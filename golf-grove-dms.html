@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Golf Grove DMS – Regent Developments</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;--bg4:#252d3d;
+  --border:#2a3348;--border2:#354060;
+  --text:#e8eaf0;--text2:#9aa3b8;--text3:#5c6680;
+  --blue:#3b7dd8;--blue-bg:#1a2d4f;--blue-light:#5a9cf0;
+  --green:#2ecc71;--green-bg:#0d2e1f;--green-light:#4ade80;
+  --amber:#f59e0b;--amber-bg:#2d1f05;--amber-light:#fbbf24;
+  --red:#ef4444;--red-bg:#2d0f0f;--red-light:#f87171;
+  --radius:8px;--radius-lg:12px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:13px;height:100vh;overflow:hidden}
+
+/* AUTH SCREEN */
+.auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg)}
+.auth-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:40px;width:420px;max-width:95vw}
+.auth-logo{text-align:center;margin-bottom:32px}
+.auth-logo .proj{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.auth-logo .name{font-size:22px;font-weight:600;color:var(--text);letter-spacing:-.3px}
+.auth-logo .sub{font-size:12px;color:var(--text2);margin-top:4px}
+.auth-tabs{display:flex;background:var(--bg3);border-radius:var(--radius);padding:3px;margin-bottom:24px}
+.auth-tab{flex:1;text-align:center;padding:7px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--text2);transition:.15s}
+.auth-tab.active{background:var(--bg4);color:var(--text)}
+.form-group{margin-bottom:16px}
+.form-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;display:block}
+.form-input{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:13px;font-family:inherit;transition:.15s}
+.form-input:focus{outline:none;border-color:var(--blue);background:var(--bg4)}
+.form-input::placeholder{color:var(--text3)}
+.btn-auth{width:100%;padding:10px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;transition:.15s;margin-top:4px}
+.btn-auth:hover{background:var(--blue-light)}
+.btn-auth:disabled{opacity:.5;cursor:not-allowed}
+.auth-msg{font-size:12px;text-align:center;margin-top:12px;padding:8px;border-radius:6px}
+.auth-msg.error{background:var(--red-bg);color:var(--red-light)}
+.auth-msg.success{background:var(--green-bg);color:var(--green-light)}
+
+/* APP LAYOUT */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:215px;min-width:215px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+.sb-header{padding:16px;border-bottom:1px solid var(--border)}
+.sb-proj-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.sb-proj-name{font-size:12px;font-weight:500;color:var(--text);line-height:1.4}
+.sb-user{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--border);margin-bottom:4px}
+.sb-avatar{width:28px;height:28px;border-radius:50%;background:var(--blue-bg);border:1px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--blue-light);flex-shrink:0}
+.sb-user-info{flex:1;min-width:0}
+.sb-user-name{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user-role{font-size:10px;color:var(--text3);text-transform:capitalize}
+.sb-section{padding:10px 12px 3px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3)}
+.nav-item{display:flex;align-items:center;gap:9px;padding:7px 12px;margin:1px 6px;border-radius:var(--radius);cursor:pointer;font-size:12px;color:var(--text2);transition:.12s;position:relative}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:var(--blue-bg);color:var(--blue-light)}
+.nav-icon{width:15px;height:15px;flex-shrink:0;opacity:.8}
+.nav-badge{margin-left:auto;background:var(--red-bg);color:var(--red-light);font-size:10px;padding:1px 5px;border-radius:8px;border:1px solid var(--red-bg)}
+.sb-logout{margin-top:auto;padding:12px 16px;border-top:1px solid var(--border)}
+.btn-logout{width:100%;padding:7px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;transition:.12s}
+.btn-logout:hover{background:var(--bg3);color:var(--text)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar-title{font-size:14px;font-weight:500;color:var(--text)}
+.topbar-right{display:flex;gap:8px;align-items:center}
+.btn{font-size:12px;padding:6px 12px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:.12s;white-space:nowrap;font-family:inherit}
+.btn:hover{background:var(--bg3);color:var(--text)}
+.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-primary:hover{background:var(--blue-light);border-color:var(--blue-light)}
+.btn-success{color:var(--green-light);border-color:var(--green)}
+.btn-danger{color:var(--red-light);border-color:var(--red)}
+.btn-sm{font-size:11px;padding:3px 8px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.content{flex:1;overflow-y:auto;padding:20px}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:20px}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px}
+.stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.stat-value{font-size:24px;font-weight:600;color:var(--text)}
+.stat-sub{font-size:10px;color:var(--text3);margin-top:3px}
+.stat-value.danger{color:var(--red-light)}
+
+/* CARDS & TABLES */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.section-title{font-size:12px;font-weight:500;color:var(--text)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px}
+.tw{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{text-align:left;padding:9px 13px;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);background:var(--bg3);white-space:nowrap}
+td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg3);cursor:pointer}
+.mono{font-family:'SF Mono',Monaco,monospace;font-size:10px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:500;padding:2px 8px;border-radius:8px;white-space:nowrap}
+.badge-success{background:var(--green-bg);color:var(--green-light);border:1px solid #1a4a2e}
+.badge-warning{background:var(--amber-bg);color:var(--amber-light);border:1px solid #3d2a05}
+.badge-danger{background:var(--red-bg);color:var(--red-light);border:1px solid #3d1515}
+.badge-info{background:var(--blue-bg);color:var(--blue-light);border:1px solid #1e3560}
+.badge-neutral{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.rev-chip{font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;background:var(--bg4);color:var(--text2);border:1px solid var(--border2)}
+
+/* FILTER BAR */
+.fbar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.fbar-label{font-size:10px;color:var(--text3)}
+.chip{font-size:10px;padding:3px 10px;border-radius:16px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:.12s}
+.chip:hover{border-color:var(--blue);color:var(--text)}
+.chip.active{background:var(--blue-bg);color:var(--blue-light);border-color:var(--blue)}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;backdrop-filter:blur(2px)}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);width:680px;max-width:100%;overflow:hidden}
+.modal.wide{width:860px}
+.modal-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-title{font-size:13px;font-weight:500;color:var(--text)}
+.modal-close{background:none;border:none;font-size:18px;color:var(--text2);cursor:pointer;line-height:1;padding:2px 6px;border-radius:4px}
+.modal-close:hover{background:var(--bg3);color:var(--text)}
+.modal-body{padding:18px;display:flex;flex-direction:column;gap:14px;max-height:72vh;overflow-y:auto}
+.modal-footer{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-label-dark{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.form-control{font-size:12px;padding:7px 10px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--bg3);color:var(--text);width:100%;font-family:inherit;transition:.15s}
+.form-control:focus{outline:none;border-color:var(--blue);background:var(--bg4)}
+.form-control::placeholder{color:var(--text3)}
+textarea.form-control{resize:vertical;min-height:70px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.checkbox-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:11px}
+.checkbox-grid label{display:flex;align-items:center;gap:6px;color:var(--text2);cursor:pointer}
+.checkbox-grid input[type=checkbox]{accent-color:var(--blue)}
+
+/* DSUB FORM */
+.dsub-preview{background:#fff;color:#000;font-family:Arial,Helvetica,sans-serif;font-size:10.5px;padding:18px;border-radius:6px}
+.dsub-preview table{width:100%;border-collapse:collapse;color:#000}
+.dsub-preview td,.dsub-preview th{border:.7px solid #888;padding:4px 6px;color:#000;vertical-align:top}
+.dsub-cb{display:inline-block;width:11px;height:11px;border:1.2px solid #333;margin-right:3px;vertical-align:middle;text-align:center;font-size:9px;line-height:11px;font-weight:700}
+.dsub-checked::after{content:'✕';color:#000}
+
+/* IR FORM */
+.ir-preview{background:#fff;color:#000;font-family:Arial,Helvetica,sans-serif;font-size:10.5px;padding:18px;border-radius:6px}
+.ir-preview table{width:100%;border-collapse:collapse;color:#000}
+.ir-preview td,.ir-preview th{border:.7px solid #888;padding:4px 6px;color:#000;vertical-align:top}
+.ir-cb{display:inline-block;width:11px;height:11px;border:1.2px solid #333;margin-right:3px;vertical-align:middle;text-align:center;font-size:9px;line-height:11px;font-weight:700}
+.ir-checked::after{content:'✕';color:#000}
+
+/* PDF VIEWER */
+.pdf-viewer{background:var(--bg3);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.pdf-viewer iframe{width:100%;height:500px;border:none}
+
+/* DETAIL GRID */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.detail-item{display:flex;flex-direction:column;gap:2px}
+.detail-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.detail-value{font-size:12px;color:var(--text)}
+.detail-section{border-top:1px solid var(--border);padding-top:14px}
+
+/* UPLOAD ZONE */
+.upload-zone{border:2px dashed var(--border2);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:.15s;background:var(--bg3)}
+.upload-zone:hover{border-color:var(--blue);background:var(--blue-bg)}
+.upload-zone.dragging{border-color:var(--blue);background:var(--blue-bg)}
+.upload-zone-text{color:var(--text2);font-size:12px;margin-top:6px}
+.upload-zone-sub{color:var(--text3);font-size:10px;margin-top:3px}
+.upload-progress{height:3px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-top:8px}
+.upload-progress-bar{height:100%;background:var(--blue);border-radius:3px;transition:width .3s}
+
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;padding:40px;color:var(--text3);font-size:12px;gap:10px}
+.spinner{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty-state{text-align:center;padding:40px;color:var(--text3);font-size:12px}
+
+/* TOAST */
+.toast-container{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{padding:10px 14px;border-radius:var(--radius);font-size:12px;min-width:220px;animation:slideIn .2s ease;border:1px solid}
+.toast.success{background:var(--green-bg);color:var(--green-light);border-color:#1a4a2e}
+.toast.error{background:var(--red-bg);color:var(--red-light);border-color:#3d1515}
+.toast.info{background:var(--blue-bg);color:var(--blue-light);border-color:#1e3560}
+@keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ADMIN BADGE */
+.role-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:8px;border:1px solid}
+.role-developer{background:#1a1a3a;color:#a78bfa;border-color:#4c1d95}
+.role-consultant{background:var(--blue-bg);color:var(--blue-light);border-color:#1e3560}
+.role-contractor{background:var(--amber-bg);color:var(--amber-light);border-color:#3d2a05}
+.role-subcontractor{background:var(--green-bg);color:var(--green-light);border-color:#1a4a2e}
+</style>
+</head>
+<body>
+
+<div class="toast-container" id="toasts"></div>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen" class="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="proj">Regent Developments</div>
+      <div class="name">Golf Grove DMS</div>
+      <div class="sub">Document Management System · Production City, Dubai</div>
+    </div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</div>
+      <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Register</div>
+    </div>
+    <div id="login-form">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="login-email" placeholder="you@company.com" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" />
+      </div>
+      <button class="btn-auth" onclick="doLogin()" id="login-btn">Sign In</button>
+      <div id="login-msg"></div>
+    </div>
+    <div id="signup-form" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" id="signup-name" placeholder="Eng. Ahmed Hassan" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="signup-email" placeholder="you@company.com" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="signup-password" placeholder="Min 6 characters" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Company</label>
+        <input type="text" class="form-input" id="signup-company" placeholder="Your company name" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select class="form-input" id="signup-role">
+          <option value="contractor">Main Contractor</option>
+          <option value="subcontractor">Subcontractor</option>
+          <option value="consultant">Consultant</option>
+          <option value="developer">Developer / Client</option>
+        </select>
+      </div>
+      <button class="btn-auth" onclick="doSignup()" id="signup-btn">Create Account</button>
+      <div id="signup-msg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app-screen" class="app" style="display:none">
+  <div class="sidebar">
+    <div class="sb-header">
+      <div class="sb-proj-label">Active Project</div>
+      <div class="sb-proj-name">Golf Grove – Residential Building (B+G+P+7+Roof)</div>
+    </div>
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-avatar">–</div>
+      <div class="sb-user-info">
+        <div class="sb-user-name" id="sb-name">Loading...</div>
+        <div class="sb-user-role" id="sb-role">–</div>
+      </div>
+    </div>
+    <div class="sb-section">Main</div>
+    <div class="nav-item active" id="n-dash" onclick="nav('dash',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
+      Dashboard
+    </div>
+    <div class="sb-section">Document Control</div>
+    <div class="nav-item" id="n-draw" onclick="nav('draw',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="10" height="13" rx="1" stroke="currentColor" stroke-width="1.3"/><line x1="4" y1="5" x2="10" y2="5" stroke="currentColor" stroke-width="1"/><line x1="4" y1="8" x2="10" y2="8" stroke="currentColor" stroke-width="1"/><line x1="4" y1="11" x2="7" y2="11" stroke="currentColor" stroke-width="1"/></svg>
+      Drawing Register
+    </div>
+    <div class="nav-item" id="n-sub" onclick="nav('sub',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M2 3h12v10H2z" stroke="currentColor" stroke-width="1.3"/><path d="M5 7l2 2 4-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Submittals (DSUB)
+      <span class="nav-badge" id="nb-sub">0</span>
+    </div>
+    <div class="sb-section">Site</div>
+    <div class="nav-item" id="n-ir" onclick="nav('ir',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Inspection Requests
+      <span class="nav-badge" id="nb-ir">0</span>
+    </div>
+    <div class="nav-item" id="n-ncr" onclick="nav('ncr',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><line x1="8" y1="7" x2="8" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="11.5" r=".6" fill="currentColor"/></svg>
+      NCRs
+      <span class="nav-badge" id="nb-ncr">0</span>
+    </div>
+    <div class="sb-section">Admin</div>
+    <div class="nav-item" id="n-subs" onclick="nav('subs',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" stroke-width="1.3"/><circle cx="12.5" cy="5" r="2" stroke="currentColor" stroke-width="1.1"/><path d="M12 9.5c1.657 0 3 1.343 3 3" stroke="currentColor" stroke-width="1.1"/></svg>
+      Subcontractors
+    </div>
+    <div id="n-users-wrap" style="display:none">
+      <div class="nav-item" id="n-users" onclick="nav('users',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 8h6M8 5v6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        User Management
+      </div>
+    </div>
+    <div class="sb-logout">
+      <button class="btn-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div class="topbar-right">
+        <span class="role-badge" id="role-badge-top"></span>
+        <button class="btn btn-primary" id="new-btn" onclick="openNew()">+ New</button>
+      </div>
+    </div>
+    <div class="content" id="content"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal-bg" onclick="closeBg(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<script>
+// ─── SUPABASE INIT ───────────────────────────────────────────────
+const SUPABASE_URL = 'https://kdxvhrwnnehicgdryowu.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkeHZocndubmVoaWNnZHJ5b3d1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTg2NjMsImV4cCI6MjA5MTIzNDY2M30.uMlyBkTeth6nVl8ofBu9g_AYlnDLkgDyVTsxxaHI_ic';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const PROJECT = {
+  name:'Golf Grove – Residential Building (B+G+P+7+Roof)',
+  client:'Regent Star Property Developments L.L.C',
+  plot:'6850752',
+  location:"Me'aisem First",
+  city:'Production City, Dubai, UAE',
+  consultant:'Pioneers of Experts Engineering Consultants',
+  contractor:'Modern Building Contracting L.L.C'
+};
+
+let currentPage = 'dash';
+let currentUser = null;
+let currentProfile = null;
+
+// ─── AUTH ────────────────────────────────────────────────────────
+function switchTab(tab) {
+  document.getElementById('login-form').style.display = tab==='login'?'':'none';
+  document.getElementById('signup-form').style.display = tab==='signup'?'':'none';
+  document.getElementById('tab-login').classList.toggle('active', tab==='login');
+  document.getElementById('tab-signup').classList.toggle('active', tab==='signup');
+}
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-password').value;
+  const btn = document.getElementById('login-btn');
+  const msg = document.getElementById('login-msg');
+  if(!email||!pass){showAuthMsg('login','Please fill in all fields','error');return;}
+  btn.disabled=true; btn.textContent='Signing in...';
+  const {data,error} = await sb.auth.signInWithPassword({email,password:pass});
+  btn.disabled=false; btn.textContent='Sign In';
+  if(error){showAuthMsg('login',error.message,'error');}
+  else{await loadApp(data.user);}
+}
+
+async function doSignup() {
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const pass = document.getElementById('signup-password').value;
+  const company = document.getElementById('signup-company').value.trim();
+  const role = document.getElementById('signup-role').value;
+  const btn = document.getElementById('signup-btn');
+  if(!name||!email||!pass){showAuthMsg('signup','Please fill in all fields','error');return;}
+  btn.disabled=true; btn.textContent='Creating account...';
+  const {data,error} = await sb.auth.signUp({email,password:pass,options:{data:{full_name:name}}});
+  if(error){showAuthMsg('signup',error.message,'error');btn.disabled=false;btn.textContent='Create Account';return;}
+  if(data.user){
+    await sb.from('profiles').upsert({id:data.user.id,full_name:name,email,role,company});
+  }
+  btn.disabled=false; btn.textContent='Create Account';
+  showAuthMsg('signup','Account created! You can now sign in.','success');
+  switchTab('login');
+}
+
+function showAuthMsg(form,msg,type){
+  const el = document.getElementById(form+'-msg');
+  el.innerHTML=`<div class="auth-msg ${type}">${msg}</div>`;
+  setTimeout(()=>el.innerHTML='',5000);
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+  currentUser=null; currentProfile=null;
+  document.getElementById('auth-screen').style.display='flex';
+  document.getElementById('app-screen').style.display='none';
+}
+
+async function loadApp(user) {
+  currentUser = user;
+  const {data:profile} = await sb.from('profiles').select('*').eq('id',user.id).single();
+  currentProfile = profile;
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('app-screen').style.display='flex';
+  const initials = (profile?.full_name||user.email).split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('sb-avatar').textContent=initials;
+  document.getElementById('sb-name').textContent=profile?.full_name||user.email;
+  document.getElementById('sb-role').textContent=profile?.role||'user';
+  const roleClass = `role-${profile?.role||'contractor'}`;
+  document.getElementById('role-badge-top').className=`role-badge ${roleClass}`;
+  document.getElementById('role-badge-top').textContent=profile?.role||'user';
+  if(profile?.role==='developer'||profile?.role==='consultant'){
+    document.getElementById('n-users-wrap').style.display='';
+  }
+  nav('dash', document.getElementById('n-dash'));
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',ir:'Inspection Requests',ncr:'Non-Conformance Reports',subs:'Subcontractors',users:'User Management'};
+
+function nav(page, el) {
+  currentPage = page;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.getElementById('page-title').textContent = PAGE_TITLES[page]||page;
+  render();
+}
+
+// ─── ROLE PERMISSIONS ─────────────────────────────────────────────
+function can(action) {
+  const role = currentProfile?.role;
+  const perms = {
+    developer: {approve:false,upload:true,raise:true,submit:false,manageUsers:true},
+    consultant: {approve:true,upload:true,raise:true,submit:false,manageUsers:true},
+    contractor: {approve:false,upload:true,raise:false,submit:true,manageUsers:false},
+    subcontractor:{approve:false,upload:false,raise:false,submit:true,manageUsers:false},
+  };
+  return perms[role]?.[action]||false;
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────
+async function render() {
+  const el = document.getElementById('content');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+  if(currentPage==='dash') await renderDash();
+  else if(currentPage==='draw') await renderDrawings();
+  else if(currentPage==='sub') await renderSubmittals();
+  else if(currentPage==='ir') await renderInspections();
+  else if(currentPage==='ncr') await renderNCRs();
+  else if(currentPage==='subs') await renderSubcontractors();
+  else if(currentPage==='users') await renderUsers();
+  await updateBadges();
+}
+
+async function updateBadges() {
+  const [{count:cs},{count:ci},{count:cn}] = await Promise.all([
+    sb.from('submittals').select('*',{count:'exact',head:true}).eq('status','Pending Review'),
+    sb.from('inspections').select('*',{count:'exact',head:true}).eq('status','Pending'),
+    sb.from('ncrs').select('*',{count:'exact',head:true}).eq('status','Open'),
+  ]);
+  document.getElementById('nb-sub').textContent=cs||0;
+  document.getElementById('nb-ir').textContent=ci||0;
+  document.getElementById('nb-ncr').textContent=cn||0;
+}
+
+function sbadge(s) {
+  const m={
+    'Approved':'badge-success','Issued for Construction':'badge-success','Passed':'badge-success','Closed':'badge-success','Approved as Noted':'badge-success',
+    'Pending Review':'badge-warning','Pending':'badge-warning','Under Review':'badge-warning','Correction':'badge-warning',
+    'Revise & Resubmit':'badge-danger','Rejected':'badge-danger','Open':'badge-danger','Major':'badge-danger','Failed':'badge-danger',
+    'Minor':'badge-warning',
+  };
+  return `<span class="badge ${m[s]||'badge-neutral'}">${s}</span>`;
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────────
+async function renderDash() {
+  const [draws,subs,irs,ncrs_d,scs] = await Promise.all([
+    sb.from('drawings').select('*',{count:'exact'}),
+    sb.from('submittals').select('*',{count:'exact'}),
+    sb.from('inspections').select('*',{count:'exact'}),
+    sb.from('ncrs').select('*',{count:'exact'}),
+    sb.from('subcontractors').select('*',{count:'exact'}),
+  ]);
+  const pSub = (subs.data||[]).filter(s=>s.status==='Pending Review').length;
+  const pIR = (irs.data||[]).filter(i=>i.status==='Pending').length;
+  const oNCR = (ncrs_d.data||[]).filter(n=>n.status==='Open').length;
+  const pendSubs = (subs.data||[]).filter(s=>s.status==='Pending Review').slice(0,5);
+  const pendIRs = (irs.data||[]).filter(i=>i.status==='Pending').slice(0,5);
+  const openNCRs = (ncrs_d.data||[]).filter(n=>n.status==='Open').slice(0,5);
+  const recentDraws = (draws.data||[]).slice(-4).reverse();
+  document.getElementById('content').innerHTML = `
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Drawings</div><div class="stat-value">${draws.count||0}</div><div class="stat-sub">${(draws.data||[]).filter(d=>d.status==='Approved').length} approved</div></div>
+    <div class="stat"><div class="stat-label">Submittals</div><div class="stat-value">${subs.count||0}</div><div class="stat-sub">${pSub} pending review</div></div>
+    <div class="stat"><div class="stat-label">Inspections</div><div class="stat-value">${irs.count||0}</div><div class="stat-sub">${pIR} awaiting response</div></div>
+    <div class="stat"><div class="stat-label">Open NCRs</div><div class="stat-value danger">${oNCR}</div><div class="stat-sub">${(ncrs_d.count||0)-oNCR} closed</div></div>
+    <div class="stat"><div class="stat-label">Subcontractors</div><div class="stat-value">${scs.count||0}</div><div class="stat-sub">registered</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div>
+      <div class="section-header"><div class="section-title">Pending Submittals</div></div>
+      <div class="card"><div class="tw"><table><tr><th>Ref</th><th>Title</th><th>Status</th></tr>
+      ${pendSubs.length?pendSubs.map(s=>`<tr onclick="viewSub('${s.id}')"><td class="mono">${s.ref_no}</td><td>${s.title}</td><td>${sbadge(s.status)}</td></tr>`).join(''):'<tr><td colspan="3" class="empty-state">No pending submittals</td></tr>'}
+      </table></div></div>
+      <div class="section-header" style="margin-top:14px"><div class="section-title">Open NCRs</div></div>
+      <div class="card"><div class="tw"><table><tr><th>Ref</th><th>Title</th><th>Severity</th></tr>
+      ${openNCRs.length?openNCRs.map(n=>`<tr onclick="viewNCR('${n.id}')"><td class="mono">${n.ref_no}</td><td>${n.title}</td><td>${sbadge(n.severity)}</td></tr>`).join(''):'<tr><td colspan="3" class="empty-state">No open NCRs</td></tr>'}
+      </table></div></div>
+    </div>
+    <div>
+      <div class="section-header"><div class="section-title">Pending Inspections</div></div>
+      <div class="card"><div class="tw"><table><tr><th>Ref</th><th>Description</th><th>Date</th></tr>
+      ${pendIRs.length?pendIRs.map(i=>`<tr onclick="viewIR('${i.id}')"><td class="mono">${i.ref_no}</td><td>${(i.elements||'').substring(0,45)}${(i.elements||'').length>45?'…':''}</td><td style="color:var(--text3);font-size:10px">${i.inspection_date||'—'}</td></tr>`).join(''):'<tr><td colspan="3" class="empty-state">No pending inspections</td></tr>'}
+      </table></div></div>
+      <div class="section-header" style="margin-top:14px"><div class="section-title">Recent Drawings</div></div>
+      <div class="card"><div class="tw"><table><tr><th>No.</th><th>Title</th><th>Rev</th><th>Status</th></tr>
+      ${recentDraws.length?recentDraws.map(d=>`<tr onclick="viewDraw('${d.id}')"><td class="mono">${d.drawing_no}</td><td>${d.title}</td><td><span class="rev-chip">${d.revision}</span></td><td>${sbadge(d.status)}</td></tr>`).join(''):'<tr><td colspan="4" class="empty-state">No drawings uploaded yet</td></tr>'}
+      </table></div></div>
+    </div>
+  </div>`;
+}
+
+// ─── DRAWINGS ─────────────────────────────────────────────────────
+async function renderDrawings() {
+  const {data} = await sb.from('drawings').select('*').order('created_at',{ascending:false});
+  const rows = data||[];
+  document.getElementById('content').innerHTML = `
+  <div class="fbar"><span class="fbar-label">Filter:</span>
+    ${['All','Architecture','Structure','MEP','Civil'].map((d,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'draw','disc','${d}')">${d}</span>`).join('')}
+  </div>
+  <div class="card"><div class="tw"><table>
+    <tr><th>Drawing No.</th><th>Title</th><th>Discipline</th><th>Revision</th><th>Status</th><th>Uploaded</th><th>Actions</th></tr>
+    ${rows.length?rows.map(d=>`<tr class="draw-row" data-disc="${d.discipline||''}">
+      <td class="mono">${d.drawing_no}</td>
+      <td style="color:var(--blue-light);cursor:pointer" onclick="viewDraw('${d.id}')">${d.title}</td>
+      <td style="color:var(--text2)">${d.discipline||'—'}</td>
+      <td><span class="rev-chip">${d.revision||'Rev A'}</span></td>
+      <td>${sbadge(d.status)}</td>
+      <td style="color:var(--text3);font-size:10px">${d.created_at?d.created_at.split('T')[0]:'—'}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="viewDraw('${d.id}')">View</button>
+        ${can('upload')?`<button class="btn btn-sm" onclick="uploadRev('${d.id}')">New Rev</button>`:''}
+      </div></td>
+    </tr>`).join(''):'<tr><td colspan="7" class="empty-state">No drawings yet. Upload the first one.</td></tr>'}
+  </table></div></div>`;
+}
+
+function filt(el, page, field, val) {
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
+  const rowClass = page==='draw'?'.draw-row':page==='sub'?'.sub-row':page==='ir'?'.ir-row':'.ncr-row';
+  document.querySelectorAll(rowClass).forEach(r=>{
+    const rv = r.dataset[field]||'';
+    r.style.display=(val==='All'||rv===val)?'':'none';
+  });
+}
+
+// ─── SUBMITTALS ───────────────────────────────────────────────────
+async function renderSubmittals() {
+  const {data} = await sb.from('submittals').select('*').order('created_at',{ascending:false});
+  const rows = data||[];
+  document.getElementById('content').innerHTML = `
+  <div class="fbar"><span class="fbar-label">Status:</span>
+    ${['All','Pending Review','Approved','Revise & Resubmit','Rejected'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'sub','status','${s}')">${s}</span>`).join('')}
+  </div>
+  <div class="card"><div class="tw"><table>
+    <tr><th>Ref No.</th><th>Title</th><th>From</th><th>Date</th><th>Status</th><th>Outcome</th><th>Actions</th></tr>
+    ${rows.length?rows.map(s=>`<tr class="sub-row" data-status="${s.status}">
+      <td class="mono">${s.ref_no}</td>
+      <td style="color:var(--blue-light);cursor:pointer" onclick="viewSub('${s.id}')">${s.title}</td>
+      <td style="color:var(--text2)">${s.from_party||'—'}</td>
+      <td style="color:var(--text3);font-size:10px">${s.submit_date||'—'}</td>
+      <td>${sbadge(s.status)}</td>
+      <td style="color:var(--text3);font-size:10px">${s.outcome?`Code (${s.outcome})`:'-'}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="viewSub('${s.id}')">View DSUB</button>
+        ${can('approve')&&s.status==='Pending Review'?`<button class="btn btn-sm btn-success" onclick="reviewSub('${s.id}')">Review</button>`:''}
+      </div></td>
+    </tr>`).join(''):'<tr><td colspan="7" class="empty-state">No submittals yet.</td></tr>'}
+  </table></div></div>`;
+}
+
+// ─── INSPECTIONS ──────────────────────────────────────────────────
+async function renderInspections() {
+  const {data} = await sb.from('inspections').select('*, subcontractors(name)').order('created_at',{ascending:false});
+  const rows = data||[];
+  document.getElementById('content').innerHTML = `
+  <div class="fbar"><span class="fbar-label">Status:</span>
+    ${['All','Pending','Approved','Approved as Noted','Correction','Rejected'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'ir','status','${s}')">${s}</span>`).join('')}
+  </div>
+  <div class="card"><div class="tw"><table>
+    <tr><th>Ref No.</th><th>Rev</th><th>Elements</th><th>Subcontractor</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+    ${rows.length?rows.map(i=>`<tr class="ir-row" data-status="${i.status}">
+      <td class="mono">${i.ref_no}</td>
+      <td><span class="rev-chip">R${i.revision||'00'}</span></td>
+      <td style="color:var(--blue-light);cursor:pointer;max-width:200px" onclick="viewIR('${i.id}')">${(i.elements||'').substring(0,50)}${(i.elements||'').length>50?'…':''}</td>
+      <td style="color:var(--text2);font-size:10px">${i.subcontractors?.name||PROJECT.contractor}</td>
+      <td style="color:var(--text3);font-size:10px">${i.inspection_date||'—'}</td>
+      <td>${sbadge(i.status)}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="viewIR('${i.id}')">View IR</button>
+        ${can('approve')&&i.status==='Pending'?`<button class="btn btn-sm btn-success" onclick="respondIR('${i.id}')">Respond</button>`:''}
+      </div></td>
+    </tr>`).join(''):'<tr><td colspan="7" class="empty-state">No inspection requests yet.</td></tr>'}
+  </table></div></div>`;
+}
+
+// ─── NCRs ─────────────────────────────────────────────────────────
+async function renderNCRs() {
+  const {data} = await sb.from('ncrs').select('*').order('created_at',{ascending:false});
+  const rows = data||[];
+  document.getElementById('content').innerHTML = `
+  <div class="fbar"><span class="fbar-label">Status:</span>
+    ${['All','Open','Closed'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'ncr','status','${s}')">${s}</span>`).join('')}
+  </div>
+  <div class="card"><div class="tw"><table>
+    <tr><th>Ref</th><th>Title</th><th>Location</th><th>Raised By</th><th>Date</th><th>Severity</th><th>Status</th><th>Actions</th></tr>
+    ${rows.length?rows.map(n=>`<tr class="ncr-row" data-status="${n.status}">
+      <td class="mono">${n.ref_no}</td>
+      <td style="color:var(--blue-light);cursor:pointer" onclick="viewNCR('${n.id}')">${n.title}</td>
+      <td style="color:var(--text2);font-size:10px">${n.location||'—'}</td>
+      <td style="color:var(--text2);font-size:10px">${n.raised_by||'—'}</td>
+      <td style="color:var(--text3);font-size:10px">${n.raised_date||'—'}</td>
+      <td>${sbadge(n.severity)}</td>
+      <td>${sbadge(n.status)}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="viewNCR('${n.id}')">View</button>
+        ${can('approve')&&n.status==='Open'?`<button class="btn btn-sm btn-success" onclick="closeNCR('${n.id}')">Close</button>`:''}
+      </div></td>
+    </tr>`).join(''):'<tr><td colspan="8" class="empty-state">No NCRs raised.</td></tr>'}
+  </table></div></div>`;
+}
+
+// ─── SUBCONTRACTORS ───────────────────────────────────────────────
+async function renderSubcontractors() {
+  const {data} = await sb.from('subcontractors').select('*').order('created_at',{ascending:false});
+  const rows = data||[];
+  document.getElementById('content').innerHTML = `
+  <div class="card"><div class="tw"><table>
+    <tr><th>Company Name</th><th>Trade / Scope</th><th>Discipline</th><th>Representative</th><th>Actions</th></tr>
+    ${rows.length?rows.map(s=>`<tr>
+      <td style="font-weight:500">${s.name}</td>
+      <td style="color:var(--text2)">${s.trade||'—'}</td>
+      <td><span class="badge badge-info">${s.discipline||'—'}</span></td>
+      <td style="color:var(--text2)">${s.rep||'—'}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="removeSub('${s.id}')">Remove</button></td>
+    </tr>`).join(''):'<tr><td colspan="5" class="empty-state">No subcontractors registered yet.</td></tr>'}
+  </table></div></div>`;
+}
+
+// ─── USER MANAGEMENT ──────────────────────────────────────────────
+async function renderUsers() {
+  const {data} = await sb.from('profiles').select('*').order('created_at',{ascending:false});
+  const rows = data||[];
+  document.getElementById('content').innerHTML = `
+  <div class="card"><div class="tw"><table>
+    <tr><th>Name</th><th>Email</th><th>Role</th><th>Company</th><th>Actions</th></tr>
+    ${rows.length?rows.map(u=>`<tr>
+      <td style="font-weight:500">${u.full_name||'—'}</td>
+      <td style="color:var(--text2);font-size:11px">${u.email||'—'}</td>
+      <td><span class="role-badge role-${u.role||'contractor'}">${u.role||'—'}</span></td>
+      <td style="color:var(--text2)">${u.company||'—'}</td>
+      <td><button class="btn btn-sm" onclick="editUserRole('${u.id}','${u.role}','${u.full_name}')">Change Role</button></td>
+    </tr>`).join(''):'<tr><td colspan="5" class="empty-state">No users yet.</td></tr>'}
+  </table></div></div>`;
+}
+
+async function editUserRole(uid, currentRole, name) {
+  openModal(`Change Role – ${name}`, `
+    <div class="form-group">
+      <label class="form-label-dark">Role</label>
+      <select class="form-control" id="new-role">
+        ${['developer','consultant','contractor','subcontractor'].map(r=>`<option value="${r}" ${r===currentRole?'selected':''}>${r}</option>`).join('')}
+      </select>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doChangeRole('${uid}')">Update Role</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doChangeRole(uid) {
+  const role = document.getElementById('new-role').value;
+  await sb.from('profiles').update({role}).eq('id',uid);
+  toast('Role updated','success'); closeModal(); render();
+}
+
+// ─── VIEW MODALS ──────────────────────────────────────────────────
+async function viewDraw(id) {
+  const {data:d} = await sb.from('drawings').select('*').eq('id',id).single();
+  if(!d) return;
+  let pdfHtml = '';
+  if(d.file_path) {
+    const {data:urlData} = await sb.storage.from('drawings').createSignedUrl(d.file_path, 3600);
+    if(urlData?.signedUrl) {
+      pdfHtml = `<div class="detail-section"><div class="detail-label" style="margin-bottom:8px">Drawing File</div>
+        <div class="pdf-viewer"><iframe src="${urlData.signedUrl}" title="Drawing"></iframe></div></div>`;
+    }
+  }
+  const revHistory = JSON.parse(d.superseded_revisions||'[]');
+  openModal(`${d.drawing_no} – ${d.title}`, `
+    <div class="detail-grid">
+      <div class="detail-item"><div class="detail-label">Discipline</div><div class="detail-value">${d.discipline||'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Current Revision</div><div class="detail-value"><span class="rev-chip">${d.revision}</span></div></div>
+      <div class="detail-item"><div class="detail-label">Status</div><div class="detail-value">${sbadge(d.status)}</div></div>
+      <div class="detail-item"><div class="detail-label">Uploaded</div><div class="detail-value">${d.created_at?d.created_at.split('T')[0]:'—'}</div></div>
+    </div>
+    ${revHistory.length?`<div class="detail-section"><div class="detail-label" style="margin-bottom:8px">Revision History</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        ${revHistory.map(r=>`<div style="font-size:11px;color:var(--text3);padding:4px 8px;background:var(--bg3);border-radius:4px">${r} – Superseded</div>`).join('')}
+        <div style="font-size:11px;color:var(--blue-light);padding:4px 8px;background:var(--blue-bg);border-radius:4px">${d.revision} – Current</div>
+      </div></div>`:''}
+    ${pdfHtml}`,
+    `${can('upload')?`<button class="btn btn-primary" onclick="uploadRev('${id}')">Upload New Revision</button>`:''}
+     ${can('approve')&&d.status==='Under Review'?`<button class="btn btn-success" onclick="approveDrawing('${id}')">Approve</button>`:''}
+     <button class="btn" onclick="closeModal()">Close</button>`, true);
+}
+
+async function viewSub(id) {
+  const {data:s} = await sb.from('submittals').select('*').eq('id',id).single();
+  if(!s) return;
+  const att = typeof s.attachments==='object'?s.attachments:{};
+  const disc = typeof s.discipline==='object'?s.discipline:{};
+  function cb(v){return `<span class="dsub-cb ${v?'dsub-checked':''}"></span>`;}
+  const dsub = `<div class="dsub-preview">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #ccc;margin-bottom:8px">
+      <div style="padding:8px;border-right:1px solid #ccc;font-size:13px;font-weight:700;color:#00008B">POE<br><span style="font-size:9px;font-weight:400;color:#000">ENGINEERING CONSULTANTS</span></div>
+      <div style="padding:8px;border-right:1px solid #ccc;text-align:center;font-size:18px;font-style:italic;color:#00008B">regent<br><span style="font-size:9px;font-weight:400;color:#000">DEVELOPMENTS</span></div>
+      <div style="padding:6px;text-align:right;font-size:9px">${PROJECT.contractor}<br>Tel.: 04-2344445</div>
+    </div>
+    <table><tr><td colspan="4" style="text-align:center;font-weight:700;font-size:12px;text-decoration:underline;color:#00008B">DOCUMENT SUBMITTAL APPROVAL REQUEST (DSUB)</td></tr>
+    <tr><td style="font-weight:700;width:22%">Reference No.:</td><td style="color:#8B0000;font-weight:700" colspan="2">${s.ref_no}</td><td style="text-align:right"><b>Date:</b> <span style="color:#8B0000;font-weight:700">${s.submit_date||''}</span></td></tr>
+    <tr><td style="font-weight:700">Project Description:</td><td colspan="3">${PROJECT.name}</td></tr>
+    <tr><td style="font-weight:700">Client's Name:</td><td colspan="3" style="font-weight:700">${PROJECT.client}</td></tr>
+    <tr><td style="font-weight:700">Plot No:</td><td colspan="3">${PROJECT.plot}</td></tr>
+    <tr><td style="font-weight:700">Location:</td><td colspan="3" style="font-weight:700;text-transform:uppercase">${PROJECT.location.toUpperCase()}, DUBAI, UAE</td></tr>
+    <tr><td style="font-weight:700">Consultant:</td><td colspan="3" style="font-weight:700;text-transform:uppercase">${PROJECT.consultant.toUpperCase()}</td></tr>
+    <tr><td style="font-weight:700">Contractor:</td><td colspan="3" style="font-weight:700;text-transform:uppercase">${PROJECT.contractor.toUpperCase()}</td></tr>
+    <tr><td style="font-weight:700">TO: ${s.to_party||'POE'}</td><td colspan="3" style="font-weight:700">FROM: &nbsp;&nbsp; ${s.from_party||'MBC'}</td></tr>
+    <tr><td colspan="4" style="font-weight:700">DESCRIPTION:</td></tr>
+    <tr><td style="font-weight:700">Title:</td><td colspan="3">${s.title}</td></tr>
+    <tr><td colspan="2" style="padding:6px"><b>Attachments:</b><br>
+      ${cb(att.samples)} Samples &nbsp; ${cb(att.brochure)} Original Brochure<br>
+      ${cb(att.drawings)} Drawings &nbsp; ${cb(att.sketches)} Sketches<br>
+      ${cb(att.others)} Others: ${att.othersText||''}
+    </td><td colspan="2" style="padding:6px"><b>Discipline:</b><br>
+      ${cb(disc.civil)} Civil/Structural &nbsp; ${cb(disc.mech)} Mechanical &nbsp; ${cb(disc.elv)} ELV/IT<br>
+      ${cb(disc.specs)} Specification &nbsp; ${cb(disc.arch)} Architectural &nbsp; ${cb(disc.elec)} Electrical<br>
+      ${cb(disc.others)} Others: ${disc.othersText||''}
+    </td></tr>
+    <tr><td colspan="4" style="font-weight:700;background:#f5f5f5">Engineer's Comments and Recommendations:</td></tr>
+    <tr><td colspan="4" style="font-size:10px;color:#555">(Please continue in a separate sheet if necessary).</td></tr>
+    <tr><td colspan="4" style="padding:12px;min-height:80px;color:${s.eng_comments?'#00008B':'#ccc'}">${s.eng_comments||'—'}</td></tr>
+    <tr><td colspan="2" style="padding:8px">${cb(s.outcome==='1')} (1) – Approved. Work may proceed</td>
+        <td colspan="2" style="padding:8px">${cb(s.outcome==='2')} (2) – Approved With Comments. Work may proceed subject to incorporation of comments indicated.</td></tr>
+    <tr><td colspan="2" style="padding:8px">${cb(s.outcome==='3')} (3) - Revise and resubmit. Work may not proceed</td>
+        <td colspan="2" style="padding:8px">${cb(s.outcome==='4')} (4) - Review not Required. Work may proceed</td></tr>
+    <tr><td colspan="2" style="padding:8px;color:#00008B;font-size:12px">${s.reviewed_by?`Eng : ${s.reviewed_by}`:''}</td>
+        <td colspan="2" style="padding:8px;text-align:right;font-weight:700">Resident Engineer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</td></tr>
+    </table><div style="margin-top:8px;font-size:9px;color:#888">POE/SUP-DSAR-004 Rev 002 | Issue date: 01/10/2018</div></div>`;
+  openModal(`DSUB – ${s.ref_no}`, dsub,
+    `${can('approve')&&s.status==='Pending Review'?`<button class="btn btn-success" onclick="reviewSub('${id}')">Review & Respond</button>`:''}
+     <button class="btn" onclick="closeModal()">Close</button>`, true);
+}
+
+async function viewIR(id) {
+  const {data:i} = await sb.from('inspections').select('*, subcontractors(name,rep)').eq('id',id).single();
+  if(!i) return;
+  const dept = typeof i.department==='object'?i.department:{};
+  function cb(v){return `<span class="ir-cb ${v?'ir-checked':''}"></span>`;}
+  const scName = i.subcontractors?.name||PROJECT.contractor;
+  const scRep = i.subcontractors?.rep||i.rep||'—';
+  const irHTML = `<div class="ir-preview">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border:1px solid #888;margin-bottom:0">
+      <div style="border-right:1px solid #888;padding:6px;font-size:10px;font-weight:700">Client<br><span style="font-style:italic;color:#00008B;font-weight:400">regent DEVELOPMENTS</span></div>
+      <div style="border-right:1px solid #888;padding:6px;font-size:10px;font-weight:700">Consultant<br><span style="font-weight:400;font-size:9px">POE ENGINEERING CONSULTANTS</span></div>
+      <div style="border-right:1px solid #888;padding:6px;font-size:10px;font-weight:700">Main Contractor<br><span style="font-weight:400;font-size:9px">${PROJECT.contractor}</span></div>
+      <div style="padding:6px;font-size:10px;font-weight:700">Enabling Contractor<br><span style="font-weight:400;font-size:9px">${scName}</span></div>
+    </div>
+    <div style="text-align:center;font-size:15px;font-weight:700;margin:8px 0">WORK INSPECTION REQUEST</div>
+    <table>
+      <tr><td style="font-weight:700;font-size:10px;width:32%">Project: ${PROJECT.name}</td><td style="font-size:10px">Ref. No: <b>${i.ref_no}</b></td><td style="font-size:10px">Rev. No: <b>${i.revision||'00'}</b></td></tr>
+      <tr><td style="font-size:10px">Plot No.: <b>${i.plot||PROJECT.plot}</b></td><td style="font-size:10px">Location: <b>${i.location||'—'}</b></td><td style="font-size:10px">City: <b>${i.city||PROJECT.city}</b></td></tr>
+      <tr><td colspan="3" style="font-size:10px"><b>Enabling Contractor: ${scName}</b></td></tr>
+      <tr><td colspan="3" style="font-size:10px"><b>Contractor's Representative On Site:</b> ${scRep}</td></tr>
+      <tr><td colspan="3" style="padding:6px"><b style="font-size:10px">Department:</b><br>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;font-size:10px;gap:3px;margin-top:3px">
+          <div>${cb(dept.arch)} Architectural</div><div>${cb(dept.elec)} Electrical</div><div>${cb(dept.fire)} Firefighting</div>
+          <div>${cb(dept.plumb)} Plumbing</div><div>${cb(dept.structural)} Structural</div><div>${cb(dept.mep)} MEP</div>
+          <div>${cb(dept.civil)} Civil</div>
+        </div></td></tr>
+      <tr><td colspan="3" style="font-weight:700;font-size:10px">Element(s) To Be Inspected:</td></tr>
+      <tr><td colspan="3" style="font-size:11px;padding:8px">${i.elements||'—'}<br><br><span style="font-size:9px;color:#555">We hereby as the main contractor confirm that the work has been checked completed to comply with the specification and drawings and ready for inspection.</span></td></tr>
+      <tr><td colspan="2" style="font-weight:700;font-size:10px">Request For Inspection Any Time After: ${i.inspection_time||'8:00am'}</td><td style="font-weight:700;font-size:10px;text-align:right">On: ${i.inspection_date||'—'}</td></tr>
+      <tr><td style="font-size:10px"><b>Enabling Contractor:</b> ${scRep}</td><td style="font-size:10px">Signature: ___________</td><td style="font-size:10px">Date: ${i.request_date||'—'}</td></tr>
+      <tr><td style="font-size:10px"><b>Resident Engineer's Name:</b></td><td style="font-size:10px">Signature: ___________</td><td style="font-size:10px">Date: ___________</td></tr>
+      <tr><td style="font-size:10px"><b>Site Contractor Engineer:</b> ${i.site_engineer||'—'}</td><td colspan="2" style="font-size:10px">Signature: ___________ &nbsp; Date: ___________</td></tr>
+      <tr><td colspan="3" style="text-align:center;font-weight:700;font-size:10px;background:#f5f5f5">Below portion for Pioneers of Experts Engineering Consultants (POE) use only</td></tr>
+      <tr><td colspan="3" style="padding:6px;font-size:10px"><b>Status:</b> &nbsp;
+        ${cb(i.status==='Approved')} Approved &nbsp;&nbsp;
+        ${cb(i.status==='Approved as Noted')} Approved as noted &nbsp;&nbsp;
+        ${cb(i.status==='Correction')} Correction &nbsp;&nbsp;
+        ${cb(i.status==='Rejected')} Rejected
+      </td></tr>
+      <tr><td colspan="3" style="padding:8px;font-size:10px;min-height:60px"><b>Comments:</b><br>${i.comments||'&nbsp;<br>&nbsp;<br>&nbsp;'}</td></tr>
+      <tr><td style="font-weight:700;font-size:10px;text-decoration:underline">Inspected By</td><td style="font-weight:700;font-size:10px;text-decoration:underline">Resident Engineer</td><td style="font-weight:700;font-size:10px;text-decoration:underline">Handed Over To</td></tr>
+      <tr><td style="font-size:10px">Signature: ___________</td><td style="font-size:10px">Signature: ___________</td><td style="font-size:10px">Signature: ___________</td></tr>
+      <tr><td style="font-size:10px">Name: ${i.inspected_by||'___________'}</td><td style="font-size:10px">Name: ___________</td><td style="font-size:10px">Name: ___________</td></tr>
+      <tr><td style="font-size:10px">Date: ___________</td><td style="font-size:10px">Date: ${i.response_date||'___________'}</td><td style="font-size:10px">Date: ___________</td></tr>
+    </table>
+    <div style="text-align:center;font-size:9px;margin-top:6px;color:#777">This form is to be handed 24 hours prior the inspection requested time</div>
+  </div>`;
+  openModal(`IR – ${i.ref_no} Rev.${i.revision||'00'}`, irHTML,
+    `${can('approve')&&i.status==='Pending'?`<button class="btn btn-success" onclick="respondIR('${id}')">Record Response</button>`:''}
+     <button class="btn" onclick="closeModal()">Close</button>`, true);
+}
+
+async function viewNCR(id) {
+  const {data:n} = await sb.from('ncrs').select('*').eq('id',id).single();
+  if(!n) return;
+  openModal(`${n.ref_no} – ${n.title}`, `
+    <div class="detail-grid">
+      <div class="detail-item"><div class="detail-label">Severity</div><div class="detail-value">${sbadge(n.severity)}</div></div>
+      <div class="detail-item"><div class="detail-label">Status</div><div class="detail-value">${sbadge(n.status)}</div></div>
+      <div class="detail-item"><div class="detail-label">Location</div><div class="detail-value">${n.location||'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Raised By</div><div class="detail-value">${n.raised_by||'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Date Raised</div><div class="detail-value">${n.raised_date||'—'}</div></div>
+      ${n.closed_date?`<div class="detail-item"><div class="detail-label">Date Closed</div><div class="detail-value">${n.closed_date}</div></div>`:''}
+    </div>
+    <div class="detail-section"><div class="detail-label" style="margin-bottom:4px">Cause / Description</div><div style="font-size:12px;line-height:1.5">${n.cause||'—'}</div></div>
+    ${n.corrective_action?`<div class="detail-section"><div class="detail-label" style="margin-bottom:4px">Corrective Action</div><div style="font-size:12px;line-height:1.5">${n.corrective_action}</div></div>`:''}
+    ${can('approve')&&n.status==='Open'?`<div class="detail-section"><div class="form-group"><label class="form-label-dark">Corrective Action Taken</label><textarea class="form-control" id="ncr-ca-${id}" placeholder="Describe corrective action..."></textarea></div></div>`:''}`,
+    `${can('approve')&&n.status==='Open'?`<button class="btn btn-success" onclick="doCloseNCR('${id}')">Close NCR</button>`:''}
+     <button class="btn" onclick="closeModal()">Close</button>`);
+}
+
+// ─── ACTIONS ──────────────────────────────────────────────────────
+async function approveDrawing(id) {
+  await sb.from('drawings').update({status:'Approved'}).eq('id',id);
+  toast('Drawing approved','success'); closeModal(); render();
+}
+
+function reviewSub(id) {
+  openModal(`Review Submittal – ${id}`, `
+    <div class="form-group"><label class="form-label-dark">Engineer's Comments</label><textarea class="form-control" id="sc-${id}" placeholder="Enter comments..." style="min-height:100px"></textarea></div>
+    <div class="form-group"><label class="form-label-dark">Outcome Code</label>
+      <select class="form-control" id="so-${id}">
+        <option value="1">(1) Approved – Work may proceed</option>
+        <option value="2">(2) Approved With Comments – Work may proceed</option>
+        <option value="3" selected>(3) Revise and resubmit – Work may not proceed</option>
+        <option value="4">(4) Review not Required – Work may proceed</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Reviewed By (Resident Engineer)</label><input type="text" class="form-control" id="sre-${id}" value="${currentProfile?.full_name||''}" /></div>`,
+    `<button class="btn btn-primary" onclick="doReviewSub('${id}')">Submit Review</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doReviewSub(id) {
+  const oc = document.getElementById('so-'+id).value;
+  const statusMap = {'1':'Approved','2':'Approved','3':'Revise & Resubmit','4':'Approved'};
+  await sb.from('submittals').update({
+    eng_comments: document.getElementById('sc-'+id).value,
+    outcome: oc,
+    status: statusMap[oc],
+    reviewed_by: document.getElementById('sre-'+id).value,
+    review_date: new Date().toISOString().split('T')[0]
+  }).eq('id',id);
+  toast('Submittal reviewed','success'); closeModal(); render();
+}
+
+function respondIR(id) {
+  openModal(`Record Inspection Response – ${id}`, `
+    <div class="form-group"><label class="form-label-dark">Status</label>
+      <select class="form-control" id="ir-st-${id}">
+        <option value="Approved">Approved</option>
+        <option value="Approved as Noted">Approved as noted</option>
+        <option value="Correction">Correction</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Comments</label><textarea class="form-control" id="ir-cm-${id}" placeholder="Enter inspection findings..." style="min-height:100px"></textarea></div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Inspected By</label><input type="text" class="form-control" id="ir-ib-${id}" value="${currentProfile?.full_name||''}" /></div>
+      <div class="form-group"><label class="form-label-dark">Response Date</label><input type="date" class="form-control" id="ir-dt-${id}" value="${new Date().toISOString().split('T')[0]}" /></div>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doRespondIR('${id}')">Submit Response</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doRespondIR(id) {
+  await sb.from('inspections').update({
+    status: document.getElementById('ir-st-'+id).value,
+    comments: document.getElementById('ir-cm-'+id).value,
+    inspected_by: document.getElementById('ir-ib-'+id).value,
+    response_date: document.getElementById('ir-dt-'+id).value,
+  }).eq('id',id);
+  toast('Inspection response recorded','success'); closeModal(); render();
+}
+
+async function doCloseNCR(id) {
+  const ca = document.getElementById('ncr-ca-'+id);
+  await sb.from('ncrs').update({
+    status:'Closed',
+    corrective_action: ca?ca.value:'Corrective action completed.',
+    closed_date: new Date().toISOString().split('T')[0]
+  }).eq('id',id);
+  toast('NCR closed','success'); closeModal(); render();
+}
+
+async function removeSub(id) {
+  if(!confirm('Remove this subcontractor?')) return;
+  await sb.from('subcontractors').delete().eq('id',id);
+  toast('Subcontractor removed','info'); render();
+}
+
+function uploadRev(id) {
+  openModal(`Upload New Revision`, `
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">New Revision</label><input type="text" class="form-control" id="nr-${id}" placeholder="e.g. Rev D" /></div>
+      <div class="form-group"><label class="form-label-dark">Status</label>
+        <select class="form-control" id="rs-${id}"><option>Under Review</option><option>Issued for Construction</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Upload PDF File</label>
+      <div class="upload-zone" id="uz-${id}" onclick="document.getElementById('fu-${id}').click()" ondragover="event.preventDefault();this.classList.add('dragging')" ondragleave="this.classList.remove('dragging')" ondrop="handleDrop(event,'${id}')">
+        <div style="font-size:24px">📄</div>
+        <div class="upload-zone-text">Click to select or drag & drop PDF</div>
+        <div class="upload-zone-sub">PDF files only</div>
+        <div class="upload-progress" id="up-${id}" style="display:none"><div class="upload-progress-bar" id="upb-${id}" style="width:0%"></div></div>
+      </div>
+      <input type="file" id="fu-${id}" accept=".pdf" style="display:none" onchange="handleFileSelect(event,'${id}')" />
+      <div id="file-name-${id}" style="font-size:11px;color:var(--text2);margin-top:6px"></div>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doUploadRev('${id}')">Upload & Supersede</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+let selectedFiles = {};
+function handleFileSelect(event, id) {
+  const f = event.target.files[0];
+  if(f){selectedFiles[id]=f;document.getElementById('file-name-'+id).textContent=`Selected: ${f.name}`;}
+}
+function handleDrop(event, id) {
+  event.preventDefault();
+  document.getElementById('uz-'+id).classList.remove('dragging');
+  const f = event.dataTransfer.files[0];
+  if(f&&f.type==='application/pdf'){selectedFiles[id]=f;document.getElementById('file-name-'+id).textContent=`Selected: ${f.name}`;}
+}
+
+async function doUploadRev(id) {
+  const newRev = document.getElementById('nr-'+id).value;
+  const newStatus = document.getElementById('rs-'+id).value;
+  const file = selectedFiles[id];
+  if(!newRev){toast('Please enter a revision number','error');return;}
+  const {data:d} = await sb.from('drawings').select('revision,superseded_revisions').eq('id',id).single();
+  let supers = JSON.parse(d.superseded_revisions||'[]');
+  supers.push(d.revision);
+  let filePath = null;
+  if(file) {
+    const path = `${id}/${newRev.replace(/\s/g,'_')}_${Date.now()}.pdf`;
+    document.getElementById('up-'+id).style.display='';
+    document.getElementById('upb-'+id).style.width='50%';
+    const {error} = await sb.storage.from('drawings').upload(path, file, {upsert:true});
+    document.getElementById('upb-'+id).style.width='100%';
+    if(!error) filePath = path;
+  }
+  const update = {revision:newRev,status:newStatus,superseded_revisions:JSON.stringify(supers)};
+  if(filePath) update.file_path = filePath;
+  await sb.from('drawings').update(update).eq('id',id);
+  delete selectedFiles[id];
+  toast('Revision uploaded successfully','success'); closeModal(); render();
+}
+
+// ─── NEW ITEM FORMS ───────────────────────────────────────────────
+async function openNew() {
+  const {data:scs} = await sb.from('subcontractors').select('*');
+  const scOpts = (scs||[]).map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+
+  if(currentPage==='draw' && can('upload')) {
+    openModal('Upload New Drawing', `
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Drawing No.</label><input type="text" class="form-control" id="nd-id" placeholder="e.g. DWG-005" /></div>
+        <div class="form-group"><label class="form-label-dark">Revision</label><input type="text" class="form-control" id="nd-rev" value="Rev A" /></div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Title</label><input type="text" class="form-control" id="nd-title" placeholder="Drawing title" /></div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Discipline</label>
+          <select class="form-control" id="nd-disc"><option>Architecture</option><option>Structure</option><option>MEP</option><option>Civil</option></select>
+        </div>
+        <div class="form-group"><label class="form-label-dark">Status</label>
+          <select class="form-control" id="nd-status"><option>Under Review</option><option>Issued for Construction</option><option>Approved</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Upload PDF File</label>
+        <div class="upload-zone" id="uz-new" onclick="document.getElementById('fu-new').click()" ondragover="event.preventDefault();this.classList.add('dragging')" ondragleave="this.classList.remove('dragging')" ondrop="handleDrop(event,'new')">
+          <div style="font-size:24px">📄</div>
+          <div class="upload-zone-text">Click to select or drag & drop PDF</div>
+          <div class="upload-zone-sub">PDF, DWG files accepted</div>
+        </div>
+        <input type="file" id="fu-new" accept=".pdf,.dwg" style="display:none" onchange="handleFileSelect(event,'new')" />
+        <div id="file-name-new" style="font-size:11px;color:var(--text2);margin-top:6px"></div>
+      </div>`,
+      `<button class="btn btn-primary" onclick="doNewDraw()">Upload Drawing</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+
+  } else if(currentPage==='sub' && can('submit')) {
+    openModal('New Document Submittal (DSUB)', `
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Reference No.</label><input type="text" class="form-control" id="ns-id" placeholder="MBC-POE-DT-P454-25-0XX" /></div>
+        <div class="form-group"><label class="form-label-dark">Date</label><input type="date" class="form-control" id="ns-date" value="${new Date().toISOString().split('T')[0]}" /></div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Document Title</label><input type="text" class="form-control" id="ns-title" placeholder="e.g. Structural Shop Drawings – Level 3" /></div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">From</label><select class="form-control" id="ns-from"><option value="MBC">MBC (Main Contractor)</option>${(scs||[]).map(s=>`<option value="${s.name}">${s.name}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label-dark">To</label><select class="form-control" id="ns-to"><option value="POE">POE (Consultant)</option><option value="Regent">Regent (Developer)</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Attachments</label>
+        <div class="checkbox-grid">
+          <label><input type="checkbox" id="ns-samp"> Samples</label>
+          <label><input type="checkbox" id="ns-broc"> Original Brochure</label>
+          <label><input type="checkbox" id="ns-draw"> Drawings</label>
+          <label><input type="checkbox" id="ns-sket"> Sketches</label>
+          <label><input type="checkbox" id="ns-spec"> Specification</label>
+          <label><input type="checkbox" id="ns-oth"> Others</label>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Discipline</label>
+        <div class="checkbox-grid">
+          <label><input type="checkbox" id="ns-civil"> Civil / Structural</label>
+          <label><input type="checkbox" id="ns-mech"> Mechanical</label>
+          <label><input type="checkbox" id="ns-elv"> ELV / IT</label>
+          <label><input type="checkbox" id="ns-dspec"> Specification</label>
+          <label><input type="checkbox" id="ns-arch"> Architectural</label>
+          <label><input type="checkbox" id="ns-elec"> Electrical</label>
+        </div>
+      </div>`,
+      `<button class="btn btn-primary" onclick="doNewSub()">Create Submittal</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+
+  } else if(currentPage==='ir' && can('submit')) {
+    openModal('New Work Inspection Request', `
+      <div class="frow3">
+        <div class="form-group"><label class="form-label-dark">Ref No.</label><input type="text" class="form-control" id="ni-id" placeholder="MBC-IR-001" /></div>
+        <div class="form-group"><label class="form-label-dark">Rev No.</label><input type="text" class="form-control" id="ni-rev" value="00" /></div>
+        <div class="form-group"><label class="form-label-dark">Inspection Time</label><input type="text" class="form-control" id="ni-time" value="8:00am" /></div>
+      </div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Subcontractor</label><select class="form-control" id="ni-sc"><option value="">Main Contractor (MBC)</option>${scOpts}</select></div>
+        <div class="form-group"><label class="form-label-dark">Inspection Date</label><input type="text" class="form-control" id="ni-date" placeholder="e.g. 10APR 2026" /></div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Location</label><input type="text" class="form-control" id="ni-loc" placeholder="e.g. Level 4 – Grid C-E" /></div>
+      <div class="form-group"><label class="form-label-dark">Elements to be Inspected</label><textarea class="form-control" id="ni-elem" placeholder="Describe the work elements to be inspected..." style="min-height:80px"></textarea></div>
+      <div class="form-group"><label class="form-label-dark">Department</label>
+        <div class="checkbox-grid">
+          <label><input type="checkbox" id="ni-arch"> Architectural</label>
+          <label><input type="checkbox" id="ni-elec"> Electrical</label>
+          <label><input type="checkbox" id="ni-fire"> Firefighting</label>
+          <label><input type="checkbox" id="ni-plumb"> Plumbing</label>
+          <label><input type="checkbox" id="ni-struct"> Structural</label>
+          <label><input type="checkbox" id="ni-mep"> MEP</label>
+          <label><input type="checkbox" id="ni-civil"> Civil</label>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Contractor's Rep on Site</label><input type="text" class="form-control" id="ni-rep" placeholder="Name" /></div>
+        <div class="form-group"><label class="form-label-dark">Site Engineer</label><input type="text" class="form-control" id="ni-eng" placeholder="Name" /></div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Request Date</label><input type="text" class="form-control" id="ni-reqdate" placeholder="e.g. 09 APR 2026" /></div>`,
+      `<button class="btn btn-primary" onclick="doNewIR()">Create Inspection Request</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+
+  } else if(currentPage==='ncr' && can('raise')) {
+    openModal('Raise NCR', `
+      <div class="form-group"><label class="form-label-dark">Title</label><input type="text" class="form-control" id="nn-title" placeholder="Brief description of non-conformance" /></div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Location</label><input type="text" class="form-control" id="nn-loc" placeholder="e.g. Level 3 – Column B2" /></div>
+        <div class="form-group"><label class="form-label-dark">Severity</label><select class="form-control" id="nn-sev"><option>Minor</option><option>Major</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Description / Cause</label><textarea class="form-control" id="nn-cause" placeholder="Describe the non-conformance..." style="min-height:80px"></textarea></div>`,
+      `<button class="btn btn-primary" onclick="doNewNCR()">Raise NCR</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+
+  } else if(currentPage==='subs') {
+    openModal('Add Subcontractor', `
+      <div class="form-group"><label class="form-label-dark">Company Name</label><input type="text" class="form-control" id="nsc-name" placeholder="Full legal company name" /></div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Representative</label><input type="text" class="form-control" id="nsc-rep" placeholder="e.g. Eng. Ahmed Hassan" /></div>
+        <div class="form-group"><label class="form-label-dark">Discipline</label>
+          <select class="form-control" id="nsc-disc"><option>MEP</option><option>Civil</option><option>Structural</option><option>Electrical</option><option>Architectural</option><option>Firefighting</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Trade / Scope</label><input type="text" class="form-control" id="nsc-trade" placeholder="e.g. Mechanical / Electrical / Plumbing" /></div>`,
+      `<button class="btn btn-primary" onclick="doNewSubcontractor()">Add Subcontractor</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+
+  } else {
+    openModal('Access Restricted', `<div class="empty-state">Your current role does not have permission to create items on this page.</div>`,
+      `<button class="btn" onclick="closeModal()">Close</button>`);
+  }
+}
+
+async function doNewDraw() {
+  const id = document.getElementById('nd-id').value;
+  const title = document.getElementById('nd-title').value;
+  if(!id||!title){toast('Drawing number and title are required','error');return;}
+  const file = selectedFiles['new'];
+  let filePath = null;
+  if(file) {
+    const tempId = Date.now().toString();
+    const path = `new/${tempId}_${file.name}`;
+    const {error,data} = await sb.storage.from('drawings').upload(path, file, {upsert:true});
+    if(!error) filePath = path;
+  }
+  const {data:inserted,error} = await sb.from('drawings').insert({
+    drawing_no:id,title,discipline:document.getElementById('nd-disc').value,
+    revision:document.getElementById('nd-rev').value,
+    status:document.getElementById('nd-status').value,
+    uploaded_by:currentProfile?.full_name||currentUser?.email,
+    file_path:filePath,
+    superseded_revisions:'[]'
+  }).select().single();
+  if(filePath&&inserted){
+    const newPath = `${inserted.id}/Rev_A_${Date.now()}.pdf`;
+    await sb.storage.from('drawings').move(filePath, newPath);
+    await sb.from('drawings').update({file_path:newPath}).eq('id',inserted.id);
+  }
+  delete selectedFiles['new'];
+  if(error){toast('Error creating drawing: '+error.message,'error');return;}
+  toast('Drawing uploaded','success'); closeModal(); render();
+}
+
+async function doNewSub() {
+  const ref = document.getElementById('ns-id').value;
+  const title = document.getElementById('ns-title').value;
+  if(!ref||!title){toast('Reference number and title are required','error');return;}
+  const {error} = await sb.from('submittals').insert({
+    ref_no:ref,title,
+    from_party:document.getElementById('ns-from').value,
+    to_party:document.getElementById('ns-to').value,
+    submit_date:document.getElementById('ns-date').value,
+    status:'Pending Review',
+    attachments:{samples:document.getElementById('ns-samp').checked,brochure:document.getElementById('ns-broc').checked,drawings:document.getElementById('ns-draw').checked,sketches:document.getElementById('ns-sket').checked,others:document.getElementById('ns-oth').checked},
+    discipline:{civil:document.getElementById('ns-civil').checked,mech:document.getElementById('ns-mech').checked,elv:document.getElementById('ns-elv').checked,specs:document.getElementById('ns-dspec').checked,arch:document.getElementById('ns-arch').checked,elec:document.getElementById('ns-elec').checked},
+    revision:'Rev 000'
+  });
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast('Submittal created','success'); closeModal(); render();
+}
+
+async function doNewIR() {
+  const ref = document.getElementById('ni-id').value;
+  const elem = document.getElementById('ni-elem').value;
+  if(!ref||!elem){toast('Ref number and elements are required','error');return;}
+  const scId = document.getElementById('ni-sc').value||null;
+  const {data:sc} = scId?await sb.from('subcontractors').select('rep').eq('id',scId).single():{data:null};
+  const {error} = await sb.from('inspections').insert({
+    ref_no:ref,revision:document.getElementById('ni-rev').value,
+    plot:PROJECT.plot,location:document.getElementById('ni-loc').value,
+    city:PROJECT.city,subcontractor_id:scId||null,
+    rep:sc?.rep||document.getElementById('ni-rep').value,
+    site_engineer:document.getElementById('ni-eng').value,
+    department:{arch:document.getElementById('ni-arch').checked,elec:document.getElementById('ni-elec').checked,fire:document.getElementById('ni-fire').checked,plumb:document.getElementById('ni-plumb').checked,structural:document.getElementById('ni-struct').checked,mep:document.getElementById('ni-mep').checked,civil:document.getElementById('ni-civil').checked},
+    elements:elem,
+    inspection_time:document.getElementById('ni-time').value,
+    inspection_date:document.getElementById('ni-date').value,
+    request_date:document.getElementById('ni-reqdate').value,
+    status:'Pending'
+  });
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast('Inspection request created','success'); closeModal(); render();
+}
+
+async function doNewNCR() {
+  const title = document.getElementById('nn-title').value;
+  if(!title){toast('Title is required','error');return;}
+  const {error} = await sb.from('ncrs').insert({
+    ref_no:'NCR-'+(Date.now()%10000).toString().padStart(3,'0'),
+    title,location:document.getElementById('nn-loc').value,
+    raised_by:currentProfile?.full_name||'Unknown',
+    raised_date:new Date().toISOString().split('T')[0],
+    severity:document.getElementById('nn-sev').value,
+    status:'Open',
+    cause:document.getElementById('nn-cause').value
+  });
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast('NCR raised','success'); closeModal(); render();
+}
+
+async function doNewSubcontractor() {
+  const name = document.getElementById('nsc-name').value;
+  if(!name){toast('Company name is required','error');return;}
+  const {error} = await sb.from('subcontractors').insert({
+    name,rep:document.getElementById('nsc-rep').value,
+    discipline:document.getElementById('nsc-disc').value,
+    trade:document.getElementById('nsc-trade').value
+  });
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast('Subcontractor added','success'); closeModal(); render();
+}
+
+// ─── MODAL HELPERS ────────────────────────────────────────────────
+function openModal(title, body, footer, wide) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-footer').innerHTML = footer;
+  document.getElementById('modal').classList.toggle('wide', !!wide);
+  document.getElementById('modal-bg').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
+function closeBg(e){if(e.target===document.getElementById('modal-bg'))closeModal();}
+
+// ─── TOAST ────────────────────────────────────────────────────────
+function toast(msg, type='info') {
+  const el = document.createElement('div');
+  el.className=`toast ${type}`; el.textContent=msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>el.remove(), 3500);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────
+(async()=>{
+  const {data:{session}} = await sb.auth.getSession();
+  if(session?.user) await loadApp(session.user);
+})();
+</script>
+</body>
+</html>
