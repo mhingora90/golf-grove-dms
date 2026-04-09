@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Golf Grove DMS – Regent Developments</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -738,7 +739,10 @@ async function doChangeRole(uid) {
 
 // ─── VIEW MODALS ──────────────────────────────────────────────────
 async function viewDraw(id) {
-  const {data:d} = await sb.from('drawings').select('*').eq('id',id).single();
+  const [{data:d},{data:revs}] = await Promise.all([
+    sb.from('drawings').select('*').eq('id',id).single(),
+    sb.from('drawing_revisions').select('*').eq('drawing_id',id).order('upload_date',{ascending:true})
+  ]);
   if(!d) return;
   let pdfHtml = '';
   if(d.file_path) {
@@ -748,7 +752,47 @@ async function viewDraw(id) {
         <div class="pdf-viewer"><iframe src="${urlData.signedUrl}" title="Drawing"></iframe></div></div>`;
     }
   }
-  const revHistory = JSON.parse(d.superseded_revisions||'[]');
+  const revRows = revs||[];
+  const revTableHTML = revRows.length ? `
+    <div class="detail-section">
+      <div class="detail-label" style="margin-bottom:10px">Full Revision History & Audit Trail</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:11px">
+          <tr style="background:var(--bg3)">
+            <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Revision</th>
+            <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Status</th>
+            <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Uploaded By</th>
+            <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Upload Date</th>
+            <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Approved By</th>
+            <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Approval Date</th>
+          </tr>
+          ${revRows.map((r,i)=>{
+            const isCurrent = i===revRows.length-1;
+            const bg = isCurrent?'background:var(--blue-bg)':'';
+            const uploadDate = r.upload_date?new Date(r.upload_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—';
+            const approvalDate = r.approval_date?new Date(r.approval_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—';
+            return `<tr style="${bg};border-bottom:1px solid var(--border)">
+              <td style="padding:7px 10px">
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span class="rev-chip" style="${isCurrent?'background:var(--blue-bg);color:var(--blue-light);border-color:var(--blue)':''}">${r.revision}</span>
+                  ${isCurrent?'<span style="font-size:9px;color:var(--blue-light)">Current</span>':'<span style="font-size:9px;color:var(--text3)">Superseded</span>'}
+                </div>
+              </td>
+              <td style="padding:7px 10px">${sbadge(r.status||'—')}</td>
+              <td style="padding:7px 10px">
+                <div style="font-weight:500;color:var(--text)">${r.uploaded_by_name||'—'}</div>
+              </td>
+              <td style="padding:7px 10px;color:var(--text2)">${uploadDate}</td>
+              <td style="padding:7px 10px">
+                ${r.approved_by_name?`<div style="font-weight:500;color:var(--green-light)">${r.approved_by_name}</div>`:'<span style="color:var(--text3)">—</span>'}
+              </td>
+              <td style="padding:7px 10px;color:var(--text2)">${r.approved_by_name?approvalDate:'—'}</td>
+            </tr>`;
+          }).join('')}
+        </table>
+      </div>
+    </div>` : `<div class="detail-section"><div class="detail-label" style="margin-bottom:8px">Revision History</div>
+      <div style="font-size:11px;color:var(--text3);padding:8px">No revision history yet — history is tracked from this update onwards.</div></div>`;
   openModal(`${d.drawing_no} – ${d.title}`, `
     <div class="detail-grid">
       <div class="detail-item"><div class="detail-label">Discipline</div><div class="detail-value">${d.discipline||'—'}</div></div>
@@ -756,11 +800,7 @@ async function viewDraw(id) {
       <div class="detail-item"><div class="detail-label">Status</div><div class="detail-value">${sbadge(d.status)}</div></div>
       <div class="detail-item"><div class="detail-label">Uploaded</div><div class="detail-value">${d.created_at?d.created_at.split('T')[0]:'—'}</div></div>
     </div>
-    ${revHistory.length?`<div class="detail-section"><div class="detail-label" style="margin-bottom:8px">Revision History</div>
-      <div style="display:flex;flex-direction:column;gap:4px">
-        ${revHistory.map(r=>`<div style="font-size:11px;color:var(--text3);padding:4px 8px;background:var(--bg3);border-radius:4px">${r} – Superseded</div>`).join('')}
-        <div style="font-size:11px;color:var(--blue-light);padding:4px 8px;background:var(--blue-bg);border-radius:4px">${d.revision} – Current</div>
-      </div></div>`:''}
+    ${revTableHTML}
     ${pdfHtml}`,
     `${can('upload')?`<button class="btn btn-primary" onclick="uploadRev('${id}')">Upload New Revision</button>`:''}
      ${can('approve')&&d.status==='Under Review'?`<button class="btn btn-success" onclick="approveDrawing('${id}')">Approve</button>`:''}
@@ -818,10 +858,12 @@ async function viewSub(id) {
     <tr><td colspan="2" style="padding:8px;color:#00008B;font-size:12px">${s.reviewed_by?`Eng : ${s.reviewed_by}`:''}</td>
         <td colspan="2" style="padding:8px;text-align:right;font-weight:700">Resident Engineer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</td></tr>
     </table><div style="margin-top:8px;font-size:9px;color:#888">POE/SUP-DSAR-004 Rev 002 | Issue date: 01/10/2018</div></div>`;
-  openModal(`DSUB – ${s.ref_no}`, parentInfo+dsub+commentThreadHTML('submittal',id,comments),
+  const dsubWrapped = `<div id='dsub-print-${id}'>${parentInfo}${dsub}</div>`;
+  openModal(`DSUB – ${s.ref_no}`, dsubWrapped+commentThreadHTML('submittal',id,comments),
     `${can('approve')&&s.status==='Pending Review'?`<button class="btn btn-success" onclick="reviewSub('${id}')">Review & Respond</button>`:''}
      ${can('submit')&&s.status==='Revise & Resubmit'?`<button class="btn btn-primary" onclick="createResubmission('${id}')">Create Resubmission</button>`:''}
      ${s.due_date?`<span style="font-size:11px;padding:4px 8px">${overdueTag(s.due_date)}</span>`:''}
+     <button class="btn" onclick="printDoc('dsub-print-${id}','DSUB_${s.ref_no}.pdf')">Download PDF</button>
      <button class="btn" onclick="closeModal()">Close</button>`, true);
 }
 
@@ -886,28 +928,87 @@ async function viewNCR(id) {
     loadComments('ncr',id)
   ]);
   if(!n) return;
-  openModal(`${n.ref_no} – ${n.title}`, `
-    <div class="detail-grid">
-      <div class="detail-item"><div class="detail-label">Severity</div><div class="detail-value">${sbadge(n.severity)}</div></div>
-      <div class="detail-item"><div class="detail-label">Status</div><div class="detail-value">${sbadge(n.status)}</div></div>
-      <div class="detail-item"><div class="detail-label">Location</div><div class="detail-value">${n.location||'—'}</div></div>
-      <div class="detail-item"><div class="detail-label">Raised By</div><div class="detail-value">${n.raised_by||'—'}</div></div>
-      <div class="detail-item"><div class="detail-label">Date Raised</div><div class="detail-value">${n.raised_date||'—'}</div></div>
-      ${n.closed_date?`<div class="detail-item"><div class="detail-label">Date Closed</div><div class="detail-value">${n.closed_date}</div></div>`:''}
+  const cb = (checked) => `<span style="display:inline-block;width:11px;height:11px;border:1.2px solid #333;margin-right:3px;vertical-align:middle;text-align:center;font-size:9px;line-height:11px;font-weight:700">${checked?'&#10005;':''}</span>`;
+  const ncrDoc = `<div id="ncr-print-${n.id}" style="background:#fff;color:#000;font-family:Arial,Helvetica,sans-serif;font-size:10.5px;padding:18px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:.7px solid #aaa;margin-bottom:8px">
+      <div style="padding:8px;border-right:.7px solid #aaa"><div style="font-size:14px;font-weight:700;color:#00008B">POE</div><div style="font-size:9px">ENGINEERING CONSULTANTS</div></div>
+      <div style="padding:8px;border-right:.7px solid #aaa;text-align:center"><div style="font-size:18px;font-style:italic;color:#00008B">regent</div><div style="font-size:9px">DEVELOPMENTS</div></div>
+      <div style="padding:6px;text-align:right;font-size:9px">Modern Building Contracting L.L.C<br>Tel.: 04-2344445</div>
     </div>
-    <div class="detail-section"><div class="detail-label" style="margin-bottom:4px">Cause / Description</div><div style="font-size:12px;line-height:1.5">${n.cause||'—'}</div></div>
-    ${n.corrective_action?`<div class="detail-section"><div class="detail-label" style="margin-bottom:4px">Corrective Action</div><div style="font-size:12px;line-height:1.5">${n.corrective_action}</div></div>`:''}
-    ${can('approve')&&n.status==='Open'?`<div class="detail-section"><div class="form-group"><label class="form-label-dark">Corrective Action Taken</label><textarea class="form-control" id="ncr-ca-${id}" placeholder="Describe corrective action..."></textarea></div></div>`:''}`,
-    `${can('approve')&&n.status==='Open'?`<button class="btn btn-success" onclick="doCloseNCR('${id}')">Close NCR</button>`:''}
-     <button class="btn" onclick="closeModal()">Close</button>`, false);
-  // Append comments
-  const mb = document.getElementById('modal-body');
-  mb.innerHTML += commentThreadHTML('ncr',id,comments);
+    <div style="text-align:center;font-weight:700;font-size:12px;text-decoration:underline;padding:5px;border:.7px solid #888;margin-bottom:0;color:#000">NON-CONFORMANCE REPORT (NCR)</div>
+    <table style="width:100%;border-collapse:collapse;color:#000">
+      <tr>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700;width:25%">NCR Ref No.:</td>
+        <td style="border:.7px solid #888;padding:4px 7px;color:#8B0000;font-weight:700">${n.ref_no}</td>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700;width:20%">Date Raised:</td>
+        <td style="border:.7px solid #888;padding:4px 7px;color:#8B0000;font-weight:700">${n.raised_date||'—'}</td>
+      </tr>
+      <tr>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Project:</td>
+        <td colspan="3" style="border:.7px solid #888;padding:4px 7px">Golf Grove – Residential Building (B+G+P+7+Roof) – Plot 6850752</td>
+      </tr>
+      <tr>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Raised By:</td>
+        <td style="border:.7px solid #888;padding:4px 7px">${n.raised_by||'—'}</td>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Location:</td>
+        <td style="border:.7px solid #888;padding:4px 7px">${n.location||'—'}</td>
+      </tr>
+      <tr>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Severity:</td>
+        <td colspan="3" style="border:.7px solid #888;padding:4px 7px">
+          ${cb(n.severity==='Major')} <b style="${n.severity==='Major'?'color:#8B0000':''}">Major</b> &nbsp;&nbsp;&nbsp;
+          ${cb(n.severity==='Minor')} Minor
+        </td>
+      </tr>
+      <tr><td colspan="4" style="border:.7px solid #888;padding:4px 7px;font-weight:700;background:#f5f5f5">Description of Non-Conformance:</td></tr>
+      <tr><td colspan="4" style="border:.7px solid #888;padding:10px 7px;min-height:60px">${n.cause||'—'}</td></tr>
+      <tr><td colspan="4" style="border:.7px solid #888;padding:4px 7px;font-weight:700;background:#f5f5f5">Corrective Action / Contractor Response:</td></tr>
+      <tr><td colspan="4" style="border:.7px solid #888;padding:10px 7px;min-height:40px">${n.corrective_action||'Pending contractor response.'}</td></tr>
+      <tr>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Status:</td>
+        <td colspan="3" style="border:.7px solid #888;padding:4px 7px">
+          ${cb(n.status==='Open')} <b style="${n.status==='Open'?'color:#8B0000':''}">Open</b> &nbsp;&nbsp;&nbsp;
+          ${cb(n.status==='Closed')} <b style="${n.status==='Closed'?'color:#1a5e1a':''}">Closed</b> &nbsp;&nbsp;&nbsp;
+          Date Closed: ${n.closed_date||'___________'}
+        </td>
+      </tr>
+    </table>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-top:10px">
+      <div style="border:.7px solid #888;padding:8px;text-align:center;font-size:10px"><b>Raised By (Consultant)</b><br><br><br>Signature: ___________<br>Name: ${n.raised_by||'___________'}<br>Date: ${n.raised_date||'___________'}</div>
+      <div style="border:.7px solid #888;padding:8px;text-align:center;font-size:10px"><b>Acknowledged By (Contractor)</b><br><br><br>Signature: ___________<br>Name: ___________<br>Date: ___________</div>
+      <div style="border:.7px solid #888;padding:8px;text-align:center;font-size:10px"><b>Closed By (Consultant)</b><br><br><br>Signature: ___________<br>Name: ${n.closed_by||'___________'}<br>Date: ${n.closed_date||'___________'}</div>
+    </div>
+    <div style="margin-top:8px;font-size:9px;color:#888;display:flex;justify-content:space-between">
+      <span>Golf Grove DMS | Regent Developments | ${n.ref_no}</span><span>Page 1 of 1</span>
+    </div>
+  </div>`;
+  const closeSection = can('approve')&&n.status==='Open'?`<div class="detail-section" style="margin-top:14px">
+    <div class="form-group" style="margin-bottom:10px"><label class="form-label-dark">Corrective Action Taken</label><textarea class="form-control" id="ncr-ca-${n.id}" placeholder="Describe corrective action taken..." style="min-height:70px"></textarea></div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Closed By – Engineer Name <span style="color:var(--color-text-danger)">*</span></label><input type="text" class="form-control" id="ncr-eng-${n.id}" placeholder="Enter engineer's full name" /></div>
+      <div class="form-group"><label class="form-label-dark">Closing Date</label><input type="date" class="form-control" id="ncr-dt-${n.id}" value="${new Date().toISOString().split('T')[0]}" /></div>
+    </div>
+  </div>`:'';
+  openModal(`${n.ref_no} – ${n.title}`, ncrDoc+closeSection+commentThreadHTML('ncr',n.id,comments),
+    `${can('approve')&&n.status==='Open'?`<button class="btn btn-success" onclick="doCloseNCR('${n.id}')">Close NCR</button>`:''}
+     <button class="btn" onclick="printDoc('ncr-print-${n.id}','NCR_${n.ref_no}.pdf')">Download PDF</button>
+     <button class="btn" onclick="closeModal()">Close</button>`, true);
 }
 
 // ─── ACTIONS ──────────────────────────────────────────────────────
 async function approveDrawing(id) {
+  const {data:d} = await sb.from('drawings').select('revision').eq('id',id).single();
   await sb.from('drawings').update({status:'Approved'}).eq('id',id);
+  // Update revision record with approval details
+  await sb.from('drawing_revisions')
+    .update({
+      approved_by_name:currentProfile?.full_name||currentUser?.email,
+      approved_by_id:currentUser?.id,
+      approval_date:new Date().toISOString(),
+      status:'Approved'
+    })
+    .eq('drawing_id',id)
+    .eq('revision',d.revision);
   toast('Drawing approved','success'); closeModal(); render();
 }
 
@@ -922,19 +1023,25 @@ function reviewSub(id) {
         <option value="4">(4) Review not Required – Work may proceed</option>
       </select>
     </div>
-    <div class="form-group"><label class="form-label-dark">Reviewed By (Resident Engineer)</label><input type="text" class="form-control" id="sre-${id}" value="${currentProfile?.full_name||''}" /></div>`,
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Resident Engineer – Name <span style="color:var(--color-text-danger)">*</span></label><input type="text" class="form-control" id="sre-${id}" placeholder="Enter engineer's full name" /></div>
+      <div class="form-group"><label class="form-label-dark">Date</label><input type="date" class="form-control" id="srd-${id}" value="${new Date().toISOString().split('T')[0]}" /></div>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);padding:6px 0">This name will appear on the DSUB form as the signing Resident Engineer.</div>`,
     `<button class="btn btn-primary" onclick="doReviewSub('${id}')">Submit Review</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 }
 
 async function doReviewSub(id) {
   const oc = document.getElementById('so-'+id).value;
+  const engName = document.getElementById('sre-'+id)?.value?.trim();
+  if(!engName){toast("Please enter the Resident Engineer's name",'error');return;}
   const statusMap = {'1':'Approved','2':'Approved','3':'Revise & Resubmit','4':'Approved'};
   await sb.from('submittals').update({
     eng_comments: document.getElementById('sc-'+id).value,
     outcome: oc,
     status: statusMap[oc],
-    reviewed_by: document.getElementById('sre-'+id).value,
-    review_date: new Date().toISOString().split('T')[0]
+    reviewed_by: engName,
+    review_date: document.getElementById('srd-'+id)?.value||new Date().toISOString().split('T')[0]
   }).eq('id',id);
   toast('Submittal reviewed','success'); closeModal(); render();
 }
@@ -949,19 +1056,22 @@ function respondIR(id) {
         <option value="Rejected">Rejected</option>
       </select>
     </div>
-    <div class="form-group"><label class="form-label-dark">Comments</label><textarea class="form-control" id="ir-cm-${id}" placeholder="Enter inspection findings..." style="min-height:100px"></textarea></div>
+    <div class="form-group"><label class="form-label-dark">Comments</label><textarea class="form-control" id="ir-cm-${id}" placeholder="Enter inspection findings and comments..." style="min-height:100px"></textarea></div>
     <div class="frow">
-      <div class="form-group"><label class="form-label-dark">Inspected By</label><input type="text" class="form-control" id="ir-ib-${id}" value="${currentProfile?.full_name||''}" /></div>
+      <div class="form-group"><label class="form-label-dark">Resident Engineer – Name <span style="color:var(--color-text-danger)">*</span></label><input type="text" class="form-control" id="ir-ib-${id}" placeholder="Enter engineer's full name" /></div>
       <div class="form-group"><label class="form-label-dark">Response Date</label><input type="date" class="form-control" id="ir-dt-${id}" value="${new Date().toISOString().split('T')[0]}" /></div>
-    </div>`,
+    </div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);padding:6px 0">This name will appear on the IR form as the signing Resident Engineer.</div>`,
     `<button class="btn btn-primary" onclick="doRespondIR('${id}')">Submit Response</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 }
 
 async function doRespondIR(id) {
+  const engName = document.getElementById('ir-ib-'+id)?.value?.trim();
+  if(!engName){toast("Please enter the Resident Engineer's name",'error');return;}
   await sb.from('inspections').update({
     status: document.getElementById('ir-st-'+id).value,
     comments: document.getElementById('ir-cm-'+id).value,
-    inspected_by: document.getElementById('ir-ib-'+id).value,
+    inspected_by: engName,
     response_date: document.getElementById('ir-dt-'+id).value,
   }).eq('id',id);
   toast('Inspection response recorded','success'); closeModal(); render();
@@ -1021,7 +1131,7 @@ async function doUploadRev(id) {
   const newStatus = document.getElementById('rs-'+id).value;
   const file = selectedFiles[id];
   if(!newRev){toast('Please enter a revision number','error');return;}
-  const {data:d} = await sb.from('drawings').select('revision,superseded_revisions').eq('id',id).single();
+  const {data:d} = await sb.from('drawings').select('revision,superseded_revisions,file_path').eq('id',id).single();
   let supers = JSON.parse(d.superseded_revisions||'[]');
   supers.push(d.revision);
   let filePath = null;
@@ -1036,6 +1146,16 @@ async function doUploadRev(id) {
   const update = {revision:newRev,status:newStatus,superseded_revisions:JSON.stringify(supers)};
   if(filePath) update.file_path = filePath;
   await sb.from('drawings').update(update).eq('id',id);
+  // Log revision event
+  await sb.from('drawing_revisions').insert({
+    drawing_id:id,
+    revision:newRev,
+    status:newStatus,
+    uploaded_by_name:currentProfile?.full_name||currentUser?.email,
+    uploaded_by_id:currentUser?.id,
+    file_path:filePath||d.file_path,
+    notes:document.getElementById('rd-'+id)?.value||''
+  });
   delete selectedFiles[id];
   toast('Revision uploaded successfully','success'); closeModal(); render();
 }
@@ -1200,6 +1320,17 @@ async function doNewDraw() {
   }
   delete selectedFiles['new'];
   if(error){toast('Error creating drawing: '+error.message,'error');return;}
+  // Log initial revision event
+  if(inserted) {
+    await sb.from('drawing_revisions').insert({
+      drawing_id:inserted.id,
+      revision:document.getElementById('nd-rev').value||'Rev A',
+      status:document.getElementById('nd-status').value,
+      uploaded_by_name:currentProfile?.full_name||currentUser?.email,
+      uploaded_by_id:currentUser?.id,
+      file_path:inserted.file_path
+    });
+  }
   toast('Drawing uploaded','success'); closeModal(); render();
 }
 
@@ -1411,6 +1542,7 @@ async function viewRFI(id) {
     ${commentThreadHTML('rfi',id,comments)}`,
     `${can('approve')&&r.status==='Open'?`<button class="btn btn-success" onclick="respondRFI('${id}')">Respond</button>`:''}
      ${can('approve')&&r.status==='Responded'?`<button class="btn btn-sm" onclick="closeRFI('${id}')">Close RFI</button>`:''}
+     <button class="btn" onclick="printDoc('rfi-print-${id}','RFI_${r.ref_no}.pdf')">Download PDF</button>
      <button class="btn" onclick="closeModal()">Close</button>`, true);
 }
 
@@ -1418,18 +1550,21 @@ function respondRFI(id) {
   openModal('Respond to RFI',`
     <div class="form-group"><label class="form-label-dark">Response</label><textarea class="form-control" id="rfi-resp-${id}" placeholder="Enter your formal response..." style="min-height:120px"></textarea></div>
     <div class="frow">
-      <div class="form-group"><label class="form-label-dark">Responded By</label><input type="text" class="form-control" id="rfi-by-${id}" value="${currentProfile?.full_name||''}" /></div>
+      <div class="form-group"><label class="form-label-dark">Responded By – Name <span style="color:var(--color-text-danger)">*</span></label><input type="text" class="form-control" id="rfi-by-${id}" placeholder="Enter engineer's full name" /></div>
       <div class="form-group"><label class="form-label-dark">Date</label><input type="date" class="form-control" id="rfi-dt-${id}" value="${new Date().toISOString().split('T')[0]}" /></div>
-    </div>`,
+    </div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);padding:6px 0">This name will appear on the RFI response as the signing engineer.</div>`,
     `<button class="btn btn-primary" onclick="doRespondRFI('${id}')">Submit Response</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 }
 
 async function doRespondRFI(id) {
   const resp = document.getElementById('rfi-resp-'+id)?.value;
+  const engName = document.getElementById('rfi-by-'+id)?.value?.trim();
   if(!resp){toast('Please enter a response','error');return;}
+  if(!engName){toast("Please enter the responding engineer's name",'error');return;}
   await sb.from('rfis').update({
     status:'Responded', response:resp,
-    responded_by:document.getElementById('rfi-by-'+id)?.value,
+    responded_by:engName,
     responded_date:document.getElementById('rfi-dt-'+id)?.value
   }).eq('id',id);
   toast('RFI response submitted','success'); closeModal(); render();
@@ -1492,8 +1627,10 @@ async function viewTransmittal(id) {
       <div style="border:.7px solid #888;padding:8px;text-align:center;font-size:10px"><strong>Received By</strong><br><br>Signature: ___________<br>Name: ___________<br>Date: ___________</div>
     </div>
   </div>`;
-  openModal(`Transmittal – ${t.ref_no}`,transHTML+commentThreadHTML('transmittal',id,comments),
-    `<button class="btn" onclick="closeModal()">Close</button>`, true);
+  const transWrapped = `<div id='trans-print-${id}'>${transHTML}</div>`;
+  openModal(`Transmittal – ${t.ref_no}`,transWrapped+commentThreadHTML('transmittal',id,comments),
+    `<button class="btn" onclick="printDoc('trans-print-${id}','Transmittal_${t.ref_no}.pdf')">Download PDF</button>
+     <button class="btn" onclick="closeModal()">Close</button>`, true);
 }
 
 // ─── RESUBMISSION ─────────────────────────────────────────────────
@@ -1655,6 +1792,21 @@ async function doNewTransmittal(drawCount) {
   });
   if(error){toast('Error: '+error.message,'error');return;}
   toast('Transmittal created','success'); closeModal(); render();
+}
+
+// ─── PDF EXPORT ───────────────────────────────────────────────────
+function printDoc(elementId, filename) {
+  const el = document.getElementById(elementId);
+  if(!el) { toast('Nothing to export','error'); return; }
+  const opt = {
+    margin: [10, 10, 10, 10],
+    filename: filename||'document.pdf',
+    image: { type:'jpeg', quality:0.98 },
+    html2canvas: { scale:2, useCORS:true, backgroundColor:'#ffffff' },
+    jsPDF: { unit:'mm', format:'a4', orientation:'portrait' }
+  };
+  toast('Generating PDF...','info');
+  html2pdf().set(opt).from(el).save().then(()=>toast('PDF downloaded','success'));
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────
