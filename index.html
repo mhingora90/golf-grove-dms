@@ -123,7 +123,7 @@ tr:hover td{background:var(--bg3);cursor:pointer}
 .modal-title{font-size:13px;font-weight:500;color:var(--text)}
 .modal-close{background:none;border:none;font-size:18px;color:var(--text2);cursor:pointer;line-height:1;padding:2px 6px;border-radius:4px}
 .modal-close:hover{background:var(--bg3);color:var(--text)}
-.modal-body{padding:18px;display:flex;flex-direction:column;gap:14px;max-height:72vh;overflow-y:auto}
+.modal-body{padding:18px;display:flex;flex-direction:column;gap:14px;max-height:78vh;overflow-y:auto;scroll-behavior:smooth}
 .modal-footer{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
 .form-group{display:flex;flex-direction:column;gap:4px}
 .form-label-dark{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
@@ -1195,12 +1195,12 @@ async function openNew() {
         <div id="file-name-new" style="font-size:11px;color:var(--text2);margin-top:6px"></div>
       </div>
       <div class="form-group"><label class="form-label-dark">Additional Attachments (optional)</label>
-        <div class="upload-zone" style="padding:14px" onclick="document.getElementById('nd-extra-files').click()"
-          ondragover="event.preventDefault();this.classList.add('dragging')"
-          ondragleave="this.classList.remove('dragging')"
-          ondrop="event.preventDefault();this.classList.remove('dragging');stageFiles(event.dataTransfer.files,'nd-staged')">
-          <div style="font-size:12px;color:var(--color-text-secondary)">Attach supporting documents (specs, calculations, etc.)</div>
-          <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">PDF, Word, Excel — max 50MB each</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('nd-extra-files').click()"
+          ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'"
+          ondragleave="this.style.borderColor='var(--color-border-secondary)'"
+          ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';stageFiles(event.dataTransfer.files,'nd-staged')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--color-text-secondary)">Attach supporting documents — specs, calculations, references (max 50MB each)</span>
         </div>
         <input type="file" id="nd-extra-files" multiple style="display:none" onchange="stageFiles(this.files,'nd-staged')" />
         <div id="nd-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
@@ -1240,6 +1240,14 @@ async function openNew() {
           <label><input type="checkbox" id="ns-arch"> Architectural</label>
           <label><input type="checkbox" id="ns-elec"> Electrical</label>
         </div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('ns-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'" ondragleave="this.style.borderColor='var(--color-border-secondary)'" ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';stageFiles(event.dataTransfer.files,'ns-staged')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--color-text-secondary)">Click to attach or drag & drop files — PDF, DWG, Images, Word, Excel (max 50MB)</span>
+        </div>
+        <input type="file" id="ns-files" multiple style="display:none" onchange="stageFiles(this.files,'ns-staged')" />
+        <div id="ns-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
       </div>`,
       `<button class="btn btn-primary" onclick="doNewSub()">Create Submittal</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 
@@ -1274,7 +1282,15 @@ async function openNew() {
         <div class="form-group"><label class="form-label-dark">Contractor's Rep on Site</label><input type="text" class="form-control" id="ni-rep" placeholder="Name" /></div>
         <div class="form-group"><label class="form-label-dark">Site Engineer</label><input type="text" class="form-control" id="ni-eng" placeholder="Name" /></div>
       </div>
-      <div class="form-group"><label class="form-label-dark">Request Date</label><input type="text" class="form-control" id="ni-reqdate" placeholder="e.g. 09 APR 2026" /></div>`,
+      <div class="form-group"><label class="form-label-dark">Request Date</label><input type="text" class="form-control" id="ni-reqdate" placeholder="e.g. 09 APR 2026" /></div>
+      <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('ni-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'" ondragleave="this.style.borderColor='var(--color-border-secondary)'" ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';stageFiles(event.dataTransfer.files,'ni-staged')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--color-text-secondary)">Click to attach or drag & drop — PDF, DWG, Images, Word, Excel (max 50MB)</span>
+        </div>
+        <input type="file" id="ni-files" multiple style="display:none" onchange="stageFiles(this.files,'ni-staged')" />
+        <div id="ni-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
+      </div>`,
       `<button class="btn btn-primary" onclick="doNewIR()">Create Inspection Request</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 
   } else if(currentPage==='ncr' && can('raise')) {
@@ -1284,7 +1300,15 @@ async function openNew() {
         <div class="form-group"><label class="form-label-dark">Location</label><input type="text" class="form-control" id="nn-loc" placeholder="e.g. Level 3 – Column B2" /></div>
         <div class="form-group"><label class="form-label-dark">Severity</label><select class="form-control" id="nn-sev"><option>Minor</option><option>Major</option></select></div>
       </div>
-      <div class="form-group"><label class="form-label-dark">Description / Cause</label><textarea class="form-control" id="nn-cause" placeholder="Describe the non-conformance..." style="min-height:80px"></textarea></div>`,
+      <div class="form-group"><label class="form-label-dark">Description / Cause</label><textarea class="form-control" id="nn-cause" placeholder="Describe the non-conformance..." style="min-height:80px"></textarea></div>
+      <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('nn-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'" ondragleave="this.style.borderColor='var(--color-border-secondary)'" ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';stageFiles(event.dataTransfer.files,'nn-staged')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--color-text-secondary)">Click to attach or drag & drop — PDF, DWG, Images, Word, Excel (max 50MB)</span>
+        </div>
+        <input type="file" id="nn-files" multiple style="display:none" onchange="stageFiles(this.files,'nn-staged')" />
+        <div id="nn-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
+      </div>`,
       `<button class="btn btn-primary" onclick="doNewNCR()">Raise NCR</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 
   } else if(currentPage==='subs') {
@@ -1432,6 +1456,7 @@ function openModal(title, body, footer, wide) {
   document.getElementById('modal-footer').innerHTML = footer;
   document.getElementById('modal').classList.toggle('wide', !!wide);
   document.getElementById('modal-bg').classList.add('open');
+  document.getElementById('modal-body').scrollTop = 0;
 }
 function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
 function closeBg(e){if(e.target===document.getElementById('modal-bg'))closeModal();}
