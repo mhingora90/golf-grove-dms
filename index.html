@@ -6,6 +6,7 @@
 <title>Golf Grove DMS – Regent Developments</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -152,8 +153,19 @@ textarea.form-control{resize:vertical;min-height:70px}
 .ir-checked::after{content:'✕';color:#000}
 
 /* PDF VIEWER */
-.pdf-viewer{background:var(--bg3);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
-.pdf-viewer iframe{width:100%;height:500px;border:none}
+.pdf-viewer{background:#1a1a1a;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);display:flex;flex-direction:column}
+.pdf-toolbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#2a2a2a;border-bottom:1px solid #444;flex-wrap:wrap}
+.pdf-toolbar button{background:#3a3a3a;color:#e0e0e0;border:1px solid #555;border-radius:5px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:var(--font-sans)}
+.pdf-toolbar button:hover{background:#4a4a4a}
+.pdf-toolbar button:disabled{opacity:.4;cursor:default}
+.pdf-toolbar .pdf-page-info{font-size:11px;color:#bbb;min-width:80px;text-align:center}
+.pdf-toolbar .pdf-zoom-info{font-size:11px;color:#bbb;min-width:50px;text-align:center}
+.pdf-toolbar select{background:#3a3a3a;color:#e0e0e0;border:1px solid #555;border-radius:5px;padding:4px 8px;font-size:11px;cursor:pointer}
+.pdf-toolbar .pdf-title{font-size:11px;color:#888;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:6px}
+.pdf-canvas-wrap{overflow:auto;flex:1;display:flex;justify-content:center;align-items:flex-start;padding:16px;background:#1a1a1a;min-height:420px;max-height:65vh}
+.pdf-canvas-wrap canvas{display:block;box-shadow:0 2px 12px rgba(0,0,0,.5)}
+.pdf-loading{display:flex;align-items:center;justify-content:center;height:300px;color:#888;font-size:13px;flex-direction:column;gap:10px}
+.pdf-error{color:#f88;font-size:12px;text-align:center;padding:20px}
 
 /* DETAIL GRID */
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -301,7 +313,11 @@ textarea.form-control{resize:vertical;min-height:70px}
     <div class="nav-item" id="n-trans" onclick="nav('trans',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M1 8h14M10 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Transmittals
-    </div>
+
+    <div class="nav-item ${currentPage==='ms'?'active':''}" onclick="nav('ms')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 5h6M5 8h4M5 11h3" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+      Method Statements
+    </div>    </div>
     <div class="sb-section">Admin</div>
     <div class="nav-item" id="n-subs" onclick="nav('subs',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" stroke-width="1.3"/><circle cx="12.5" cy="5" r="2" stroke="currentColor" stroke-width="1.1"/><path d="M12 9.5c1.657 0 3 1.343 3 3" stroke="currentColor" stroke-width="1.1"/></svg>
@@ -575,6 +591,277 @@ async function renderDash() {
   </div>`;
 }
 
+// ─── METHOD STATEMENTS ───────────────────────────────────────────────
+async function renderMS() {
+  const {data} = await sb.from('method_statements').select('*').order('created_at',{ascending:false});
+  const rows = data||[];
+  const open = rows.filter(r=>r.status!=='Approved'&&r.status!=='Rejected').length;
+  document.getElementById('content').innerHTML = `
+  <div class="fbar">
+    <span class="fbar-label">Status:</span>
+    ${['All','Pending Review','Under Review','Approved','Revise & Resubmit','Rejected'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'ms','status','${s}')">${s}</span>`).join('')}
+  </div>
+  <div class="table-wrap"><table>
+    <tr><th>Ref No.</th><th>Title / Activity</th><th>Discipline</th><th>Location</th><th>Rev</th><th>Submitted By</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+    ${rows.length?rows.map(m=>`<tr class="ms-row" data-status="${m.status||''}">
+      <td class="mono">${m.ref_no}</td>
+      <td><div style="font-weight:500;color:var(--blue-light);cursor:pointer" onclick="viewMS('${m.id}')">${m.title}</div><div style="font-size:10px;color:var(--text3)">${m.activity||''}</div></td>
+      <td style="color:var(--text2)">${m.discipline||'—'}</td>
+      <td style="color:var(--text2);font-size:11px">${m.location||'—'}</td>
+      <td><span class="rev-chip">${m.revision||'Rev 0'}</span></td>
+      <td style="font-size:11px;color:var(--text2)">${m.submitted_by||'—'}</td>
+      <td style="font-size:10px;color:var(--text3)">${m.submitted_date||'—'}</td>
+      <td>${sbadge(m.status)}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="viewMS('${m.id}')">View</button>
+        ${can('approve')&&m.status==='Pending Review'?`<button class="btn btn-sm btn-success" onclick="viewMS('${m.id}')">Review</button>`:''}
+      </div></td>
+    </tr>`).join(''):`<tr><td colspan="9" class="empty-state">No method statements submitted yet</td></tr>`}
+  </table></div>`;
+}
+
+async function viewMS(id) {
+  const [{data:m},comments,atts] = await Promise.all([
+    sb.from('method_statements').select('*').eq('id',id).single(),
+    loadComments('ms',id),
+    loadAttachments('ms',id)
+  ]);
+  if(!m) return;
+  const msDoc = `<div id="ms-print-${m.id}" style="background:#fff;color:#000;font-family:Arial,Helvetica,sans-serif;font-size:10.5px;padding:18px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:.7px solid #aaa;margin-bottom:8px">
+      <div style="padding:8px;border-right:.7px solid #aaa"><div style="font-size:14px;font-weight:700;color:#00008B">POE</div><div style="font-size:9px">ENGINEERING CONSULTANTS</div></div>
+      <div style="padding:8px;border-right:.7px solid #aaa;text-align:center"><div style="font-size:18px;font-style:italic;color:#00008B">regent</div><div style="font-size:9px">DEVELOPMENTS</div></div>
+      <div style="padding:6px;text-align:right;font-size:9px">Modern Building Contracting L.L.C<br>Tel.: 04-2344445</div>
+    </div>
+    <div style="text-align:center;font-weight:700;font-size:12px;text-decoration:underline;padding:5px;border:.7px solid #888;margin-bottom:0;color:#000">METHOD STATEMENT REVIEW</div>
+    <table style="width:100%;border-collapse:collapse;color:#000">
+      <tr>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700;width:25%">MS Ref No.:</td>
+        <td style="border:.7px solid #888;padding:4px 7px;color:#8B0000;font-weight:700">${m.ref_no}</td>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700;width:20%">Revision:</td>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">${m.revision||'Rev 0'}</td>
+      </tr>
+      <tr>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Project:</td>
+        <td colspan="3" style="border:.7px solid #888;padding:4px 7px">Golf Grove – Residential Building (B+G+P+7+Roof) – Plot 6850752</td>
+      </tr>
+      <tr>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Title:</td>
+        <td colspan="3" style="border:.7px solid #888;padding:4px 7px;font-weight:700">${m.title}</td>
+      </tr>
+      <tr>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Activity:</td>
+        <td style="border:.7px solid #888;padding:4px 7px">${m.activity||'—'}</td>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Discipline:</td>
+        <td style="border:.7px solid #888;padding:4px 7px">${m.discipline||'—'}</td>
+      </tr>
+      <tr>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Location:</td>
+        <td style="border:.7px solid #888;padding:4px 7px">${m.location||'—'}</td>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Submitted By:</td>
+        <td style="border:.7px solid #888;padding:4px 7px">${m.submitted_by||'—'}</td>
+      </tr>
+      <tr>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Submitted Date:</td>
+        <td style="border:.7px solid #888;padding:4px 7px">${m.submitted_date||'—'}</td>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Status:</td>
+        <td style="border:.7px solid #888;padding:4px 7px">${m.status}</td>
+      </tr>
+      <tr><td colspan="4" style="border:.7px solid #888;padding:4px 7px;font-weight:700;background:#f5f5f5">Consultant Review Comments:</td></tr>
+      <tr><td colspan="4" style="border:.7px solid #888;padding:10px 7px;min-height:60px">${m.review_comments||'Pending review.'}</td></tr>
+      <tr>
+        <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Review Outcome:</td>
+        <td colspan="3" style="border:.7px solid #888;padding:4px 7px;font-weight:700;color:${m.status==='Approved'?'#1a5e1a':m.status==='Rejected'?'#8B0000':'#555'}">${m.status}</td>
+      </tr>
+    </table>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-top:10px">
+      <div style="border:.7px solid #888;padding:8px;text-align:center;font-size:10px"><b>Submitted By (Contractor)</b><br><br><br>Signature: ___________<br>Name: ${m.submitted_by||'___________'}<br>Date: ${m.submitted_date||'___________'}</div>
+      <div style="border:.7px solid #888;padding:8px;text-align:center;font-size:10px"><b>Reviewed By (Consultant)</b><br><br><br>Signature: ___________<br>Name: ${m.reviewed_by||'___________'}<br>Date: ${m.review_date||'___________'}</div>
+      <div style="border:.7px solid #888;padding:8px;text-align:center;font-size:10px"><b>Noted By (Developer)</b><br><br><br>Signature: ___________<br>Name: ___________<br>Date: ___________</div>
+    </div>
+    <div style="margin-top:8px;font-size:9px;color:#888;display:flex;justify-content:space-between">
+      <span>Golf Grove DMS | Regent Developments | ${m.ref_no}</span><span>Page 1 of 1</span>
+    </div>
+  </div>`;
+  const reviewSection = can('approve')&&(m.status==='Pending Review'||m.status==='Under Review')?`<div class="detail-section" style="margin-top:14px">
+    <div class="detail-label" style="margin-bottom:10px;color:var(--color-text-warning)">Review — Consultant Action Required</div>
+    <div style="display:flex;flex-direction:column;gap:10px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:13px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        ${['Approved','Revise & Resubmit','Rejected'].map(s=>`<div onclick="this.parentElement.querySelectorAll('div').forEach(d=>d.style.fontWeight='400');this.style.fontWeight='600';document.getElementById('ms-outcome-${m.id}').value='${s}'" style="padding:8px 10px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;font-size:11px;text-align:center;background:var(--color-background-primary)">${s}</div>`).join('')}
+      </div>
+      <input type="hidden" id="ms-outcome-${m.id}" value="" />
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Resident Engineer — Name <span style="color:var(--color-text-danger)">*</span></label><input type="text" class="form-control" id="ms-eng-${m.id}" placeholder="Enter engineer full name" /></div>
+        <div class="form-group"><label class="form-label-dark">Review Date</label><input type="date" class="form-control" id="ms-date-${m.id}" value="${new Date().toISOString().split('T')[0]}" /></div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Review Comments</label><textarea class="form-control" id="ms-comments-${m.id}" placeholder="Enter review comments..." style="min-height:80px"></textarea></div>
+    </div>
+  </div>`:'';
+  openModal(`${m.ref_no} – ${m.title}`, msDoc+reviewSection+attachmentSectionHTML('ms',m.id,atts)+commentThreadHTML('ms',m.id,comments),
+    `${can('approve')&&(m.status==='Pending Review'||m.status==='Under Review')?`<button class="btn btn-success" onclick="doReviewMS('${m.id}')">Submit Review</button>`:''}
+     <button class="btn" onclick="printDoc('ms-print-${m.id}','MS_${m.ref_no}.pdf')">Download PDF</button>
+     <button class="btn" onclick="closeModal()">Close</button>`, true);
+}
+
+async function doReviewMS(id) {
+  const outcome = document.getElementById('ms-outcome-'+id)?.value;
+  const eng = document.getElementById('ms-eng-'+id)?.value?.trim();
+  const comments = document.getElementById('ms-comments-'+id)?.value;
+  const date = document.getElementById('ms-date-'+id)?.value;
+  if(!outcome){toast('Please select a review outcome','error');return;}
+  if(!eng){toast("Please enter the Resident Engineer's name",'error');return;}
+  await sb.from('method_statements').update({
+    status:outcome, reviewed_by:eng,
+    review_date:date, review_comments:comments
+  }).eq('id',id);
+  await sb.from('comments').insert({
+    record_type:'ms', record_id:id,
+    author_name:eng, author_role:currentProfile?.role||'consultant',
+    message:`Review submitted — ${outcome}.${comments?' Comments: '+comments:''}`
+  });
+  toast(`Method statement ${outcome.toLowerCase()}`,'success');
+  closeModal(); render();
+}
+
+async function doNewMS() {
+  const title = document.getElementById('ms-title')?.value?.trim();
+  if(!title){toast('Please enter a title','error');return;}
+  const refNo = 'MS-MBC-'+(Date.now()%10000).toString().padStart(3,'0');
+  const {data:newMS,error} = await sb.from('method_statements').insert({
+    ref_no:document.getElementById('ms-ref')?.value||refNo, title,
+    activity:document.getElementById('ms-activity')?.value,
+    discipline:document.getElementById('ms-disc')?.value,
+    location:document.getElementById('ms-loc')?.value,
+    revision:document.getElementById('ms-rev')?.value||'Rev 0',
+    submitted_by:document.getElementById('ms-by')?.value||currentProfile?.full_name,
+    submitted_date:document.getElementById('ms-submitdate')?.value||new Date().toISOString().split('T')[0],
+    status:'Pending Review'
+  }).select().single();
+  if(error){toast('Error: '+error.message,'error');return;}
+  if(newMS?.id) await uploadStagedFiles('ms-staged','ms',newMS.id);
+  toast('Method statement submitted','success'); closeModal(); render();
+}
+
+
+// ─── BULK DRAWING IMPORT ───────────────────────────────────────────
+function openBulkImport() {
+  openModal('Bulk Drawing Import', `
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:12px 14px">
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px">Step 1 — Download the CSV template</div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">Fill in drawing details for all drawings you want to register. Leave file_path blank — you can upload PDFs after import.</div>
+        <button class="btn" style="font-size:11px" onclick="downloadBulkTemplate()">Download CSV Template</button>
+      </div>
+      <div style="background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:12px 14px">
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px">Step 2 — Upload completed CSV</div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">Required columns: drawing_no, title, discipline, revision, status. Optional: description, uploaded_by.</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-primary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('bulk-csv').click()" ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'" ondragleave="this.style.borderColor='var(--color-border-secondary)'" ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';handleBulkDrop(event)">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--color-text-secondary)">Click to select CSV file or drag & drop</span>
+        </div>
+        <input type="file" id="bulk-csv" accept=".csv" style="display:none" onchange="parseBulkCSV(event)" />
+      </div>
+      <div id="bulk-preview" style="display:none">
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px" id="bulk-preview-label"></div>
+        <div style="overflow-x:auto;border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md)">
+          <table style="width:100%;border-collapse:collapse;font-size:11px" id="bulk-preview-table"></table>
+        </div>
+        <div id="bulk-errors" style="margin-top:8px;font-size:11px;color:var(--color-text-danger)"></div>
+      </div>
+    </div>`,
+    `<button class="btn btn-primary" id="bulk-submit-btn" style="display:none" onclick="doBulkImport()">Import Drawings</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+function downloadBulkTemplate() {
+  const headers = ['drawing_no','title','discipline','revision','status','description','uploaded_by'];
+  const examples = [
+    ['DWG-A-001','Ground Floor Plan – Architecture','Architecture','Rev A','Under Review','Ground floor architectural plan','POE'],
+    ['DWG-S-001','Foundation Detail – Grid A','Structure','Rev A','Under Review','Structural foundation detail','POE'],
+    ['DWG-M-001','HVAC Layout – Level 3','MEP','Rev A','Under Review','Mechanical ventilation layout','MEP Consultant'],
+    ['DWG-E-001','Electrical Single Line Diagram','MEP','Rev A','Under Review','Main electrical distribution','MEP Consultant'],
+    ['DWG-P-001','Plumbing Isometric – Core 1','MEP','Rev A','Under Review','Plumbing riser diagram','MEP Consultant'],
+  ];
+  const csvContent = [headers, ...examples].map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csvContent], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'GolfGrove_Drawing_Register_Template.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  toast('Template downloaded','success');
+}
+
+let bulkRows = [];
+
+function handleBulkDrop(event) {
+  const file = event.dataTransfer.files[0];
+  if(file) parseBulkCSV({target:{files:[file]}});
+}
+
+function parseBulkCSV(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const text = e.target.result;
+    const lines = text.split(/\r?\n/).filter(l=>l.trim());
+    if(lines.length < 2) { toast('CSV must have a header row and at least one data row','error'); return; }
+    const headers = lines[0].split(',').map(h=>h.replace(/"/g,'').trim().toLowerCase());
+    const reqFields = ['drawing_no','title','discipline'];
+    const missing = reqFields.filter(f=>!headers.includes(f));
+    if(missing.length) { toast('Missing required columns: '+missing.join(', '),'error'); return; }
+    bulkRows = [];
+    const errors = [];
+    for(let i=1;i<lines.length;i++) {
+      const vals = lines[i].match(/(".*?"|[^,]+)(?=,|$)/g)||lines[i].split(',');
+      const row = {};
+      headers.forEach((h,j)=>{ row[h]=(vals[j]||'').replace(/"/g,'').trim(); });
+      if(!row.drawing_no){errors.push(`Row ${i+1}: drawing_no is required`);continue;}
+      if(!row.title){errors.push(`Row ${i+1}: title is required`);continue;}
+      row.revision = row.revision||'Rev A';
+      row.status = row.status||'Under Review';
+      bulkRows.push(row);
+    }
+    // Show preview
+    const preview = document.getElementById('bulk-preview');
+    const label = document.getElementById('bulk-preview-label');
+    const table = document.getElementById('bulk-preview-table');
+    const errDiv = document.getElementById('bulk-errors');
+    const btn = document.getElementById('bulk-submit-btn');
+    preview.style.display='';
+    label.textContent = `${bulkRows.length} drawing${bulkRows.length!==1?'s':''} ready to import${errors.length?' — '+errors.length+' rows skipped due to errors':''}`;
+    table.innerHTML = `<tr style="background:var(--color-background-secondary)">${['Drawing No.','Title','Discipline','Revision','Status','Uploaded By'].map(h=>`<th style="padding:7px 10px;font-size:10px;text-align:left;border-bottom:.5px solid var(--color-border-tertiary);white-space:nowrap">${h}</th>`).join('')}</tr>`
+      + bulkRows.slice(0,10).map(r=>`<tr style="border-bottom:.5px solid var(--color-border-tertiary)">${[r.drawing_no,r.title,r.discipline,r.revision,r.status,r.uploaded_by||'—'].map(v=>`<td style="padding:7px 10px;font-size:11px;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis">${v}</td>`).join('')}</tr>`).join('')
+      + (bulkRows.length>10?`<tr><td colspan="6" style="padding:7px 10px;font-size:11px;color:var(--color-text-tertiary)">…and ${bulkRows.length-10} more rows</td></tr>`:'');
+    errDiv.innerHTML = errors.map(e=>`<div>⚠ ${e}</div>`).join('');
+    if(btn) btn.style.display = bulkRows.length?'':'none';
+  };
+  reader.readAsText(file);
+}
+
+async function doBulkImport() {
+  if(!bulkRows.length){toast('No rows to import','error');return;}
+  const btn = document.getElementById('bulk-submit-btn');
+  if(btn){btn.disabled=true;btn.textContent='Importing…';}
+  let imported=0, failed=0;
+  for(const row of bulkRows) {
+    const {error} = await sb.from('drawings').insert({
+      drawing_no:row.drawing_no,
+      title:row.title,
+      discipline:row.discipline,
+      revision:row.revision||'Rev A',
+      status:row.status||'Under Review',
+      description:row.description||null,
+      uploaded_by:row.uploaded_by||currentProfile?.full_name||'Import',
+    });
+    if(error){failed++;console.error('Import error:',row.drawing_no,error.message);}
+    else imported++;
+  }
+  if(btn){btn.disabled=false;btn.textContent='Import Drawings';}
+  toast(`Imported ${imported} drawing${imported!==1?'s':''}${failed?' — '+failed+' failed':''}`, imported?'success':'error');
+  if(imported>0){bulkRows=[];closeModal();render();}
+}
+
 // ─── DRAWINGS ─────────────────────────────────────────────────────
 async function renderDrawings() {
   const {data} = await sb.from('drawings').select('*').order('drawing_no',{ascending:true});
@@ -586,6 +873,8 @@ async function renderDrawings() {
     <span style="width:.5px;background:var(--color-border-tertiary);height:16px;align-self:center"></span>
     <span class="fbar-label">Status:</span>
     ${['All','Under Review','Approved','Issued for Construction','Revise & Resubmit'].map((s,i)=>`<span class="chip ${i===0?'active':''}" id="stat-chip-${i}" onclick="filtDraw(this,'status','${s}')">${s}</span>`).join('')}
+    <span style="flex:1"></span>
+    ${can('upload')?`<button class="btn btn-sm" style="font-size:11px" onclick="openBulkImport()">Bulk Import</button>`:''}
   </div>
   <div class="card"><div class="tw"><table>
     <tr><th>Drawing No.</th><th>Title</th><th>Discipline</th><th>Revision</th><th>Review Status</th><th>Uploaded</th><th>By</th><th>Actions</th></tr>
@@ -623,7 +912,7 @@ function filtDraw(el, field, val) {
 }
 function filt(el, page, field, val) {
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
-  const rowClass = page==='sub'?'.sub-row':page==='ir'?'.ir-row':page==='ncr'?'.ncr-row':page==='rfi'?'.rfi-row':'.draw-row';
+  const rowClass = page==='sub'?'.sub-row':page==='ir'?'.ir-row':page==='ncr'?'.ncr-row':page==='rfi'?'.rfi-row':page==='ms'?'.ms-row':'.draw-row';
   document.querySelectorAll(rowClass).forEach(r=>{
     const rv = r.dataset[field]||'';
     r.style.display=(val==='All'||rv===val)?'':'none';
@@ -767,11 +1056,34 @@ async function viewDraw(id) {
   ]);
   if(!d) return;
   let pdfHtml = '';
+  let pdfUrl = null;
   if(d.file_path) {
     const {data:urlData} = await sb.storage.from('drawings').createSignedUrl(d.file_path, 3600);
     if(urlData?.signedUrl) {
+      pdfUrl = urlData.signedUrl;
       pdfHtml = `<div class="detail-section"><div class="detail-label" style="margin-bottom:8px">Drawing File</div>
-        <div class="pdf-viewer"><iframe src="${urlData.signedUrl}" title="Drawing"></iframe></div></div>`;
+        <div class="pdf-viewer" id="pdfv-${id}">
+          <div class="pdf-toolbar">
+            <button onclick="pdfPrevPage('${id}')" id="pdf-prev-${id}">◀ Prev</button>
+            <span class="pdf-page-info" id="pdf-pageinfo-${id}">— / —</span>
+            <button onclick="pdfNextPage('${id}')" id="pdf-next-${id}">Next ▶</button>
+            <span style="width:1px;background:#555;height:16px;margin:0 4px"></span>
+            <button onclick="pdfZoomOut('${id}')">− Zoom</button>
+            <span class="pdf-zoom-info" id="pdf-zoom-${id}">100%</span>
+            <button onclick="pdfZoomIn('${id}')">+ Zoom</button>
+            <button onclick="pdfFitWidth('${id}')">Fit Width</button>
+            <button onclick="pdfFitPage('${id}')">Fit Page</button>
+            <span style="width:1px;background:#555;height:16px;margin:0 4px"></span>
+            <button onclick="window.open('${urlData.signedUrl}','_blank')">Open in Tab</button>
+            <span class="pdf-title">${d.drawing_no} – ${d.title} (${d.revision})</span>
+          </div>
+          <div class="pdf-canvas-wrap" id="pdf-wrap-${id}">
+            <div class="pdf-loading" id="pdf-loading-${id}">
+              <div style="width:24px;height:24px;border:2px solid #555;border-top-color:#aaa;border-radius:50%;animation:spin 1s linear infinite"></div>
+              <span>Loading PDF…</span>
+            </div>
+          </div>
+        </div></div>`;
     }
   }
   const revRows = revs||[];
@@ -1919,6 +2231,7 @@ function attachmentSectionHTML(recordType, recordId, attachments) {
             <div style="font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.file_name}</div>
             <div style="font-size:10px;color:var(--text3)">${formatFileSize(a.file_size)} · Uploaded by ${a.uploaded_by_name||'—'} · ${a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</div>
           </div>
+          ${a.file_name.toLowerCase().endsWith('.pdf')||a.file_type?.includes('pdf')?`<button class="btn btn-sm" onclick="viewAttachmentPDF('${a.id}','${a.file_path}','${a.file_name.replace(/'/g,'')}')">View</button>`:''}
           <button class="btn btn-sm" onclick="downloadAttachment('${a.file_path}','${a.file_name}')">Download</button>
           ${canDel&&a.uploaded_by_id===currentUser?.id?`<button class="btn btn-sm btn-danger" onclick="deleteAttachment('${a.id}','${a.file_path}','${recordType}','${recordId}')">Remove</button>`:''}
         </div>`).join('') : '<div style="font-size:11px;color:var(--text3);padding:4px">No attachments yet.</div>'}
@@ -2205,6 +2518,200 @@ async function submitDrawingReview(drawingId) {
     toast(`Drawing review submitted — Code (${code}): ${newStatus}`,'success');
   }
   closeModal(); render();
+}
+
+
+// ─── PDF.JS VIEWER ENGINE ──────────────────────────────────────────
+const pdfState = {};
+
+// Set PDF.js worker
+if(typeof pdfjsLib !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+async function initPdfViewer(viewerId, url, filename) {
+  if(typeof pdfjsLib === 'undefined') {
+    const el = document.getElementById('pdf-loading-'+viewerId);
+    if(el) el.innerHTML = '<div class="pdf-error">PDF.js not loaded. Try refreshing.</div>';
+    return;
+  }
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  pdfState[viewerId] = {
+    url, filename: filename||'document.pdf',
+    page: 1, totalPages: 0,
+    scale: 1.0, fitWidth: true,
+    doc: null, rendering: false
+  };
+
+  try {
+    const loadTask = pdfjsLib.getDocument({url, cMapUrl:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',cMapPacked:true});
+    const doc = await loadTask.promise;
+    pdfState[viewerId].doc = doc;
+    pdfState[viewerId].totalPages = doc.numPages;
+    await pdfRenderPage(viewerId);
+    pdfUpdateToolbar(viewerId);
+  } catch(err) {
+    const el = document.getElementById('pdf-loading-'+viewerId);
+    if(el) el.innerHTML = `<div class="pdf-error">Could not load PDF.<br>${err.message}<br><br><small>Try "Open in Tab" above.</small></div>`;
+    console.error('PDF load error:', err);
+  }
+}
+
+async function pdfRenderPage(viewerId) {
+  const state = pdfState[viewerId];
+  if(!state||!state.doc||state.rendering) return;
+  state.rendering = true;
+
+  const wrap = document.getElementById('pdf-wrap-'+viewerId);
+  if(!wrap) { state.rendering=false; return; }
+
+  const page = await state.doc.getPage(state.page);
+  const wrapWidth = wrap.clientWidth - 40;
+
+  let scale = state.scale;
+  if(state.fitWidth) {
+    const unscaledVp = page.getViewport({scale:1});
+    scale = wrapWidth / unscaledVp.width;
+    state.scale = scale;
+    state.fitWidth = false;
+  }
+
+  const viewport = page.getViewport({scale});
+
+  // Create or reuse canvas
+  let canvas = document.getElementById('pdf-canvas-'+viewerId);
+  if(!canvas) {
+    canvas = document.createElement('canvas');
+    canvas.id = 'pdf-canvas-'+viewerId;
+    // Remove loading state
+    const loading = document.getElementById('pdf-loading-'+viewerId);
+    if(loading) loading.remove();
+    wrap.appendChild(canvas);
+  }
+
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  canvas.style.width = viewport.width + 'px';
+  canvas.style.maxWidth = '100%';
+
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  await page.render({canvasContext:ctx, viewport}).promise;
+  state.rendering = false;
+  pdfUpdateToolbar(viewerId);
+}
+
+function pdfUpdateToolbar(viewerId) {
+  const state = pdfState[viewerId];
+  if(!state) return;
+  const info = document.getElementById('pdf-pageinfo-'+viewerId);
+  const zoom = document.getElementById('pdf-zoom-'+viewerId);
+  const prev = document.getElementById('pdf-prev-'+viewerId);
+  const next = document.getElementById('pdf-next-'+viewerId);
+  if(info) info.textContent = `${state.page} / ${state.totalPages}`;
+  if(zoom) zoom.textContent = Math.round(state.scale*100)+'%';
+  if(prev) prev.disabled = state.page <= 1;
+  if(next) next.disabled = state.page >= state.totalPages;
+}
+
+async function pdfPrevPage(viewerId) {
+  const s = pdfState[viewerId]; if(!s||s.page<=1) return;
+  s.page--; await pdfRenderPage(viewerId);
+}
+async function pdfNextPage(viewerId) {
+  const s = pdfState[viewerId]; if(!s||s.page>=s.totalPages) return;
+  s.page++; await pdfRenderPage(viewerId);
+}
+async function pdfZoomIn(viewerId) {
+  const s = pdfState[viewerId]; if(!s) return;
+  s.scale = Math.min(s.scale*1.25, 4); await pdfRenderPage(viewerId);
+}
+async function pdfZoomOut(viewerId) {
+  const s = pdfState[viewerId]; if(!s) return;
+  s.scale = Math.max(s.scale/1.25, 0.25); await pdfRenderPage(viewerId);
+}
+async function pdfFitWidth(viewerId) {
+  const s = pdfState[viewerId]; if(!s||!s.doc) return;
+  const wrap = document.getElementById('pdf-wrap-'+viewerId);
+  if(!wrap) return;
+  const page = await s.doc.getPage(s.page);
+  const vp = page.getViewport({scale:1});
+  s.scale = (wrap.clientWidth-40)/vp.width;
+  await pdfRenderPage(viewerId);
+}
+async function pdfFitPage(viewerId) {
+  const s = pdfState[viewerId]; if(!s||!s.doc) return;
+  const wrap = document.getElementById('pdf-wrap-'+viewerId);
+  if(!wrap) return;
+  const page = await s.doc.getPage(s.page);
+  const vp = page.getViewport({scale:1});
+  const scaleW = (wrap.clientWidth-40)/vp.width;
+  const scaleH = (wrap.clientHeight-40)/vp.height;
+  s.scale = Math.min(scaleW, scaleH);
+  await pdfRenderPage(viewerId);
+}
+
+// Keyboard navigation for PDF viewer
+document.addEventListener('keydown', (e) => {
+  const viewers = Object.keys(pdfState);
+  if(!viewers.length) return;
+  const id = viewers[viewers.length-1];
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') { e.preventDefault(); pdfNextPage(id); }
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') { e.preventDefault(); pdfPrevPage(id); }
+  if(e.key==='+'||e.key==='=') pdfZoomIn(id);
+  if(e.key==='-') pdfZoomOut(id);
+});
+
+// Auto-init PDF viewer when modal opens
+const _origOpenModal = openModal;
+function openModal(title, body, footer, wide) {
+  _origOpenModal(title, body, footer, wide);
+  // Check for PDF viewer elements and init them
+  setTimeout(async () => {
+    document.querySelectorAll('[id^="pdfv-"]').forEach(el => {
+      const viewerId = el.id.replace('pdfv-','');
+      if(!pdfState[viewerId] && el.dataset.pdfUrl) {
+        initPdfViewer(viewerId, el.dataset.pdfUrl, el.dataset.pdfName);
+      }
+    });
+  }, 100);
+}
+
+
+async function viewAttachmentPDF(attId, filePath, fileName) {
+  const {data, error} = await sb.storage.from('attachments').createSignedUrl(filePath, 3600);
+  if(error||!data?.signedUrl) { toast('Could not load PDF','error'); return; }
+  const viewerId = 'att-'+attId;
+  openModal(fileName, `
+    <div class="pdf-viewer" id="pdfv-${viewerId}" style="min-height:500px">
+      <div class="pdf-toolbar">
+        <button onclick="pdfPrevPage('${viewerId}')" id="pdf-prev-${viewerId}">◀ Prev</button>
+        <span class="pdf-page-info" id="pdf-pageinfo-${viewerId}">— / —</span>
+        <button onclick="pdfNextPage('${viewerId}')" id="pdf-next-${viewerId}">Next ▶</button>
+        <span style="width:1px;background:#555;height:16px;margin:0 4px"></span>
+        <button onclick="pdfZoomOut('${viewerId}')">− Zoom</button>
+        <span class="pdf-zoom-info" id="pdf-zoom-${viewerId}">100%</span>
+        <button onclick="pdfZoomIn('${viewerId}')">+ Zoom</button>
+        <button onclick="pdfFitWidth('${viewerId}')">Fit Width</button>
+        <button onclick="pdfFitPage('${viewerId}')">Fit Page</button>
+        <span style="width:1px;background:#555;height:16px;margin:0 4px"></span>
+        <button onclick="window.open('${data.signedUrl}','_blank')">Open in Tab</button>
+        <span class="pdf-title">${fileName}</span>
+      </div>
+      <div class="pdf-canvas-wrap" id="pdf-wrap-${viewerId}" style="max-height:70vh">
+        <div class="pdf-loading" id="pdf-loading-${viewerId}">
+          <div style="width:24px;height:24px;border:2px solid #555;border-top-color:#aaa;border-radius:50%;animation:spin 1s linear infinite"></div>
+          <span>Loading PDF…</span>
+        </div>
+      </div>
+    </div>`,
+    `<button class="btn" onclick="downloadAttachment('${filePath}','${fileName}')">Download</button>
+     <button class="btn" onclick="closeModal()">Close</button>`, true);
+  setTimeout(()=>initPdfViewer(viewerId, data.signedUrl, fileName), 200);
 }
 
 // ─── PDF EXPORT ───────────────────────────────────────────────────
