@@ -1193,6 +1193,17 @@ async function openNew() {
         </div>
         <input type="file" id="fu-new" accept=".pdf,.dwg" style="display:none" onchange="handleFileSelect(event,'new')" />
         <div id="file-name-new" style="font-size:11px;color:var(--text2);margin-top:6px"></div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Additional Attachments (optional)</label>
+        <div class="upload-zone" style="padding:14px" onclick="document.getElementById('nd-extra-files').click()"
+          ondragover="event.preventDefault();this.classList.add('dragging')"
+          ondragleave="this.classList.remove('dragging')"
+          ondrop="event.preventDefault();this.classList.remove('dragging');stageFiles(event.dataTransfer.files,'nd-staged')">
+          <div style="font-size:12px;color:var(--color-text-secondary)">Attach supporting documents (specs, calculations, etc.)</div>
+          <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">PDF, Word, Excel — max 50MB each</div>
+        </div>
+        <input type="file" id="nd-extra-files" multiple style="display:none" onchange="stageFiles(this.files,'nd-staged')" />
+        <div id="nd-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
       </div>`,
       `<button class="btn btn-primary" onclick="doNewDraw()">Upload Drawing</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 
@@ -1335,6 +1346,7 @@ async function doNewDraw() {
       uploaded_by_id:currentUser?.id,
       file_path:inserted.file_path
     });
+    await uploadStagedFiles('nd-staged','drawing',inserted.id);
   }
   toast('Drawing uploaded','success'); closeModal(); render();
 }
@@ -1343,7 +1355,7 @@ async function doNewSub() {
   const ref = document.getElementById('ns-id').value;
   const title = document.getElementById('ns-title').value;
   if(!ref||!title){toast('Reference number and title are required','error');return;}
-  const {error} = await sb.from('submittals').insert({
+  const {data:newSub,error} = await sb.from('submittals').insert({
     ref_no:ref,title,
     from_party:document.getElementById('ns-from').value,
     to_party:document.getElementById('ns-to').value,
@@ -1353,8 +1365,9 @@ async function doNewSub() {
     discipline:{civil:document.getElementById('ns-civil').checked,mech:document.getElementById('ns-mech').checked,elv:document.getElementById('ns-elv').checked,specs:document.getElementById('ns-dspec').checked,arch:document.getElementById('ns-arch').checked,elec:document.getElementById('ns-elec').checked},
     revision:'Rev 000',
     due_date:document.getElementById('ns-due')?.value||null
-  });
+  }).select().single();
   if(error){toast('Error: '+error.message,'error');return;}
+  if(newSub?.id) await uploadStagedFiles('ns-staged','submittal',newSub.id);
   toast('Submittal created','success'); closeModal(); render();
 }
 
@@ -1379,13 +1392,14 @@ async function doNewIR() {
     due_date:document.getElementById('ni-due')?.value||null
   });
   if(error){toast('Error: '+error.message,'error');return;}
+  if(newIR?.id) await uploadStagedFiles('ni-staged','inspection',newIR.id);
   toast('Inspection request created','success'); closeModal(); render();
 }
 
 async function doNewNCR() {
   const title = document.getElementById('nn-title').value;
   if(!title){toast('Title is required','error');return;}
-  const {error} = await sb.from('ncrs').insert({
+  const {data:newNCR,error} = await sb.from('ncrs').insert({
     ref_no:'NCR-'+(Date.now()%10000).toString().padStart(3,'0'),
     title,location:document.getElementById('nn-loc').value,
     raised_by:currentProfile?.full_name||'Unknown',
@@ -1393,8 +1407,9 @@ async function doNewNCR() {
     severity:document.getElementById('nn-sev').value,
     status:'Open',
     cause:document.getElementById('nn-cause').value
-  });
+  }).select().single();
   if(error){toast('Error: '+error.message,'error');return;}
+  if(newNCR?.id) await uploadStagedFiles('nn-staged','ncr',newNCR.id);
   toast('NCR raised','success'); closeModal(); render();
 }
 
@@ -1936,6 +1951,45 @@ async function deleteAttachment(attId, path, recordType, recordId) {
   if(list) list.innerHTML = atts.length
     ? atts.map(a=>`<div style="padding:8px 10px;background:var(--bg3);border-radius:6px;border:.5px solid var(--border);font-size:12px">${a.file_name}</div>`).join('')
     : '<div style="font-size:11px;color:var(--text3);padding:4px">No attachments yet.</div>';
+}
+
+// ─── STAGED FILES HELPER ──────────────────────────────────────────
+const stagedFiles = {};
+
+function stageFiles(fileList, stagingId) {
+  if(!stagedFiles[stagingId]) stagedFiles[stagingId] = [];
+  Array.from(fileList).forEach(f => {
+    if(f.size > 50*1024*1024) { toast(`${f.name} exceeds 50MB`,'error'); return; }
+    stagedFiles[stagingId].push(f);
+  });
+  renderStagedFiles(stagingId);
+}
+
+function renderStagedFiles(stagingId) {
+  const el = document.getElementById(stagingId);
+  if(!el) return;
+  const files = stagedFiles[stagingId]||[];
+  el.innerHTML = files.map((f,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--color-background-secondary);border-radius:6px;border:.5px solid var(--color-border-tertiary)">
+      <span style="font-size:13px">${fileIcon(f.type)}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:11px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.name}</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary)">${formatFileSize(f.size)}</div>
+      </div>
+      <button class="btn btn-sm" style="color:var(--color-text-danger);border-color:var(--color-border-danger);padding:2px 7px" onclick="removeStagedFile('${stagingId}',${i})">✕</button>
+    </div>`).join('');
+}
+
+function removeStagedFile(stagingId, idx) {
+  if(stagedFiles[stagingId]) stagedFiles[stagingId].splice(idx,1);
+  renderStagedFiles(stagingId);
+}
+
+async function uploadStagedFiles(stagingId, recordType, recordId) {
+  const files = stagedFiles[stagingId]||[];
+  if(!files.length) return;
+  await uploadAttachments(files, recordType, recordId);
+  delete stagedFiles[stagingId];
 }
 
 // ─── PDF EXPORT ───────────────────────────────────────────────────
