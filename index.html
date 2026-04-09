@@ -739,9 +739,10 @@ async function doChangeRole(uid) {
 
 // ─── VIEW MODALS ──────────────────────────────────────────────────
 async function viewDraw(id) {
-  const [{data:d},{data:revs}] = await Promise.all([
+  const [{data:d},{data:revs},atts] = await Promise.all([
     sb.from('drawings').select('*').eq('id',id).single(),
-    sb.from('drawing_revisions').select('*').eq('drawing_id',id).order('upload_date',{ascending:true})
+    sb.from('drawing_revisions').select('*').eq('drawing_id',id).order('upload_date',{ascending:true}),
+    loadAttachments('drawing',id)
   ]);
   if(!d) return;
   let pdfHtml = '';
@@ -808,9 +809,10 @@ async function viewDraw(id) {
 }
 
 async function viewSub(id) {
-  const [{data:s},comments] = await Promise.all([
+  const [{data:s},comments,atts] = await Promise.all([
     sb.from('submittals').select('*').eq('id',id).single(),
-    loadComments('submittal',id)
+    loadComments('submittal',id),
+    loadAttachments('submittal',id)
   ]);
   if(!s) return;
   // Load parent if this is a resubmission
@@ -859,7 +861,7 @@ async function viewSub(id) {
         <td colspan="2" style="padding:8px;text-align:right;font-weight:700">Resident Engineer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</td></tr>
     </table><div style="margin-top:8px;font-size:9px;color:#888">POE/SUP-DSAR-004 Rev 002 | Issue date: 01/10/2018</div></div>`;
   const dsubWrapped = `<div id='dsub-print-${id}'>${parentInfo}${dsub}</div>`;
-  openModal(`DSUB – ${s.ref_no}`, dsubWrapped+commentThreadHTML('submittal',id,comments),
+  openModal(`DSUB – ${s.ref_no}`, dsubWrapped+attachmentSectionHTML('submittal',id,atts)+commentThreadHTML('submittal',id,comments),
     `${can('approve')&&s.status==='Pending Review'?`<button class="btn btn-success" onclick="reviewSub('${id}')">Review & Respond</button>`:''}
      ${can('submit')&&s.status==='Revise & Resubmit'?`<button class="btn btn-primary" onclick="createResubmission('${id}')">Create Resubmission</button>`:''}
      ${s.due_date?`<span style="font-size:11px;padding:4px 8px">${overdueTag(s.due_date)}</span>`:''}
@@ -868,9 +870,10 @@ async function viewSub(id) {
 }
 
 async function viewIR(id) {
-  const [{data:i},comments] = await Promise.all([
+  const [{data:i},comments,atts] = await Promise.all([
     sb.from('inspections').select('*, subcontractors(name,rep)').eq('id',id).single(),
-    loadComments('inspection',id)
+    loadComments('inspection',id),
+    loadAttachments('inspection',id)
   ]);
   if(!i) return;
   const dept = typeof i.department==='object'?i.department:{};
@@ -917,15 +920,17 @@ async function viewIR(id) {
     </table>
     <div style="text-align:center;font-size:9px;margin-top:6px;color:#777">This form is to be handed 24 hours prior the inspection requested time</div>
   </div>`;
-  openModal(`IR – ${i.ref_no} Rev.${i.revision||'00'}`, irHTML,
+  const irWrapped = `<div id='ir-print-${id}'>${irHTML}</div>`+attachmentSectionHTML('inspection',id,atts);
+  openModal(`IR – ${i.ref_no} Rev.${i.revision||'00'}`, irWrapped,
     `${can('approve')&&i.status==='Pending'?`<button class="btn btn-success" onclick="respondIR('${id}')">Record Response</button>`:''}
      <button class="btn" onclick="closeModal()">Close</button>`, true);
 }
 
 async function viewNCR(id) {
-  const [{data:n},comments] = await Promise.all([
+  const [{data:n},comments,atts] = await Promise.all([
     sb.from('ncrs').select('*').eq('id',id).single(),
-    loadComments('ncr',id)
+    loadComments('ncr',id),
+    loadAttachments('ncr',id)
   ]);
   if(!n) return;
   const cb = (checked) => `<span style="display:inline-block;width:11px;height:11px;border:1.2px solid #333;margin-right:3px;vertical-align:middle;text-align:center;font-size:9px;line-height:11px;font-weight:700">${checked?'&#10005;':''}</span>`;
@@ -989,7 +994,7 @@ async function viewNCR(id) {
       <div class="form-group"><label class="form-label-dark">Closing Date</label><input type="date" class="form-control" id="ncr-dt-${n.id}" value="${new Date().toISOString().split('T')[0]}" /></div>
     </div>
   </div>`:'';
-  openModal(`${n.ref_no} – ${n.title}`, ncrDoc+closeSection+commentThreadHTML('ncr',n.id,comments),
+  openModal(`${n.ref_no} – ${n.title}`, ncrDoc+closeSection+attachmentSectionHTML('ncr',n.id,atts)+commentThreadHTML('ncr',n.id,comments),
     `${can('approve')&&n.status==='Open'?`<button class="btn btn-success" onclick="doCloseNCR('${n.id}')">Close NCR</button>`:''}
      <button class="btn" onclick="printDoc('ncr-print-${n.id}','NCR_${n.ref_no}.pdf')">Download PDF</button>
      <button class="btn" onclick="closeModal()">Close</button>`, true);
@@ -1523,9 +1528,10 @@ async function renderRFIs() {
 }
 
 async function viewRFI(id) {
-  const [{data:r},comments] = await Promise.all([
+  const [{data:r},comments,atts] = await Promise.all([
     sb.from('rfis').select('*').eq('id',id).single(),
-    loadComments('rfi',id)
+    loadComments('rfi',id),
+    loadAttachments('rfi',id)
   ]);
   if(!r) return;
   openModal(`${r.ref_no} – ${r.subject}`,`
@@ -1544,6 +1550,12 @@ async function viewRFI(id) {
      ${can('approve')&&r.status==='Responded'?`<button class="btn btn-sm" onclick="closeRFI('${id}')">Close RFI</button>`:''}
      <button class="btn" onclick="printDoc('rfi-print-${id}','RFI_${r.ref_no}.pdf')">Download PDF</button>
      <button class="btn" onclick="closeModal()">Close</button>`, true);
+  setTimeout(()=>{
+    const mb=document.getElementById('modal-body');
+    if(mb){const d=document.createElement('div');d.innerHTML=attachmentSectionHTML('rfi',id,atts);
+    const cs=mb.querySelector('[id^="comment-list-"]')?.closest('.detail-section');
+    if(cs)mb.insertBefore(d.firstChild,cs);else mb.appendChild(d.firstChild);}
+  },50);
 }
 
 function respondRFI(id) {
@@ -1792,6 +1804,138 @@ async function doNewTransmittal(drawCount) {
   });
   if(error){toast('Error: '+error.message,'error');return;}
   toast('Transmittal created','success'); closeModal(); render();
+}
+
+
+// ─── ATTACHMENTS ──────────────────────────────────────────────────
+async function loadAttachments(recordType, recordId) {
+  const {data} = await sb.from('attachments').select('*')
+    .eq('record_type', recordType).eq('record_id', recordId)
+    .order('created_at', {ascending:true});
+  return data||[];
+}
+
+function formatFileSize(bytes) {
+  if(!bytes) return '—';
+  if(bytes < 1024) return bytes+'B';
+  if(bytes < 1024*1024) return Math.round(bytes/1024)+'KB';
+  return (bytes/(1024*1024)).toFixed(1)+'MB';
+}
+
+function fileIcon(type) {
+  if(!type) return '📎';
+  if(type.includes('pdf')) return '📄';
+  if(type.includes('image')) return '🖼';
+  if(type.includes('dwg')||type.includes('dxf')||type.includes('autocad')) return '📐';
+  if(type.includes('sheet')||type.includes('excel')||type.includes('csv')) return '📊';
+  if(type.includes('word')||type.includes('doc')) return '📝';
+  if(type.includes('zip')||type.includes('rar')) return '🗜';
+  return '📎';
+}
+
+function attachmentSectionHTML(recordType, recordId, attachments) {
+  const canDel = can('upload')||can('submit');
+  return `<div class="detail-section" style="margin-top:14px">
+    <div class="detail-label" style="margin-bottom:10px">Attachments (${attachments.length})</div>
+    <div id="att-list-${recordId}" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px">
+      ${attachments.length ? attachments.map(a=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg3);border-radius:6px;border:.5px solid var(--border)">
+          <span style="font-size:16px">${fileIcon(a.file_type)}</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.file_name}</div>
+            <div style="font-size:10px;color:var(--text3)">${formatFileSize(a.file_size)} · Uploaded by ${a.uploaded_by_name||'—'} · ${a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</div>
+          </div>
+          <button class="btn btn-sm" onclick="downloadAttachment('${a.file_path}','${a.file_name}')">Download</button>
+          ${canDel&&a.uploaded_by_id===currentUser?.id?`<button class="btn btn-sm btn-danger" onclick="deleteAttachment('${a.id}','${a.file_path}','${recordType}','${recordId}')">Remove</button>`:''}
+        </div>`).join('') : '<div style="font-size:11px;color:var(--text3);padding:4px">No attachments yet.</div>'}
+    </div>
+    <div class="upload-zone" style="padding:16px" onclick="document.getElementById('att-upload-${recordId}').click()"
+      ondragover="event.preventDefault();this.classList.add('dragging')"
+      ondragleave="this.classList.remove('dragging')"
+      ondrop="handleAttDrop(event,'${recordType}','${recordId}')">
+      <div style="font-size:13px;color:var(--text2)">Click to attach a file or drag & drop</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:3px">PDF, DWG, DXF, Images, Word, Excel, ZIP — max 50MB</div>
+      <div class="upload-progress" id="att-prog-${recordId}" style="display:none;margin-top:8px"><div class="upload-progress-bar" id="att-progb-${recordId}" style="width:0%"></div></div>
+    </div>
+    <input type="file" id="att-upload-${recordId}" style="display:none" multiple
+      onchange="handleAttUpload(event,'${recordType}','${recordId}')" />
+  </div>`;
+}
+
+async function handleAttDrop(event, recordType, recordId) {
+  event.preventDefault();
+  event.currentTarget.classList.remove('dragging');
+  const files = Array.from(event.dataTransfer.files);
+  await uploadAttachments(files, recordType, recordId);
+}
+
+async function handleAttUpload(event, recordType, recordId) {
+  const files = Array.from(event.target.files);
+  await uploadAttachments(files, recordType, recordId);
+}
+
+async function uploadAttachments(files, recordType, recordId) {
+  if(!files.length) return;
+  const prog = document.getElementById('att-prog-'+recordId);
+  const progb = document.getElementById('att-progb-'+recordId);
+  if(prog) prog.style.display='';
+  let uploaded = 0;
+  for(const file of files) {
+    if(file.size > 50*1024*1024) { toast(`${file.name} exceeds 50MB limit`,'error'); continue; }
+    const path = `${recordType}/${recordId}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+    const {error} = await sb.storage.from('attachments').upload(path, file, {upsert:false});
+    if(error) { toast(`Upload failed: ${file.name}`,'error'); continue; }
+    await sb.from('attachments').insert({
+      record_type: recordType,
+      record_id: recordId,
+      file_name: file.name,
+      file_path: path,
+      file_size: file.size,
+      file_type: file.type,
+      uploaded_by_name: currentProfile?.full_name||currentUser?.email,
+      uploaded_by_id: currentUser?.id
+    });
+    uploaded++;
+    if(progb) progb.style.width = Math.round((uploaded/files.length)*100)+'%';
+  }
+  if(prog) setTimeout(()=>prog.style.display='none', 600);
+  if(uploaded > 0) toast(`${uploaded} file${uploaded>1?'s':''} attached`,'success');
+  // Refresh attachment list in modal
+  const atts = await loadAttachments(recordType, recordId);
+  const list = document.getElementById('att-list-'+recordId);
+  if(list) {
+    const canDel = can('upload')||can('submit');
+    list.innerHTML = atts.length ? atts.map(a=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg3);border-radius:6px;border:.5px solid var(--border)">
+        <span style="font-size:16px">${fileIcon(a.file_type)}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.file_name}</div>
+          <div style="font-size:10px;color:var(--text3)">${formatFileSize(a.file_size)} · ${a.uploaded_by_name||'—'} · ${a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</div>
+        </div>
+        <button class="btn btn-sm" onclick="downloadAttachment('${"'"}${a.file_path}${"'"}','${"'"}${a.file_name}${"'"}')">Download</button>
+        ${canDel&&a.uploaded_by_id===currentUser?.id?`<button class="btn btn-sm btn-danger" onclick="deleteAttachment('${a.id}','${a.file_path}','${recordType}','${recordId}')">Remove</button>`:''}
+      </div>`).join('') : '<div style="font-size:11px;color:var(--text3);padding:4px">No attachments yet.</div>';
+  }
+}
+
+async function downloadAttachment(path, name) {
+  const {data, error} = await sb.storage.from('attachments').createSignedUrl(path, 300);
+  if(error||!data?.signedUrl) { toast('Could not generate download link','error'); return; }
+  const a = document.createElement('a');
+  a.href = data.signedUrl; a.download = name; a.target = '_blank';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+async function deleteAttachment(attId, path, recordType, recordId) {
+  if(!confirm('Remove this attachment?')) return;
+  await sb.storage.from('attachments').remove([path]);
+  await sb.from('attachments').delete().eq('id', attId);
+  toast('Attachment removed','info');
+  const atts = await loadAttachments(recordType, recordId);
+  const list = document.getElementById('att-list-'+recordId);
+  if(list) list.innerHTML = atts.length
+    ? atts.map(a=>`<div style="padding:8px 10px;background:var(--bg3);border-radius:6px;border:.5px solid var(--border);font-size:12px">${a.file_name}</div>`).join('')
+    : '<div style="font-size:11px;color:var(--text3);padding:4px">No attachments yet.</div>';
 }
 
 // ─── PDF EXPORT ───────────────────────────────────────────────────
