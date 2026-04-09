@@ -2666,20 +2666,7 @@ document.addEventListener('keydown', (e) => {
   if(e.key==='-') pdfZoomOut(id);
 });
 
-// Auto-init PDF viewer when modal opens
-const _origOpenModal = openModal;
-function openModal(title, body, footer, wide) {
-  _origOpenModal(title, body, footer, wide);
-  // Check for PDF viewer elements and init them
-  setTimeout(async () => {
-    document.querySelectorAll('[id^="pdfv-"]').forEach(el => {
-      const viewerId = el.id.replace('pdfv-','');
-      if(!pdfState[viewerId] && el.dataset.pdfUrl) {
-        initPdfViewer(viewerId, el.dataset.pdfUrl, el.dataset.pdfName);
-      }
-    });
-  }, 100);
-}
+// PDF.js worker is set on init - no modal wrapper needed
 
 
 async function viewAttachmentPDF(attId, filePath, fileName) {
