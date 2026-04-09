@@ -503,7 +503,7 @@ async function updateBadges() {
 
 function sbadge(s) {
   const m={
-    'Approved':'badge-success','Issued for Construction':'badge-success','Passed':'badge-success','Closed':'badge-success','Approved as Noted':'badge-success','Responded':'badge-success',
+    'Approved':'badge-success','Issued for Construction':'badge-success','Passed':'badge-success','Closed':'badge-success','Approved as Noted':'badge-success','Responded':'badge-success','Approved with Comments':'badge-success','Review Not Required':'badge-success',
     'Pending Review':'badge-warning','Pending':'badge-warning','Under Review':'badge-warning','Correction':'badge-warning','Open':'badge-warning','Awaiting Resubmission':'badge-warning',
     'Revise & Resubmit':'badge-danger','Rejected':'badge-danger','Major':'badge-danger','Failed':'badge-danger','Overdue':'badge-danger',
     'Minor':'badge-warning','Normal':'badge-neutral','High':'badge-warning','Urgent':'badge-danger',
@@ -577,32 +577,53 @@ async function renderDash() {
 
 // ─── DRAWINGS ─────────────────────────────────────────────────────
 async function renderDrawings() {
-  const {data} = await sb.from('drawings').select('*').order('created_at',{ascending:false});
+  const {data} = await sb.from('drawings').select('*').order('drawing_no',{ascending:true});
   const rows = data||[];
   document.getElementById('content').innerHTML = `
-  <div class="fbar"><span class="fbar-label">Filter:</span>
-    ${['All','Architecture','Structure','MEP','Civil'].map((d,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'draw','disc','${d}')">${d}</span>`).join('')}
+  <div class="fbar" style="flex-wrap:wrap;gap:8px">
+    <span class="fbar-label">Discipline:</span>
+    ${['All','Architecture','Structure','MEP','Civil'].map((d,i)=>`<span class="chip ${i===0?'active':''}" id="disc-chip-${i}" onclick="filtDraw(this,'disc','${d}')">${d}</span>`).join('')}
+    <span style="width:.5px;background:var(--color-border-tertiary);height:16px;align-self:center"></span>
+    <span class="fbar-label">Status:</span>
+    ${['All','Under Review','Approved','Issued for Construction','Revise & Resubmit'].map((s,i)=>`<span class="chip ${i===0?'active':''}" id="stat-chip-${i}" onclick="filtDraw(this,'status','${s}')">${s}</span>`).join('')}
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>Drawing No.</th><th>Title</th><th>Discipline</th><th>Revision</th><th>Status</th><th>Uploaded</th><th>Actions</th></tr>
-    ${rows.length?rows.map(d=>`<tr class="draw-row" data-disc="${d.discipline||''}">
+    <tr><th>Drawing No.</th><th>Title</th><th>Discipline</th><th>Revision</th><th>Review Status</th><th>Uploaded</th><th>By</th><th>Actions</th></tr>
+    ${rows.length?rows.map(d=>`<tr class="draw-row" data-disc="${d.discipline||''}" data-status="${d.status||''}">
       <td class="mono">${d.drawing_no}</td>
       <td style="color:var(--blue-light);cursor:pointer" onclick="viewDraw('${d.id}')">${d.title}</td>
       <td style="color:var(--text2)">${d.discipline||'—'}</td>
       <td><span class="rev-chip">${d.revision||'Rev A'}</span></td>
       <td>${sbadge(d.status)}</td>
       <td style="color:var(--text3);font-size:10px">${d.created_at?d.created_at.split('T')[0]:'—'}</td>
+      <td style="color:var(--text2);font-size:10px">${d.uploaded_by||'—'}</td>
       <td><div style="display:flex;gap:4px">
         <button class="btn btn-sm" onclick="viewDraw('${d.id}')">View</button>
         ${can('upload')?`<button class="btn btn-sm" onclick="uploadRev('${d.id}')">New Rev</button>`:''}
+        ${can('approve')&&d.status==='Under Review'?`<button class="btn btn-sm btn-success" onclick="viewDraw('${d.id}')">Review</button>`:''}
       </div></td>
     </tr>`).join(''):'<tr><td colspan="7" class="empty-state">No drawings yet. Upload the first one.</td></tr>'}
   </table></div></div>`;
 }
 
+let drawFilters = {disc:'All', status:'All'};
+function filtDraw(el, field, val) {
+  drawFilters[field] = val;
+  document.querySelectorAll('.chip').forEach(c=>{
+    if((field==='disc'&&['All','Architecture','Structure','MEP','Civil'].includes(c.textContent))||
+       (field==='status'&&['All','Under Review','Approved','Issued for Construction','Revise & Resubmit'].includes(c.textContent)))
+      c.classList.remove('active');
+  });
+  el.classList.add('active');
+  document.querySelectorAll('.draw-row').forEach(r=>{
+    const discOk = drawFilters.disc==='All'||(r.dataset.disc||'')=== drawFilters.disc;
+    const statOk = drawFilters.status==='All'||(r.dataset.status||'')=== drawFilters.status;
+    r.style.display=(discOk&&statOk)?'':'none';
+  });
+}
 function filt(el, page, field, val) {
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
-  const rowClass = page==='draw'?'.draw-row':page==='sub'?'.sub-row':page==='ir'?'.ir-row':'.ncr-row';
+  const rowClass = page==='sub'?'.sub-row':page==='ir'?'.ir-row':page==='ncr'?'.ncr-row':page==='rfi'?'.rfi-row':'.draw-row';
   document.querySelectorAll(rowClass).forEach(r=>{
     const rv = r.dataset[field]||'';
     r.style.display=(val==='All'||rv===val)?'':'none';
@@ -794,6 +815,8 @@ async function viewDraw(id) {
       </div>
     </div>` : `<div class="detail-section"><div class="detail-label" style="margin-bottom:8px">Revision History</div>
       <div style="font-size:11px;color:var(--text3);padding:8px">No revision history yet — history is tracked from this update onwards.</div></div>`;
+    const {data:_relSubs} = await sb.from('submittals').select('ref_no,title,status').eq('related_drawing',d.drawing_no);
+  const _relSubsHTML = _relSubs&&_relSubs.length?`<div class="detail-section"><div class="detail-label" style="margin-bottom:6px">Linked Submittals</div>${_relSubs.map(s=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--bg3);border-radius:4px;margin-bottom:4px;border:.5px solid var(--border)"><div><span style="font-size:11px;font-weight:500;color:var(--blue-light)">${s.ref_no}</span><span style="font-size:11px;color:var(--text2);margin-left:8px">${s.title}</span></div>${sbadge(s.status)}</div>`).join('')}</div>`:'';
   openModal(`${d.drawing_no} – ${d.title}`, `
     <div class="detail-grid">
       <div class="detail-item"><div class="detail-label">Discipline</div><div class="detail-value">${d.discipline||'—'}</div></div>
@@ -801,6 +824,7 @@ async function viewDraw(id) {
       <div class="detail-item"><div class="detail-label">Status</div><div class="detail-value">${sbadge(d.status)}</div></div>
       <div class="detail-item"><div class="detail-label">Uploaded</div><div class="detail-value">${d.created_at?d.created_at.split('T')[0]:'—'}</div></div>
     </div>
+    ${_relSubsHTML}
     ${revTableHTML}
     ${pdfHtml}`,
     `${can('upload')?`<button class="btn btn-primary" onclick="uploadRev('${id}')">Upload New Revision</button>`:''}
@@ -1208,6 +1232,7 @@ async function openNew() {
       `<button class="btn btn-primary" onclick="doNewDraw()">Upload Drawing</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 
   } else if(currentPage==='sub' && can('submit')) {
+    const {data:draws} = await sb.from('drawings').select('drawing_no,title').order('drawing_no');
     openModal('New Document Submittal (DSUB)', `
       <div class="frow">
         <div class="form-group"><label class="form-label-dark">Reference No.</label><input type="text" class="form-control" id="ns-id" placeholder="MBC-POE-DT-P454-25-0XX" /></div>
@@ -1218,7 +1243,15 @@ async function openNew() {
         <div class="form-group"><label class="form-label-dark">From</label><select class="form-control" id="ns-from"><option value="MBC">MBC (Main Contractor)</option>${(scs||[]).map(s=>`<option value="${s.name}">${s.name}</option>`).join('')}</select></div>
         <div class="form-group"><label class="form-label-dark">To</label><select class="form-control" id="ns-to"><option value="POE">POE (Consultant)</option><option value="Regent">Regent (Developer)</option></select></div>
       </div>
-      <div class="form-group"><label class="form-label-dark">Response Due Date</label><input type="date" class="form-control" id="ns-due" /></div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Response Due Date</label><input type="date" class="form-control" id="ns-due" /></div>
+        <div class="form-group"><label class="form-label-dark">Related Drawing (optional)</label>
+          <select class="form-control" id="ns-drawing">
+            <option value="">— None —</option>
+            ${(draws||[]).map(d=>`<option value="${d.drawing_no}">${d.drawing_no} – ${d.title}</option>`).join('')}
+          </select>
+        </div>
+      </div>
       <div class="frow">
       </div>
       <div class="form-group"><label class="form-label-dark">Attachments</label>
@@ -1388,7 +1421,8 @@ async function doNewSub() {
     attachments:{samples:document.getElementById('ns-samp').checked,brochure:document.getElementById('ns-broc').checked,drawings:document.getElementById('ns-draw').checked,sketches:document.getElementById('ns-sket').checked,others:document.getElementById('ns-oth').checked},
     discipline:{civil:document.getElementById('ns-civil').checked,mech:document.getElementById('ns-mech').checked,elv:document.getElementById('ns-elv').checked,specs:document.getElementById('ns-dspec').checked,arch:document.getElementById('ns-arch').checked,elec:document.getElementById('ns-elec').checked},
     revision:'Rev 000',
-    due_date:document.getElementById('ns-due')?.value||null
+    due_date:document.getElementById('ns-due')?.value||null,
+    related_drawing:document.getElementById('ns-drawing')?.value||null
   }).select().single();
   if(error){toast('Error: '+error.message,'error');return;}
   if(newSub?.id) await uploadStagedFiles('ns-staged','submittal',newSub.id);
@@ -2015,6 +2049,162 @@ async function uploadStagedFiles(stagingId, recordType, recordId) {
   if(!files.length) return;
   await uploadAttachments(files, recordType, recordId);
   delete stagedFiles[stagingId];
+}
+
+
+// ─── DRAWING REVIEW PANEL ─────────────────────────────────────────
+function drawingReviewPanelHTML(drawingId) {
+  return `<div class="detail-section" style="margin-top:14px">
+    <div class="detail-label" style="margin-bottom:10px;color:var(--color-text-warning)">Review & Outcome — Consultant Action Required</div>
+    <div style="display:flex;flex-direction:column;gap:10px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:13px">
+      <div style="font-size:11px;color:var(--color-text-secondary)">Select outcome for this revision:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="review-opts-${drawingId}">
+        <div onclick="selectReviewCode(this,'1','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-primary);transition:.12s">
+          <div id="rc1-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px"></div>
+          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(1) Approved</div><div style="font-size:10px;color:var(--color-text-secondary)">Work may proceed</div></div>
+        </div>
+        <div onclick="selectReviewCode(this,'2','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-primary);transition:.12s">
+          <div id="rc2-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px"></div>
+          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(2) Approved with comments</div><div style="font-size:10px;color:var(--color-text-secondary)">Proceed, incorporate comments</div></div>
+        </div>
+        <div onclick="selectReviewCode(this,'3','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-primary);transition:.12s">
+          <div id="rc3-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px"></div>
+          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(3) Revise & resubmit</div><div style="font-size:10px;color:var(--color-text-secondary)">Work may not proceed</div></div>
+        </div>
+        <div onclick="selectReviewCode(this,'4','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-primary);transition:.12s">
+          <div id="rc4-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px"></div>
+          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(4) Review not required</div><div style="font-size:10px;color:var(--color-text-secondary)">Work may proceed</div></div>
+        </div>
+      </div>
+      <input type="hidden" id="review-code-${drawingId}" value="" />
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Resident Engineer — Name <span style="color:var(--color-text-danger)">*</span></label>
+          <input type="text" class="form-control" id="review-eng-${drawingId}" placeholder="Enter engineer full name" /></div>
+        <div class="form-group"><label class="form-label-dark">Review Date</label>
+          <input type="date" class="form-control" id="review-date-${drawingId}" value="${new Date().toISOString().split('T')[0]}" /></div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Review Comments</label>
+        <textarea class="form-control" id="review-comments-${drawingId}" placeholder="Enter formal review comments..." style="min-height:80px"></textarea></div>
+      <div class="form-group"><label class="form-label-dark">Upload Marked-Up Drawing (optional)</label>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-primary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer"
+          onclick="document.getElementById('markup-upload-${drawingId}').click()"
+          ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'"
+          ondragleave="this.style.borderColor='var(--color-border-secondary)'"
+          ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';handleMarkupDrop(event,'${drawingId}')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--color-text-secondary)">Upload marked-up PDF — your comments/redlines on the drawing</span>
+        </div>
+        <input type="file" id="markup-upload-${drawingId}" accept=".pdf,.dwg,.dxf" style="display:none" onchange="stageMarkup(event,'${drawingId}')" />
+        <div id="markup-staged-${drawingId}" style="margin-top:6px"></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+let markupFiles = {};
+function stageMarkup(event, drawingId) {
+  const f = event.target.files[0];
+  if(!f) return;
+  markupFiles[drawingId] = f;
+  document.getElementById('markup-staged-'+drawingId).innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--color-background-secondary);border-radius:6px;border:.5px solid var(--color-border-tertiary);margin-top:4px">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="10" height="13" rx="1" stroke="var(--color-text-info)" stroke-width="1.3"/></svg>
+      <div style="flex:1;font-size:11px;color:var(--color-text-primary)">${f.name}</div>
+      <div style="font-size:10px;color:var(--color-text-tertiary)">${formatFileSize(f.size)}</div>
+      <button class="btn btn-sm" style="color:var(--color-text-danger);font-size:10px;padding:2px 6px" onclick="delete markupFiles['${drawingId}'];document.getElementById('markup-staged-${drawingId}').innerHTML=''">✕</button>
+    </div>`;
+}
+function handleMarkupDrop(event, drawingId) {
+  const f = event.dataTransfer.files[0];
+  if(f) { markupFiles[drawingId]=f; stageMarkup({target:{files:[f]}},drawingId); }
+}
+
+function selectReviewCode(el, code, drawingId) {
+  const statusMap = {'1':'Approved','2':'Approved with Comments','3':'Revise & Resubmit','4':'Review Not Required'};
+  const colorMap = {'1':'var(--color-text-success)','2':'var(--color-text-warning)','3':'var(--color-text-danger)','4':'var(--color-text-info)'};
+  const bgMap = {'1':'var(--color-background-success)','2':'var(--color-background-warning)','3':'var(--color-background-danger)','4':'var(--color-background-info)'};
+  const borderMap = {'1':'var(--color-border-success)','2':'var(--color-border-warning)','3':'var(--color-border-danger)','4':'var(--color-border-info)'};
+  // Reset all
+  document.querySelectorAll(`#review-opts-${drawingId} > div`).forEach(d=>{
+    d.style.background='var(--color-background-primary)';
+    d.style.borderColor='var(--color-border-secondary)';
+    const dot=d.querySelector('div');
+    if(dot){dot.style.background='transparent';dot.style.borderColor='var(--color-border-secondary)';}
+  });
+  // Highlight selected
+  el.style.background=bgMap[code];
+  el.style.borderColor=borderMap[code];
+  const dot=el.querySelector('div');
+  if(dot){dot.style.background=colorMap[code];dot.style.borderColor=colorMap[code];}
+  document.getElementById('review-code-'+drawingId).value=code;
+}
+
+async function submitDrawingReview(drawingId) {
+  const code = document.getElementById('review-code-'+drawingId)?.value;
+  const eng = document.getElementById('review-eng-'+drawingId)?.value?.trim();
+  const comments = document.getElementById('review-comments-'+drawingId)?.value;
+  const reviewDate = document.getElementById('review-date-'+drawingId)?.value;
+  if(!code){toast('Please select a review outcome (1–4)','error');return;}
+  if(!eng){toast("Please enter the Resident Engineer's name",'error');return;}
+  const statusMap={'1':'Approved','2':'Approved with Comments','3':'Revise & Resubmit','4':'Review Not Required'};
+  const newStatus = statusMap[code];
+  // Update drawing status
+  await sb.from('drawings').update({status:newStatus}).eq('id',drawingId);
+  // Update drawing_revisions record with approval info
+  const {data:d} = await sb.from('drawings').select('revision').eq('id',drawingId).single();
+  await sb.from('drawing_revisions').update({
+    approved_by_name:eng,
+    approved_by_id:currentUser?.id,
+    approval_date:new Date().toISOString(),
+    status:newStatus
+  }).eq('drawing_id',drawingId).eq('revision',d?.revision||'');
+  // Post comment with review outcome
+  const outcomeText = `Review submitted — Code (${code}): ${newStatus}.${comments?' Comments: '+comments:''}`;
+  await sb.from('comments').insert({
+    record_type:'drawing', record_id:drawingId,
+    author_name:eng,
+    author_role:currentProfile?.role||'consultant',
+    message:outcomeText
+  });
+  // Upload marked-up drawing as attachment if provided
+  const markupFile = markupFiles[drawingId];
+  if(markupFile) {
+    toast('Uploading marked-up drawing...','info');
+    const path = `drawing/${drawingId}/markup_${Date.now()}_${markupFile.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+    const {error:upErr} = await sb.storage.from('attachments').upload(path, markupFile, {upsert:false});
+    if(!upErr) {
+      await sb.from('attachments').insert({
+        record_type:'drawing', record_id:drawingId,
+        file_name:`[MARKUP] ${markupFile.name}`,
+        file_path:path, file_size:markupFile.size,
+        file_type:markupFile.type,
+        uploaded_by_name:eng,
+        uploaded_by_id:currentUser?.id
+      });
+    }
+    delete markupFiles[drawingId];
+  }
+  // Auto-generate transmittal for Approved / Approved with Comments
+  if(code==='1'||code==='2') {
+    const {data:drawing} = await sb.from('drawings').select('drawing_no,title,revision').eq('id',drawingId).single();
+    if(drawing) {
+      const trnRef = 'TRN-AUTO-'+Date.now().toString().slice(-6);
+      await sb.from('transmittals').insert({
+        ref_no: trnRef,
+        from_party: 'POE (Consultant)',
+        to_party: 'MBC (Main Contractor)',
+        transmit_date: new Date().toISOString().split('T')[0],
+        purpose: code==='1'?'For Construction':'For Construction (Approved with Comments)',
+        method: 'Portal',
+        documents: JSON.stringify([{no:drawing.drawing_no,title:drawing.title,rev:drawing.revision,copies:1}]),
+        notes: `Auto-generated on drawing approval. Review Code (${code}) by ${eng}.${comments?' Comments: '+comments:''}`
+      });
+      toast(`Drawing approved — transmittal ${trnRef} auto-generated`,'success');
+    }
+  } else {
+    toast(`Drawing review submitted — Code (${code}): ${newStatus}`,'success');
+  }
+  closeModal(); render();
 }
 
 // ─── PDF EXPORT ───────────────────────────────────────────────────
