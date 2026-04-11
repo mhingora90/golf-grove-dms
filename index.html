@@ -313,11 +313,11 @@ textarea.form-control{resize:vertical;min-height:70px}
     <div class="nav-item" id="n-trans" onclick="nav('trans',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M1 8h14M10 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Transmittals
-
-    <div class="nav-item ${currentPage==='ms'?'active':''}" onclick="nav('ms')">
+    </div>
+    <div class="nav-item" id="n-ms" onclick="nav('ms',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 5h6M5 8h4M5 11h3" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
       Method Statements
-    </div>    </div>
+    </div>
     <div class="sb-section">Admin</div>
     <div class="nav-item" id="n-subs" onclick="nav('subs',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" stroke-width="1.3"/><circle cx="12.5" cy="5" r="2" stroke="currentColor" stroke-width="1.1"/><path d="M12 9.5c1.657 0 3 1.343 3 3" stroke="currentColor" stroke-width="1.1"/></svg>
@@ -464,7 +464,7 @@ async function loadApp(user) {
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',subs:'Subcontractors',users:'User Management'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',subs:'Subcontractors',users:'User Management',ms:'Method Statements'};
 
 function nav(page, el) {
   currentPage = page;
@@ -498,6 +498,7 @@ async function render() {
   else if(currentPage==='rfi') await renderRFIs();
   else if(currentPage==='trans') await renderTransmittals();
   else if(currentPage==='subs') await renderSubcontractors();
+  else if(currentPage==='ms') await renderMS();
   else if(currentPage==='users') await renderUsers();
   await updateBadges();
 }
