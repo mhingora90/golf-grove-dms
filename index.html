@@ -457,7 +457,7 @@ async function loadApp(user) {
   const roleClass = `role-${profile?.role||'contractor'}`;
   document.getElementById('role-badge-top').className=`role-badge ${roleClass}`;
   document.getElementById('role-badge-top').textContent=profile?.role||'user';
-  if(profile?.role==='developer'||profile?.role==='consultant'){
+  if(profile?.role==='developer'){
     document.getElementById('n-users-wrap').style.display='';
   }
   nav('dash', document.getElementById('n-dash'));
@@ -471,6 +471,10 @@ function nav(page, el) {
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(el) el.classList.add('active');
   document.getElementById('page-title').textContent = PAGE_TITLES[page]||page;
+  // Hide + New button on pages where no role can create (dash)
+  const noNewPages = ['dash'];
+  const newBtn = document.getElementById('new-btn');
+  if(newBtn) newBtn.style.display = noNewPages.includes(page) ? 'none' : '';
   render();
 }
 
@@ -478,10 +482,10 @@ function nav(page, el) {
 function can(action) {
   const role = currentProfile?.role;
   const perms = {
-    developer: {approve:true,upload:true,raise:true,submit:true,manageUsers:true},
-    consultant: {approve:true,upload:true,raise:true,submit:true,manageUsers:true},
-    contractor: {approve:false,upload:true,raise:false,submit:true,manageUsers:false},
-    subcontractor:{approve:false,upload:false,raise:false,submit:true,manageUsers:false},
+    developer: {approve:true,upload:true,raise:true,submit:true,manageUsers:true,manageSubs:true,submitMS:true},
+    consultant: {approve:true,upload:true,raise:true,submit:true,manageUsers:false,manageSubs:false,submitMS:false},
+    contractor: {approve:false,upload:true,raise:false,submit:true,manageUsers:false,manageSubs:true,submitMS:true},
+    subcontractor:{approve:false,upload:false,raise:false,submit:true,manageUsers:false,manageSubs:false,submitMS:true},
   };
   return perms[role]?.[action]||false;
 }
@@ -686,9 +690,9 @@ async function viewMS(id) {
   </div>`;
   const reviewSection = can('approve')&&(m.status==='Pending Review'||m.status==='Under Review')?`<div class="detail-section" style="margin-top:14px">
     <div class="detail-label" style="margin-bottom:10px;color:var(--color-text-warning)">Review — Consultant Action Required</div>
-    <div style="display:flex;flex-direction:column;gap:10px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:13px">
+    <div style="display:flex;flex-direction:column;gap:10px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);padding:13px">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-        ${['Approved','Revise & Resubmit','Rejected'].map(s=>`<div onclick="this.parentElement.querySelectorAll('div').forEach(d=>d.style.fontWeight='400');this.style.fontWeight='600';document.getElementById('ms-outcome-${m.id}').value='${s}'" style="padding:8px 10px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;font-size:11px;text-align:center;background:var(--color-background-primary)">${s}</div>`).join('')}
+        ${['Approved','Revise & Resubmit','Rejected'].map(s=>`<div onclick="this.parentElement.querySelectorAll('div').forEach(d=>d.style.fontWeight='400');this.style.fontWeight='600';document.getElementById('ms-outcome-${m.id}').value='${s}'" style="padding:8px 10px;border-radius:6px;border:.5px solid var(--border2);cursor:pointer;font-size:11px;text-align:center;background:var(--bg2)">${s}</div>`).join('')}
       </div>
       <input type="hidden" id="ms-outcome-${m.id}" value="" />
       <div class="frow">
@@ -748,23 +752,23 @@ async function doNewMS() {
 function openBulkImport() {
   openModal('Bulk Drawing Import', `
     <div style="display:flex;flex-direction:column;gap:14px">
-      <div style="background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:12px 14px">
+      <div style="background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);padding:12px 14px">
         <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px">Step 1 — Download the CSV template</div>
-        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">Fill in drawing details for all drawings you want to register. Leave file_path blank — you can upload PDFs after import.</div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:10px">Fill in drawing details for all drawings you want to register. Leave file_path blank — you can upload PDFs after import.</div>
         <button class="btn" style="font-size:11px" onclick="downloadBulkTemplate()">Download CSV Template</button>
       </div>
-      <div style="background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:12px 14px">
+      <div style="background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);padding:12px 14px">
         <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px">Step 2 — Upload completed CSV</div>
-        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">Required columns: drawing_no, title, discipline, revision, status. Optional: description, uploaded_by.</div>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-primary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('bulk-csv').click()" ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'" ondragleave="this.style.borderColor='var(--color-border-secondary)'" ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';handleBulkDrop(event)">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span style="font-size:12px;color:var(--color-text-secondary)">Click to select CSV file or drag & drop</span>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:10px">Required columns: drawing_no, title, discipline, revision, status. Optional: description, uploaded_by.</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="document.getElementById('bulk-csv').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border2)'" ondrop="event.preventDefault();this.style.borderColor='var(--border2)';handleBulkDrop(event)">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--text2)">Click to select CSV file or drag & drop</span>
         </div>
         <input type="file" id="bulk-csv" accept=".csv" style="display:none" onchange="parseBulkCSV(event)" />
       </div>
       <div id="bulk-preview" style="display:none">
         <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px" id="bulk-preview-label"></div>
-        <div style="overflow-x:auto;border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md)">
+        <div style="overflow-x:auto;border:.5px solid var(--border);border-radius:var(--radius)">
           <table style="width:100%;border-collapse:collapse;font-size:11px" id="bulk-preview-table"></table>
         </div>
         <div id="bulk-errors" style="margin-top:8px;font-size:11px;color:var(--color-text-danger)"></div>
@@ -831,8 +835,8 @@ function parseBulkCSV(event) {
     const btn = document.getElementById('bulk-submit-btn');
     preview.style.display='';
     label.textContent = `${bulkRows.length} drawing${bulkRows.length!==1?'s':''} ready to import${errors.length?' — '+errors.length+' rows skipped due to errors':''}`;
-    table.innerHTML = `<tr style="background:var(--color-background-secondary)">${['Drawing No.','Title','Discipline','Revision','Status','Uploaded By'].map(h=>`<th style="padding:7px 10px;font-size:10px;text-align:left;border-bottom:.5px solid var(--color-border-tertiary);white-space:nowrap">${h}</th>`).join('')}</tr>`
-      + bulkRows.slice(0,10).map(r=>`<tr style="border-bottom:.5px solid var(--color-border-tertiary)">${[r.drawing_no,r.title,r.discipline,r.revision,r.status,r.uploaded_by||'—'].map(v=>`<td style="padding:7px 10px;font-size:11px;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis">${v}</td>`).join('')}</tr>`).join('')
+    table.innerHTML = `<tr style="background:var(--bg3)">${['Drawing No.','Title','Discipline','Revision','Status','Uploaded By'].map(h=>`<th style="padding:7px 10px;font-size:10px;text-align:left;border-bottom:.5px solid var(--border);white-space:nowrap">${h}</th>`).join('')}</tr>`
+      + bulkRows.slice(0,10).map(r=>`<tr style="border-bottom:.5px solid var(--border)">${[r.drawing_no,r.title,r.discipline,r.revision,r.status,r.uploaded_by||'—'].map(v=>`<td style="padding:7px 10px;font-size:11px;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis">${v}</td>`).join('')}</tr>`).join('')
       + (bulkRows.length>10?`<tr><td colspan="6" style="padding:7px 10px;font-size:11px;color:var(--color-text-tertiary)">…and ${bulkRows.length-10} more rows</td></tr>`:'');
     errDiv.innerHTML = errors.map(e=>`<div>⚠ ${e}</div>`).join('');
     if(btn) btn.style.display = bulkRows.length?'':'none';
@@ -871,7 +875,7 @@ async function renderDrawings() {
   <div class="fbar" style="flex-wrap:wrap;gap:8px">
     <span class="fbar-label">Discipline:</span>
     ${['All','Architecture','Structure','MEP','Civil'].map((d,i)=>`<span class="chip ${i===0?'active':''}" id="disc-chip-${i}" onclick="filtDraw(this,'disc','${d}')">${d}</span>`).join('')}
-    <span style="width:.5px;background:var(--color-border-tertiary);height:16px;align-self:center"></span>
+    <span style="width:.5px;background:var(--border);height:16px;align-self:center"></span>
     <span class="fbar-label">Status:</span>
     ${['All','Under Review','Approved','Issued for Construction','Revise & Resubmit'].map((s,i)=>`<span class="chip ${i===0?'active':''}" id="stat-chip-${i}" onclick="filtDraw(this,'status','${s}')">${s}</span>`).join('')}
     <span style="flex:1"></span>
@@ -1045,7 +1049,7 @@ async function editUserRole(uid, currentRole, name) {
 async function doChangeRole(uid) {
   const role = document.getElementById('new-role').value;
   await sb.from('profiles').update({role}).eq('id',uid);
-  toast('Role updated','success'); closeModal(); render();
+  toast('Role updated — reloading...','success'); setTimeout(()=>location.reload(),800); closeModal(); render();
 }
 
 // ─── VIEW MODALS ──────────────────────────────────────────────────
@@ -1532,12 +1536,12 @@ async function openNew() {
         <div id="file-name-new" style="font-size:11px;color:var(--text2);margin-top:6px"></div>
       </div>
       <div class="form-group"><label class="form-label-dark">Additional Attachments (optional)</label>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('nd-extra-files').click()"
-          ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'"
-          ondragleave="this.style.borderColor='var(--color-border-secondary)'"
-          ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';stageFiles(event.dataTransfer.files,'nd-staged')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span style="font-size:12px;color:var(--color-text-secondary)">Attach supporting documents — specs, calculations, references (max 50MB each)</span>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="document.getElementById('nd-extra-files').click()"
+          ondragover="event.preventDefault();this.style.borderColor='var(--blue)'"
+          ondragleave="this.style.borderColor='var(--border2)'"
+          ondrop="event.preventDefault();this.style.borderColor='var(--border2)';stageFiles(event.dataTransfer.files,'nd-staged')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--text2)">Attach supporting documents — specs, calculations, references (max 50MB each)</span>
         </div>
         <input type="file" id="nd-extra-files" multiple style="display:none" onchange="stageFiles(this.files,'nd-staged')" />
         <div id="nd-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
@@ -1553,7 +1557,7 @@ async function openNew() {
       </div>
       <div class="form-group"><label class="form-label-dark">Document Title</label><input type="text" class="form-control" id="ns-title" placeholder="e.g. Structural Shop Drawings – Level 3" /></div>
       <div class="frow">
-        <div class="form-group"><label class="form-label-dark">From</label><select class="form-control" id="ns-from"><option value="MBC">MBC (Main Contractor)</option>${(scs||[]).map(s=>`<option value="${s.name}">${s.name}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label-dark">From</label><select class="form-control" id="ns-from"><option value="${currentProfile?.company||'MBC'}">${currentProfile?.company||'MBC (Main Contractor)'}</option>${(scs||[]).map(s=>`<option value="${s.name}">${s.name}</option>`).join('')}</select></div>
         <div class="form-group"><label class="form-label-dark">To</label><select class="form-control" id="ns-to"><option value="POE">POE (Consultant)</option><option value="Regent">Regent (Developer)</option></select></div>
       </div>
       <div class="frow">
@@ -1588,9 +1592,9 @@ async function openNew() {
         </div>
       </div>
       <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('ns-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'" ondragleave="this.style.borderColor='var(--color-border-secondary)'" ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';stageFiles(event.dataTransfer.files,'ns-staged')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span style="font-size:12px;color:var(--color-text-secondary)">Click to attach or drag & drop files — PDF, DWG, Images, Word, Excel (max 50MB)</span>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="document.getElementById('ns-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border2)'" ondrop="event.preventDefault();this.style.borderColor='var(--border2)';stageFiles(event.dataTransfer.files,'ns-staged')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--text2)">Click to attach or drag & drop files — PDF, DWG, Images, Word, Excel (max 50MB)</span>
         </div>
         <input type="file" id="ns-files" multiple style="display:none" onchange="stageFiles(this.files,'ns-staged')" />
         <div id="ns-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
@@ -1628,11 +1632,11 @@ async function openNew() {
         <div class="form-group"><label class="form-label-dark">Contractor's Rep on Site</label><input type="text" class="form-control" id="ni-rep" placeholder="Name" /></div>
         <div class="form-group"><label class="form-label-dark">Site Engineer</label><input type="text" class="form-control" id="ni-eng" placeholder="Name" /></div>
       </div>
-      <div class="form-group"><label class="form-label-dark">Request Date</label><input type="text" class="form-control" id="ni-reqdate" placeholder="e.g. 09 APR 2026" /></div>
+      <div class="form-group"><label class="form-label-dark">Request Date</label><input type="text" class="form-control" id="ni-reqdate" placeholder="${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase()}" /></div>
       <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('ni-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'" ondragleave="this.style.borderColor='var(--color-border-secondary)'" ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';stageFiles(event.dataTransfer.files,'ni-staged')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span style="font-size:12px;color:var(--color-text-secondary)">Click to attach or drag & drop — PDF, DWG, Images, Word, Excel (max 50MB)</span>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="document.getElementById('ni-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border2)'" ondrop="event.preventDefault();this.style.borderColor='var(--border2)';stageFiles(event.dataTransfer.files,'ni-staged')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--text2)">Click to attach or drag & drop — PDF, DWG, Images, Word, Excel (max 50MB)</span>
         </div>
         <input type="file" id="ni-files" multiple style="display:none" onchange="stageFiles(this.files,'ni-staged')" />
         <div id="ni-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
@@ -1648,16 +1652,16 @@ async function openNew() {
       </div>
       <div class="form-group"><label class="form-label-dark">Description / Cause</label><textarea class="form-control" id="nn-cause" placeholder="Describe the non-conformance..." style="min-height:80px"></textarea></div>
       <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('nn-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'" ondragleave="this.style.borderColor='var(--color-border-secondary)'" ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';stageFiles(event.dataTransfer.files,'nn-staged')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span style="font-size:12px;color:var(--color-text-secondary)">Click to attach or drag & drop — PDF, DWG, Images, Word, Excel (max 50MB)</span>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="document.getElementById('nn-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border2)'" ondrop="event.preventDefault();this.style.borderColor='var(--border2)';stageFiles(event.dataTransfer.files,'nn-staged')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--text2)">Click to attach or drag & drop — PDF, DWG, Images, Word, Excel (max 50MB)</span>
         </div>
         <input type="file" id="nn-files" multiple style="display:none" onchange="stageFiles(this.files,'nn-staged')" />
         <div id="nn-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
       </div>`,
       `<button class="btn btn-primary" onclick="doNewNCR()">Raise NCR</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 
-  } else if(currentPage==='subs') {
+  } else if(currentPage==='subs' && can('manageSubs')) {
     openModal('Add Subcontractor', `
       <div class="form-group"><label class="form-label-dark">Company Name</label><input type="text" class="form-control" id="nsc-name" placeholder="Full legal company name" /></div>
       <div class="frow">
@@ -1673,6 +1677,8 @@ async function openNew() {
     openNewRFI();
   } else if(currentPage==='trans') {
     openNewTransmittal();
+  } else if(currentPage==='ms' && can('submitMS')) {
+    openNewMS();
   } else {
     openModal('Access Restricted', `<div class="empty-state">Your current role does not have permission to create items on this page.</div>`,
       `<button class="btn" onclick="closeModal()">Close</button>`);
@@ -2132,6 +2138,66 @@ async function doNewRFI() {
   toast('RFI raised','success'); closeModal(); render();
 }
 
+
+async function openNewMS() {
+  const {data:scs} = await sb.from('subcontractors').select('*');
+  const scOpts = (scs||[]).map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+  openModal('Submit Method Statement', `
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Ref No.</label><input type="text" class="form-control" id="nm-ref" placeholder="MS-001" /></div>
+      <div class="form-group"><label class="form-label-dark">Date</label><input type="date" class="form-control" id="nm-date" value="${new Date().toISOString().split('T')[0]}" /></div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Title / Activity</label><input type="text" class="form-control" id="nm-title" placeholder="e.g. Waterproofing – Level B1" /></div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Discipline</label>
+        <select class="form-control" id="nm-disc"><option>Civil</option><option>MEP</option><option>Structural</option><option>Architectural</option><option>Electrical</option><option>Firefighting</option></select>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Location</label><input type="text" class="form-control" id="nm-loc" placeholder="e.g. Level 3 – Zone A" /></div>
+    </div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Submitted By</label><input type="text" class="form-control" id="nm-by" value="${currentProfile?.full_name||''}" /></div>
+      <div class="form-group"><label class="form-label-dark">Revision</label><input type="text" class="form-control" id="nm-rev" value="Rev A" /></div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Upload Method Statement (PDF)</label>
+      <div class="upload-zone" id="uz-ms" onclick="document.getElementById('fu-ms').click()" ondragover="event.preventDefault();this.classList.add('dragging')" ondragleave="this.classList.remove('dragging')" ondrop="handleDrop(event,'ms')">
+        <div style="font-size:24px">📄</div>
+        <div class="upload-zone-text">Click to select or drag & drop PDF</div>
+        <div class="upload-zone-sub">PDF files only</div>
+      </div>
+      <input type="file" id="fu-ms" accept=".pdf" style="display:none" onchange="handleFileSelect(event,'ms')" />
+      <div id="file-name-ms" style="font-size:11px;color:var(--text2);margin-top:6px"></div>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doNewMS()">Submit Method Statement</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doNewMS() {
+  const ref = document.getElementById('nm-ref').value.trim();
+  const title = document.getElementById('nm-title').value.trim();
+  if(!ref||!title){toast('Ref and title are required','error');return;}
+  const file = selectedFiles['ms'];
+  let filePath = null;
+  if(file) {
+    const path = `ms/${Date.now()}_${file.name}`;
+    const {error,data} = await sb.storage.from('method-statements').upload(path, file, {upsert:true});
+    if(!error) filePath = path;
+  }
+  const {error} = await sb.from('method_statements').insert({
+    ref_no: ref,
+    title,
+    discipline: document.getElementById('nm-disc').value,
+    location: document.getElementById('nm-loc').value,
+    submitted_by: document.getElementById('nm-by').value,
+    submitted_date: document.getElementById('nm-date').value,
+    revision: document.getElementById('nm-rev').value,
+    status: 'Pending Review',
+    file_path: filePath,
+  });
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast('Method Statement submitted','success');
+  closeModal();
+  render();
+}
+
 async function openNewTransmittal() {
   const {data:draws} = await sb.from('drawings').select('drawing_no,title,revision').order('drawing_no');
   openModal('New Transmittal',`
@@ -2343,7 +2409,7 @@ function renderStagedFiles(stagingId) {
   if(!el) return;
   const files = stagedFiles[stagingId]||[];
   el.innerHTML = files.map((f,i)=>`
-    <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--color-background-secondary);border-radius:6px;border:.5px solid var(--color-border-tertiary)">
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--bg3);border-radius:6px;border:.5px solid var(--border)">
       <span style="font-size:13px">${fileIcon(f.type)}</span>
       <div style="flex:1;min-width:0">
         <div style="font-size:11px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.name}</div>
@@ -2370,24 +2436,24 @@ async function uploadStagedFiles(stagingId, recordType, recordId) {
 function drawingReviewPanelHTML(drawingId) {
   return `<div class="detail-section" style="margin-top:14px">
     <div class="detail-label" style="margin-bottom:10px;color:var(--color-text-warning)">Review & Outcome — Consultant Action Required</div>
-    <div style="display:flex;flex-direction:column;gap:10px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:13px">
-      <div style="font-size:11px;color:var(--color-text-secondary)">Select outcome for this revision:</div>
+    <div style="display:flex;flex-direction:column;gap:10px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);padding:13px">
+      <div style="font-size:11px;color:var(--text2)">Select outcome for this revision:</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="review-opts-${drawingId}">
-        <div onclick="selectReviewCode(this,'1','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-primary);transition:.12s">
-          <div id="rc1-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px"></div>
-          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(1) Approved</div><div style="font-size:10px;color:var(--color-text-secondary)">Work may proceed</div></div>
+        <div onclick="selectReviewCode(this,'1','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--border2);cursor:pointer;background:var(--bg2);transition:.12s">
+          <div id="rc1-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px"></div>
+          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(1) Approved</div><div style="font-size:10px;color:var(--text2)">Work may proceed</div></div>
         </div>
-        <div onclick="selectReviewCode(this,'2','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-primary);transition:.12s">
-          <div id="rc2-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px"></div>
-          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(2) Approved with comments</div><div style="font-size:10px;color:var(--color-text-secondary)">Proceed, incorporate comments</div></div>
+        <div onclick="selectReviewCode(this,'2','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--border2);cursor:pointer;background:var(--bg2);transition:.12s">
+          <div id="rc2-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px"></div>
+          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(2) Approved with comments</div><div style="font-size:10px;color:var(--text2)">Proceed, incorporate comments</div></div>
         </div>
-        <div onclick="selectReviewCode(this,'3','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-primary);transition:.12s">
-          <div id="rc3-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px"></div>
-          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(3) Revise & resubmit</div><div style="font-size:10px;color:var(--color-text-secondary)">Work may not proceed</div></div>
+        <div onclick="selectReviewCode(this,'3','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--border2);cursor:pointer;background:var(--bg2);transition:.12s">
+          <div id="rc3-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px"></div>
+          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(3) Revise & resubmit</div><div style="font-size:10px;color:var(--text2)">Work may not proceed</div></div>
         </div>
-        <div onclick="selectReviewCode(this,'4','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-primary);transition:.12s">
-          <div id="rc4-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px"></div>
-          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(4) Review not required</div><div style="font-size:10px;color:var(--color-text-secondary)">Work may proceed</div></div>
+        <div onclick="selectReviewCode(this,'4','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--border2);cursor:pointer;background:var(--bg2);transition:.12s">
+          <div id="rc4-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px"></div>
+          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(4) Review not required</div><div style="font-size:10px;color:var(--text2)">Work may proceed</div></div>
         </div>
       </div>
       <input type="hidden" id="review-code-${drawingId}" value="" />
@@ -2400,13 +2466,13 @@ function drawingReviewPanelHTML(drawingId) {
       <div class="form-group"><label class="form-label-dark">Review Comments</label>
         <textarea class="form-control" id="review-comments-${drawingId}" placeholder="Enter formal review comments..." style="min-height:80px"></textarea></div>
       <div class="form-group"><label class="form-label-dark">Upload Marked-Up Drawing (optional)</label>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-primary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer"
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--radius);cursor:pointer"
           onclick="document.getElementById('markup-upload-${drawingId}').click()"
-          ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'"
-          ondragleave="this.style.borderColor='var(--color-border-secondary)'"
-          ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';handleMarkupDrop(event,'${drawingId}')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span style="font-size:12px;color:var(--color-text-secondary)">Upload marked-up PDF — your comments/redlines on the drawing</span>
+          ondragover="event.preventDefault();this.style.borderColor='var(--blue)'"
+          ondragleave="this.style.borderColor='var(--border2)'"
+          ondrop="event.preventDefault();this.style.borderColor='var(--border2)';handleMarkupDrop(event,'${drawingId}')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--text2)">Upload marked-up PDF — your comments/redlines on the drawing</span>
         </div>
         <input type="file" id="markup-upload-${drawingId}" accept=".pdf,.dwg,.dxf" style="display:none" onchange="stageMarkup(event,'${drawingId}')" />
         <div id="markup-staged-${drawingId}" style="margin-top:6px"></div>
@@ -2421,7 +2487,7 @@ function stageMarkup(event, drawingId) {
   if(!f) return;
   markupFiles[drawingId] = f;
   document.getElementById('markup-staged-'+drawingId).innerHTML = `
-    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--color-background-secondary);border-radius:6px;border:.5px solid var(--color-border-tertiary);margin-top:4px">
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg3);border-radius:6px;border:.5px solid var(--border);margin-top:4px">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="10" height="13" rx="1" stroke="var(--color-text-info)" stroke-width="1.3"/></svg>
       <div style="flex:1;font-size:11px;color:var(--color-text-primary)">${f.name}</div>
       <div style="font-size:10px;color:var(--color-text-tertiary)">${formatFileSize(f.size)}</div>
@@ -2437,13 +2503,13 @@ function selectReviewCode(el, code, drawingId) {
   const statusMap = {'1':'Approved','2':'Approved with Comments','3':'Revise & Resubmit','4':'Review Not Required'};
   const colorMap = {'1':'var(--color-text-success)','2':'var(--color-text-warning)','3':'var(--color-text-danger)','4':'var(--color-text-info)'};
   const bgMap = {'1':'var(--color-background-success)','2':'var(--color-background-warning)','3':'var(--color-background-danger)','4':'var(--color-background-info)'};
-  const borderMap = {'1':'var(--color-border-success)','2':'var(--color-border-warning)','3':'var(--color-border-danger)','4':'var(--color-border-info)'};
+  const borderMap = {'1':'var(--color-border-success)','2':'var(--color-border-warning)','3':'var(--color-border-danger)','4':'var(--blue)'};
   // Reset all
   document.querySelectorAll(`#review-opts-${drawingId} > div`).forEach(d=>{
-    d.style.background='var(--color-background-primary)';
-    d.style.borderColor='var(--color-border-secondary)';
+    d.style.background='var(--bg2)';
+    d.style.borderColor='var(--border2)';
     const dot=d.querySelector('div');
-    if(dot){dot.style.background='transparent';dot.style.borderColor='var(--color-border-secondary)';}
+    if(dot){dot.style.background='transparent';dot.style.borderColor='var(--border2)';}
   });
   // Highlight selected
   el.style.background=bgMap[code];
