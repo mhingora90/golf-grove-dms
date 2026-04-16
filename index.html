@@ -4,40 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Golf Grove DMS – Regent Developments</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;--bg4:#252d3d;
-  --border:#2a3348;--border2:#354060;
-  --text:#e8eaf0;--text2:#9aa3b8;--text3:#5c6680;
-  --blue:#3b7dd8;--blue-bg:#1a2d4f;--blue-light:#5a9cf0;
-  --green:#2ecc71;--green-bg:#0d2e1f;--green-light:#4ade80;
-  --amber:#f59e0b;--amber-bg:#2d1f05;--amber-light:#fbbf24;
-  --red:#ef4444;--red-bg:#2d0f0f;--red-light:#f87171;
+  --bg:#F7F5F0;--bg2:#FFFEFB;--bg3:#F0EBE2;--bg4:#EDE8E0;
+  --border:#E8E4DC;--border2:#DDD8CE;
+  --text:#2C2A24;--text2:#7A6E5F;--text3:#B4A88C;
+  --blue:#185FA5;--blue-bg:#E6F1FB;--blue-light:#378ADD;
+  --green:#3B6D11;--green-bg:#EAF3DE;--green-light:#639922;
+  --amber:#C4863A;--amber-bg:#FEF3E8;--amber-light:#EF9F27;
+  --red:#A32D2D;--red-bg:#FCEBEB;--red-light:#E24B4A;
+  --sand:#8B7355;--sand-bg:#F5EFE6;--sand-light:#C4A882;
+  --charcoal:#2C2A24;
   --radius:8px;--radius-lg:12px;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:13px;height:100vh;overflow:hidden}
+body{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:13px;height:100vh;overflow:hidden}
 
 /* AUTH SCREEN */
 .auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg)}
-.auth-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:40px;width:420px;max-width:95vw}
+.auth-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;padding:40px;width:420px;max-width:95vw;box-shadow:0 4px 24px rgba(44,42,36,.06)}
 .auth-logo{text-align:center;margin-bottom:32px}
-.auth-logo .proj{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
-.auth-logo .name{font-size:22px;font-weight:600;color:var(--text);letter-spacing:-.3px}
+.auth-logo .proj{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
+.auth-logo .name{font-size:22px;font-weight:600;color:var(--charcoal);letter-spacing:-.3px}
 .auth-logo .sub{font-size:12px;color:var(--text2);margin-top:4px}
 .auth-tabs{display:flex;background:var(--bg3);border-radius:var(--radius);padding:3px;margin-bottom:24px}
 .auth-tab{flex:1;text-align:center;padding:7px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--text2);transition:.15s}
-.auth-tab.active{background:var(--bg4);color:var(--text)}
+.auth-tab.active{background:var(--bg2);color:var(--charcoal);box-shadow:0 1px 3px rgba(44,42,36,.08)}
 .form-group{margin-bottom:16px}
 .form-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;display:block}
-.form-input{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:13px;font-family:inherit;transition:.15s}
-.form-input:focus{outline:none;border-color:var(--blue);background:var(--bg4)}
+.form-input{width:100%;padding:9px 12px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--radius);color:var(--charcoal);font-size:13px;font-family:inherit;transition:.15s}
+.form-input:focus{outline:none;border-color:var(--sand);background:var(--bg2)}
 .form-input::placeholder{color:var(--text3)}
-.btn-auth{width:100%;padding:10px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;transition:.15s;margin-top:4px}
-.btn-auth:hover{background:var(--blue-light)}
+.btn-auth{width:100%;padding:10px;background:var(--charcoal);color:#F7F5F0;border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;transition:.15s;margin-top:4px;font-family:inherit}
+.btn-auth:hover{background:#444240}
 .btn-auth:disabled{opacity:.5;cursor:not-allowed}
 .auth-msg{font-size:12px;text-align:center;margin-top:12px;padding:8px;border-radius:6px}
 .auth-msg.error{background:var(--red-bg);color:var(--red-light)}
@@ -45,98 +48,98 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 /* APP LAYOUT */
 .app{display:flex;height:100vh;overflow:hidden}
-.sidebar{width:215px;min-width:215px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
-.sb-header{padding:16px;border-bottom:1px solid var(--border)}
-.sb-proj-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
-.sb-proj-name{font-size:12px;font-weight:500;color:var(--text);line-height:1.4}
-.sb-user{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--border);margin-bottom:4px}
-.sb-avatar{width:28px;height:28px;border-radius:50%;background:var(--blue-bg);border:1px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--blue-light);flex-shrink:0}
+.sidebar{width:220px;min-width:220px;background:var(--bg2);border-right:0.5px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+.sb-header{padding:18px 18px 14px;border-bottom:0.5px solid var(--border)}
+.sb-proj-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.sb-proj-name{font-size:12px;font-weight:500;color:var(--charcoal);line-height:1.35}
+.sb-user{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:0.5px solid var(--border)}
+.sb-avatar{width:30px;height:30px;border-radius:50%;background:var(--bg4);border:0.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--text2);flex-shrink:0}
 .sb-user-info{flex:1;min-width:0}
-.sb-user-name{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user-name{font-size:12px;font-weight:500;color:var(--charcoal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sb-user-role{font-size:10px;color:var(--text3);text-transform:capitalize}
-.sb-section{padding:10px 12px 3px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3)}
-.nav-item{display:flex;align-items:center;gap:9px;padding:7px 12px;margin:1px 6px;border-radius:var(--radius);cursor:pointer;font-size:12px;color:var(--text2);transition:.12s;position:relative}
-.nav-item:hover{background:var(--bg3);color:var(--text)}
-.nav-item.active{background:var(--blue-bg);color:var(--blue-light)}
+.sb-section{padding:12px 18px 3px;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3)}
+.nav-item{display:flex;align-items:center;gap:9px;padding:7px 12px;margin:1px 8px;border-radius:var(--radius);cursor:pointer;font-size:12px;color:var(--text2);transition:.12s;position:relative}
+.nav-item:hover{background:var(--bg3);color:var(--charcoal)}
+.nav-item.active{background:var(--bg4);color:var(--charcoal);font-weight:500}
 .nav-icon{width:15px;height:15px;flex-shrink:0;opacity:.8}
-.nav-badge{margin-left:auto;background:var(--red-bg);color:var(--red-light);font-size:10px;padding:1px 5px;border-radius:8px;border:1px solid var(--red-bg)}
-.sb-logout{margin-top:auto;padding:12px 16px;border-top:1px solid var(--border)}
-.btn-logout{width:100%;padding:7px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;transition:.12s}
-.btn-logout:hover{background:var(--bg3);color:var(--text)}
+.nav-badge{margin-left:auto;background:var(--sand-bg);color:var(--sand);font-size:10px;padding:1px 6px;border-radius:8px;border:0.5px solid var(--border2)}
+.sb-logout{margin-top:auto;padding:12px 18px;border-top:0.5px solid var(--border)}
+.btn-logout{width:100%;padding:7px;background:transparent;border:0.5px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;transition:.12s;font-family:inherit}
+.btn-logout:hover{background:var(--bg3);color:var(--charcoal)}
 
 /* MAIN */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.topbar-title{font-size:14px;font-weight:500;color:var(--text)}
+.topbar{background:var(--bg2);border-bottom:0.5px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar-title{font-size:15px;font-weight:500;color:var(--charcoal)}
 .topbar-right{display:flex;gap:8px;align-items:center}
-.btn{font-size:12px;padding:6px 12px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:.12s;white-space:nowrap;font-family:inherit}
-.btn:hover{background:var(--bg3);color:var(--text)}
-.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
-.btn-primary:hover{background:var(--blue-light);border-color:var(--blue-light)}
+.btn{font-size:12px;padding:6px 12px;border-radius:var(--radius);border:0.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:.12s;white-space:nowrap;font-family:inherit}
+.btn:hover{background:var(--bg3);color:var(--charcoal)}
+.btn-primary{background:var(--charcoal);color:#F7F5F0;border-color:var(--charcoal)}
+.btn-primary:hover{background:#444240;border-color:#444240}
 .btn-success{color:var(--green-light);border-color:var(--green)}
 .btn-danger{color:var(--red-light);border-color:var(--red)}
 .btn-sm{font-size:11px;padding:3px 8px}
 .btn:disabled{opacity:.4;cursor:not-allowed}
-.content{flex:1;overflow-y:auto;padding:20px}
+.content{flex:1;overflow-y:auto;padding:20px 24px}
 
 /* STATS */
 .stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:20px}
-.stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px}
+.stat{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px}
 .stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.stat-value{font-size:24px;font-weight:600;color:var(--text)}
+.stat-value{font-size:26px;font-weight:500;color:var(--charcoal)}
 .stat-sub{font-size:10px;color:var(--text3);margin-top:3px}
-.stat-value.danger{color:var(--red-light)}
+.stat-value.danger{color:var(--amber)}
 
 /* CARDS & TABLES */
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .section-title{font-size:12px;font-weight:500;color:var(--text)}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px}
+.card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px}
 .tw{width:100%;overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:11px}
-th{text-align:left;padding:9px 13px;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);background:var(--bg3);white-space:nowrap}
-td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+th{text-align:left;padding:9px 14px;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:0.5px solid var(--border);background:var(--bg3);white-space:nowrap}
+td{padding:10px 14px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--bg3);cursor:pointer}
+tr:hover td{background:var(--bg3);cursor:pointer;color:var(--charcoal)}
 .mono{font-family:'SF Mono',Monaco,monospace;font-size:10px}
 
 /* BADGES */
 .badge{display:inline-flex;align-items:center;font-size:10px;font-weight:500;padding:2px 8px;border-radius:8px;white-space:nowrap}
-.badge-success{background:var(--green-bg);color:var(--green-light);border:1px solid #1a4a2e}
-.badge-warning{background:var(--amber-bg);color:var(--amber-light);border:1px solid #3d2a05}
-.badge-danger{background:var(--red-bg);color:var(--red-light);border:1px solid #3d1515}
-.badge-info{background:var(--blue-bg);color:var(--blue-light);border:1px solid #1e3560}
-.badge-neutral{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
-.rev-chip{font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;background:var(--bg4);color:var(--text2);border:1px solid var(--border2)}
+.badge-success{background:var(--green-bg);color:var(--green);border:0.5px solid #C0DD97}
+.badge-warning{background:var(--amber-bg);color:var(--amber);border:0.5px solid #FAC775}
+.badge-danger{background:var(--red-bg);color:var(--red);border:0.5px solid #F7C1C1}
+.badge-info{background:var(--blue-bg);color:var(--blue);border:0.5px solid #B5D4F4}
+.badge-neutral{background:var(--bg3);color:var(--text2);border:0.5px solid var(--border)}
+.rev-chip{font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;background:var(--sand-bg);color:var(--sand);border:0.5px solid var(--border2)}
 
 /* FILTER BAR */
 .fbar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
 .fbar-label{font-size:10px;color:var(--text3)}
-.chip{font-size:10px;padding:3px 10px;border-radius:16px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:.12s}
-.chip:hover{border-color:var(--blue);color:var(--text)}
-.chip.active{background:var(--blue-bg);color:var(--blue-light);border-color:var(--blue)}
+.chip{font-size:10px;padding:3px 10px;border-radius:16px;border:0.5px solid var(--border2);background:var(--bg2);color:var(--text2);cursor:pointer;transition:.12s}
+.chip:hover{border-color:var(--sand);color:var(--charcoal)}
+.chip.active{background:var(--bg4);color:var(--charcoal);border-color:var(--border2);font-weight:500}
 
 /* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;backdrop-filter:blur(2px)}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(44,42,36,.35);z-index:1000;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;backdrop-filter:blur(3px)}
 .modal-bg.open{display:flex}
-.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);width:680px;max-width:100%;overflow:hidden}
+.modal{background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;width:680px;max-width:100%;overflow:hidden;box-shadow:0 8px 40px rgba(44,42,36,.12)}
 .modal.wide{width:860px}
-.modal-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.modal-title{font-size:13px;font-weight:500;color:var(--text)}
-.modal-close{background:none;border:none;font-size:18px;color:var(--text2);cursor:pointer;line-height:1;padding:2px 6px;border-radius:4px}
+.modal-header{padding:16px 20px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-title{font-size:14px;font-weight:500;color:var(--charcoal)}
+.modal-close{background:none;border:none;font-size:18px;color:var(--text3);cursor:pointer;line-height:1;padding:2px 6px;border-radius:4px}
 .modal-close:hover{background:var(--bg3);color:var(--text)}
-.modal-body{padding:18px;display:flex;flex-direction:column;gap:14px;max-height:78vh;overflow-y:auto;scroll-behavior:smooth}
-.modal-footer{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+.modal-body{padding:20px;display:flex;flex-direction:column;gap:14px;max-height:78vh;overflow-y:auto;scroll-behavior:smooth}
+.modal-footer{padding:14px 20px;border-top:0.5px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
 .form-group{display:flex;flex-direction:column;gap:4px}
-.form-label-dark{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
-.form-control{font-size:12px;padding:7px 10px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--bg3);color:var(--text);width:100%;font-family:inherit;transition:.15s}
-.form-control:focus{outline:none;border-color:var(--blue);background:var(--bg4)}
+.form-label-dark{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+.form-control{font-size:12px;padding:8px 10px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg3);color:var(--charcoal);width:100%;font-family:inherit;transition:.15s}
+.form-control:focus{outline:none;border-color:var(--sand);background:var(--bg2)}
 .form-control::placeholder{color:var(--text3)}
 textarea.form-control{resize:vertical;min-height:70px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 .checkbox-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:11px}
-.checkbox-grid label{display:flex;align-items:center;gap:6px;color:var(--text2);cursor:pointer}
-.checkbox-grid input[type=checkbox]{accent-color:var(--blue)}
+.checkbox-grid label{display:flex;align-items:center;gap:6px;color:var(--text2);cursor:pointer;font-size:11px}
+.checkbox-grid input[type=checkbox]{accent-color:var(--sand)}
 
 /* DSUB FORM */
 .dsub-preview{background:#fff;color:#000;font-family:Arial,Helvetica,sans-serif;font-size:10.5px;padding:18px;border-radius:6px}
@@ -170,39 +173,39 @@ textarea.form-control{resize:vertical;min-height:70px}
 /* DETAIL GRID */
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .detail-item{display:flex;flex-direction:column;gap:2px}
-.detail-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
-.detail-value{font-size:12px;color:var(--text)}
-.detail-section{border-top:1px solid var(--border);padding-top:14px}
+.detail-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+.detail-value{font-size:12px;color:var(--charcoal)}
+.detail-section{border-top:0.5px solid var(--border);padding-top:14px}
 
 /* UPLOAD ZONE */
-.upload-zone{border:2px dashed var(--border2);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:.15s;background:var(--bg3)}
-.upload-zone:hover{border-color:var(--blue);background:var(--blue-bg)}
-.upload-zone.dragging{border-color:var(--blue);background:var(--blue-bg)}
+.upload-zone{border:1.5px dashed var(--border2);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:.15s;background:var(--bg3)}
+.upload-zone:hover{border-color:var(--sand);background:var(--sand-bg)}
+.upload-zone.dragging{border-color:var(--sand);background:var(--sand-bg)}
 .upload-zone-text{color:var(--text2);font-size:12px;margin-top:6px}
 .upload-zone-sub{color:var(--text3);font-size:10px;margin-top:3px}
 .upload-progress{height:3px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-top:8px}
-.upload-progress-bar{height:100%;background:var(--blue);border-radius:3px;transition:width .3s}
+.upload-progress-bar{height:100%;background:var(--sand);border-radius:3px;transition:width .3s}
 
 /* LOADING */
 .loading{display:flex;align-items:center;justify-content:center;padding:40px;color:var(--text3);font-size:12px;gap:10px}
-.spinner{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+.spinner{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--sand);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.empty-state{text-align:center;padding:40px;color:var(--text3);font-size:12px}
+.empty-state{text-align:center;padding:48px;color:var(--text3);font-size:12px;line-height:1.6}
 
 /* TOAST */
-.toast-container{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
-.toast{padding:10px 14px;border-radius:var(--radius);font-size:12px;min-width:220px;animation:slideIn .2s ease;border:1px solid}
-.toast.success{background:var(--green-bg);color:var(--green-light);border-color:#1a4a2e}
-.toast.error{background:var(--red-bg);color:var(--red-light);border-color:#3d1515}
-.toast.info{background:var(--blue-bg);color:var(--blue-light);border-color:#1e3560}
+.toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{padding:11px 16px;border-radius:var(--radius-lg);font-size:12px;min-width:240px;animation:slideIn .25s ease;border:0.5px solid;box-shadow:0 4px 16px rgba(44,42,36,.1)}
+.toast.success{background:var(--bg2);color:var(--green);border-color:var(--green-bg)}
+.toast.error{background:var(--bg2);color:var(--red);border-color:var(--red-bg)}
+.toast.info{background:var(--bg2);color:var(--blue);border-color:var(--blue-bg)}
 @keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
 
 /* ADMIN BADGE */
-.role-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:8px;border:1px solid}
-.role-developer{background:#1a1a3a;color:#a78bfa;border-color:#4c1d95}
-.role-consultant{background:var(--blue-bg);color:var(--blue-light);border-color:#1e3560}
-.role-contractor{background:var(--amber-bg);color:var(--amber-light);border-color:#3d2a05}
-.role-subcontractor{background:var(--green-bg);color:var(--green-light);border-color:#1a4a2e}
+.role-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 10px;border-radius:20px;border:0.5px solid}
+.role-developer{background:var(--bg4);color:var(--charcoal);border-color:var(--border2)}
+.role-consultant{background:var(--blue-bg);color:var(--blue);border-color:#B5D4F4}
+.role-contractor{background:var(--amber-bg);color:var(--amber);border-color:#FAC775}
+.role-subcontractor{background:var(--green-bg);color:var(--green);border-color:#C0DD97}
 </style>
 </head>
 <body>
@@ -335,7 +338,10 @@ textarea.form-control{resize:vertical;min-height:70px}
   </div>
   <div class="main">
     <div class="topbar">
-      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div>
+        <div class="topbar-title" id="page-title">Dashboard</div>
+        <div id="topbar-date" style="font-size:11px;color:var(--text3);margin-top:1px"></div>
+      </div>
       <div class="topbar-right">
         <span class="role-badge" id="role-badge-top"></span>
         <button class="btn btn-primary" id="new-btn" onclick="openNew()">+ New</button>
@@ -457,9 +463,12 @@ async function loadApp(user) {
   const roleClass = `role-${profile?.role||'contractor'}`;
   document.getElementById('role-badge-top').className=`role-badge ${roleClass}`;
   document.getElementById('role-badge-top').textContent=profile?.role||'user';
-  if(profile?.role==='developer'){
+  if(profile?.role==='developer'||profile?.role==='consultant'){
     document.getElementById('n-users-wrap').style.display='';
   }
+  // Set topbar date
+  const dateEl = document.getElementById('topbar-date');
+  if(dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   nav('dash', document.getElementById('n-dash'));
 }
 
@@ -471,10 +480,6 @@ function nav(page, el) {
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(el) el.classList.add('active');
   document.getElementById('page-title').textContent = PAGE_TITLES[page]||page;
-  // Hide + New button on pages where no role can create (dash)
-  const noNewPages = ['dash'];
-  const newBtn = document.getElementById('new-btn');
-  if(newBtn) newBtn.style.display = noNewPages.includes(page) ? 'none' : '';
   render();
 }
 
@@ -482,10 +487,10 @@ function nav(page, el) {
 function can(action) {
   const role = currentProfile?.role;
   const perms = {
-    developer: {approve:true,upload:true,raise:true,submit:true,manageUsers:true,manageSubs:true,submitMS:true},
-    consultant: {approve:true,upload:true,raise:true,submit:true,manageUsers:false,manageSubs:false,submitMS:false},
-    contractor: {approve:false,upload:true,raise:false,submit:true,manageUsers:false,manageSubs:true,submitMS:true},
-    subcontractor:{approve:false,upload:false,raise:false,submit:true,manageUsers:false,manageSubs:false,submitMS:true},
+    developer: {approve:true,upload:true,raise:true,submit:true,manageUsers:true},
+    consultant: {approve:true,upload:true,raise:true,submit:true,manageUsers:true},
+    contractor: {approve:false,upload:true,raise:false,submit:true,manageUsers:false},
+    subcontractor:{approve:false,upload:false,raise:false,submit:true,manageUsers:false},
   };
   return perms[role]?.[action]||false;
 }
@@ -524,10 +529,12 @@ async function updateBadges() {
 
 function sbadge(s) {
   const m={
-    'Approved':'badge-success','Issued for Construction':'badge-success','Passed':'badge-success','Closed':'badge-success','Approved as Noted':'badge-success','Responded':'badge-success','Approved with Comments':'badge-success','Review Not Required':'badge-success',
-    'Pending Review':'badge-warning','Pending':'badge-warning','Under Review':'badge-warning','Correction':'badge-warning','Open':'badge-warning','Awaiting Resubmission':'badge-warning',
-    'Revise & Resubmit':'badge-danger','Rejected':'badge-danger','Major':'badge-danger','Failed':'badge-danger','Overdue':'badge-danger',
-    'Minor':'badge-warning','Normal':'badge-neutral','High':'badge-warning','Urgent':'badge-danger',
+    'Approved':'badge-success','Issued for Construction':'badge-success','Passed':'badge-success',
+    'Closed':'badge-success','Approved as Noted':'badge-success',
+    'Under Review':'badge-info','Pending Review':'badge-info','Pending':'badge-info','Responded':'badge-info',
+    'Revise & Resubmit':'badge-warning','Correction':'badge-warning','Open':'badge-warning','High':'badge-warning',
+    'Rejected':'badge-danger','Major':'badge-danger','Critical':'badge-danger',
+    'Normal':'badge-neutral','Minor':'badge-neutral',
   };
   return `<span class="badge ${m[s]||'badge-neutral'}">${s}</span>`;
 }
@@ -556,12 +563,12 @@ async function renderDash() {
   const overdueRFIs = (rfis_d.data||[]).filter(r=>r.due_date&&r.due_date<today&&r.status==='Open');
   const overdueAll = [...overdueSubs.map(s=>({...s,_type:'Submittal'})),...overdueIRs.map(i=>({...i,_type:'Inspection'})),...overdueRFIs.map(r=>({...r,_type:'RFI'}))];
   document.getElementById('content').innerHTML = `
-  ${overdueAll.length?`<div style="background:var(--red-bg);border:1px solid var(--red);border-radius:var(--radius-lg);padding:12px 16px;margin-bottom:16px">
-    <div style="font-size:11px;font-weight:500;color:var(--red-light);margin-bottom:8px">⚠ ${overdueAll.length} Overdue Item${overdueAll.length>1?'s':''}</div>
+  ${overdueAll.length?`<div style="background:var(--amber-bg);border:0.5px solid #FAC775;border-radius:var(--radius-lg);padding:12px 16px;margin-bottom:16px">
+    <div style="font-size:11px;font-weight:500;color:var(--amber);margin-bottom:8px">${overdueAll.length} overdue item${overdueAll.length>1?'s':''}</div>
     <div style="display:flex;flex-direction:column;gap:4px">
       ${overdueAll.map(o=>`<div style="display:flex;align-items:center;justify-content:space-between;font-size:11px">
-        <span style="color:var(--text2)"><span class="badge badge-danger" style="margin-right:6px;font-size:9px">${o._type}</span>${o.ref_no||o.subject} – ${o.title||o.subject||''}</span>
-        <span style="color:var(--red-light);font-size:10px">Due ${o.due_date}</span>
+        <span style="color:var(--text2)"><span class="badge badge-warning" style="margin-right:6px;font-size:9px">${o._type}</span>${o.ref_no||o.subject} – ${o.title||o.subject||''}</span>
+        <span style="color:var(--amber);font-size:10px">Due ${o.due_date}</span>
       </div>`).join('')}
     </div>
   </div>`:''}
@@ -569,31 +576,130 @@ async function renderDash() {
     <div class="stat"><div class="stat-label">Drawings</div><div class="stat-value">${draws.count||0}</div><div class="stat-sub">${(draws.data||[]).filter(d=>d.status==='Approved').length} approved</div></div>
     <div class="stat"><div class="stat-label">Submittals</div><div class="stat-value">${subs.count||0}</div><div class="stat-sub">${pSub} pending review</div></div>
     <div class="stat"><div class="stat-label">Inspections</div><div class="stat-value">${irs.count||0}</div><div class="stat-sub">${pIR} awaiting response</div></div>
-    <div class="stat"><div class="stat-label">Open NCRs</div><div class="stat-value danger">${oNCR}</div><div class="stat-sub">${(ncrs_d.count||0)-oNCR} closed</div></div>
+    <div class="stat"><div class="stat-label">Open NCRs</div><div class="stat-value ${oNCR>0?'danger':''}">${oNCR}</div><div class="stat-sub">${(ncrs_d.count||0)-oNCR} closed</div></div>
     <div class="stat"><div class="stat-label">Open RFIs</div><div class="stat-value ${oRFI>0?'danger':''}">${oRFI}</div><div class="stat-sub">${(rfis_d.count||0)-oRFI} closed</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+    <div class="card" style="margin:0">
+      <div style="padding:12px 14px 8px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;font-weight:500;color:var(--charcoal)">Drawing approval</span>
+        <span style="font-size:11px;color:var(--text3)">${draws.count||0} total</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:16px;padding:14px" id="donut-wrap">
+        ${(()=>{
+          const tot = draws.count||0;
+          const appr = (draws.data||[]).filter(d=>d.status==='Approved').length;
+          const rev = (draws.data||[]).filter(d=>d.status==='Under Review').length;
+          const pend = Math.max(0,tot-appr-rev);
+          const circ = 2*Math.PI*30;
+          const pct = tot>0?Math.round((appr/tot)*100):0;
+          const aDash = tot>0?(appr/tot)*circ:0;
+          const rDash = tot>0?(rev/tot)*circ:0;
+          const pDash = tot>0?(pend/tot)*circ:0;
+          const offset = circ/4;
+          return `<svg width="80" height="80" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="30" fill="none" stroke="var(--bg3)" stroke-width="11"/>
+            ${tot>0?`<circle cx="40" cy="40" r="30" fill="none" stroke="#3B6D11" stroke-width="11" stroke-dasharray="${aDash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}" stroke-linecap="round"/>
+            <circle cx="40" cy="40" r="30" fill="none" stroke="#185FA5" stroke-width="11" stroke-dasharray="${rDash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${(offset-aDash).toFixed(1)}" stroke-linecap="round"/>
+            <circle cx="40" cy="40" r="30" fill="none" stroke="#C4863A" stroke-width="11" stroke-dasharray="${pDash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${(offset-aDash-rDash).toFixed(1)}" stroke-linecap="round"/>`:''}
+            <text x="40" y="37" text-anchor="middle" font-size="14" font-weight="500" fill="var(--charcoal)" font-family="Plus Jakarta Sans,sans-serif">${pct}%</text>
+            <text x="40" y="50" text-anchor="middle" font-size="9" fill="var(--text3)" font-family="Plus Jakarta Sans,sans-serif">approved</text>
+          </svg>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#3B6D11;flex-shrink:0"></div>Approved<span style="margin-left:8px;font-weight:500;color:var(--charcoal)">${appr}</span></div>
+            <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>Under Review<span style="margin-left:8px;font-weight:500;color:var(--charcoal)">${rev}</span></div>
+            <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#C4863A;flex-shrink:0"></div>Pending<span style="margin-left:8px;font-weight:500;color:var(--charcoal)">${pend}</span></div>
+          </div>`;
+        })()}
+      </div>
+    </div>
+    <div class="card" style="margin:0">
+      <div style="padding:12px 14px 8px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;font-weight:500;color:var(--charcoal)">Discipline completion</span>
+        <span style="font-size:11px;color:var(--text3)">by approved drawings</span>
+      </div>
+      <div style="padding:12px 14px" id="disc-bars">
+        <div style="color:var(--text3);font-size:11px;text-align:center;padding:12px">Loading...</div>
+      </div>
+    </div>
+    <div class="card" style="margin:0">
+      <div style="padding:12px 14px 8px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;font-weight:500;color:var(--charcoal)">Open items</span>
+        <span style="font-size:11px;color:var(--text3)">NCRs + RFIs</span>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:var(--bg3);border-radius:8px;padding:12px;text-align:center">
+            <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">NCRs</div>
+            <div style="font-size:28px;font-weight:500;color:${oNCR>0?'var(--amber)':'var(--charcoal)'}">${oNCR}</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:2px">${(ncrs_d.count||0)-oNCR} closed</div>
+          </div>
+          <div style="background:var(--bg3);border-radius:8px;padding:12px;text-align:center">
+            <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">RFIs</div>
+            <div style="font-size:28px;font-weight:500;color:${oRFI>0?'var(--amber)':'var(--charcoal)'}">${oRFI}</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:2px">${(rfis_d.count||0)-oRFI} closed</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid var(--border)">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em">Submittals pending</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden">
+              <div style="height:100%;width:${(subs.count||0)>0?Math.round((pSub/(subs.count||1))*100):0}%;background:var(--sand);border-radius:3px"></div>
+            </div>
+            <span style="font-size:11px;font-weight:500;color:var(--charcoal)">${pSub}<span style="font-weight:400;color:var(--text3)">/${subs.count||0}</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
     <div>
-      <div class="section-header"><div class="section-title">Pending Submittals</div></div>
+      <div class="section-header" style="margin-bottom:8px"><div class="section-title" style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Pending submittals</div></div>
       <div class="card"><div class="tw"><table><tr><th>Ref</th><th>Title</th><th>Status</th></tr>
       ${pendSubs.length?pendSubs.map(s=>`<tr onclick="viewSub('${s.id}')"><td class="mono">${s.ref_no}</td><td>${s.title}</td><td>${sbadge(s.status)}</td></tr>`).join(''):'<tr><td colspan="3" class="empty-state">No pending submittals</td></tr>'}
       </table></div></div>
-      <div class="section-header" style="margin-top:14px"><div class="section-title">Open NCRs</div></div>
+      <div class="section-header" style="margin-top:14px;margin-bottom:8px"><div class="section-title" style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Open NCRs</div></div>
       <div class="card"><div class="tw"><table><tr><th>Ref</th><th>Title</th><th>Severity</th></tr>
       ${openNCRs.length?openNCRs.map(n=>`<tr onclick="viewNCR('${n.id}')"><td class="mono">${n.ref_no}</td><td>${n.title}</td><td>${sbadge(n.severity)}</td></tr>`).join(''):'<tr><td colspan="3" class="empty-state">No open NCRs</td></tr>'}
       </table></div></div>
     </div>
     <div>
-      <div class="section-header"><div class="section-title">Pending Inspections</div></div>
+      <div class="section-header" style="margin-bottom:8px"><div class="section-title" style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Pending inspections</div></div>
       <div class="card"><div class="tw"><table><tr><th>Ref</th><th>Description</th><th>Date</th></tr>
       ${pendIRs.length?pendIRs.map(i=>`<tr onclick="viewIR('${i.id}')"><td class="mono">${i.ref_no}</td><td>${(i.elements||'').substring(0,45)}${(i.elements||'').length>45?'…':''}</td><td style="color:var(--text3);font-size:10px">${i.inspection_date||'—'}</td></tr>`).join(''):'<tr><td colspan="3" class="empty-state">No pending inspections</td></tr>'}
       </table></div></div>
-      <div class="section-header" style="margin-top:14px"><div class="section-title">Recent Drawings</div></div>
+      <div class="section-header" style="margin-top:14px;margin-bottom:8px"><div class="section-title" style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Recent drawings</div></div>
       <div class="card"><div class="tw"><table><tr><th>No.</th><th>Title</th><th>Rev</th><th>Status</th></tr>
       ${recentDraws.length?recentDraws.map(d=>`<tr onclick="viewDraw('${d.id}')"><td class="mono">${d.drawing_no}</td><td>${d.title}</td><td><span class="rev-chip">${d.revision}</span></td><td>${sbadge(d.status)}</td></tr>`).join(''):'<tr><td colspan="4" class="empty-state">No drawings uploaded yet</td></tr>'}
       </table></div></div>
     </div>
   </div>`;
+  // Async: load discipline completion bars
+  (async () => {
+    const disciplines = ['Architecture','Structure','MEP','Civil'];
+    const counts = await Promise.all(disciplines.map(d =>
+      Promise.all([
+        sb.from('drawings').select('*',{count:'exact',head:true}).eq('discipline',d),
+        sb.from('drawings').select('*',{count:'exact',head:true}).eq('discipline',d).eq('status','Approved')
+      ])
+    ));
+    const barsEl = document.getElementById('disc-bars');
+    if(!barsEl) return;
+    if(counts.every(c => (c[0].count||0) === 0)) {
+      barsEl.innerHTML = '<div style="color:var(--text3);font-size:11px;text-align:center;padding:12px">No drawings yet</div>';
+      return;
+    }
+    barsEl.innerHTML = disciplines.map((d,i) => {
+      const total = counts[i][0].count||0;
+      const approved = counts[i][1].count||0;
+      const pct = total > 0 ? Math.round((approved/total)*100) : 0;
+      return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">'
+        + '<div style="font-size:10px;color:var(--text3);width:80px;flex-shrink:0;text-transform:uppercase;letter-spacing:.04em">'+d+'</div>'
+        + '<div style="flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden">'
+        + '<div style="height:100%;width:'+pct+'%;background:var(--sand);border-radius:3px"></div></div>'
+        + '<div style="font-size:11px;font-weight:500;color:var(--charcoal);width:30px;text-align:right">'+pct+'%</div></div>';
+    }).join('');
+  })();
 }
 
 // ─── METHOD STATEMENTS ───────────────────────────────────────────────
@@ -610,7 +716,7 @@ async function renderMS() {
     <tr><th>Ref No.</th><th>Title / Activity</th><th>Discipline</th><th>Location</th><th>Rev</th><th>Submitted By</th><th>Date</th><th>Status</th><th>Actions</th></tr>
     ${rows.length?rows.map(m=>`<tr class="ms-row" data-status="${m.status||''}">
       <td class="mono">${m.ref_no}</td>
-      <td><div style="font-weight:500;color:var(--blue-light);cursor:pointer" onclick="viewMS('${m.id}')">${m.title}</div><div style="font-size:10px;color:var(--text3)">${m.activity||''}</div></td>
+      <td><div style="font-weight:500;color:var(--blue);cursor:pointer" onclick="viewMS('${m.id}')">${m.title}</div><div style="font-size:10px;color:var(--text3)">${m.activity||''}</div></td>
       <td style="color:var(--text2)">${m.discipline||'—'}</td>
       <td style="color:var(--text2);font-size:11px">${m.location||'—'}</td>
       <td><span class="rev-chip">${m.revision||'Rev 0'}</span></td>
@@ -690,9 +796,9 @@ async function viewMS(id) {
   </div>`;
   const reviewSection = can('approve')&&(m.status==='Pending Review'||m.status==='Under Review')?`<div class="detail-section" style="margin-top:14px">
     <div class="detail-label" style="margin-bottom:10px;color:var(--color-text-warning)">Review — Consultant Action Required</div>
-    <div style="display:flex;flex-direction:column;gap:10px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);padding:13px">
+    <div style="display:flex;flex-direction:column;gap:10px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:13px">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-        ${['Approved','Revise & Resubmit','Rejected'].map(s=>`<div onclick="this.parentElement.querySelectorAll('div').forEach(d=>d.style.fontWeight='400');this.style.fontWeight='600';document.getElementById('ms-outcome-${m.id}').value='${s}'" style="padding:8px 10px;border-radius:6px;border:.5px solid var(--border2);cursor:pointer;font-size:11px;text-align:center;background:var(--bg2)">${s}</div>`).join('')}
+        ${['Approved','Revise & Resubmit','Rejected'].map(s=>`<div onclick="this.parentElement.querySelectorAll('div').forEach(d=>d.style.fontWeight='400');this.style.fontWeight='600';document.getElementById('ms-outcome-${m.id}').value='${s}'" style="padding:8px 10px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;font-size:11px;text-align:center;background:var(--color-background-primary)">${s}</div>`).join('')}
       </div>
       <input type="hidden" id="ms-outcome-${m.id}" value="" />
       <div class="frow">
@@ -752,23 +858,23 @@ async function doNewMS() {
 function openBulkImport() {
   openModal('Bulk Drawing Import', `
     <div style="display:flex;flex-direction:column;gap:14px">
-      <div style="background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);padding:12px 14px">
+      <div style="background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:12px 14px">
         <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px">Step 1 — Download the CSV template</div>
-        <div style="font-size:11px;color:var(--text2);margin-bottom:10px">Fill in drawing details for all drawings you want to register. Leave file_path blank — you can upload PDFs after import.</div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">Fill in drawing details for all drawings you want to register. Leave file_path blank — you can upload PDFs after import.</div>
         <button class="btn" style="font-size:11px" onclick="downloadBulkTemplate()">Download CSV Template</button>
       </div>
-      <div style="background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);padding:12px 14px">
+      <div style="background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:12px 14px">
         <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px">Step 2 — Upload completed CSV</div>
-        <div style="font-size:11px;color:var(--text2);margin-bottom:10px">Required columns: drawing_no, title, discipline, revision, status. Optional: description, uploaded_by.</div>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="document.getElementById('bulk-csv').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border2)'" ondrop="event.preventDefault();this.style.borderColor='var(--border2)';handleBulkDrop(event)">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span style="font-size:12px;color:var(--text2)">Click to select CSV file or drag & drop</span>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">Required columns: drawing_no, title, discipline, revision, status. Optional: description, uploaded_by.</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-primary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('bulk-csv').click()" ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'" ondragleave="this.style.borderColor='var(--color-border-secondary)'" ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';handleBulkDrop(event)">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--color-text-secondary)">Click to select CSV file or drag & drop</span>
         </div>
         <input type="file" id="bulk-csv" accept=".csv" style="display:none" onchange="parseBulkCSV(event)" />
       </div>
       <div id="bulk-preview" style="display:none">
         <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px" id="bulk-preview-label"></div>
-        <div style="overflow-x:auto;border:.5px solid var(--border);border-radius:var(--radius)">
+        <div style="overflow-x:auto;border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md)">
           <table style="width:100%;border-collapse:collapse;font-size:11px" id="bulk-preview-table"></table>
         </div>
         <div id="bulk-errors" style="margin-top:8px;font-size:11px;color:var(--color-text-danger)"></div>
@@ -835,8 +941,8 @@ function parseBulkCSV(event) {
     const btn = document.getElementById('bulk-submit-btn');
     preview.style.display='';
     label.textContent = `${bulkRows.length} drawing${bulkRows.length!==1?'s':''} ready to import${errors.length?' — '+errors.length+' rows skipped due to errors':''}`;
-    table.innerHTML = `<tr style="background:var(--bg3)">${['Drawing No.','Title','Discipline','Revision','Status','Uploaded By'].map(h=>`<th style="padding:7px 10px;font-size:10px;text-align:left;border-bottom:.5px solid var(--border);white-space:nowrap">${h}</th>`).join('')}</tr>`
-      + bulkRows.slice(0,10).map(r=>`<tr style="border-bottom:.5px solid var(--border)">${[r.drawing_no,r.title,r.discipline,r.revision,r.status,r.uploaded_by||'—'].map(v=>`<td style="padding:7px 10px;font-size:11px;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis">${v}</td>`).join('')}</tr>`).join('')
+    table.innerHTML = `<tr style="background:var(--color-background-secondary)">${['Drawing No.','Title','Discipline','Revision','Status','Uploaded By'].map(h=>`<th style="padding:7px 10px;font-size:10px;text-align:left;border-bottom:.5px solid var(--color-border-tertiary);white-space:nowrap">${h}</th>`).join('')}</tr>`
+      + bulkRows.slice(0,10).map(r=>`<tr style="border-bottom:.5px solid var(--color-border-tertiary)">${[r.drawing_no,r.title,r.discipline,r.revision,r.status,r.uploaded_by||'—'].map(v=>`<td style="padding:7px 10px;font-size:11px;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis">${v}</td>`).join('')}</tr>`).join('')
       + (bulkRows.length>10?`<tr><td colspan="6" style="padding:7px 10px;font-size:11px;color:var(--color-text-tertiary)">…and ${bulkRows.length-10} more rows</td></tr>`:'');
     errDiv.innerHTML = errors.map(e=>`<div>⚠ ${e}</div>`).join('');
     if(btn) btn.style.display = bulkRows.length?'':'none';
@@ -875,7 +981,7 @@ async function renderDrawings() {
   <div class="fbar" style="flex-wrap:wrap;gap:8px">
     <span class="fbar-label">Discipline:</span>
     ${['All','Architecture','Structure','MEP','Civil'].map((d,i)=>`<span class="chip ${i===0?'active':''}" id="disc-chip-${i}" onclick="filtDraw(this,'disc','${d}')">${d}</span>`).join('')}
-    <span style="width:.5px;background:var(--border);height:16px;align-self:center"></span>
+    <span style="width:.5px;background:var(--color-border-tertiary);height:16px;align-self:center"></span>
     <span class="fbar-label">Status:</span>
     ${['All','Under Review','Approved','Issued for Construction','Revise & Resubmit'].map((s,i)=>`<span class="chip ${i===0?'active':''}" id="stat-chip-${i}" onclick="filtDraw(this,'status','${s}')">${s}</span>`).join('')}
     <span style="flex:1"></span>
@@ -1049,7 +1155,7 @@ async function editUserRole(uid, currentRole, name) {
 async function doChangeRole(uid) {
   const role = document.getElementById('new-role').value;
   await sb.from('profiles').update({role}).eq('id',uid);
-  toast('Role updated — reloading...','success'); setTimeout(()=>location.reload(),800); closeModal(); render();
+  toast('Role updated','success'); closeModal(); render();
 }
 
 // ─── VIEW MODALS ──────────────────────────────────────────────────
@@ -1536,12 +1642,12 @@ async function openNew() {
         <div id="file-name-new" style="font-size:11px;color:var(--text2);margin-top:6px"></div>
       </div>
       <div class="form-group"><label class="form-label-dark">Additional Attachments (optional)</label>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="document.getElementById('nd-extra-files').click()"
-          ondragover="event.preventDefault();this.style.borderColor='var(--blue)'"
-          ondragleave="this.style.borderColor='var(--border2)'"
-          ondrop="event.preventDefault();this.style.borderColor='var(--border2)';stageFiles(event.dataTransfer.files,'nd-staged')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span style="font-size:12px;color:var(--text2)">Attach supporting documents — specs, calculations, references (max 50MB each)</span>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('nd-extra-files').click()"
+          ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'"
+          ondragleave="this.style.borderColor='var(--color-border-secondary)'"
+          ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';stageFiles(event.dataTransfer.files,'nd-staged')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--color-text-secondary)">Attach supporting documents — specs, calculations, references (max 50MB each)</span>
         </div>
         <input type="file" id="nd-extra-files" multiple style="display:none" onchange="stageFiles(this.files,'nd-staged')" />
         <div id="nd-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
@@ -1557,7 +1663,7 @@ async function openNew() {
       </div>
       <div class="form-group"><label class="form-label-dark">Document Title</label><input type="text" class="form-control" id="ns-title" placeholder="e.g. Structural Shop Drawings – Level 3" /></div>
       <div class="frow">
-        <div class="form-group"><label class="form-label-dark">From</label><select class="form-control" id="ns-from"><option value="${currentProfile?.company||'MBC'}">${currentProfile?.company||'MBC (Main Contractor)'}</option>${(scs||[]).map(s=>`<option value="${s.name}">${s.name}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label-dark">From</label><select class="form-control" id="ns-from"><option value="MBC">MBC (Main Contractor)</option>${(scs||[]).map(s=>`<option value="${s.name}">${s.name}</option>`).join('')}</select></div>
         <div class="form-group"><label class="form-label-dark">To</label><select class="form-control" id="ns-to"><option value="POE">POE (Consultant)</option><option value="Regent">Regent (Developer)</option></select></div>
       </div>
       <div class="frow">
@@ -1592,9 +1698,9 @@ async function openNew() {
         </div>
       </div>
       <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="document.getElementById('ns-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border2)'" ondrop="event.preventDefault();this.style.borderColor='var(--border2)';stageFiles(event.dataTransfer.files,'ns-staged')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span style="font-size:12px;color:var(--text2)">Click to attach or drag & drop files — PDF, DWG, Images, Word, Excel (max 50MB)</span>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('ns-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'" ondragleave="this.style.borderColor='var(--color-border-secondary)'" ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';stageFiles(event.dataTransfer.files,'ns-staged')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--color-text-secondary)">Click to attach or drag & drop files — PDF, DWG, Images, Word, Excel (max 50MB)</span>
         </div>
         <input type="file" id="ns-files" multiple style="display:none" onchange="stageFiles(this.files,'ns-staged')" />
         <div id="ns-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
@@ -1632,11 +1738,11 @@ async function openNew() {
         <div class="form-group"><label class="form-label-dark">Contractor's Rep on Site</label><input type="text" class="form-control" id="ni-rep" placeholder="Name" /></div>
         <div class="form-group"><label class="form-label-dark">Site Engineer</label><input type="text" class="form-control" id="ni-eng" placeholder="Name" /></div>
       </div>
-      <div class="form-group"><label class="form-label-dark">Request Date</label><input type="text" class="form-control" id="ni-reqdate" placeholder="${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase()}" /></div>
+      <div class="form-group"><label class="form-label-dark">Request Date</label><input type="text" class="form-control" id="ni-reqdate" placeholder="e.g. 09 APR 2026" /></div>
       <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="document.getElementById('ni-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border2)'" ondrop="event.preventDefault();this.style.borderColor='var(--border2)';stageFiles(event.dataTransfer.files,'ni-staged')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span style="font-size:12px;color:var(--text2)">Click to attach or drag & drop — PDF, DWG, Images, Word, Excel (max 50MB)</span>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('ni-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'" ondragleave="this.style.borderColor='var(--color-border-secondary)'" ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';stageFiles(event.dataTransfer.files,'ni-staged')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--color-text-secondary)">Click to attach or drag & drop — PDF, DWG, Images, Word, Excel (max 50MB)</span>
         </div>
         <input type="file" id="ni-files" multiple style="display:none" onchange="stageFiles(this.files,'ni-staged')" />
         <div id="ni-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
@@ -1652,16 +1758,16 @@ async function openNew() {
       </div>
       <div class="form-group"><label class="form-label-dark">Description / Cause</label><textarea class="form-control" id="nn-cause" placeholder="Describe the non-conformance..." style="min-height:80px"></textarea></div>
       <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="document.getElementById('nn-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border2)'" ondrop="event.preventDefault();this.style.borderColor='var(--border2)';stageFiles(event.dataTransfer.files,'nn-staged')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span style="font-size:12px;color:var(--text2)">Click to attach or drag & drop — PDF, DWG, Images, Word, Excel (max 50MB)</span>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer" onclick="document.getElementById('nn-files').click()" ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'" ondragleave="this.style.borderColor='var(--color-border-secondary)'" ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';stageFiles(event.dataTransfer.files,'nn-staged')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--color-text-secondary)">Click to attach or drag & drop — PDF, DWG, Images, Word, Excel (max 50MB)</span>
         </div>
         <input type="file" id="nn-files" multiple style="display:none" onchange="stageFiles(this.files,'nn-staged')" />
         <div id="nn-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
       </div>`,
       `<button class="btn btn-primary" onclick="doNewNCR()">Raise NCR</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 
-  } else if(currentPage==='subs' && can('manageSubs')) {
+  } else if(currentPage==='subs') {
     openModal('Add Subcontractor', `
       <div class="form-group"><label class="form-label-dark">Company Name</label><input type="text" class="form-control" id="nsc-name" placeholder="Full legal company name" /></div>
       <div class="frow">
@@ -1677,8 +1783,6 @@ async function openNew() {
     openNewRFI();
   } else if(currentPage==='trans') {
     openNewTransmittal();
-  } else if(currentPage==='ms' && can('submitMS')) {
-    openNewMS();
   } else {
     openModal('Access Restricted', `<div class="empty-state">Your current role does not have permission to create items on this page.</div>`,
       `<button class="btn" onclick="closeModal()">Close</button>`);
@@ -2138,66 +2242,6 @@ async function doNewRFI() {
   toast('RFI raised','success'); closeModal(); render();
 }
 
-
-async function openNewMS() {
-  const {data:scs} = await sb.from('subcontractors').select('*');
-  const scOpts = (scs||[]).map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
-  openModal('Submit Method Statement', `
-    <div class="frow">
-      <div class="form-group"><label class="form-label-dark">Ref No.</label><input type="text" class="form-control" id="nm-ref" placeholder="MS-001" /></div>
-      <div class="form-group"><label class="form-label-dark">Date</label><input type="date" class="form-control" id="nm-date" value="${new Date().toISOString().split('T')[0]}" /></div>
-    </div>
-    <div class="form-group"><label class="form-label-dark">Title / Activity</label><input type="text" class="form-control" id="nm-title" placeholder="e.g. Waterproofing – Level B1" /></div>
-    <div class="frow">
-      <div class="form-group"><label class="form-label-dark">Discipline</label>
-        <select class="form-control" id="nm-disc"><option>Civil</option><option>MEP</option><option>Structural</option><option>Architectural</option><option>Electrical</option><option>Firefighting</option></select>
-      </div>
-      <div class="form-group"><label class="form-label-dark">Location</label><input type="text" class="form-control" id="nm-loc" placeholder="e.g. Level 3 – Zone A" /></div>
-    </div>
-    <div class="frow">
-      <div class="form-group"><label class="form-label-dark">Submitted By</label><input type="text" class="form-control" id="nm-by" value="${currentProfile?.full_name||''}" /></div>
-      <div class="form-group"><label class="form-label-dark">Revision</label><input type="text" class="form-control" id="nm-rev" value="Rev A" /></div>
-    </div>
-    <div class="form-group"><label class="form-label-dark">Upload Method Statement (PDF)</label>
-      <div class="upload-zone" id="uz-ms" onclick="document.getElementById('fu-ms').click()" ondragover="event.preventDefault();this.classList.add('dragging')" ondragleave="this.classList.remove('dragging')" ondrop="handleDrop(event,'ms')">
-        <div style="font-size:24px">📄</div>
-        <div class="upload-zone-text">Click to select or drag & drop PDF</div>
-        <div class="upload-zone-sub">PDF files only</div>
-      </div>
-      <input type="file" id="fu-ms" accept=".pdf" style="display:none" onchange="handleFileSelect(event,'ms')" />
-      <div id="file-name-ms" style="font-size:11px;color:var(--text2);margin-top:6px"></div>
-    </div>`,
-    `<button class="btn btn-primary" onclick="doNewMS()">Submit Method Statement</button><button class="btn" onclick="closeModal()">Cancel</button>`);
-}
-
-async function doNewMS() {
-  const ref = document.getElementById('nm-ref').value.trim();
-  const title = document.getElementById('nm-title').value.trim();
-  if(!ref||!title){toast('Ref and title are required','error');return;}
-  const file = selectedFiles['ms'];
-  let filePath = null;
-  if(file) {
-    const path = `ms/${Date.now()}_${file.name}`;
-    const {error,data} = await sb.storage.from('method-statements').upload(path, file, {upsert:true});
-    if(!error) filePath = path;
-  }
-  const {error} = await sb.from('method_statements').insert({
-    ref_no: ref,
-    title,
-    discipline: document.getElementById('nm-disc').value,
-    location: document.getElementById('nm-loc').value,
-    submitted_by: document.getElementById('nm-by').value,
-    submitted_date: document.getElementById('nm-date').value,
-    revision: document.getElementById('nm-rev').value,
-    status: 'Pending Review',
-    file_path: filePath,
-  });
-  if(error){toast('Error: '+error.message,'error');return;}
-  toast('Method Statement submitted','success');
-  closeModal();
-  render();
-}
-
 async function openNewTransmittal() {
   const {data:draws} = await sb.from('drawings').select('drawing_no,title,revision').order('drawing_no');
   openModal('New Transmittal',`
@@ -2409,7 +2453,7 @@ function renderStagedFiles(stagingId) {
   if(!el) return;
   const files = stagedFiles[stagingId]||[];
   el.innerHTML = files.map((f,i)=>`
-    <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--bg3);border-radius:6px;border:.5px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--color-background-secondary);border-radius:6px;border:.5px solid var(--color-border-tertiary)">
       <span style="font-size:13px">${fileIcon(f.type)}</span>
       <div style="flex:1;min-width:0">
         <div style="font-size:11px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.name}</div>
@@ -2436,24 +2480,24 @@ async function uploadStagedFiles(stagingId, recordType, recordId) {
 function drawingReviewPanelHTML(drawingId) {
   return `<div class="detail-section" style="margin-top:14px">
     <div class="detail-label" style="margin-bottom:10px;color:var(--color-text-warning)">Review & Outcome — Consultant Action Required</div>
-    <div style="display:flex;flex-direction:column;gap:10px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--radius);padding:13px">
-      <div style="font-size:11px;color:var(--text2)">Select outcome for this revision:</div>
+    <div style="display:flex;flex-direction:column;gap:10px;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:13px">
+      <div style="font-size:11px;color:var(--color-text-secondary)">Select outcome for this revision:</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="review-opts-${drawingId}">
-        <div onclick="selectReviewCode(this,'1','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--border2);cursor:pointer;background:var(--bg2);transition:.12s">
-          <div id="rc1-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px"></div>
-          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(1) Approved</div><div style="font-size:10px;color:var(--text2)">Work may proceed</div></div>
+        <div onclick="selectReviewCode(this,'1','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-primary);transition:.12s">
+          <div id="rc1-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px"></div>
+          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(1) Approved</div><div style="font-size:10px;color:var(--color-text-secondary)">Work may proceed</div></div>
         </div>
-        <div onclick="selectReviewCode(this,'2','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--border2);cursor:pointer;background:var(--bg2);transition:.12s">
-          <div id="rc2-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px"></div>
-          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(2) Approved with comments</div><div style="font-size:10px;color:var(--text2)">Proceed, incorporate comments</div></div>
+        <div onclick="selectReviewCode(this,'2','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-primary);transition:.12s">
+          <div id="rc2-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px"></div>
+          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(2) Approved with comments</div><div style="font-size:10px;color:var(--color-text-secondary)">Proceed, incorporate comments</div></div>
         </div>
-        <div onclick="selectReviewCode(this,'3','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--border2);cursor:pointer;background:var(--bg2);transition:.12s">
-          <div id="rc3-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px"></div>
-          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(3) Revise & resubmit</div><div style="font-size:10px;color:var(--text2)">Work may not proceed</div></div>
+        <div onclick="selectReviewCode(this,'3','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-primary);transition:.12s">
+          <div id="rc3-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px"></div>
+          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(3) Revise & resubmit</div><div style="font-size:10px;color:var(--color-text-secondary)">Work may not proceed</div></div>
         </div>
-        <div onclick="selectReviewCode(this,'4','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--border2);cursor:pointer;background:var(--bg2);transition:.12s">
-          <div id="rc4-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px"></div>
-          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(4) Review not required</div><div style="font-size:10px;color:var(--text2)">Work may proceed</div></div>
+        <div onclick="selectReviewCode(this,'4','${drawingId}')" style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:6px;border:.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-primary);transition:.12s">
+          <div id="rc4-${drawingId}" style="width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px"></div>
+          <div><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">(4) Review not required</div><div style="font-size:10px;color:var(--color-text-secondary)">Work may proceed</div></div>
         </div>
       </div>
       <input type="hidden" id="review-code-${drawingId}" value="" />
@@ -2466,13 +2510,13 @@ function drawingReviewPanelHTML(drawingId) {
       <div class="form-group"><label class="form-label-dark">Review Comments</label>
         <textarea class="form-control" id="review-comments-${drawingId}" placeholder="Enter formal review comments..." style="min-height:80px"></textarea></div>
       <div class="form-group"><label class="form-label-dark">Upload Marked-Up Drawing (optional)</label>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--radius);cursor:pointer"
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--color-background-primary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer"
           onclick="document.getElementById('markup-upload-${drawingId}').click()"
-          ondragover="event.preventDefault();this.style.borderColor='var(--blue)'"
-          ondragleave="this.style.borderColor='var(--border2)'"
-          ondrop="event.preventDefault();this.style.borderColor='var(--border2)';handleMarkupDrop(event,'${drawingId}')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span style="font-size:12px;color:var(--text2)">Upload marked-up PDF — your comments/redlines on the drawing</span>
+          ondragover="event.preventDefault();this.style.borderColor='var(--color-border-info)'"
+          ondragleave="this.style.borderColor='var(--color-border-secondary)'"
+          ondrop="event.preventDefault();this.style.borderColor='var(--color-border-secondary)';handleMarkupDrop(event,'${drawingId}')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--color-text-secondary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--color-text-secondary)">Upload marked-up PDF — your comments/redlines on the drawing</span>
         </div>
         <input type="file" id="markup-upload-${drawingId}" accept=".pdf,.dwg,.dxf" style="display:none" onchange="stageMarkup(event,'${drawingId}')" />
         <div id="markup-staged-${drawingId}" style="margin-top:6px"></div>
@@ -2487,7 +2531,7 @@ function stageMarkup(event, drawingId) {
   if(!f) return;
   markupFiles[drawingId] = f;
   document.getElementById('markup-staged-'+drawingId).innerHTML = `
-    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg3);border-radius:6px;border:.5px solid var(--border);margin-top:4px">
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--color-background-secondary);border-radius:6px;border:.5px solid var(--color-border-tertiary);margin-top:4px">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="10" height="13" rx="1" stroke="var(--color-text-info)" stroke-width="1.3"/></svg>
       <div style="flex:1;font-size:11px;color:var(--color-text-primary)">${f.name}</div>
       <div style="font-size:10px;color:var(--color-text-tertiary)">${formatFileSize(f.size)}</div>
@@ -2503,13 +2547,13 @@ function selectReviewCode(el, code, drawingId) {
   const statusMap = {'1':'Approved','2':'Approved with Comments','3':'Revise & Resubmit','4':'Review Not Required'};
   const colorMap = {'1':'var(--color-text-success)','2':'var(--color-text-warning)','3':'var(--color-text-danger)','4':'var(--color-text-info)'};
   const bgMap = {'1':'var(--color-background-success)','2':'var(--color-background-warning)','3':'var(--color-background-danger)','4':'var(--color-background-info)'};
-  const borderMap = {'1':'var(--color-border-success)','2':'var(--color-border-warning)','3':'var(--color-border-danger)','4':'var(--blue)'};
+  const borderMap = {'1':'var(--color-border-success)','2':'var(--color-border-warning)','3':'var(--color-border-danger)','4':'var(--color-border-info)'};
   // Reset all
   document.querySelectorAll(`#review-opts-${drawingId} > div`).forEach(d=>{
-    d.style.background='var(--bg2)';
-    d.style.borderColor='var(--border2)';
+    d.style.background='var(--color-background-primary)';
+    d.style.borderColor='var(--color-border-secondary)';
     const dot=d.querySelector('div');
-    if(dot){dot.style.background='transparent';dot.style.borderColor='var(--border2)';}
+    if(dot){dot.style.background='transparent';dot.style.borderColor='var(--color-border-secondary)';}
   });
   // Highlight selected
   el.style.background=bgMap[code];
