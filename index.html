@@ -585,30 +585,30 @@ async function renderDash() {
         <span style="font-size:12px;font-weight:500;color:var(--charcoal)">Drawing approval</span>
         <span style="font-size:11px;color:var(--text3)">${draws.count||0} total</span>
       </div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:16px;padding:14px" id="donut-wrap">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:14px" id="donut-wrap">
         ${(()=>{
           const tot = draws.count||0;
           const appr = (draws.data||[]).filter(d=>d.status==='Approved').length;
           const rev = (draws.data||[]).filter(d=>d.status==='Under Review').length;
           const pend = Math.max(0,tot-appr-rev);
-          const circ = 2*Math.PI*30;
+          const circ = 2*Math.PI*52;
           const pct = tot>0?Math.round((appr/tot)*100):0;
           const aDash = tot>0?(appr/tot)*circ:0;
           const rDash = tot>0?(rev/tot)*circ:0;
           const pDash = tot>0?(pend/tot)*circ:0;
           const offset = circ/4;
-          return `<svg width="80" height="80" viewBox="0 0 80 80">
-            <circle cx="40" cy="40" r="30" fill="none" stroke="var(--bg3)" stroke-width="11"/>
-            ${tot>0?`<circle cx="40" cy="40" r="30" fill="none" stroke="#3B6D11" stroke-width="11" stroke-dasharray="${aDash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}" stroke-linecap="round"/>
-            <circle cx="40" cy="40" r="30" fill="none" stroke="#185FA5" stroke-width="11" stroke-dasharray="${rDash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${(offset-aDash).toFixed(1)}" stroke-linecap="round"/>
-            <circle cx="40" cy="40" r="30" fill="none" stroke="#C4863A" stroke-width="11" stroke-dasharray="${pDash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${(offset-aDash-rDash).toFixed(1)}" stroke-linecap="round"/>`:''}
-            <text x="40" y="37" text-anchor="middle" font-size="14" font-weight="500" fill="var(--charcoal)" font-family="Plus Jakarta Sans,sans-serif">${pct}%</text>
-            <text x="40" y="50" text-anchor="middle" font-size="9" fill="var(--text3)" font-family="Plus Jakarta Sans,sans-serif">approved</text>
+          return `<svg width="130" height="130" viewBox="0 0 130 130">
+            <circle cx="65" cy="65" r="52" fill="none" stroke="var(--bg3)" stroke-width="14"/>
+            ${tot>0?`<circle cx="65" cy="65" r="52" fill="none" stroke="#3B6D11" stroke-width="14" stroke-dasharray="${aDash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}" stroke-linecap="round"/>
+            <circle cx="65" cy="65" r="52" fill="none" stroke="#185FA5" stroke-width="14" stroke-dasharray="${rDash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${(offset-aDash).toFixed(1)}" stroke-linecap="round"/>
+            <circle cx="65" cy="65" r="52" fill="none" stroke="#C4863A" stroke-width="14" stroke-dasharray="${pDash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${(offset-aDash-rDash).toFixed(1)}" stroke-linecap="round"/>`:''}
+            <text x="65" y="59" text-anchor="middle" font-size="22" font-weight="500" fill="var(--charcoal)" font-family="Plus Jakarta Sans,sans-serif">${pct}%</text>
+            <text x="65" y="76" text-anchor="middle" font-size="11" fill="var(--text3)" font-family="Plus Jakarta Sans,sans-serif">approved</text>
           </svg>
-          <div style="display:flex;flex-direction:column;gap:7px">
-            <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#3B6D11;flex-shrink:0"></div>Approved<span style="margin-left:8px;font-weight:500;color:var(--charcoal)">${appr}</span></div>
-            <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>Under Review<span style="margin-left:8px;font-weight:500;color:var(--charcoal)">${rev}</span></div>
-            <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#C4863A;flex-shrink:0"></div>Pending<span style="margin-left:8px;font-weight:500;color:var(--charcoal)">${pend}</span></div>
+          <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#3B6D11;flex-shrink:0"></div>Approved <span style="font-weight:500;color:var(--charcoal)">${appr}</span></div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>Review <span style="font-weight:500;color:var(--charcoal)">${rev}</span></div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#C4863A;flex-shrink:0"></div>Pending <span style="font-weight:500;color:var(--charcoal)">${pend}</span></div>
           </div>`;
         })()}
       </div>
