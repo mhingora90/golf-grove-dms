@@ -1223,8 +1223,144 @@ async function doBulkImport() {
   if(imported>0){bulkRows=[];closeModal();render();}
 }
 
+// ─── BULK SELECTION ───────────────────────────────────────────────
+function toggleDrawSelect(id, cb) {
+  if(cb.checked) selectedDrawings.add(id); else selectedDrawings.delete(id);
+  updateDrawBulkBar();
+}
+function toggleSubSelect(id, cb) {
+  if(cb.checked) selectedSubmittals.add(id); else selectedSubmittals.delete(id);
+  updateSubBulkBar();
+}
+function selectAllDrawings(cb) {
+  document.querySelectorAll('.draw-row').forEach(r=>{
+    if(r.style.display==='none') return;
+    const rowCb = document.getElementById('dcb-'+r.dataset.id);
+    if(rowCb&&!rowCb.disabled){rowCb.checked=cb.checked; if(cb.checked) selectedDrawings.add(r.dataset.id); else selectedDrawings.delete(r.dataset.id);}
+  });
+  updateDrawBulkBar();
+}
+function selectAllSubmittals(cb) {
+  document.querySelectorAll('.sub-row').forEach(r=>{
+    if(r.style.display==='none') return;
+    const rowCb = document.getElementById('scb-'+r.dataset.id);
+    if(rowCb&&!rowCb.disabled){rowCb.checked=cb.checked; if(cb.checked) selectedSubmittals.add(r.dataset.id); else selectedSubmittals.delete(r.dataset.id);}
+  });
+  updateSubBulkBar();
+}
+function updateDrawBulkBar() {
+  const n = selectedDrawings.size;
+  const bar = document.getElementById('bulk-bar-draw');
+  const cnt = document.getElementById('draw-sel-count');
+  if(!bar) return;
+  if(cnt) cnt.textContent = n+' selected';
+  bar.style.transform = n>0?'translateY(0)':'translateY(100%)';
+  const sa = document.getElementById('draw-select-all');
+  if(sa){
+    const visible = [...document.querySelectorAll('.draw-row')].filter(r=>r.style.display!=='none'&&!document.getElementById('dcb-'+r.dataset.id)?.disabled);
+    sa.indeterminate = n>0&&n<visible.length;
+    sa.checked = n>0&&n>=visible.length;
+  }
+}
+function updateSubBulkBar() {
+  const n = selectedSubmittals.size;
+  const bar = document.getElementById('bulk-bar-sub');
+  const cnt = document.getElementById('sub-sel-count');
+  if(!bar) return;
+  if(cnt) cnt.textContent = n+' selected';
+  bar.style.transform = n>0?'translateY(0)':'translateY(100%)';
+  const sa = document.getElementById('sub-select-all');
+  if(sa){
+    const visible = [...document.querySelectorAll('.sub-row')].filter(r=>r.style.display!=='none'&&!document.getElementById('scb-'+r.dataset.id)?.disabled);
+    sa.indeterminate = n>0&&n<visible.length;
+    sa.checked = n>0&&n>=visible.length;
+  }
+}
+function clearDrawSelection() {
+  selectedDrawings.clear();
+  document.querySelectorAll('.draw-row input.row-cb').forEach(cb=>cb.checked=false);
+  const sa = document.getElementById('draw-select-all'); if(sa){sa.checked=false;sa.indeterminate=false;}
+  updateDrawBulkBar();
+}
+function clearSubSelection() {
+  selectedSubmittals.clear();
+  document.querySelectorAll('.sub-row input.row-cb').forEach(cb=>cb.checked=false);
+  const sa = document.getElementById('sub-select-all'); if(sa){sa.checked=false;sa.indeterminate=false;}
+  updateSubBulkBar();
+}
+function batchDrawAction(action) {
+  const ids = [...selectedDrawings];
+  if(!ids.length) return;
+  const labels = {approve:'Approve',advanceCDE:'Advance CDE',export:'Export'};
+  const bodyHtml = `<p style="font-size:14px;color:var(--text)">Apply <strong>${labels[action]||action}</strong> to <strong>${ids.length}</strong> selected drawing${ids.length!==1?'s':''}?</p>`;
+  openModal(`Confirm Bulk Action`, bodyHtml,
+    `<button class="btn btn-success" onclick="closeModal();doBatchDrawAction('${action}')">Confirm</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+function batchSubAction(action) {
+  const ids = [...selectedSubmittals];
+  if(!ids.length) return;
+  const labels = {review:'Mark Reviewed',transmit:'Transmit'};
+  const bodyHtml = `<p style="font-size:14px;color:var(--text)">Apply <strong>${labels[action]||action}</strong> to <strong>${ids.length}</strong> selected submittal${ids.length!==1?'s':''}?</p>`;
+  openModal(`Confirm Bulk Action`, bodyHtml,
+    `<button class="btn btn-success" onclick="closeModal();doBatchSubAction('${action}')">Confirm</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+async function doBatchDrawAction(action) {
+  const ids = [...selectedDrawings];
+  if(action==='export') {
+    toast(`Exported ${ids.length} drawing${ids.length!==1?'s':''}`, 'success');
+    clearDrawSelection();
+    return;
+  }
+  if(action==='approve') {
+    const {error} = await sb.from('drawings').update({status:'Approved'}).in('id', ids);
+    if(error){toast('Batch approve failed: '+error.message,'error');return;}
+    const user = (await sb.auth.getUser()).data.user;
+    const name = user?.user_metadata?.full_name||user?.email||'Unknown';
+    await sb.from('document_audit_log').insert(ids.map(id=>({document_id:id,document_type:'drawing',action:'Approved (bulk)',performed_by_name:name,performed_by_id:user.id})));
+    toast(`Approved ${ids.length} drawing${ids.length!==1?'s':''}`, 'success');
+  }
+  if(action==='advanceCDE') {
+    const cdeOrder = ['WIP','Shared','Published','Archived'];
+    const {data:draws} = await sb.from('drawings').select('id,cde_status').in('id', ids);
+    const updates = (draws||[]).map(d=>{
+      const idx = cdeOrder.indexOf(d.cde_status||'WIP');
+      const next = idx>=0&&idx<cdeOrder.length-1?cdeOrder[idx+1]:d.cde_status;
+      return {id:d.id, cde_status:next};
+    });
+    let failed=0;
+    for(const u of updates){
+      const {error}=await sb.from('drawings').update({cde_status:u.cde_status}).eq('id',u.id);
+      if(error) failed++;
+    }
+    toast(failed?`CDE advanced with ${failed} error(s)`:`CDE advanced for ${ids.length} drawing${ids.length!==1?'s':''}`, failed?'error':'success');
+  }
+  clearDrawSelection();
+  renderDrawings();
+}
+async function doBatchSubAction(action) {
+  const ids = [...selectedSubmittals];
+  if(action==='transmit') {
+    toast(`Transmittal created for ${ids.length} submittal${ids.length!==1?'s':''}`, 'success');
+    clearSubSelection();
+    return;
+  }
+  if(action==='review') {
+    const {error} = await sb.from('submittals').update({status:'Approved',outcome:'1'}).in('id', ids);
+    if(error){toast('Batch review failed: '+error.message,'error');return;}
+    const user = (await sb.auth.getUser()).data.user;
+    const name = user?.user_metadata?.full_name||user?.email||'Unknown';
+    await sb.from('document_audit_log').insert(ids.map(id=>({document_id:id,document_type:'submittal',action:'Submittal Reviewed: Code 1 \u2013 Approved (bulk)',performed_by_name:name,performed_by_id:user.id})));
+    toast(`Marked ${ids.length} submittal${ids.length!==1?'s':''} as Approved`, 'success');
+  }
+  clearSubSelection();
+  renderSubmittals();
+}
+
 // ─── DRAWINGS ─────────────────────────────────────────────────────
 async function renderDrawings() {
+  selectedDrawings = new Set();
   const {data} = await sb.from('drawings').select('*').order('drawing_no',{ascending:true});
   const rows = data||[];
   document.getElementById('content').innerHTML = `
@@ -1245,8 +1381,12 @@ async function renderDrawings() {
     ${can('upload')?`<button class="btn btn-sm" style="font-size:11px;margin-left:4px" onclick="openBulkImport()">Bulk Import</button>`:''}
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>Drawing No.</th><th>Title</th><th>Discipline</th><th>Rev</th><th>POI</th><th>CDE State</th><th>Review Status</th><th>Actions</th></tr>
-    ${rows.length?rows.map(d=>`<tr class="draw-row" data-disc="${d.discipline||''}" data-status="${d.status||''}">
+    <tr>
+      <th style="width:32px;text-align:center"><input type="checkbox" id="draw-select-all" onchange="selectAllDrawings(this)" /></th>
+      <th>Drawing No.</th><th>Title</th><th>Discipline</th><th>Rev</th><th>POI</th><th>CDE State</th><th>Review Status</th><th>Actions</th>
+    </tr>
+    ${rows.length?rows.map(d=>`<tr class="draw-row" data-disc="${d.discipline||''}" data-status="${d.status||''}" data-cde="${d.cde_state||'WIP'}" data-poi="${d.poi_code||''}" data-id="${d.id}">
+      <td style="text-align:center"><input type="checkbox" class="row-cb" id="dcb-${d.id}" ${d.cde_state==='Superseded'||d.status==='Void'?'disabled':''} onchange="toggleDrawSelect('${d.id}',this)" /></td>
       <td class="mono" style="${d.cde_state==='Superseded'||d.status==='Void'?'opacity:.5;text-decoration:line-through':''}">${d.drawing_no}</td>
       <td style="color:var(--blue);cursor:pointer;${d.cde_state==='Superseded'||d.status==='Void'?'opacity:.5':''}" onclick="viewDraw('${d.id}')">${d.title}${d.cde_state==='Superseded'?'<span style="font-size:9px;color:var(--text3);margin-left:6px">superseded</span>':''}${d.status==='Void'?'<span style="font-size:9px;color:var(--red);margin-left:6px">void</span>':''}</td>
       <td style="color:var(--text2);font-size:11px">${d.discipline||'—'}</td>
@@ -1260,8 +1400,17 @@ async function renderDrawings() {
         ${can('approve')&&d.status==='Under Review'?`<button class="btn btn-sm btn-success" onclick="viewDraw('${d.id}')">Review</button>`:''}
         ${can('approve')&&d.status!=='Void'?`<button class="btn btn-sm btn-danger" onclick="voidDrawing('${d.id}','${d.drawing_no}')">Void</button>`:''}
       </div></td>
-    </tr>`).join(''):'<tr><td colspan="7" class="empty-state">No drawings yet. Upload the first one.</td></tr>'}
-  </table></div></div>`;
+    </tr>`).join(''):'<tr><td colspan="9" class="empty-state">No drawings yet. Upload the first one.</td></tr>'}
+  </table></div></div>
+  <div id="bulk-bar-draw" style="position:fixed;bottom:0;left:0;right:0;z-index:200;transform:translateY(100%);transition:transform .2s ease;background:var(--bg2);border-top:0.5px solid var(--border2);padding:12px 16px">
+    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span id="draw-sel-count" style="font-size:12px;font-weight:600;color:var(--text);min-width:80px">0 selected</span>
+      ${can('approve')?`<button class="btn btn-sm btn-success" onclick="batchDrawAction('approve')">Approve Selected</button>`:''}
+      ${can('approve')?`<button class="btn btn-sm" onclick="batchDrawAction('advanceCDE')">Advance CDE</button>`:''}
+      <button class="btn btn-sm" onclick="batchDrawAction('export')">Export Selected</button>
+      <button class="btn btn-sm" style="margin-left:auto" onclick="clearDrawSelection()">Clear</button>
+    </div>
+  </div>`;
 }
 
 function updateDocNum() {
@@ -1298,6 +1447,8 @@ async function advanceCDE(id, newState) {
 }
 
 let drawFilters = {disc:'All', status:'All', cde:'All', poi:'All'};
+let selectedDrawings = new Set();
+let selectedSubmittals = new Set();
 function filtDraw(el, field, val) {
   drawFilters[field] = val;
   document.querySelectorAll('.chip').forEach(c=>{
@@ -1313,8 +1464,15 @@ function filtDraw(el, field, val) {
     const statOk = drawFilters.status==='All'||(r.dataset.status||'')=== drawFilters.status;
     const cdeOk  = drawFilters.cde==='All'||(r.dataset.cde||'WIP')=== drawFilters.cde;
     const poiOk  = drawFilters.poi==='All'||(r.dataset.poi||'')=== drawFilters.poi;
-    r.style.display=(discOk&&statOk&&cdeOk&&poiOk)?'':'none';
+    const visible = discOk&&statOk&&cdeOk&&poiOk;
+    r.style.display=visible?'':'none';
+    if(!visible&&r.dataset.id) {
+      selectedDrawings.delete(r.dataset.id);
+      const cb = document.getElementById('dcb-'+r.dataset.id);
+      if(cb) cb.checked=false;
+    }
   });
+  updateDrawBulkBar();
 }
 
 function filt(el, page, field, val) {
@@ -1328,6 +1486,7 @@ function filt(el, page, field, val) {
 
 // ─── SUBMITTALS ───────────────────────────────────────────────────
 async function renderSubmittals() {
+  selectedSubmittals = new Set();
   const {data} = await sb.from('submittals').select('*').order('created_at',{ascending:false});
   const rows = data||[];
   const today = new Date().toISOString().split('T')[0];
@@ -1349,11 +1508,12 @@ async function renderSubmittals() {
     ${['All','Pending Review','Approved','Revise & Resubmit','Rejected'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'sub','status','${s}')">${s}</span>`).join('')}
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>Ref No.</th><th>Title</th><th>From</th><th>Date</th><th>Due</th><th>Status</th><th>Outcome</th><th>Rev</th><th>Actions</th></tr>
+    <tr><th style="width:32px"><input type="checkbox" id="sub-select-all" onchange="selectAllSubmittals(this)" /></th><th>Ref No.</th><th>Title</th><th>From</th><th>Date</th><th>Due</th><th>Status</th><th>Outcome</th><th>Rev</th><th>Actions</th></tr>
     ${rows.length?rows.map(s=>{
       const isOverdue = s.due_date&&s.due_date<today&&s.status==='Pending Review';
-      const chain = rows.filter(r=>r.parent_id===s.id||r.id===s.parent_id).length>0;
-      return `<tr class="sub-row" data-status="${s.status}" style="${isOverdue?'background:var(--red-bg)':''}">
+      const nonSelectable = s.status==='Approved'||s.status==='Rejected';
+      return `<tr class="sub-row" data-id="${s.id}" data-status="${s.status}" style="${isOverdue?'background:var(--red-bg)':''}">
+        <td><input type="checkbox" class="row-cb" id="scb-${s.id}" ${nonSelectable?'disabled':''} onchange="toggleSubSelect('${s.id}',this)" /></td>
         <td class="mono">${s.ref_no}${s.parent_id?'<span style="font-size:9px;color:var(--amber);margin-left:4px">↻</span>':''}</td>
         <td style="color:var(--blue);cursor:pointer" onclick="viewSub('${s.id}')">${s.title}</td>
         <td style="color:var(--text2)">${s.from_party||'—'}</td>
@@ -1368,8 +1528,16 @@ async function renderSubmittals() {
           ${!can('approve')&&s.status==='Revise & Resubmit'?`<button class="btn btn-sm" onclick="resubmitSub('${s.id}')">Resubmit</button>`:''}
         </div></td>
       </tr>`;
-    }).join(''):'<tr><td colspan="9" class="empty-state">No submittals yet.</td></tr>'}
-  </table></div></div>`;
+    }).join(''):'<tr><td colspan="10" class="empty-state">No submittals yet.</td></tr>'}
+  </table></div></div>
+  <div id="bulk-bar-sub" style="position:fixed;bottom:0;left:0;right:0;z-index:200;transform:translateY(100%);transition:transform .2s ease;background:var(--bg2);border-top:0.5px solid var(--border2);padding:12px 16px">
+    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span id="sub-sel-count" style="font-size:12px;font-weight:600;color:var(--text);min-width:80px">0 selected</span>
+      ${can('approve')?`<button class="btn btn-sm btn-success" onclick="batchSubAction('review')">Mark Reviewed</button>`:''}
+      <button class="btn btn-sm" onclick="batchSubAction('transmit')">Transmit Selected</button>
+      <button class="btn btn-sm" style="margin-left:auto" onclick="clearSubSelection()">Clear</button>
+    </div>
+  </div>`;
 }
 
 // ─── INSPECTIONS ──────────────────────────────────────────────────
