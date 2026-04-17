@@ -2088,7 +2088,15 @@ async function openNew() {
       </div>`,
       `<button class="btn btn-primary" onclick="doNewNCR()">Raise NCR</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 
-  } else if(currentPage==='subs') {
+  } else if(currentPage==='rfi') {
+    openNewRFI();
+  } else if(currentPage==='trans') {
+    openNewTransmittal();
+  } else if(currentPage==='ms' && can('submitMS')) {
+    openNewMS();
+  } else if(currentPage==='sreg' && can('manageRegister')) {
+    addRegisterItem();
+  } else if(currentPage==='subs' && can('manageSubs')) {
     openModal('Add Subcontractor', `
       <div class="form-group"><label class="form-label-dark">Company Name</label><input type="text" class="form-control" id="nsc-name" placeholder="Full legal company name" /></div>
       <div class="frow">
@@ -2099,11 +2107,6 @@ async function openNew() {
       </div>
       <div class="form-group"><label class="form-label-dark">Trade / Scope</label><input type="text" class="form-control" id="nsc-trade" placeholder="e.g. Mechanical / Electrical / Plumbing" /></div>`,
       `<button class="btn btn-primary" onclick="doNewSubcontractor()">Add Subcontractor</button><button class="btn" onclick="closeModal()">Cancel</button>`);
-
-  } else if(currentPage==='rfi') {
-    openNewRFI();
-  } else if(currentPage==='trans') {
-    openNewTransmittal();
   } else {
     openModal('Access Restricted', `<div class="empty-state">Your current role does not have permission to create items on this page.</div>`,
       `<button class="btn" onclick="closeModal()">Close</button>`);
