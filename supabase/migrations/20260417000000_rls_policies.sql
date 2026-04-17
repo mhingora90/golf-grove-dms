@@ -1,6 +1,8 @@
 -- ================================================================
 -- Migration: 20260417000000_rls_policies.sql
--- RLS for all 16 tables in Golf Grove DMS
+-- RLS for 15 tables in Golf Grove DMS
+-- NOTE: document_audit_log excluded — table not yet in remote schema;
+--       add its RLS in a follow-up migration when the table is created.
 -- Roles: developer > consultant > contractor > subcontractor
 -- Helper: get_user_role() reads public.profiles via auth.uid()
 -- ================================================================
@@ -38,7 +40,6 @@ alter table public.method_statements  enable row level security;
 alter table public.subcontractors     enable row level security;
 alter table public.attachments        enable row level security;
 alter table public.comments           enable row level security;
-alter table public.document_audit_log enable row level security;
 
 -- ================================================================
 -- profiles
@@ -473,16 +474,10 @@ create policy "comments: developer deletes"
 
 -- ================================================================
 -- document_audit_log
+-- Deferred: table does not exist in remote schema yet.
+-- When created, add a follow-up migration with:
+--   alter table public.document_audit_log enable row level security;
+--   SELECT: developer, consultant
+--   INSERT: all authenticated (app logs every tracked action)
+--   UPDATE / DELETE: none (immutable audit trail)
 -- ================================================================
-
--- TEST: developer and consultant can review audit history
-create policy "document_audit_log: manage roles read"
-  on public.document_audit_log for select to authenticated
-  using (get_user_role() in ('developer', 'consultant'));
-
--- TEST: all authenticated write audit entries (app logs all actions)
-create policy "document_audit_log: all authenticated insert"
-  on public.document_audit_log for insert to authenticated
-  with check (true);
-
--- TEST: audit log is immutable — no UPDATE or DELETE policies
