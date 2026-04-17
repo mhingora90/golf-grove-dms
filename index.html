@@ -2690,6 +2690,7 @@ async function doNewIR() {
 async function doNewNCR() {
   const title = document.getElementById('nn-title').value;
   if(!title){toast('Title is required','error');return;}
+  console.log('[NCR] insert attempted, title:', title);
   const {data:newNCR,error} = await sb.from('ncrs').insert({
     ref_no:'NCR-'+(Date.now()%10000).toString().padStart(3,'0'),
     title,location:document.getElementById('nn-loc').value,
@@ -2701,10 +2702,13 @@ async function doNewNCR() {
     status:'Open',
     cause:document.getElementById('nn-cause').value
   }).select().single();
+  console.log('[NCR] insert result — data:', newNCR, 'error:', error);
   if(error){toast('Error: '+error.message,'error');return;}
   if(newNCR?.id) {
     await uploadStagedFiles('nn-staged','ncr',newNCR.id);
     await logAudit(newNCR.id, 'ncr', 'NCR Raised');
+  } else {
+    console.warn('[NCR] newNCR.id missing — logAudit skipped. newNCR was:', newNCR);
   }
   toast('NCR raised','success'); closeModal(); render();
 }
