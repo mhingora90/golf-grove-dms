@@ -2727,7 +2727,8 @@ async function doNewNCR() {
   if(error){toast('Error: '+error.message,'error');return;}
   if(newNCR?.id) {
     await uploadStagedFiles('nn-staged','ncr',newNCR.id);
-    await sb.from('document_audit_log').insert({document_id:newNCR.id,document_type:'ncr',action:'NCR Raised',performed_by_name:currentProfile?.full_name||currentUser?.email,performed_by_id:currentUser?.id});
+    const {error:auditErr} = await sb.from('document_audit_log').insert({document_id:newNCR.id,document_type:'ncr',action:'NCR Raised',performed_by_name:currentProfile?.full_name||currentUser?.email,performed_by_id:currentUser?.id});
+    if(auditErr) console.error('[audit_log] NCR Raised insert failed:', auditErr);
   }
   toast('NCR raised','success'); closeModal(); render();
 }
