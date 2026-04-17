@@ -2355,9 +2355,7 @@ async function doReInspect(parentId) {
     ref_no:ref,
     parent_ir_id:parentId,
     inspection_date:document.getElementById('ri-date')?.value||null,
-    elements:(document.getElementById('ri-changes')?.value||'')+'
-
-[Re-inspection of '+parent.ref_no+']',
+    elements:(document.getElementById('ri-changes')?.value||'')+' [Re-inspection of '+parent.ref_no+']',
     status:'Pending',
     revision:String(parseInt(parent.revision||0)+1).padStart(2,'0'),
     request_date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase(),
@@ -2617,8 +2615,7 @@ function parseRegisterCSV(e) { parseRegisterCSVFile(e.target.files[0]); }
 function parseRegisterCSVFile(file) {
   const reader = new FileReader();
   reader.onload = e => {
-    const lines = e.target.result.split('
-').filter(l=>l.trim());
+    const lines = e.target.result.split('\n').filter(l=>l.trim());
     const headers = lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/"/g,''));
     registerImportData = lines.slice(1).map(line=>{
       const vals = line.split(',').map(v=>v.trim().replace(/^"|"$/g,''));
