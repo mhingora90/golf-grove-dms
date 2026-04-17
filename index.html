@@ -669,12 +669,25 @@ function corrTypeBadge(type) {
 }
 
 function validateDrawingNumber(num) {
-  // BS 1192: {Project}-{Originator}-{Zone}-{Level}-{Type}-{Revision}
-  // Allow flexible: at least GG-XXX-...-XXX pattern
   if(!num) return {valid:false, msg:'Drawing number is required'};
   const parts = num.split('-');
-  if(parts.length < 4) return {valid:false, msg:'Number must follow format: GG-{Originator}-{Zone}-{Level}-{Type}-{Rev} (min 4 segments separated by -)'};
-  if(parts[0].toUpperCase() !== 'GG') return {valid:true, msg:'Warning: Project code should be GG'};
+  // Format: GG-[ORIGINATOR]-[VOLUME]-[LEVEL]-[TYPE]-[ROLE]-[NUMBER]-[REV]
+  if(parts[0]?.toUpperCase() !== 'GG')
+    return {valid:false, msg:'Segment 1 (Project) must be "GG"'};
+  if(parts.length < 8)
+    return {valid:false, msg:`Expected format: GG-Originator-Volume-Level-Type-Role-Number-Rev (8 segments), got ${parts.length}`};
+  if(!parts[1])
+    return {valid:false, msg:'Segment 2 (Originator) is empty'};
+  if(!parts[2])
+    return {valid:false, msg:'Segment 3 (Volume/Zone) is empty'};
+  if(!parts[3])
+    return {valid:false, msg:'Segment 4 (Level) is empty'};
+  if(!parts[4])
+    return {valid:false, msg:'Segment 5 (Type) is empty'};
+  if(!parts[5])
+    return {valid:false, msg:'Segment 6 (Role) is empty'};
+  if(!/^\d{4}$/.test(parts[6]))
+    return {valid:false, msg:'Segment 7 (Number) must be exactly 4 digits (e.g. 0001)'};
   return {valid:true, msg:''};
 }
 
@@ -1440,14 +1453,15 @@ async function renderDrawings() {
 }
 
 function updateDocNum() {
-  const orig = (document.getElementById('nd-orig')?.value||'——').toUpperCase();
-  const zone = (document.getElementById('nd-zone')?.value||'——').toUpperCase();
+  const orig  = (document.getElementById('nd-orig')?.value||'——').toUpperCase();
+  const zone  = (document.getElementById('nd-zone')?.value||'——').toUpperCase();
   const level = (document.getElementById('nd-level')?.value||'——').toUpperCase();
-  const type = document.getElementById('nd-type')?.value||'DR';
-  const rev = (document.getElementById('nd-rev')?.value||'RevA').replace(/\s/g,'');
-  const num = `GG-${orig}-${zone}-${level}-${type}-${rev}`;
+  const type  = document.getElementById('nd-type')?.value||'DR';
+  const role  = (document.getElementById('nd-role')?.value||'——').toUpperCase();
+  const seq   = (document.getElementById('nd-num')?.value||'——').padStart(4,'0');
+  const rev   = (document.getElementById('nd-rev')?.value||'RevA').replace(/\s/g,'');
   const el = document.getElementById('nd-preview');
-  if(el) el.textContent = num;
+  if(el) el.textContent = `GG-${orig}-${zone}-${level}-${type}-${role}-${seq}-${rev}`;
 }
 
 async function advanceCDE(id, newState) {
@@ -1543,6 +1557,7 @@ async function renderSubmittals() {
   const thisWeek = rows.filter(r=>{const d=new Date(r.created_at);const now=new Date();return (now-d)<7*86400000;}).length;
   // Get register count for required vs submitted
   const {count:regCount} = await sb.from('submittal_register').select('*',{count:'exact',head:true});
+  const subOverdueFilter = navFilter==='overdue'; navFilter=null;
   document.getElementById('content').innerHTML = `
   <div class="module-bar">
     <div class="module-stat"><div class="module-stat-val ${open>0?'warn':''}">${open}</div><div class="module-stat-label">Pending Review</div></div>
@@ -1551,7 +1566,6 @@ async function renderSubmittals() {
     <div class="module-stat"><div class="module-stat-val">${thisWeek}</div><div class="module-stat-label">This Week</div></div>
     ${regCount?`<div class="module-stat"><div class="module-stat-val">${rows.length}<span style="font-size:14px;color:var(--text3)">/${regCount}</span></div><div class="module-stat-label">vs Register</div></div>`:''}
   </div>
-  const subOverdueFilter = navFilter==='overdue'; navFilter=null;
   <div class="fbar"><span class="fbar-label">Status:</span>
     ${['All','Pending Review','Approved','Revise & Resubmit','Rejected'].map((s,i)=>`<span class="chip ${i===0&&!subOverdueFilter?'active':''}" onclick="filt(this,'sub','status','${s}')">${s}</span>`).join('')}
     <span class="chip${subOverdueFilter?' active':''}" onclick="filtSubOverdue(this)">Overdue</span>
@@ -1609,6 +1623,7 @@ async function renderInspections() {
     if(age<=5) return '<span class="ncr-age warning">Day '+age+' / 5</span>';
     return '<span class="ncr-age overdue">'+age+' days overdue</span>';
   }
+  const irOverdueFilter = navFilter==='overdue'; navFilter=null;
   document.getElementById('content').innerHTML = `
   <div class="module-bar">
     <div class="module-stat"><div class="module-stat-val ${pending>0?'warn':''}">${pending}</div><div class="module-stat-label">Pending</div></div>
@@ -1616,7 +1631,6 @@ async function renderInspections() {
     <div class="module-stat"><div class="module-stat-val">${responded}</div><div class="module-stat-label">Responded</div></div>
     <div class="module-stat"><div class="module-stat-val">${thisWeek}</div><div class="module-stat-label">This Week</div></div>
   </div>
-  const irOverdueFilter = navFilter==='overdue'; navFilter=null;
   <div class="fbar"><span class="fbar-label">Status:</span>
     ${['All','Pending','Approved','Approved as Noted','Correction','Rejected','Re-Inspection'].map((s,i)=>`<span class="chip ${i===0&&!irOverdueFilter?'active':''}" onclick="filt(this,'ir','status','${s}')">${s}</span>`).join('')}
     <span class="chip${irOverdueFilter?' active':''}" onclick="filtIROverdue(this)">Overdue</span>
@@ -2289,7 +2303,7 @@ async function removeSub(id) {
 function uploadRev(id) {
   openModal(`Upload New Revision`, `
     <div class="frow">
-      <div class="form-group"><label class="form-label-dark">New Revision</label><input type="text" class="form-control" id="nr-${id}" placeholder="e.g. Rev D" /></div>
+      <div class="form-group"><label class="form-label-dark">New Revision</label><input type="text" class="form-control" id="nr-${id}" placeholder="e.g. Rev D" /><div id="nr-err-${id}" style="display:none;color:var(--red);font-size:11px;margin-top:4px"></div></div>
       <div class="form-group"><label class="form-label-dark">Status</label>
         <select class="form-control" id="rs-${id}"><option>Under Review</option><option>Issued for Construction</option></select>
       </div>
@@ -2326,6 +2340,13 @@ async function doUploadRev(id) {
   if(!newRev){toast('Please enter a revision number','error');return;}
   const {data:d} = await sb.from('drawings').select('revision,superseded_revisions,file_path').eq('id',id).single();
   let supers = JSON.parse(d.superseded_revisions||'[]');
+  const errEl = document.getElementById('nr-err-'+id);
+  const isDupe = newRev.trim() === d.revision?.trim() || supers.includes(newRev.trim());
+  if(isDupe) {
+    if(errEl){ errEl.textContent = `Revision "${newRev}" already exists. Use a new revision identifier.`; errEl.style.display=''; }
+    return;
+  }
+  if(errEl) errEl.style.display='none';
   supers.push(d.revision);
   let filePath = null;
   if(file) {
@@ -2362,10 +2383,10 @@ async function openNew() {
     openModal('Upload New Drawing', `
       <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;margin-bottom:4px">
         <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">ISO 19650 Document Number</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px">
           <div class="form-group"><label class="form-label-dark" title="Required per ISO 19650-2 §5.3.2">Originator <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-orig" placeholder="MBC" oninput="updateDocNum()" /></div>
-          <div class="form-group"><label class="form-label-dark" title="Volume or Zone reference">Zone</label><input type="text" class="form-control" id="nd-zone" placeholder="B1" oninput="updateDocNum()" /></div>
-          <div class="form-group"><label class="form-label-dark">Level</label><input type="text" class="form-control" id="nd-level" placeholder="L04" oninput="updateDocNum()" /></div>
+          <div class="form-group"><label class="form-label-dark" title="Volume or Zone reference">Zone <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-zone" placeholder="B1" oninput="updateDocNum()" /></div>
+          <div class="form-group"><label class="form-label-dark">Level <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-level" placeholder="L04" oninput="updateDocNum()" /></div>
           <div class="form-group"><label class="form-label-dark">Type</label>
             <select class="form-control" id="nd-type" onchange="updateDocNum()">
               <option value="DR">DR – Drawing</option>
@@ -2374,11 +2395,13 @@ async function openNew() {
               <option value="MS">MS – Method Statement</option>
             </select>
           </div>
-          <div class="form-group"><label class="form-label-dark">Revision <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-rev" value="Rev A" oninput="updateDocNum()" /></div>
+          <div class="form-group"><label class="form-label-dark" title="Role code e.g. A=Architect, S=Structural">Role <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-role" placeholder="A" oninput="updateDocNum()" /></div>
+          <div class="form-group"><label class="form-label-dark" title="4-digit sequence number">Number <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-num" placeholder="0001" maxlength="4" oninput="updateDocNum()" /></div>
+          <div class="form-group"><label class="form-label-dark">Revision <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-rev" value="Rev A" oninput="updateDocNum();checkRevScheme()" /></div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           <div style="font-size:10px;color:var(--text3)">Generated No.:</div>
-          <div id="nd-preview" style="font-family:monospace;font-size:11px;font-weight:500;color:var(--sand);background:var(--bg2);padding:4px 10px;border-radius:6px;border:0.5px solid var(--border2)">GG-MBC-——-——-DR-RevA</div>
+          <div id="nd-preview" style="font-family:monospace;font-size:11px;font-weight:500;color:var(--sand);background:var(--bg2);padding:4px 10px;border-radius:6px;border:0.5px solid var(--border2)">GG-MBC-——-——-DR-——-——-RevA</div>
           <button type="button" class="btn btn-sm" onclick="document.getElementById('nd-id').value=document.getElementById('nd-preview').textContent" style="font-size:10px">Use this</button>
         </div>
       </div>
@@ -2588,13 +2611,25 @@ async function doNewDraw() {
   const id = document.getElementById('nd-id').value;
   const title = document.getElementById('nd-title').value;
   if(!id||!title){toast('Drawing number and title are required','error');return;}
+  const orig  = document.getElementById('nd-orig')?.value?.trim();
+  const zone  = document.getElementById('nd-zone')?.value?.trim();
+  const level = document.getElementById('nd-level')?.value?.trim();
+  if(!orig||!zone||!level){toast('Originator, Zone, and Level are required','error');return;}
   // Validate drawing number format
   const numCheck = validateDrawingNumber(id);
-  if(!numCheck.valid){toast(numCheck.msg,'error');return;}
-  if(numCheck.msg){toast(numCheck.msg,'info');}
+  const numWarnEl = document.getElementById('nd-num-warn');
+  if(!numCheck.valid){
+    if(numWarnEl){ numWarnEl.textContent = numCheck.msg; numWarnEl.style.display=''; }
+    return;
+  }
+  if(numWarnEl) numWarnEl.style.display='none';
   // Revision scheme warning
   const revWarn = enforceRevisionScheme(document.getElementById('nd-status')?.value, document.getElementById('nd-rev')?.value);
-  if(revWarn.warn) toast(revWarn.msg,'info');
+  if(revWarn.warn) {
+    const warnEl = document.getElementById('nd-rev-warn');
+    if(warnEl){ warnEl.textContent = revWarn.msg; warnEl.style.display=''; }
+    return;
+  }
   const file = selectedFiles['new'];
   let filePath = null;
   if(file) {
