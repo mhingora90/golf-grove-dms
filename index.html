@@ -550,10 +550,10 @@ function nav(page, el) {
 function can(action) {
   const role = currentProfile?.role;
   const perms = {
-    developer: {approve:true,upload:true,raise:true,submit:true,manageUsers:true},
-    consultant: {approve:true,upload:true,raise:true,submit:true,manageUsers:true},
-    contractor: {approve:false,upload:true,raise:false,submit:true,manageUsers:false},
-    subcontractor:{approve:false,upload:false,raise:false,submit:true,manageUsers:false},
+    developer:    {approve:true, upload:true, raise:true, submit:true, manageUsers:true, manageSubs:true, submitMS:false, manageRegister:true},
+    consultant:   {approve:true, upload:true, raise:true, submit:true, manageUsers:false,manageSubs:false,submitMS:false,manageRegister:true},
+    contractor:   {approve:false,upload:true, raise:false,submit:true, manageUsers:false,manageSubs:true, submitMS:true, manageRegister:false},
+    subcontractor:{approve:false,upload:false,raise:false,submit:true, manageUsers:false,manageSubs:false,submitMS:true, manageRegister:false},
   };
   return perms[role]?.[action]||false;
 }
