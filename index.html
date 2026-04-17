@@ -1459,14 +1459,7 @@ async function advanceCDE(id, newState) {
   if(!confirm(stateLabels[newState]||'Advance to '+newState+'?')) return;
   const {error} = await sb.from('drawings').update({cde_state: newState}).eq('id', id);
   if(error){toast('Error: '+error.message,'error');return;}
-  // Log to audit trail
-  await sb.from('document_audit_log').insert({
-    document_id: id,
-    document_type: 'drawing',
-    action: 'CDE State Change → ' + newState,
-    performed_by_name: currentProfile?.full_name||currentUser?.email,
-    performed_by_id: currentUser?.id,
-  }).then(()=>{});
+  await logAudit(id, 'drawing', 'CDE State Change \u2192 ' + newState);
   toast('Document advanced to ' + newState, 'success');
   closeModal();
   renderDrawings();
@@ -1476,6 +1469,17 @@ let drawFilters = {disc:'All', status:'All', cde:'All', poi:'All'};
 let selectedDrawings = new Set();
 let selectedSubmittals = new Set();
 let navFilter = null;
+
+async function logAudit(document_id, document_type, action) {
+  const {error} = await sb.from('document_audit_log').insert({
+    document_id,
+    document_type,
+    action,
+    performed_by_name: currentProfile?.full_name || currentUser?.email || 'Unknown',
+    performed_by_id: currentUser?.id,
+  });
+  if(error) console.error('[audit_log] insert failed:', document_type, action, error);
+}
 function filtDraw(el, field, val) {
   drawFilters[field] = val;
   document.querySelectorAll('.chip').forEach(c=>{
@@ -2115,12 +2119,7 @@ async function voidDrawing(id, drawingNo) {
     status:'Void', cde_state:'Archived'
   }).eq('id',id);
   if(error){toast('Error: '+error.message,'error');return;}
-  await sb.from('document_audit_log').insert({
-    document_id:id, document_type:'drawing',
-    action:'Drawing Voided: '+drawingNo,
-    performed_by_name:currentProfile?.full_name||currentUser?.email,
-    performed_by_id:currentUser?.id,
-  }).then(()=>{});
+  await logAudit(id, 'drawing', 'Drawing Voided: ' + drawingNo);
   toast('Drawing '+drawingNo+' has been voided','info');
   closeModal(); renderDrawings();
 }
@@ -2188,14 +2187,7 @@ function exportDrawingRegister() {
 async function approveDrawing(id) {
   const {data:d} = await sb.from('drawings').select('revision').eq('id',id).single();
   await sb.from('drawings').update({status:'Approved'}).eq('id',id);
-  // Log approval to audit trail
-  await sb.from('document_audit_log').insert({
-    document_id: id,
-    document_type: 'drawing',
-    action: 'Drawing Approved',
-    performed_by_name: currentProfile?.full_name||currentUser?.email,
-    performed_by_id: currentUser?.id,
-  }).then(()=>{});
+  await logAudit(id, 'drawing', 'Drawing Approved');
   // Update revision record with approval details
   await sb.from('drawing_revisions')
     .update({
@@ -2240,12 +2232,7 @@ async function doReviewSub(id) {
     reviewed_by: engName,
     review_date: document.getElementById('srd-'+id)?.value||new Date().toISOString().split('T')[0]
   }).eq('id',id);
-  await sb.from('document_audit_log').insert({
-    document_id: id, document_type: 'submittal',
-    action: 'Submittal Reviewed: Code ' + oc + ' \u2013 ' + statusMap[oc],
-    performed_by_name: currentProfile?.full_name||currentUser?.email,
-    performed_by_id: currentUser?.id,
-  }).then(()=>{});
+  await logAudit(id, 'submittal', 'Submittal Reviewed: Code ' + oc + ' \u2013 ' + statusMap[oc]);
   toast('Submittal reviewed','success'); closeModal(); render();
 }
 
@@ -2278,12 +2265,7 @@ async function doRespondIR(id) {
     inspected_by: engName,
     response_date: document.getElementById('ir-dt-'+id).value,
   }).eq('id',id);
-  await sb.from('document_audit_log').insert({
-    document_id: id, document_type: 'inspection',
-    action: 'IR Response: ' + irStatus,
-    performed_by_name: currentProfile?.full_name||currentUser?.email,
-    performed_by_id: currentUser?.id,
-  }).then(()=>{});
+  await logAudit(id, 'inspection', 'IR Response: ' + irStatus);
   toast('Inspection response recorded','success'); closeModal(); render();
 }
 
@@ -2294,12 +2276,7 @@ async function doCloseNCR(id) {
     corrective_action: ca?ca.value:'Corrective action completed.',
     closed_date: new Date().toISOString().split('T')[0]
   }).eq('id',id);
-  await sb.from('document_audit_log').insert({
-    document_id: id, document_type: 'ncr',
-    action: 'NCR: Closed',
-    performed_by_name: currentProfile?.full_name||currentUser?.email,
-    performed_by_id: currentUser?.id,
-  }).then(()=>{});
+  await logAudit(id, 'ncr', 'NCR: Closed');
   toast('NCR closed','success'); closeModal(); render();
 }
 
@@ -2727,8 +2704,7 @@ async function doNewNCR() {
   if(error){toast('Error: '+error.message,'error');return;}
   if(newNCR?.id) {
     await uploadStagedFiles('nn-staged','ncr',newNCR.id);
-    const {error:auditErr} = await sb.from('document_audit_log').insert({document_id:newNCR.id,document_type:'ncr',action:'NCR Raised',performed_by_name:currentProfile?.full_name||currentUser?.email,performed_by_id:currentUser?.id});
-    if(auditErr) console.error('[audit_log] NCR Raised insert failed:', auditErr);
+    await logAudit(newNCR.id, 'ncr', 'NCR Raised');
   }
   toast('NCR raised','success'); closeModal(); render();
 }
@@ -2787,12 +2763,7 @@ async function doSubmitCAP(id) {
     cap_submitted_by: currentProfile?.full_name||currentUser?.email,
   }).eq('id',id);
   if(error){toast('Error: '+error.message,'error');return;}
-  await sb.from('document_audit_log').insert({
-    document_id: id, document_type: 'ncr',
-    action: 'NCR: Open \u2192 CAP Submitted',
-    performed_by_name: currentProfile?.full_name||currentUser?.email,
-    performed_by_id: currentUser?.id,
-  }).then(()=>{});
+  await logAudit(id, 'ncr', 'NCR: Open \u2192 CAP Submitted');
   toast('CAP submitted for consultant verification','success');
   closeModal(); render();
 }
@@ -2826,12 +2797,7 @@ async function doVerifyCAP(id) {
     cap_verify_comments: document.getElementById('cap-verify-'+id)?.value||null,
   }).eq('id',id);
   if(error){toast('Error: '+error.message,'error');return;}
-  await sb.from('document_audit_log').insert({
-    document_id: id, document_type: 'ncr',
-    action: 'NCR: CAP Verified',
-    performed_by_name: currentProfile?.full_name||currentUser?.email,
-    performed_by_id: currentUser?.id,
-  }).then(()=>{});
+  await logAudit(id, 'ncr', 'NCR: CAP Verified');
   toast('CAP verified — NCR ready to close','success');
   closeModal(); render();
 }
@@ -2842,12 +2808,7 @@ async function doRejectCAP(id) {
     cap_verify_comments: document.getElementById('cap-verify-'+id)?.value||'CAP returned for revision.',
   }).eq('id',id);
   if(error){toast('Error','error');return;}
-  await sb.from('document_audit_log').insert({
-    document_id: id, document_type: 'ncr',
-    action: 'NCR: CAP Returned \u2192 Open',
-    performed_by_name: currentProfile?.full_name||currentUser?.email,
-    performed_by_id: currentUser?.id,
-  }).then(()=>{});
+  await logAudit(id, 'ncr', 'NCR: CAP Returned \u2192 Open');
   toast('CAP returned to contractor for revision','info');
   closeModal(); render();
 }
@@ -3496,12 +3457,7 @@ async function viewCorrespondence(id) {
 
 async function closeCorrespondence(id) {
   await sb.from('correspondence').update({status:'Closed',closed_date:new Date().toISOString().split('T')[0]}).eq('id',id);
-  await sb.from('document_audit_log').insert({
-    document_id: id, document_type: 'correspondence',
-    action: 'Correspondence: Closed',
-    performed_by_name: currentProfile?.full_name||currentUser?.email,
-    performed_by_id: currentUser?.id,
-  }).then(()=>{});
+  await logAudit(id, 'correspondence', 'Correspondence: Closed');
   toast('Correspondence closed','success'); closeModal(); render();
 }
 
