@@ -203,6 +203,45 @@ textarea.form-control{resize:vertical;min-height:70px}
 /* ADMIN BADGE */
 .role-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 10px;border-radius:20px;border:0.5px solid}
 
+/* MODULE SUMMARY BAR */
+.module-bar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.module-stat{background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;padding:10px 16px;display:flex;flex-direction:column;gap:2px;min-width:100px}
+.module-stat-val{font-size:22px;font-weight:500;color:var(--charcoal)}
+.module-stat-val.warn{color:var(--amber)}
+.module-stat-val.danger{color:var(--red)}
+.module-stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+/* CHECKLIST */
+.checklist-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:0.5px solid var(--border);font-size:12px}
+.checklist-item:last-child{border-bottom:none}
+.checklist-label{flex:1;color:var(--text)}
+.checklist-btns{display:flex;gap:4px}
+.ck-btn{font-size:10px;padding:2px 8px;border-radius:6px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;transition:.12s}
+.ck-btn.pass{background:var(--green-bg);color:var(--green);border-color:#C0DD97}
+.ck-btn.fail{background:var(--red-bg);color:var(--red);border-color:#F7C1C1}
+.ck-btn.na{background:var(--bg4);color:var(--text3);border-color:var(--border2)}
+/* CAP / NCR WORKFLOW */
+.workflow-step{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;font-size:11px;margin-bottom:6px}
+.workflow-step.done{background:var(--green-bg);color:var(--green)}
+.workflow-step.active{background:var(--amber-bg);color:var(--amber)}
+.workflow-step.pending{background:var(--bg3);color:var(--text3)}
+.ncr-age{display:inline-block;font-size:10px;padding:1px 6px;border-radius:8px;font-weight:500}
+.ncr-age.fresh{background:var(--green-bg);color:var(--green)}
+.ncr-age.warning{background:var(--amber-bg);color:var(--amber)}
+.ncr-age.overdue{background:var(--red-bg);color:var(--red)}
+/* SUBMITTAL REGISTER */
+.reg-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;border:0.5px solid}
+.reg-required{background:var(--amber-bg);color:var(--amber);border-color:#FAC775}
+.reg-submitted{background:var(--blue-bg);color:var(--blue);border-color:#B5D4F4}
+.reg-approved{background:var(--green-bg);color:var(--green);border-color:#C0DD97}
+.reg-overdue{background:var(--red-bg);color:var(--red);border-color:#F7C1C1}
+/* REVISION CHAIN */
+.rev-chain{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:8px 0}
+.rev-chain-item{font-size:10px;padding:3px 10px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--text3)}
+.rev-chain-item.current{background:var(--charcoal);color:#F7F5F0;border-color:var(--charcoal);font-weight:500}
+.rev-chain-item.rejected{background:var(--red-bg);color:var(--red);border-color:#F7C1C1}
+.rev-chain-item.approved{background:var(--green-bg);color:var(--green);border-color:#C0DD97}
+.rev-chain-arrow{font-size:10px;color:var(--text3);padding:0 2px}
+
 /* CDE STATE BADGES */
 .cde-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;border:0.5px solid;white-space:nowrap}
 .cde-wip{background:#FEF3E8;color:#854F0B;border-color:#FAC775}
@@ -316,6 +355,10 @@ textarea.form-control{resize:vertical;min-height:70px}
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M2 3h12v10H2z" stroke="currentColor" stroke-width="1.3"/><path d="M5 7l2 2 4-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Submittals (DSUB)
       <span class="nav-badge" id="nb-sub">0</span>
+    </div>
+    <div class="nav-item" id="n-sreg" onclick="nav('sreg',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1" stroke="currentColor" stroke-width="1.3"/><line x1="5" y1="5" x2="11" y2="5" stroke="currentColor" stroke-width="1"/><line x1="5" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1"/><line x1="5" y1="11" x2="8" y2="11" stroke="currentColor" stroke-width="1"/></svg>
+      Submittal Register
     </div>
     <div class="sb-section">Site</div>
     <div class="nav-item" id="n-ir" onclick="nav('ir',this)">
@@ -493,7 +536,7 @@ async function loadApp(user) {
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',subs:'Subcontractors',users:'User Management',ms:'Method Statements'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',subs:'Subcontractors',users:'User Management',ms:'Method Statements'};
 
 function nav(page, el) {
   currentPage = page;
@@ -522,6 +565,7 @@ async function render() {
   if(currentPage==='dash') await renderDash();
   else if(currentPage==='draw') await renderDrawings();
   else if(currentPage==='sub') await renderSubmittals();
+  else if(currentPage==='sreg') await renderSubmittalRegister();
   else if(currentPage==='ir') await renderInspections();
   else if(currentPage==='ncr') await renderNCRs();
   else if(currentPage==='rfi') await renderRFIs();
@@ -1164,24 +1208,45 @@ function filt(el, page, field, val) {
 async function renderSubmittals() {
   const {data} = await sb.from('submittals').select('*').order('created_at',{ascending:false});
   const rows = data||[];
+  const today = new Date().toISOString().split('T')[0];
+  const open = rows.filter(r=>r.status==='Pending Review').length;
+  const overdue = rows.filter(r=>r.due_date&&r.due_date<today&&r.status==='Pending Review').length;
+  const approved = rows.filter(r=>r.status==='Approved'||r.outcome==='1'||r.outcome==='2').length;
+  const thisWeek = rows.filter(r=>{const d=new Date(r.created_at);const now=new Date();return (now-d)<7*86400000;}).length;
+  // Get register count for required vs submitted
+  const {count:regCount} = await sb.from('submittal_register').select('*',{count:'exact',head:true});
   document.getElementById('content').innerHTML = `
+  <div class="module-bar">
+    <div class="module-stat"><div class="module-stat-val ${open>0?'warn':''}">${open}</div><div class="module-stat-label">Pending Review</div></div>
+    <div class="module-stat"><div class="module-stat-val ${overdue>0?'danger':''}">${overdue}</div><div class="module-stat-label">Overdue</div></div>
+    <div class="module-stat"><div class="module-stat-val">${approved}</div><div class="module-stat-label">Approved</div></div>
+    <div class="module-stat"><div class="module-stat-val">${thisWeek}</div><div class="module-stat-label">This Week</div></div>
+    ${regCount?`<div class="module-stat"><div class="module-stat-val">${rows.length}<span style="font-size:14px;color:var(--text3)">/${regCount}</span></div><div class="module-stat-label">vs Register</div></div>`:''}
+  </div>
   <div class="fbar"><span class="fbar-label">Status:</span>
     ${['All','Pending Review','Approved','Revise & Resubmit','Rejected'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'sub','status','${s}')">${s}</span>`).join('')}
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>Ref No.</th><th>Title</th><th>From</th><th>Date</th><th>Status</th><th>Outcome</th><th>Actions</th></tr>
-    ${rows.length?rows.map(s=>`<tr class="sub-row" data-status="${s.status}">
-      <td class="mono">${s.ref_no}</td>
-      <td style="color:var(--blue-light);cursor:pointer" onclick="viewSub('${s.id}')">${s.title}</td>
-      <td style="color:var(--text2)">${s.from_party||'—'}</td>
-      <td style="color:var(--text3);font-size:10px">${s.submit_date||'—'}</td>
-      <td>${sbadge(s.status)}</td>
-      <td style="color:var(--text3);font-size:10px">${s.outcome?`Code (${s.outcome})`:'-'}</td>
-      <td><div style="display:flex;gap:4px">
-        <button class="btn btn-sm" onclick="viewSub('${s.id}')">View DSUB</button>
-        ${can('approve')&&s.status==='Pending Review'?`<button class="btn btn-sm btn-success" onclick="reviewSub('${s.id}')">Review</button>`:''}
-      </div></td>
-    </tr>`).join(''):'<tr><td colspan="7" class="empty-state">No submittals yet.</td></tr>'}
+    <tr><th>Ref No.</th><th>Title</th><th>From</th><th>Date</th><th>Due</th><th>Status</th><th>Outcome</th><th>Rev</th><th>Actions</th></tr>
+    ${rows.length?rows.map(s=>{
+      const isOverdue = s.due_date&&s.due_date<today&&s.status==='Pending Review';
+      const chain = rows.filter(r=>r.parent_id===s.id||r.id===s.parent_id).length>0;
+      return `<tr class="sub-row" data-status="${s.status}" style="${isOverdue?'background:var(--red-bg)':''}">
+        <td class="mono">${s.ref_no}${s.parent_id?'<span style="font-size:9px;color:var(--amber);margin-left:4px">↻</span>':''}</td>
+        <td style="color:var(--blue);cursor:pointer" onclick="viewSub('${s.id}')">${s.title}</td>
+        <td style="color:var(--text2)">${s.from_party||'—'}</td>
+        <td style="color:var(--text3);font-size:10px">${s.submit_date||'—'}</td>
+        <td style="font-size:10px;color:${isOverdue?'var(--red)':'var(--text3)'}">${s.due_date||'—'}</td>
+        <td>${sbadge(s.status)}</td>
+        <td style="font-size:11px;font-weight:500;color:var(--charcoal)">${s.outcome?`(${s.outcome})`:'-'}</td>
+        <td><span class="rev-chip">${s.revision||'1'}</span></td>
+        <td><div style="display:flex;gap:4px">
+          <button class="btn btn-sm" onclick="viewSub('${s.id}')">View</button>
+          ${can('approve')&&s.status==='Pending Review'?`<button class="btn btn-sm btn-success" onclick="reviewSub('${s.id}')">Review</button>`:''}
+          ${!can('approve')&&s.status==='Revise & Resubmit'?`<button class="btn btn-sm" onclick="resubmitSub('${s.id}')">Resubmit</button>`:''}
+        </div></td>
+      </tr>`;
+    }).join(''):'<tr><td colspan="9" class="empty-state">No submittals yet.</td></tr>'}
   </table></div></div>`;
 }
 
@@ -1189,24 +1254,49 @@ async function renderSubmittals() {
 async function renderInspections() {
   const {data} = await sb.from('inspections').select('*, subcontractors(name)').order('created_at',{ascending:false});
   const rows = data||[];
+  const today = new Date(); const todayStr = today.toISOString().split('T')[0];
+  const pending = rows.filter(r=>r.status==='Pending').length;
+  const overdue = rows.filter(r=>r.due_date&&r.due_date<todayStr&&r.status==='Pending').length;
+  const responded = rows.filter(r=>['Approved','Approved as Noted','Correction','Rejected'].includes(r.status)).length;
+  const thisWeek = rows.filter(r=>{const d=new Date(r.created_at);return (today-d)<7*86400000;}).length;
+  function slaTag(row) {
+    if(row.status!=='Pending'||!row.created_at) return '';
+    const age = Math.floor((today - new Date(row.created_at)) / 86400000);
+    if(age<=1) return '<span class="ncr-age fresh">Day '+age+'</span>';
+    if(age<=5) return '<span class="ncr-age warning">Day '+age+' / 5</span>';
+    return '<span class="ncr-age overdue">'+age+' days overdue</span>';
+  }
   document.getElementById('content').innerHTML = `
+  <div class="module-bar">
+    <div class="module-stat"><div class="module-stat-val ${pending>0?'warn':''}">${pending}</div><div class="module-stat-label">Pending</div></div>
+    <div class="module-stat"><div class="module-stat-val ${overdue>0?'danger':''}">${overdue}</div><div class="module-stat-label">SLA Overdue</div></div>
+    <div class="module-stat"><div class="module-stat-val">${responded}</div><div class="module-stat-label">Responded</div></div>
+    <div class="module-stat"><div class="module-stat-val">${thisWeek}</div><div class="module-stat-label">This Week</div></div>
+  </div>
   <div class="fbar"><span class="fbar-label">Status:</span>
-    ${['All','Pending','Approved','Approved as Noted','Correction','Rejected'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'ir','status','${s}')">${s}</span>`).join('')}
+    ${['All','Pending','Approved','Approved as Noted','Correction','Rejected','Re-Inspection'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'ir','status','${s}')">${s}</span>`).join('')}
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>Ref No.</th><th>Rev</th><th>Elements</th><th>Subcontractor</th><th>Date</th><th>Status</th><th>Actions</th></tr>
-    ${rows.length?rows.map(i=>`<tr class="ir-row" data-status="${i.status}">
-      <td class="mono">${i.ref_no}</td>
-      <td><span class="rev-chip">R${i.revision||'00'}</span></td>
-      <td style="color:var(--blue-light);cursor:pointer;max-width:200px" onclick="viewIR('${i.id}')">${(i.elements||'').substring(0,50)}${(i.elements||'').length>50?'…':''}</td>
-      <td style="color:var(--text2);font-size:10px">${i.subcontractors?.name||PROJECT.contractor}</td>
-      <td style="color:var(--text3);font-size:10px">${i.inspection_date||'—'}</td>
-      <td>${sbadge(i.status)}</td>
-      <td><div style="display:flex;gap:4px">
-        <button class="btn btn-sm" onclick="viewIR('${i.id}')">View IR</button>
-        ${can('approve')&&i.status==='Pending'?`<button class="btn btn-sm btn-success" onclick="respondIR('${i.id}')">Respond</button>`:''}
-      </div></td>
-    </tr>`).join(''):'<tr><td colspan="7" class="empty-state">No inspection requests yet.</td></tr>'}
+    <tr><th>Ref No.</th><th>Rev</th><th>Elements</th><th>Location</th><th>SLA</th><th>Checklist</th><th>Status</th><th>Actions</th></tr>
+    ${rows.length?rows.map(i=>{
+      const hasChecklist = i.checklist&&Object.keys(i.checklist||{}).length>0;
+      const ckTotal = hasChecklist?Object.keys(i.checklist).length:0;
+      const ckPassed = hasChecklist?Object.values(i.checklist).filter(v=>v==='pass').length:0;
+      return `<tr class="ir-row" data-status="${i.status}">
+        <td class="mono">${i.ref_no}${i.parent_ir_id?'<span style="font-size:9px;color:var(--amber);margin-left:4px">↻</span>':''}</td>
+        <td><span class="rev-chip">R${i.revision||'00'}</span></td>
+        <td style="color:var(--blue);cursor:pointer;max-width:180px" onclick="viewIR('${i.id}')">${(i.elements||'').substring(0,45)}${(i.elements||'').length>45?'…':''}</td>
+        <td style="color:var(--text2);font-size:10px">${i.location||'—'}</td>
+        <td>${slaTag(i)}</td>
+        <td style="font-size:10px;color:var(--text2)">${hasChecklist?ckPassed+'/'+ckTotal+' pass':'—'}</td>
+        <td>${sbadge(i.status)}</td>
+        <td><div style="display:flex;gap:4px">
+          <button class="btn btn-sm" onclick="viewIR('${i.id}')">View</button>
+          ${can('approve')&&i.status==='Pending'?`<button class="btn btn-sm btn-success" onclick="respondIR('${i.id}')">Respond</button>`:''}
+          ${!can('approve')&&i.status==='Rejected'?`<button class="btn btn-sm" onclick="reInspect('${i.id}')">Re-Inspect</button>`:''}
+        </div></td>
+      </tr>`;
+    }).join(''):'<tr><td colspan="8" class="empty-state">No inspection requests yet.</td></tr>'}
   </table></div></div>`;
 }
 
@@ -1214,25 +1304,54 @@ async function renderInspections() {
 async function renderNCRs() {
   const {data} = await sb.from('ncrs').select('*').order('created_at',{ascending:false});
   const rows = data||[];
+  const today = new Date(); const todayStr = today.toISOString().split('T')[0];
+  const open = rows.filter(r=>r.status==='Open').length;
+  const capPending = rows.filter(r=>r.status==='CAP Submitted').length;
+  const overdue = rows.filter(r=>{
+    if(r.status!=='Open'||!r.raised_date) return false;
+    const age = Math.floor((today-new Date(r.raised_date))/86400000);
+    return age>14;
+  }).length;
+  const closed = rows.filter(r=>r.status==='Closed').length;
+  function ageTag(row) {
+    if(row.status==='Closed') return '';
+    if(!row.raised_date) return '';
+    const age = Math.floor((today - new Date(row.raised_date)) / 86400000);
+    const cls = age<=7?'fresh':age<=14?'warning':'overdue';
+    return `<span class="ncr-age ${cls}">${age}d</span>`;
+  }
   document.getElementById('content').innerHTML = `
-  <div class="fbar"><span class="fbar-label">Status:</span>
-    ${['All','Open','Closed'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'ncr','status','${s}')">${s}</span>`).join('')}
+  <div class="module-bar">
+    <div class="module-stat"><div class="module-stat-val ${open>0?'danger':''}">${open}</div><div class="module-stat-label">Open</div></div>
+    <div class="module-stat"><div class="module-stat-val ${capPending>0?'warn':''}">${capPending}</div><div class="module-stat-label">CAP Pending</div></div>
+    <div class="module-stat"><div class="module-stat-val ${overdue>0?'danger':''}">${overdue}</div><div class="module-stat-label">&gt;14 Days</div></div>
+    <div class="module-stat"><div class="module-stat-val">${closed}</div><div class="module-stat-label">Closed</div></div>
+  </div>
+  <div class="fbar">
+    <span class="fbar-label">Status:</span>
+    ${['All','Open','CAP Submitted','CAP Verified','Closed'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'ncr','status','${s}')">${s}</span>`).join('')}
+    <span style="width:.5px;background:var(--border2);height:16px;align-self:center"></span>
+    <span class="fbar-label">Root Cause:</span>
+    ${['All','Design Error','Material Non-compliance','Workmanship','Coordination Failure'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'ncr','root_cause','${s}')">${s}</span>`).join('')}
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>Ref</th><th>Title</th><th>Location</th><th>Raised By</th><th>Date</th><th>Severity</th><th>Status</th><th>Actions</th></tr>
-    ${rows.length?rows.map(n=>`<tr class="ncr-row" data-status="${n.status}">
+    <tr><th>Ref</th><th>Title</th><th>Root Cause</th><th>Location</th><th>Age</th><th>Severity</th><th>CAP</th><th>Status</th><th>Actions</th></tr>
+    ${rows.length?rows.map(n=>`<tr class="ncr-row" data-status="${n.status}" data-root_cause="${n.root_cause||''}">
       <td class="mono">${n.ref_no}</td>
-      <td style="color:var(--blue-light);cursor:pointer" onclick="viewNCR('${n.id}')">${n.title}</td>
+      <td style="color:var(--blue);cursor:pointer" onclick="viewNCR('${n.id}')">${n.title}</td>
+      <td style="font-size:10px;color:var(--text2)">${n.root_cause||'—'}</td>
       <td style="color:var(--text2);font-size:10px">${n.location||'—'}</td>
-      <td style="color:var(--text2);font-size:10px">${n.raised_by||'—'}</td>
-      <td style="color:var(--text3);font-size:10px">${n.raised_date||'—'}</td>
+      <td>${ageTag(n)}</td>
       <td>${sbadge(n.severity)}</td>
+      <td style="font-size:10px">${n.cap_submitted_date?'<span style="color:var(--green)">Submitted</span>':'<span style="color:var(--text3)">Pending</span>'}</td>
       <td>${sbadge(n.status)}</td>
       <td><div style="display:flex;gap:4px">
         <button class="btn btn-sm" onclick="viewNCR('${n.id}')">View</button>
-        ${can('approve')&&n.status==='Open'?`<button class="btn btn-sm btn-success" onclick="closeNCR('${n.id}')">Close</button>`:''}
+        ${!can('approve')&&n.status==='Open'?`<button class="btn btn-sm btn-success" onclick="submitCAP('${n.id}')">Submit CAP</button>`:''}
+        ${can('approve')&&n.status==='CAP Submitted'?`<button class="btn btn-sm btn-success" onclick="verifyCAP('${n.id}')">Verify CAP</button>`:''}
+        ${can('approve')&&n.status==='CAP Verified'?`<button class="btn btn-sm" onclick="closeNCR('${n.id}')">Close</button>`:''}
       </div></td>
-    </tr>`).join(''):'<tr><td colspan="8" class="empty-state">No NCRs raised.</td></tr>'}
+    </tr>`).join(''):'<tr><td colspan="9" class="empty-state">No NCRs raised.</td></tr>'}
   </table></div></div>`;
 }
 
@@ -1509,9 +1628,34 @@ async function viewIR(id) {
     </table>
     <div style="text-align:center;font-size:9px;margin-top:6px;color:#777">This form is to be handed 24 hours prior the inspection requested time</div>
   </div>`;
-  const irWrapped = `<div id='ir-print-${id}'>${irHTML}</div>`+attachmentSectionHTML('inspection',id,atts);
+  // Checklist section
+  const ckData = i.checklist||{};
+  const ckItems = Object.keys(ckData);
+  const ckHTML = ckItems.length ? `
+    <div class="detail-section">
+      <div class="detail-label" style="margin-bottom:8px">Inspection Checklist</div>
+      <div style="border:0.5px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px">
+        ${ckItems.map(item=>`<div class="checklist-item">
+          <div class="checklist-label">${item}</div>
+          <span class="ck-btn ${ckData[item]==='pass'?'pass':ckData[item]==='fail'?'fail':ckData[item]==='na'?'na':''}">${ckData[item]==='pass'?'Pass':ckData[item]==='fail'?'Fail':ckData[item]==='na'?'N/A':'Pending'}</span>
+        </div>`).join('')}
+      </div>
+      ${i.checklist_notes?`<div style="font-size:11px;color:var(--text2);padding:6px 0"><b>Notes:</b> ${i.checklist_notes}</div>`:''}
+    </div>` : `<div class="detail-section">
+      <div class="detail-label" style="margin-bottom:6px">Inspection Checklist</div>
+      <div style="font-size:11px;color:var(--text3)">No checklist recorded yet.</div>
+    </div>`;
+  const parentInfo = i.parent_ir_id?`<div style="background:var(--amber-bg);border:0.5px solid #FAC775;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:11px;color:var(--amber)">Re-inspection — linked to original IR</div>`:'';
+  const irWrapped = parentInfo+`<div id='ir-print-${id}'>${irHTML}</div>`+ckHTML+attachmentSectionHTML('inspection',id,atts);
+  // Checklist template selector
+  const ckSelector = `<select id="ck-tmpl-${id}" class="form-control" style="font-size:11px;padding:4px 8px;width:auto">
+    ${Object.keys(IR_TEMPLATES).map(t=>`<option>${t}</option>`).join('')}
+  </select>`;
   openModal(`IR – ${i.ref_no} Rev.${i.revision||'00'}`, irWrapped,
     `${can('approve')&&i.status==='Pending'?`<button class="btn btn-success" onclick="respondIR('${id}')">Record Response</button>`:''}
+     ${ckSelector}
+     <button class="btn" onclick="openChecklistModal('${id}',document.getElementById('ck-tmpl-${id}').value)">Fill Checklist</button>
+     <button class="btn" onclick="printDoc('ir-print-${id}','IR_${i.ref_no}.pdf')">Download PDF</button>
      <button class="btn" onclick="closeModal()">Close</button>`, true);
 }
 
@@ -1576,6 +1720,15 @@ async function viewNCR(id) {
       <span>Golf Grove DMS | Regent Developments | ${n.ref_no}</span><span>Page 1 of 1</span>
     </div>
   </div>`;
+  // CAP workflow status display
+  const capSection = `<div class="detail-section" style="margin-top:12px">
+    <div class="detail-label" style="margin-bottom:8px">NCR Workflow</div>
+    <div class="workflow-step ${n.raised_date?'done':'pending'}"><span>✓</span> NCR Raised ${n.raised_date?'on '+n.raised_date:''}</div>
+    <div class="workflow-step ${n.cap_submitted_date?'done':n.status==='Open'?'active':'pending'}"><span>${n.cap_submitted_date?'✓':'→'}</span> CAP Submission ${n.cap_submitted_date?'by '+n.cap_submitted_by+' on '+n.cap_submitted_date:'— awaiting contractor'}</div>
+    ${n.corrective_action&&n.cap_submitted_date?`<div style="background:var(--bg3);border-radius:6px;padding:8px 12px;margin:-2px 0 4px 24px;font-size:11px;color:var(--text2)">${n.corrective_action}</div>`:''}
+    <div class="workflow-step ${n.cap_verified_date?'done':n.status==='CAP Submitted'?'active':'pending'}"><span>${n.cap_verified_date?'✓':'○'}</span> CAP Verified ${n.cap_verified_date?'by '+n.cap_verified_by+' on '+n.cap_verified_date:'— awaiting consultant'}</div>
+    <div class="workflow-step ${n.status==='Closed'?'done':'pending'}"><span>${n.status==='Closed'?'✓':'○'}</span> NCR Closed ${n.closed_date?'on '+n.closed_date:''}</div>
+  </div>`;
   const closeSection = can('approve')&&n.status==='Open'?`<div class="detail-section" style="margin-top:14px">
     <div class="form-group" style="margin-bottom:10px"><label class="form-label-dark">Corrective Action Taken</label><textarea class="form-control" id="ncr-ca-${n.id}" placeholder="Describe corrective action taken..." style="min-height:70px"></textarea></div>
     <div class="frow">
@@ -1583,7 +1736,7 @@ async function viewNCR(id) {
       <div class="form-group"><label class="form-label-dark">Closing Date</label><input type="date" class="form-control" id="ncr-dt-${n.id}" value="${new Date().toISOString().split('T')[0]}" /></div>
     </div>
   </div>`:'';
-  openModal(`${n.ref_no} – ${n.title}`, ncrDoc+closeSection+attachmentSectionHTML('ncr',n.id,atts)+commentThreadHTML('ncr',n.id,comments),
+  openModal(`${n.ref_no} – ${n.title}`, ncrDoc+capSection+closeSection+attachmentSectionHTML('ncr',n.id,atts)+commentThreadHTML('ncr',n.id,comments),
     `${can('approve')&&n.status==='Open'?`<button class="btn btn-success" onclick="doCloseNCR('${n.id}')">Close NCR</button>`:''}
      <button class="btn" onclick="printDoc('ncr-print-${n.id}','NCR_${n.ref_no}.pdf')">Download PDF</button>
      <button class="btn" onclick="closeModal()">Close</button>`, true);
@@ -1915,6 +2068,18 @@ async function openNew() {
         <div class="form-group"><label class="form-label-dark">Location</label><input type="text" class="form-control" id="nn-loc" placeholder="e.g. Level 3 – Column B2" /></div>
         <div class="form-group"><label class="form-label-dark">Severity</label><select class="form-control" id="nn-sev"><option>Minor</option><option>Major</option></select></div>
       </div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Root Cause</label>
+          <select class="form-control" id="nn-rc">
+            <option value="">Select root cause...</option>
+            <option>Design Error</option><option>Material Non-compliance</option>
+            <option>Workmanship</option><option>Coordination Failure</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label-dark">Linked Drawing (optional)</label>
+          <input type="text" class="form-control" id="nn-draw" placeholder="e.g. DWG-S-042" />
+        </div>
+      </div>
       <div class="form-group"><label class="form-label-dark">Description / Cause</label><textarea class="form-control" id="nn-cause" placeholder="Describe the non-conformance..." style="min-height:80px"></textarea></div>
       <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
         <div class="upload-zone" style="padding:14px 16px;display:flex;align-items:center;gap:10px;text-align:left" onclick="document.getElementById('nn-files').click()" ondragover="event.preventDefault();this.classList.add('dragging')" ondragleave="this.classList.remove('dragging')" ondrop="event.preventDefault();this.classList.remove('dragging');stageFiles(event.dataTransfer.files,'nn-staged')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;opacity:.6"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg><span style="font-size:12px;color:var(--text2)">Click to attach or drag & drop — PDF, DWG, Images, Word, Excel (max 50MB)</span></div>
@@ -2047,6 +2212,8 @@ async function doNewNCR() {
     raised_by:currentProfile?.full_name||'Unknown',
     raised_date:new Date().toISOString().split('T')[0],
     severity:document.getElementById('nn-sev').value,
+    root_cause:document.getElementById('nn-rc')?.value||null,
+    linked_drawing:document.getElementById('nn-draw')?.value||null,
     status:'Open',
     cause:document.getElementById('nn-cause').value
   }).select().single();
@@ -2065,6 +2232,418 @@ async function doNewSubcontractor() {
   });
   if(error){toast('Error: '+error.message,'error');return;}
   toast('Subcontractor added','success'); closeModal(); render();
+}
+
+// ─── CAP WORKFLOW ─────────────────────────────────────────────────
+function submitCAP(id) {
+  openModal('Submit Corrective Action Plan', `
+    <div class="workflow-step done"><span>✓</span> NCR Raised</div>
+    <div class="workflow-step active"><span>→</span> CAP Submission (current step)</div>
+    <div class="workflow-step pending"><span>○</span> CAP Verification by Consultant</div>
+    <div class="workflow-step pending"><span>○</span> NCR Closure</div>
+    <div class="form-group" style="margin-top:14px"><label class="form-label-dark">Root Cause Classification</label>
+      <select class="form-control" id="cap-rc-${id}">
+        <option value="">Select root cause...</option>
+        <option>Design Error</option><option>Material Non-compliance</option>
+        <option>Workmanship</option><option>Coordination Failure</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Corrective Action Description <span style="color:var(--red)">*</span></label>
+      <textarea class="form-control" id="cap-desc-${id}" placeholder="Describe the corrective action taken or planned..." style="min-height:90px"></textarea>
+    </div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Responsible Person</label>
+        <input type="text" class="form-control" id="cap-person-${id}" placeholder="Name" value="${currentProfile?.full_name||''}" />
+      </div>
+      <div class="form-group"><label class="form-label-dark">Target Completion Date</label>
+        <input type="date" class="form-control" id="cap-date-${id}" />
+      </div>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doSubmitCAP('${id}')">Submit CAP</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doSubmitCAP(id) {
+  const desc = document.getElementById('cap-desc-'+id)?.value;
+  if(!desc){toast('Corrective action description is required','error');return;}
+  const {error} = await sb.from('ncrs').update({
+    status:'CAP Submitted',
+    corrective_action: desc,
+    root_cause: document.getElementById('cap-rc-'+id)?.value||null,
+    cap_responsible: document.getElementById('cap-person-'+id)?.value||null,
+    cap_target_date: document.getElementById('cap-date-'+id)?.value||null,
+    cap_submitted_date: new Date().toISOString().split('T')[0],
+    cap_submitted_by: currentProfile?.full_name||currentUser?.email,
+  }).eq('id',id);
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast('CAP submitted for consultant verification','success');
+  closeModal(); render();
+}
+
+async function verifyCAP(id) {
+  const {data:n} = await sb.from('ncrs').select('corrective_action,cap_responsible,cap_target_date,root_cause').eq('id',id).single();
+  openModal('Verify Corrective Action Plan', `
+    <div class="workflow-step done"><span>✓</span> NCR Raised</div>
+    <div class="workflow-step done"><span>✓</span> CAP Submitted by Contractor</div>
+    <div class="workflow-step active"><span>→</span> CAP Verification (current step)</div>
+    <div class="workflow-step pending"><span>○</span> NCR Closure</div>
+    <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;margin:12px 0">
+      <div class="detail-label" style="margin-bottom:6px">Submitted CAP</div>
+      <div style="font-size:12px;color:var(--charcoal)">${n?.corrective_action||'—'}</div>
+      ${n?.root_cause?`<div style="margin-top:6px;font-size:11px;color:var(--text2)">Root Cause: ${n.root_cause}</div>`:''}
+      ${n?.cap_responsible?`<div style="font-size:11px;color:var(--text2)">Responsible: ${n.cap_responsible}</div>`:''}
+    </div>
+    <div class="form-group"><label class="form-label-dark">Verification Comments</label>
+      <textarea class="form-control" id="cap-verify-${id}" placeholder="Comments on CAP adequacy..." style="min-height:70px"></textarea>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doVerifyCAP('${id}')">Verify & Approve CAP</button>
+     <button class="btn btn-danger" onclick="doRejectCAP('${id}')">Return to Contractor</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doVerifyCAP(id) {
+  const {error} = await sb.from('ncrs').update({
+    status:'CAP Verified',
+    cap_verified_by: currentProfile?.full_name||currentUser?.email,
+    cap_verified_date: new Date().toISOString().split('T')[0],
+    cap_verify_comments: document.getElementById('cap-verify-'+id)?.value||null,
+  }).eq('id',id);
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast('CAP verified — NCR ready to close','success');
+  closeModal(); render();
+}
+
+async function doRejectCAP(id) {
+  const {error} = await sb.from('ncrs').update({
+    status:'Open',
+    cap_verify_comments: document.getElementById('cap-verify-'+id)?.value||'CAP returned for revision.',
+  }).eq('id',id);
+  if(error){toast('Error','error');return;}
+  toast('CAP returned to contractor for revision','info');
+  closeModal(); render();
+}
+
+// ─── RE-INSPECTION ────────────────────────────────────────────────
+async function reInspect(parentId) {
+  const {data:parent} = await sb.from('inspections').select('*').eq('id',parentId).single();
+  if(!parent) return;
+  openModal('Request Re-Inspection', `
+    <div style="background:var(--amber-bg);border:0.5px solid #FAC775;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:11px;color:var(--amber)">
+      Re-inspection of: <b>${parent.ref_no}</b> — ${(parent.elements||'').substring(0,60)}
+    </div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">New Ref No.</label>
+        <input type="text" class="form-control" id="ri-ref" value="${parent.ref_no}-R1" />
+      </div>
+      <div class="form-group"><label class="form-label-dark">Inspection Date</label>
+        <input type="text" class="form-control" id="ri-date" placeholder="e.g. 20 APR 2026" />
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Changes Made / Corrective Works</label>
+      <textarea class="form-control" id="ri-changes" placeholder="Describe what was corrected since the original inspection..." style="min-height:80px"></textarea>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doReInspect('${parentId}')">Submit Re-Inspection Request</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doReInspect(parentId) {
+  const {data:parent} = await sb.from('inspections').select('*').eq('id',parentId).single();
+  const ref = document.getElementById('ri-ref')?.value;
+  if(!ref){toast('Ref number required','error');return;}
+  const {error} = await sb.from('inspections').insert({
+    ...parent, id:undefined, created_at:undefined,
+    ref_no:ref,
+    parent_ir_id:parentId,
+    inspection_date:document.getElementById('ri-date')?.value||null,
+    elements:(document.getElementById('ri-changes')?.value||'')+'
+
+[Re-inspection of '+parent.ref_no+']',
+    status:'Pending',
+    revision:String(parseInt(parent.revision||0)+1).padStart(2,'0'),
+    request_date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase(),
+  });
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast('Re-inspection request submitted','success');
+  closeModal(); render();
+}
+
+// ─── RESUBMIT SUBMITTAL ───────────────────────────────────────────
+async function resubmitSub(parentId) {
+  const {data:parent} = await sb.from('submittals').select('*').eq('id',parentId).single();
+  if(!parent) return;
+  const nextRev = (parseInt(parent.revision||1)+1);
+  openModal('Resubmit Document', `
+    <div style="background:var(--amber-bg);border:0.5px solid #FAC775;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:11px;color:var(--amber)">
+      Resubmission of: <b>${parent.ref_no}</b> Rev.${parent.revision||1}
+    </div>
+    <div class="rev-chain">
+      <div class="rev-chain-item ${parent.outcome==='1'||parent.outcome==='2'?'approved':parent.outcome==='3'||parent.outcome==='4'?'rejected':''}">Rev.${parent.revision||1}</div>
+      <div class="rev-chain-arrow">›</div>
+      <div class="rev-chain-item current">Rev.${nextRev} (new)</div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Changes from Previous Submission</label>
+      <textarea class="form-control" id="rs-changes" placeholder="Describe what was changed in response to reviewer comments..." style="min-height:80px"></textarea>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Attachments</label>
+      <div class="upload-zone" style="padding:14px 16px;display:flex;align-items:center;gap:10px;text-align:left"
+        onclick="document.getElementById('rs-files').click()"
+        ondragover="event.preventDefault();this.classList.add('dragging')"
+        ondragleave="this.classList.remove('dragging')"
+        ondrop="event.preventDefault();this.classList.remove('dragging');stageFiles(event.dataTransfer.files,'rs-staged')">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;opacity:.6"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <span style="font-size:12px;color:var(--text2)">Attach revised documents — PDF, DWG, Images (max 50MB)</span>
+      </div>
+      <input type="file" id="rs-files" multiple style="display:none" onchange="stageFiles(this.files,'rs-staged')" />
+      <div id="rs-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doResubmit('${parentId}',${nextRev})">Submit Revision ${nextRev}</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doResubmit(parentId, nextRev) {
+  const {data:parent} = await sb.from('submittals').select('*').eq('id',parentId).single();
+  const changes = document.getElementById('rs-changes')?.value||'';
+  const {data:newSub,error} = await sb.from('submittals').insert({
+    ref_no:parent.ref_no+'-R'+nextRev,
+    title:parent.title,
+    from_party:parent.from_party,
+    to_party:parent.to_party,
+    discipline:parent.discipline,
+    revision:nextRev,
+    parent_id:parentId,
+    submit_date:new Date().toISOString().split('T')[0],
+    status:'Pending Review',
+    changes_description:changes,
+  }).select().single();
+  if(error){toast('Error: '+error.message,'error');return;}
+  if(newSub?.id) await uploadStagedFiles('rs-staged','submittal',newSub.id);
+  toast('Resubmission created','success');
+  closeModal(); render();
+}
+
+// ─── INSPECTION CHECKLISTS ────────────────────────────────────────
+const IR_TEMPLATES = {
+  'Concrete Pour':['Formwork dimensions and alignment verified','Rebar cover maintained (min 30mm)','Rebar spacing and diameter confirmed','Laps and splices to drawing','Construction joints approved','No debris in formwork','Concrete mix design approved','Slump test performed and recorded','Cube samples cast','Pour sequence agreed'],
+  'Rebar':['Bar diameter and grade confirmed','Spacing to drawing','Lap length minimum 40Ø','Cover blocks correct type and spacing','Hooks and bends to BS8666','Dowels correctly positioned','No excess rust or contamination','Approved shop drawing on site'],
+  'Waterproofing':['Surface preparation approved — dry and clean','Primer applied and cured','Membrane type as specified','Laps minimum 100mm','Corner and upstand details correct','Protective screed specified','No punctures or holidays','Mock-up approved'],
+  'Formwork':['Propping layout approved','Soffit level checked','Panel joints sealed','Release agent applied','Openings and inserts confirmed','Stability bracing in place','Camber if required'],
+  'MEP':['Sleeves and inserts correct position','Pipe gradient verified','Support spacing to specification','Material certification on site','Pressure test witnessed','Insulation type approved','Electrical containment earthed'],
+};
+
+function openChecklistModal(irId, template) {
+  const items = IR_TEMPLATES[template]||IR_TEMPLATES['Concrete Pour'];
+  openModal('Inspection Checklist – '+template, `
+    <div style="font-size:11px;color:var(--text3);margin-bottom:10px">Mark each item as Pass, Fail, or N/A</div>
+    <div style="border:0.5px solid var(--border);border-radius:8px;overflow:hidden">
+      ${items.map((item,i)=>`
+        <div class="checklist-item" id="ck-row-${irId}-${i}">
+          <div class="checklist-label">${item}</div>
+          <div class="checklist-btns">
+            <button class="ck-btn" onclick="setCK('${irId}',${i},'pass',this)">Pass</button>
+            <button class="ck-btn" onclick="setCK('${irId}',${i},'fail',this)">Fail</button>
+            <button class="ck-btn" onclick="setCK('${irId}',${i},'na',this)">N/A</button>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div style="margin-top:10px">
+      <div class="form-group"><label class="form-label-dark">Additional Observations</label>
+        <textarea class="form-control" id="ck-notes-${irId}" placeholder="Any additional notes..." style="min-height:60px"></textarea>
+      </div>
+    </div>`,
+    `<button class="btn btn-primary" onclick="saveChecklist('${irId}',${JSON.stringify(items).replace(/'/g,"\'")})">Save Checklist</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+let ckState = {};
+function setCK(irId, idx, val, btn) {
+  if(!ckState[irId]) ckState[irId] = {};
+  ckState[irId][idx] = val;
+  const row = document.getElementById('ck-row-'+irId+'-'+idx);
+  row.querySelectorAll('.ck-btn').forEach(b=>{b.className='ck-btn';});
+  btn.className = 'ck-btn '+val;
+}
+
+async function saveChecklist(irId, items) {
+  const cl = ckState[irId]||{};
+  const result = {};
+  items.forEach((item,i)=>result[item]=cl[i]||'pending');
+  const notes = document.getElementById('ck-notes-'+irId)?.value||'';
+  const {error} = await sb.from('inspections').update({
+    checklist:result,
+    checklist_notes:notes,
+  }).eq('id',irId);
+  if(error){toast('Error saving checklist','error');return;}
+  toast('Checklist saved','success');
+  closeModal();
+  viewIR(irId);
+}
+
+// ─── SUBMITTAL REGISTER ───────────────────────────────────────────
+async function renderSubmittalRegister() {
+  const {data} = await sb.from('submittal_register').select('*').order('spec_ref',{ascending:true});
+  const rows = data||[];
+  const {data:subs} = await sb.from('submittals').select('ref_no,title,status,outcome');
+  const subsAll = subs||[];
+  const required = rows.length;
+  const submitted = rows.filter(r=>subsAll.some(s=>s.title.toLowerCase().includes((r.title||'').toLowerCase().substring(0,15)))).length;
+  const approved = rows.filter(r=>subsAll.some(s=>s.outcome==='1'||s.outcome==='2')).length;
+  document.getElementById('content').innerHTML = `
+  <div class="module-bar">
+    <div class="module-stat"><div class="module-stat-val">${required}</div><div class="module-stat-label">Required</div></div>
+    <div class="module-stat"><div class="module-stat-val ${submitted<required?'warn':''}">${submitted}</div><div class="module-stat-label">Submitted</div></div>
+    <div class="module-stat"><div class="module-stat-val">${approved}</div><div class="module-stat-label">Approved</div></div>
+    <div class="module-stat"><div class="module-stat-val ${(required-submitted)>0?'danger':''}">${required-submitted}</div><div class="module-stat-label">Outstanding</div></div>
+  </div>
+  <div class="fbar">
+    <span class="fbar-label">Discipline:</span>
+    ${['All','Architecture','Structure','MEP','Civil','Firefighting'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'sreg','discipline','${s}')">${s}</span>`).join('')}
+    <span style="flex:1"></span>
+    ${can('manageRegister')?`<button class="btn btn-sm btn-primary" onclick="addRegisterItem()">+ Add Item</button>
+    <button class="btn btn-sm" onclick="importRegisterCSV()">Import CSV</button>`:''}
+  </div>
+  ${rows.length===0?`
+  <div style="text-align:center;padding:60px 20px;background:var(--bg2);border:0.5px solid var(--border);border-radius:12px">
+    <div style="font-size:32px;margin-bottom:12px;opacity:.3">📋</div>
+    <div style="font-size:14px;font-weight:500;color:var(--charcoal);margin-bottom:6px">Submittal Register is empty</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:20px">Add required submittals manually or import from a CSV.<br>You can also share your project specification and I can parse the required submittals for you.</div>
+    ${can('manageRegister')?`<button class="btn btn-primary" style="margin-right:8px" onclick="addRegisterItem()">+ Add Item</button>
+    <button class="btn" onclick="importRegisterCSV()">Import CSV</button>`:''}
+  </div>`:`
+  <div class="card"><div class="tw"><table>
+    <tr><th>Item No.</th><th>Description</th><th>Spec Ref</th><th>Discipline</th><th>Required By</th><th>Status</th><th>Actions</th></tr>
+    ${rows.map(r=>{
+      const linked = subsAll.filter(s=>s.title.toLowerCase().includes((r.title||'').toLowerCase().substring(0,15)));
+      const hasApproved = linked.some(s=>s.outcome==='1'||s.outcome==='2');
+      const hasSubmitted = linked.length>0;
+      const today = new Date().toISOString().split('T')[0];
+      const isOverdue = r.required_by&&r.required_by<today&&!hasApproved;
+      const regStatus = hasApproved?'approved':hasSubmitted?'submitted':isOverdue?'overdue':'required';
+      const regLabel = {approved:'Approved',submitted:'Submitted',overdue:'Overdue',required:'Required'};
+      return `<tr class="sreg-row" data-discipline="${r.discipline||''}">
+        <td class="mono">${r.item_no||'—'}</td>
+        <td style="font-weight:500;color:var(--charcoal)">${r.title||'—'}</td>
+        <td style="font-size:10px;color:var(--text2)">${r.spec_ref||'—'}</td>
+        <td style="font-size:11px;color:var(--text2)">${r.discipline||'—'}</td>
+        <td style="font-size:10px;color:${isOverdue?'var(--red)':'var(--text3)'}">${r.required_by||'—'}</td>
+        <td><span class="reg-badge reg-${regStatus}">${regLabel[regStatus]}</span></td>
+        <td><div style="display:flex;gap:4px">
+          ${can('manageRegister')?`<button class="btn btn-sm btn-danger" onclick="deleteRegisterItem('${r.id}')">Remove</button>`:''}
+        </div></td>
+      </tr>`;
+    }).join('')}
+  </table></div></div>`}`;
+}
+
+function addRegisterItem() {
+  openModal('Add to Submittal Register', `
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Item No.</label>
+        <input type="text" class="form-control" id="sri-no" placeholder="e.g. SUB-001" />
+      </div>
+      <div class="form-group"><label class="form-label-dark">Spec Reference</label>
+        <input type="text" class="form-control" id="sri-spec" placeholder="e.g. §03.30.00" />
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Description / Title <span style="color:var(--red)">*</span></label>
+      <input type="text" class="form-control" id="sri-title" placeholder="e.g. Concrete Mix Design – Grade C40" />
+    </div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Discipline</label>
+        <select class="form-control" id="sri-disc">
+          <option>Architecture</option><option>Structure</option><option>MEP</option>
+          <option>Civil</option><option>Firefighting</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Required By</label>
+        <input type="date" class="form-control" id="sri-date" />
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Notes</label>
+      <input type="text" class="form-control" id="sri-notes" placeholder="Any additional notes" />
+    </div>`,
+    `<button class="btn btn-primary" onclick="doAddRegisterItem()">Add to Register</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doAddRegisterItem() {
+  const title = document.getElementById('sri-title')?.value;
+  if(!title){toast('Description is required','error');return;}
+  const {error} = await sb.from('submittal_register').insert({
+    item_no: document.getElementById('sri-no')?.value||null,
+    spec_ref: document.getElementById('sri-spec')?.value||null,
+    title,
+    discipline: document.getElementById('sri-disc')?.value||null,
+    required_by: document.getElementById('sri-date')?.value||null,
+    notes: document.getElementById('sri-notes')?.value||null,
+  });
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast('Item added to register','success');
+  closeModal(); renderSubmittalRegister();
+}
+
+async function deleteRegisterItem(id) {
+  if(!confirm('Remove this item from the register?')) return;
+  await sb.from('submittal_register').delete().eq('id',id);
+  toast('Item removed','info');
+  renderSubmittalRegister();
+}
+
+function importRegisterCSV() {
+  openModal('Import Submittal Register from CSV', `
+    <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;margin-bottom:12px">
+      <div style="font-size:11px;color:var(--text2);margin-bottom:6px">Required columns: <code>item_no, title, spec_ref, discipline, required_by</code></div>
+      <div style="font-size:11px;color:var(--text3)">Optional: <code>notes</code></div>
+    </div>
+    <div class="upload-zone" style="padding:20px;text-align:center"
+      onclick="document.getElementById('sreg-csv').click()"
+      ondragover="event.preventDefault();this.classList.add('dragging')"
+      ondragleave="this.classList.remove('dragging')"
+      ondrop="event.preventDefault();this.classList.remove('dragging');handleRegisterDrop(event)">
+      <div style="font-size:20px;margin-bottom:6px;opacity:.5">📄</div>
+      <div class="upload-zone-text">Click to select CSV or drag & drop</div>
+    </div>
+    <input type="file" id="sreg-csv" accept=".csv" style="display:none" onchange="parseRegisterCSV(event)" />
+    <div id="sreg-preview" style="margin-top:10px"></div>`,
+    `<button class="btn btn-primary" id="sreg-import-btn" onclick="doImportRegister()" style="display:none">Import Items</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+let registerImportData = [];
+function handleRegisterDrop(e) {
+  const f = e.dataTransfer.files[0];
+  if(f) parseRegisterCSVFile(f);
+}
+function parseRegisterCSV(e) { parseRegisterCSVFile(e.target.files[0]); }
+function parseRegisterCSVFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const lines = e.target.result.split('
+').filter(l=>l.trim());
+    const headers = lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/"/g,''));
+    registerImportData = lines.slice(1).map(line=>{
+      const vals = line.split(',').map(v=>v.trim().replace(/^"|"$/g,''));
+      const obj = {};
+      headers.forEach((h,i)=>obj[h]=vals[i]||'');
+      return obj;
+    }).filter(r=>r.title||r.description);
+    document.getElementById('sreg-preview').innerHTML = `<div style="font-size:11px;color:var(--green);margin-bottom:6px">${registerImportData.length} items ready to import</div>`;
+    document.getElementById('sreg-import-btn').style.display='';
+  };
+  reader.readAsText(file);
+}
+async function doImportRegister() {
+  if(!registerImportData.length){toast('No data to import','error');return;}
+  let ok=0,fail=0;
+  for(const r of registerImportData) {
+    const {error} = await sb.from('submittal_register').insert({
+      item_no:r.item_no||null, spec_ref:r.spec_ref||null,
+      title:r.title||r.description, discipline:r.discipline||null,
+      required_by:r.required_by||null, notes:r.notes||null,
+    });
+    error?fail++:ok++;
+  }
+  toast(`Imported ${ok} items${fail?', '+fail+' failed':''}`, fail?'error':'success');
+  closeModal(); renderSubmittalRegister();
 }
 
 // ─── MODAL HELPERS ────────────────────────────────────────────────
