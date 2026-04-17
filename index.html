@@ -203,6 +203,31 @@ textarea.form-control{resize:vertical;min-height:70px}
 /* ADMIN BADGE */
 .role-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 10px;border-radius:20px;border:0.5px solid}
 
+/* PURPOSE OF ISSUE CODES */
+.poi-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;border:0.5px solid;white-space:nowrap}
+.poi-s0{background:#F1EFE8;color:#5F5E5A;border-color:#D3D1C7}
+.poi-s1{background:#E6F1FB;color:#0C447C;border-color:#B5D4F4}
+.poi-s2{background:#E6F1FB;color:#185FA5;border-color:#B5D4F4}
+.poi-s3{background:#FAEEDA;color:#633806;border-color:#FAC775}
+.poi-s4{background:#EAF3DE;color:#27500A;border-color:#C0DD97}
+.poi-s5{background:#EAF3DE;color:#3B6D11;border-color:#C0DD97}
+.poi-s6{background:#F1EFE8;color:#5F5E5A;border-color:#D3D1C7}
+.poi-s7{background:#F1EFE8;color:#888780;border-color:#D3D1C7;text-decoration:line-through}
+/* VOID DRAWING */
+.void-banner{background:#FCEBEB;border:0.5px solid #F7C1C1;border-radius:8px;padding:10px 14px;font-size:11px;color:#A32D2D;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+/* CORRESPONDENCE */
+.corr-type{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;border:0.5px solid}
+.corr-letter{background:#E6F1FB;color:#185FA5;border-color:#B5D4F4}
+.corr-instruction{background:#FEF3E8;color:#854F0B;border-color:#FAC775}
+.corr-variation{background:#FCEBEB;color:#A32D2D;border-color:#F7C1C1}
+.corr-eot{background:#FAEEDA;color:#633806;border-color:#FAC775}
+.corr-rfi{background:#EAF3DE;color:#27500A;border-color:#C0DD97}
+.corr-general{background:#F1EFE8;color:#5F5E5A;border-color:#D3D1C7}
+/* PUNCH LIST */
+.punch-loc{font-size:10px;color:var(--text3);margin-top:2px}
+/* ARFI */
+.arfi-ar{background:#FCEBEB;color:#A32D2D;border:0.5px solid #F7C1C1;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block}
+.arfi-fi{background:#F1EFE8;color:#5F5E5A;border:0.5px solid #D3D1C7;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block}
 /* MODULE SUMMARY BAR */
 .module-bar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
 .module-stat{background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;padding:10px 16px;display:flex;flex-direction:column;gap:2px;min-width:100px}
@@ -384,6 +409,15 @@ textarea.form-control{resize:vertical;min-height:70px}
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 5h6M5 8h4M5 11h3" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
       Method Statements
     </div>
+    <div class="nav-item" id="n-corr" onclick="nav('corr',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M2 3h12v10H2z" stroke="currentColor" stroke-width="1.3"/><path d="M2 3l6 5 6-5" stroke="currentColor" stroke-width="1.3"/></svg>
+      Correspondence
+    </div>
+    <div class="nav-item" id="n-punch" onclick="nav('punch',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M6 8l1.5 1.5L10 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Punch List
+      <span class="nav-badge" id="nb-punch">0</span>
+    </div>
     <div class="sb-section">Admin</div>
     <div class="nav-item" id="n-subs" onclick="nav('subs',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" stroke-width="1.3"/><circle cx="12.5" cy="5" r="2" stroke="currentColor" stroke-width="1.1"/><path d="M12 9.5c1.657 0 3 1.343 3 3" stroke="currentColor" stroke-width="1.1"/></svg>
@@ -536,7 +570,7 @@ async function loadApp(user) {
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',subs:'Subcontractors',users:'User Management',ms:'Method Statements'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements'};
 
 function nav(page, el) {
   currentPage = page;
@@ -566,6 +600,8 @@ async function render() {
   else if(currentPage==='draw') await renderDrawings();
   else if(currentPage==='sub') await renderSubmittals();
   else if(currentPage==='sreg') await renderSubmittalRegister();
+  else if(currentPage==='corr') await renderCorrespondence();
+  else if(currentPage==='punch') await renderPunchList();
   else if(currentPage==='ir') await renderInspections();
   else if(currentPage==='ncr') await renderNCRs();
   else if(currentPage==='rfi') await renderRFIs();
@@ -603,6 +639,55 @@ function cdeBadge(state) {
   return `<span class="cde-badge ${s.cls}">${s.label}</span>`;
 }
 
+function poiBadge(code) {
+  const map = {
+    'S0':['poi-s0','S0 – Work in Progress'],
+    'S1':['poi-s1','S1 – For Coordination'],
+    'S2':['poi-s2','S2 – For Information'],
+    'S3':['poi-s3','S3 – For Review & Comment'],
+    'S4':['poi-s4','S4 – For Construction'],
+    'S5':['poi-s5','S5 – As Constructed'],
+    'S6':['poi-s6','S6 – Post-Construction'],
+    'S7':['poi-s7','S7 – Archived'],
+  };
+  if(!code) return '';
+  const [cls,label] = map[code]||['poi-s0',code];
+  return `<span class="poi-badge ${cls}">${label}</span>`;
+}
+
+function corrTypeBadge(type) {
+  const map = {
+    'Site Instruction':     'corr-instruction',
+    'Letter':               'corr-letter',
+    'Variation Order':      'corr-variation',
+    'Extension of Time':    'corr-eot',
+    'RFI Response':         'corr-rfi',
+    'General Correspondence':'corr-general',
+  };
+  return `<span class="corr-type ${map[type]||'corr-general'}">${type||'General'}</span>`;
+}
+
+function validateDrawingNumber(num) {
+  // BS 1192: {Project}-{Originator}-{Zone}-{Level}-{Type}-{Revision}
+  // Allow flexible: at least GG-XXX-...-XXX pattern
+  if(!num) return {valid:false, msg:'Drawing number is required'};
+  const parts = num.split('-');
+  if(parts.length < 4) return {valid:false, msg:'Number must follow format: GG-{Originator}-{Zone}-{Level}-{Type}-{Rev} (min 4 segments separated by -)'};
+  if(parts[0].toUpperCase() !== 'GG') return {valid:true, msg:'Warning: Project code should be GG'};
+  return {valid:true, msg:''};
+}
+
+function enforceRevisionScheme(currentStatus, revision) {
+  // Alphabetical for pre-construction (Under Review / Revise & Resubmit)
+  // Numerical for construction (Issued for Construction / Approved)
+  const isIFC = currentStatus === 'Issued for Construction' || currentStatus === 'Approved';
+  const hasAlpha = /^[A-Z]$|^Rev [A-Z]$|^[Rr]ev[A-Z]$/i.test(revision?.trim()||'');
+  const hasNum = /^[0-9]+$|^Rev [0-9]+$|^[Rr]ev[0-9]+$/i.test(revision?.trim()||'');
+  if(isIFC && hasAlpha) return {warn:true, msg:'IFC drawings should use numerical revisions (1, 2, 3). Alphabetical revisions are for pre-construction only.'};
+  if(!isIFC && hasNum) return {warn:true, msg:'Pre-construction drawings should use alphabetical revisions (A, B, C). Numerical revisions are for IFC drawings.'};
+  return {warn:false, msg:''};
+}
+
 function cdeStepperHTML(currentState, drawingId) {
   const steps = ['WIP','Shared','Published','Archived'];
   const role = currentProfile?.role;
@@ -632,7 +717,7 @@ function sbadge(s) {
     'Under Review':'badge-info','Pending Review':'badge-info','Pending':'badge-info','Responded':'badge-info',
     'Revise & Resubmit':'badge-warning','Correction':'badge-warning','Open':'badge-warning','High':'badge-warning',
     'Rejected':'badge-danger','Major':'badge-danger','Critical':'badge-danger',
-    'Normal':'badge-neutral','Minor':'badge-neutral',
+    'Normal':'badge-neutral','Minor':'badge-neutral','Void':'badge-danger','Cancelled':'badge-danger',
   };
   return `<span class="badge ${m[s]||'badge-neutral'}">${s}</span>`;
 }
@@ -688,6 +773,7 @@ async function renderDash() {
         ${(()=>{
           const tot = draws.count||0;
           const appr = (draws.data||[]).filter(d=>d.status==='Approved').length;
+          const ifc = (draws.data||[]).filter(d=>d.status==='Issued for Construction').length;
           const rev = (draws.data||[]).filter(d=>d.status==='Under Review').length;
           const pend = Math.max(0,tot-appr-rev);
           const circ = 2*Math.PI*52;
@@ -704,10 +790,11 @@ async function renderDash() {
             <text x="65" y="59" text-anchor="middle" font-size="22" font-weight="500" fill="var(--charcoal)" font-family="Plus Jakarta Sans,sans-serif">${pct}%</text>
             <text x="65" y="76" text-anchor="middle" font-size="11" fill="var(--text3)" font-family="Plus Jakarta Sans,sans-serif">approved</text>
           </svg>
-          <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-            <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#3B6D11;flex-shrink:0"></div>Approved <span style="font-weight:500;color:var(--charcoal)">${appr}</span></div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>Review <span style="font-weight:500;color:var(--charcoal)">${rev}</span></div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#C4863A;flex-shrink:0"></div>Pending <span style="font-weight:500;color:var(--charcoal)">${pend}</span></div>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#3B6D11;flex-shrink:0"></div>IFC <span style="font-weight:500;color:var(--charcoal)">${ifc}</span></div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#27500A;flex-shrink:0"></div>Approved <span style="font-weight:500;color:var(--charcoal)">${appr}</span></div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>Review <span style="font-weight:500;color:var(--charcoal)">${rev}</span></div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><div style="width:8px;height:8px;border-radius:50%;background:#C4863A;flex-shrink:0"></div>Pending <span style="font-weight:500;color:var(--charcoal)">${pend}</span></div>
           </div>`;
         })()}
       </div>
@@ -1121,24 +1208,28 @@ async function renderDrawings() {
     <span style="width:.5px;background:var(--border2);height:16px;align-self:center"></span>
     <span class="fbar-label">CDE:</span>
     ${['All','WIP','Shared','Published','Archived','Superseded'].map((s,i)=>`<span class="chip ${i===0?'active':''}" id="cde-chip-${i}" onclick="filtDraw(this,'cde','${s}')">${s}</span>`).join('')}
+    <span style="width:.5px;background:var(--border2);height:16px;align-self:center"></span>
+    <span class="fbar-label">POI:</span>
+    ${['All','S0','S1','S2','S3','S4','S5'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filtDraw(this,'poi','${s}')">${s}</span>`).join('')}
     <span style="flex:1"></span>
-    ${can('upload')?`<button class="btn btn-sm" style="font-size:11px" onclick="openBulkImport()">Bulk Import</button>`:''}
+    <button class="btn btn-sm" onclick="exportDrawingRegister()">Export Register</button>
+    ${can('upload')?`<button class="btn btn-sm" style="font-size:11px;margin-left:4px" onclick="openBulkImport()">Bulk Import</button>`:''}
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>Drawing No.</th><th>Title</th><th>Discipline</th><th>Revision</th><th>CDE State</th><th>Review Status</th><th>Uploaded</th><th>By</th><th>Actions</th></tr>
+    <tr><th>Drawing No.</th><th>Title</th><th>Discipline</th><th>Rev</th><th>POI</th><th>CDE State</th><th>Review Status</th><th>Actions</th></tr>
     ${rows.length?rows.map(d=>`<tr class="draw-row" data-disc="${d.discipline||''}" data-status="${d.status||''}">
-      <td class="mono" style="${d.cde_state==='Superseded'?'opacity:.5;text-decoration:line-through':''}">${d.drawing_no}</td>
-      <td style="color:var(--blue);cursor:pointer;${d.cde_state==='Superseded'?'opacity:.5':''}" onclick="viewDraw('${d.id}')">${d.title}${d.cde_state==='Superseded'?'<span style="font-size:9px;color:var(--text3);margin-left:6px">superseded</span>':''}</td>
-      <td style="color:var(--text2)">${d.discipline||'—'}</td>
+      <td class="mono" style="${d.cde_state==='Superseded'||d.status==='Void'?'opacity:.5;text-decoration:line-through':''}">${d.drawing_no}</td>
+      <td style="color:var(--blue);cursor:pointer;${d.cde_state==='Superseded'||d.status==='Void'?'opacity:.5':''}" onclick="viewDraw('${d.id}')">${d.title}${d.cde_state==='Superseded'?'<span style="font-size:9px;color:var(--text3);margin-left:6px">superseded</span>':''}${d.status==='Void'?'<span style="font-size:9px;color:var(--red);margin-left:6px">void</span>':''}</td>
+      <td style="color:var(--text2);font-size:11px">${d.discipline||'—'}</td>
       <td><span class="rev-chip">${d.revision||'Rev A'}</span></td>
+      <td>${d.poi_code?poiBadge(d.poi_code):'<span style="color:var(--text3);font-size:10px">—</span>'}</td>
       <td>${cdeBadge(d.cde_state||'WIP')}</td>
       <td>${sbadge(d.status)}</td>
-      <td style="color:var(--text3);font-size:10px">${d.created_at?d.created_at.split('T')[0]:'—'}</td>
-      <td style="color:var(--text2);font-size:10px">${d.uploaded_by||'—'}</td>
       <td><div style="display:flex;gap:4px">
         <button class="btn btn-sm" onclick="viewDraw('${d.id}')">View</button>
-        ${can('upload')?`<button class="btn btn-sm" onclick="uploadRev('${d.id}')">New Rev</button>`:''}
+        ${can('upload')&&d.status!=='Void'?`<button class="btn btn-sm" onclick="uploadRev('${d.id}')">New Rev</button>`:''}
         ${can('approve')&&d.status==='Under Review'?`<button class="btn btn-sm btn-success" onclick="viewDraw('${d.id}')">Review</button>`:''}
+        ${can('approve')&&d.status!=='Void'?`<button class="btn btn-sm btn-danger" onclick="voidDrawing('${d.id}','${d.drawing_no}')">Void</button>`:''}
       </div></td>
     </tr>`).join(''):'<tr><td colspan="7" class="empty-state">No drawings yet. Upload the first one.</td></tr>'}
   </table></div></div>`;
@@ -1177,13 +1268,14 @@ async function advanceCDE(id, newState) {
   renderDrawings();
 }
 
-let drawFilters = {disc:'All', status:'All', cde:'All'};
+let drawFilters = {disc:'All', status:'All', cde:'All', poi:'All'};
 function filtDraw(el, field, val) {
   drawFilters[field] = val;
   document.querySelectorAll('.chip').forEach(c=>{
     if((field==='disc'&&['All','Architecture','Structure','MEP','Civil'].includes(c.textContent))||
        (field==='status'&&['All','Under Review','Approved','Issued for Construction','Revise & Resubmit'].includes(c.textContent))||
-       (field==='cde'&&['All','WIP','Shared','Published','Archived','Superseded'].includes(c.textContent)))
+       (field==='cde'&&['All','WIP','Shared','Published','Archived','Superseded'].includes(c.textContent))||
+       (field==='poi'&&['All','S0','S1','S2','S3','S4','S5'].includes(c.textContent)))
       c.classList.remove('active');
   });
   el.classList.add('active');
@@ -1191,7 +1283,8 @@ function filtDraw(el, field, val) {
     const discOk = drawFilters.disc==='All'||(r.dataset.disc||'')=== drawFilters.disc;
     const statOk = drawFilters.status==='All'||(r.dataset.status||'')=== drawFilters.status;
     const cdeOk  = drawFilters.cde==='All'||(r.dataset.cde||'WIP')=== drawFilters.cde;
-    r.style.display=(discOk&&statOk&&cdeOk)?'':'none';
+    const poiOk  = drawFilters.poi==='All'||(r.dataset.poi||'')=== drawFilters.poi;
+    r.style.display=(discOk&&statOk&&cdeOk&&poiOk)?'':'none';
   });
 }
 
@@ -1459,6 +1552,7 @@ async function viewDraw(id) {
             <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Upload Date</th>
             <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Approved By</th>
             <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Approval Date</th>
+            <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Review Comments</th>
           </tr>
           ${revRows.map((r,i)=>{
             const isCurrent = i===revRows.length-1;
@@ -1481,6 +1575,7 @@ async function viewDraw(id) {
                 ${r.approved_by_name?`<div style="font-weight:500;color:var(--green-light)">${r.approved_by_name}</div>`:'<span style="color:var(--text3)">—</span>'}
               </td>
               <td style="padding:7px 10px;color:var(--text2)">${r.approved_by_name?approvalDate:'—'}</td>
+              <td style="padding:7px 10px;font-size:11px;color:var(--text2);max-width:200px">${r.review_comments||'<span style="color:var(--text3)">—</span>'}</td>
             </tr>`;
           }).join('')}
         </table>
@@ -1506,13 +1601,19 @@ async function viewDraw(id) {
       <div class="detail-item"><div class="detail-label">Originator</div><div class="detail-value">${d.originator||'—'}</div></div>
       <div class="detail-item"><div class="detail-label">Zone / Level</div><div class="detail-value">${[d.zone,d.level].filter(Boolean).join(' / ')||'—'}</div></div>
       <div class="detail-item"><div class="detail-label">Type</div><div class="detail-value">${d.doc_type||'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Purpose of Issue</div><div class="detail-value">${d.poi_code?poiBadge(d.poi_code):'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">AR / FI</div><div class="detail-value">${d.arfi?`<span class="arfi-${(d.arfi||'').toLowerCase()}">${d.arfi}</span>`:'—'}</div></div>
       <div class="detail-item"><div class="detail-label">Uploaded</div><div class="detail-value">${d.created_at?d.created_at.split('T')[0]:'—'}</div></div>
     </div>
+    ${d.status==='Void'?'<div class="void-banner"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><circle cx="8" cy="8" r="6" stroke="#A32D2D" stroke-width="1.3"/><line x1="5" y1="5" x2="11" y2="11" stroke="#A32D2D" stroke-width="1.3"/></svg> This drawing has been voided and is no longer applicable. Do not use for construction.</div>':''}
     ${_relSubsHTML}
     ${revTableHTML}
     ${pdfHtml}`,
-    `${can('upload')?`<button class="btn btn-primary" onclick="uploadRev('${id}')">Upload New Revision</button>`:''}
+    `${can('upload')&&d.status!=='Void'?`<button class="btn btn-primary" onclick="uploadRev('${id}')">Upload New Revision</button>`:''}
      ${can('approve')&&d.status==='Under Review'?`<button class="btn btn-success" onclick="approveDrawing('${id}')">Approve</button>`:''}
+     ${can('approve')&&d.status!=='Void'?`<button class="btn" onclick="voidDrawing('${id}','${d.drawing_no}')">Void Drawing</button>`:''}
+     ${d.cde_state==='Superseded'?'<span style="font-size:11px;color:var(--amber);padding:0 8px">⚠ Superseded — download with caution</span>':''}
+     <button class="btn" onclick="linkDrawings('${id}','${d.drawing_no}')">Link Drawings</button>
      <button class="btn" onclick="closeModal()">Close</button>`, true);
 }
 
@@ -1742,6 +1843,82 @@ async function viewNCR(id) {
      <button class="btn" onclick="closeModal()">Close</button>`, true);
 }
 
+// ─── DRAWING ACTIONS ──────────────────────────────────────────────
+async function voidDrawing(id, drawingNo) {
+  if(!confirm('Void drawing '+drawingNo+'? This cannot be undone — the drawing will be flagged as no longer applicable.')) return;
+  const {error} = await sb.from('drawings').update({
+    status:'Void', cde_state:'Archived'
+  }).eq('id',id);
+  if(error){toast('Error: '+error.message,'error');return;}
+  await sb.from('document_audit_log').insert({
+    document_id:id, document_type:'drawing',
+    action:'Drawing Voided: '+drawingNo,
+    performed_by_name:currentProfile?.full_name||currentUser?.email,
+    performed_by_id:currentUser?.id,
+  }).then(()=>{});
+  toast('Drawing '+drawingNo+' has been voided','info');
+  closeModal(); renderDrawings();
+}
+
+async function linkDrawings(id, drawingNo) {
+  const {data:all} = await sb.from('drawings').select('id,drawing_no,title,discipline').order('drawing_no').neq('id',id);
+  const {data:current} = await sb.from('drawings').select('related_drawings').eq('id',id).single();
+  const linked = current?.related_drawings||[];
+  openModal('Link Related Drawings – '+drawingNo, `
+    <div style="font-size:11px;color:var(--text3);margin-bottom:10px">Select drawings that cross-reference this drawing</div>
+    <div style="border:0.5px solid var(--border);border-radius:8px;overflow:hidden;max-height:300px;overflow-y:auto">
+      ${(all||[]).map(d=>`<label style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:0.5px solid var(--border);cursor:pointer;font-size:11px">
+        <input type="checkbox" value="${d.id}" ${linked.includes(d.id)?'checked':''} style="accent-color:var(--sand)">
+        <span class="mono" style="color:var(--sand);flex-shrink:0">${d.drawing_no}</span>
+        <span style="color:var(--charcoal)">${d.title}</span>
+        <span style="color:var(--text3);font-size:10px;margin-left:auto">${d.discipline||''}</span>
+      </label>`).join('')}
+    </div>`,
+    `<button class="btn btn-primary" onclick="saveLinkDrawings('${id}')">Save Links</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function saveLinkDrawings(id) {
+  const checked = [...document.querySelectorAll('#modal-body input[type=checkbox]:checked')].map(c=>c.value);
+  const {error} = await sb.from('drawings').update({related_drawings:checked}).eq('id',id);
+  if(error){toast('Error saving links','error');return;}
+  toast('Drawing links saved','success');
+  closeModal(); viewDraw(id);
+}
+
+function exportDrawingRegister() {
+  // Export as formatted CSV then trigger download
+  sb.from('drawings').select('*').order('drawing_no',{ascending:true}).then(({data})=>{
+    const rows = data||[];
+    const headers = ['Drawing No.','Title','Discipline','Revision','POI Code','CDE State','Review Status','Originator','Zone','Level','Type','Uploaded By','Date'];
+    const csvRows = [headers.join(',')];
+    rows.forEach(d=>{
+      csvRows.push([
+        '"'+(d.drawing_no||'')+'"',
+        '"'+(d.title||'').replace(/"/g,"''")+'"',
+        d.discipline||'',
+        d.revision||'',
+        d.poi_code||'',
+        d.cde_state||'WIP',
+        d.status||'',
+        d.originator||'',
+        d.zone||'',
+        d.level||'',
+        d.doc_type||'',
+        '"'+(d.uploaded_by||'')+'"',
+        d.created_at?d.created_at.split('T')[0]:'',
+      ].join(','));
+    });
+    const csv = csvRows.join('\n');
+    const blob = new Blob([csv],{type:'text/csv'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'GolfGrove_Drawing_Register_'+new Date().toISOString().split('T')[0]+'.csv';
+    a.click();
+    toast('Drawing register exported','success');
+  });
+}
+
 // ─── ACTIONS ──────────────────────────────────────────────────────
 async function approveDrawing(id) {
   const {data:d} = await sb.from('drawings').select('revision').eq('id',id).single();
@@ -1953,9 +2130,30 @@ async function openNew() {
           <select class="form-control" id="nd-disc"><option>Architecture</option><option>Structure</option><option>MEP</option><option>Civil</option></select>
         </div>
         <div class="form-group"><label class="form-label-dark">Review Status</label>
-          <select class="form-control" id="nd-status"><option>Under Review</option><option>Issued for Construction</option><option>Approved</option></select>
+          <select class="form-control" id="nd-status" onchange="checkRevScheme()"><option>Under Review</option><option>Issued for Construction</option><option>Approved</option></select>
         </div>
       </div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark" title="ISO 19650 Purpose of Issue code">Purpose of Issue (POI)</label>
+          <select class="form-control" id="nd-poi">
+            <option value="">— Select —</option>
+            <option value="S0">S0 – Work in Progress</option>
+            <option value="S1">S1 – Suitable for Coordination</option>
+            <option value="S2">S2 – Suitable for Information</option>
+            <option value="S3">S3 – Suitable for Review & Comment</option>
+            <option value="S4">S4 – Suitable for Construction</option>
+            <option value="S5">S5 – As Constructed</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label-dark">AR / FI Classification</label>
+          <select class="form-control" id="nd-arfi">
+            <option value="AR">AR – Action Required</option>
+            <option value="FI">FI – For Information Only</option>
+          </select>
+        </div>
+      </div>
+      <div id="nd-rev-warn" style="display:none;background:var(--amber-bg);border:0.5px solid #FAC775;border-radius:6px;padding:7px 12px;font-size:11px;color:var(--amber);margin-top:-4px"></div>
+      <div id="nd-num-warn" style="display:none;background:var(--amber-bg);border:0.5px solid #FAC775;border-radius:6px;padding:7px 12px;font-size:11px;color:var(--amber);margin-top:-4px"></div>
       <div class="form-group"><label class="form-label-dark">Upload PDF File</label>
         <div class="upload-zone" id="uz-new" onclick="document.getElementById('fu-new').click()" ondragover="event.preventDefault();this.classList.add('dragging')" ondragleave="this.classList.remove('dragging')" ondrop="handleDrop(event,'new')">
           <div style="font-size:24px">📄</div>
@@ -2096,6 +2294,10 @@ async function openNew() {
     openNewMS();
   } else if(currentPage==='sreg' && can('manageRegister')) {
     addRegisterItem();
+  } else if(currentPage==='corr') {
+    openNewCorrespondence();
+  } else if(currentPage==='punch') {
+    openNewPunchItem();
   } else if(currentPage==='subs' && can('manageSubs')) {
     openModal('Add Subcontractor', `
       <div class="form-group"><label class="form-label-dark">Company Name</label><input type="text" class="form-control" id="nsc-name" placeholder="Full legal company name" /></div>
@@ -2113,10 +2315,25 @@ async function openNew() {
   }
 }
 
+function checkRevScheme() {
+  const status = document.getElementById('nd-status')?.value||'';
+  const rev = document.getElementById('nd-rev')?.value||'';
+  const result = enforceRevisionScheme(status, rev);
+  const el = document.getElementById('nd-rev-warn');
+  if(el){ el.style.display = result.warn?'':'none'; el.textContent = result.msg; }
+}
+
 async function doNewDraw() {
   const id = document.getElementById('nd-id').value;
   const title = document.getElementById('nd-title').value;
   if(!id||!title){toast('Drawing number and title are required','error');return;}
+  // Validate drawing number format
+  const numCheck = validateDrawingNumber(id);
+  if(!numCheck.valid){toast(numCheck.msg,'error');return;}
+  if(numCheck.msg){toast(numCheck.msg,'info');}
+  // Revision scheme warning
+  const revWarn = enforceRevisionScheme(document.getElementById('nd-status')?.value, document.getElementById('nd-rev')?.value);
+  if(revWarn.warn) toast(revWarn.msg,'info');
   const file = selectedFiles['new'];
   let filePath = null;
   if(file) {
@@ -2129,6 +2346,8 @@ async function doNewDraw() {
     drawing_no:id,title,discipline:document.getElementById('nd-disc').value,
     revision:document.getElementById('nd-rev').value,
     status:document.getElementById('nd-status').value,
+    poi_code:document.getElementById('nd-poi')?.value||null,
+    arfi:document.getElementById('nd-arfi')?.value||'AR',
     cde_state:'WIP',
     originator:document.getElementById('nd-orig')?.value||null,
     zone:document.getElementById('nd-zone')?.value||null,
@@ -2136,7 +2355,8 @@ async function doNewDraw() {
     doc_type:document.getElementById('nd-type')?.value||'DR',
     uploaded_by:currentProfile?.full_name||currentUser?.email,
     file_path:filePath,
-    superseded_revisions:'[]'
+    superseded_revisions:'[]',
+    related_drawings:[]
   }).select().single();
   if(filePath&&inserted){
     const newPath = `${inserted.id}/Rev_A_${Date.now()}.pdf`;
@@ -2877,9 +3097,320 @@ async function viewTransmittal(id) {
     </div>
   </div>`;
   const transWrapped = `<div id='trans-print-${id}'>${transHTML}</div>`;
-  openModal(`Transmittal – ${t.ref_no}`,transWrapped+commentThreadHTML('transmittal',id,comments),
-    `<button class="btn" onclick="printDoc('trans-print-${id}','Transmittal_${t.ref_no}.pdf')">Download PDF</button>
+  const ackSection = `<div style="margin-top:12px;background:var(--bg3);border-radius:8px;padding:12px 14px">
+    <div class="detail-label" style="margin-bottom:8px">Acknowledgement Status</div>
+    ${t.acknowledged_at?
+      `<div style="color:var(--green);font-size:11px;font-weight:500">✓ Acknowledged by ${t.acknowledged_by} on ${new Date(t.acknowledged_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}</div>`:
+      `<div style="color:var(--amber);font-size:11px">Pending recipient acknowledgement</div>`}
+    ${t.response_required?`<div style="font-size:11px;color:var(--text2);margin-top:4px">Response required by: <b>${t.response_required}</b></div>`:''} 
+  </div>`;
+  openModal(`Transmittal – ${t.ref_no}`,transWrapped+ackSection+commentThreadHTML('transmittal',id,comments),
+    `${!t.acknowledged_at&&can('submit')?`<button class="btn btn-primary" onclick="acknowledgeTransmittal('${id}')">Acknowledge Receipt</button>`:''}
+     <button class="btn" onclick="printDoc('trans-print-${id}','Transmittal_${t.ref_no}.pdf')">Download PDF</button>
      <button class="btn" onclick="closeModal()">Close</button>`, true);
+}
+
+// ─── TRANSMITTAL ACKNOWLEDGEMENT ─────────────────────────────────
+async function acknowledgeTransmittal(id) {
+  const {error} = await sb.from('transmittals').update({
+    acknowledged_by: currentProfile?.full_name||currentUser?.email,
+    acknowledged_at: new Date().toISOString(),
+  }).eq('id',id);
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast('Transmittal acknowledged','success');
+  closeModal(); render();
+}
+
+// ─── CORRESPONDENCE REGISTER ──────────────────────────────────────
+async function renderCorrespondence() {
+  const {data} = await sb.from('correspondence').select('*').order('created_at',{ascending:false});
+  const rows = data||[];
+  const today = new Date().toISOString().split('T')[0];
+  const open = rows.filter(r=>r.status==='Open').length;
+  const overdue = rows.filter(r=>r.due_date&&r.due_date<today&&r.status==='Open').length;
+  document.getElementById('content').innerHTML = `
+  <div class="module-bar">
+    <div class="module-stat"><div class="module-stat-val">${rows.length}</div><div class="module-stat-label">Total</div></div>
+    <div class="module-stat"><div class="module-stat-val ${open>0?'warn':''}">${open}</div><div class="module-stat-label">Open</div></div>
+    <div class="module-stat"><div class="module-stat-val ${overdue>0?'danger':''}">${overdue}</div><div class="module-stat-label">Overdue</div></div>
+    <div class="module-stat"><div class="module-stat-val">${rows.filter(r=>r.status==='Closed').length}</div><div class="module-stat-label">Closed</div></div>
+  </div>
+  <div class="fbar"><span class="fbar-label">Type:</span>
+    ${['All','Site Instruction','Letter','Variation Order','Extension of Time','RFI Response','General Correspondence'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'corr','type','${s}')">${s}</span>`).join('')}
+  </div>
+  <div class="card"><div class="tw"><table>
+    <tr><th>Ref No.</th><th>Type</th><th>Subject</th><th>From</th><th>To</th><th>Date</th><th>Due</th><th>Status</th><th>Actions</th></tr>
+    ${rows.length?rows.map(c=>{
+      const isOverdue = c.due_date&&c.due_date<today&&c.status==='Open';
+      return `<tr class="corr-row" data-type="${c.type||''}" style="${isOverdue?'background:var(--red-bg)':''}">
+        <td class="mono">${c.ref_no||'—'}</td>
+        <td>${corrTypeBadge(c.type)}</td>
+        <td style="color:var(--blue);cursor:pointer;max-width:200px" onclick="viewCorrespondence('${c.id}')">${c.subject||'—'}</td>
+        <td style="font-size:11px;color:var(--text2)">${c.from_party||'—'}</td>
+        <td style="font-size:11px;color:var(--text2)">${c.to_party||'—'}</td>
+        <td style="font-size:10px;color:var(--text3)">${c.correspondence_date||'—'}</td>
+        <td style="font-size:10px;color:${isOverdue?'var(--red)':'var(--text3)'}">${c.due_date||'—'}</td>
+        <td>${sbadge(c.status||'Open')}</td>
+        <td><button class="btn btn-sm" onclick="viewCorrespondence('${c.id}')">View</button></td>
+      </tr>`;
+    }).join(''):'<tr><td colspan="9" class="empty-state">No correspondence logged yet.</td></tr>'}
+  </table></div></div>`;
+}
+
+async function viewCorrespondence(id) {
+  const [{data:c},comments,atts] = await Promise.all([
+    sb.from('correspondence').select('*').eq('id',id).single(),
+    loadComments('correspondence',id),
+    loadAttachments('correspondence',id)
+  ]);
+  if(!c) return;
+  openModal(`${c.ref_no} – ${c.subject}`, `
+    <div class="detail-grid">
+      <div class="detail-item"><div class="detail-label">Type</div><div class="detail-value">${corrTypeBadge(c.type)}</div></div>
+      <div class="detail-item"><div class="detail-label">Status</div><div class="detail-value">${sbadge(c.status||'Open')}</div></div>
+      <div class="detail-item"><div class="detail-label">From</div><div class="detail-value">${c.from_party||'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">To</div><div class="detail-value">${c.to_party||'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Date</div><div class="detail-value">${c.correspondence_date||'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Response Due</div><div class="detail-value">${c.due_date||'—'}</div></div>
+    </div>
+    ${c.body?`<div class="detail-section"><div class="detail-label" style="margin-bottom:6px">Content</div><div style="font-size:12px;color:var(--charcoal);line-height:1.6;white-space:pre-wrap">${c.body}</div></div>`:''}
+    ${attachmentSectionHTML('correspondence',id,atts)}
+    ${commentThreadHTML('correspondence',id,comments)}`,
+    `${c.status==='Open'&&can('approve')?`<button class="btn btn-primary" onclick="closeCorrespondence('${id}')">Mark Closed</button>`:''}
+     <button class="btn" onclick="closeModal()">Close</button>`, true);
+}
+
+async function closeCorrespondence(id) {
+  await sb.from('correspondence').update({status:'Closed',closed_date:new Date().toISOString().split('T')[0]}).eq('id',id);
+  toast('Correspondence closed','success'); closeModal(); render();
+}
+
+async function openNewCorrespondence() {
+  openModal('Log Correspondence', `
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Ref No. <span style="color:var(--red)">*</span></label>
+        <input type="text" class="form-control" id="nc-ref" placeholder="e.g. SI-001 or LTR-042" />
+      </div>
+      <div class="form-group"><label class="form-label-dark">Type</label>
+        <select class="form-control" id="nc-type">
+          <option>Site Instruction</option><option>Letter</option><option>Variation Order</option>
+          <option>Extension of Time</option><option>RFI Response</option><option>General Correspondence</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Subject <span style="color:var(--red)">*</span></label>
+      <input type="text" class="form-control" id="nc-subject" placeholder="Brief subject line" />
+    </div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">From</label>
+        <select class="form-control" id="nc-from"><option>POE</option><option>MBC</option><option>Regent</option></select>
+      </div>
+      <div class="form-group"><label class="form-label-dark">To</label>
+        <select class="form-control" id="nc-to"><option>MBC</option><option>POE</option><option>Regent</option></select>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Correspondence Date</label>
+        <input type="date" class="form-control" id="nc-date" value="${new Date().toISOString().split('T')[0]}" />
+      </div>
+      <div class="form-group"><label class="form-label-dark">Response Due</label>
+        <input type="date" class="form-control" id="nc-due" />
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Content / Body</label>
+      <textarea class="form-control" id="nc-body" placeholder="Paste or type the correspondence content..." style="min-height:100px"></textarea>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
+      <div class="upload-zone" style="padding:14px 16px;display:flex;align-items:center;gap:10px;text-align:left"
+        onclick="document.getElementById('nc-files').click()"
+        ondragover="event.preventDefault();this.classList.add('dragging')"
+        ondragleave="this.classList.remove('dragging')"
+        ondrop="event.preventDefault();this.classList.remove('dragging');stageFiles(event.dataTransfer.files,'nc-staged')">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;opacity:.6"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <span style="font-size:12px;color:var(--text2)">Attach original correspondence — PDF, Images, Word (max 50MB)</span>
+      </div>
+      <input type="file" id="nc-files" multiple style="display:none" onchange="stageFiles(this.files,'nc-staged')" />
+      <div id="nc-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doNewCorrespondence()">Log Correspondence</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doNewCorrespondence() {
+  const ref = document.getElementById('nc-ref')?.value;
+  const subject = document.getElementById('nc-subject')?.value;
+  if(!ref||!subject){toast('Ref and subject are required','error');return;}
+  const {data:newCorr,error} = await sb.from('correspondence').insert({
+    ref_no:ref, type:document.getElementById('nc-type')?.value,
+    subject, from_party:document.getElementById('nc-from')?.value,
+    to_party:document.getElementById('nc-to')?.value,
+    correspondence_date:document.getElementById('nc-date')?.value,
+    due_date:document.getElementById('nc-due')?.value||null,
+    body:document.getElementById('nc-body')?.value||null,
+    status:'Open',
+    logged_by:currentProfile?.full_name||currentUser?.email,
+  }).select().single();
+  if(error){toast('Error: '+error.message,'error');return;}
+  if(newCorr?.id) await uploadStagedFiles('nc-staged','correspondence',newCorr.id);
+  toast('Correspondence logged','success'); closeModal(); render();
+}
+
+// ─── PUNCH LIST ───────────────────────────────────────────────────
+async function renderPunchList() {
+  const {data} = await sb.from('punch_list').select('*').order('created_at',{ascending:false});
+  const rows = data||[];
+  const open = rows.filter(r=>r.status==='Open').length;
+  const inProgress = rows.filter(r=>r.status==='In Progress').length;
+  const closed = rows.filter(r=>r.status==='Closed').length;
+  document.getElementById('content').innerHTML = `
+  <div class="module-bar">
+    <div class="module-stat"><div class="module-stat-val ${open>0?'danger':''}">${open}</div><div class="module-stat-label">Open</div></div>
+    <div class="module-stat"><div class="module-stat-val ${inProgress>0?'warn':''}">${inProgress}</div><div class="module-stat-label">In Progress</div></div>
+    <div class="module-stat"><div class="module-stat-val">${closed}</div><div class="module-stat-label">Closed</div></div>
+    <div class="module-stat"><div class="module-stat-val">${rows.length}</div><div class="module-stat-label">Total Items</div></div>
+  </div>
+  <div class="fbar"><span class="fbar-label">Status:</span>
+    ${['All','Open','In Progress','Closed'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'punch','status','${s}')">${s}</span>`).join('')}
+    <span style="width:.5px;background:var(--border2);height:16px;align-self:center"></span>
+    <span class="fbar-label">Severity:</span>
+    ${['All','Minor','Major','Critical'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'punch','severity','${s}')">${s}</span>`).join('')}
+  </div>
+  <div class="card"><div class="tw"><table>
+    <tr><th>#</th><th>Description</th><th>Location</th><th>Discipline</th><th>Raised By</th><th>Assigned To</th><th>Severity</th><th>Status</th><th>Actions</th></tr>
+    ${rows.length?rows.map((p,idx)=>`<tr class="punch-row" data-status="${p.status||''}" data-severity="${p.severity||''}">
+      <td class="mono" style="font-size:10px">${String(idx+1).padStart(3,'0')}</td>
+      <td style="color:var(--blue);cursor:pointer;max-width:200px" onclick="viewPunchItem('${p.id}')">${p.description||'—'}</td>
+      <td><div style="font-size:11px;color:var(--charcoal)">${p.location||'—'}</div><div class="punch-loc">${p.element||''}</div></td>
+      <td style="font-size:11px;color:var(--text2)">${p.discipline||'—'}</td>
+      <td style="font-size:10px;color:var(--text2)">${p.raised_by||'—'}</td>
+      <td style="font-size:10px;color:var(--text2)">${p.assigned_to||'—'}</td>
+      <td>${sbadge(p.severity||'Minor')}</td>
+      <td>${sbadge(p.status||'Open')}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="viewPunchItem('${p.id}')">View</button>
+        ${p.status!=='Closed'&&can('approve')?`<button class="btn btn-sm btn-success" onclick="closePunchItem('${p.id}')">Close</button>`:''}
+      </div></td>
+    </tr>`).join(''):'<tr><td colspan="9" class="empty-state">No punch list items. Items are typically raised during snagging and handover inspections.</td></tr>'}
+  </table></div></div>`;
+}
+
+async function viewPunchItem(id) {
+  const [{data:p},comments,atts] = await Promise.all([
+    sb.from('punch_list').select('*').eq('id',id).single(),
+    loadComments('punch',id),
+    loadAttachments('punch',id)
+  ]);
+  if(!p) return;
+  openModal(`Punch Item – ${p.description?.substring(0,40)}`, `
+    <div class="detail-grid">
+      <div class="detail-item"><div class="detail-label">Location</div><div class="detail-value">${p.location||'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Element</div><div class="detail-value">${p.element||'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Discipline</div><div class="detail-value">${p.discipline||'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Severity</div><div class="detail-value">${sbadge(p.severity)}</div></div>
+      <div class="detail-item"><div class="detail-label">Raised By</div><div class="detail-value">${p.raised_by||'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Assigned To</div><div class="detail-value">${p.assigned_to||'—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Status</div><div class="detail-value">${sbadge(p.status)}</div></div>
+      <div class="detail-item"><div class="detail-label">Date Raised</div><div class="detail-value">${p.created_at?p.created_at.split('T')[0]:'—'}</div></div>
+    </div>
+    ${p.description?`<div class="detail-section"><div class="detail-label" style="margin-bottom:6px">Description</div><div style="font-size:12px;color:var(--charcoal)">${p.description}</div></div>`:''}
+    ${p.status!=='Closed'?`<div class="detail-section">
+      <div class="form-group"><label class="form-label-dark">Contractor Response / Action Taken</label>
+        <textarea class="form-control" id="punch-response-${id}" placeholder="Describe action taken..." style="min-height:70px">${p.contractor_response||''}</textarea>
+      </div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Assigned To</label>
+          <input type="text" class="form-control" id="punch-assign-${id}" value="${p.assigned_to||''}" placeholder="Subcontractor / Person responsible" />
+        </div>
+        <div class="form-group"><label class="form-label-dark">Status</label>
+          <select class="form-control" id="punch-status-${id}">
+            <option ${p.status==='Open'?'selected':''}>Open</option>
+            <option ${p.status==='In Progress'?'selected':''}>In Progress</option>
+            <option ${p.status==='Closed'?'selected':''}>Closed</option>
+          </select>
+        </div>
+      </div>
+    </div>`:''}
+    ${attachmentSectionHTML('punch',id,atts)}
+    ${commentThreadHTML('punch',id,comments)}`,
+    `${p.status!=='Closed'?`<button class="btn btn-primary" onclick="updatePunchItem('${id}')">Update</button>`:''}
+     <button class="btn" onclick="closeModal()">Close</button>`, true);
+}
+
+async function updatePunchItem(id) {
+  const {error} = await sb.from('punch_list').update({
+    contractor_response: document.getElementById('punch-response-'+id)?.value||null,
+    assigned_to: document.getElementById('punch-assign-'+id)?.value||null,
+    status: document.getElementById('punch-status-'+id)?.value||'Open',
+    closed_date: document.getElementById('punch-status-'+id)?.value==='Closed'?new Date().toISOString().split('T')[0]:null,
+  }).eq('id',id);
+  if(error){toast('Error','error');return;}
+  toast('Punch item updated','success'); closeModal(); render();
+}
+
+async function closePunchItem(id) {
+  await sb.from('punch_list').update({status:'Closed',closed_date:new Date().toISOString().split('T')[0]}).eq('id',id);
+  toast('Item closed','success'); render();
+}
+
+async function openNewPunchItem() {
+  openModal('Add Punch List Item', `
+    <div class="form-group"><label class="form-label-dark">Description <span style="color:var(--red)">*</span></label>
+      <textarea class="form-control" id="np-desc" placeholder="Describe the defect or incomplete work item..." style="min-height:70px"></textarea>
+    </div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Location</label>
+        <input type="text" class="form-control" id="np-loc" placeholder="e.g. Level 4 – Apartment 401" />
+      </div>
+      <div class="form-group"><label class="form-label-dark">Element</label>
+        <input type="text" class="form-control" id="np-elem" placeholder="e.g. Door frame, Window seal" />
+      </div>
+    </div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Discipline</label>
+        <select class="form-control" id="np-disc">
+          <option>Architecture</option><option>Structure</option><option>MEP</option>
+          <option>Civil</option><option>Firefighting</option><option>Finishing</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Severity</label>
+        <select class="form-control" id="np-sev"><option>Minor</option><option>Major</option><option>Critical</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Assigned To (optional)</label>
+      <input type="text" class="form-control" id="np-assign" placeholder="Subcontractor responsible" />
+    </div>
+    <div class="form-group"><label class="form-label-dark">Photo Attachments</label>
+      <div class="upload-zone" style="padding:14px 16px;display:flex;align-items:center;gap:10px;text-align:left"
+        onclick="document.getElementById('np-files').click()"
+        ondragover="event.preventDefault();this.classList.add('dragging')"
+        ondragleave="this.classList.remove('dragging')"
+        ondrop="event.preventDefault();this.classList.remove('dragging');stageFiles(event.dataTransfer.files,'np-staged')">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;opacity:.6"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <span style="font-size:12px;color:var(--text2)">Attach site photos — images and PDFs (max 50MB)</span>
+      </div>
+      <input type="file" id="np-files" multiple accept="image/*,.pdf" style="display:none" onchange="stageFiles(this.files,'np-staged')" />
+      <div id="np-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doNewPunchItem()">Add to Punch List</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doNewPunchItem() {
+  const desc = document.getElementById('np-desc')?.value;
+  if(!desc){toast('Description is required','error');return;}
+  const {data:newPunch,error} = await sb.from('punch_list').insert({
+    description:desc,
+    location:document.getElementById('np-loc')?.value||null,
+    element:document.getElementById('np-elem')?.value||null,
+    discipline:document.getElementById('np-disc')?.value||null,
+    severity:document.getElementById('np-sev')?.value||'Minor',
+    assigned_to:document.getElementById('np-assign')?.value||null,
+    raised_by:currentProfile?.full_name||currentUser?.email,
+    status:'Open',
+  }).select().single();
+  if(error){toast('Error: '+error.message,'error');return;}
+  if(newPunch?.id) await uploadStagedFiles('np-staged','punch',newPunch.id);
+  toast('Punch list item added','success'); closeModal(); render();
 }
 
 // ─── RESUBMISSION ─────────────────────────────────────────────────
@@ -3017,7 +3548,14 @@ async function openNewTransmittal() {
         ${!draws?.length?'<div style="padding:12px;color:var(--text3);font-size:11px;text-align:center">No drawings in register yet</div>':''}
       </div>
     </div>
-    <div class="form-group"><label class="form-label-dark">Notes</label><textarea class="form-control" id="nt-notes" placeholder="Any additional notes..." style="min-height:50px"></textarea></div>`,
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Response Required By</label>
+        <input type="date" class="form-control" id="nt-response-date" />
+      </div>
+      <div class="form-group"><label class="form-label-dark">Notes</label>
+        <textarea class="form-control" id="nt-notes" placeholder="Any additional notes..." style="min-height:50px"></textarea>
+      </div>
+    </div>`,
     `<button class="btn btn-primary" onclick="doNewTransmittal(${draws?.length||0})">Create Transmittal</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 }
 
@@ -3037,7 +3575,8 @@ async function doNewTransmittal(drawCount) {
     purpose:document.getElementById('nt-purpose')?.value,
     method:document.getElementById('nt-method')?.value,
     documents:JSON.stringify(docs),
-    notes:document.getElementById('nt-notes')?.value||''
+    notes:document.getElementById('nt-notes')?.value||'',
+    response_required:document.getElementById('nt-response-date')?.value||null
   });
   if(error){toast('Error: '+error.message,'error');return;}
   toast('Transmittal created','success'); closeModal(); render();
