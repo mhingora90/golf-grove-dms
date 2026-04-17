@@ -1055,6 +1055,35 @@ async function doReviewMS(id) {
   closeModal(); render();
 }
 
+function openNewMS() {
+  openModal('Submit Method Statement', `
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Reference No.</label><input type="text" class="form-control" id="ms-ref" placeholder="MS-MBC-001 (auto-generated if blank)" /></div>
+      <div class="form-group"><label class="form-label-dark">Revision</label><input type="text" class="form-control" id="ms-rev" value="Rev 0" /></div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Title <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="ms-title" placeholder="e.g. Excavation and Backfilling Method Statement" /></div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Activity</label><input type="text" class="form-control" id="ms-activity" placeholder="e.g. Structural works" /></div>
+      <div class="form-group"><label class="form-label-dark">Discipline</label>
+        <select class="form-control" id="ms-disc">
+          <option>Civil</option><option>Structural</option><option>MEP</option>
+          <option>Architectural</option><option>Electrical</option><option>Mechanical</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Location</label><input type="text" class="form-control" id="ms-loc" placeholder="e.g. Level 3 – Columns" /></div>
+      <div class="form-group"><label class="form-label-dark">Submitted Date</label><input type="date" class="form-control" id="ms-submitdate" value="${new Date().toISOString().split('T')[0]}" /></div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Submitted By</label><input type="text" class="form-control" id="ms-by" value="${currentProfile?.full_name||''}" /></div>
+    <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
+      <div class="upload-zone" style="padding:14px 16px;display:flex;align-items:center;gap:10px;text-align:left" onclick="document.getElementById('ms-files').click()" ondragover="event.preventDefault();this.classList.add('dragging')" ondragleave="this.classList.remove('dragging')" ondrop="event.preventDefault();this.classList.remove('dragging');stageFiles(event.dataTransfer.files,'ms-staged')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;opacity:.6"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg><span style="font-size:12px;color:var(--text2)">Click to attach or drag &amp; drop — PDF, DWG, Images, Word, Excel (max 50MB)</span></div>
+      <input type="file" id="ms-files" multiple style="display:none" onchange="stageFiles(this.files,'ms-staged')" />
+      <div id="ms-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doNewMS()">Submit Method Statement</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
 async function doNewMS() {
   const title = document.getElementById('ms-title')?.value?.trim();
   if(!title){toast('Please enter a title','error');return;}
@@ -1674,6 +1703,7 @@ async function viewSub(id) {
     `${can('approve')&&s.status==='Pending Review'?`<button class="btn btn-success" onclick="reviewSub('${id}')">Review & Respond</button>`:''}
      ${can('submit')&&s.status==='Revise & Resubmit'?`<button class="btn btn-primary" onclick="createResubmission('${id}')">Create Resubmission</button>`:''}
      ${s.due_date?`<span style="font-size:11px;padding:4px 8px">${overdueTag(s.due_date)}</span>`:''}
+     <button class="btn" onclick="viewAuditTrail('submittal','${id}','${s.ref_no}')">View Audit Trail</button>
      <button class="btn" onclick="printDoc('dsub-print-${id}','DSUB_${s.ref_no}.pdf')">Download PDF</button>
      <button class="btn" onclick="closeModal()">Close</button>`, true);
 }
@@ -1756,6 +1786,7 @@ async function viewIR(id) {
     `${can('approve')&&i.status==='Pending'?`<button class="btn btn-success" onclick="respondIR('${id}')">Record Response</button>`:''}
      ${ckSelector}
      <button class="btn" onclick="openChecklistModal('${id}',document.getElementById('ck-tmpl-${id}').value)">Fill Checklist</button>
+     <button class="btn" onclick="viewAuditTrail('inspection','${id}','${i.ref_no}')">View Audit Trail</button>
      <button class="btn" onclick="printDoc('ir-print-${id}','IR_${i.ref_no}.pdf')">Download PDF</button>
      <button class="btn" onclick="closeModal()">Close</button>`, true);
 }
@@ -1839,6 +1870,7 @@ async function viewNCR(id) {
   </div>`:'';
   openModal(`${n.ref_no} – ${n.title}`, ncrDoc+capSection+closeSection+attachmentSectionHTML('ncr',n.id,atts)+commentThreadHTML('ncr',n.id,comments),
     `${can('approve')&&n.status==='Open'?`<button class="btn btn-success" onclick="doCloseNCR('${n.id}')">Close NCR</button>`:''}
+     <button class="btn" onclick="viewAuditTrail('ncr','${n.id}','${n.ref_no}')">View Audit Trail</button>
      <button class="btn" onclick="printDoc('ncr-print-${n.id}','NCR_${n.ref_no}.pdf')">Download PDF</button>
      <button class="btn" onclick="closeModal()">Close</button>`, true);
 }
@@ -1975,6 +2007,12 @@ async function doReviewSub(id) {
     reviewed_by: engName,
     review_date: document.getElementById('srd-'+id)?.value||new Date().toISOString().split('T')[0]
   }).eq('id',id);
+  await sb.from('document_audit_log').insert({
+    document_id: id, document_type: 'submittal',
+    action: 'Submittal Reviewed: Code ' + oc + ' \u2013 ' + statusMap[oc],
+    performed_by_name: currentProfile?.full_name||currentUser?.email,
+    performed_by_id: currentUser?.id,
+  }).then(()=>{});
   toast('Submittal reviewed','success'); closeModal(); render();
 }
 
@@ -2000,12 +2038,19 @@ function respondIR(id) {
 async function doRespondIR(id) {
   const engName = document.getElementById('ir-ib-'+id)?.value?.trim();
   if(!engName){toast("Please enter the Resident Engineer's name",'error');return;}
+  const irStatus = document.getElementById('ir-st-'+id).value;
   await sb.from('inspections').update({
-    status: document.getElementById('ir-st-'+id).value,
+    status: irStatus,
     comments: document.getElementById('ir-cm-'+id).value,
     inspected_by: engName,
     response_date: document.getElementById('ir-dt-'+id).value,
   }).eq('id',id);
+  await sb.from('document_audit_log').insert({
+    document_id: id, document_type: 'inspection',
+    action: 'IR Response: ' + irStatus,
+    performed_by_name: currentProfile?.full_name||currentUser?.email,
+    performed_by_id: currentUser?.id,
+  }).then(()=>{});
   toast('Inspection response recorded','success'); closeModal(); render();
 }
 
@@ -2016,6 +2061,12 @@ async function doCloseNCR(id) {
     corrective_action: ca?ca.value:'Corrective action completed.',
     closed_date: new Date().toISOString().split('T')[0]
   }).eq('id',id);
+  await sb.from('document_audit_log').insert({
+    document_id: id, document_type: 'ncr',
+    action: 'NCR: Closed',
+    performed_by_name: currentProfile?.full_name||currentUser?.email,
+    performed_by_id: currentUser?.id,
+  }).then(()=>{});
   toast('NCR closed','success'); closeModal(); render();
 }
 
@@ -2499,6 +2550,12 @@ async function doSubmitCAP(id) {
     cap_submitted_by: currentProfile?.full_name||currentUser?.email,
   }).eq('id',id);
   if(error){toast('Error: '+error.message,'error');return;}
+  await sb.from('document_audit_log').insert({
+    document_id: id, document_type: 'ncr',
+    action: 'NCR: Open \u2192 CAP Submitted',
+    performed_by_name: currentProfile?.full_name||currentUser?.email,
+    performed_by_id: currentUser?.id,
+  }).then(()=>{});
   toast('CAP submitted for consultant verification','success');
   closeModal(); render();
 }
@@ -2532,6 +2589,12 @@ async function doVerifyCAP(id) {
     cap_verify_comments: document.getElementById('cap-verify-'+id)?.value||null,
   }).eq('id',id);
   if(error){toast('Error: '+error.message,'error');return;}
+  await sb.from('document_audit_log').insert({
+    document_id: id, document_type: 'ncr',
+    action: 'NCR: CAP Verified',
+    performed_by_name: currentProfile?.full_name||currentUser?.email,
+    performed_by_id: currentUser?.id,
+  }).then(()=>{});
   toast('CAP verified — NCR ready to close','success');
   closeModal(); render();
 }
@@ -2542,6 +2605,12 @@ async function doRejectCAP(id) {
     cap_verify_comments: document.getElementById('cap-verify-'+id)?.value||'CAP returned for revision.',
   }).eq('id',id);
   if(error){toast('Error','error');return;}
+  await sb.from('document_audit_log').insert({
+    document_id: id, document_type: 'ncr',
+    action: 'NCR: CAP Returned \u2192 Open',
+    performed_by_name: currentProfile?.full_name||currentUser?.email,
+    performed_by_id: currentUser?.id,
+  }).then(()=>{});
   toast('CAP returned to contractor for revision','info');
   closeModal(); render();
 }
@@ -3182,7 +3251,33 @@ async function viewCorrespondence(id) {
 
 async function closeCorrespondence(id) {
   await sb.from('correspondence').update({status:'Closed',closed_date:new Date().toISOString().split('T')[0]}).eq('id',id);
+  await sb.from('document_audit_log').insert({
+    document_id: id, document_type: 'correspondence',
+    action: 'Correspondence: Closed',
+    performed_by_name: currentProfile?.full_name||currentUser?.email,
+    performed_by_id: currentUser?.id,
+  }).then(()=>{});
   toast('Correspondence closed','success'); closeModal(); render();
+}
+
+async function viewAuditTrail(documentType, recordId, label) {
+  const {data:logs} = await sb.from('document_audit_log')
+    .select('action,performed_by_name,created_at')
+    .eq('document_id', recordId)
+    .order('created_at', {ascending: true});
+  const rows = logs && logs.length
+    ? logs.map(l => `
+        <div style="display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border)">
+          <div style="min-width:140px;font-size:11px;color:var(--text2);flex-shrink:0">${new Date(l.created_at).toLocaleString()}</div>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:500;color:var(--text)">${l.action}</div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px">${l.performed_by_name}</div>
+          </div>
+        </div>`).join('')
+    : `<div style="color:var(--text3);font-size:12px;padding:16px 0;text-align:center">No audit entries recorded for this ${documentType}.</div>`;
+  openModal(`Audit Trail \u2013 ${label}`,
+    `<div style="font-size:11px;color:var(--text2);margin-bottom:10px">All recorded actions for this ${documentType}, oldest first.</div>${rows}`,
+    `<button class="btn" onclick="closeModal()">Close</button>`);
 }
 
 async function openNewCorrespondence() {
