@@ -73,7 +73,7 @@ Paste this file at the start of any new Claude session to restore full context i
 | `subcontractors` | id, name, rep, discipline, trade |
 | `profiles` | id, full_name, role, company |
 | `attachments` | id, record_type, record_id, file_name, file_path, file_type, file_size, uploaded_by_name |
-| `comments` | id, record_type, record_id, content, author_name, created_at |
+| `comments` | id, record_type, record_id, message, author_name, author_role, created_at |
 | `document_audit_log` | id, document_id, document_type, action, performed_by_name, performed_by_id, created_at |
 
 ### Storage buckets

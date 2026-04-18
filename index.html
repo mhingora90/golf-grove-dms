@@ -1090,6 +1090,7 @@ async function doReviewMS(id) {
     author_name:eng, author_role:currentProfile?.role||'consultant',
     message:`Review submitted — ${outcome}.${comments?' Comments: '+comments:''}`
   });
+  await logAudit(id, 'method_statement', 'MS Reviewed: '+outcome);
   toast(`Method statement ${outcome.toLowerCase()}`,'success');
   closeModal(); render();
 }
@@ -1138,7 +1139,10 @@ async function doNewMS() {
     status:'Pending Review'
   }).select().single();
   if(error){toast('Error: '+error.message,'error');return;}
-  if(newMS?.id) await uploadStagedFiles('ms-staged','ms',newMS.id);
+  if(newMS?.id) {
+    await uploadStagedFiles('ms-staged','ms',newMS.id);
+    await logAudit(newMS.id, 'method_statement', 'MS Submitted: '+newMS.title);
+  }
   toast('Method statement submitted','success'); closeModal(); render();
 }
 
@@ -1372,6 +1376,7 @@ async function doBatchDrawAction(action) {
     for(const u of updates){
       const {error}=await sb.from('drawings').update({cde_state:u.cde_state}).eq('id',u.id);
       if(error) failed++;
+      else await logAudit(u.id, 'drawing', 'CDE State Change → '+u.cde_state+' (bulk)');
     }
     toast(failed?`CDE advanced with ${failed} error(s)`:`CDE advanced for ${ids.length} drawing${ids.length!==1?'s':''}`, failed?'error':'success');
   }
@@ -2370,6 +2375,7 @@ async function doUploadRev(id) {
     file_path:filePath||d.file_path,
     notes:document.getElementById('rd-'+id)?.value||''
   });
+  await logAudit(id, 'drawing', 'New Revision Uploaded: '+newRev);
   delete selectedFiles[id];
   toast('Revision uploaded successfully','success'); closeModal(); render();
 }
@@ -2672,6 +2678,7 @@ async function doNewDraw() {
       file_path:inserted.file_path
     });
     await uploadStagedFiles('nd-staged','drawing',inserted.id);
+    await logAudit(inserted.id, 'drawing', 'Drawing Uploaded: '+inserted.drawing_no);
   }
   toast('Drawing uploaded','success'); closeModal(); render();
 }
@@ -2693,7 +2700,10 @@ async function doNewSub() {
     related_drawing:document.getElementById('ns-drawing')?.value||null
   }).select().single();
   if(error){toast('Error: '+error.message,'error');return;}
-  if(newSub?.id) await uploadStagedFiles('ns-staged','submittal',newSub.id);
+  if(newSub?.id) {
+    await uploadStagedFiles('ns-staged','submittal',newSub.id);
+    await logAudit(newSub.id, 'submittal', 'Submittal Created: '+newSub.ref_no);
+  }
   toast('Submittal created','success'); closeModal(); render();
 }
 
@@ -2703,7 +2713,7 @@ async function doNewIR() {
   if(!ref||!elem){toast('Ref number and elements are required','error');return;}
   const scId = document.getElementById('ni-sc').value||null;
   const {data:sc} = scId?await sb.from('subcontractors').select('rep').eq('id',scId).single():{data:null};
-  const {error} = await sb.from('inspections').insert({
+  const {data:newIR,error} = await sb.from('inspections').insert({
     ref_no:ref,revision:document.getElementById('ni-rev').value,
     plot:PROJECT.plot,location:document.getElementById('ni-loc').value,
     city:PROJECT.city,subcontractor_id:scId||null,
@@ -2716,9 +2726,12 @@ async function doNewIR() {
     request_date:document.getElementById('ni-reqdate').value,
     status:'Pending',
     due_date:document.getElementById('ni-due')?.value||null
-  });
+  }).select().single();
   if(error){toast('Error: '+error.message,'error');return;}
-  if(newIR?.id) await uploadStagedFiles('ni-staged','inspection',newIR.id);
+  if(newIR?.id) {
+    await uploadStagedFiles('ni-staged','inspection',newIR.id);
+    await logAudit(newIR.id, 'inspection', 'IR Raised: '+ref);
+  }
   toast('Inspection request created','success'); closeModal(); render();
 }
 
@@ -2890,6 +2903,7 @@ async function doReInspect(parentId) {
     request_date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase(),
   });
   if(error){toast('Error: '+error.message,'error');return;}
+  await logAudit(parentId, 'inspection', 'Re-Inspection Requested: '+ref);
   toast('Re-inspection request submitted','success');
   closeModal(); render();
 }
@@ -2943,7 +2957,10 @@ async function doResubmit(parentId, nextRev) {
     changes_description:changes,
   }).select().single();
   if(error){toast('Error: '+error.message,'error');return;}
-  if(newSub?.id) await uploadStagedFiles('rs-staged','submittal',newSub.id);
+  if(newSub?.id) {
+    await uploadStagedFiles('rs-staged','submittal',newSub.id);
+    await logAudit(parentId, 'submittal', 'Resubmission Created: Rev '+nextRev);
+  }
   toast('Resubmission created','success');
   closeModal(); render();
 }
@@ -3350,11 +3367,13 @@ async function doRespondRFI(id) {
     responded_by:engName,
     responded_date:document.getElementById('rfi-dt-'+id)?.value
   }).eq('id',id);
+  await logAudit(id, 'rfi', 'RFI Responded');
   toast('RFI response submitted','success'); closeModal(); render();
 }
 
 async function closeRFI(id) {
   await sb.from('rfis').update({status:'Closed'}).eq('id',id);
+  await logAudit(id, 'rfi', 'RFI Closed');
   toast('RFI closed','success'); closeModal(); render();
 }
 
@@ -3431,6 +3450,7 @@ async function acknowledgeTransmittal(id) {
     acknowledged_at: new Date().toISOString(),
   }).eq('id',id);
   if(error){toast('Error: '+error.message,'error');return;}
+  await logAudit(id, 'transmittal', 'Transmittal Acknowledged');
   toast('Transmittal acknowledged','success');
   closeModal(); render();
 }
@@ -3586,7 +3606,10 @@ async function doNewCorrespondence() {
     logged_by:currentProfile?.full_name||currentUser?.email,
   }).select().single();
   if(error){toast('Error: '+error.message,'error');return;}
-  if(newCorr?.id) await uploadStagedFiles('nc-staged','correspondence',newCorr.id);
+  if(newCorr?.id) {
+    await uploadStagedFiles('nc-staged','correspondence',newCorr.id);
+    await logAudit(newCorr.id, 'correspondence', 'Correspondence Created: '+newCorr.ref_no);
+  }
   toast('Correspondence logged','success'); closeModal(); render();
 }
 
@@ -3672,18 +3695,21 @@ async function viewPunchItem(id) {
 }
 
 async function updatePunchItem(id) {
+  const newStatus = document.getElementById('punch-status-'+id)?.value||'Open';
   const {error} = await sb.from('punch_list').update({
     contractor_response: document.getElementById('punch-response-'+id)?.value||null,
     assigned_to: document.getElementById('punch-assign-'+id)?.value||null,
-    status: document.getElementById('punch-status-'+id)?.value||'Open',
-    closed_date: document.getElementById('punch-status-'+id)?.value==='Closed'?new Date().toISOString().split('T')[0]:null,
+    status: newStatus,
+    closed_date: newStatus==='Closed'?new Date().toISOString().split('T')[0]:null,
   }).eq('id',id);
   if(error){toast('Error','error');return;}
+  await logAudit(id, 'punch_list', 'Punch Item Updated: '+newStatus);
   toast('Punch item updated','success'); closeModal(); render();
 }
 
 async function closePunchItem(id) {
   await sb.from('punch_list').update({status:'Closed',closed_date:new Date().toISOString().split('T')[0]}).eq('id',id);
+  await logAudit(id, 'punch_list', 'Punch Item Closed');
   toast('Item closed','success'); render();
 }
 
@@ -3744,7 +3770,10 @@ async function doNewPunchItem() {
     status:'Open',
   }).select().single();
   if(error){toast('Error: '+error.message,'error');return;}
-  if(newPunch?.id) await uploadStagedFiles('np-staged','punch',newPunch.id);
+  if(newPunch?.id) {
+    await uploadStagedFiles('np-staged','punch',newPunch.id);
+    await logAudit(newPunch.id, 'punch_list', 'Punch Item Created');
+  }
   toast('Punch list item added','success'); closeModal(); render();
 }
 
@@ -3799,6 +3828,7 @@ async function doResubmit(parentId, revNo) {
       message:`Resubmission Rev ${revNo} created. Changes: ${changes}`
     });
   }
+  await logAudit(parentId, 'submittal', 'Resubmission Created: Rev '+revNo);
   toast('Resubmission created','success'); closeModal(); render();
 }
 
@@ -3834,7 +3864,7 @@ async function doNewRFI() {
   const ref = document.getElementById('nr-id')?.value;
   const subj = document.getElementById('nr-subj')?.value;
   if(!ref||!subj){toast('Ref number and subject are required','error');return;}
-  const {error} = await sb.from('rfis').insert({
+  const {data:newRFI,error} = await sb.from('rfis').insert({
     ref_no:ref, subject:subj,
     drawing_ref:document.getElementById('nr-draw')?.value||null,
     raised_by:currentProfile?.full_name||currentUser?.email,
@@ -3843,8 +3873,9 @@ async function doNewRFI() {
     due_date:document.getElementById('nr-due')?.value||null,
     question:document.getElementById('nr-q')?.value,
     status:'Open'
-  });
+  }).select().single();
   if(error){toast('Error: '+error.message,'error');return;}
+  if(newRFI?.id) await logAudit(newRFI.id, 'rfi', 'RFI Raised: '+ref);
   toast('RFI raised','success'); closeModal(); render();
 }
 
@@ -3914,6 +3945,8 @@ async function doNewTransmittal(drawCount) {
     response_required:document.getElementById('nt-response-date')?.value||null
   });
   if(error){toast('Error: '+error.message,'error');return;}
+  const {data:newTrans} = await sb.from('transmittals').select('id').eq('ref_no',ref).order('created_at',{ascending:false}).limit(1).single();
+  if(newTrans?.id) await logAudit(newTrans.id, 'transmittal', 'Transmittal Created: '+ref);
   toast('Transmittal created','success'); closeModal(); render();
 }
 
