@@ -1362,15 +1362,15 @@ async function doBatchDrawAction(action) {
   }
   if(action==='advanceCDE') {
     const cdeOrder = ['WIP','Shared','Published','Archived'];
-    const {data:draws} = await sb.from('drawings').select('id,cde_status').in('id', ids);
+    const {data:draws} = await sb.from('drawings').select('id,cde_state').in('id', ids);
     const updates = (draws||[]).map(d=>{
-      const idx = cdeOrder.indexOf(d.cde_status||'WIP');
-      const next = idx>=0&&idx<cdeOrder.length-1?cdeOrder[idx+1]:d.cde_status;
-      return {id:d.id, cde_status:next};
+      const idx = cdeOrder.indexOf(d.cde_state||'WIP');
+      const next = idx>=0&&idx<cdeOrder.length-1?cdeOrder[idx+1]:d.cde_state;
+      return {id:d.id, cde_state:next};
     });
     let failed=0;
     for(const u of updates){
-      const {error}=await sb.from('drawings').update({cde_status:u.cde_status}).eq('id',u.id);
+      const {error}=await sb.from('drawings').update({cde_state:u.cde_state}).eq('id',u.id);
       if(error) failed++;
     }
     toast(failed?`CDE advanced with ${failed} error(s)`:`CDE advanced for ${ids.length} drawing${ids.length!==1?'s':''}`, failed?'error':'success');
