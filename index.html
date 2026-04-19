@@ -2596,9 +2596,9 @@ async function openNew() {
     openNewMS();
   } else if(currentPage==='sreg' && can('manageRegister')) {
     addRegisterItem();
-  } else if(currentPage==='corr') {
+  } else if(currentPage==='corr' && can('approve')) {
     openNewCorrespondence();
-  } else if(currentPage==='punch') {
+  } else if(currentPage==='punch' && can('approve')) {
     openNewPunchItem();
   } else if(currentPage==='subs' && can('manageSubs')) {
     openModal('Add Subcontractor', `
