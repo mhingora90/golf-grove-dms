@@ -1752,6 +1752,18 @@ async function renderSubcontractors() {
 
 // ─── USER MANAGEMENT ──────────────────────────────────────────────
 async function renderUsers() {
+  if(!can('manageUsers')){
+    const el = document.getElementById('content');
+    el.textContent = '';
+    const card = document.createElement('div');
+    card.className = 'card';
+    const msg = document.createElement('div');
+    msg.className = 'empty-state';
+    msg.textContent = 'Access Restricted — User Management is only available to developers.';
+    card.appendChild(msg);
+    el.appendChild(card);
+    return;
+  }
   const {data} = await sb.from('profiles').select('*').order('created_at',{ascending:false});
   const rows = data||[];
   document.getElementById('content').innerHTML = `
