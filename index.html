@@ -572,12 +572,30 @@ async function loadApp(user) {
 // ─── NAVIGATION ──────────────────────────────────────────────────
 const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements'};
 
+function canCreateOnPage(page) {
+  if(page==='draw') return can('upload');
+  if(page==='sub') return can('submit');
+  if(page==='ir') return can('submit');
+  if(page==='ncr') return can('raise');
+  if(page==='rfi') return true;
+  if(page==='trans') return true;
+  if(page==='ms') return can('submitMS');
+  if(page==='sreg') return can('manageRegister');
+  if(page==='corr') return can('approve');
+  if(page==='punch') return can('approve');
+  if(page==='subs') return can('manageSubs');
+  if(page==='users') return can('manageUsers');
+  return false;
+}
+
 function nav(page, el, opts) {
   currentPage = page;
   navFilter = opts?.filter || null;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(el) el.classList.add('active');
   document.getElementById('page-title').textContent = PAGE_TITLES[page]||page;
+  const fab = document.getElementById('new-btn');
+  if(fab) fab.style.display = canCreateOnPage(page) ? '' : 'none';
   render();
 }
 
@@ -3695,7 +3713,7 @@ async function viewPunchItem(id) {
           <select class="form-control" id="punch-status-${id}">
             <option ${p.status==='Open'?'selected':''}>Open</option>
             <option ${p.status==='In Progress'?'selected':''}>In Progress</option>
-            <option ${p.status==='Closed'?'selected':''}>Closed</option>
+            ${can('approve')?`<option ${p.status==='Closed'?'selected':''}>Closed</option>`:''}
           </select>
         </div>
       </div>
