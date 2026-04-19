@@ -560,7 +560,7 @@ async function loadApp(user) {
   const roleClass = `role-${profile?.role||'contractor'}`;
   document.getElementById('role-badge-top').className=`role-badge ${roleClass}`;
   document.getElementById('role-badge-top').textContent=profile?.role||'user';
-  if(profile?.role==='developer'||profile?.role==='consultant'){
+  if(profile?.role==='developer'){
     document.getElementById('n-users-wrap').style.display='';
   }
   // Set topbar date
@@ -1763,7 +1763,7 @@ async function renderSubcontractors() {
       <td style="color:var(--text2)">${s.trade||'—'}</td>
       <td><span class="badge badge-info">${s.discipline||'—'}</span></td>
       <td style="color:var(--text2)">${s.rep||'—'}</td>
-      <td><button class="btn btn-sm btn-danger" onclick="removeSub('${s.id}')">Remove</button></td>
+      <td>${can('manageSubs')?`<button class="btn btn-sm btn-danger" onclick="removeSub('${s.id}')">Remove</button>`:'—'}</td>
     </tr>`).join(''):'<tr><td colspan="5" class="empty-state">No subcontractors registered yet.</td></tr>'}
   </table></div></div>`;
 }
