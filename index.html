@@ -4077,22 +4077,25 @@ async function uploadAttachments(files, recordType, recordId) {
   if(uploaded > 0) toast(`${uploaded} file${uploaded>1?'s':''} attached`,'success');
   // Refresh attachment list in modal
   const atts = await loadAttachments(recordType, recordId);
+  refreshAttList(recordType, recordId, atts);
+}
+
+function refreshAttList(recordType, recordId, atts) {
   const countEl = document.getElementById('att-count-'+recordId);
   if(countEl) countEl.textContent = `Attachments (${atts.length})`;
   const list = document.getElementById('att-list-'+recordId);
-  if(list) {
-    const canDel = can('upload')||can('submit');
-    list.innerHTML = atts.length ? atts.map(a=>`
-      <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg3);border-radius:6px;border:0.5px solid var(--border)">
-        <span style="font-size:16px">${fileIcon(a.file_type)}</span>
-        <div style="flex:1;min-width:0">
-          <div style="font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.file_name}</div>
-          <div style="font-size:10px;color:var(--text3)">${formatFileSize(a.file_size)} · ${a.uploaded_by_name||'—'} · ${a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</div>
-        </div>
-        <button class="btn btn-sm" onclick="downloadAttachment('${"'"}${a.file_path}${"'"}','${"'"}${a.file_name}${"'"}')">Download</button>
-        ${canDel&&a.uploaded_by_id===currentUser?.id?`<button class="btn btn-sm btn-danger" onclick="deleteAttachment('${a.id}','${a.file_path}','${recordType}','${recordId}')">Remove</button>`:''}
-      </div>`).join('') : '<div style="font-size:11px;color:var(--text3);padding:4px">No attachments yet.</div>';
-  }
+  if(!list) return;
+  const canDel = can('upload')||can('submit');
+  list.innerHTML = atts.length ? atts.map(a=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg3);border-radius:6px;border:0.5px solid var(--border)">
+      <span style="font-size:16px">${fileIcon(a.file_type)}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.file_name}</div>
+        <div style="font-size:10px;color:var(--text3)">${formatFileSize(a.file_size)} · ${a.uploaded_by_name||'—'} · ${a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</div>
+      </div>
+      <button class="btn btn-sm" onclick="downloadAttachment('${"'"}${a.file_path}${"'"}','${"'"}${a.file_name}${"'"}')">Download</button>
+      ${canDel&&a.uploaded_by_id===currentUser?.id?`<button class="btn btn-sm btn-danger" onclick="deleteAttachment('${a.id}','${a.file_path}','${recordType}','${recordId}')">Remove</button>`:''}
+    </div>`).join('') : '<div style="font-size:11px;color:var(--text3);padding:4px">No attachments yet.</div>';
 }
 
 async function downloadAttachment(path, name) {
@@ -4109,12 +4112,7 @@ async function deleteAttachment(attId, path, recordType, recordId) {
   await sb.from('attachments').delete().eq('id', attId);
   toast('Attachment removed','info');
   const atts = await loadAttachments(recordType, recordId);
-  const countEl2 = document.getElementById('att-count-'+recordId);
-  if(countEl2) countEl2.textContent = `Attachments (${atts.length})`;
-  const list = document.getElementById('att-list-'+recordId);
-  if(list) list.innerHTML = atts.length
-    ? atts.map(a=>`<div style="padding:8px 10px;background:var(--bg3);border-radius:6px;border:0.5px solid var(--border);font-size:12px">${a.file_name}</div>`).join('')
-    : '<div style="font-size:11px;color:var(--text3);padding:4px">No attachments yet.</div>';
+  refreshAttList(recordType, recordId, atts);
 }
 
 // ─── STAGED FILES HELPER ──────────────────────────────────────────
