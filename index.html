@@ -117,6 +117,10 @@ tr:hover td{background:var(--bg3);cursor:pointer;color:var(--charcoal)}
 .chip{font-size:10px;padding:3px 10px;border-radius:16px;border:0.5px solid var(--border2);background:var(--bg2);color:var(--text2);cursor:pointer;transition:.12s}
 .chip:hover{border-color:var(--sand);color:var(--charcoal)}
 .chip.active{background:var(--bg4);color:var(--charcoal);border-color:var(--border2);font-weight:500}
+.reg-search{height:24px;padding:0 10px;background:var(--bg3);border:0.5px solid var(--border);border-radius:16px;color:var(--charcoal);font-size:11px;font-family:inherit;outline:none;min-width:180px;transition:.15s}
+.reg-search::placeholder{color:var(--text3)}
+.reg-search:focus{border-color:var(--border2);background:var(--bg2)}
+.srch-hide{display:none!important}
 
 /* MODAL */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(44,42,36,.35);z-index:1000;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;backdrop-filter:blur(3px)}
@@ -989,10 +993,11 @@ async function renderMS() {
   <div class="fbar">
     <span class="fbar-label">Status:</span>
     ${['All','Pending Review','Under Review','Approved','Revise & Resubmit','Rejected'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'ms','status','${s}')">${s}</span>`).join('')}
+    <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search method statements..." oninput="searchReg('ms',this.value)" />
   </div>
   <div class="table-wrap"><table>
     <tr><th>Ref No.</th><th>Title / Activity</th><th>Discipline</th><th>Location</th><th>Rev</th><th>Submitted By</th><th>Date</th><th>Status</th><th>Actions</th></tr>
-    ${rows.length?rows.map(m=>`<tr class="ms-row" data-status="${m.status||''}">
+    ${rows.length?rows.map(m=>`<tr class="ms-row" data-status="${m.status||''}" data-search="${[m.ref_no,m.title,m.activity].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}">
       <td class="mono">${m.ref_no}</td>
       <td><div style="font-weight:500;color:var(--blue);cursor:pointer" onclick="viewMS('${m.id}')">${m.title}</div><div style="font-size:10px;color:var(--text3)">${m.activity||''}</div></td>
       <td style="color:var(--text2)">${m.discipline||'—'}</td>
@@ -1006,6 +1011,7 @@ async function renderMS() {
         ${can('approve')&&m.status==='Pending Review'?`<button class="btn btn-sm btn-success" onclick="viewMS('${m.id}')">Review</button>`:''}
       </div></td>
     </tr>`).join(''):`<tr><td colspan="9" class="empty-state">No method statements submitted yet</td></tr>`}
+    <tr id="srch-empty-ms" style="display:none"><td colspan="9" class="empty-state"></td></tr>
   </table></div>`;
 }
 
@@ -1441,13 +1447,14 @@ async function renderDrawings() {
     <span style="flex:1"></span>
     <button class="btn btn-sm" onclick="exportDrawingRegister()">Export Register</button>
     ${can('upload')?`<button class="btn btn-sm" style="font-size:11px;margin-left:4px" onclick="openBulkImport()">Bulk Import</button>`:''}
+    <input type="text" class="reg-search" placeholder="Search drawings..." oninput="searchReg('draw',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
     <tr>
       <th style="width:32px;text-align:center"><input type="checkbox" id="draw-select-all" onchange="selectAllDrawings(this)" /></th>
       <th>Drawing No.</th><th>Title</th><th>Discipline</th><th>Rev</th><th>POI</th><th>CDE State</th><th>Review Status</th><th>Actions</th>
     </tr>
-    ${rows.length?rows.map(d=>`<tr class="draw-row" data-disc="${d.discipline||''}" data-status="${d.status||''}" data-cde="${d.cde_state||'WIP'}" data-poi="${d.poi_code||''}" data-id="${d.id}">
+    ${rows.length?rows.map(d=>`<tr class="draw-row" data-disc="${d.discipline||''}" data-status="${d.status||''}" data-cde="${d.cde_state||'WIP'}" data-poi="${d.poi_code||''}" data-id="${d.id}" data-search="${[d.drawing_no,d.title,d.discipline,d.originator].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}">
       <td style="text-align:center"><input type="checkbox" class="row-cb" id="dcb-${d.id}" ${d.cde_state==='Superseded'||d.status==='Void'?'disabled':''} onchange="toggleDrawSelect('${d.id}',this)" /></td>
       <td class="mono" style="${d.cde_state==='Superseded'||d.status==='Void'?'opacity:.5;text-decoration:line-through':''}">${d.drawing_no}</td>
       <td style="color:var(--blue);cursor:pointer;${d.cde_state==='Superseded'||d.status==='Void'?'opacity:.5':''}" onclick="viewDraw('${d.id}')">${d.title}${d.cde_state==='Superseded'?'<span style="font-size:9px;color:var(--text3);margin-left:6px">superseded</span>':''}${d.status==='Void'?'<span style="font-size:9px;color:var(--red);margin-left:6px">void</span>':''}</td>
@@ -1463,6 +1470,7 @@ async function renderDrawings() {
         ${can('approve')&&d.status!=='Void'?`<button class="btn btn-sm btn-danger" onclick="voidDrawing('${d.id}','${d.drawing_no}')">Void</button>`:''}
       </div></td>
     </tr>`).join(''):'<tr><td colspan="9" class="empty-state">No drawings yet. Upload the first one.</td></tr>'}
+    <tr id="srch-empty-draw" style="display:none"><td colspan="9" class="empty-state"></td></tr>
   </table></div></div>
   <div id="bulk-bar-draw" style="position:fixed;bottom:0;left:0;right:0;z-index:200;transform:translateY(100%);transition:transform .2s ease;background:var(--bg2);border-top:0.5px solid var(--border2);padding:12px 16px">
     <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -1551,6 +1559,19 @@ function filt(el, page, field, val) {
     r.style.display=(val==='All'||rv===val)?'':'none';
   });
 }
+function searchReg(page, q) {
+  q = q.trim().toLowerCase();
+  const cls = {draw:'.draw-row',sub:'.sub-row',ir:'.ir-row',ncr:'.ncr-row',rfi:'.rfi-row',trans:'.trans-row',corr:'.corr-row',punch:'.punch-row',ms:'.ms-row'}[page];
+  if(!cls) return;
+  let vis = 0;
+  document.querySelectorAll(cls).forEach(r=>{
+    const ok = !q||(r.dataset.search||'').includes(q);
+    r.classList.toggle('srch-hide',!ok);
+    if(ok&&r.style.display!=='none') vis++;
+  });
+  const el=document.getElementById('srch-empty-'+page);
+  if(el){el.style.display=(!vis&&q)?'':'none';if(!vis&&q)el.querySelector('td').textContent=`No results for "${q}"`;}
+}
 function filtIROverdue(el) {
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
   document.querySelectorAll('.ir-row').forEach(r=>{ r.style.display=r.dataset.overdue==='1'?'':'none'; });
@@ -1592,6 +1613,7 @@ async function renderSubmittals() {
   <div class="fbar"><span class="fbar-label">Status:</span>
     ${['All','Pending Review','Approved','Revise & Resubmit','Rejected'].map((s,i)=>`<span class="chip ${i===0&&!subOverdueFilter?'active':''}" onclick="filt(this,'sub','status','${s}')">${s}</span>`).join('')}
     <span class="chip${subOverdueFilter?' active':''}" onclick="filtSubOverdue(this)">Overdue</span>
+    <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search submittals..." oninput="searchReg('sub',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
     <tr><th style="width:32px"><input type="checkbox" id="sub-select-all" onchange="selectAllSubmittals(this)" /></th><th>Ref No.</th><th>Title</th><th>From</th><th>Date</th><th>Due</th><th>Status</th><th>Outcome</th><th>Rev</th><th>Actions</th></tr>
@@ -1599,7 +1621,7 @@ async function renderSubmittals() {
       const isOverdue = s.due_date&&s.due_date<today&&s.status==='Pending Review';
       const isSoon = !isOverdue&&s.due_date&&s.status==='Pending Review'&&(new Date(s.due_date)-new Date(today))<=3*86400000;
       const nonSelectable = s.status==='Approved'||s.status==='Rejected';
-      return `<tr class="sub-row" data-id="${s.id}" data-status="${s.status}" data-overdue="${isOverdue?'1':'0'}" style="${isOverdue?'background:var(--red-bg);border-left:2px solid var(--red)':isSoon?'border-left:2px solid var(--amber)':''}">
+      return `<tr class="sub-row" data-id="${s.id}" data-status="${s.status}" data-overdue="${isOverdue?'1':'0'}" data-search="${[s.ref_no,s.title,s.from_party,s.to_party].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" style="${isOverdue?'background:var(--red-bg);border-left:2px solid var(--red)':isSoon?'border-left:2px solid var(--amber)':''}">
         <td><input type="checkbox" class="row-cb" id="scb-${s.id}" ${nonSelectable?'disabled':''} onchange="toggleSubSelect('${s.id}',this)" /></td>
         <td class="mono">${s.ref_no}${s.parent_id?'<span style="font-size:9px;color:var(--amber);margin-left:4px">↻</span>':''}</td>
         <td style="color:var(--blue);cursor:pointer" onclick="viewSub('${s.id}')">${s.title}</td>
@@ -1616,6 +1638,7 @@ async function renderSubmittals() {
         </div></td>
       </tr>`;
     }).join(''):'<tr><td colspan="10" class="empty-state">No submittals yet.</td></tr>'}
+    <tr id="srch-empty-sub" style="display:none"><td colspan="10" class="empty-state"></td></tr>
   </table></div></div>
   <div id="bulk-bar-sub" style="position:fixed;bottom:0;left:0;right:0;z-index:200;transform:translateY(100%);transition:transform .2s ease;background:var(--bg2);border-top:0.5px solid var(--border2);padding:12px 16px">
     <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -1657,6 +1680,7 @@ async function renderInspections() {
   <div class="fbar"><span class="fbar-label">Status:</span>
     ${['All','Pending','Approved','Approved as Noted','Correction','Rejected','Re-Inspection'].map((s,i)=>`<span class="chip ${i===0&&!irOverdueFilter?'active':''}" onclick="filt(this,'ir','status','${s}')">${s}</span>`).join('')}
     <span class="chip${irOverdueFilter?' active':''}" onclick="filtIROverdue(this)">Overdue</span>
+    <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search inspections..." oninput="searchReg('ir',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
     <tr><th>Ref No.</th><th>Rev</th><th>Elements</th><th>Location</th><th>Due Date</th><th>SLA</th><th>Checklist</th><th>Status</th><th>Actions</th></tr>
@@ -1666,7 +1690,7 @@ async function renderInspections() {
       const ckPassed = hasChecklist?Object.values(i.checklist).filter(v=>v==='pass').length:0;
       const irIsOverdue = i.due_date&&i.due_date<todayStr&&i.status==='Pending';
       const irIsSoon = !irIsOverdue&&i.due_date&&i.status==='Pending'&&(new Date(i.due_date)-today)<=3*86400000;
-      return `<tr class="ir-row" data-status="${i.status}" data-overdue="${irIsOverdue?'1':'0'}" style="${irIsOverdue?'border-left:2px solid var(--red)':irIsSoon?'border-left:2px solid var(--amber)':''}">
+      return `<tr class="ir-row" data-status="${i.status}" data-overdue="${irIsOverdue?'1':'0'}" data-search="${[i.ref_no,i.location,i.elements].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" style="${irIsOverdue?'border-left:2px solid var(--red)':irIsSoon?'border-left:2px solid var(--amber)':''}">
         <td class="mono">${i.ref_no}${i.parent_ir_id?'<span style="font-size:9px;color:var(--amber);margin-left:4px">↻</span>':''}</td>
         <td><span class="rev-chip">R${i.revision||'00'}</span></td>
         <td style="color:var(--blue);cursor:pointer;max-width:180px" onclick="viewIR('${i.id}')">${(i.elements||'').substring(0,45)}${(i.elements||'').length>45?'…':''}</td>
@@ -1682,6 +1706,7 @@ async function renderInspections() {
         </div></td>
       </tr>`;
     }).join(''):'<tr><td colspan="9" class="empty-state">No inspection requests yet.</td></tr>'}
+    <tr id="srch-empty-ir" style="display:none"><td colspan="9" class="empty-state"></td></tr>
   </table></div></div>`;
   if(irOverdueFilter) {
     document.querySelectorAll('.ir-row').forEach(r=>{ r.style.display=r.dataset.overdue==='1'?'':'none'; });
@@ -1722,6 +1747,7 @@ async function renderNCRs() {
     <span style="width:.5px;background:var(--border2);height:16px;align-self:center"></span>
     <span class="fbar-label">Root Cause:</span>
     ${['All','Design Error','Material Non-compliance','Workmanship','Coordination Failure'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'ncr','root_cause','${s}')">${s}</span>`).join('')}
+    <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search NCRs..." oninput="searchReg('ncr',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
     <tr><th>Ref</th><th>Title</th><th>Root Cause</th><th>Location</th><th>Age</th><th>Severity</th><th>CAP</th><th>Status</th><th>Actions</th></tr>
@@ -1729,7 +1755,7 @@ async function renderNCRs() {
       const ncrAge = n.raised_date?Math.floor((today-new Date(n.raised_date))/86400000):0;
       const ncrIsOverdue = n.status!=='Closed'&&ncrAge>30;
       const ncrIsSoon = !ncrIsOverdue&&n.status!=='Closed'&&ncrAge>14;
-      return `<tr class="ncr-row" data-status="${n.status}" data-root_cause="${n.root_cause||''}" data-overdue="${ncrIsOverdue?'1':'0'}" style="${ncrIsOverdue?'border-left:2px solid var(--red)':ncrIsSoon?'border-left:2px solid var(--amber)':''}">
+      return `<tr class="ncr-row" data-status="${n.status}" data-root_cause="${n.root_cause||''}" data-overdue="${ncrIsOverdue?'1':'0'}" data-search="${[n.ref_no,n.title,n.location].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" style="${ncrIsOverdue?'border-left:2px solid var(--red)':ncrIsSoon?'border-left:2px solid var(--amber)':''}">
       <td class="mono">${n.ref_no}</td>
       <td style="color:var(--blue);cursor:pointer" onclick="viewNCR('${n.id}')">${n.title}</td>
       <td style="font-size:10px;color:var(--text2)">${n.root_cause||'—'}</td>
@@ -1745,6 +1771,7 @@ async function renderNCRs() {
         ${can('approve')&&n.status==='CAP Verified'?`<button class="btn btn-sm" onclick="closeNCR('${n.id}')">Close</button>`:''}
       </div></td>
     </tr>`;}).join(''):'<tr><td colspan="9" class="empty-state">No NCRs raised.</td></tr>'}
+    <tr id="srch-empty-ncr" style="display:none"><td colspan="9" class="empty-state"></td></tr>
   </table></div></div>`;
   if(ncrOverdueFilter) {
     document.querySelectorAll('.ncr-row').forEach(r=>{ r.style.display=r.dataset.overdue==='1'?'':'none'; });
@@ -1987,7 +2014,7 @@ async function viewSub(id) {
   const dsubWrapped = `<div id='dsub-print-${id}'>${parentInfo}${dsub}</div>`;
   openModal(`DSUB – ${s.ref_no}`, dsubWrapped+attachmentSectionHTML('submittal',id,atts)+commentThreadHTML('submittal',id,comments),
     `${can('approve')&&s.status==='Pending Review'?`<button class="btn btn-success" onclick="reviewSub('${id}')">Review & Respond</button>`:''}
-     ${can('submit')&&s.status==='Revise & Resubmit'?`<button class="btn btn-primary" onclick="createResubmission('${id}')">Create Resubmission</button>`:''}
+     ${can('submit')&&!can('approve')&&s.status==='Revise & Resubmit'?`<button class="btn btn-primary" onclick="createResubmission('${id}')">Create Resubmission</button>`:''}
      ${s.due_date?`<span style="font-size:11px;padding:4px 8px">${overdueTag(s.due_date)}</span>`:''}
      <button class="btn" onclick="viewAuditTrail('submittal','${id}','${s.ref_no}')">View Audit Trail</button>
      <button class="btn" onclick="printDoc('dsub-print-${id}','DSUB_${s.ref_no}.pdf')">Download PDF</button>
@@ -3320,13 +3347,14 @@ async function renderRFIs() {
     ${['All','Open','Responded','Closed'].map((s,i)=>`<span class="chip ${i===0&&!rfiOverdueFilter?'active':''}" onclick="filt(this,'rfi','status','${s}')">${s}</span>`).join('')}
     <span class="chip${rfiOverdueFilter?' active':''}" onclick="filtRFIOverdue(this)">Overdue</span>
     <span class="chip" onclick="filt(this,'rfi','priority','Urgent')" style="color:var(--red-light);border-color:var(--red)">Urgent only</span>
+    <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search RFIs..." oninput="searchReg('rfi',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
     <tr><th>Ref No.</th><th>Subject</th><th>Drawing Ref</th><th>Raised By</th><th>Priority</th><th>Due Date</th><th>Status</th><th>Actions</th></tr>
     ${rows.length?rows.map(r=>{
       const rfiIsOverdue = r.due_date&&r.due_date<today&&r.status==='Open';
       const rfiIsSoon = !rfiIsOverdue&&r.due_date&&r.status==='Open'&&(new Date(r.due_date)-new Date(today))<=3*86400000;
-      return `<tr class="rfi-row" data-status="${r.status}" data-priority="${r.priority||'Normal'}" data-overdue="${rfiIsOverdue?'1':'0'}" style="${rfiIsOverdue?'border-left:2px solid var(--red)':rfiIsSoon?'border-left:2px solid var(--amber)':''}">
+      return `<tr class="rfi-row" data-status="${r.status}" data-priority="${r.priority||'Normal'}" data-overdue="${rfiIsOverdue?'1':'0'}" data-search="${[r.ref_no,r.subject].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" style="${rfiIsOverdue?'border-left:2px solid var(--red)':rfiIsSoon?'border-left:2px solid var(--amber)':''}">
       <td class="mono">${r.ref_no}</td>
       <td style="color:var(--blue-light);cursor:pointer" onclick="viewRFI('${r.id}')">${r.subject}</td>
       <td style="color:var(--text2);font-size:10px">${r.drawing_ref||'—'}</td>
@@ -3339,6 +3367,7 @@ async function renderRFIs() {
         ${can('approve')&&r.status==='Open'?`<button class="btn btn-sm btn-success" onclick="respondRFI('${r.id}')">Respond</button>`:''}
       </div></td>
     </tr>`;}).join(''):'<tr><td colspan="8" class="empty-state">No RFIs raised yet.</td></tr>'}
+    <tr id="srch-empty-rfi" style="display:none"><td colspan="8" class="empty-state"></td></tr>
   </table></div></div>`;
   if(rfiOverdueFilter) {
     document.querySelectorAll('.rfi-row').forEach(r=>{ r.style.display=r.dataset.overdue==='1'?'':'none'; });
@@ -3412,9 +3441,12 @@ async function renderTransmittals() {
   const {data} = await sb.from('transmittals').select('*').order('created_at',{ascending:false});
   const rows = data||[];
   document.getElementById('content').innerHTML = `
+  <div class="fbar">
+    <input type="text" class="reg-search" placeholder="Search transmittals..." oninput="searchReg('trans',this.value)" />
+  </div>
   <div class="card"><div class="tw"><table>
     <tr><th>Ref No.</th><th>From</th><th>To</th><th>Date</th><th>Purpose</th><th>Method</th><th>Documents</th><th>Actions</th></tr>
-    ${rows.length?rows.map(t=>`<tr>
+    ${rows.length?rows.map(t=>`<tr class="trans-row" data-search="${[t.ref_no,t.notes].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}">
       <td class="mono">${t.ref_no}</td>
       <td style="color:var(--text2)">${t.from_party||'—'}</td>
       <td style="color:var(--text2)">${t.to_party||'—'}</td>
@@ -3424,6 +3456,7 @@ async function renderTransmittals() {
       <td style="color:var(--text3);font-size:10px">${Array.isArray(t.documents)?t.documents.length+' doc(s)':typeof t.documents==='string'?JSON.parse(t.documents||'[]').length+' doc(s)':'—'}</td>
       <td><button class="btn btn-sm" onclick="viewTransmittal('${t.id}')">View</button></td>
     </tr>`).join(''):'<tr><td colspan="8" class="empty-state">No transmittals created yet.</td></tr>'}
+    <tr id="srch-empty-trans" style="display:none"><td colspan="8" class="empty-state"></td></tr>
   </table></div></div>`;
 }
 
@@ -3501,12 +3534,13 @@ async function renderCorrespondence() {
   </div>
   <div class="fbar"><span class="fbar-label">Type:</span>
     ${['All','Site Instruction','Letter','Variation Order','Extension of Time','RFI Response','General Correspondence'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'corr','type','${s}')">${s}</span>`).join('')}
+    <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search correspondence..." oninput="searchReg('corr',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
     <tr><th>Ref No.</th><th>Type</th><th>Subject</th><th>From</th><th>To</th><th>Date</th><th>Due</th><th>Status</th><th>Actions</th></tr>
     ${rows.length?rows.map(c=>{
       const isOverdue = c.due_date&&c.due_date<today&&c.status==='Open';
-      return `<tr class="corr-row" data-type="${c.type||''}" style="${isOverdue?'background:var(--red-bg)':''}">
+      return `<tr class="corr-row" data-type="${c.type||''}" data-search="${[c.ref_no,c.subject].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" style="${isOverdue?'background:var(--red-bg)':''}">
         <td class="mono">${c.ref_no||'—'}</td>
         <td>${corrTypeBadge(c.type)}</td>
         <td style="color:var(--blue);cursor:pointer;max-width:200px" onclick="viewCorrespondence('${c.id}')">${c.subject||'—'}</td>
@@ -3518,6 +3552,7 @@ async function renderCorrespondence() {
         <td><button class="btn btn-sm" onclick="viewCorrespondence('${c.id}')">View</button></td>
       </tr>`;
     }).join(''):'<tr><td colspan="9" class="empty-state">No correspondence logged yet.</td></tr>'}
+    <tr id="srch-empty-corr" style="display:none"><td colspan="9" class="empty-state"></td></tr>
   </table></div></div>`;
 }
 
@@ -3662,10 +3697,11 @@ async function renderPunchList() {
     <span style="width:.5px;background:var(--border2);height:16px;align-self:center"></span>
     <span class="fbar-label">Severity:</span>
     ${['All','Minor','Major','Critical'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'punch','severity','${s}')">${s}</span>`).join('')}
+    <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search punch list..." oninput="searchReg('punch',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
     <tr><th>#</th><th>Description</th><th>Location</th><th>Discipline</th><th>Raised By</th><th>Assigned To</th><th>Severity</th><th>Status</th><th>Actions</th></tr>
-    ${rows.length?rows.map((p,idx)=>`<tr class="punch-row" data-status="${p.status||''}" data-severity="${p.severity||''}">
+    ${rows.length?rows.map((p,idx)=>`<tr class="punch-row" data-status="${p.status||''}" data-severity="${p.severity||''}" data-search="${[p.description,p.location].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}">
       <td class="mono" style="font-size:10px">${String(idx+1).padStart(3,'0')}</td>
       <td style="color:var(--blue);cursor:pointer;max-width:200px" onclick="viewPunchItem('${p.id}')">${p.description||'—'}</td>
       <td><div style="font-size:11px;color:var(--charcoal)">${p.location||'—'}</div><div class="punch-loc">${p.element||''}</div></td>
@@ -3679,6 +3715,7 @@ async function renderPunchList() {
         ${p.status!=='Closed'&&can('approve')?`<button class="btn btn-sm btn-success" onclick="closePunchItem('${p.id}')">Close</button>`:''}
       </div></td>
     </tr>`).join(''):'<tr><td colspan="9" class="empty-state">No punch list items. Items are typically raised during snagging and handover inspections.</td></tr>'}
+    <tr id="srch-empty-punch" style="display:none"><td colspan="9" class="empty-state"></td></tr>
   </table></div></div>`;
 }
 
