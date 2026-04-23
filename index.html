@@ -1454,7 +1454,8 @@ async function doBatchDrawAction(action) {
   if(action==='approve') {
     const {error} = await sb.from('drawings').update({status:'Approved'}).in('id', ids);
     if(error){toast('Batch approve failed: '+error.message,'error');return;}
-    const user = (await sb.auth.getUser()).data.user;
+    const user = (await sb.auth.getUser()).data?.user;
+    if(!user){toast('Session expired — please refresh','error');return;}
     const name = user?.user_metadata?.full_name||user?.email||'Unknown';
     await sb.from('document_audit_log').insert(ids.map(id=>({document_id:id,document_type:'drawing',action:'Approved (bulk)',performed_by_name:name,performed_by_id:user.id})));
     toast(`Approved ${ids.length} drawing${ids.length!==1?'s':''}`, 'success');
@@ -1502,7 +1503,8 @@ async function doBatchSubAction(action) {
   if(action==='review') {
     const {error} = await sb.from('submittals').update({status:'Approved',outcome:'1'}).in('id', ids);
     if(error){toast('Batch review failed: '+error.message,'error');return;}
-    const user = (await sb.auth.getUser()).data.user;
+    const user = (await sb.auth.getUser()).data?.user;
+    if(!user){toast('Session expired — please refresh','error');return;}
     const name = user?.user_metadata?.full_name||user?.email||'Unknown';
     await sb.from('document_audit_log').insert(ids.map(id=>({document_id:id,document_type:'submittal',action:'Submittal Reviewed: Code 1 \u2013 Approved (bulk)',performed_by_name:name,performed_by_id:user.id})));
     toast(`Marked ${ids.length} submittal${ids.length!==1?'s':''} as Approved`, 'success');
@@ -1552,7 +1554,7 @@ async function renderDrawings() {
         <button class="btn btn-sm" onclick="viewDraw('${d.id}')">View</button>
         ${can('upload')&&d.status!=='Void'?`<button class="btn btn-sm" onclick="uploadRev('${d.id}')">New Rev</button>`:''}
         ${can('approve')&&d.status==='Under Review'?`<button class="btn btn-sm btn-success" onclick="viewDraw('${d.id}')">Review</button>`:''}
-        ${can('approve')&&d.status!=='Void'?`<button class="btn btn-sm btn-danger" onclick="voidDrawing('${d.id}','${d.drawing_no}')">Void</button>`:''}
+        ${can('approve')&&d.status!=='Void'?`<button class="btn btn-sm btn-danger" onclick="voidDrawing('${d.id}',${JSON.stringify(d.drawing_no)})">Void</button>`:''}
       </div></td>
     </tr>`).join(''):'<tr><td colspan="9" class="empty-state">No drawings yet. Upload the first one.</td></tr>'}
     <tr id="srch-empty-draw" style="display:none"><td colspan="9" class="empty-state"></td></tr>
@@ -2369,11 +2371,13 @@ function exportDrawingRegister() {
 
 // ─── ACTIONS ──────────────────────────────────────────────────────
 async function approveDrawing(id) {
-  const {data:d} = await sb.from('drawings').select('revision').eq('id',id).single();
-  await sb.from('drawings').update({status:'Approved'}).eq('id',id);
+  const {data:d} = await sb.from('drawings').select('revision').eq('id',id).maybeSingle();
+  if(!d){toast('Drawing not found','error');return;}
+  const {error} = await sb.from('drawings').update({status:'Approved'}).eq('id',id);
+  if(error){toast('Error: '+error.message,'error');return;}
   await logAudit(id, 'drawing', 'Drawing Approved');
   // Update revision record with approval details
-  await sb.from('drawing_revisions')
+  const {error:revErr} = await sb.from('drawing_revisions')
     .update({
       approved_by_name:currentProfile?.full_name||currentUser?.email,
       approved_by_id:currentUser?.id,
@@ -2382,6 +2386,7 @@ async function approveDrawing(id) {
     })
     .eq('drawing_id',id)
     .eq('revision',d.revision);
+  if(revErr){toast('Drawing approved but revision record update failed','warning');}
   toast('Drawing approved','success'); closeModal(); render();
 }
 
@@ -2466,7 +2471,8 @@ async function doCloseNCR(id) {
 
 async function removeSub(id) {
   if(!confirm('Remove this subcontractor?')) return;
-  await sb.from('subcontractors').delete().eq('id',id);
+  const {error} = await sb.from('subcontractors').delete().eq('id',id);
+  if(error){toast('Error: '+error.message,'error');return;}
   toast('Subcontractor removed','info'); render();
 }
 
@@ -2511,7 +2517,8 @@ async function doUploadRev(id) {
   // Hard block on revision scheme mismatch
   const revCheck = enforceRevisionScheme(newStatus, newRev);
   if(revCheck.warn){toast(revCheck.msg,'error');return;}
-  const {data:d} = await sb.from('drawings').select('revision,superseded_revisions,file_path').eq('id',id).single();
+  const {data:d} = await sb.from('drawings').select('revision,superseded_revisions,file_path,status').eq('id',id).maybeSingle();
+  if(!d){toast('Drawing not found','error');return;}
   let supers = JSON.parse(d.superseded_revisions||'[]');
   const errEl = document.getElementById('nr-err-'+id);
   const isDupe = newRev.trim() === d.revision?.trim() || supers.includes(newRev.trim());
@@ -2534,7 +2541,8 @@ async function doUploadRev(id) {
   const update = {revision:newRev,status:newStatus,superseded_revisions:JSON.stringify(supers)};
   if(filePath) update.file_path = filePath;
   const prevData = {revision:d.revision, status:d.status, superseded_revisions:d.superseded_revisions, file_path:d.file_path};
-  await sb.from('drawings').update(update).eq('id',id);
+  const {error:updErr} = await sb.from('drawings').update(update).eq('id',id);
+  if(updErr){toast('Error updating drawing: '+updErr.message,'error');return;}
   // Log revision event — wrapped to prevent orphaned drawing state
   const {error:revErr} = await sb.from('drawing_revisions').insert({
     drawing_id:id,
@@ -2818,7 +2826,8 @@ async function doNewDraw() {
     const tempId = Date.now().toString();
     const path = `new/${tempId}_${file.name}`;
     const {error,data} = await sb.storage.from('drawings').upload(path, file, {upsert:true});
-    if(!error) filePath = path;
+    if(error){toast('Storage upload failed — '+error.message,'error');return;}
+    filePath = path;
   }
   const {data:inserted,error} = await sb.from('drawings').insert({
     drawing_no:id,title,discipline:document.getElementById('nd-disc').value,
@@ -3313,7 +3322,8 @@ async function doAddRegisterItem() {
 
 async function deleteRegisterItem(id) {
   if(!confirm('Remove this item from the register?')) return;
-  await sb.from('submittal_register').delete().eq('id',id);
+  const {error} = await sb.from('submittal_register').delete().eq('id',id);
+  if(error){toast('Error: '+error.message,'error');return;}
   toast('Item removed','info');
   renderSubmittalRegister();
 }
@@ -3550,17 +3560,19 @@ async function doRespondRFI(id) {
   const engName = document.getElementById('rfi-by-'+id)?.value?.trim();
   if(!resp){toast('Please enter a response','error');return;}
   if(!engName){toast("Please enter the responding engineer's name",'error');return;}
-  await sb.from('rfis').update({
+  const {error} = await sb.from('rfis').update({
     status:'Responded', response:resp,
     responded_by:engName,
     responded_date:document.getElementById('rfi-dt-'+id)?.value
   }).eq('id',id);
+  if(error){toast('Error: '+error.message,'error');return;}
   await logAudit(id, 'rfi', 'RFI Responded');
   toast('RFI response submitted','success'); closeModal(); render();
 }
 
 async function closeRFI(id) {
-  await sb.from('rfis').update({status:'Closed'}).eq('id',id);
+  const {error} = await sb.from('rfis').update({status:'Closed'}).eq('id',id);
+  if(error){toast('Error: '+error.message,'error');return;}
   await logAudit(id, 'rfi', 'RFI Closed');
   toast('RFI closed','success'); closeModal(); render();
 }
@@ -3709,7 +3721,8 @@ async function viewCorrespondence(id) {
 }
 
 async function closeCorrespondence(id) {
-  await sb.from('correspondence').update({status:'Closed',closed_date:new Date().toISOString().split('T')[0]}).eq('id',id);
+  const {error} = await sb.from('correspondence').update({status:'Closed',closed_date:new Date().toISOString().split('T')[0]}).eq('id',id);
+  if(error){toast('Error: '+error.message,'error');return;}
   await logAudit(id, 'correspondence', 'Correspondence: Closed');
   toast('Correspondence closed','success'); closeModal(); render();
 }
@@ -3904,7 +3917,8 @@ async function updatePunchItem(id) {
 }
 
 async function closePunchItem(id) {
-  await sb.from('punch_list').update({status:'Closed',closed_date:new Date().toISOString().split('T')[0]}).eq('id',id);
+  const {error} = await sb.from('punch_list').update({status:'Closed',closed_date:new Date().toISOString().split('T')[0]}).eq('id',id);
+  if(error){toast('Error: '+error.message,'error');return;}
   await logAudit(id, 'punch_list', 'Punch Item Closed');
   toast('Item closed','success'); render();
 }
