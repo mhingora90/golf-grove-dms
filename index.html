@@ -1597,8 +1597,9 @@ function searchReg(page, q) {
   let vis = 0;
   document.querySelectorAll(cls).forEach(r=>{
     const ok = !q||(r.dataset.search||'').includes(q);
-    r.classList.toggle('srch-hide',!ok);
-    if(ok&&r.style.display!=='none') vis++;
+    const filtered = r.style.display==='none';
+    r.classList.toggle('srch-hide',!ok||filtered);
+    if(ok&&!filtered) vis++;
   });
   const el=document.getElementById('srch-empty-'+page);
   if(el){el.style.display=(!vis&&q)?'':'none';if(!vis&&q)el.querySelector('td').textContent=`No results for "${q}"`;}
