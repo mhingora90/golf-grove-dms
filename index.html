@@ -1439,19 +1439,32 @@ async function doBatchDrawAction(action) {
   }
   if(action==='advanceCDE') {
     const cdeOrder = ['WIP','Shared','Published','Archived'];
+    const role = currentProfile?.role;
+    const allowedTransitions = {
+      'WIP':       ['contractor','developer'],
+      'Shared':    ['consultant','developer'],
+      'Published': ['developer'],
+    };
     const {data:draws} = await sb.from('drawings').select('id,cde_state').in('id', ids);
     const updates = (draws||[]).map(d=>{
       const idx = cdeOrder.indexOf(d.cde_state||'WIP');
       const next = idx>=0&&idx<cdeOrder.length-1?cdeOrder[idx+1]:d.cde_state;
+      // Role gate
+      if(!allowedTransitions[d.cde_state]?.includes(role)){
+        console.warn('[batch CDE] skipped', d.id, d.cde_state, '→', next, '— role', role, 'not permitted');
+        return null;
+      }
       return {id:d.id, cde_state:next};
-    });
+    }).filter(Boolean);
     let failed=0;
     for(const u of updates){
       const {error}=await sb.from('drawings').update({cde_state:u.cde_state}).eq('id',u.id);
       if(error) failed++;
       else await logAudit(u.id, 'drawing', 'CDE State Change → '+u.cde_state+' (bulk)');
     }
-    toast(failed?`CDE advanced with ${failed} error(s)`:`CDE advanced for ${ids.length} drawing${ids.length!==1?'s':''}`, failed?'error':'success');
+    const skipped = (draws||[]).length - updates.length;
+    const msg = `CDE advanced for ${updates.length} drawing${updates.length!==1?'s':''}${failed?' — '+failed+' error(s)':''}${skipped?' — '+skipped+' skipped (no permission)':''}`;
+    toast(msg, failed?'error':'success');
   }
   clearDrawSelection();
   renderDrawings();
