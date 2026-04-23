@@ -539,21 +539,23 @@ async function doLogout() {
 
 async function loadApp(user) {
   currentUser = user;
-  let {data:profile} = await sb.from('profiles').select('*').eq('id',user.id).single();
+  let {data:profile, error:profErr} = await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  if(profErr && profErr.code !== 'PGRST116'){toast('Profile error: '+profErr.message,'error');return;}
   if(profile && !profile.role) {
     const meta = user.user_metadata||{};
     if(meta.role) {
       await sb.from('profiles').update({role:meta.role,company:meta.company||profile.company,full_name:meta.full_name||profile.full_name}).eq('id',user.id);
-      const {data:refreshed} = await sb.from('profiles').select('*').eq('id',user.id).single();
-      profile = refreshed;
+      const {data:refreshed} = await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+      profile = refreshed||null;
     }
   }
   if(!profile) {
     const meta = user.user_metadata||{};
     await sb.from('profiles').upsert({id:user.id,email:user.email,full_name:meta.full_name||user.email,role:meta.role||'contractor',company:meta.company||''});
-    const {data:created} = await sb.from('profiles').select('*').eq('id',user.id).single();
-    profile = created;
+    const {data:created} = await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+    profile = created||null;
   }
+  if(!profile){toast('Failed to load profile — please refresh','error');return;}
   currentProfile = profile;
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('app-screen').style.display='flex';
