@@ -2422,6 +2422,9 @@ async function doUploadRev(id) {
   const newStatus = document.getElementById('rs-'+id).value;
   const file = selectedFiles[id];
   if(!newRev){toast('Please enter a revision number','error');return;}
+  // Hard block on revision scheme mismatch
+  const revCheck = enforceRevisionScheme(newStatus, newRev);
+  if(revCheck.warn){toast(revCheck.msg,'error');return;}
   const {data:d} = await sb.from('drawings').select('revision,superseded_revisions,file_path').eq('id',id).single();
   let supers = JSON.parse(d.superseded_revisions||'[]');
   const errEl = document.getElementById('nr-err-'+id);
