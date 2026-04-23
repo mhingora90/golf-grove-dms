@@ -15,7 +15,7 @@ Paste this file at the start of any new Claude session to restore full context i
 |---|---|
 | Repo | github.com/mhingora90/golf-grove-dms |
 | Live | https://golf-grove-dms.vercel.app |
-| Working file | `/home/claude/index_v3.html` (4,116 lines, ~275KB) |
+| Working file | `index.html` (~4,700 lines, ~280KB) |
 | Project | Golf Grove – Residential Building (B+G+P+7+Roof), Production City, Dubai |
 | Developer | Regent Star Property Developments |
 | Consultant | POE Engineering Consultants |
@@ -288,17 +288,36 @@ Open → CAP Submitted → CAP Verified → Closed
 ## Building / Editing Pattern
 
 When making changes:
-1. Read the relevant function(s) first with `sed -n 'START,ENDp'`
-2. Write all changes as a Python script that uses `str.replace()` on exact patterns
-3. Run `node --check /tmp/check.js` after extracting inline JS with regex
-4. Fix any literal newline issues in strings (use `\\n` not actual newlines)
-5. Copy to `/mnt/user-data/outputs/index.html` and present to user
+1. Read the relevant function(s) first with `read_file`
+2. Edit with `edit` tool using exact string matching (include 3+ lines context before/after)
+3. Run `git diff --stat` to verify scope
+4. Commit and push after grouping related changes
 
 **Common bugs to watch for:**
 - Literal newlines inside single-quoted JS strings → use `\\n`
 - Nested backtick template literals in HTML strings → use single-quoted strings inside
-- `var(--color-background-secondary)` etc. are Claude.ai CSS vars — use `var(--bg3)` etc.
+- Supabase JS client returns `{data, error}`, does NOT throw — always check `.error`
+- Use `.maybeSingle()` when row might not exist; `.single()` throws on 0 rows
+- Chain `.insert().select('id')` to get generated ID in one call (no race condition)
 - All borders must be `0.5px` not `1px`
+
+---
+
+## Performance Patterns
+
+- **Dashboard counts** use `head:true` queries — never `select('*')` for counts
+- **Display tables** use limited-field, limited-row queries (max 20 rows, only needed columns)
+- **Bulk inserts** use single batched calls — not per-row sequential loops
+- **SPA navigation** uses URL hash (`#ncr`, `#draw`) for refresh recovery
+
+---
+
+## Correctness Patterns
+
+- **Use `.maybeSingle()` instead of `.single()`** when a row might not exist (deleted, soft-deleted, or uncertain)
+- **Use `.insert().select('id')`** instead of separate insert-then-select (race condition risk)
+- **Guard `string.includes()` against empty substrings** — `"".includes("")` is always true
+- **Always wrap paired DB operations** (e.g., drawing insert + revision insert) — rollback first if second fails
 
 ---
 
@@ -336,16 +355,19 @@ openNew(); document.getElementById('modal-title')?.textContent
 | v3 | CDE workflow, ISO metadata fields on drawings, audit log, submittal register page |
 | v4 | IR checklists, NCR CAP workflow, re-inspection, resubmit chain, module summary bars |
 | v5 | POI codes, drawing number validation, revision scheme enforcement, void drawings, drawing register export, cross-referencing, revision comments, correspondence register, punch list, transmittal acknowledgement, AR/FI classification, IFC vs Approved on dashboard |
+| v6+ | Dashboard optimization (head-only counts), URL hash page persistence, role-gated CDE transitions (individual + batch), batch upload, hard block on revision scheme mismatch, `.maybeSingle()` for profile/drawing lookups, error handling across 10+ action functions, storage upload failure aborts, `JSON.stringify` in onclick handlers, XSS fixes, drawing revision creation in bulk import |
 
 ---
 
-## Suggested Next Features
+## Dev Login Credentials
 
-- Email notifications via Supabase Edge Functions
-- Bulk export PDF/Excel per module (IR register, NCR log, etc.)
-- Download restriction + watermark on superseded drawings (server-side)
-- Document distribution matrix (who gets notified on drawing publish)
-- Tender / contract document register (separate from construction drawings)
-- Specification linking (drawing ↔ spec section)
-- Mobile-responsive layout improvements
-- Parse project specification PDF → auto-populate Submittal Register
+| Email | Password | Role |
+|---|---|---|
+| `mohammed@regent-developments.com` | `Mman1990` | consultant |
+
+---
+
+## Testing Notes
+
+- **Preferred approach:** Write a standalone Playwright/Node test script → run once → read compact report. Avoid browser screenshots during active development (too token-heavy).
+- **For role-based button testing:** One script that logs in as each role, clicks every button, checks toast/DOM outcome → ~20-line text report.
