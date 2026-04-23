@@ -1343,7 +1343,16 @@ async function doBulkImport() {
       }));
       if(revRows.length) {
         const {error:revErr} = await sb.from('drawing_revisions').insert(revRows);
-        if(revErr) console.error('[bulk import] revision history insert failed:', revErr.message);
+        if(revErr){
+          console.error('[bulk import] revision history insert failed:', revErr.message);
+          // Rollback: delete orphaned drawing rows
+          const ids = inserted.map(d=>d.id);
+          await sb.from('drawings').delete().in('id', ids);
+          toast('Revision history insert failed — imported drawings rolled back','error');
+          if(btn){btn.disabled=false;btn.textContent='Import Drawings';}
+          render();
+          return;
+        }
       }
     }
   }
@@ -1477,7 +1486,8 @@ async function doBatchDrawAction(action) {
     }
     const skipped = (draws||[]).length - updates.length;
     const msg = `CDE advanced for ${updates.length} drawing${updates.length!==1?'s':''}${failed?' — '+failed+' error(s)':''}${skipped?' — '+skipped+' skipped (no permission)':''}`;
-    toast(msg, failed?'error':'success');
+    const toastType = failed?'error':updates.length?'success':'info';
+    toast(msg, toastType);
   }
   clearDrawSelection();
   renderDrawings();
@@ -1579,8 +1589,8 @@ async function advanceCDE(id, newState) {
   const role = currentProfile?.role;
 
   // Fetch drawing to get current state
-  const {data:drawings, error:fetchErr} = await sb.from('drawings').select('cde_state,drawing_no').eq('id', id).single();
-  if(fetchErr||!drawings){toast('Error loading drawing','error');return;}
+  const {data:drawings, error:fetchErr} = await sb.from('drawings').select('cde_state,drawing_no').eq('id', id).maybeSingle();
+  if(fetchErr||!drawings){toast('Drawing not found or already deleted','error');return;}
   const currentState = drawings.cde_state;
 
   // Validate transition exists
@@ -2518,7 +2528,8 @@ async function doUploadRev(id) {
     document.getElementById('upb-'+id).style.width='50%';
     const {error} = await sb.storage.from('drawings').upload(path, file, {upsert:true});
     document.getElementById('upb-'+id).style.width='100%';
-    if(!error) filePath = path;
+    if(error){toast('Storage upload failed — '+error.message,'error');return;}
+    filePath = path;
   }
   const update = {revision:newRev,status:newStatus,superseded_revisions:JSON.stringify(supers)};
   if(filePath) update.file_path = filePath;
@@ -3200,7 +3211,11 @@ async function renderSubmittalRegister() {
   const {data:subs} = await sb.from('submittals').select('ref_no,title,status,outcome');
   const subsAll = subs||[];
   const required = rows.length;
-  const submitted = rows.filter(r=>subsAll.some(s=>s.title.toLowerCase().includes((r.title||'').toLowerCase().substring(0,15)))).length;
+  const submitted = rows.filter(r=>{
+    if(!r.title) return false;
+    const key = r.title.toLowerCase().substring(0,15);
+    return subsAll.some(s=>s.title.toLowerCase().includes(key));
+  }).length;
   const approved = rows.filter(r=>subsAll.some(s=>s.outcome==='1'||s.outcome==='2')).length;
   document.getElementById('content').innerHTML = `
   <div class="module-bar">
@@ -4114,7 +4129,7 @@ async function doNewTransmittal(drawCount) {
     const cb = document.getElementById('tdoc-'+i);
     if(cb?.checked) docs.push({no:cb.dataset.no,title:cb.dataset.title,rev:cb.dataset.rev,copies:1});
   }
-  const {error} = await sb.from('transmittals').insert({
+  const {data:newTrans,error} = await sb.from('transmittals').insert({
     ref_no:ref,
     from_party:document.getElementById('nt-from')?.value,
     to_party:document.getElementById('nt-to')?.value,
@@ -4124,9 +4139,8 @@ async function doNewTransmittal(drawCount) {
     documents:JSON.stringify(docs),
     notes:document.getElementById('nt-notes')?.value||'',
     response_required:document.getElementById('nt-response-date')?.value||null
-  });
+  }).select('id').single();
   if(error){toast('Error: '+error.message,'error');return;}
-  const {data:newTrans} = await sb.from('transmittals').select('id').eq('ref_no',ref).order('created_at',{ascending:false}).limit(1).single();
   if(newTrans?.id) await logAudit(newTrans.id, 'transmittal', 'Transmittal Created: '+ref);
   toast('Transmittal created','success'); closeModal(); render();
 }
@@ -4244,8 +4258,8 @@ function refreshAttList(recordType, recordId, atts) {
         <div style="font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.file_name}</div>
         <div style="font-size:10px;color:var(--text3)">${formatFileSize(a.file_size)} · ${a.uploaded_by_name||'—'} · ${a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</div>
       </div>
-      <button class="btn btn-sm" onclick="downloadAttachment('${"'"}${a.file_path}${"'"}','${"'"}${a.file_name}${"'"}')">Download</button>
-      ${canDel&&a.uploaded_by_id===currentUser?.id?`<button class="btn btn-sm btn-danger" onclick="deleteAttachment('${a.id}','${a.file_path}','${recordType}','${recordId}')">Remove</button>`:''}
+      <button class="btn btn-sm" onclick="downloadAttachment(${JSON.stringify(a.file_path)},${JSON.stringify(a.file_name)})">Download</button>
+      ${canDel&&a.uploaded_by_id===currentUser?.id?`<button class="btn btn-sm btn-danger" onclick="deleteAttachment(${JSON.stringify(a.id)},${JSON.stringify(a.file_path)},${JSON.stringify(recordType)},${JSON.stringify(recordId)})">Remove</button>`:''}
     </div>`).join('') : '<div style="font-size:11px;color:var(--text3);padding:4px">No attachments yet.</div>';
 }
 
