@@ -1297,16 +1297,17 @@ async function doBulkImport() {
   if(!bulkRows.length){toast('No rows to import','error');return;}
   const btn = document.getElementById('bulk-submit-btn');
   if(btn){btn.disabled=true;btn.textContent='Importing…';}
-  let imported=0, failed=0;
+  // Validate all rows first, collect valid ones
+  const validRows = [];
+  let failed = 0;
   for(const row of bulkRows) {
-    // Validate drawing number format
     const numCheck = validateDrawingNumber(row.drawing_no);
     if(!numCheck.valid){
       failed++;
       console.error('Import skipped:', row.drawing_no, numCheck.msg);
       continue;
     }
-    const {error} = await sb.from('drawings').insert({
+    validRows.push({
       drawing_no:row.drawing_no,
       title:row.title,
       discipline:row.discipline,
@@ -1315,8 +1316,17 @@ async function doBulkImport() {
       description:row.description||null,
       uploaded_by:row.uploaded_by||currentProfile?.full_name||'Import',
     });
-    if(error){failed++;console.error('Import error:',row.drawing_no,error.message);}
-    else imported++;
+  }
+  // Batch insert all valid rows in a single call
+  let imported = 0;
+  if(validRows.length) {
+    const {error, count} = await sb.from('drawings').insert(validRows);
+    if(error){
+      failed += validRows.length;
+      console.error('Batch import error:', error.message);
+    } else {
+      imported = validRows.length;
+    }
   }
   if(btn){btn.disabled=false;btn.textContent='Import Drawings';}
   toast(`Imported ${imported} drawing${imported!==1?'s':''}${failed?' — '+failed+' failed':''}`, imported?'success':'error');
