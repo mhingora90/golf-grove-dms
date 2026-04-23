@@ -1323,15 +1323,28 @@ async function doBulkImport() {
       uploaded_by:row.uploaded_by||currentProfile?.full_name||'Import',
     });
   }
-  // Batch insert all valid rows in a single call
+  // Batch insert all valid rows in a single call, selecting back IDs
   let imported = 0;
   if(validRows.length) {
-    const {error, count} = await sb.from('drawings').insert(validRows);
+    const {data:inserted, error} = await sb.from('drawings').insert(validRows).select('id,revision,status');
     if(error){
       failed += validRows.length;
       console.error('Batch import error:', error.message);
     } else {
-      imported = validRows.length;
+      imported = inserted.length;
+      // Create initial drawing_revisions entries for each imported drawing
+      const name = currentProfile?.full_name||currentUser?.email||'Import';
+      const revRows = (inserted||[]).map(d=>({
+        drawing_id:d.id,
+        revision:d.revision,
+        status:d.status,
+        uploaded_by_name:name,
+        uploaded_by_id:currentUser?.id||null,
+      }));
+      if(revRows.length) {
+        const {error:revErr} = await sb.from('drawing_revisions').insert(revRows);
+        if(revErr) console.error('[bulk import] revision history insert failed:', revErr.message);
+      }
     }
   }
   if(btn){btn.disabled=false;btn.textContent='Import Drawings';}
