@@ -572,7 +572,11 @@ async function loadApp(user) {
   // Set topbar date
   const dateEl = document.getElementById('topbar-date');
   if(dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  nav('dash', document.getElementById('n-dash'));
+  // Restore page from URL hash, or default to dash
+  const hash = location.hash.replace('#','');
+  const defaultPage = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users'].includes(hash) ? hash : 'dash';
+  const navEl = document.getElementById('n-'+defaultPage);
+  nav(defaultPage, navEl);
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
@@ -602,6 +606,8 @@ function nav(page, el, opts) {
   document.getElementById('page-title').textContent = PAGE_TITLES[page]||page;
   const fab = document.getElementById('new-btn');
   if(fab) fab.style.display = canCreateOnPage(page) ? '' : 'none';
+  // Persist page in URL hash for refresh recovery
+  history.replaceState(null,'','#'+page);
   render();
 }
 
@@ -4629,6 +4635,16 @@ function printDoc(elementId, filename) {
 (async()=>{
   const {data:{session}} = await sb.auth.getSession();
   if(session?.user) await loadApp(session.user);
+  // Handle browser back/forward navigation
+  window.addEventListener('hashchange', ()=>{
+    if(!currentProfile) return;
+    const hash = location.hash.replace('#','');
+    const validPages = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users'];
+    if(validPages.includes(hash) && hash !== currentPage){
+      const navEl = document.getElementById('n-'+hash);
+      nav(hash, navEl);
+    }
+  });
 })();
 </script>
 </body>
