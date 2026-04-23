@@ -763,35 +763,59 @@ function sbadge(s) {
 // ─── DASHBOARD ────────────────────────────────────────────────────
 async function renderDash() {
   const today = new Date().toISOString().split('T')[0];
-  const [draws,subs,irs,ncrs_d,scs,rfis_d] = await Promise.all([
-    sb.from('drawings').select('*',{count:'exact'}),
-    sb.from('submittals').select('*',{count:'exact'}),
-    sb.from('inspections').select('*',{count:'exact'}),
-    sb.from('ncrs').select('*',{count:'exact'}),
-    sb.from('subcontractors').select('*',{count:'exact'}),
-    sb.from('rfis').select('*',{count:'exact'}),
+  const thirtyAgo = new Date(Date.now() - 30*86400000).toISOString().split('T')[0];
+
+  // Counts only — head:true means Supabase returns count with zero payload
+  const counts = await Promise.all([
+    sb.from('drawings').select('*',{head:true,count:'exact'}),
+    sb.from('submittals').select('*',{head:true,count:'exact'}),
+    sb.from('inspections').select('*',{head:true,count:'exact'}),
+    sb.from('ncrs').select('*',{head:true,count:'exact'}),
+    sb.from('subcontractors').select('*',{head:true,count:'exact'}),
+    sb.from('rfis').select('*',{head:true,count:'exact'}),
+    // Status-filtered counts
+    sb.from('submittals').select('*',{head:true,count:'exact'}).eq('status','Pending Review'),
+    sb.from('inspections').select('*',{head:true,count:'exact'}).eq('status','Pending'),
+    sb.from('ncrs').select('*',{head:true,count:'exact'}).eq('status','Open'),
+    sb.from('rfis').select('*',{head:true,count:'exact'}).eq('status','Open'),
+    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('status','Approved'),
+    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('status','Issued for Construction'),
+    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('status','Under Review'),
+    // Overdue counts
+    sb.from('submittals').select('*',{head:true,count:'exact'}).lt('due_date',today).eq('status','Pending Review'),
+    sb.from('inspections').select('*',{head:true,count:'exact'}).lt('due_date',today).eq('status','Pending'),
+    sb.from('rfis').select('*',{head:true,count:'exact'}).lt('due_date',today).eq('status','Open'),
+    sb.from('ncrs').select('*',{head:true,count:'exact'}).lt('raised_date',thirtyAgo).neq('status','Closed'),
   ]);
-  const pSub = (subs.data||[]).filter(s=>s.status==='Pending Review').length;
-  const pIR = (irs.data||[]).filter(i=>i.status==='Pending').length;
-  const oNCR = (ncrs_d.data||[]).filter(n=>n.status==='Open').length;
-  const oRFI = (rfis_d.data||[]).filter(r=>r.status==='Open').length;
-  const pendSubs = (subs.data||[]).filter(s=>s.status==='Pending Review').slice(0,5);
-  const pendIRs = (irs.data||[]).filter(i=>i.status==='Pending').slice(0,5);
-  const openNCRs = (ncrs_d.data||[]).filter(n=>n.status==='Open').slice(0,5);
-  const recentDraws = (draws.data||[]).slice(-4).reverse();
-  const overdueSubs = (subs.data||[]).filter(s=>s.due_date&&s.due_date<today&&s.status==='Pending Review');
-  const overdueIRs = (irs.data||[]).filter(i=>i.due_date&&i.due_date<today&&i.status==='Pending');
-  const overdueRFIs = (rfis_d.data||[]).filter(r=>r.due_date&&r.due_date<today&&r.status==='Open');
-  const overdueNCRs = (ncrs_d.data||[]).filter(n=>{
-    if(n.status==='Closed'||!n.raised_date) return false;
-    return Math.floor((new Date()-new Date(n.raised_date))/86400000)>30;
-  });
-  const overdueAll = [...overdueSubs.map(s=>({...s,_type:'Submittal'})),...overdueIRs.map(i=>({...i,_type:'Inspection'})),...overdueRFIs.map(r=>({...r,_type:'RFI'}))];
+  const [drawCnt,subCnt,irCnt,ncrCnt,scCnt,rfiCnt,
+         pSubCnt,pIRCnt,oNCRCnt,oRFICnt,
+         apprCnt,ifcCnt,revCnt,
+         oSubCnt,oIRCnt,oRFIOvdCnt,oNCROvdCnt] = counts;
+
+  // Display rows — limited fields, limited count
+  const rows = await Promise.all([
+    sb.from('submittals').select('id,ref_no,title,status').eq('status','Pending Review').limit(5),
+    sb.from('inspections').select('id,ref_no,elements,inspection_date').eq('status','Pending').limit(5),
+    sb.from('ncrs').select('id,ref_no,title,severity').eq('status','Open').limit(5),
+    sb.from('drawings').select('id,drawing_no,title,revision,status').order('created_at',{ascending:false}).limit(4),
+    // Overdue rows for banner
+    sb.from('submittals').select('ref_no,title,due_date').eq('status','Pending Review').lt('due_date',today).limit(20),
+    sb.from('inspections').select('ref_no,title,elements as title,due_date').eq('status','Pending').lt('due_date',today).limit(20),
+    sb.from('rfis').select('ref_no,subject as title,due_date').eq('status','Open').lt('due_date',today).limit(20),
+  ]);
+  const [pendSubs,pendIRs,openNCRs,recentDraws,
+         oSubRows,oIRRows,oRFIRows] = rows;
+
+  const overdueAll = [
+    ...(oSubRows.data||[]).map(s=>({...s,_type:'Submittal'})),
+    ...(oIRRows.data||[]).map(i=>({...i,_type:'Inspection'})),
+    ...(oRFIRows.data||[]).map(r=>({...r,_type:'RFI'})),
+  ];
   const slaRows = [
-    {label:'Overdue IRs',     count:overdueIRs.length,  page:'ir'},
-    {label:'Overdue NCRs',    count:overdueNCRs.length, page:'ncr'},
-    {label:'Overdue RFIs',    count:overdueRFIs.length, page:'rfi'},
-    {label:'Overdue Submittals',count:overdueSubs.length,page:'sub'},
+    {label:'Overdue IRs',     count:oIRCnt.count||0,  page:'ir'},
+    {label:'Overdue NCRs',    count:oNCROvdCnt.count||0, page:'ncr'},
+    {label:'Overdue RFIs',    count:oRFIOvdCnt.count||0, page:'rfi'},
+    {label:'Overdue Submittals',count:oSubCnt.count||0,page:'sub'},
   ];
   const slaTotalOverdue = slaRows.reduce((s,r)=>s+r.count,0);
   document.getElementById('content').innerHTML = `
@@ -805,25 +829,25 @@ async function renderDash() {
     </div>
   </div>`:''}
   <div class="stats">
-    <div class="stat"><div class="stat-label">Drawings</div><div class="stat-value">${draws.count||0}</div><div class="stat-sub">${(draws.data||[]).filter(d=>d.status==='Approved').length} approved</div></div>
-    <div class="stat"><div class="stat-label">Submittals</div><div class="stat-value">${subs.count||0}</div><div class="stat-sub">${pSub} pending review</div></div>
-    <div class="stat"><div class="stat-label">Inspections</div><div class="stat-value">${irs.count||0}</div><div class="stat-sub">${pIR} awaiting response</div></div>
-    <div class="stat"><div class="stat-label">Open NCRs</div><div class="stat-value ${oNCR>0?'danger':''}">${oNCR}</div><div class="stat-sub">${(ncrs_d.count||0)-oNCR} closed</div></div>
-    <div class="stat"><div class="stat-label">Open RFIs</div><div class="stat-value ${oRFI>0?'danger':''}">${oRFI}</div><div class="stat-sub">${(rfis_d.count||0)-oRFI} closed</div></div>
+    <div class="stat"><div class="stat-label">Drawings</div><div class="stat-value">${drawCnt.count||0}</div><div class="stat-sub">${apprCnt.count||0} approved</div></div>
+    <div class="stat"><div class="stat-label">Submittals</div><div class="stat-value">${subCnt.count||0}</div><div class="stat-sub">${pSubCnt.count||0} pending review</div></div>
+    <div class="stat"><div class="stat-label">Inspections</div><div class="stat-value">${irCnt.count||0}</div><div class="stat-sub">${pIRCnt.count||0} awaiting response</div></div>
+    <div class="stat"><div class="stat-label">Open NCRs</div><div class="stat-value ${(oNCRCnt.count||0)>0?'danger':''}">${oNCRCnt.count||0}</div><div class="stat-sub">${(ncrCnt.count||0)-(oNCRCnt.count||0)} closed</div></div>
+    <div class="stat"><div class="stat-label">Open RFIs</div><div class="stat-value ${(oRFICnt.count||0)>0?'danger':''}">${oRFICnt.count||0}</div><div class="stat-sub">${(rfiCnt.count||0)-(oRFICnt.count||0)} closed</div></div>
   </div>
   <div id="compliance-widget" style="margin-bottom:12px"></div>
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:16px">
     <div class="card" style="margin:0">
       <div style="padding:12px 14px 8px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center">
         <span style="font-size:12px;font-weight:500;color:var(--charcoal)">Drawing approval</span>
-        <span style="font-size:11px;color:var(--text3)">${draws.count||0} total</span>
+        <span style="font-size:11px;color:var(--text3)">${drawCnt.count||0} total</span>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:14px" id="donut-wrap">
         ${(()=>{
-          const tot = draws.count||0;
-          const appr = (draws.data||[]).filter(d=>d.status==='Approved').length;
-          const ifc = (draws.data||[]).filter(d=>d.status==='Issued for Construction').length;
-          const rev = (draws.data||[]).filter(d=>d.status==='Under Review').length;
+          const tot = drawCnt.count||0;
+          const appr = apprCnt.count||0;
+          const ifc = ifcCnt.count||0;
+          const rev = revCnt.count||0;
           const pend = Math.max(0,tot-appr-rev);
           const circ = 2*Math.PI*52;
           const pct = tot>0?Math.round((appr/tot)*100):0;
@@ -866,22 +890,22 @@ async function renderDash() {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div style="background:var(--bg3);border-radius:8px;padding:12px;text-align:center">
             <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">NCRs</div>
-            <div style="font-size:28px;font-weight:500;color:${oNCR>0?'var(--amber)':'var(--charcoal)'}">${oNCR}</div>
-            <div style="font-size:10px;color:var(--text3);margin-top:2px">${(ncrs_d.count||0)-oNCR} closed</div>
+            <div style="font-size:28px;font-weight:500;color:${(oNCRCnt.count||0)>0?'var(--amber)':'var(--charcoal)'}">${oNCRCnt.count||0}</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:2px">${(ncrCnt.count||0)-(oNCRCnt.count||0)} closed</div>
           </div>
           <div style="background:var(--bg3);border-radius:8px;padding:12px;text-align:center">
             <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">RFIs</div>
-            <div style="font-size:28px;font-weight:500;color:${oRFI>0?'var(--amber)':'var(--charcoal)'}">${oRFI}</div>
-            <div style="font-size:10px;color:var(--text3);margin-top:2px">${(rfis_d.count||0)-oRFI} closed</div>
+            <div style="font-size:28px;font-weight:500;color:${(oRFICnt.count||0)>0?'var(--amber)':'var(--charcoal)'}">${oRFICnt.count||0}</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:2px">${(rfiCnt.count||0)-(oRFICnt.count||0)} closed</div>
           </div>
         </div>
         <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid var(--border)">
           <div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em">Submittals pending</div>
           <div style="display:flex;align-items:center;gap:8px">
             <div style="flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden">
-              <div style="height:100%;width:${(subs.count||0)>0?Math.round((pSub/(subs.count||1))*100):0}%;background:var(--sand);border-radius:3px"></div>
+              <div style="height:100%;width:${(subCnt.count||0)>0?Math.round(((pSubCnt.count||0)/(subCnt.count||1))*100):0}%;background:var(--sand);border-radius:3px"></div>
             </div>
-            <span style="font-size:11px;font-weight:500;color:var(--charcoal)">${pSub}<span style="font-weight:400;color:var(--text3)">/${subs.count||0}</span></span>
+            <span style="font-size:11px;font-weight:500;color:var(--charcoal)">${pSubCnt.count||0}<span style="font-weight:400;color:var(--text3)">/${subCnt.count||0}</span></span>
           </div>
         </div>
       </div>
@@ -926,9 +950,9 @@ async function renderDash() {
   // Async: load compliance score widget
   (async () => {
     const [allDraws, publishedDraws, metaDraws] = await Promise.all([
-      sb.from('drawings').select('cde_state,originator,zone,level,doc_type',{count:'exact'}),
-      sb.from('drawings').select('*',{count:'exact',head:true}).in('cde_state',['Published','Archived']),
-      sb.from('drawings').select('*',{count:'exact',head:true}).not('originator','is',null).not('zone','is',null).not('level','is',null),
+      sb.from('drawings').select('*',{head:true,count:'exact'}),
+      sb.from('drawings').select('*',{head:true,count:'exact'}).in('cde_state',['Published','Archived']),
+      sb.from('drawings').select('*',{head:true,count:'exact'}).not('originator','is',null).not('zone','is',null).not('level','is',null),
     ]);
     const total = allDraws.count||0;
     const published = publishedDraws.count||0;
