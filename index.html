@@ -2455,9 +2455,10 @@ async function doUploadRev(id) {
   }
   const update = {revision:newRev,status:newStatus,superseded_revisions:JSON.stringify(supers)};
   if(filePath) update.file_path = filePath;
+  const prevData = {revision:d.revision, status:d.status, superseded_revisions:d.superseded_revisions, file_path:d.file_path};
   await sb.from('drawings').update(update).eq('id',id);
-  // Log revision event
-  await sb.from('drawing_revisions').insert({
+  // Log revision event — wrapped to prevent orphaned drawing state
+  const {error:revErr} = await sb.from('drawing_revisions').insert({
     drawing_id:id,
     revision:newRev,
     status:newStatus,
@@ -2466,6 +2467,12 @@ async function doUploadRev(id) {
     file_path:filePath||d.file_path,
     notes:document.getElementById('rd-'+id)?.value||''
   });
+  if(revErr) {
+    await sb.from('drawings').update(prevData).eq('id',id);
+    toast('Revision audit entry failed — drawing state rolled back','error');
+    closeModal(); render();
+    return;
+  }
   await logAudit(id, 'drawing', 'New Revision Uploaded: '+newRev);
   delete selectedFiles[id];
   toast('Revision uploaded successfully','success'); closeModal(); render();
@@ -2758,9 +2765,9 @@ async function doNewDraw() {
   }
   delete selectedFiles['new'];
   if(error){toast('Error creating drawing: '+error.message,'error');return;}
-  // Log initial revision event
+  // Log initial revision event — wrapped to delete orphaned drawing on failure
   if(inserted) {
-    await sb.from('drawing_revisions').insert({
+    const {error:revErr} = await sb.from('drawing_revisions').insert({
       drawing_id:inserted.id,
       revision:document.getElementById('nd-rev').value||'Rev A',
       status:document.getElementById('nd-status').value,
@@ -2768,6 +2775,12 @@ async function doNewDraw() {
       uploaded_by_id:currentUser?.id,
       file_path:inserted.file_path
     });
+    if(revErr){
+      await sb.from('drawings').delete().eq('id',inserted.id);
+      toast('Drawing created but revision audit failed — drawing deleted','error');
+      closeModal(); render();
+      return;
+    }
     await uploadStagedFiles('nd-staged','drawing',inserted.id);
     await logAudit(inserted.id, 'drawing', 'Drawing Uploaded: '+inserted.drawing_no);
   }
