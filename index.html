@@ -1273,6 +1273,13 @@ async function doBulkImport() {
   if(btn){btn.disabled=true;btn.textContent='Importing…';}
   let imported=0, failed=0;
   for(const row of bulkRows) {
+    // Validate drawing number format
+    const numCheck = validateDrawingNumber(row.drawing_no);
+    if(!numCheck.valid){
+      failed++;
+      console.error('Import skipped:', row.drawing_no, numCheck.msg);
+      continue;
+    }
     const {error} = await sb.from('drawings').insert({
       drawing_no:row.drawing_no,
       title:row.title,
