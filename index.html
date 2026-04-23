@@ -1496,6 +1496,28 @@ function updateDocNum() {
 }
 
 async function advanceCDE(id, newState) {
+  const transitions = {
+    'WIP':       {to:['Shared'],    roles:['contractor','developer']},
+    'Shared':    {to:['Published'],  roles:['consultant','developer']},
+    'Published': {to:['Archived'],   roles:['developer']},
+  };
+  const role = currentProfile?.role;
+
+  // Fetch drawing to get current state
+  const {data:drawings, error:fetchErr} = await sb.from('drawings').select('cde_state,drawing_no').eq('id', id).single();
+  if(fetchErr||!drawings){toast('Error loading drawing','error');return;}
+  const currentState = drawings.cde_state;
+
+  // Validate transition exists
+  const rule = transitions[currentState];
+  if(!rule||!rule.to.includes(newState)){toast('Invalid CDE transition','error');return;}
+
+  // Role gate
+  if(!rule.roles.includes(role)){
+    toast('Insufficient permissions to advance '+currentState+' \u2192 '+newState,'error');
+    return;
+  }
+
   const stateLabels = {
     'Shared':    'Share this drawing with the consultant for review?',
     'Published': 'Publish this drawing as approved and ready for use on site?',
