@@ -15,7 +15,7 @@ Paste this file at the start of any new Claude session to restore full context i
 |---|---|
 | Repo | github.com/mhingora90/golf-grove-dms |
 | Live | https://golf-grove-dms.vercel.app |
-| Working file | `index.html` (~4,700 lines, ~280KB) |
+| Working file | `index.html` (~5,000 lines, ~290KB) |
 | Project | Golf Grove – Residential Building (B+G+P+7+Roof), Production City, Dubai |
 | Developer | Regent Star Property Developments |
 | Consultant | POE Engineering Consultants |
@@ -46,8 +46,9 @@ Paste this file at the start of any new Claude session to restore full context i
 **Font:** Plus Jakarta Sans (Google Fonts), weights 400/500/600
 **Borders:** always 0.5px, never 1px (except PDF viewer which stays dark)
 **Radius:** `--radius: 8px`, `--radius-lg: 12px`
-**Toasts:** top-right, card style, cream background
-**Buttons:** `.btn-primary` = charcoal background, `.btn-success/.btn-danger` = outline style
+**Toasts:** top-right, icon prefix (✓ ✕  ⚠), dismiss (×), variable durations:
+  - `success` = 3s, `error` = 6s, `info` = persistent until dismissed, `warning` = 4s
+**Buttons:** `.btn-primary` = charcoal background, `.btn-success` = outline green, `.btn-danger` = outline red
 
 ---
 
@@ -79,6 +80,14 @@ Paste this file at the start of any new Claude session to restore full context i
 ### Storage buckets
 - `drawings` — drawing PDF files, path: `{drawing_id}/{revision}_{timestamp}.pdf`
 - `attachments` — all other attachments, path: `{record_type}/{record_id}/{filename}`
+
+### RLS Security
+Row Level Security is enforced via `supabase/rls_policies.sql`. The script is idempotent:
+- Disables RLS on all tables first (clears existing policies)
+- Drops/recreates helper functions (`get_user_role()`, `is_developer()`, etc.)
+- Re-enables RLS with role-based policies for all 16 tables
+- Wrap in `BEGIN; ... COMMIT;` for atomic execution
+- Safe to run repeatedly. See `supabase/rls_policies.sql` for full policy definitions.
 
 ---
 
@@ -136,7 +145,10 @@ renderPunchList()          // Punch list / defects
 openNew()                  // Context-sensitive new item — routes by currentPage
 openModal(title, body, footer, wide)
 closeModal()
-toast(msg, type)           // type: 'success' | 'error' | 'info'
+confirmModal(msg)          // Custom confirmation dialog (replaces window.confirm, returns Promise<boolean>)
+toast(msg, type)           // type: 'success' (3s) | 'error' (6s) | 'info' (persistent) | 'warning' (4s)
+validateForm(fields)       // Inline validation: highlights empty required fields, returns boolean
+validateDrawingNumberLive() // Live BS 1192 format validation on blur
 ```
 
 ### Drawing-specific
@@ -356,6 +368,7 @@ openNew(); document.getElementById('modal-title')?.textContent
 | v4 | IR checklists, NCR CAP workflow, re-inspection, resubmit chain, module summary bars |
 | v5 | POI codes, drawing number validation, revision scheme enforcement, void drawings, drawing register export, cross-referencing, revision comments, correspondence register, punch list, transmittal acknowledgement, AR/FI classification, IFC vs Approved on dashboard |
 | v6+ | Dashboard optimization (head-only counts), URL hash page persistence, role-gated CDE transitions (individual + batch), batch upload, hard block on revision scheme mismatch, `.maybeSingle()` for profile/drawing lookups, error handling across 10+ action functions, storage upload failure aborts, `JSON.stringify` in onclick handlers, XSS fixes, drawing revision creation in bulk import |
+| v7+ | Stat cards + bulk actions on all modules, checkboxes + export CSV everywhere, custom confirm modal (replaces window.confirm), toast UX (icons, dismiss, variable durations), inline form validation with red borders, live drawing number validation on blur, `sbadge()` case-insensitive via title-case normalisation, comprehensive RLS SQL script (idempotent, 16 tables) |
 
 ---
 
