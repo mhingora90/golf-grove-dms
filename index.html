@@ -258,6 +258,13 @@ textarea.form-control{resize:vertical;min-height:70px}
 .ncr-age.warning{background:var(--amber-bg);color:var(--amber)}
 .ncr-age.overdue{background:var(--red-bg);color:var(--red)}
 /* SUBMITTAL REGISTER */
+/* BULK ACTION BAR */
+.bulk-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;transform:translateY(100%);transition:transform .2s ease;background:var(--bg2);border-top:0.5px solid var(--border2);padding:12px 16px;box-shadow:0 -2px 16px rgba(44,42,36,.06)}
+.bulk-bar.visible{transform:translateY(0)}
+.bulk-bar-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.bulk-bar-count{font-size:12px;font-weight:600;color:var(--text);min-width:80px}
+/* RECORD FOOTER */
+.record-footer{text-align:center;padding:10px 14px;font-size:11px;color:var(--text3);border-top:0.5px solid var(--border);background:var(--bg3)}
 .reg-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;border:0.5px solid}
 .reg-required{background:var(--amber-bg);color:var(--amber);border-color:#FAC775}
 .reg-submitted{background:var(--blue-bg);color:var(--blue);border-color:#B5D4F4}
@@ -759,6 +766,7 @@ function sbadge(s) {
     'Approved':'badge-success','Issued for Construction':'badge-success','Passed':'badge-success',
     'Closed':'badge-success','Approved as Noted':'badge-success',
     'Under Review':'badge-info','Pending Review':'badge-info','Pending':'badge-info','Responded':'badge-info',
+    'CAP Verified':'badge-info',
     'Revise & Resubmit':'badge-warning','Correction':'badge-warning','Open':'badge-warning','High':'badge-warning',
     'Rejected':'badge-danger','Major':'badge-danger','Critical':'badge-danger',
     'Normal':'badge-neutral','Minor':'badge-neutral','Void':'badge-danger','Cancelled':'badge-danger',
@@ -1018,18 +1026,32 @@ async function renderDash() {
 
 // ─── METHOD STATEMENTS ───────────────────────────────────────────────
 async function renderMS() {
+  selectedMS = new Set();
   const {data} = await sb.from('method_statements').select('*').order('created_at',{ascending:false});
   const rows = data||[];
-  const open = rows.filter(r=>r.status!=='Approved'&&r.status!=='Rejected').length;
+  const pending = rows.filter(r=>r.status==='Pending Review').length;
+  const underReview = rows.filter(r=>r.status==='Under Review').length;
+  const approved = rows.filter(r=>r.status==='Approved').length;
+  const rejected = rows.filter(r=>r.status==='Rejected').length;
   document.getElementById('content').innerHTML = `
+  <div class="module-bar">
+    <div class="module-stat"><div class="module-stat-val ${pending>0?'warn':''}">${pending}</div><div class="module-stat-label">Pending Review</div></div>
+    <div class="module-stat"><div class="module-stat-val">${underReview}</div><div class="module-stat-label">Under Review</div></div>
+    <div class="module-stat"><div class="module-stat-val">${approved}</div><div class="module-stat-label">Approved</div></div>
+    <div class="module-stat"><div class="module-stat-val ${rejected>0?'danger':''}">${rejected}</div><div class="module-stat-label">Rejected</div></div>
+  </div>
   <div class="fbar">
     <span class="fbar-label">Status:</span>
     ${['All','Pending Review','Under Review','Approved','Revise & Resubmit','Rejected'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filt(this,'ms','status','${s}')">${s}</span>`).join('')}
     <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search method statements..." oninput="searchReg('ms',this.value)" />
   </div>
-  <div class="table-wrap"><table>
-    <tr><th>Ref No.</th><th>Title / Activity</th><th>Discipline</th><th>Location</th><th>Rev</th><th>Submitted By</th><th>Date</th><th>Status</th><th>Actions</th></tr>
-    ${rows.length?rows.map(m=>`<tr class="ms-row" data-status="${m.status||''}" data-search="${[m.ref_no,m.title,m.activity].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}">
+  <div class="card"><div class="tw"><table>
+    <tr>
+      <th style="width:32px;text-align:center"><input type="checkbox" id="ms-select-all" onchange="selectAllRows('ms',selectedMS,'bulk-bar-ms','ms-sel-count')" /></th>
+      <th>Ref No.</th><th>Title / Activity</th><th>Discipline</th><th>Location</th><th>Rev</th><th>Submitted By</th><th>Date</th><th>Status</th><th>Actions</th>
+    </tr>
+    ${rows.length?rows.map(m=>`<tr class="ms-row" data-status="${m.status||''}" data-search="${[m.ref_no,m.title,m.activity].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" data-id="${m.id}">
+      <td style="text-align:center"><input type="checkbox" class="row-cb" id="mscb-${m.id}" onchange="toggleRowSelect('${m.id}',selectedMS,'ms','bulk-bar-ms','ms-sel-count')" /></td>
       <td class="mono">${m.ref_no}</td>
       <td><div style="font-weight:500;color:var(--blue);cursor:pointer" onclick="viewMS('${m.id}')">${m.title}</div><div style="font-size:10px;color:var(--text3)">${m.activity||''}</div></td>
       <td style="color:var(--text2)">${m.discipline||'—'}</td>
@@ -1040,11 +1062,31 @@ async function renderMS() {
       <td>${sbadge(m.status)}</td>
       <td><div style="display:flex;gap:4px">
         <button class="btn btn-sm" onclick="viewMS('${m.id}')">View</button>
-        ${can('approve')&&m.status==='Pending Review'?`<button class="btn btn-sm btn-success" onclick="viewMS('${m.id}')">Review</button>`:''}
+        ${can('approve')&&m.status==='Pending Review'?`<button class="btn btn-sm btn-primary" onclick="viewMS('${m.id}')">Review</button>`:''}
       </div></td>
-    </tr>`).join(''):`<tr><td colspan="9" class="empty-state">No method statements submitted yet</td></tr>`}
-    <tr id="srch-empty-ms" style="display:none"><td colspan="9" class="empty-state"></td></tr>
-  </table></div>`;
+    </tr>`).join(''):`<tr><td colspan="10" class="empty-state">No method statements submitted yet</td></tr>`}
+    <tr id="srch-empty-ms" style="display:none"><td colspan="10" class="empty-state"></td></tr>
+  </table>
+  <div class="record-footer">Showing ${rows.length} record${rows.length!==1?'s':''}</div>
+  </div></div>
+  <div id="bulk-bar-ms" class="bulk-bar">
+    <div class="bulk-bar-inner">
+      <span id="ms-sel-count" class="bulk-bar-count">0 selected</span>
+      <button class="btn btn-sm" onclick="bulkExportCSV('method_statements','*','method_statements.csv')">Export Selected</button>
+      ${can('approve')?`<button class="btn btn-sm btn-success" onclick="doBatchMSApprove()">Approve Selected</button>`:''}
+      <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedMS,'ms','bulk-bar-ms','ms-sel-count')">Clear</button>
+    </div>
+  </div>`;
+}
+
+async function doBatchMSApprove() {
+  const ids = [...selectedMS];
+  if(!ids.length) return;
+  const {error} = await sb.from('method_statements').update({status:'Approved',outcome:'1'}).in('id',ids);
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast(`Approved ${ids.length} method statement${ids.length!==1?'s':''}`,'success');
+  clearSelection(selectedMS,'ms','bulk-bar-ms','ms-sel-count');
+  renderMS();
 }
 
 async function viewMS(id) {
@@ -1414,6 +1456,55 @@ function updateSubBulkBar() {
     sa.checked = n>0&&n>=visible.length;
   }
 }
+// ─── SHARED BULK EXPORT CSV ───────────────────────────────────────
+async function bulkExportCSV(table, columns, filename) {
+  const {data} = await sb.from(table).select(columns);
+  if(!data||!data.length){toast('No data to export','error');return;}
+  const headers = Object.keys(data[0]);
+  const csv = [headers.join(','),...data.map(r=>headers.map(h=>{
+    const v = r[h]; return typeof v==='object'?'"'+JSON.stringify(v).replace(/"/g,'""')+'"':'"'+(v||'').toString().replace(/"/g,'""')+'"';
+  }).join(','))].join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=filename; a.click();
+  URL.revokeObjectURL(url);
+  toast(`Exported ${data.length} records to ${filename}`,'success');
+}
+// ─── GENERIC SELECTION HELPERS ────────────────────────────────────
+function selectAllRows(prefix, set, barId, countId) {
+  const cb = document.getElementById(prefix+'-select-all');
+  const checked = cb?.checked||false;
+  document.querySelectorAll('.'+prefix+'-row').forEach(r=>{
+    if(r.style.display==='none') return;
+    const rowCb = document.getElementById(prefix+'cb-'+r.dataset.id);
+    if(rowCb&&!rowCb.disabled){rowCb.checked=checked; if(checked) set.add(r.dataset.id); else set.delete(r.dataset.id);}
+  });
+  updateBulkBar(set, barId, countId, prefix);
+}
+function toggleRowSelect(id, set, prefix, barId, countId) {
+  if(set.has(id)) set.delete(id); else set.add(id);
+  updateBulkBar(set, barId, countId, prefix);
+}
+function clearSelection(set, prefix, barId, countId) {
+  set.clear();
+  document.querySelectorAll('.'+prefix+'-row input.row-cb').forEach(cb=>cb.checked=false);
+  const sa = document.getElementById(prefix+'-select-all'); if(sa){sa.checked=false;sa.indeterminate=false;}
+  updateBulkBar(set, barId, countId, prefix);
+}
+function updateBulkBar(set, barId, countId, prefix) {
+  const n = set.size;
+  const bar = document.getElementById(barId);
+  const cnt = document.getElementById(countId);
+  if(!bar) return;
+  if(cnt) cnt.textContent = n+' selected';
+  bar.style.transform = n>0?'translateY(0)':'translateY(100%)';
+  const sa = document.getElementById(prefix+'-select-all');
+  if(sa){
+    const visible = [...document.querySelectorAll('.'+prefix+'-row')].filter(r=>r.style.display!=='none'&&!document.getElementById(prefix+'cb-'+r.dataset.id)?.disabled);
+    sa.indeterminate = n>0&&n<visible.length;
+    sa.checked = n>0&&n>=visible.length;
+  }
+}
 function clearDrawSelection() {
   selectedDrawings.clear();
   document.querySelectorAll('.draw-row input.row-cb').forEach(cb=>cb.checked=false);
@@ -1518,23 +1609,37 @@ async function renderDrawings() {
   selectedDrawings = new Set();
   const {data} = await sb.from('drawings').select('*').order('drawing_no',{ascending:true});
   const rows = data||[];
+  const total = rows.length;
+  const published = rows.filter(r=>r.cde_state==='Published').length;
+  const underReview = rows.filter(r=>r.status==='Under Review').length;
+  const wip = rows.filter(r=>r.cde_state==='WIP').length;
   document.getElementById('content').innerHTML = `
-  <div class="fbar" style="flex-wrap:wrap;gap:8px">
-    <span class="fbar-label">Discipline:</span>
-    ${['All','Architecture','Structure','MEP','Civil'].map((d,i)=>`<span class="chip ${i===0?'active':''}" id="disc-chip-${i}" onclick="filtDraw(this,'disc','${d}')">${d}</span>`).join('')}
-    <span style="width:.5px;background:var(--border);height:16px;align-self:center"></span>
-    <span class="fbar-label">Status:</span>
-    ${['All','Under Review','Approved','Issued for Construction','Revise & Resubmit'].map((s,i)=>`<span class="chip ${i===0?'active':''}" id="stat-chip-${i}" onclick="filtDraw(this,'status','${s}')">${s}</span>`).join('')}
-    <span style="width:.5px;background:var(--border2);height:16px;align-self:center"></span>
-    <span class="fbar-label">CDE:</span>
-    ${['All','WIP','Shared','Published','Archived','Superseded'].map((s,i)=>`<span class="chip ${i===0?'active':''}" id="cde-chip-${i}" onclick="filtDraw(this,'cde','${s}')">${s}</span>`).join('')}
-    <span style="width:.5px;background:var(--border2);height:16px;align-self:center"></span>
-    <span class="fbar-label">POI:</span>
-    ${['All','S0','S1','S2','S3','S4','S5'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filtDraw(this,'poi','${s}')">${s}</span>`).join('')}
-    <span style="flex:1"></span>
-    <button class="btn btn-sm" onclick="exportDrawingRegister()">Export Register</button>
-    ${can('upload')?`<button class="btn btn-sm" style="font-size:11px;margin-left:4px" onclick="openBulkImport()">Bulk Import</button>`:''}
-    <input type="text" class="reg-search" placeholder="Search drawings..." oninput="searchReg('draw',this.value)" />
+  <div class="module-bar">
+    <div class="module-stat"><div class="module-stat-val">${total}</div><div class="module-stat-label">Total</div></div>
+    <div class="module-stat"><div class="module-stat-val">${published}</div><div class="module-stat-label">Published</div></div>
+    <div class="module-stat"><div class="module-stat-val">${underReview}</div><div class="module-stat-label">Under Review</div></div>
+    <div class="module-stat"><div class="module-stat-val">${wip}</div><div class="module-stat-label">WIP</div></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+    <div class="fbar" style="gap:6px">
+      <span class="fbar-label">Discipline:</span>
+      ${['All','Architecture','Structure','MEP','Civil'].map((d,i)=>`<span class="chip ${i===0?'active':''}" id="disc-chip-${i}" onclick="filtDraw(this,'disc','${d}')">${d}</span>`).join('')}
+      <span style="width:.5px;background:var(--border);height:16px;align-self:center"></span>
+      <span class="fbar-label">Status:</span>
+      ${['All','Under Review','Approved','Issued for Construction','Revise & Resubmit'].map((s,i)=>`<span class="chip ${i===0?'active':''}" id="stat-chip-${i}" onclick="filtDraw(this,'status','${s}')">${s}</span>`).join('')}
+      <span style="flex:1"></span>
+      <input type="text" class="reg-search" placeholder="Search drawings..." oninput="searchReg('draw',this.value)" />
+    </div>
+    <div class="fbar" style="gap:6px">
+      <span class="fbar-label">CDE:</span>
+      ${['All','WIP','Shared','Published','Archived','Superseded'].map((s,i)=>`<span class="chip ${i===0?'active':''}" id="cde-chip-${i}" onclick="filtDraw(this,'cde','${s}')">${s}</span>`).join('')}
+      <span style="width:.5px;background:var(--border2);height:16px;align-self:center"></span>
+      <span class="fbar-label">POI:</span>
+      ${['All','S0','S1','S2','S3','S4','S5'].map((s,i)=>`<span class="chip ${i===0?'active':''}" onclick="filtDraw(this,'poi','${s}')">${s}</span>`).join('')}
+      <span style="flex:1"></span>
+      <button class="btn btn-sm" onclick="exportDrawingRegister()">Export Register</button>
+      ${can('upload')?`<button class="btn btn-sm" style="font-size:11px;margin-left:4px" onclick="openBulkImport()">Bulk Import</button>`:''}
+    </div>
   </div>
   <div class="card"><div class="tw"><table>
     <tr>
@@ -1558,10 +1663,12 @@ async function renderDrawings() {
       </div></td>
     </tr>`).join(''):'<tr><td colspan="9" class="empty-state">No drawings yet. Upload the first one.</td></tr>'}
     <tr id="srch-empty-draw" style="display:none"><td colspan="9" class="empty-state"></td></tr>
-  </table></div></div>
-  <div id="bulk-bar-draw" style="position:fixed;bottom:0;left:0;right:0;z-index:200;transform:translateY(100%);transition:transform .2s ease;background:var(--bg2);border-top:0.5px solid var(--border2);padding:12px 16px">
-    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span id="draw-sel-count" style="font-size:12px;font-weight:600;color:var(--text);min-width:80px">0 selected</span>
+  </table>
+  <div class="record-footer">Showing ${rows.length} record${rows.length!==1?'s':''}</div>
+  </div></div>
+  <div id="bulk-bar-draw" class="bulk-bar">
+    <div class="bulk-bar-inner">
+      <span id="draw-sel-count" class="bulk-bar-count">0 selected</span>
       ${can('approve')?`<button class="btn btn-sm btn-success" onclick="batchDrawAction('approve')">Approve Selected</button>`:''}
       ${can('approve')?`<button class="btn btn-sm" onclick="batchDrawAction('advanceCDE')">Advance CDE</button>`:''}
       <button class="btn btn-sm" onclick="batchDrawAction('export')">Export Selected</button>
@@ -1622,6 +1729,13 @@ async function advanceCDE(id, newState) {
 let drawFilters = {disc:'All', status:'All', cde:'All', poi:'All'};
 let selectedDrawings = new Set();
 let selectedSubmittals = new Set();
+let selectedIRs = new Set();
+let selectedNCRs = new Set();
+let selectedRFIs = new Set();
+let selectedTransmittals = new Set();
+let selectedCorrespondence = new Set();
+let selectedMS = new Set();
+let selectedPunch = new Set();
 let navFilter = null;
 
 async function logAudit(document_id, document_type, action) {
@@ -1749,10 +1863,12 @@ async function renderSubmittals() {
       </tr>`;
     }).join(''):'<tr><td colspan="10" class="empty-state">No submittals yet.</td></tr>'}
     <tr id="srch-empty-sub" style="display:none"><td colspan="10" class="empty-state"></td></tr>
-  </table></div></div>
-  <div id="bulk-bar-sub" style="position:fixed;bottom:0;left:0;right:0;z-index:200;transform:translateY(100%);transition:transform .2s ease;background:var(--bg2);border-top:0.5px solid var(--border2);padding:12px 16px">
-    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span id="sub-sel-count" style="font-size:12px;font-weight:600;color:var(--text);min-width:80px">0 selected</span>
+  </table>
+  <div class="record-footer">Showing ${rows.length} record${rows.length!==1?'s':''}</div>
+  </div></div>
+  <div id="bulk-bar-sub" class="bulk-bar">
+    <div class="bulk-bar-inner">
+      <span id="sub-sel-count" class="bulk-bar-count">0 selected</span>
       ${can('approve')?`<button class="btn btn-sm btn-success" onclick="batchSubAction('review')">Mark Reviewed</button>`:''}
       <button class="btn btn-sm" onclick="batchSubAction('transmit')">Transmit Selected</button>
       <button class="btn btn-sm" style="margin-left:auto" onclick="clearSubSelection()">Clear</button>
@@ -1793,14 +1909,18 @@ async function renderInspections() {
     <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search inspections..." oninput="searchReg('ir',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>Ref No.</th><th>Rev</th><th>Elements</th><th>Location</th><th>Due Date</th><th>SLA</th><th>Checklist</th><th>Status</th><th>Actions</th></tr>
+    <tr>
+      <th style="width:32px;text-align:center"><input type="checkbox" id="ir-select-all" onchange="selectAllRows('ir',selectedIRs,'bulk-bar-ir','ir-sel-count')" /></th>
+      <th>Ref No.</th><th>Rev</th><th>Elements</th><th>Location</th><th>Due Date</th><th>SLA</th><th>Checklist</th><th>Status</th><th>Actions</th>
+    </tr>
     ${rows.length?rows.map(i=>{
       const hasChecklist = i.checklist&&Object.keys(i.checklist||{}).length>0;
       const ckTotal = hasChecklist?Object.keys(i.checklist).length:0;
       const ckPassed = hasChecklist?Object.values(i.checklist).filter(v=>v==='pass').length:0;
       const irIsOverdue = i.due_date&&i.due_date<todayStr&&i.status==='Pending';
       const irIsSoon = !irIsOverdue&&i.due_date&&i.status==='Pending'&&(new Date(i.due_date)-today)<=3*86400000;
-      return `<tr class="ir-row" data-status="${i.status}" data-overdue="${irIsOverdue?'1':'0'}" data-search="${[i.ref_no,i.location,i.elements].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" style="${irIsOverdue?'border-left:2px solid var(--red)':irIsSoon?'border-left:2px solid var(--amber)':''}">
+      return `<tr class="ir-row" data-status="${i.status}" data-overdue="${irIsOverdue?'1':'0'}" data-id="${i.id}" data-search="${[i.ref_no,i.location,i.elements].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" style="${irIsOverdue?'border-left:2px solid var(--red)':irIsSoon?'border-left:2px solid var(--amber)':''}">
+        <td style="text-align:center"><input type="checkbox" class="row-cb" id="ircb-${i.id}" onchange="toggleRowSelect('${i.id}',selectedIRs,'ir','bulk-bar-ir','ir-sel-count')" /></td>
         <td class="mono">${i.ref_no}${i.parent_ir_id?'<span style="font-size:9px;color:var(--amber);margin-left:4px">↻</span>':''}</td>
         <td><span class="rev-chip">R${i.revision||'00'}</span></td>
         <td style="color:var(--blue);cursor:pointer;max-width:180px" onclick="viewIR('${i.id}')">${(i.elements||'').substring(0,45)}${(i.elements||'').length>45?'…':''}</td>
@@ -1811,13 +1931,22 @@ async function renderInspections() {
         <td>${sbadge(i.status)}</td>
         <td><div style="display:flex;gap:4px">
           <button class="btn btn-sm" onclick="viewIR('${i.id}')">View</button>
-          ${can('approve')&&i.status==='Pending'?`<button class="btn btn-sm btn-success" onclick="respondIR('${i.id}')">Respond</button>`:''}
+          ${can('approve')&&i.status==='Pending'?`<button class="btn btn-sm btn-primary" onclick="respondIR('${i.id}')">Respond</button>`:''}
           ${!can('approve')&&i.status==='Rejected'?`<button class="btn btn-sm" onclick="reInspect('${i.id}')">Re-Inspect</button>`:''}
         </div></td>
       </tr>`;
-    }).join(''):'<tr><td colspan="9" class="empty-state">No inspection requests yet.</td></tr>'}
-    <tr id="srch-empty-ir" style="display:none"><td colspan="9" class="empty-state"></td></tr>
-  </table></div></div>`;
+    }).join(''):'<tr><td colspan="10" class="empty-state">No inspection requests yet.</td></tr>'}
+    <tr id="srch-empty-ir" style="display:none"><td colspan="10" class="empty-state"></td></tr>
+  </table>
+  <div class="record-footer">Showing ${rows.length} record${rows.length!==1?'s':''}</div>
+  </div></div>
+  <div id="bulk-bar-ir" class="bulk-bar">
+    <div class="bulk-bar-inner">
+      <span id="ir-sel-count" class="bulk-bar-count">0 selected</span>
+      <button class="btn btn-sm" onclick="bulkExportCSV('inspections','*','inspections.csv')">Export Selected</button>
+      <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedIRs,'ir','bulk-bar-ir','ir-sel-count')">Clear</button>
+    </div>
+  </div>`;
   if(irOverdueFilter) {
     document.querySelectorAll('.ir-row').forEach(r=>{ r.style.display=r.dataset.overdue==='1'?'':'none'; });
   }
@@ -1860,12 +1989,16 @@ async function renderNCRs() {
     <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search NCRs..." oninput="searchReg('ncr',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>Ref</th><th>Title</th><th>Root Cause</th><th>Location</th><th>Age</th><th>Severity</th><th>CAP</th><th>Status</th><th>Actions</th></tr>
+    <tr>
+      <th style="width:32px;text-align:center"><input type="checkbox" id="ncr-select-all" onchange="selectAllRows('ncr',selectedNCRs,'bulk-bar-ncr','ncr-sel-count')" /></th>
+      <th>Ref</th><th>Title</th><th>Root Cause</th><th>Location</th><th>Age</th><th>Severity</th><th>CAP</th><th>Status</th><th>Actions</th>
+    </tr>
     ${rows.length?rows.map(n=>{
       const ncrAge = n.raised_date?Math.floor((today-new Date(n.raised_date))/86400000):0;
       const ncrIsOverdue = n.status!=='Closed'&&ncrAge>30;
       const ncrIsSoon = !ncrIsOverdue&&n.status!=='Closed'&&ncrAge>14;
-      return `<tr class="ncr-row" data-status="${n.status}" data-root_cause="${n.root_cause||''}" data-overdue="${ncrIsOverdue?'1':'0'}" data-search="${[n.ref_no,n.title,n.location].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" style="${ncrIsOverdue?'border-left:2px solid var(--red)':ncrIsSoon?'border-left:2px solid var(--amber)':''}">
+      return `<tr class="ncr-row" data-status="${n.status}" data-root_cause="${n.root_cause||''}" data-overdue="${ncrIsOverdue?'1':'0'}" data-id="${n.id}" data-search="${[n.ref_no,n.title,n.location].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" style="${ncrIsOverdue?'border-left:2px solid var(--red)':ncrIsSoon?'border-left:2px solid var(--amber)':''}">
+      <td style="text-align:center"><input type="checkbox" class="row-cb" id="ncrcb-${n.id}" onchange="toggleRowSelect('${n.id}',selectedNCRs,'ncr','bulk-bar-ncr','ncr-sel-count')" /></td>
       <td class="mono">${n.ref_no}</td>
       <td style="color:var(--blue);cursor:pointer" onclick="viewNCR('${n.id}')">${n.title}</td>
       <td style="font-size:10px;color:var(--text2)">${n.root_cause||'—'}</td>
@@ -1880,9 +2013,18 @@ async function renderNCRs() {
         ${can('approve')&&n.status==='CAP Submitted'?`<button class="btn btn-sm btn-success" onclick="verifyCAP('${n.id}')">Verify CAP</button>`:''}
         ${can('approve')&&n.status==='CAP Verified'?`<button class="btn btn-sm" onclick="closeNCR('${n.id}')">Close</button>`:''}
       </div></td>
-    </tr>`;}).join(''):'<tr><td colspan="9" class="empty-state">No NCRs raised.</td></tr>'}
-    <tr id="srch-empty-ncr" style="display:none"><td colspan="9" class="empty-state"></td></tr>
-  </table></div></div>`;
+    </tr>`;}).join(''):'<tr><td colspan="10" class="empty-state">No NCRs raised.</td></tr>'}
+    <tr id="srch-empty-ncr" style="display:none"><td colspan="10" class="empty-state"></td></tr>
+  </table>
+  <div class="record-footer">Showing ${rows.length} record${rows.length!==1?'s':''}</div>
+  </div></div>
+  <div id="bulk-bar-ncr" class="bulk-bar">
+    <div class="bulk-bar-inner">
+      <span id="ncr-sel-count" class="bulk-bar-count">0 selected</span>
+      <button class="btn btn-sm" onclick="bulkExportCSV('ncrs','*','ncrs.csv')">Export Selected</button>
+      <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedNCRs,'ncr','bulk-bar-ncr','ncr-sel-count')">Clear</button>
+    </div>
+  </div>`;
   if(ncrOverdueFilter) {
     document.querySelectorAll('.ncr-row').forEach(r=>{ r.style.display=r.dataset.overdue==='1'?'':'none'; });
   }
@@ -3477,23 +3619,38 @@ async function postComment(recordType, recordId) {
 
 // ─── RFI REGISTER ─────────────────────────────────────────────────
 async function renderRFIs() {
+  selectedRFIs = new Set();
   const today = new Date().toISOString().split('T')[0];
   const {data} = await sb.from('rfis').select('*').order('created_at',{ascending:false});
   const rows = data||[];
   const rfiOverdueFilter = navFilter==='overdue'; navFilter=null;
+  const open = rows.filter(r=>r.status==='Open').length;
+  const responded = rows.filter(r=>r.status==='Responded').length;
+  const closed = rows.filter(r=>r.status==='Closed').length;
+  const overdue = rows.filter(r=>r.due_date&&r.due_date<today&&r.status==='Open').length;
   document.getElementById('content').innerHTML = `
+  <div class="module-bar">
+    <div class="module-stat"><div class="module-stat-val ${open>0?'warn':''}">${open}</div><div class="module-stat-label">Open</div></div>
+    <div class="module-stat"><div class="module-stat-val">${responded}</div><div class="module-stat-label">Responded</div></div>
+    <div class="module-stat"><div class="module-stat-val">${closed}</div><div class="module-stat-label">Closed</div></div>
+    <div class="module-stat"><div class="module-stat-val ${overdue>0?'danger':''}">${overdue}</div><div class="module-stat-label">Overdue</div></div>
+  </div>
   <div class="fbar"><span class="fbar-label">Status:</span>
     ${['All','Open','Responded','Closed'].map((s,i)=>`<span class="chip ${i===0&&!rfiOverdueFilter?'active':''}" onclick="filt(this,'rfi','status','${s}')">${s}</span>`).join('')}
     <span class="chip${rfiOverdueFilter?' active':''}" onclick="filtRFIOverdue(this)">Overdue</span>
-    <span class="chip" onclick="filt(this,'rfi','priority','Urgent')" style="color:var(--red-light);border-color:var(--red)">Urgent only</span>
+    <span class="chip" onclick="filt(this,'rfi','priority','Urgent')" style="color:var(--red-light);border-color:var(--border2)">Urgent only</span>
     <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search RFIs..." oninput="searchReg('rfi',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>Ref No.</th><th>Subject</th><th>Drawing Ref</th><th>Raised By</th><th>Priority</th><th>Due Date</th><th>Status</th><th>Actions</th></tr>
+    <tr>
+      <th style="width:32px;text-align:center"><input type="checkbox" id="rfi-select-all" onchange="selectAllRows('rfi',selectedRFIs,'bulk-bar-rfi','rfi-sel-count')" /></th>
+      <th>Ref No.</th><th>Subject</th><th>Drawing Ref</th><th>Raised By</th><th>Priority</th><th>Due Date</th><th>Status</th><th>Actions</th>
+    </tr>
     ${rows.length?rows.map(r=>{
       const rfiIsOverdue = r.due_date&&r.due_date<today&&r.status==='Open';
       const rfiIsSoon = !rfiIsOverdue&&r.due_date&&r.status==='Open'&&(new Date(r.due_date)-new Date(today))<=3*86400000;
-      return `<tr class="rfi-row" data-status="${r.status}" data-priority="${r.priority||'Normal'}" data-overdue="${rfiIsOverdue?'1':'0'}" data-search="${[r.ref_no,r.subject].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" style="${rfiIsOverdue?'border-left:2px solid var(--red)':rfiIsSoon?'border-left:2px solid var(--amber)':''}">
+      return `<tr class="rfi-row" data-status="${r.status}" data-priority="${r.priority||'Normal'}" data-overdue="${rfiIsOverdue?'1':'0'}" data-id="${r.id}" data-search="${[r.ref_no,r.subject].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" style="${rfiIsOverdue?'border-left:2px solid var(--red)':rfiIsSoon?'border-left:2px solid var(--amber)':''}">
+      <td style="text-align:center"><input type="checkbox" class="row-cb" id="rficb-${r.id}" onchange="toggleRowSelect('${r.id}',selectedRFIs,'rfi','bulk-bar-rfi','rfi-sel-count')" /></td>
       <td class="mono">${r.ref_no}</td>
       <td style="color:var(--blue-light);cursor:pointer" onclick="viewRFI('${r.id}')">${r.subject}</td>
       <td style="color:var(--text2);font-size:10px">${r.drawing_ref||'—'}</td>
@@ -3503,11 +3660,20 @@ async function renderRFIs() {
       <td>${sbadge(r.status)}</td>
       <td><div style="display:flex;gap:4px">
         <button class="btn btn-sm" onclick="viewRFI('${r.id}')">View</button>
-        ${can('approve')&&r.status==='Open'?`<button class="btn btn-sm btn-success" onclick="respondRFI('${r.id}')">Respond</button>`:''}
+        ${can('approve')&&r.status==='Open'?`<button class="btn btn-sm btn-primary" onclick="respondRFI('${r.id}')">Respond</button>`:''}
       </div></td>
-    </tr>`;}).join(''):'<tr><td colspan="8" class="empty-state">No RFIs raised yet.</td></tr>'}
-    <tr id="srch-empty-rfi" style="display:none"><td colspan="8" class="empty-state"></td></tr>
-  </table></div></div>`;
+    </tr>`;}).join(''):'<tr><td colspan="9" class="empty-state">No RFIs raised yet.</td></tr>'}
+    <tr id="srch-empty-rfi" style="display:none"><td colspan="9" class="empty-state"></td></tr>
+  </table>
+  <div class="record-footer">Showing ${rows.length} record${rows.length!==1?'s':''}</div>
+  </div></div>
+  <div id="bulk-bar-rfi" class="bulk-bar">
+    <div class="bulk-bar-inner">
+      <span id="rfi-sel-count" class="bulk-bar-count">0 selected</span>
+      <button class="btn btn-sm" onclick="bulkExportCSV('rfis','*','rfis.csv')">Export Selected</button>
+      <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedRFIs,'rfi','bulk-bar-rfi','rfi-sel-count')">Clear</button>
+    </div>
+  </div>`;
   if(rfiOverdueFilter) {
     document.querySelectorAll('.rfi-row').forEach(r=>{ r.style.display=r.dataset.overdue==='1'?'':'none'; });
   }
@@ -3579,15 +3745,33 @@ async function closeRFI(id) {
 
 // ─── TRANSMITTAL LOG ──────────────────────────────────────────────
 async function renderTransmittals() {
+  selectedTransmittals = new Set();
   const {data} = await sb.from('transmittals').select('*').order('created_at',{ascending:false});
   const rows = data||[];
+  const total = rows.length;
+  const acknowledged = rows.filter(r=>r.acknowledged_at).length;
+  const pending = total - acknowledged;
   document.getElementById('content').innerHTML = `
-  <div class="fbar">
-    <input type="text" class="reg-search" placeholder="Search transmittals..." oninput="searchReg('trans',this.value)" />
+  <div class="module-bar">
+    <div class="module-stat"><div class="module-stat-val">${total}</div><div class="module-stat-label">Total</div></div>
+    <div class="module-stat"><div class="module-stat-val">${acknowledged}</div><div class="module-stat-label">Acknowledged</div></div>
+    <div class="module-stat"><div class="module-stat-val ${pending>0?'warn':''}">${pending}</div><div class="module-stat-label">Pending Ack</div></div>
+  </div>
+  <div class="fbar"><span class="fbar-label">Status:</span>
+    <span class="chip active" onclick="filt(this,'trans','status','All')">All</span>
+    <span class="chip" onclick="filt(this,'trans','status','Acknowledged')">Acknowledged</span>
+    <span class="chip" onclick="filt(this,'trans','status','Pending')">Pending Ack</span>
+    <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search transmittals..." oninput="searchReg('trans',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>Ref No.</th><th>From</th><th>To</th><th>Date</th><th>Purpose</th><th>Method</th><th>Documents</th><th>Actions</th></tr>
-    ${rows.length?rows.map(t=>`<tr class="trans-row" data-search="${[t.ref_no,t.notes].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}">
+    <tr>
+      <th style="width:32px;text-align:center"><input type="checkbox" id="trans-select-all" onchange="selectAllRows('trans',selectedTransmittals,'bulk-bar-trans','trans-sel-count')" /></th>
+      <th>Ref No.</th><th>From</th><th>To</th><th>Date</th><th>Purpose</th><th>Method</th><th>Documents</th><th>Actions</th>
+    </tr>
+    ${rows.length?rows.map(t=>{
+      const ackStatus = t.acknowledged_at?'Acknowledged':'Pending';
+      return `<tr class="trans-row" data-status="${ackStatus}" data-search="${[t.ref_no,t.notes].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" data-id="${t.id}">
+      <td style="text-align:center"><input type="checkbox" class="row-cb" id="transcb-${t.id}" onchange="toggleRowSelect('${t.id}',selectedTransmittals,'trans','bulk-bar-trans','trans-sel-count')" /></td>
       <td class="mono">${t.ref_no}</td>
       <td style="color:var(--text2)">${t.from_party||'—'}</td>
       <td style="color:var(--text2)">${t.to_party||'—'}</td>
@@ -3596,9 +3780,18 @@ async function renderTransmittals() {
       <td><span class="badge badge-neutral">${t.method||'Email'}</span></td>
       <td style="color:var(--text3);font-size:10px">${Array.isArray(t.documents)?t.documents.length+' doc(s)':typeof t.documents==='string'?JSON.parse(t.documents||'[]').length+' doc(s)':'—'}</td>
       <td><button class="btn btn-sm" onclick="viewTransmittal('${t.id}')">View</button></td>
-    </tr>`).join(''):'<tr><td colspan="8" class="empty-state">No transmittals created yet.</td></tr>'}
-    <tr id="srch-empty-trans" style="display:none"><td colspan="8" class="empty-state"></td></tr>
-  </table></div></div>`;
+    </tr>`}).join(''):'<tr><td colspan="9" class="empty-state">No transmittals created yet.</td></tr>'}
+    <tr id="srch-empty-trans" style="display:none"><td colspan="9" class="empty-state"></td></tr>
+  </table>
+  <div class="record-footer">Showing ${rows.length} record${rows.length!==1?'s':''}</div>
+  </div></div>
+  <div id="bulk-bar-trans" class="bulk-bar">
+    <div class="bulk-bar-inner">
+      <span id="trans-sel-count" class="bulk-bar-count">0 selected</span>
+      <button class="btn btn-sm" onclick="bulkExportCSV('transmittals','*','transmittals.csv')">Export Selected</button>
+      <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedTransmittals,'trans','bulk-bar-trans','trans-sel-count')">Clear</button>
+    </div>
+  </div>`;
 }
 
 async function viewTransmittal(id) {
@@ -3661,6 +3854,7 @@ async function acknowledgeTransmittal(id) {
 
 // ─── CORRESPONDENCE REGISTER ──────────────────────────────────────
 async function renderCorrespondence() {
+  selectedCorrespondence = new Set();
   const {data} = await sb.from('correspondence').select('*').order('created_at',{ascending:false});
   const rows = data||[];
   const today = new Date().toISOString().split('T')[0];
@@ -3678,10 +3872,14 @@ async function renderCorrespondence() {
     <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search correspondence..." oninput="searchReg('corr',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>Ref No.</th><th>Type</th><th>Subject</th><th>From</th><th>To</th><th>Date</th><th>Due</th><th>Status</th><th>Actions</th></tr>
+    <tr>
+      <th style="width:32px;text-align:center"><input type="checkbox" id="corr-select-all" onchange="selectAllRows('corr',selectedCorrespondence,'bulk-bar-corr','corr-sel-count')" /></th>
+      <th>Ref No.</th><th>Type</th><th>Subject</th><th>From</th><th>To</th><th>Date</th><th>Due</th><th>Status</th><th>Actions</th>
+    </tr>
     ${rows.length?rows.map(c=>{
       const isOverdue = c.due_date&&c.due_date<today&&c.status==='Open';
-      return `<tr class="corr-row" data-type="${c.type||''}" data-search="${[c.ref_no,c.subject].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" style="${isOverdue?'background:var(--red-bg)':''}">
+      return `<tr class="corr-row" data-type="${c.type||''}" data-search="${[c.ref_no,c.subject].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" data-id="${c.id}" style="${isOverdue?'background:var(--red-bg)':''}">
+        <td style="text-align:center"><input type="checkbox" class="row-cb" id="corrcb-${c.id}" onchange="toggleRowSelect('${c.id}',selectedCorrespondence,'corr','bulk-bar-corr','corr-sel-count')" /></td>
         <td class="mono">${c.ref_no||'—'}</td>
         <td>${corrTypeBadge(c.type)}</td>
         <td style="color:var(--blue);cursor:pointer;max-width:200px" onclick="viewCorrespondence('${c.id}')">${c.subject||'—'}</td>
@@ -3692,9 +3890,18 @@ async function renderCorrespondence() {
         <td>${sbadge(c.status||'Open')}</td>
         <td><button class="btn btn-sm" onclick="viewCorrespondence('${c.id}')">View</button></td>
       </tr>`;
-    }).join(''):'<tr><td colspan="9" class="empty-state">No correspondence logged yet.</td></tr>'}
-    <tr id="srch-empty-corr" style="display:none"><td colspan="9" class="empty-state"></td></tr>
-  </table></div></div>`;
+    }).join(''):'<tr><td colspan="10" class="empty-state">No correspondence logged yet.</td></tr>'}
+    <tr id="srch-empty-corr" style="display:none"><td colspan="10" class="empty-state"></td></tr>
+  </table>
+  <div class="record-footer">Showing ${rows.length} record${rows.length!==1?'s':''}</div>
+  </div></div>
+  <div id="bulk-bar-corr" class="bulk-bar">
+    <div class="bulk-bar-inner">
+      <span id="corr-sel-count" class="bulk-bar-count">0 selected</span>
+      <button class="btn btn-sm" onclick="bulkExportCSV('correspondence','*','correspondence.csv')">Export Selected</button>
+      <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedCorrespondence,'corr','bulk-bar-corr','corr-sel-count')">Clear</button>
+    </div>
+  </div>`;
 }
 
 async function viewCorrespondence(id) {
@@ -3822,6 +4029,7 @@ async function doNewCorrespondence() {
 
 // ─── PUNCH LIST ───────────────────────────────────────────────────
 async function renderPunchList() {
+  selectedPunch = new Set();
   const {data} = await sb.from('punch_list').select('*').order('created_at',{ascending:false});
   const rows = data||[];
   const open = rows.filter(r=>r.status==='Open').length;
@@ -3842,8 +4050,12 @@ async function renderPunchList() {
     <input type="text" class="reg-search" style="margin-left:auto" placeholder="Search punch list..." oninput="searchReg('punch',this.value)" />
   </div>
   <div class="card"><div class="tw"><table>
-    <tr><th>#</th><th>Description</th><th>Location</th><th>Discipline</th><th>Raised By</th><th>Assigned To</th><th>Severity</th><th>Status</th><th>Actions</th></tr>
-    ${rows.length?rows.map((p,idx)=>`<tr class="punch-row" data-status="${p.status||''}" data-severity="${p.severity||''}" data-search="${[p.description,p.location].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}">
+    <tr>
+      <th style="width:32px;text-align:center"><input type="checkbox" id="punch-select-all" onchange="selectAllRows('punch',selectedPunch,'bulk-bar-punch','punch-sel-count')" /></th>
+      <th>#</th><th>Description</th><th>Location</th><th>Discipline</th><th>Raised By</th><th>Assigned To</th><th>Severity</th><th>Status</th><th>Actions</th>
+    </tr>
+    ${rows.length?rows.map((p,idx)=>`<tr class="punch-row" data-status="${p.status||''}" data-severity="${p.severity||''}" data-search="${[p.description,p.location].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}" data-id="${p.id}">
+      <td style="text-align:center"><input type="checkbox" class="row-cb" id="punchcb-${p.id}" onchange="toggleRowSelect('${p.id}',selectedPunch,'punch','bulk-bar-punch','punch-sel-count')" /></td>
       <td class="mono" style="font-size:10px">${String(idx+1).padStart(3,'0')}</td>
       <td style="color:var(--blue);cursor:pointer;max-width:200px" onclick="viewPunchItem('${p.id}')">${p.description||'—'}</td>
       <td><div style="font-size:11px;color:var(--charcoal)">${p.location||'—'}</div><div class="punch-loc">${p.element||''}</div></td>
@@ -3854,11 +4066,31 @@ async function renderPunchList() {
       <td>${sbadge(p.status||'Open')}</td>
       <td><div style="display:flex;gap:4px">
         <button class="btn btn-sm" onclick="viewPunchItem('${p.id}')">View</button>
-        ${p.status!=='Closed'&&can('approve')?`<button class="btn btn-sm btn-success" onclick="closePunchItem('${p.id}')">Close</button>`:''}
+        ${p.status!=='Closed'&&can('approve')?`<button class="btn btn-sm btn-danger" onclick="closePunchItem('${p.id}')">Close</button>`:''}
       </div></td>
-    </tr>`).join(''):'<tr><td colspan="9" class="empty-state">No punch list items. Items are typically raised during snagging and handover inspections.</td></tr>'}
-    <tr id="srch-empty-punch" style="display:none"><td colspan="9" class="empty-state"></td></tr>
-  </table></div></div>`;
+    </tr>`).join(''):'<tr><td colspan="10" class="empty-state">No punch list items. Items are typically raised during snagging and handover inspections.</td></tr>'}
+    <tr id="srch-empty-punch" style="display:none"><td colspan="10" class="empty-state"></td></tr>
+  </table>
+  <div class="record-footer">Showing ${rows.length} record${rows.length!==1?'s':''}</div>
+  </div></div>
+  <div id="bulk-bar-punch" class="bulk-bar">
+    <div class="bulk-bar-inner">
+      <span id="punch-sel-count" class="bulk-bar-count">0 selected</span>
+      <button class="btn btn-sm" onclick="bulkExportCSV('punch_list','*','punch_list.csv')">Export Selected</button>
+      ${can('approve')?`<button class="btn btn-sm btn-success" onclick="doBatchPunchClose()">Bulk Close</button>`:''}
+      <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedPunch,'punch','bulk-bar-punch','punch-sel-count')">Clear</button>
+    </div>
+  </div>`;
+}
+
+async function doBatchPunchClose() {
+  const ids = [...selectedPunch];
+  if(!ids.length) return;
+  const {error} = await sb.from('punch_list').update({status:'Closed',closed_date:new Date().toISOString().split('T')[0]}).in('id',ids);
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast(`Closed ${ids.length} punch item${ids.length!==1?'s':''}`,'success');
+  clearSelection(selectedPunch,'punch','bulk-bar-punch','punch-sel-count');
+  renderPunchList();
 }
 
 async function viewPunchItem(id) {
