@@ -771,16 +771,19 @@ function cdeStepperHTML(currentState, drawingId) {
 }
 
 function sbadge(s) {
+  if(!s) return '<span class="badge badge-neutral">—</span>';
+  // Normalise to title case for case-insensitive matching
+  const norm = String(s).toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
   const m={
-    'Approved':'badge-success','Issued for Construction':'badge-success','Passed':'badge-success',
-    'Closed':'badge-success','Approved as Noted':'badge-success',
+    'Approved':'badge-success','Issued For Construction':'badge-success','Passed':'badge-success',
+    'Closed':'badge-success','Approved As Noted':'badge-success',
     'Under Review':'badge-info','Pending Review':'badge-info','Pending':'badge-info','Responded':'badge-info',
-    'CAP Verified':'badge-info',
+    'Cap Verified':'badge-info',
     'Revise & Resubmit':'badge-warning','Correction':'badge-warning','Open':'badge-warning','High':'badge-warning',
     'Rejected':'badge-danger','Major':'badge-danger','Critical':'badge-danger',
     'Normal':'badge-neutral','Minor':'badge-neutral','Void':'badge-danger','Cancelled':'badge-danger',
   };
-  return `<span class="badge ${m[s]||'badge-neutral'}">${s}</span>`;
+  return `<span class="badge ${m[norm]||'badge-neutral'}">${s}</span>`;
 }
 
 // ─── DASHBOARD ────────────────────────────────────────────────────
