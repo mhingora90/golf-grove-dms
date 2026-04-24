@@ -198,11 +198,20 @@ textarea.form-control{resize:vertical;min-height:70px}
 
 /* TOAST */
 .toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
-.toast{padding:11px 16px;border-radius:var(--radius-lg);font-size:12px;min-width:240px;animation:slideIn .25s ease;border:0.5px solid;box-shadow:0 4px 16px rgba(44,42,36,.1)}
+.toast{padding:11px 16px;border-radius:var(--radius-lg);font-size:12px;min-width:260px;max-width:400px;animation:slideIn .25s ease;border:0.5px solid;box-shadow:0 4px 16px rgba(44,42,36,.1);display:flex;align-items:flex-start;gap:8px;position:relative}
+.toast-icon{font-size:14px;flex-shrink:0;line-height:1;margin-top:1px}
+.toast-msg{flex:1;line-height:1.4}
+.toast-close{background:none;border:none;font-size:16px;color:inherit;opacity:.4;cursor:pointer;padding:0 0 0 8px;line-height:1;flex-shrink:0}
+.toast-close:hover{opacity:.8}
 .toast.success{background:var(--bg2);color:var(--green);border-color:var(--green-bg)}
 .toast.error{background:var(--bg2);color:var(--red);border-color:var(--red-bg)}
 .toast.info{background:var(--bg2);color:var(--blue);border-color:var(--blue-bg)}
+.toast.warning{background:var(--bg2);color:var(--amber);border-color:var(--amber-bg)}
 @keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+/* INLINE VALIDATION */
+.form-err{font-size:11px;color:var(--red);margin-top:3px;display:none}
+.form-err.visible{display:block}
+.form-control.err{border-color:var(--red)!important}
 
 /* ADMIN BADGE */
 .role-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 10px;border-radius:20px;border:0.5px solid}
@@ -1717,7 +1726,8 @@ async function advanceCDE(id, newState) {
     'Published': 'Publish this drawing as approved and ready for use on site?',
     'Archived':  'Archive this drawing? It will be marked as superseded.',
   };
-  if(!confirm(stateLabels[newState]||'Advance to '+newState+'?')) return;
+  const label = stateLabels[newState]||'Advance to '+newState+'?';
+  if(!await confirmModal(label)) return;
   const {error} = await sb.from('drawings').update({cde_state: newState}).eq('id', id);
   if(error){toast('Error: '+error.message,'error');return;}
   await logAudit(id, 'drawing', 'CDE State Change \u2192 ' + newState);
@@ -2442,7 +2452,7 @@ async function viewNCR(id) {
 
 // ─── DRAWING ACTIONS ──────────────────────────────────────────────
 async function voidDrawing(id, drawingNo) {
-  if(!confirm('Void drawing '+drawingNo+'? This cannot be undone — the drawing will be flagged as no longer applicable.')) return;
+  if(!await confirmModal('Void drawing <b>'+drawingNo+'</b>? This cannot be undone — the drawing will be flagged as no longer applicable.')) return;
   const {error} = await sb.from('drawings').update({
     status:'Void', cde_state:'Archived'
   }).eq('id',id);
@@ -2612,7 +2622,7 @@ async function doCloseNCR(id) {
 }
 
 async function removeSub(id) {
-  if(!confirm('Remove this subcontractor?')) return;
+  if(!await confirmModal('Remove this subcontractor?')) return;
   const {error} = await sb.from('subcontractors').delete().eq('id',id);
   if(error){toast('Error: '+error.message,'error');return;}
   toast('Subcontractor removed','info'); render();
@@ -2734,13 +2744,13 @@ async function openNew() {
         <div style="display:flex;align-items:center;gap:8px">
           <div style="font-size:10px;color:var(--text3)">Generated No.:</div>
           <div id="nd-preview" style="font-family:monospace;font-size:11px;font-weight:500;color:var(--sand);background:var(--bg2);padding:4px 10px;border-radius:6px;border:0.5px solid var(--border2)">GG-MBC-——-——-DR-——-——-RevA</div>
-          <button type="button" class="btn btn-sm" onclick="document.getElementById('nd-id').value=document.getElementById('nd-preview').textContent" style="font-size:10px">Use this</button>
+          <button type="button" class="btn btn-sm" onclick="document.getElementById('nd-id').value=document.getElementById('nd-preview').textContent;validateDrawingNumberLive()" style="font-size:10px">Use this</button>
         </div>
       </div>
       <div class="frow">
-        <div class="form-group"><label class="form-label-dark">Drawing No. <span style="color:var(--text3);font-size:9px">(or use generated above)</span></label><input type="text" class="form-control" id="nd-id" placeholder="e.g. GG-MBC-B1-L04-DR-RevA" /></div>
+        <div class="form-group"><label class="form-label-dark">Drawing No. <span style="color:var(--text3);font-size:9px">(or use generated above)</span></label><input type="text" class="form-control" id="nd-id" placeholder="e.g. GG-MBC-B1-L04-DR-RevA" onblur="validateDrawingNumberLive()" /><div id="nd-id-err" class="form-err"></div></div>
       </div>
-      <div class="form-group"><label class="form-label-dark">Title</label><input type="text" class="form-control" id="nd-title" placeholder="Drawing title" /></div>
+      <div class="form-group"><label class="form-label-dark">Title</label><input type="text" class="form-control" id="nd-title" placeholder="Drawing title" /><div id="nd-title-err" class="form-err"></div></div>
       <div class="frow">
         <div class="form-group"><label class="form-label-dark">Discipline</label>
           <select class="form-control" id="nd-disc"><option>Architecture</option><option>Structure</option><option>MEP</option><option>Civil</option></select>
@@ -2940,9 +2950,19 @@ function checkRevScheme() {
 }
 
 async function doNewDraw() {
-  const id = document.getElementById('nd-id').value;
-  const title = document.getElementById('nd-title').value;
-  if(!id||!title){toast('Drawing number and title are required','error');return;}
+  const idEl = document.getElementById('nd-id');
+  const titleEl = document.getElementById('nd-title');
+  const id = idEl.value.trim();
+  const title = titleEl.value.trim();
+  // E4/E5: Inline error highlighting
+  idEl.classList.remove('err'); document.getElementById('nd-id-err')?.classList.remove('visible');
+  titleEl.classList.remove('err'); document.getElementById('nd-title-err')?.classList.remove('visible');
+  if(!id||!title){
+    if(!id){idEl.classList.add('err');const e=document.getElementById('nd-id-err');if(e){e.textContent='Drawing number is required';e.classList.add('visible');}}
+    if(!title){titleEl.classList.add('err');const e=document.getElementById('nd-title-err');if(e){e.textContent='Title is required';e.classList.add('visible');}}
+    toast('Please fill in all required fields','error');
+    return;
+  }
   const orig  = document.getElementById('nd-orig')?.value?.trim();
   const zone  = document.getElementById('nd-zone')?.value?.trim();
   const level = document.getElementById('nd-level')?.value?.trim();
@@ -3463,7 +3483,7 @@ async function doAddRegisterItem() {
 }
 
 async function deleteRegisterItem(id) {
-  if(!confirm('Remove this item from the register?')) return;
+  if(!await confirmModal('Remove this item from the register?')) return;
   const {error} = await sb.from('submittal_register').delete().eq('id',id);
   if(error){toast('Error: '+error.message,'error');return;}
   toast('Item removed','info');
@@ -3539,12 +3559,60 @@ function openModal(title, body, footer, wide) {
 function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
 function closeBg(e){if(e.target===document.getElementById('modal-bg'))closeModal();}
 
+// ─── CONFIRM MODAL (replaces window.confirm, returns Promise) ────
+function confirmModal(msg) {
+  return new Promise(resolve=>{
+    openModal('Confirm Action', `<div style="font-size:14px;color:var(--text);line-height:1.5;padding:8px 0">${msg}</div>`,
+      `<button class="btn btn-primary" id="confirm-yes">Confirm</button><button class="btn btn-danger" onclick="window._confirmResolve(false)">Cancel</button>`);
+    window._confirmResolve = (v)=>{ closeModal(); resolve(v); };
+    document.getElementById('confirm-yes').onclick = ()=> resolve(true);
+  });
+}
+
+// ─── FORM VALIDATION ─────────────────────────────────────────────
+function validateForm(fields) {
+  // fields: array of {id, label, required}
+  let firstErr = null, allValid = true;
+  fields.forEach(f=>{
+    const el = document.getElementById(f.id);
+    if(!el) return;
+    const errEl = document.getElementById(f.id+'-err');
+    el.classList.remove('err');
+    if(errEl) errEl.classList.remove('visible');
+    if(f.required && !el.value.trim()){
+      allValid = false;
+      el.classList.add('err');
+      if(errEl){errEl.textContent=f.label+' is required';errEl.classList.add('visible');}
+      if(!firstErr) firstErr = el;
+    }
+  });
+  if(firstErr) firstErr.focus();
+  return allValid;
+}
+
+// ─── LIVE DRAWING NUMBER VALIDATION ──────────────────────────────
+function validateDrawingNumberLive() {
+  const el = document.getElementById('nd-id');
+  if(!el) return;
+  let msgEl = document.getElementById('nd-id-err');
+  if(!msgEl){msgEl=document.createElement('div');msgEl.id='nd-id-err';msgEl.className='form-err';el.parentElement.appendChild(msgEl);}
+  const v = el.value.trim();
+  if(!v){msgEl.classList.remove('visible');el.classList.remove('err');return;}
+  const r = validateDrawingNumber(v);
+  if(!r.valid){el.classList.add('err');msgEl.textContent='⚠ '+r.msg;msgEl.classList.add('visible');}
+  else{el.classList.remove('err');msgEl.classList.remove('visible');}
+}
+
 // ─── TOAST ────────────────────────────────────────────────────────
 function toast(msg, type='info') {
   const el = document.createElement('div');
-  el.className=`toast ${type}`; el.textContent=msg;
+  el.className = `toast ${type}`;
+  const icons = {success:'✓',error:'✕',info:'ℹ',warning:'⚠'};
+  const durations = {success:3000,error:6000,info:0,warning:4000};
+  el.innerHTML = `<span class="toast-icon">${icons[type]||'ℹ'}</span><span class="toast-msg">${msg}</span><button class="toast-close" onclick="this.parentElement.remove()">×</button>`;
   document.getElementById('toasts').appendChild(el);
-  setTimeout(()=>el.remove(), 3500);
+  const dur = durations[type]||3500;
+  if(dur > 0) setTimeout(()=>{ if(el.parentElement) el.remove(); }, dur);
 }
 
 
@@ -4518,7 +4586,7 @@ async function downloadAttachment(path, name) {
 }
 
 async function deleteAttachment(attId, path, recordType, recordId) {
-  if(!confirm('Remove this attachment?')) return;
+  if(!await confirmModal('Remove this attachment?')) return;
   await sb.storage.from('attachments').remove([path]);
   await sb.from('attachments').delete().eq('id', attId);
   toast('Attachment removed','info');
