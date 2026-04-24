@@ -341,8 +341,8 @@ CREATE POLICY "comments_read_all" ON public.comments
 CREATE POLICY "comments_insert_all" ON public.comments
   FOR INSERT WITH CHECK (true);
 
-CREATE POLICY "comments_delete_own" ON public.comments
-  FOR DELETE USING (auth.uid() = uploaded_by_id);
+-- No delete policy — comments are immutable once posted
+-- (If you add uploaded_by_id later, add: FOR DELETE USING (auth.uid() = uploaded_by_id))
 
 -- ─── ATTACHMENTS TABLE ───────────────────────────────────────────
 ALTER TABLE public.attachments ENABLE ROW LEVEL SECURITY;
@@ -353,7 +353,7 @@ CREATE POLICY "attachments_read_all" ON public.attachments
 CREATE POLICY "attachments_insert_all" ON public.attachments
   FOR INSERT WITH CHECK (true);
 
-CREATE POLICY "attachments_delete_own" ON public.attachments
-  FOR DELETE USING (auth.uid() = uploaded_by_id);
+-- No delete policy — attachments are managed via RLS on the parent record
+-- (If you add uploaded_by_id later, add: FOR DELETE USING (auth.uid() = uploaded_by_id))
 
 COMMIT;
