@@ -2700,6 +2700,12 @@ async function doUploadRev(id) {
   const prevData = {revision:d.revision, status:d.status, superseded_revisions:d.superseded_revisions, file_path:d.file_path};
   const {error:updErr} = await sb.from('drawings').update(update).eq('id',id);
   if(updErr){toast('Error updating drawing: '+updErr.message,'error');return;}
+  // Backfill file_path on the previous revision row so it remains viewable
+  if(d.file_path) {
+    await sb.from('drawing_revisions')
+      .update({file_path:d.file_path})
+      .eq('drawing_id',id).eq('revision',d.revision).is('file_path',null);
+  }
   // Log revision event — wrapped to prevent orphaned drawing state
   const {error:revErr} = await sb.from('drawing_revisions').insert({
     drawing_id:id,
