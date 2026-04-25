@@ -106,7 +106,6 @@ async function seedData() {
     status:     'Under Review',
     cde_state:  'WIP',
     uploaded_by: 'Test Script',
-    upload_date: TODAY,
     superseded_revisions: '["Rev A"]',
     related_drawings: [],
   });
@@ -169,7 +168,6 @@ async function seedData() {
     title:       'PDF Test Submittal',
     status:      'Pending Review',
     submit_date:  TODAY,
-    submitted_by: state.mohId,
     attachments:  {},
     discipline:   {},
   });
@@ -193,11 +191,10 @@ async function seedData() {
   // ── Inspection Request + attachment ────────────────────────────────────────
   const { data: irRows } = await ins('inspections', {
     ref_no:          `IR-TEST-${TS}`,
-    title:           'PDF Test IR',
+    location:        'PDF Test IR',
     status:          'Pending',
     request_date:    TODAY,
     inspection_date: TODAY,
-    submitted_by:    state.mohId,
     department:      {},
     revision:        0,
   });
@@ -248,7 +245,6 @@ async function seedData() {
     ref_no:      `RFI-TEST-${TS}`,
     subject:     'PDF Test RFI',
     status:      'Open',
-    raised_date: TODAY,
     due_date:    TODAY,
     raised_by:   state.mohId,
   });
@@ -271,11 +267,11 @@ async function seedData() {
 
   // ── Method Statement + attachment ───────────────────────────────────────────
   const { data: msRows } = await ins('method_statements', {
-    ref_no:       `MS-TEST-${TS}`,
-    title:        'PDF Test MS',
-    status:       'Pending Review',
-    submitted_by: state.mohId,
-    submit_date:  TODAY,
+    ref_no:         `MS-TEST-${TS}`,
+    title:          'PDF Test MS',
+    status:         'Pending Review',
+    submitted_by:   state.mohId,
+    submitted_date: TODAY,
   });
   const ms = Array.isArray(msRows) ? msRows[0] : msRows;
   if (!ms?.id) throw new Error('MS insert failed');
@@ -296,12 +292,12 @@ async function seedData() {
 
   // ── Correspondence + attachment ─────────────────────────────────────────────
   const { data: corrRows } = await ins('correspondence', {
-    ref_no:    `CORR-TEST-${TS}`,
-    subject:   'PDF Test Correspondence',
-    status:    'Open',
-    sent_date: TODAY,
-    sent_by:   state.mohId,
-    direction: 'Outgoing',
+    ref_no:               `CORR-TEST-${TS}`,
+    subject:              'PDF Test Correspondence',
+    status:               'Open',
+    correspondence_date:  TODAY,
+    logged_by:            state.mohId,
+    type:                 'Letter',
   });
   const corr = Array.isArray(corrRows) ? corrRows[0] : corrRows;
   if (!corr?.id) throw new Error('Correspondence insert failed');
@@ -341,15 +337,30 @@ async function loginAndWait(page) {
   await page.waitForSelector('#content', { timeout: 15000 });
 }
 
+async function closeAnyModal(page) {
+  // Close any open modal via Escape, then wait for it to disappear
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(300);
+  // If modal-bg still open, click outside it
+  const bg = page.locator('.modal-bg.open');
+  if (await bg.count() > 0) {
+    await page.evaluate(() => { const bg = document.querySelector('.modal-bg'); if (bg) bg.click(); });
+    await page.waitForTimeout(300);
+  }
+}
+
 async function searchAndOpenDrawing(page) {
-  // Search for our test drawing by drawing_no
+  // Wait for the register table to be stable
+  await page.waitForSelector('table', { timeout: 10000 });
+  await page.waitForTimeout(500);
   const searchBox = page.locator('input[placeholder="Search drawings..."]');
+  await searchBox.waitFor({ state: 'visible', timeout: 8000 });
   await searchBox.fill(`GG-TEST-PDF-${TS}`);
-  await page.waitForTimeout(600);
-  // Click View on the row
+  await page.waitForTimeout(700);
   const row = page.locator('table tr').filter({ hasText: `GG-TEST-PDF-${TS}` });
   await row.locator('button:has-text("View")').first().click();
-  await page.waitForSelector('.modal-title, #modal-title', { timeout: 8000 });
+  await page.waitForSelector('#modal-title', { timeout: 8000 });
+  await page.waitForTimeout(500);
 }
 
 async function testDrawingRevisions(page, role) {
@@ -357,8 +368,9 @@ async function testDrawingRevisions(page, role) {
 
   await page.goto(`${APP_URL}/#draw`);
   await page.waitForSelector('#content', { timeout: 10000 });
-  await page.waitForTimeout(800);
+  await page.waitForTimeout(1000);
 
+  // ── Open modal ──
   try {
     await searchAndOpenDrawing(page);
   } catch (e) {
@@ -366,115 +378,109 @@ async function testDrawingRevisions(page, role) {
     return;
   }
 
-  // Wait for revision table to render
-  await page.waitForTimeout(600);
-
-  // ── Rev A (superseded) checks ──
-  // Should have strikethrough label span containing "Rev A"
+  // ── Rev A (superseded): strikethrough label ──
   const revAStrike = page.locator('span[style*="line-through"]').filter({ hasText: 'Rev A' });
   if (await revAStrike.count() > 0) {
     pass(`${label} Rev A — strikethrough label`);
   } else {
-    fail(`${label} Rev A — strikethrough label`, 'No strikethrough span found for Rev A');
+    fail(`${label} Rev A — strikethrough label`, 'No strikethrough span for Rev A');
   }
 
-  // Rev A View button should have amber colour (border-color or color style)
-  const revAViewBtn = page.locator('button:has-text("View")').filter({
-    has: page.locator('..').filter({ has: page.locator('span[style*="line-through"]') })
-  });
-  // Simpler: find the amber-styled button near the strikethrough span
+  // ── Rev A: amber View button ──
   const revARow = page.locator('tr').filter({ has: page.locator('span[style*="line-through"]') });
   const amberBtn = revARow.locator('button:has-text("View")');
   if (await amberBtn.count() > 0) {
     const style = await amberBtn.getAttribute('style') || '';
-    if (style.includes('b45309') || style.includes('amber') || style.includes('opacity')) {
+    if (style.includes('b45309') || style.includes('opacity')) {
       pass(`${label} Rev A — amber/muted View button`);
     } else {
-      pass(`${label} Rev A — View button present (style: ${style.substring(0, 60)})`);
+      pass(`${label} Rev A — View button present (style check: ${style.substring(0, 80)})`);
     }
-  } else {
-    // Rev A may genuinely have no file — skip
-    skip(`${label} Rev A — amber View button`, 'No View button in Rev A row (may have no file)');
-  }
 
-  // Click Rev A View and check that confirmModal appears ("Confirm Action" modal)
-  if (await amberBtn.count() > 0) {
+    // ── Rev A: click View → confirmModal ──
     await amberBtn.click();
-    await page.waitForTimeout(400);
-    const confirmTitle = page.locator('#modal-title, .modal-title').filter({ hasText: 'Confirm Action' });
-    if (await confirmTitle.count() > 0) {
+    await page.waitForTimeout(500);
+    const confirmTitle = page.locator('#modal-title');
+    const titleText = await confirmTitle.innerText().catch(() => '');
+    if (titleText.includes('Confirm')) {
       pass(`${label} Rev A — confirmModal shown on View click`);
-      // Check warning text mentions "Superseded"
-      const modalBody = await page.locator('.modal-body, [id*="modal"]').innerText().catch(() => '');
-      if (modalBody.includes('Superseded') || modalBody.includes('superseded') || modalBody.includes('not the current')) {
+      // Read warning body text BEFORE dismissing
+      const bodyText = await page.locator('#modal-body').innerText().catch(() => '');
+      if (bodyText.toLowerCase().includes('superseded') || bodyText.includes('not the current')) {
         pass(`${label} Rev A — warning text mentions superseded/not current`);
       } else {
-        fail(`${label} Rev A — warning text`, `Modal text: "${modalBody.substring(0, 120)}"`);
+        fail(`${label} Rev A — warning text`, `Body: "${bodyText.substring(0, 120)}"`);
       }
-      // Cancel to dismiss
+      // Cancel — this closes the entire modal stack
       await page.locator('button:has-text("Cancel")').click();
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(400);
     } else {
-      fail(`${label} Rev A — confirmModal shown on View click`, 'No "Confirm Action" modal appeared');
+      fail(`${label} Rev A — confirmModal shown on View click`, `Modal title was: "${titleText}"`);
     }
+  } else {
+    skip(`${label} Rev A — amber View button`, 'No View button in Rev A row');
   }
 
-  // ── Rev B (current) checks ──
+  // ── Re-open drawing modal for Rev B check (confirmModal closed everything) ──
+  try {
+    await searchAndOpenDrawing(page);
+  } catch (e) {
+    fail(`${label} Rev B — re-open modal`, e.message);
+    return;
+  }
+
+  // ── Rev B (current): normal View button, no confirm ──
   const revBRow = page.locator('tr').filter({ has: page.locator('span:has-text("Current")') });
   const revBViewBtn = revBRow.locator('button:has-text("View")');
   if (await revBViewBtn.count() > 0) {
     pass(`${label} Rev B (current) — View button present`);
-    // Click and confirm no confirmModal appears
     await revBViewBtn.click();
     await page.waitForTimeout(400);
-    const unexpectedConfirm = page.locator('#modal-title, .modal-title').filter({ hasText: 'Confirm Action' });
-    if (await unexpectedConfirm.count() === 0) {
+    const titleAfter = await page.locator('#modal-title').innerText().catch(() => '');
+    if (!titleAfter.includes('Confirm')) {
       pass(`${label} Rev B (current) — no confirmModal (opens directly)`);
     } else {
-      fail(`${label} Rev B (current) — no confirmModal`, 'Confirm dialog appeared unexpectedly for current revision');
+      fail(`${label} Rev B (current) — no confirmModal`, 'Confirm dialog appeared for current revision');
       await page.locator('button:has-text("Cancel")').click();
     }
   } else {
-    fail(`${label} Rev B (current) — View button present`, 'No View button in Rev B (Current) row');
+    fail(`${label} Rev B (current) — View button present`, 'No View button in Current row');
   }
 
-  // Close modal
-  await page.locator('button:has-text("Close")').click().catch(() => {});
-  await page.waitForTimeout(300);
+  // Close modal cleanly
+  await closeAnyModal(page);
 }
 
 async function testModuleAttachment(page, role, module, navHash, searchText, openBtnText = 'View') {
   const label = `[${role}] ${module}`;
+
+  // Ensure no stale modal before navigating
+  await closeAnyModal(page);
 
   await page.goto(`${APP_URL}/#${navHash}`);
   await page.waitForSelector('#content', { timeout: 10000 });
   await page.waitForTimeout(800);
 
   try {
-    // Find the row containing our test ref
-    const row = page.locator('table tr, .card, [class*="row"]').filter({ hasText: searchText });
-    const rowCount = await row.count();
-    if (rowCount === 0) { fail(`${label} — find test record`, `No row with text "${searchText}"`); return; }
+    const row = page.locator('table tr').filter({ hasText: searchText });
+    if (await row.count() === 0) { fail(`${label} — find test record`, `No row with text "${searchText}"`); return; }
     await row.locator(`button:has-text("${openBtnText}")`).first().click();
-    await page.waitForSelector('.modal-title, #modal-title', { timeout: 8000 });
+    await page.waitForSelector('#modal-title', { timeout: 8000 });
   } catch (e) {
     fail(`${label} — open modal`, e.message);
     return;
   }
 
-  await page.waitForTimeout(600);
+  await page.waitForTimeout(700);
 
-  // Look for View button in attachment section (PDF files have View buttons)
   const viewBtn = page.locator('button:has-text("View")');
   if (await viewBtn.count() > 0) {
     pass(`${label} — attachment View button visible`);
   } else {
-    // Maybe the attachment section hasn't loaded or no View for this role
     fail(`${label} — attachment View button visible`, 'No View button found in modal');
   }
 
-  await page.locator('button:has-text("Close")').click().catch(() => {});
-  await page.waitForTimeout(300);
+  await closeAnyModal(page);
 }
 
 // ── main ──────────────────────────────────────────────────────────────────────
