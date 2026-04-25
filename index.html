@@ -2147,7 +2147,6 @@ async function viewDraw(id) {
     }
   }
   const revRows = revs||[];
-  console.log('[viewDraw] revRows full array:', JSON.stringify(revRows));
   const revTableHTML = revRows.length ? `
     <div class="detail-section">
       <div class="detail-label" style="margin-bottom:10px">Full Revision History & Audit Trail</div>
@@ -2164,7 +2163,6 @@ async function viewDraw(id) {
             <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">File</th>
           </tr>
           ${revRows.map((r,i)=>{
-            console.log('[viewDraw] revision row', i, 'file_path=', r.file_path, 'keys=', Object.keys(r));
             const isCurrent = i===revRows.length-1;
             const bg = isCurrent?'background:var(--blue-bg)':'';
             const uploadDate = r.upload_date?new Date(r.upload_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—';
@@ -2186,7 +2184,7 @@ async function viewDraw(id) {
               </td>
               <td style="padding:7px 10px;color:var(--text2)">${r.approved_by_name?approvalDate:'—'}</td>
               <td style="padding:7px 10px;font-size:11px;color:var(--text2);max-width:200px">${r.review_comments||'<span style="color:var(--text3)">—</span>'}</td>
-              <td style="padding:7px 10px">${r.file_path?`<button class="btn btn-sm" onclick="viewRevisionPDF('${r.file_path}','${r.revision}')">View</button>`:'<span style="color:var(--text3);font-size:10px">—</span>'}</td>
+              <td style="padding:7px 10px">${(r.file_path||(isCurrent&&d.file_path))?`<button class="btn btn-sm" onclick="viewRevisionPDF('${r.file_path||d.file_path}','${r.revision}')">View</button>`:'<span style="color:var(--text3);font-size:10px">—</span>'}</td>
             </tr>`;
           }).join('')}
         </table>
