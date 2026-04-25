@@ -4956,9 +4956,9 @@ document.addEventListener('keydown', (e) => {
 
 
 // ─── VIEW REVISION PDF ────────────────────────────────────────────
-function viewRevisionPDF(filePath, revision, isSuperseded, currentRev) {
+async function viewRevisionPDF(filePath, revision, isSuperseded, currentRev) {
   if(isSuperseded) {
-    const proceed = confirm(`⚠ Superseded revision\n\n"${revision}" is not the current revision — the latest is ${currentRev}.\n\nThis file should not be used on site. View for reference only?`);
+    const proceed = await confirmModal(`⚠️ <strong>Superseded Revision</strong><br><br><strong>${revision}</strong> is not the current revision — the latest is <strong>${currentRev}</strong>.<br><br>This file should not be used on site. View for reference only?`);
     if(!proceed) return;
   }
   const {data} = sb.storage.from('drawings').getPublicUrl(filePath);
