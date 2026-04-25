@@ -4944,10 +4944,10 @@ document.addEventListener('keydown', (e) => {
 
 
 // ─── VIEW REVISION PDF ────────────────────────────────────────────
-async function viewRevisionPDF(filePath, revision) {
-  const {data, error} = await sb.storage.from('drawings').createSignedUrl(filePath, 3600);
-  if(error||!data?.signedUrl) { toast('Could not load PDF','error'); return; }
-  window.open(data.signedUrl, '_blank');
+function viewRevisionPDF(filePath, revision) {
+  const {data} = sb.storage.from('drawings').getPublicUrl(filePath);
+  if(data?.publicUrl) window.open(data.publicUrl, '_blank');
+  else toast('Could not load PDF','error');
 }
 
 // ─── VIEW ATTACHMENT PDF ──────────────────────────────────────────
