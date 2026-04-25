@@ -2184,7 +2184,13 @@ async function viewDraw(id) {
               </td>
               <td style="padding:7px 10px;color:var(--text2)">${r.approved_by_name?approvalDate:'—'}</td>
               <td style="padding:7px 10px;font-size:11px;color:var(--text2);max-width:200px">${r.review_comments||'<span style="color:var(--text3)">—</span>'}</td>
-              <td style="padding:7px 10px">${(r.file_path||(isCurrent&&d.file_path))?`<button class="btn btn-sm" onclick="viewRevisionPDF('${r.file_path||d.file_path}','${r.revision}')">View</button>`:'<span style="color:var(--text3);font-size:10px">—</span>'}</td>
+              <td style="padding:7px 10px">${(()=>{
+                const fp = r.file_path||(isCurrent?d.file_path:null);
+                if(!fp) return '<span style="color:var(--text3);font-size:10px">—</span>';
+                if(isCurrent) return `<button class="btn btn-sm" onclick="viewRevisionPDF('${fp}','${r.revision}',false)">View</button>`;
+                const currentRev = revRows[revRows.length-1].revision;
+                return `<span style="display:flex;align-items:center;gap:5px"><span style="font-size:10px;color:var(--text3);text-decoration:line-through">${r.revision}</span><button class="btn btn-sm" style="opacity:.65;border-color:var(--amber,#b45309);color:var(--amber,#b45309)" onclick="viewRevisionPDF('${fp}','${r.revision}',true,'${currentRev}')">View</button></span>`;
+              })()}</td>
             </tr>`;
           }).join('')}
         </table>
@@ -4950,7 +4956,11 @@ document.addEventListener('keydown', (e) => {
 
 
 // ─── VIEW REVISION PDF ────────────────────────────────────────────
-function viewRevisionPDF(filePath, revision) {
+function viewRevisionPDF(filePath, revision, isSuperseded, currentRev) {
+  if(isSuperseded) {
+    const proceed = confirm(`⚠ Superseded revision\n\n"${revision}" is not the current revision — the latest is ${currentRev}.\n\nThis file should not be used on site. View for reference only?`);
+    if(!proceed) return;
+  }
   const {data} = sb.storage.from('drawings').getPublicUrl(filePath);
   if(data?.publicUrl) window.open(data.publicUrl, '_blank');
   else toast('Could not load PDF','error');
