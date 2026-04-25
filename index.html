@@ -2160,6 +2160,7 @@ async function viewDraw(id) {
             <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Approved By</th>
             <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Approval Date</th>
             <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Review Comments</th>
+            <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">File</th>
           </tr>
           ${revRows.map((r,i)=>{
             const isCurrent = i===revRows.length-1;
@@ -2183,6 +2184,7 @@ async function viewDraw(id) {
               </td>
               <td style="padding:7px 10px;color:var(--text2)">${r.approved_by_name?approvalDate:'—'}</td>
               <td style="padding:7px 10px;font-size:11px;color:var(--text2);max-width:200px">${r.review_comments||'<span style="color:var(--text3)">—</span>'}</td>
+              <td style="padding:7px 10px">${r.file_path?`<button class="btn btn-sm" onclick="viewRevisionPDF('${r.file_path}','${r.revision}')">View</button>`:'<span style="color:var(--text3);font-size:10px">—</span>'}</td>
             </tr>`;
           }).join('')}
         </table>
@@ -4941,6 +4943,14 @@ document.addEventListener('keydown', (e) => {
 // PDF.js worker is set on init - no modal wrapper needed
 
 
+// ─── VIEW REVISION PDF ────────────────────────────────────────────
+async function viewRevisionPDF(filePath, revision) {
+  const {data, error} = await sb.storage.from('drawings').createSignedUrl(filePath, 3600);
+  if(error||!data?.signedUrl) { toast('Could not load PDF','error'); return; }
+  window.open(data.signedUrl, '_blank');
+}
+
+// ─── VIEW ATTACHMENT PDF ──────────────────────────────────────────
 async function viewAttachmentPDF(attId, filePath, fileName) {
   const {data, error} = await sb.storage.from('attachments').createSignedUrl(filePath, 3600);
   if(error||!data?.signedUrl) { toast('Could not load PDF','error'); return; }
