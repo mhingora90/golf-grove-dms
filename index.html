@@ -848,13 +848,14 @@ async function renderDash() {
          oSubCnt,oIRCnt,oRFIOvdCnt,oNCROvdCnt] = counts;
 
   // IPC summary — latest certified net amount
-  const {data:ipcData} = await sb.from('payment_certificates').select('id,status,retention_pct,advance_recovery,vat_pct,previously_paid').in('status',['Certified','Paid']);
+  const {data:ipcData} = await sb.from('payment_certificates').select('id,status,retention_pct,advance_recovery_pct,vat_pct,previously_paid').in('status',['Certified','Paid']);
   let ipcTotalCertified = 0;
   for(const pc of ipcData||[]) {
     const {data:pit} = await sb.from('payment_certificate_items').select('consultant_amount').eq('cert_id',pc.id);
     const gross = (pit||[]).reduce((s,i)=>s+(+i.consultant_amount||0),0);
     const ret = gross * (+pc.retention_pct||10)/100;
-    const nbv = gross - ret - (+pc.advance_recovery||0) - (+pc.previously_paid||0);
+    const advRecovery = gross * (+pc.advance_recovery_pct||10)/100;
+    const nbv = gross - ret - advRecovery - (+pc.previously_paid||0);
     ipcTotalCertified += nbv + nbv * (+pc.vat_pct||5)/100;
   }
   const ipcCount = (ipcData||[]).length;
