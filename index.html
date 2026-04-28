@@ -86,7 +86,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13
 .content{flex:1;overflow-y:auto;padding:20px 24px}
 
 /* STATS */
-.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:20px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
 .stat{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px}
 .stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
 .stat-value{font-size:22px;font-weight:500;color:var(--charcoal)}
@@ -446,10 +446,6 @@ textarea.form-control{resize:vertical;min-height:70px}
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M1 8h14M10 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Transmittals
     </div>
-    <div class="nav-item" id="n-ipc" onclick="nav('ipc',this)">
-      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 6h3M4 9h2M9 6h3M9 9h2" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><path d="M1 5h14" stroke="currentColor" stroke-width="1"/></svg>
-      Payment Certificates
-    </div>
     <div class="nav-item" id="n-ms" onclick="nav('ms',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 5h6M5 8h4M5 11h3" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
       Method Statements
@@ -463,11 +459,16 @@ textarea.form-control{resize:vertical;min-height:70px}
       Punch List
       <span class="nav-badge" id="nb-punch">0</span>
     </div>
-    <div class="sb-section">Admin</div>
+    <div class="sb-section">Finance</div>
+    <div class="nav-item" id="n-ipc" onclick="nav('ipc',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 6h3M4 9h2M9 6h3M9 9h2" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><path d="M1 5h14" stroke="currentColor" stroke-width="1"/></svg>
+      Payment Certificates
+    </div>
     <div class="nav-item" id="n-boq" onclick="nav('boq',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 5h8M4 8h8M4 11h5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
       BOQ Setup
     </div>
+    <div class="sb-section">Admin</div>
     <div class="nav-item" id="n-subs" onclick="nav('subs',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" stroke-width="1.3"/><circle cx="12.5" cy="5" r="2" stroke="currentColor" stroke-width="1.1"/><path d="M12 9.5c1.657 0 3 1.343 3 3" stroke="currentColor" stroke-width="1.1"/></svg>
       Subcontractors
@@ -559,13 +560,13 @@ async function doSignup() {
   const btn = document.getElementById('signup-btn');
   if(!name||!email||!pass){showAuthMsg('signup','Please fill in all fields','error');return;}
   btn.disabled=true; btn.textContent='Creating account...';
-  const {data,error} = await sb.auth.signUp({email,password:pass,options:{data:{full_name:name,role,company}}});
+  const {data,error} = await sb.auth.signUp({email,password:pass,options:{data:{full_name:name,role:'pending',company}}});
   if(error){showAuthMsg('signup',error.message,'error');btn.disabled=false;btn.textContent='Create Account';return;}
   if(data.user){
-    await sb.from('profiles').upsert({id:data.user.id,full_name:name,email,role,company});
+    await sb.from('profiles').upsert({id:data.user.id,full_name:name,email,role:'pending',company,requested_role:role},{onConflict:'id'});
   }
   btn.disabled=false; btn.textContent='Create Account';
-  showAuthMsg('signup','Account created! You can now sign in.','success');
+  showAuthMsg('signup','Request submitted — a project admin will approve your access shortly.','success');
   switchTab('login');
 }
 
@@ -601,6 +602,11 @@ async function loadApp(user) {
     profile = created||null;
   }
   if(!profile){toast('Failed to load profile — please refresh','error');return;}
+  if(profile.role==='pending'){
+    await sb.auth.signOut();
+    showAuthMsg('login','Your account is pending approval. A project admin will activate it shortly.','error');
+    return;
+  }
   currentProfile = profile;
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('app-screen').style.display='flex';
@@ -693,18 +699,22 @@ async function render() {
 }
 
 async function updateBadges() {
-  const today = new Date().toISOString().split('T')[0];
   const [{count:cs},{count:ci},{count:cn},{count:cr}] = await Promise.all([
     sb.from('submittals').select('*',{count:'exact',head:true}).eq('status','Pending Review'),
     sb.from('inspections').select('*',{count:'exact',head:true}).eq('status','Pending'),
     sb.from('ncrs').select('*',{count:'exact',head:true}).eq('status','Open'),
     sb.from('rfis').select('*',{count:'exact',head:true}).eq('status','Open'),
   ]);
-  document.getElementById('nb-sub').textContent=cs||0;
-  document.getElementById('nb-ir').textContent=ci||0;
-  document.getElementById('nb-ncr').textContent=cn||0;
-  const rfiEl=document.getElementById('nb-rfi');
-  if(rfiEl) rfiEl.textContent=cr||0;
+  function setBadge(id, n) {
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.textContent = n||0;
+    el.style.display = (n||0) > 0 ? '' : 'none';
+  }
+  setBadge('nb-sub', cs);
+  setBadge('nb-ir', ci);
+  setBadge('nb-ncr', cn);
+  setBadge('nb-rfi', cr);
 }
 
 function cdeBadge(state) {
@@ -1879,7 +1889,11 @@ function filtBOQ(billId) {
     r.style.display = billId==='all' || r.dataset.billId===billId ? '' : 'none';
   });
 }
-function filtIPC(billId) {
+function filtIPC(billId, chipEl) {
+  if(chipEl) {
+    chipEl.closest('.fbar').querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    chipEl.classList.add('active');
+  }
   document.querySelectorAll('.modal-body [data-bill-id]').forEach(r=>{
     r.style.display = billId==='all' || r.dataset.billId===billId ? '' : 'none';
   });
@@ -2819,7 +2833,7 @@ async function openNew() {
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           <div style="font-size:10px;color:var(--text3)">Generated No.:</div>
-          <div id="nd-preview" style="font-family:monospace;font-size:11px;font-weight:500;color:var(--sand);background:var(--bg2);padding:4px 10px;border-radius:6px;border:0.5px solid var(--border2)">GG-MBC-——-——-DR-——-——-RevA</div>
+          <div id="nd-preview" style="font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--sand);background:var(--bg2);padding:4px 10px;border-radius:6px;border:0.5px solid var(--border2)">GG-MBC-——-——-DR-——-——-RevA</div>
           <button type="button" class="btn btn-sm" onclick="document.getElementById('nd-id').value=document.getElementById('nd-preview').textContent;validateDrawingNumberLive()" style="font-size:10px">Use this</button>
         </div>
       </div>
@@ -3629,6 +3643,7 @@ async function doImportRegister() {
 
 // ─── MODAL HELPERS ────────────────────────────────────────────────
 function openModal(title, body, footer, wide) {
+  _modalDirty = false;
   document.getElementById('modal-title').textContent = title;
   document.getElementById('modal-body').innerHTML = body;
   document.getElementById('modal-footer').innerHTML = footer;
@@ -3636,7 +3651,13 @@ function openModal(title, body, footer, wide) {
   document.getElementById('modal-bg').classList.add('open');
   document.getElementById('modal-body').scrollTop = 0;
 }
-function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
+let _modalDirty = false;
+function setModalDirty(){ _modalDirty = true; }
+function closeModal(){
+  if(_modalDirty && !confirm('You have unsaved changes. Close anyway?')) return;
+  _modalDirty = false;
+  document.getElementById('modal-bg').classList.remove('open');
+}
 function closeBg(e){if(e.target===document.getElementById('modal-bg'))closeModal();}
 
 // ─── CONFIRM MODAL (replaces window.confirm, returns Promise) ────
@@ -5129,7 +5150,7 @@ async function renderBOQ() {
         <td><input type="number" class="form-control boq-edit" data-field="qty" data-id="${it.id}" value="${+it.qty}" style="width:65px;padding:3px 5px;font-size:11px;text-align:right" onchange="recalcBOQRow(this)" /></td>
         <td><input class="form-control boq-edit" data-field="unit" data-id="${it.id}" value="${esc(it.unit)}" style="width:55px;padding:3px 5px;font-size:11px" /></td>
         <td><input type="number" class="form-control boq-edit" data-field="rate" data-id="${it.id}" value="${+it.rate}" style="width:85px;padding:3px 5px;font-size:11px;text-align:right" onchange="recalcBOQRow(this)" /></td>
-        <td style="text-align:right;width:110px;font-weight:500;font-family:monospace" data-total="${it.id}">${fmtAED(it.total)}</td>
+        <td style="text-align:right;width:110px;font-weight:500;font-variant-numeric:tabular-nums" data-total="${it.id}">${fmtAED(it.total)}</td>
         <td style="width:30px"><button class="btn btn-danger" style="padding:2px 6px;font-size:11px" onclick="deleteBOQItem('${it.id}')">&times;</button></td>
       </tr>`;
     }).join('');
@@ -5165,13 +5186,13 @@ async function renderBOQ() {
         <div style="width:120px;height:4px;background:var(--bg3);border-radius:2px;flex-shrink:0">
           <div style="width:${Math.min(pct,100).toFixed(1)}%;height:100%;background:var(--sand-light);border-radius:2px"></div>
         </div>
-        <span style="font-family:monospace;font-size:11px;color:var(--charcoal);min-width:120px;text-align:right">${fmtAED(bt)}</span>
+        <span style="font-variant-numeric:tabular-nums;font-size:11px;color:var(--charcoal);min-width:120px;text-align:right">${fmtAED(bt)}</span>
         <span style="font-size:10px;color:var(--text3);min-width:36px;text-align:right">${pct.toFixed(1)}%</span>
       </div>`).join('')}
       <div style="display:flex;align-items:center;gap:10px;padding:8px 0 2px">
         <span style="font-size:12px;font-weight:600;flex:1">Contract Sum</span>
         <div style="width:120px;flex-shrink:0"></div>
-        <span style="font-family:monospace;font-size:12px;font-weight:600;color:var(--charcoal);min-width:120px;text-align:right">${fmtAED(grandTotal)}</span>
+        <span style="font-variant-numeric:tabular-nums;font-size:12px;font-weight:600;color:var(--charcoal);min-width:120px;text-align:right">${fmtAED(grandTotal)}</span>
         <span style="font-size:10px;color:var(--text3);min-width:36px;text-align:right">100%</span>
       </div>
     </div>
@@ -5412,47 +5433,49 @@ async function doAddBill() {
 
 // ─── PAYMENT CERTIFICATES ─────────────────────────────────────────
 async function renderIPC() {
-  const {data} = await sb.from('payment_certificates').select('*').order('cert_no');
-  const certs = data||[];
-  const inProgress = certs.filter(c=>c.status==='Draft'||c.status==='Submitted'||c.status==='Under Review').length;
-  const certified = certs.filter(c=>c.status==='Certified').length;
-  const paid = certs.filter(c=>c.status==='Paid').length;
+  const [{data:certsRaw},{data:allItems}] = await Promise.all([
+    sb.from('payment_certificates').select('*').order('cert_no'),
+    sb.from('payment_certificate_items').select('cert_id,contractor_amount,consultant_amount'),
+  ]);
+  const certs = certsRaw||[];
+
+  // Pre-aggregate amounts per cert
+  const amtMap = {};
+  for(const it of allItems||[]) {
+    if(!amtMap[it.cert_id]) amtMap[it.cert_id]={claimed:0,certified:0};
+    amtMap[it.cert_id].claimed   += +it.contractor_amount||0;
+    amtMap[it.cert_id].certified += +it.consultant_amount||0;
+  }
+
+  const draft      = certs.filter(c=>c.status==='Draft').length;
+  const submitted  = certs.filter(c=>c.status==='Submitted').length;
+  const underReview= certs.filter(c=>c.status==='Under Review').length;
+  const certified  = certs.filter(c=>c.status==='Certified').length;
+  const paid       = certs.filter(c=>c.status==='Paid').length;
 
   document.getElementById('content').innerHTML = `
   <div class="module-bar">
     <div class="module-stat"><div class="module-stat-val">${certs.length}</div><div class="module-stat-label">Total IPCs</div></div>
-    <div class="module-stat"><div class="module-stat-val ${inProgress>0?'warn':''}">${inProgress}</div><div class="module-stat-label">In Progress</div></div>
+    <div class="module-stat"><div class="module-stat-val ${draft>0?'warn':''}">${draft}</div><div class="module-stat-label">Draft</div></div>
+    <div class="module-stat"><div class="module-stat-val ${submitted>0?'warn':''}">${submitted}</div><div class="module-stat-label">Submitted</div></div>
+    <div class="module-stat"><div class="module-stat-val ${underReview>0?'warn':''}">${underReview}</div><div class="module-stat-label">Under Review</div></div>
     <div class="module-stat"><div class="module-stat-val">${certified}</div><div class="module-stat-label">Certified</div></div>
     <div class="module-stat"><div class="module-stat-val">${paid}</div><div class="module-stat-label">Paid</div></div>
   </div>
   <div class="card"><div class="tw"><table>
     <tr><th>Ref No.</th><th>Submission Date</th><th>Submitted By</th><th style="text-align:right">Contractor Claimed</th><th style="text-align:right">Consultant Certified</th><th>Status</th><th>Actions</th></tr>
-    ${certs.length ? certs.map(c=>`<tr class="ipc-list-row" onclick="viewIPC('${c.id}')">
+    ${certs.length ? certs.map(c=>{
+      const a = amtMap[c.id]||{claimed:0,certified:0};
+      return `<tr class="ipc-list-row" onclick="viewIPC('${c.id}')">
       <td class="mono" style="font-weight:500;color:var(--sand)">${esc(c.ref_no)}<span style="font-size:10px;color:var(--text3);margin-left:5px">#${c.cert_no}</span></td>
       <td style="font-size:11px;color:var(--text2)">${c.submitted_date ? new Date(c.submitted_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '&mdash;'}</td>
       <td style="font-size:11px;color:var(--text2)">${esc(c.submitted_by_name||'—')}</td>
-      <td style="text-align:right;font-family:monospace;font-size:11px;color:var(--charcoal)" id="ipc-claim-${c.id}">&mdash;</td>
-      <td style="text-align:right;font-family:monospace;font-size:11px;color:var(--green)" id="ipc-cert-${c.id}">&mdash;</td>
+      <td style="text-align:right;font-variant-numeric:tabular-nums;color:var(--charcoal)">${a.claimed ? fmtAED(a.claimed) : '&mdash;'}</td>
+      <td style="text-align:right;font-variant-numeric:tabular-nums;color:var(--green)">${a.certified ? fmtAED(a.certified) : '&mdash;'}</td>
       <td>${sbadge(c.status)}</td>
       <td><button class="btn btn-sm" onclick="event.stopPropagation();viewIPC('${c.id}')">View</button></td>
-    </tr>`).join('') : '<tr><td colspan="7" class="empty-state">No payment certificates yet. Click + New to create the first IPC.</td></tr>'}
+    </tr>`;}).join('') : '<tr><td colspan="7" class="empty-state">No payment certificates yet. Click + New to create the first IPC.</td></tr>'}
   </table></div></div>`;
-
-  if(certs.length) loadIPCTotals(certs);
-}
-
-async function loadIPCTotals(certs) {
-  for(const c of certs) {
-    const {data:pitems} = await sb.from('payment_certificate_items')
-      .select('contractor_amount,consultant_amount').eq('cert_id',c.id);
-    const items = pitems||[];
-    const claimed = items.reduce((s,i)=>s+(+i.contractor_amount||0),0);
-    const certified = items.reduce((s,i)=>s+(+i.consultant_amount||0),0);
-    const clEl = document.getElementById('ipc-claim-'+c.id);
-    const ceEl = document.getElementById('ipc-cert-'+c.id);
-    if(clEl) clEl.textContent = claimed ? fmtAED(claimed) : '—';
-    if(ceEl) ceEl.textContent = certified ? fmtAED(certified) : '—';
-  }
 }
 
 async function openNewIPC() {
@@ -5564,11 +5587,11 @@ async function viewIPC(id) {
         <td style="width:50px;color:var(--text2)">${esc(item.unit||'—')}</td>
         <td style="text-align:right;width:90px">${fmtAED(item.total)}</td>
         <td style="text-align:right;width:80px">${canEditContractor
-          ? `<input type="number" min="0" max="100" step="0.5" class="form-control" style="width:70px;text-align:right;padding:3px 6px" value="${+ctrPct}" onchange="recalcIPCRow(this,'contractor')">`
+          ? `<input type="number" min="0" max="100" step="0.5" class="form-control" style="width:70px;text-align:right;padding:3px 6px" value="${+ctrPct}" onchange="setModalDirty();recalcIPCRow(this,'contractor')">`
           : `${(+ctrPct).toFixed(1)}%`}</td>
         <td style="text-align:right;width:110px;font-variant-numeric:tabular-nums" id="contr-amt-${item.id}">${fmtAED(+pi.contractor_amount||0)}</td>
         <td style="text-align:right;width:80px">${canEditConsultant
-          ? `<input type="number" min="0" max="100" step="0.5" class="form-control" style="width:70px;text-align:right;padding:3px 6px" value="${csPct!==''?+csPct:''}" onchange="recalcIPCRow(this,'consultant')">`
+          ? `<input type="number" min="0" max="100" step="0.5" class="form-control" style="width:70px;text-align:right;padding:3px 6px" value="${csPct!==''?+csPct:''}" onchange="setModalDirty();recalcIPCRow(this,'consultant')">`
           : `${csPct!==''?(+csPct).toFixed(1)+'%':'&mdash;'}`}</td>
         <td style="text-align:right;width:110px;font-variant-numeric:tabular-nums" id="consult-amt-${item.id}">${pi.consultant_amount!=null?fmtAED(+pi.consultant_amount):'&mdash;'}</td>
       </tr>`;
@@ -5653,12 +5676,9 @@ async function viewIPC(id) {
 
   const summaryHTML = comparisonHTML;
 
-  const ipcChipsHTML = (bills||[]).length ? `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-    <label style="font-size:11px;color:var(--text2);white-space:nowrap">Filter by Bill:</label>
-    <select class="form-control" style="width:auto;max-width:280px;padding:4px 8px;font-size:12px" onchange="filtIPC(this.value)">
-      <option value="all">All Bills</option>
-      ${sortedBills.map(b=>`<option value="${b.id}">${esc(b.bill_no)}. ${esc(b.title)}</option>`).join('')}
-    </select>
+  const ipcChipsHTML = (bills||[]).length ? `<div class="fbar" style="margin-bottom:10px">
+    <span class="chip active" onclick="filtIPC('all',this)">All Bills</span>
+    ${sortedBills.map(b=>`<span class="chip" onclick="filtIPC('${b.id}',this)">${esc(b.bill_no)}. ${esc(b.title)}</span>`).join('')}
   </div>` : '';
 
   const headerHTML = `<div class="detail-grid">
@@ -5808,7 +5828,7 @@ async function saveIPCClaims(id, action) {
   } else {
     toast('Draft saved','success');
   }
-  closeModal(); render();
+  _modalDirty = false; closeModal(); render();
 }
 
 async function beginReviewIPC(id) {
@@ -5848,10 +5868,10 @@ async function saveIPCCertification(id, action) {
       certified_date: new Date().toISOString()
     }).eq('id',id);
     if(error) { toast('Error: '+error.message,'error'); return; }
-    toast('IPC certified and issued','success'); closeModal(); render();
+    toast('IPC certified and issued','success'); _modalDirty=false; closeModal(); render();
   } else {
     await sb.from('payment_certificates').update({status:'Submitted'}).eq('id',id);
-    toast('Application returned to contractor','info'); closeModal(); render();
+    toast('Application returned to contractor','info'); _modalDirty=false; closeModal(); render();
   }
 }
 
