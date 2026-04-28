@@ -245,6 +245,8 @@ textarea.form-control{resize:vertical;min-height:70px}
 .ipc-row.total{border-top:0.5px solid var(--border2);margin-top:4px;padding-top:8px;font-weight:600;font-size:13px}
 .ipc-row.deduct{color:var(--red)}
 .ipc-row.vat{color:var(--text2)}
+.ipc-summary[data-compare="true"] .ipc-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;font-size:12px}
+.ipc-summary[data-compare="true"] .ipc-row.total{border-top:0.5px solid var(--border2);margin-top:4px;padding-top:8px;font-weight:600;font-size:13px}
 .ipc-label{color:var(--text2)}
 .ipc-val{font-family:'SF Mono',Monaco,monospace;font-size:11px;color:var(--charcoal)}
 .ipc-val.total{font-size:13px;color:var(--green)}
@@ -5579,25 +5581,69 @@ async function viewIPC(id) {
   const retPct = +cert.retention_pct||10;
   const advPct = +cert.advance_recovery_pct||10;
   const vatPct = +cert.vat_pct||5;
-  // Retention & Advance Recovery: use consultant amount if available, else contractor amount
-  const base = gross > 0 ? gross : grossContr;
-  const retention = base * retPct / 100;
-  const advanceRecovery = base * advPct / 100;
-  const subTotal = base - retention - advanceRecovery - (+cert.previously_paid||0);
-  const vatAmt = subTotal * vatPct / 100;
-  const netCert = subTotal + vatAmt;
+  const prevPaid = +cert.previously_paid||0;
+  // Consultant side calculations (always the accepted/final values)
+  const consRetention = gross * retPct / 100;
+  const consAdvRecovery = gross * advPct / 100;
+  const consNetBeforeVat = gross - consRetention - consAdvRecovery - prevPaid;
+  const consVat = consNetBeforeVat * vatPct / 100;
+  const consNet = consNetBeforeVat + consVat;
+  // Contractor side calculations
+  const ctrRetention = grossContr * retPct / 100;
+  const ctrAdvRecovery = grossContr * advPct / 100;
+  const ctrNetBeforeVat = grossContr - ctrRetention - ctrAdvRecovery - prevPaid;
+  const ctrVat = ctrNetBeforeVat * vatPct / 100;
+  const ctrNet = ctrNetBeforeVat + ctrVat;
 
-  const summaryHTML = `<div class="ipc-summary" id="ipc-financial-summary">
-    <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:6px">Financial Summary</div>
-    <div class="ipc-row"><span class="ipc-label">Contractor Claimed</span><span class="ipc-val" id="sum-contractor">${fmtAED(grossContr)}</span></div>
-    <div class="ipc-row"><span class="ipc-label">Value of Works Certified</span><span class="ipc-val" id="sum-gross">${base?fmtAED(base):'&mdash;'}</span></div>
-    <div class="ipc-row deduct"><span class="ipc-label">Less: Retention (${retPct}%)</span><span class="ipc-val deduct" id="sum-retention">${base?'('+fmtAED(retention)+')':'&mdash;'}</span></div>
-    <div class="ipc-row deduct"><span class="ipc-label">Less: Advance Recovery (${advPct}%)</span><span class="ipc-val deduct" id="sum-advance">${base?'('+fmtAED(advanceRecovery)+')':'&mdash;'}</span></div>
-    <div class="ipc-row deduct"><span class="ipc-label">Less: Previously Paid</span><span class="ipc-val deduct" id="sum-prev">${(+cert.previously_paid||0)?'('+fmtAED(+cert.previously_paid||0)+')':'&mdash;'}</span></div>
-    <div class="ipc-row"><span class="ipc-label">Net Before VAT</span><span class="ipc-val" id="sum-net-before-vat">${base?fmtAED(subTotal):'&mdash;'}</span></div>
-    <div class="ipc-row vat"><span class="ipc-label">VAT (${vatPct}%)</span><span class="ipc-val vat" id="sum-vat">${base?fmtAED(vatAmt):'&mdash;'}</span></div>
-    <div class="ipc-row total"><span class="ipc-label">NET CERTIFIED</span><span class="ipc-val total" id="sum-net">${base?fmtAED(netCert):'&mdash;'}</span></div>
-  </div>`;
+  // When consultant has certified, show comparison table
+  const hasConsultant = gross > 0;
+  const compRow = (label, ctrVal, consVal, ded, id) => {
+    const ctr = ded ? '('+fmtAED(ctrVal)+')' : fmtAED(ctrVal);
+    const cons = ded ? '('+fmtAED(consVal)+')' : fmtAED(consVal);
+    return `<div class="ipc-row${ded?' deduct':''}" id="${id}">
+      <span class="ipc-label">${label}</span>
+      <span class="ipc-val">${ctrVal?ctr:'—'}</span>
+      <span class="ipc-val" style="font-weight:600;color:var(--charcoal)">${consVal?cons:'—'}</span>
+    </div>`;
+  };
+  const totalRow = (label, ctrVal, consVal) => {
+    const ctr = fmtAED(ctrVal);
+    const cons = fmtAED(consVal);
+    return `<div class="ipc-row total" id="${label.replace(/\s+/g,'-')}">
+      <span class="ipc-label">${label}</span>
+      <span class="ipc-val">${ctrVal?ctr:'—'}</span>
+      <span class="ipc-val" style="font-weight:700;color:var(--green)">${consVal?cons:'—'} ✓</span>
+    </div>`;
+  };
+
+  const comparisonHTML = hasConsultant ? `
+    <div class="ipc-summary" id="ipc-financial-summary" data-compare="true">
+      <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:6px">Financial Summary</div>
+      <div class="ipc-compare-header" style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em">
+        <span></span><span>Contractor Claimed</span><span style="color:var(--charcoal)">Consultant Certified</span>
+      </div>
+      ${compRow('Value of Works', grossContr, gross, false, 'sum-gross')}
+      ${compRow('Less: Retention', ctrRetention, consRetention, true, 'sum-retention')}
+      ${compRow('Less: Advance Recovery', ctrAdvRecovery, consAdvRecovery, true, 'sum-advance')}
+      ${compRow('Less: Previously Paid', prevPaid, prevPaid, true, 'sum-prev')}
+      <div style="height:1px;background:var(--border);margin:4px 0"></div>
+      ${compRow('Net Before VAT', ctrNetBeforeVat, consNetBeforeVat, false, 'sum-net-before-vat')}
+      ${compRow('VAT', ctrVat, consVat, false, 'sum-vat')}
+      ${totalRow('NET CERTIFIED', ctrNet, consNet)}
+    </div>` : `
+    <div class="ipc-summary" id="ipc-financial-summary">
+      <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:6px">Financial Summary</div>
+      <div class="ipc-row"><span class="ipc-label">Contractor Claimed</span><span class="ipc-val" id="sum-contractor">${fmtAED(grossContr)}</span></div>
+      <div class="ipc-row"><span class="ipc-label">Value of Works</span><span class="ipc-val" id="sum-gross">${grossContr?fmtAED(grossContr):'&mdash;'}</span></div>
+      <div class="ipc-row deduct"><span class="ipc-label">Less: Retention (${retPct}%)</span><span class="ipc-val deduct" id="sum-retention">${grossContr?'('+fmtAED(ctrRetention)+')':'&mdash;'}</span></div>
+      <div class="ipc-row deduct"><span class="ipc-label">Less: Advance Recovery (${advPct}%)</span><span class="ipc-val deduct" id="sum-advance">${grossContr?'('+fmtAED(ctrAdvRecovery)+')':'&mdash;'}</span></div>
+      <div class="ipc-row deduct"><span class="ipc-label">Less: Previously Paid</span><span class="ipc-val deduct" id="sum-prev">${prevPaid?'('+fmtAED(prevPaid)+')':'&mdash;'}</span></div>
+      <div class="ipc-row"><span class="ipc-label">Net Before VAT</span><span class="ipc-val" id="sum-net-before-vat">${grossContr?fmtAED(ctrNetBeforeVat):'&mdash;'}</span></div>
+      <div class="ipc-row vat"><span class="ipc-label">VAT (${vatPct}%)</span><span class="ipc-val vat" id="sum-vat">${grossContr?fmtAED(ctrVat):'&mdash;'}</span></div>
+      <div class="ipc-row total"><span class="ipc-label">NET CERTIFIED</span><span class="ipc-val total" id="sum-net">${grossContr?fmtAED(ctrNet):'&mdash;'}</span></div>
+    </div>`;
+
+  const summaryHTML = comparisonHTML;
 
   const ipcChipsHTML = (bills||[]).length ? `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
     <label style="font-size:11px;color:var(--text2);white-space:nowrap">Filter by Bill:</label>
@@ -5688,21 +5734,37 @@ function recalcIPCSummary() {
   const retPct = +cert.retention_pct||10;
   const advPct = +cert.advance_recovery_pct||10;
   const vatPct = +cert.vat_pct||5;
-  const base = gross > 0 ? gross : grossContr;
-  const retention = base * retPct / 100;
-  const advanceRecovery = base * advPct / 100;
-  const subTotal = base - retention - advanceRecovery - (+cert.previously_paid||0);
-  const vatAmt = subTotal * vatPct / 100;
-  const netCert = subTotal + vatAmt;
+  const prevPaid = +cert.previously_paid||0;
+
+  const ctrRetention = grossContr * retPct / 100;
+  const ctrAdvRecovery = grossContr * advPct / 100;
+  const ctrNetBeforeVat = grossContr - ctrRetention - ctrAdvRecovery - prevPaid;
+  const ctrVat = ctrNetBeforeVat * vatPct / 100;
+  const ctrNet = ctrNetBeforeVat + ctrVat;
+
+  const consRetention = gross * retPct / 100;
+  const consAdvRecovery = gross * advPct / 100;
+  const consNetBeforeVat = gross - consRetention - consAdvRecovery - prevPaid;
+  const consVat = consNetBeforeVat * vatPct / 100;
+  const consNet = consNetBeforeVat + consVat;
+
   const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
-  set('sum-contractor', fmtAED(grossContr));
-  set('sum-gross', base ? fmtAED(base) : '—');
-  set('sum-retention', base ? '('+fmtAED(retention)+')' : '—');
-  set('sum-advance', base ? '('+fmtAED(advanceRecovery)+')' : '—');
-  set('sum-prev', (+cert.previously_paid||0) ? '('+fmtAED(+cert.previously_paid||0)+')' : '—');
-  set('sum-net-before-vat', base ? fmtAED(subTotal) : '—');
-  set('sum-vat', base ? fmtAED(vatAmt) : '—');
-  set('sum-net', base ? fmtAED(netCert) : '—');
+  const hasConsultant = gross > 0;
+  if(hasConsultant) {
+    set('sum-gross', fmtAED(gross));
+    set('sum-retention', '('+fmtAED(consRetention)+')');
+    set('sum-advance', '('+fmtAED(consAdvRecovery)+')');
+    set('sum-net-before-vat', fmtAED(consNetBeforeVat));
+    set('sum-vat', fmtAED(consVat));
+    set('NET-CERTIFIED', fmtAED(consNet)+' \u2713');
+  } else {
+    set('sum-gross', grossContr ? fmtAED(grossContr) : '—');
+    set('sum-retention', grossContr ? '('+fmtAED(ctrRetention)+')' : '—');
+    set('sum-advance', grossContr ? '('+fmtAED(ctrAdvRecovery)+')' : '—');
+    set('sum-net-before-vat', grossContr ? fmtAED(ctrNetBeforeVat) : '—');
+    set('sum-vat', grossContr ? fmtAED(ctrVat) : '—');
+    set('sum-net', grossContr ? fmtAED(ctrNet) : '—');
+  }
 }
 
 async function saveIPCClaims(id, action) {
