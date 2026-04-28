@@ -5560,23 +5560,25 @@ async function viewIPC(id) {
       return `<tr data-item-id="${item.id}" data-boq-total="${item.total}" data-bill-id="${b.id}">
         <td class="mono" style="width:80px">${esc(item.item_no)}</td>
         <td style="min-width:200px">${esc(item.description)}</td>
+        <td style="text-align:right;width:60px;color:var(--text2)">${+item.qty||'—'}</td>
+        <td style="width:50px;color:var(--text2)">${esc(item.unit||'—')}</td>
         <td style="text-align:right;width:90px">${fmtAED(item.total)}</td>
         <td style="text-align:right;width:80px">${canEditContractor
           ? `<input type="number" min="0" max="100" step="0.5" class="form-control" style="width:70px;text-align:right;padding:3px 6px" value="${+ctrPct}" onchange="recalcIPCRow(this,'contractor')">`
           : `${(+ctrPct).toFixed(1)}%`}</td>
-        <td style="text-align:right;width:110px;font-family:monospace;font-size:11px" id="contr-amt-${item.id}">${fmtAED(+pi.contractor_amount||0)}</td>
+        <td style="text-align:right;width:110px;font-variant-numeric:tabular-nums" id="contr-amt-${item.id}">${fmtAED(+pi.contractor_amount||0)}</td>
         <td style="text-align:right;width:80px">${canEditConsultant
           ? `<input type="number" min="0" max="100" step="0.5" class="form-control" style="width:70px;text-align:right;padding:3px 6px" value="${csPct!==''?+csPct:''}" onchange="recalcIPCRow(this,'consultant')">`
           : `${csPct!==''?(+csPct).toFixed(1)+'%':'&mdash;'}`}</td>
-        <td style="text-align:right;width:110px;font-family:monospace;font-size:11px" id="consult-amt-${item.id}">${pi.consultant_amount!=null?fmtAED(+pi.consultant_amount):'&mdash;'}</td>
+        <td style="text-align:right;width:110px;font-variant-numeric:tabular-nums" id="consult-amt-${item.id}">${pi.consultant_amount!=null?fmtAED(+pi.consultant_amount):'&mdash;'}</td>
       </tr>`;
     }).join('');
 
     return `<tr class="boq-bill-header" data-bill-id="${b.id}">
-      <td colspan="2" style="padding:8px 14px">${esc(b.bill_no)}. ${esc(b.title)}</td>
+      <td colspan="4" style="padding:8px 14px">${esc(b.bill_no)}. ${esc(b.title)}</td>
       <td></td>
-      <td colspan="2" style="text-align:right;padding:8px 14px;font-family:monospace;font-size:11px">${fmtAED(billContrAmt)}</td>
-      <td colspan="2" style="text-align:right;padding:8px 14px;font-family:monospace;font-size:11px">${billConsAmt?fmtAED(billConsAmt):'&mdash;'}</td>
+      <td colspan="2" style="text-align:right;padding:8px 14px;font-variant-numeric:tabular-nums">${fmtAED(billContrAmt)}</td>
+      <td colspan="2" style="text-align:right;padding:8px 14px;font-variant-numeric:tabular-nums">${billConsAmt?fmtAED(billConsAmt):'&mdash;'}</td>
     </tr>${itemRows}`;
   }).join('');
 
@@ -5675,7 +5677,7 @@ async function viewIPC(id) {
       ${ipcChipsHTML}
       <div style="overflow-x:auto;max-height:380px;overflow-y:auto;border:0.5px solid var(--border);border-radius:var(--radius)">
         <table style="font-size:11px">
-          <tr><th>Item No.</th><th>Description</th><th style="text-align:right">BOQ Total</th><th style="text-align:right">Contr. %</th><th style="text-align:right">Contr. Amt</th><th style="text-align:right">Consult. %</th><th style="text-align:right">Consult. Amt</th></tr>
+          <tr><th>Item No.</th><th>Description</th><th style="text-align:right">Qty</th><th>Unit</th><th style="text-align:right">BOQ Total</th><th style="text-align:right">Contr. %</th><th style="text-align:right">Contr. Amt</th><th style="text-align:right">Consult. %</th><th style="text-align:right">Consult. Amt</th></tr>
           ${billRows}
         </table>
       </div>
