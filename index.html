@@ -245,15 +245,18 @@ textarea.form-control{resize:vertical;min-height:70px}
 .ipc-row.total{border-top:0.5px solid var(--border2);margin-top:4px;padding-top:8px;font-weight:600;font-size:13px}
 .ipc-row.deduct{color:var(--red)}
 .ipc-row.vat{color:var(--text2)}
-.ipc-summary[data-compare="true"] .ipc-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;font-size:12px}
+.ipc-summary[data-compare="true"] .ipc-row{display:grid;grid-template-columns:1fr 130px 130px;gap:8px;font-size:12px}
 .ipc-summary[data-compare="true"] .ipc-row.total{border-top:0.5px solid var(--border2);margin-top:4px;padding-top:8px;font-weight:600;font-size:13px}
+.ipc-summary[data-compare="true"] .ipc-val{text-align:right}
 .ipc-label{color:var(--text2)}
 .ipc-val{font-family:'SF Mono',Monaco,monospace;font-size:11px;color:var(--charcoal)}
 .ipc-val.total{font-size:13px;color:var(--green)}
 .ipc-val.deduct{color:var(--red)}
-.boq-bill-header td{background:var(--bg4);font-weight:600;color:var(--charcoal);font-size:11px}
+.boq-bill-header td{background:var(--bg4);font-weight:600;color:var(--charcoal);font-size:11px;border-left:3px solid var(--sand-light)}
 .boq-bill-total td{background:var(--bg3);font-style:italic;color:var(--text2);font-size:11px}
-.boq-grand-total td{background:var(--bg4);font-weight:700;color:var(--charcoal);font-size:12px;border-top:0.5px solid var(--border2)}
+.boq-grand-total td{background:var(--bg4);font-weight:700;color:var(--charcoal);font-size:12px;border-top:1.5px solid var(--border2)}
+.ipc-list-row{cursor:pointer;transition:.1s}
+.ipc-list-row:hover{background:var(--bg3)}
 /* ARFI */
 .arfi-ar{background:#FCEBEB;color:#A32D2D;border:0.5px solid #F7C1C1;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block}
 .arfi-fi{background:#F1EFE8;color:#5F5E5A;border:0.5px solid #D3D1C7;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block}
@@ -5145,11 +5148,11 @@ async function renderBOQ() {
   ${billList.length ? `
   <div class="module-bar">
     <div class="module-stat" style="flex:1;min-width:180px">
-      <div class="module-stat-val" style="font-size:16px;font-family:'SF Mono',Monaco,monospace">${fmtAED(grandTotal)}</div>
+      <div class="module-stat-val" style="font-size:16px;font-family:'SF Mono',Monaco,monospace;color:var(--sand)">${fmtAED(grandTotal)}</div>
       <div class="module-stat-label">Contract Sum</div>
     </div>
     <div class="module-stat"><div class="module-stat-val">${billList.length}</div><div class="module-stat-label">Bills</div></div>
-    <div class="module-stat"><div class="module-stat-val">${itemList.length}</div><div class="module-stat-label">Items</div></div>
+    <div class="module-stat"><div class="module-stat-val">${itemList.length}</div><div class="module-stat-label">Line Items</div></div>
   </div>
   <div class="card" style="margin-bottom:14px">
     <div style="padding:14px 18px">
@@ -5422,15 +5425,15 @@ async function renderIPC() {
   </div>
   <div class="card"><div class="tw"><table>
     <tr><th>Ref No.</th><th>Submission Date</th><th>Submitted By</th><th style="text-align:right">Contractor Claimed</th><th style="text-align:right">Consultant Certified</th><th>Status</th><th>Actions</th></tr>
-    ${certs.length ? certs.map(c=>`<tr>
-      <td class="mono" style="font-weight:500;color:var(--blue);cursor:pointer" onclick="viewIPC('${c.id}')">${esc(c.ref_no)}</td>
+    ${certs.length ? certs.map(c=>`<tr class="ipc-list-row" onclick="viewIPC('${c.id}')">
+      <td class="mono" style="font-weight:500;color:var(--sand)">${esc(c.ref_no)}<span style="font-size:10px;color:var(--text3);margin-left:5px">#${c.cert_no}</span></td>
       <td style="font-size:11px;color:var(--text2)">${c.submitted_date ? new Date(c.submitted_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '&mdash;'}</td>
       <td style="font-size:11px;color:var(--text2)">${esc(c.submitted_by_name||'—')}</td>
-      <td style="text-align:right;font-family:monospace;font-size:11px" id="ipc-claim-${c.id}">&mdash;</td>
-      <td style="text-align:right;font-family:monospace;font-size:11px" id="ipc-cert-${c.id}">&mdash;</td>
+      <td style="text-align:right;font-family:monospace;font-size:11px;color:var(--charcoal)" id="ipc-claim-${c.id}">&mdash;</td>
+      <td style="text-align:right;font-family:monospace;font-size:11px;color:var(--green)" id="ipc-cert-${c.id}">&mdash;</td>
       <td>${sbadge(c.status)}</td>
-      <td><button class="btn btn-sm" onclick="viewIPC('${c.id}')">View</button></td>
-    </tr>`).join('') : '<tr><td colspan="7" class="empty-state">No payment certificates yet. Click + New to create the first application.</td></tr>'}
+      <td><button class="btn btn-sm" onclick="event.stopPropagation();viewIPC('${c.id}')">View</button></td>
+    </tr>`).join('') : '<tr><td colspan="7" class="empty-state">No payment certificates yet. Click + New to create the first IPC.</td></tr>'}
   </table></div></div>`;
 
   if(certs.length) loadIPCTotals(certs);
@@ -5613,15 +5616,15 @@ async function viewIPC(id) {
     return `<div class="ipc-row total" id="${label.replace(/\s+/g,'-')}">
       <span class="ipc-label">${label}</span>
       <span class="ipc-val">${ctrVal?ctr:'—'}</span>
-      <span class="ipc-val" style="font-weight:700;color:var(--green)">${consVal?cons:'—'} ✓</span>
+      <span class="ipc-val" style="font-weight:700;color:var(--green)">${consVal?cons:'—'}</span>
     </div>`;
   };
 
   const comparisonHTML = hasConsultant ? `
     <div class="ipc-summary" id="ipc-financial-summary" data-compare="true">
       <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:6px">Financial Summary</div>
-      <div class="ipc-compare-header" style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em">
-        <span></span><span>Contractor Claimed</span><span style="color:var(--charcoal)">Consultant Certified</span>
+      <div style="display:grid;grid-template-columns:1fr 130px 130px;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em">
+        <span></span><span style="text-align:right">Contractor</span><span style="text-align:right;color:var(--charcoal)">Consultant</span>
       </div>
       ${compRow('Value of Works', grossContr, gross, false, 'sum-gross')}
       ${compRow('Less: Retention', ctrRetention, consRetention, true, 'sum-retention')}
