@@ -5579,24 +5579,18 @@ async function viewIPC(id) {
   const retPct = +cert.retention_pct||10;
   const advPct = +cert.advance_recovery_pct||10;
   const vatPct = +cert.vat_pct||5;
-  const mobAdvance = +cert.mobilisation_advance||0;
-  const pcPsAdjustments = 0;
-  // Value of Works = consultant gross (auto-calculated, not editable)
-  const valueOfWorks = gross;
-  const valueOfWorksCompleted = valueOfWorks + pcPsAdjustments;
-  const advancePayment = 0;
   // Retention & Advance Recovery: use consultant amount if available, else contractor amount
   const base = gross > 0 ? gross : grossContr;
   const retention = base * retPct / 100;
   const advanceRecovery = base * advPct / 100;
-  const subTotal = valueOfWorksCompleted + advancePayment - retention - advanceRecovery - mobAdvance - (+cert.previously_paid||0);
+  const subTotal = base - retention - advanceRecovery - (+cert.previously_paid||0);
   const vatAmt = subTotal * vatPct / 100;
   const netCert = subTotal + vatAmt;
 
   const summaryHTML = `<div class="ipc-summary" id="ipc-financial-summary">
     <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:6px">Financial Summary</div>
     <div class="ipc-row"><span class="ipc-label">Contractor Claimed</span><span class="ipc-val" id="sum-contractor">${fmtAED(grossContr)}</span></div>
-    <div class="ipc-row"><span class="ipc-label">Value of Works Certified</span><span class="ipc-val" id="sum-gross">${gross?fmtAED(gross):'&mdash;'}</span></div>
+    <div class="ipc-row"><span class="ipc-label">Value of Works Certified</span><span class="ipc-val" id="sum-gross">${base?fmtAED(base):'&mdash;'}</span></div>
     <div class="ipc-row deduct"><span class="ipc-label">Less: Retention (${retPct}%)</span><span class="ipc-val deduct" id="sum-retention">${base?'('+fmtAED(retention)+')':'&mdash;'}</span></div>
     <div class="ipc-row deduct"><span class="ipc-label">Less: Advance Recovery (${advPct}%)</span><span class="ipc-val deduct" id="sum-advance">${base?'('+fmtAED(advanceRecovery)+')':'&mdash;'}</span></div>
     <div class="ipc-row deduct"><span class="ipc-label">Less: Previously Paid</span><span class="ipc-val deduct" id="sum-prev">${(+cert.previously_paid||0)?'('+fmtAED(+cert.previously_paid||0)+')':'&mdash;'}</span></div>
@@ -5694,16 +5688,15 @@ function recalcIPCSummary() {
   const retPct = +cert.retention_pct||10;
   const advPct = +cert.advance_recovery_pct||10;
   const vatPct = +cert.vat_pct||5;
-  const mobAdvance = +cert.mobilisation_advance||0;
   const base = gross > 0 ? gross : grossContr;
   const retention = base * retPct / 100;
   const advanceRecovery = base * advPct / 100;
-  const subTotal = gross + 0 - retention - advanceRecovery - mobAdvance - (+cert.previously_paid||0);
+  const subTotal = base - retention - advanceRecovery - (+cert.previously_paid||0);
   const vatAmt = subTotal * vatPct / 100;
   const netCert = subTotal + vatAmt;
   const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
   set('sum-contractor', fmtAED(grossContr));
-  set('sum-gross', gross ? fmtAED(gross) : '—');
+  set('sum-gross', base ? fmtAED(base) : '—');
   set('sum-retention', base ? '('+fmtAED(retention)+')' : '—');
   set('sum-advance', base ? '('+fmtAED(advanceRecovery)+')' : '—');
   set('sum-prev', (+cert.previously_paid||0) ? '('+fmtAED(+cert.previously_paid||0)+')' : '—');
