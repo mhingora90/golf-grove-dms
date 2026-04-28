@@ -8,6 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -83,7 +84,7 @@ body{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI'
 .content{flex:1;overflow-y:auto;padding:20px 24px}
 
 /* STATS */
-.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:20px}
+.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:20px}
 .stat{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px}
 .stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
 .stat-value{font-size:26px;font-weight:500;color:var(--charcoal)}
@@ -238,6 +239,19 @@ textarea.form-control{resize:vertical;min-height:70px}
 .corr-general{background:#F1EFE8;color:#5F5E5A;border-color:#D3D1C7}
 /* PUNCH LIST */
 .punch-loc{font-size:10px;color:var(--text3);margin-top:2px}
+/* IPC / PAYMENT CERTIFICATES */
+.ipc-summary{background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:16px 20px;display:flex;flex-direction:column;gap:8px}
+.ipc-row{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.ipc-row.total{border-top:0.5px solid var(--border2);margin-top:4px;padding-top:8px;font-weight:600;font-size:13px}
+.ipc-row.deduct{color:var(--red)}
+.ipc-row.vat{color:var(--text2)}
+.ipc-label{color:var(--text2)}
+.ipc-val{font-family:'SF Mono',Monaco,monospace;font-size:11px;color:var(--charcoal)}
+.ipc-val.total{font-size:13px;color:var(--green)}
+.ipc-val.deduct{color:var(--red)}
+.boq-bill-header td{background:var(--bg4);font-weight:600;color:var(--charcoal);font-size:11px}
+.boq-bill-total td{background:var(--bg3);font-style:italic;color:var(--text2);font-size:11px}
+.boq-grand-total td{background:var(--bg4);font-weight:700;color:var(--charcoal);font-size:12px;border-top:0.5px solid var(--border2)}
 /* ARFI */
 .arfi-ar{background:#FCEBEB;color:#A32D2D;border:0.5px solid #F7C1C1;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block}
 .arfi-fi{background:#F1EFE8;color:#5F5E5A;border:0.5px solid #D3D1C7;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block}
@@ -425,6 +439,10 @@ textarea.form-control{resize:vertical;min-height:70px}
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M1 8h14M10 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Transmittals
     </div>
+    <div class="nav-item" id="n-ipc" onclick="nav('ipc',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 6h3M4 9h2M9 6h3M9 9h2" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><path d="M1 5h14" stroke="currentColor" stroke-width="1"/></svg>
+      Payment Certificates
+    </div>
     <div class="nav-item" id="n-ms" onclick="nav('ms',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 5h6M5 8h4M5 11h3" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
       Method Statements
@@ -439,6 +457,10 @@ textarea.form-control{resize:vertical;min-height:70px}
       <span class="nav-badge" id="nb-punch">0</span>
     </div>
     <div class="sb-section">Admin</div>
+    <div class="nav-item" id="n-boq" onclick="nav('boq',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 5h8M4 8h8M4 11h5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+      BOQ Setup
+    </div>
     <div class="nav-item" id="n-subs" onclick="nav('subs',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" stroke-width="1.3"/><circle cx="12.5" cy="5" r="2" stroke="currentColor" stroke-width="1.1"/><path d="M12 9.5c1.657 0 3 1.343 3 3" stroke="currentColor" stroke-width="1.1"/></svg>
       Subcontractors
@@ -596,7 +618,7 @@ async function loadApp(user) {
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup'};
 
 function canCreateOnPage(page) {
   if(page==='draw') return can('upload');
@@ -611,6 +633,8 @@ function canCreateOnPage(page) {
   if(page==='punch') return can('approve');
   if(page==='subs') return can('manageSubs');
   if(page==='users') return can('manageUsers');
+  if(page==='ipc') return can('submit') || currentProfile?.role==='developer';
+  if(page==='boq') return can('manageRegister');
   return false;
 }
 
@@ -656,6 +680,8 @@ async function render() {
   else if(currentPage==='subs') await renderSubcontractors();
   else if(currentPage==='ms') await renderMS();
   else if(currentPage==='users') await renderUsers();
+  else if(currentPage==='ipc') await renderIPC();
+  else if(currentPage==='boq') await renderBOQ();
   await updateBadges();
 }
 
@@ -782,6 +808,7 @@ function sbadge(s) {
     'Revise & Resubmit':'badge-warning','Correction':'badge-warning','Open':'badge-warning','High':'badge-warning',
     'Rejected':'badge-danger','Major':'badge-danger','Critical':'badge-danger',
     'Normal':'badge-neutral','Minor':'badge-neutral','Void':'badge-danger','Cancelled':'badge-danger',
+    'Draft':'badge-neutral','Submitted':'badge-info','Under Review':'badge-warning','Certified':'badge-success','Paid':'badge-success',
   };
   return `<span class="badge ${m[norm]||'badge-neutral'}">${s}</span>`;
 }
@@ -817,6 +844,19 @@ async function renderDash() {
          pSubCnt,pIRCnt,oNCRCnt,oRFICnt,
          apprCnt,ifcCnt,revCnt,
          oSubCnt,oIRCnt,oRFIOvdCnt,oNCROvdCnt] = counts;
+
+  // IPC summary — latest certified net amount
+  const {data:ipcData} = await sb.from('payment_certificates').select('id,status,retention_pct,advance_recovery,vat_pct,previously_paid').in('status',['Certified','Paid']);
+  let ipcTotalCertified = 0;
+  for(const pc of ipcData||[]) {
+    const {data:pit} = await sb.from('payment_certificate_items').select('consultant_amount').eq('cert_id',pc.id);
+    const gross = (pit||[]).reduce((s,i)=>s+(+i.consultant_amount||0),0);
+    const ret = gross * (+pc.retention_pct||10)/100;
+    const nbv = gross - ret - (+pc.advance_recovery||0) - (+pc.previously_paid||0);
+    ipcTotalCertified += nbv + nbv * (+pc.vat_pct||5)/100;
+  }
+  const ipcCount = (ipcData||[]).length;
+  const ipcPaid = (ipcData||[]).filter(c=>c.status==='Paid').length;
 
   // Display rows — limited fields, limited count
   const rows = await Promise.all([
@@ -860,6 +900,7 @@ async function renderDash() {
     <div class="stat"><div class="stat-label">Inspections</div><div class="stat-value">${irCnt.count||0}</div><div class="stat-sub">${pIRCnt.count||0} awaiting response</div></div>
     <div class="stat"><div class="stat-label">Open NCRs</div><div class="stat-value ${(oNCRCnt.count||0)>0?'danger':''}">${oNCRCnt.count||0}</div><div class="stat-sub">${(ncrCnt.count||0)-(oNCRCnt.count||0)} closed</div></div>
     <div class="stat"><div class="stat-label">Open RFIs</div><div class="stat-value ${(oRFICnt.count||0)>0?'danger':''}">${oRFICnt.count||0}</div><div class="stat-sub">${(rfiCnt.count||0)-(oRFICnt.count||0)} closed</div></div>
+    <div class="stat" style="cursor:pointer" onclick="nav('ipc',document.getElementById('n-ipc'))"><div class="stat-label">Payment Certs</div><div class="stat-value">${ipcCount}</div><div class="stat-sub" style="color:var(--green)">${ipcTotalCertified>0?fmtAED(ipcTotalCertified)+' certified':ipcPaid+' paid'}</div></div>
   </div>
   <div id="compliance-widget" style="margin-bottom:12px"></div>
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:16px">
@@ -2941,6 +2982,10 @@ async function openNew() {
     openNewCorrespondence();
   } else if(currentPage==='punch' && can('approve')) {
     openNewPunchItem();
+  } else if(currentPage==='ipc' && (can('submit') || currentProfile?.role==='developer')) {
+    openNewIPC();
+  } else if(currentPage==='boq' && can('manageRegister')) {
+    openImportBOQ();
   } else if(currentPage==='subs' && can('manageSubs')) {
     openModal('Add Subcontractor', `
       <div class="form-group"><label class="form-label-dark">Company Name</label><input type="text" class="form-control" id="nsc-name" placeholder="Full legal company name" /></div>
@@ -5014,6 +5059,493 @@ function printDoc(elementId, filename) {
   html2pdf().set(opt).from(el).save().then(()=>toast('PDF downloaded','success'));
 }
 
+// ─── BOQ SETUP ────────────────────────────────────────────────────
+function esc(s) {
+  return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmtAED(n) {
+  return 'AED ' + (+n||0).toLocaleString('en-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+async function renderBOQ() {
+  const [{data:bills},{data:items}] = await Promise.all([
+    sb.from('boq_bills').select('*').order('sort_order'),
+    sb.from('boq_items').select('*').order('sort_order')
+  ]);
+  const billList = bills||[];
+  const itemList = items||[];
+  const grandTotal = itemList.reduce((s,i)=>s+(+i.total||0),0);
+
+  const billsHTML = billList.length ? billList.map(b=>{
+    const bItems = itemList.filter(i=>i.bill_id===b.id);
+    const billTotal = bItems.reduce((s,i)=>s+(+i.total||0),0);
+    return `
+    <tr class="boq-bill-header"><td colspan="5" style="padding:8px 14px">${esc(b.bill_no)}. ${esc(b.title)}</td><td style="text-align:right;padding:8px 14px">${fmtAED(billTotal)}</td></tr>
+    ${bItems.map(it=>`<tr>
+      <td class="mono" style="width:80px">${esc(it.item_no)}</td>
+      <td>${esc(it.description)}</td>
+      <td style="text-align:right;width:70px">${(+it.qty).toLocaleString()}</td>
+      <td style="width:60px;color:var(--text2)">${esc(it.unit)}</td>
+      <td style="text-align:right;width:90px">${fmtAED(it.rate)}</td>
+      <td style="text-align:right;width:110px;font-weight:500">${fmtAED(it.total)}</td>
+    </tr>`).join('')}`;
+  }).join('') : `<tr><td colspan="6" class="empty-state">No BOQ loaded yet. Use Import Excel to load the Bill of Quantities.</td></tr>`;
+
+  document.getElementById('content').innerHTML = `
+  <div class="fbar" style="margin-bottom:14px">
+    ${can('manageRegister') ? '<button class="btn btn-primary" onclick="openImportBOQ()">Import Excel</button>' : ''}
+    ${can('manageRegister') && billList.length ? '<button class="btn btn-danger" onclick="replaceBOQ()" style="margin-left:6px">Replace BOQ</button>' : ''}
+    ${billList.length ? `<span style="margin-left:auto;font-size:11px;color:var(--text3)">${billList.length} bills &middot; ${itemList.length} items</span>` : ''}
+  </div>
+  <div class="card"><div class="tw"><table>
+    <tr><th>Item No.</th><th>Description</th><th style="text-align:right">Qty</th><th>Unit</th><th style="text-align:right">Rate (AED)</th><th style="text-align:right">Total (AED)</th></tr>
+    ${billsHTML}
+    ${billList.length ? `<tr class="boq-grand-total"><td colspan="5" style="padding:10px 14px">CONTRACT SUM</td><td style="text-align:right;padding:10px 14px">${fmtAED(grandTotal)}</td></tr>` : ''}
+  </table></div></div>`;
+}
+
+async function openImportBOQ() {
+  openModal('Import BOQ from Excel', `
+    <p style="font-size:12px;color:var(--text2);line-height:1.6">Upload an Excel file (.xlsx) with columns in this order:<br>
+    <span class="mono" style="font-size:11px">Bill No | Bill Title | Item No | Description | Qty | Unit | Rate</span><br>
+    One row per line item. Rows with the same Bill No are grouped under one bill.</p>
+    <div class="form-group">
+      <label class="form-label-dark">Excel File (.xlsx)</label>
+      <input type="file" class="form-control" id="boq-file" accept=".xlsx,.xls" onchange="previewBOQ(this)" />
+    </div>
+    <div id="boq-preview"></div>`,
+    `<button class="btn btn-primary" id="boq-import-btn" onclick="doImportBOQ()" style="display:none">Import</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+function previewBOQ(input) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(e.target.result, {type:'array'});
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+      const dataRows = rows.filter(r=>r[0]!==undefined && r[0]!=='');
+      const isHeader = typeof dataRows[0]?.[0]==='string' && isNaN(dataRows[0]?.[0]);
+      const data = isHeader ? dataRows.slice(1) : dataRows;
+      window._boqImportData = data;
+      const previewRows = data.slice(0,10).map(r=>`<tr>
+        <td class="mono">${esc(r[0])}</td><td>${esc(r[1])}</td><td class="mono">${esc(r[2])}</td>
+        <td>${esc(r[3])}</td><td style="text-align:right">${esc(r[4])}</td><td>${esc(r[5])}</td>
+        <td style="text-align:right">${(+r[6]||0).toLocaleString()}</td></tr>`).join('');
+      const previewEl = document.getElementById('boq-preview');
+      previewEl.innerHTML = `
+        <p style="font-size:11px;color:var(--text3);margin-top:8px">Preview (first 10 rows of ${data.length} total):</p>
+        <div style="max-height:220px;overflow-y:auto;margin-top:6px"><table>
+          <tr><th>Bill No</th><th>Bill Title</th><th>Item No</th><th>Description</th><th>Qty</th><th>Unit</th><th>Rate</th></tr>
+          ${previewRows}
+        </table></div>`;
+      document.getElementById('boq-import-btn').style.display = '';
+    } catch(err) {
+      document.getElementById('boq-preview').textContent = 'Could not parse file: ' + err.message;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+async function doImportBOQ() {
+  const data = window._boqImportData;
+  if(!data?.length) { toast('No data to import','error'); return; }
+  const btn = document.getElementById('boq-import-btn');
+  if(btn) btn.disabled = true;
+
+  const billMap = {};
+  data.forEach(r => {
+    const billNo = String(r[0]||'').trim();
+    const billTitle = String(r[1]||'').trim();
+    if(billNo && !billMap[billNo]) billMap[billNo] = {bill_no:billNo, title:billTitle, sort_order:Object.keys(billMap).length};
+  });
+
+  const {data:insertedBills, error:billErr} = await sb.from('boq_bills').insert(Object.values(billMap)).select('id,bill_no');
+  if(billErr) { toast('Error inserting bills: '+billErr.message,'error'); if(btn) btn.disabled=false; return; }
+
+  const billIdMap = {};
+  (insertedBills||[]).forEach(b => billIdMap[b.bill_no] = b.id);
+
+  const items = data.map((r,idx) => ({
+    bill_id: billIdMap[String(r[0]||'').trim()],
+    item_no: String(r[2]||'').trim(),
+    description: String(r[3]||'').trim(),
+    qty: +r[4]||0,
+    unit: String(r[5]||'').trim(),
+    rate: +r[6]||0,
+    total: (+r[4]||0) * (+r[6]||0),
+    sort_order: idx
+  })).filter(i=>i.bill_id && i.item_no);
+
+  const {error:itemErr} = await sb.from('boq_items').insert(items);
+  if(itemErr) { toast('Error inserting items: '+itemErr.message,'error'); if(btn) btn.disabled=false; return; }
+
+  toast(`Imported ${Object.keys(billMap).length} bills, ${items.length} items`,'success');
+  closeModal(); render();
+}
+
+async function replaceBOQ() {
+  const {count} = await sb.from('payment_certificates').select('*',{head:true,count:'exact'});
+  if(count > 0) { toast('Cannot replace BOQ — payment certificates already exist against this BOQ','error'); return; }
+  const ok = await confirmModal('This will permanently delete all BOQ bills and items. This cannot be undone. Continue?');
+  if(!ok) return;
+  await sb.from('boq_items').delete().neq('id','00000000-0000-0000-0000-000000000000');
+  await sb.from('boq_bills').delete().neq('id','00000000-0000-0000-0000-000000000000');
+  toast('BOQ cleared — ready for re-import','success');
+  openImportBOQ();
+}
+
+// ─── PAYMENT CERTIFICATES ─────────────────────────────────────────
+async function renderIPC() {
+  const {data} = await sb.from('payment_certificates').select('*').order('cert_no');
+  const certs = data||[];
+  const inProgress = certs.filter(c=>c.status==='Draft'||c.status==='Submitted'||c.status==='Under Review').length;
+  const certified = certs.filter(c=>c.status==='Certified').length;
+  const paid = certs.filter(c=>c.status==='Paid').length;
+
+  document.getElementById('content').innerHTML = `
+  <div class="module-bar">
+    <div class="module-stat"><div class="module-stat-val">${certs.length}</div><div class="module-stat-label">Total IPCs</div></div>
+    <div class="module-stat"><div class="module-stat-val ${inProgress>0?'warn':''}">${inProgress}</div><div class="module-stat-label">In Progress</div></div>
+    <div class="module-stat"><div class="module-stat-val">${certified}</div><div class="module-stat-label">Certified</div></div>
+    <div class="module-stat"><div class="module-stat-val">${paid}</div><div class="module-stat-label">Paid</div></div>
+  </div>
+  <div class="card"><div class="tw"><table>
+    <tr><th>Ref No.</th><th>Submission Date</th><th>Submitted By</th><th style="text-align:right">Contractor Claimed</th><th style="text-align:right">Consultant Certified</th><th>Status</th><th>Actions</th></tr>
+    ${certs.length ? certs.map(c=>`<tr>
+      <td class="mono" style="font-weight:500;color:var(--blue);cursor:pointer" onclick="viewIPC('${c.id}')">${esc(c.ref_no)}</td>
+      <td style="font-size:11px;color:var(--text2)">${c.submitted_date ? new Date(c.submitted_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '&mdash;'}</td>
+      <td style="font-size:11px;color:var(--text2)">${esc(c.submitted_by_name||'—')}</td>
+      <td style="text-align:right;font-family:monospace;font-size:11px" id="ipc-claim-${c.id}">&mdash;</td>
+      <td style="text-align:right;font-family:monospace;font-size:11px" id="ipc-cert-${c.id}">&mdash;</td>
+      <td>${sbadge(c.status)}</td>
+      <td><button class="btn btn-sm" onclick="viewIPC('${c.id}')">View</button></td>
+    </tr>`).join('') : '<tr><td colspan="7" class="empty-state">No payment certificates yet. Click + New to create the first application.</td></tr>'}
+  </table></div></div>`;
+
+  if(certs.length) loadIPCTotals(certs);
+}
+
+async function loadIPCTotals(certs) {
+  for(const c of certs) {
+    const {data:pitems} = await sb.from('payment_certificate_items')
+      .select('contractor_amount,consultant_amount').eq('cert_id',c.id);
+    const items = pitems||[];
+    const claimed = items.reduce((s,i)=>s+(+i.contractor_amount||0),0);
+    const certified = items.reduce((s,i)=>s+(+i.consultant_amount||0),0);
+    const clEl = document.getElementById('ipc-claim-'+c.id);
+    const ceEl = document.getElementById('ipc-cert-'+c.id);
+    if(clEl) clEl.textContent = claimed ? fmtAED(claimed) : '—';
+    if(ceEl) ceEl.textContent = certified ? fmtAED(certified) : '—';
+  }
+}
+
+async function openNewIPC() {
+  const {count:openCount} = await sb.from('payment_certificates')
+    .select('*',{head:true,count:'exact'}).in('status',['Draft','Submitted']);
+  if(openCount > 0) { toast('An application is already in progress. Complete or retract it first.','warning'); return; }
+
+  const {count:boqCount} = await sb.from('boq_items').select('*',{head:true,count:'exact'});
+  if(!boqCount) { toast('No BOQ loaded. Go to BOQ Setup and import your Bill of Quantities first.','warning'); return; }
+
+  const {data:last} = await sb.from('payment_certificates').select('cert_no').order('cert_no',{ascending:false}).limit(1);
+  const nextNo = ((last?.[0]?.cert_no)||0) + 1;
+  const refNo = 'IPC-' + String(nextNo).padStart(3,'0');
+
+  // Calculate previously_paid from all prior certified/paid certs
+  const {data:priorCerts} = await sb.from('payment_certificates')
+    .select('id,retention_pct,advance_recovery,vat_pct').in('status',['Certified','Paid']);
+  let prevPaid = 0;
+  for(const pc of priorCerts||[]) {
+    const {data:pit} = await sb.from('payment_certificate_items').select('consultant_amount').eq('cert_id',pc.id);
+    const gross = (pit||[]).reduce((s,i)=>s+(+i.consultant_amount||0),0);
+    const ret = gross * (+pc.retention_pct||10) / 100;
+    const adv = +pc.advance_recovery||0;
+    const nbv = gross - ret - adv;
+    prevPaid += nbv + nbv * (+pc.vat_pct||5) / 100;
+  }
+
+  openModal('New Payment Application', `
+    <div class="detail-grid">
+      <div class="detail-item"><div class="detail-label">Reference</div><div class="detail-value mono" style="color:var(--sand);font-weight:600">${esc(refNo)}</div></div>
+      <div class="detail-item"><div class="detail-label">Previously Paid (cumulative)</div><div class="detail-value">${fmtAED(prevPaid)}</div></div>
+    </div>
+    <p style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.6">This will create a new Draft application. Enter your percentage claims against each BOQ item before submitting to the consultant.</p>`,
+    `<button class="btn btn-primary" onclick="doNewIPC('${esc(refNo)}',${nextNo},${prevPaid})">Create Application</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doNewIPC(refNo, certNo, prevPaid) {
+  const {data:cert, error:certErr} = await sb.from('payment_certificates').insert({
+    cert_no:certNo, ref_no:refNo, status:'Draft', previously_paid:prevPaid
+  }).select('id').single();
+  if(certErr) { toast('Error creating IPC: '+certErr.message,'error'); return; }
+
+  const {data:boqItems} = await sb.from('boq_items').select('id');
+  const certItems = (boqItems||[]).map(i=>({cert_id:cert.id, boq_item_id:i.id, contractor_pct:0, contractor_amount:0}));
+  if(certItems.length) {
+    const {error:iErr} = await sb.from('payment_certificate_items').insert(certItems);
+    if(iErr) { toast('Error initialising IPC items: '+iErr.message,'error'); return; }
+  }
+  toast(`${refNo} created`,'success'); closeModal(); viewIPC(cert.id);
+}
+
+async function viewIPC(id) {
+  const [{data:cert},{data:pitems},{data:bills},{data:boqItems}] = await Promise.all([
+    sb.from('payment_certificates').select('*').eq('id',id).single(),
+    sb.from('payment_certificate_items').select('*').eq('cert_id',id),
+    sb.from('boq_bills').select('*').order('sort_order'),
+    sb.from('boq_items').select('*').order('sort_order')
+  ]);
+  if(!cert) { toast('Certificate not found','error'); return; }
+
+  const role = currentProfile?.role;
+  const canEditContractor = (role==='contractor'||role==='developer') && (cert.status==='Draft'||cert.status==='Submitted');
+  const canEditConsultant = (role==='consultant'||role==='developer') && cert.status==='Under Review';
+
+  const itemMap = {};
+  (pitems||[]).forEach(pi => itemMap[pi.boq_item_id] = pi);
+  window._ipcPitems = itemMap;
+  window._ipcBoqItems = boqItems||[];
+  window._ipcCert = cert;
+
+  const billRows = (bills||[]).map(b => {
+    const bItems = (boqItems||[]).filter(i=>i.bill_id===b.id);
+    const billContrAmt = bItems.reduce((s,i)=>s+(+itemMap[i.id]?.contractor_amount||0),0);
+    const billConsAmt  = bItems.reduce((s,i)=>s+(+itemMap[i.id]?.consultant_amount||0),0);
+
+    const itemRows = bItems.map(item => {
+      const pi = itemMap[item.id]||{};
+      const ctrPct = pi.contractor_pct??0;
+      const csPct  = pi.consultant_pct??'';
+      return `<tr data-item-id="${item.id}" data-boq-total="${item.total}">
+        <td class="mono" style="width:80px">${esc(item.item_no)}</td>
+        <td style="min-width:200px">${esc(item.description)}</td>
+        <td style="text-align:right;width:90px">${fmtAED(item.total)}</td>
+        <td style="text-align:right;width:80px">${canEditContractor
+          ? `<input type="number" min="0" max="100" step="0.5" class="form-control" style="width:70px;text-align:right;padding:3px 6px" value="${+ctrPct}" onchange="recalcIPCRow(this,'contractor')">`
+          : `${(+ctrPct).toFixed(1)}%`}</td>
+        <td style="text-align:right;width:110px;font-family:monospace;font-size:11px" id="contr-amt-${item.id}">${fmtAED(+pi.contractor_amount||0)}</td>
+        <td style="text-align:right;width:80px">${canEditConsultant
+          ? `<input type="number" min="0" max="100" step="0.5" class="form-control" style="width:70px;text-align:right;padding:3px 6px" value="${csPct!==''?+csPct:''}" onchange="recalcIPCRow(this,'consultant')">`
+          : `${csPct!==''?(+csPct).toFixed(1)+'%':'&mdash;'}`}</td>
+        <td style="text-align:right;width:110px;font-family:monospace;font-size:11px" id="consult-amt-${item.id}">${pi.consultant_amount!=null?fmtAED(+pi.consultant_amount):'&mdash;'}</td>
+      </tr>`;
+    }).join('');
+
+    return `<tr class="boq-bill-header">
+      <td colspan="2" style="padding:8px 14px">${esc(b.bill_no)}. ${esc(b.title)}</td>
+      <td></td>
+      <td colspan="2" style="text-align:right;padding:8px 14px;font-family:monospace;font-size:11px">${fmtAED(billContrAmt)}</td>
+      <td colspan="2" style="text-align:right;padding:8px 14px;font-family:monospace;font-size:11px">${billConsAmt?fmtAED(billConsAmt):'&mdash;'}</td>
+    </tr>${itemRows}`;
+  }).join('');
+
+  // Financial summary calcs
+  const gross = (pitems||[]).reduce((s,i)=>s+(+i.consultant_amount||0),0);
+  const grossContr = (pitems||[]).reduce((s,i)=>s+(+i.contractor_amount||0),0);
+  const retPct = +cert.retention_pct||10;
+  const adv = +cert.advance_recovery||0;
+  const vatPct = +cert.vat_pct||5;
+  const prevPaid = +cert.previously_paid||0;
+  const retention = gross * retPct / 100;
+  const nbv = gross - retention - adv - prevPaid;
+  const vatAmt = nbv * vatPct / 100;
+  const netCert = nbv + vatAmt;
+
+  const retEdit  = canEditConsultant ? `(<input type="number" min="0" max="100" step="0.5" id="ipc-ret-pct" value="${retPct}" style="width:40px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--red);font-size:11px" onchange="recalcIPCSummary()">%)` : `(${retPct}%)`;
+  const advEdit  = canEditConsultant ? `<input type="number" min="0" id="ipc-adv" value="${adv}" style="width:90px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--red);font-size:11px" onchange="recalcIPCSummary()">` : fmtAED(adv);
+  const vatEdit  = canEditConsultant ? `(<input type="number" min="0" max="30" step="0.5" id="ipc-vat-pct" value="${vatPct}" style="width:35px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--text2);font-size:11px" onchange="recalcIPCSummary()">%)` : `(${vatPct}%)`;
+
+  const summaryHTML = `<div class="ipc-summary" id="ipc-financial-summary">
+    <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:6px">Financial Summary</div>
+    <div class="ipc-row"><span class="ipc-label">Contractor Claimed</span><span class="ipc-val" id="sum-contractor">${fmtAED(grossContr)}</span></div>
+    <div class="ipc-row"><span class="ipc-label">Gross Certified Amount</span><span class="ipc-val" id="sum-gross">${gross?fmtAED(gross):'&mdash;'}</span></div>
+    <div class="ipc-row deduct"><span class="ipc-label">Less: Retention ${retEdit}</span><span class="ipc-val deduct" id="sum-retention">${gross?'('+fmtAED(retention)+')':'&mdash;'}</span></div>
+    <div class="ipc-row deduct"><span class="ipc-label">Less: Advance Recovery ${advEdit}</span><span class="ipc-val deduct" id="sum-advance">${adv?'('+fmtAED(adv)+')':'AED 0.00'}</span></div>
+    <div class="ipc-row deduct"><span class="ipc-label">Less: Previously Paid</span><span class="ipc-val deduct" id="sum-prev">${prevPaid?'('+fmtAED(prevPaid)+')':'AED 0.00'}</span></div>
+    <div class="ipc-row"><span class="ipc-label">Net Before VAT</span><span class="ipc-val" id="sum-net-before-vat">${gross?fmtAED(nbv):'&mdash;'}</span></div>
+    <div class="ipc-row vat"><span class="ipc-label">VAT ${vatEdit}</span><span class="ipc-val vat" id="sum-vat">${gross?fmtAED(vatAmt):'&mdash;'}</span></div>
+    <div class="ipc-row total"><span class="ipc-label">NET CERTIFIED</span><span class="ipc-val total" id="sum-net">${gross?fmtAED(netCert):'&mdash;'}</span></div>
+  </div>`;
+
+  const headerHTML = `<div class="detail-grid">
+    <div class="detail-item"><div class="detail-label">Reference</div><div class="detail-value mono" style="font-weight:600;color:var(--sand)">${esc(cert.ref_no)}</div></div>
+    <div class="detail-item"><div class="detail-label">Status</div><div class="detail-value">${sbadge(cert.status)}</div></div>
+    ${cert.submitted_date?`<div class="detail-item"><div class="detail-label">Submitted</div><div class="detail-value">${new Date(cert.submitted_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})} by ${esc(cert.submitted_by_name||'—')}</div></div>`:''}
+    ${cert.certified_date?`<div class="detail-item"><div class="detail-label">Certified</div><div class="detail-value">${new Date(cert.certified_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})} by ${esc(cert.certified_by_name||'—')}</div></div>`:''}
+    ${cert.paid_date?`<div class="detail-item"><div class="detail-label">Paid</div><div class="detail-value">${esc(cert.paid_date)} &middot; Ref: ${esc(cert.payment_ref||'—')}</div></div>`:''}
+    ${cert.notes?`<div class="detail-item" style="grid-column:span 2"><div class="detail-label">Notes</div><div class="detail-value">${esc(cert.notes)}</div></div>`:''}
+  </div>`;
+
+  openModal(`${esc(cert.ref_no)} — Payment Application`, `
+    ${headerHTML}
+    <div class="detail-section">
+      <div class="section-header"><span class="section-title">Bill of Quantities — Progress Claims</span></div>
+      <div style="overflow-x:auto;max-height:380px;overflow-y:auto;border:0.5px solid var(--border);border-radius:var(--radius)">
+        <table style="font-size:11px">
+          <tr><th>Item No.</th><th>Description</th><th style="text-align:right">BOQ Total</th><th style="text-align:right">Contr. %</th><th style="text-align:right">Contr. Amt</th><th style="text-align:right">Consult. %</th><th style="text-align:right">Consult. Amt</th></tr>
+          ${billRows}
+        </table>
+      </div>
+    </div>
+    <div class="detail-section">${summaryHTML}</div>`,
+    ipcActionButtons(cert, id), true);
+}
+
+function ipcActionButtons(cert, id) {
+  const role = currentProfile?.role;
+  const s = cert.status;
+  let btns = `<button class="btn" onclick="closeModal()">Close</button>`;
+  if(s==='Draft' && (role==='contractor'||role==='developer'))
+    btns = `<button class="btn btn-primary" onclick="saveIPCClaims('${id}','submit')">Save &amp; Submit</button>
+            <button class="btn" onclick="saveIPCClaims('${id}','draft')">Save Draft</button>` + btns;
+  if(s==='Submitted' && (role==='contractor'||role==='developer'))
+    btns = `<button class="btn btn-danger" onclick="retractIPC('${id}')">Retract to Draft</button>` + btns;
+  if(s==='Submitted' && (role==='consultant'||role==='developer'))
+    btns = `<button class="btn btn-primary" onclick="beginReviewIPC('${id}')">Begin Review</button>` + btns;
+  if(s==='Under Review' && (role==='consultant'||role==='developer'))
+    btns = `<button class="btn btn-success" onclick="saveIPCCertification('${id}','certify')">Issue Certificate</button>
+            <button class="btn" onclick="saveIPCCertification('${id}','return')">Return to Contractor</button>` + btns;
+  if(s==='Certified' && role==='developer')
+    btns = `<button class="btn btn-primary" onclick="openRecordPayment('${id}')">Record Payment</button>` + btns;
+  return btns;
+}
+
+function recalcIPCRow(input, party) {
+  const tr = input.closest('tr');
+  const boqTotal = +tr.dataset.boqTotal||0;
+  const itemId = tr.dataset.itemId;
+  const pct = +input.value||0;
+  const amt = boqTotal * pct / 100;
+  if(party==='contractor') {
+    const el = document.getElementById('contr-amt-'+itemId);
+    if(el) el.textContent = fmtAED(amt);
+    if(window._ipcPitems[itemId]) { window._ipcPitems[itemId].contractor_pct=pct; window._ipcPitems[itemId].contractor_amount=amt; }
+  } else {
+    const el = document.getElementById('consult-amt-'+itemId);
+    if(el) el.textContent = fmtAED(amt);
+    if(window._ipcPitems[itemId]) { window._ipcPitems[itemId].consultant_pct=pct; window._ipcPitems[itemId].consultant_amount=amt; }
+  }
+  recalcIPCSummary();
+}
+
+function recalcIPCSummary() {
+  const pitems = Object.values(window._ipcPitems||{});
+  const cert = window._ipcCert||{};
+  const grossContr = pitems.reduce((s,i)=>s+(+i.contractor_amount||0),0);
+  const gross = pitems.reduce((s,i)=>s+(+i.consultant_amount||0),0);
+  const retPct = +(document.getElementById('ipc-ret-pct')?.value ?? cert.retention_pct ?? 10);
+  const adv    = +(document.getElementById('ipc-adv')?.value ?? cert.advance_recovery ?? 0);
+  const vatPct = +(document.getElementById('ipc-vat-pct')?.value ?? cert.vat_pct ?? 5);
+  const prevPaid = +cert.previously_paid||0;
+  const retention = gross * retPct / 100;
+  const nbv = gross - retention - adv - prevPaid;
+  const vatAmt = nbv * vatPct / 100;
+  const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('sum-contractor', fmtAED(grossContr));
+  set('sum-gross', gross ? fmtAED(gross) : '—');
+  set('sum-retention', gross ? '('+fmtAED(retention)+')' : '—');
+  set('sum-advance', adv ? '('+fmtAED(adv)+')' : 'AED 0.00');
+  set('sum-net-before-vat', gross ? fmtAED(nbv) : '—');
+  set('sum-vat', gross ? fmtAED(vatAmt) : '—');
+  set('sum-net', gross ? fmtAED(nbv + vatAmt) : '—');
+}
+
+async function saveIPCClaims(id, action) {
+  const rows = document.querySelectorAll('tr[data-item-id]');
+  for(const tr of rows) {
+    const itemId = tr.dataset.itemId;
+    const boqTotal = +tr.dataset.boqTotal||0;
+    const input = tr.querySelector('input[type=number]');
+    const pct = input ? +input.value||0 : (+window._ipcPitems[itemId]?.contractor_pct||0);
+    const amt = boqTotal * pct / 100;
+    await sb.from('payment_certificate_items')
+      .update({contractor_pct:pct, contractor_amount:amt})
+      .eq('cert_id',id).eq('boq_item_id',itemId);
+  }
+  if(action==='submit') {
+    const {error} = await sb.from('payment_certificates').update({
+      status:'Submitted',
+      submitted_by_name: currentProfile?.full_name||currentUser?.email,
+      submitted_date: new Date().toISOString()
+    }).eq('id',id);
+    if(error) { toast('Error: '+error.message,'error'); return; }
+    toast('Application submitted to consultant','success');
+  } else {
+    toast('Draft saved','success');
+  }
+  closeModal(); render();
+}
+
+async function beginReviewIPC(id) {
+  const {error} = await sb.from('payment_certificates').update({status:'Under Review'}).eq('id',id);
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  toast('Review started','success'); closeModal(); viewIPC(id);
+}
+
+async function retractIPC(id) {
+  const ok = await confirmModal('Retract this application back to Draft? The consultant will no longer see it as submitted.');
+  if(!ok) return;
+  const {error} = await sb.from('payment_certificates').update({status:'Draft',submitted_date:null,submitted_by_name:null}).eq('id',id);
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  toast('Application retracted to Draft','success'); closeModal(); render();
+}
+
+async function saveIPCCertification(id, action) {
+  const rows = document.querySelectorAll('tr[data-item-id]');
+  for(const tr of rows) {
+    const itemId = tr.dataset.itemId;
+    const boqTotal = +tr.dataset.boqTotal||0;
+    const input = tr.querySelector('input[type=number]');
+    if(!input) continue;
+    const pct = +input.value||0;
+    await sb.from('payment_certificate_items')
+      .update({consultant_pct:pct, consultant_amount:boqTotal*pct/100})
+      .eq('cert_id',id).eq('boq_item_id',itemId);
+  }
+  const retPct = +(document.getElementById('ipc-ret-pct')?.value ?? window._ipcCert?.retention_pct ?? 10);
+  const adv    = +(document.getElementById('ipc-adv')?.value ?? 0);
+  const vatPct = +(document.getElementById('ipc-vat-pct')?.value ?? window._ipcCert?.vat_pct ?? 5);
+
+  if(action==='certify') {
+    const {error} = await sb.from('payment_certificates').update({
+      status:'Certified', retention_pct:retPct, advance_recovery:adv, vat_pct:vatPct,
+      certified_by_name: currentProfile?.full_name||currentUser?.email,
+      certified_date: new Date().toISOString()
+    }).eq('id',id);
+    if(error) { toast('Error: '+error.message,'error'); return; }
+    toast('IPC certified and issued','success'); closeModal(); render();
+  } else {
+    await sb.from('payment_certificates').update({status:'Submitted',retention_pct:retPct,advance_recovery:adv,vat_pct:vatPct}).eq('id',id);
+    toast('Application returned to contractor','info'); closeModal(); render();
+  }
+}
+
+function openRecordPayment(id) {
+  openModal('Record Payment', `
+    <p style="font-size:12px;color:var(--text2);line-height:1.6">Confirm payment has been made against this certified IPC.</p>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Payment Date</label><input type="date" class="form-control" id="pay-date" value="${new Date().toISOString().split('T')[0]}" /></div>
+      <div class="form-group"><label class="form-label-dark">Payment Reference</label><input type="text" class="form-control" id="pay-ref" placeholder="Bank ref / cheque no." /></div>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doRecordPayment('${id}')">Confirm Payment</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doRecordPayment(id) {
+  const date = document.getElementById('pay-date').value;
+  const ref  = document.getElementById('pay-ref').value.trim();
+  if(!date) { toast('Payment date is required','error'); return; }
+  const {error} = await sb.from('payment_certificates').update({status:'Paid',paid_date:date,payment_ref:ref}).eq('id',id);
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  toast('Payment recorded','success'); closeModal(); render();
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────
 (async()=>{
   const {data:{session}} = await sb.auth.getSession();
@@ -5022,7 +5554,7 @@ function printDoc(elementId, filename) {
   window.addEventListener('hashchange', ()=>{
     if(!currentProfile) return;
     const hash = location.hash.replace('#','');
-    const validPages = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users'];
+    const validPages = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq'];
     if(validPages.includes(hash) && hash !== currentPage){
       const navEl = document.getElementById('n-'+hash);
       nav(hash, navEl);
