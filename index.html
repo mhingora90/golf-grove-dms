@@ -5088,6 +5088,11 @@ async function renderBOQ() {
   const grandTotal = itemList.reduce((s,i)=>s+(+i.total||0),0);
   const editMode = window._boqEditMode || false;
 
+  const billBreakdown = billList.map(b => {
+    const bt = itemList.filter(i=>i.bill_id===b.id).reduce((s,i)=>s+(+i.total||0),0);
+    return {b, bt, pct: grandTotal ? bt/grandTotal*100 : 0};
+  });
+
   const boqChipsHTML = billList.length ? `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
     <label style="font-size:11px;color:var(--text2);white-space:nowrap">Filter by Bill:</label>
     <select class="form-control" style="width:auto;max-width:280px;padding:4px 8px;font-size:12px" onchange="filtBOQ(this.value)">
@@ -5130,10 +5135,39 @@ async function renderBOQ() {
   <div class="fbar" style="margin-bottom:14px">
     ${can('manageRegister') ? '<button class="btn btn-primary" onclick="openImportBOQ()">Import Excel</button>' : ''}
     ${can('manageRegister') && billList.length ? `<button class="btn ${editMode?'btn-success':''}" onclick="toggleBOQEdit()" style="margin-left:6px">${editMode?'Save Changes':'Edit'}</button>` : ''}
+    ${editMode ? '<button class="btn" onclick="openAddBill()" style="margin-left:6px">+ Add Bill</button>' : ''}
     ${can('manageRegister') && billList.length ? '<button class="btn btn-danger" onclick="replaceBOQ()" style="margin-left:6px">Replace BOQ</button>' : ''}
     ${editMode ? '<button class="btn" onclick="cancelBOQEdit()" style="margin-left:6px">Cancel</button>' : ''}
-    ${billList.length ? `<span style="margin-left:auto;font-size:11px;color:var(--text3)">${billList.length} bills &middot; ${itemList.length} items</span>` : ''}
   </div>
+  ${billList.length ? `
+  <div class="module-bar">
+    <div class="module-stat" style="flex:1;min-width:180px">
+      <div class="module-stat-val" style="font-size:16px;font-family:'SF Mono',Monaco,monospace">${fmtAED(grandTotal)}</div>
+      <div class="module-stat-label">Contract Sum</div>
+    </div>
+    <div class="module-stat"><div class="module-stat-val">${billList.length}</div><div class="module-stat-label">Bills</div></div>
+    <div class="module-stat"><div class="module-stat-val">${itemList.length}</div><div class="module-stat-label">Items</div></div>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div style="padding:14px 18px">
+      <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Bill Breakdown</div>
+      ${billBreakdown.map(({b,bt,pct})=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:0.5px solid var(--border)">
+        <span style="font-size:12px;color:var(--text2);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(b.bill_no+'. '+b.title)}">${esc(b.bill_no)}. ${esc(b.title)}</span>
+        <div style="width:120px;height:4px;background:var(--bg3);border-radius:2px;flex-shrink:0">
+          <div style="width:${Math.min(pct,100).toFixed(1)}%;height:100%;background:var(--sand-light);border-radius:2px"></div>
+        </div>
+        <span style="font-family:monospace;font-size:11px;color:var(--charcoal);min-width:120px;text-align:right">${fmtAED(bt)}</span>
+        <span style="font-size:10px;color:var(--text3);min-width:36px;text-align:right">${pct.toFixed(1)}%</span>
+      </div>`).join('')}
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0 2px">
+        <span style="font-size:12px;font-weight:600;flex:1">Contract Sum</span>
+        <div style="width:120px;flex-shrink:0"></div>
+        <span style="font-family:monospace;font-size:12px;font-weight:600;color:var(--charcoal);min-width:120px;text-align:right">${fmtAED(grandTotal)}</span>
+        <span style="font-size:10px;color:var(--text3);min-width:36px;text-align:right">100%</span>
+      </div>
+    </div>
+  </div>` : ''}
   ${boqChipsHTML}
   <div class="card"><div class="tw"><table>
     <tr><th>Item No.</th><th>Description</th><th style="text-align:right">Qty</th><th>Unit</th><th style="text-align:right">Rate (AED)</th><th style="text-align:right">Total (AED)</th>${editMode?'<th></th>':''}</tr>
@@ -5313,6 +5347,33 @@ async function replaceBOQ() {
   await sb.from('boq_bills').delete().neq('id','00000000-0000-0000-0000-000000000000');
   toast('BOQ cleared — ready for re-import','success');
   openImportBOQ();
+}
+
+function openAddBill() {
+  openModal('Add New Bill', `
+    <div class="frow">
+      <div class="form-group" style="width:100px">
+        <label class="form-label-dark">Bill No.</label>
+        <input type="text" class="form-control" id="new-bill-no" placeholder="e.g. 3" />
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label-dark">Bill Title</label>
+        <input type="text" class="form-control" id="new-bill-title" placeholder="e.g. Superstructure" />
+      </div>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doAddBill()">Add Bill</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doAddBill() {
+  const billNo = document.getElementById('new-bill-no').value.trim();
+  const title  = document.getElementById('new-bill-title').value.trim();
+  if(!billNo || !title) { toast('Bill No. and Title are required','error'); return; }
+  const {data:existing} = await sb.from('boq_bills').select('sort_order').order('sort_order',{ascending:false}).limit(1);
+  const sortOrder = ((existing?.[0]?.sort_order)??-1) + 1;
+  const {error} = await sb.from('boq_bills').insert({bill_no:billNo, title, sort_order:sortOrder});
+  if(error) { toast('Error adding bill: '+error.message,'error'); return; }
+  toast(`Bill ${billNo} added`,'success'); closeModal(); render();
 }
 
 // ─── PAYMENT CERTIFICATES ─────────────────────────────────────────
