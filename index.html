@@ -5751,6 +5751,7 @@ function recalcIPCSummary() {
   const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
   const hasConsultant = gross > 0;
   if(hasConsultant) {
+    set('sum-contractor', fmtAED(grossContr));
     set('sum-gross', fmtAED(gross));
     set('sum-retention', '('+fmtAED(consRetention)+')');
     set('sum-advance', '('+fmtAED(consAdvRecovery)+')');
@@ -5758,6 +5759,7 @@ function recalcIPCSummary() {
     set('sum-vat', fmtAED(consVat));
     set('NET-CERTIFIED', fmtAED(consNet)+' \u2713');
   } else {
+    set('sum-contractor', fmtAED(grossContr));
     set('sum-gross', grossContr ? fmtAED(grossContr) : '—');
     set('sum-retention', grossContr ? '('+fmtAED(ctrRetention)+')' : '—');
     set('sum-advance', grossContr ? '('+fmtAED(ctrAdvRecovery)+')' : '—');
