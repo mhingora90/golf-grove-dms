@@ -5554,9 +5554,9 @@ async function viewIPC(id) {
   }).join('');
 
   // Financial summary calcs
-  const pitems = (pitems||[]);
-  const gross = pitems.reduce((s,i)=>s+(+i.consultant_amount||0),0);
-  const grossContr = pitems.reduce((s,i)=>s+(+i.contractor_amount||0),0);
+  const allPitems = (pitems||[]);
+  const gross = allPitems.reduce((s,i)=>s+(+i.consultant_amount||0),0);
+  const grossContr = allPitems.reduce((s,i)=>s+(+i.contractor_amount||0),0);
   const retPct = +cert.retention_pct||10;
   const advPct = +cert.advance_recovery_pct||10;
   const vatPct = +cert.vat_pct||5;
