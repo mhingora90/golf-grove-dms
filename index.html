@@ -612,7 +612,7 @@ async function loadApp(user) {
   if(dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   // Restore page from URL hash, or default to dash
   const hash = location.hash.replace('#','');
-  const defaultPage = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users'].includes(hash) ? hash : 'dash';
+  const defaultPage = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq'].includes(hash) ? hash : 'dash';
   const navEl = document.getElementById('n-'+defaultPage);
   nav(defaultPage, navEl);
 }
