@@ -1866,14 +1866,12 @@ function filtSubOverdue(el) {
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
   document.querySelectorAll('.sub-row').forEach(r=>{ r.style.display=r.dataset.overdue==='1'?'':'none'; });
 }
-function filtBOQ(el, billId) {
-  document.querySelectorAll('.boq-chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
+function filtBOQ(billId) {
   document.querySelectorAll('#content [data-bill-id]').forEach(r=>{
     r.style.display = billId==='all' || r.dataset.billId===billId ? '' : 'none';
   });
 }
-function filtIPC(el, billId) {
-  document.querySelectorAll('.ipc-chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
+function filtIPC(billId) {
   document.querySelectorAll('.modal-body [data-bill-id]').forEach(r=>{
     r.style.display = billId==='all' || r.dataset.billId===billId ? '' : 'none';
   });
@@ -5090,9 +5088,12 @@ async function renderBOQ() {
   const grandTotal = itemList.reduce((s,i)=>s+(+i.total||0),0);
   const editMode = window._boqEditMode || false;
 
-  const boqChipsHTML = billList.length ? `<div class="fbar" style="margin-bottom:10px">
-    <span class="chip boq-chip active" onclick="filtBOQ(this,'all')">All Bills</span>
-    ${billList.map(b=>`<span class="chip boq-chip" onclick="filtBOQ(this,'${b.id}')" title="${esc(b.bill_no+'. '+b.title)}">${esc(b.bill_no)}. ${esc(b.title.length>24?b.title.substring(0,24)+'\u2026':b.title)}</span>`).join('')}
+  const boqChipsHTML = billList.length ? `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+    <label style="font-size:11px;color:var(--text2);white-space:nowrap">Filter by Bill:</label>
+    <select class="form-control" style="width:auto;max-width:280px;padding:4px 8px;font-size:12px" onchange="filtBOQ(this.value)">
+      <option value="all">All Bills</option>
+      ${billList.map(b=>`<option value="${b.id}">${esc(b.bill_no)}. ${esc(b.title)}</option>`).join('')}
+    </select>
   </div>` : '';
 
   const billsHTML = billList.length ? billList.map(b=>{
@@ -5488,9 +5489,12 @@ async function viewIPC(id) {
     <div class="ipc-row total"><span class="ipc-label">NET CERTIFIED</span><span class="ipc-val total" id="sum-net">${gross?fmtAED(netCert):'&mdash;'}</span></div>
   </div>`;
 
-  const ipcChipsHTML = (bills||[]).length ? `<div class="fbar" style="margin-bottom:10px">
-    <span class="chip ipc-chip active" onclick="filtIPC(this,'all')">All Bills</span>
-    ${(bills||[]).map(b=>`<span class="chip ipc-chip" onclick="filtIPC(this,'${b.id}')" title="${esc(b.bill_no+'. '+b.title)}">${esc(b.bill_no)}. ${esc(b.title.length>24?b.title.substring(0,24)+'\u2026':b.title)}</span>`).join('')}
+  const ipcChipsHTML = (bills||[]).length ? `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+    <label style="font-size:11px;color:var(--text2);white-space:nowrap">Filter by Bill:</label>
+    <select class="form-control" style="width:auto;max-width:280px;padding:4px 8px;font-size:12px" onchange="filtIPC(this.value)">
+      <option value="all">All Bills</option>
+      ${(bills||[]).map(b=>`<option value="${b.id}">${esc(b.bill_no)}. ${esc(b.title)}</option>`).join('')}
+    </select>
   </div>` : '';
 
   const headerHTML = `<div class="detail-grid">
