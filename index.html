@@ -5083,7 +5083,7 @@ async function renderBOQ() {
     sb.from('boq_bills').select('*').order('sort_order').order('created_at'),
     sb.from('boq_items').select('*').order('sort_order').order('created_at')
   ]);
-  const billList = bills||[];
+  const billList = (bills||[]).sort((a,b)=>(+a.bill_no||0)-(+b.bill_no||0)||a.bill_no.localeCompare(b.bill_no));
   const itemList = items||[];
   const grandTotal = itemList.reduce((s,i)=>s+(+i.total||0),0);
   const editMode = window._boqEditMode || false;
@@ -5510,13 +5510,15 @@ async function viewIPC(id) {
   const canEditContractor = (role==='contractor'||role==='developer') && (cert.status==='Draft'||cert.status==='Submitted');
   const canEditConsultant = (role==='consultant'||role==='developer') && cert.status==='Under Review';
 
+  const sortedBills = (bills||[]).sort((a,b)=>(+a.bill_no||0)-(+b.bill_no||0)||a.bill_no.localeCompare(b.bill_no));
+
   const itemMap = {};
   (pitems||[]).forEach(pi => itemMap[pi.boq_item_id] = pi);
   window._ipcPitems = itemMap;
   window._ipcBoqItems = boqItems||[];
   window._ipcCert = cert;
 
-  const billRows = (bills||[]).map(b => {
+  const billRows = sortedBills.map(b => {
     const bItems = (boqItems||[]).filter(i=>i.bill_id===b.id);
     const billContrAmt = bItems.reduce((s,i)=>s+(+itemMap[i.id]?.contractor_amount||0),0);
     const billConsAmt  = bItems.reduce((s,i)=>s+(+itemMap[i.id]?.consultant_amount||0),0);
@@ -5580,7 +5582,7 @@ async function viewIPC(id) {
     <label style="font-size:11px;color:var(--text2);white-space:nowrap">Filter by Bill:</label>
     <select class="form-control" style="width:auto;max-width:280px;padding:4px 8px;font-size:12px" onchange="filtIPC(this.value)">
       <option value="all">All Bills</option>
-      ${(bills||[]).map(b=>`<option value="${b.id}">${esc(b.bill_no)}. ${esc(b.title)}</option>`).join('')}
+      ${sortedBills.map(b=>`<option value="${b.id}">${esc(b.bill_no)}. ${esc(b.title)}</option>`).join('')}
     </select>
   </div>` : '';
 
