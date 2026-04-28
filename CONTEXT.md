@@ -15,11 +15,31 @@ Paste this file at the start of any new Claude session to restore full context i
 |---|---|
 | Repo | github.com/mhingora90/golf-grove-dms |
 | Live | https://golf-grove-dms.vercel.app |
-| Working file | `index.html` (~5,000 lines, ~290KB) |
+| Working file | `index.html` (~5,800 lines, ~320KB) |
 | Project | Golf Grove – Residential Building (B+G+P+7+Roof), Production City, Dubai |
 | Developer | Regent Star Property Developments |
 | Consultant | POE Engineering Consultants |
 | Contractor | Modern Building Contracting L.L.C |
+
+---
+
+## Dev Server & Testing
+
+**Dev server:** `npx http-server . -p 3000 --cors -s`
+**MCP Playwright browser** — use browser tools for UI testing, NOT screenshots
+**DO NOT use `taskkill /F /T` on dev server PID** — it kills the MCP browser too
+To stop dev server: `taskkill /F /T /IM node.exe` is also risky — use browser close first
+
+**Test files:**
+- `tests/boq-ipc-permissions.test.js` — Part A: Pure Node.js permission matrix (48 tests, all pass)
+- `tests/boq-ipc-ui.test.js` — Part B: Playwright UI tests (needs fresh browser)
+- `tests/boq-ipc-integration.test.js` — Part C: Supabase API tests (needs auth)
+
+**Login:** mohammed@regent-developments.com / Mman1990 (developer role)
+**Role switching:** Blocked by RLS `restrict_profile_role_changes`. Must reset via Supabase Dashboard SQL:
+```sql
+UPDATE profiles SET role = 'developer' WHERE email = 'mohammed@regent-developments.com';
+```
 
 ---
 
@@ -76,6 +96,10 @@ Paste this file at the start of any new Claude session to restore full context i
 | `attachments` | id, record_type, record_id, file_name, file_path, file_type, file_size, uploaded_by_name |
 | `comments` | id, record_type, record_id, message, author_name, author_role, created_at |
 | `document_audit_log` | id, document_id, document_type, action, performed_by_name, performed_by_id, created_at |
+| `boq_bills` | id, bill_no, title, sort_order |
+| `boq_items` | id, bill_id, item_no, description, qty, unit, rate, total, sort_order |
+| `payment_certificates` | id, cert_no, ref_no, status, submitted_date, submitted_by_name, reviewed_date, reviewed_by_name, certified_date, certified_by_name, paid_date, recorded_by_name, retention_pct, advance_recovery, vat_pct, previously_paid |
+| `payment_certificate_items` | id, cert_id, boq_item_id, contractor_pct, contractor_amount, consultant_pct, consultant_amount |
 
 ### Storage buckets
 - `drawings` — drawing PDF files, path: `{drawing_id}/{revision}_{timestamp}.pdf`
@@ -89,18 +113,36 @@ Row Level Security is enforced via `supabase/rls_policies.sql`. The script is id
 - Wrap in `BEGIN; ... COMMIT;` for atomic execution
 - Safe to run repeatedly. See `supabase/rls_policies.sql` for full policy definitions.
 
+**Profile role changes blocked by RLS** — `restrict_profile_role_changes` policy prevents non-developers from changing their own role. Must use Supabase Dashboard SQL Editor to reset.
+
 ---
 
 ## Roles & Permissions
 
 ```javascript
-developer:    { approve, upload, raise, submit, manageUsers, manageSubs, manageRegister }
-consultant:   { approve, upload, raise, submit, manageRegister }
-contractor:   { upload, submit, manageSubs, submitMS }
-subcontractor:{ submit, submitMS }
+developer:    { approve:true,  upload:true,  raise:true,  submit:true,  manageUsers:true,  manageSubs:true,  submitMS:false, manageRegister:true  }
+consultant:   { approve:true,  upload:true,  raise:true,  submit:true,  manageUsers:false, manageSubs:false, submitMS:false, manageRegister:true  }
+contractor:   { approve:false, upload:true,  raise:false, submit:true,  manageUsers:false, manageSubs:true,  submitMS:true,  manageRegister:false }
+subcontractor:{ approve:false, upload:false, raise:false, submit:true,  manageUsers:false, manageSubs:false, submitMS:true,  manageRegister:false }
 ```
 
 Checked via `can(action)` — returns boolean based on `currentProfile.role`.
+
+**BOQ permissions:** Import Excel, Edit, Replace BOQ, + New — all gated by `can('manageRegister')` (developer + consultant only)
+
+**IPC permissions:**
+- + New button: visible to all (uses `can('submit')`), but RLS blocks consultant/subcontractor at DB
+- Submit/Retract: contractor or developer
+- Begin Review/Certify: consultant or developer
+- Record Payment: developer only
+
+**IPC Financial Summary:**
+- **Contractor phase (Draft/Submitted):** Single-column summary showing contractor claimed → Value of Works → Retention → Advance Recovery → Previously Paid → Net Before VAT → VAT → NET CERTIFIED. All auto-calculated from contractor percentages (read-only, no editable inputs).
+- **Consultant phase (Under Review/Certified/Paid):** Comparison table with 3 columns: Label | Contractor Claimed | Consultant Certified. When consultant enters percentages, both columns update live via `recalcIPCSummary()`. Consultant values are final/accepted (shown with ✓).
+- **Contract-level settings** set at IPC creation: Retention %, Advance Recovery %, VAT %, Mobilisation Advance (AED). Inherited from last IPC or default to 10%/10%/5%/0.
+- **Previously Paid:** Cumulative sum of all prior certified/paid IPCs' net amounts (gross - retention - advanceRecovery + VAT). Stored in `payment_certificates.previously_paid`.
+- **Formula:** `NET = base - retention - advanceRecovery - previouslyPaid + VAT(base)`. Base = consultant amount if available, else contractor amount.
+- **No editable financial inputs** — retention/advance/VAT displayed as read-only percentages in summary rows.
 
 ---
 
@@ -119,8 +161,10 @@ Checked via `can(action)` — returns boolean based on `currentProfile.role`.
 | `corr` | Correspondence Register | Site |
 | `punch` | Punch List / Defects | Site |
 | `ms` | Method Statements | Site |
+| `ipc` | Payment Certificates | Site |
 | `subs` | Subcontractors | Admin |
 | `users` | User Management | Admin (developer only) |
+| `boq` | BOQ Setup | Admin |
 
 ---
 
@@ -138,6 +182,34 @@ renderInspections()        // IR list with SLA tracking
 renderNCRs()               // NCR list with CAP workflow + aging
 renderCorrespondence()     // Correspondence register
 renderPunchList()          // Punch list / defects
+renderBOQ()                // BOQ Setup with grouped bills/items
+renderIPC()                // Payment Certificates list
+```
+
+### BOQ Functions
+```javascript
+renderBOQ()                // Grouped bill headers + items, contract sum
+openImportBOQ()            // Excel import modal with SheetJS
+doImportBOQ(file)          // Parse XLSX, insert boq_bills + boq_items
+replaceBOQ()               // Confirm + delete all + re-import
+toggleBOQEdit()            // Enter/exit inline edit mode (collects data, renders, saves in parallel)
+recalcBOQRow(input)        // Live total recalc on qty/rate change
+deleteBOQItem(id)          // Confirm + delete item
+addBOQItem(billId)         // Add new item to bill
+```
+
+### IPC Functions
+```javascript
+renderIPC()                // IPC list with module stats (total, in progress, certified, paid)
+openNewIPC()               // Check for open IPCs, show new IPC modal with prev-paid calc
+doNewIPC(refNo, certNo, prevPaid)  // Create IPC + link to all BOQ items
+viewIPC(id)                // IPC detail modal with BOQ claims table + financial summary
+saveIPCClaims(id)          // Save contractor's percentage claims
+beginReviewIPC(id)         // Transition to Under Review
+retractIPC(id)             // Contractor retracts submission
+saveIPCCertification(id)   // Consultant saves certified amounts
+openRecordPayment(id)      // Record payment modal
+doRecordPayment(id)        // Record payment, transition to Paid
 ```
 
 ### Modals & Forms
@@ -289,7 +361,7 @@ Open → CAP Submitted → CAP Verified → Closed
 
 ## Dashboard Widgets
 
-1. **Stat cards** — Drawings / Submittals / Inspections / Open NCRs / Open RFIs
+1. **Stat cards** — Drawings / Submittals / Inspections / Open NCRs / Open RFIs / Payment Certs
 2. **ISO Compliance Score** — % Published+Archived, % complete metadata
 3. **Drawing approval donut** — IFC / Approved / Under Review / Pending (130px SVG)
 4. **Discipline completion bars** — Architecture / Structure / MEP / Civil (async)
@@ -335,26 +407,63 @@ When making changes:
 
 ## Testing Pattern (browser)
 
+**DO NOT use screenshots during development** — use browser tools, DOM inspection, and assertions
+**MCP Playwright browser tools available** — use `browser_navigate`, `browser_click`, `browser_type`, `browser_snapshot`, `browser_evaluate`, `browser_file_upload`
+**DO NOT use `taskkill /F /T` on dev server PID** — it kills the MCP browser context
+
+**Login:**
 ```javascript
-// Login
-doLogin()
-
-// Switch role via Supabase REST
-fetch(window._su+'/rest/v1/profiles?id=eq.'+window._uid, {
-  method:'PATCH',
-  headers:{'Content-Type':'application/json','apikey':window._sk,'Authorization':'Bearer '+window._token,'Prefer':'return=minimal'},
-  body:JSON.stringify({role:'contractor'})
-})
-
-// Test page loads
-nav('ir', null); // wait 500ms then check content
-document.getElementById('content')?.innerHTML.length > 100 // true = loaded
-
-// Test + New
-openNew(); document.getElementById('modal-title')?.textContent
+// MCP browser is already logged in after first navigation
+await page.goto('http://localhost:3000');
+// Wait for dashboard to load
+await page.waitForTimeout(2000);
+// Check currentProfile
+await page.evaluate(() => currentProfile?.role);
 ```
 
-**Role switching note:** Contractor cannot PATCH own role (RLS). Switch back to developer via User Management modal or by temporarily granting elevated access.
+**Role switching — blocked by RLS.** Must reset via Supabase Dashboard:
+```sql
+UPDATE profiles SET role = 'developer' WHERE email = 'mohammed@regent-developments.com';
+```
+
+---
+
+## Current State (April 29, 2026)
+
+### Completed This Session
+- **BOQ PDF → Excel conversion** — Parsed 115-page PDF, generated `boq_import.xlsx` with 276 items across 18 bills (AED 38M total)
+- **BOQ Excel import** — Successfully imported into Supabase via browser
+- **BOQ Edit feature** — Added inline editing with ✏️ Edit / ✓ Save Changes / Cancel, delete per row, + Add Item per bill
+- **BOQ Edit RLS policy** — Created migration `supabase/migrations/20260429000000_add_boq_update_policies.sql` for `boq_items_update` policy
+- **BOQ Edit save fix** — Fixed hang: collect data from DOM → set `_boqEditMode = false` → `render()` → save in background (Promise.allSettled)
+- **Test suite** — Part A: 48/48 permission matrix tests pass (pure Node.js)
+
+### Still Needed
+- **Run RLS migration** for `boq_items_update` policy — run in Supabase Dashboard SQL Editor:
+```sql
+drop policy if exists "boq_bills_update" on boq_bills;
+drop policy if exists "boq_items_update" on boq_items;
+create policy "boq_bills_update" on boq_bills for update to authenticated using (get_user_role() in ('developer','consultant'));
+create policy "boq_items_update" on boq_items for update to authenticated using (get_user_role() in ('developer','consultant'));
+```
+- **Part B Playwright UI tests** — need fresh MCP browser
+- **Part C Supabase API tests** — need auth session (anon key blocked by RLS)
+
+### Files Created/Modified
+- `index.html` — Added BOQ edit mode, deleteBOQItem, addBOQItem, toggleBOQEdit, recalcBOQRow
+- `boq_import.xlsx` — Generated Excel file from PDF (ready for re-import if needed)
+- `supabase/migrations/20260428000000_create_payment_certificates.sql`
+- `supabase/migrations/20260428000001_rls_payment_certificates.sql`
+- `supabase/migrations/20260429000000_add_boq_update_policies.sql`
+- `tests/boq-ipc-permissions.test.js` — Part A (48 tests, all pass)
+- `tests/boq-ipc-ui.test.js` — Part B (needs fresh browser)
+- `tests/boq-ipc-integration.test.js` — Part C (needs auth)
+
+### Known Issues
+- MCP Playwright browser dies if dev server killed with `taskkill /F /T`
+- Role switching blocked by `restrict_profile_role_changes` RLS policy
+- Supabase anon key (401) blocks write operations — tests need authenticated session
+- IPC `+ New` button visible to all roles (uses `can('submit')`), but RLS blocks consultant/subcontractor at DB level — UI shows button, insert fails
 
 ---
 
@@ -369,6 +478,7 @@ openNew(); document.getElementById('modal-title')?.textContent
 | v5 | POI codes, drawing number validation, revision scheme enforcement, void drawings, drawing register export, cross-referencing, revision comments, correspondence register, punch list, transmittal acknowledgement, AR/FI classification, IFC vs Approved on dashboard |
 | v6+ | Dashboard optimization (head-only counts), URL hash page persistence, role-gated CDE transitions (individual + batch), batch upload, hard block on revision scheme mismatch, `.maybeSingle()` for profile/drawing lookups, error handling across 10+ action functions, storage upload failure aborts, `JSON.stringify` in onclick handlers, XSS fixes, drawing revision creation in bulk import |
 | v7+ | Stat cards + bulk actions on all modules, checkboxes + export CSV everywhere, custom confirm modal (replaces window.confirm), toast UX (icons, dismiss, variable durations), inline form validation with red borders, live drawing number validation on blur, `sbadge()` case-insensitive via title-case normalisation, comprehensive RLS SQL script (idempotent, 16 tables) |
+| v8+ | Payment Certificates module (BOQ + IPC workflow), BOQ Setup page with Excel import, BOQ inline editing, IPC detail modal with BOQ claims table + financial summary, full FIDIC IPC lifecycle (Draft → Submitted → Under Review → Certified → Paid) |
 
 ---
 
@@ -378,9 +488,4 @@ openNew(); document.getElementById('modal-title')?.textContent
 |---|---|---|
 | `mohammed@regent-developments.com` | `Mman1990` | consultant |
 
----
-
-## Testing Notes
-
-- **Preferred approach:** Write a standalone Playwright/Node test script → run once → read compact report. Avoid browser screenshots during active development (too token-heavy).
-- **For role-based button testing:** One script that logs in as each role, clicks every button, checks toast/DOM outcome → ~20-line text report.
+**Note:** RLS blocks role self-changes. Reset to developer via Supabase Dashboard if needed.
