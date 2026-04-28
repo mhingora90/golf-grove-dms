@@ -1866,6 +1866,18 @@ function filtSubOverdue(el) {
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
   document.querySelectorAll('.sub-row').forEach(r=>{ r.style.display=r.dataset.overdue==='1'?'':'none'; });
 }
+function filtBOQ(el, billId) {
+  document.querySelectorAll('.boq-chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
+  document.querySelectorAll('#content [data-bill-id]').forEach(r=>{
+    r.style.display = billId==='all' || r.dataset.billId===billId ? '' : 'none';
+  });
+}
+function filtIPC(el, billId) {
+  document.querySelectorAll('.ipc-chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
+  document.querySelectorAll('.modal-body [data-bill-id]').forEach(r=>{
+    r.style.display = billId==='all' || r.dataset.billId===billId ? '' : 'none';
+  });
+}
 
 // ─── SUBMITTALS ───────────────────────────────────────────────────
 async function renderSubmittals() {
@@ -5076,33 +5088,136 @@ async function renderBOQ() {
   const billList = bills||[];
   const itemList = items||[];
   const grandTotal = itemList.reduce((s,i)=>s+(+i.total||0),0);
+  const editMode = window._boqEditMode || false;
+
+  const boqChipsHTML = billList.length ? `<div class="fbar" style="margin-bottom:10px">
+    <span class="chip boq-chip active" onclick="filtBOQ(this,'all')">All Bills</span>
+    ${billList.map(b=>`<span class="chip boq-chip" onclick="filtBOQ(this,'${b.id}')" title="${esc(b.bill_no+'. '+b.title)}">${esc(b.bill_no)}. ${esc(b.title.length>24?b.title.substring(0,24)+'\u2026':b.title)}</span>`).join('')}
+  </div>` : '';
 
   const billsHTML = billList.length ? billList.map(b=>{
     const bItems = itemList.filter(i=>i.bill_id===b.id);
     const billTotal = bItems.reduce((s,i)=>s+(+i.total||0),0);
+    const itemsHTML = bItems.map(it=>{
+      if(!editMode) {
+        return `<tr data-id="${it.id}" data-bill-id="${b.id}">
+          <td class="mono" style="width:80px">${esc(it.item_no)}</td>
+          <td>${esc(it.description)}</td>
+          <td style="text-align:right;width:70px">${(+it.qty).toLocaleString()}</td>
+          <td style="width:60px;color:var(--text2)">${esc(it.unit)}</td>
+          <td style="text-align:right;width:90px">${fmtAED(it.rate)}</td>
+          <td style="text-align:right;width:110px;font-weight:500">${fmtAED(it.total)}</td>
+        </tr>`;
+      }
+      return `<tr data-id="${it.id}" data-bill-id="${b.id}">
+        <td><input class="form-control boq-edit" data-field="item_no" data-id="${it.id}" value="${esc(it.item_no)}" style="width:75px;padding:3px 5px;font-size:11px" /></td>
+        <td><input class="form-control boq-edit" data-field="description" data-id="${it.id}" value="${esc(it.description)}" style="width:100%;padding:3px 5px;font-size:11px" /></td>
+        <td><input type="number" class="form-control boq-edit" data-field="qty" data-id="${it.id}" value="${+it.qty}" style="width:65px;padding:3px 5px;font-size:11px;text-align:right" onchange="recalcBOQRow(this)" /></td>
+        <td><input class="form-control boq-edit" data-field="unit" data-id="${it.id}" value="${esc(it.unit)}" style="width:55px;padding:3px 5px;font-size:11px" /></td>
+        <td><input type="number" class="form-control boq-edit" data-field="rate" data-id="${it.id}" value="${+it.rate}" style="width:85px;padding:3px 5px;font-size:11px;text-align:right" onchange="recalcBOQRow(this)" /></td>
+        <td style="text-align:right;width:110px;font-weight:500;font-family:monospace" data-total="${it.id}">${fmtAED(it.total)}</td>
+        <td style="width:30px"><button class="btn btn-danger" style="padding:2px 6px;font-size:11px" onclick="deleteBOQItem('${it.id}')">&times;</button></td>
+      </tr>`;
+    }).join('');
+    const addBtn = editMode ? `<tr data-bill-id="${b.id}"><td colspan="${7}"><button class="btn" style="font-size:11px;padding:3px 10px" onclick="addBOQItem('${b.id}')">+ Add Item</button></td></tr>` : '';
     return `
-    <tr class="boq-bill-header"><td colspan="5" style="padding:8px 14px">${esc(b.bill_no)}. ${esc(b.title)}</td><td style="text-align:right;padding:8px 14px">${fmtAED(billTotal)}</td></tr>
-    ${bItems.map(it=>`<tr>
-      <td class="mono" style="width:80px">${esc(it.item_no)}</td>
-      <td>${esc(it.description)}</td>
-      <td style="text-align:right;width:70px">${(+it.qty).toLocaleString()}</td>
-      <td style="width:60px;color:var(--text2)">${esc(it.unit)}</td>
-      <td style="text-align:right;width:90px">${fmtAED(it.rate)}</td>
-      <td style="text-align:right;width:110px;font-weight:500">${fmtAED(it.total)}</td>
-    </tr>`).join('')}`;
+    <tr class="boq-bill-header" data-bill-id="${b.id}"><td colspan="${editMode?6:5}" style="padding:8px 14px">${esc(b.bill_no)}. ${esc(b.title)}</td><td style="text-align:right;padding:8px 14px">${fmtAED(billTotal)}</td></tr>
+    ${itemsHTML}${addBtn}`;
   }).join('') : `<tr><td colspan="6" class="empty-state">No BOQ loaded yet. Use Import Excel to load the Bill of Quantities.</td></tr>`;
 
   document.getElementById('content').innerHTML = `
   <div class="fbar" style="margin-bottom:14px">
     ${can('manageRegister') ? '<button class="btn btn-primary" onclick="openImportBOQ()">Import Excel</button>' : ''}
+    ${can('manageRegister') && billList.length ? `<button class="btn ${editMode?'btn-success':''}" onclick="toggleBOQEdit()" style="margin-left:6px">${editMode?'Save Changes':'Edit'}</button>` : ''}
     ${can('manageRegister') && billList.length ? '<button class="btn btn-danger" onclick="replaceBOQ()" style="margin-left:6px">Replace BOQ</button>' : ''}
+    ${editMode ? '<button class="btn" onclick="cancelBOQEdit()" style="margin-left:6px">Cancel</button>' : ''}
     ${billList.length ? `<span style="margin-left:auto;font-size:11px;color:var(--text3)">${billList.length} bills &middot; ${itemList.length} items</span>` : ''}
   </div>
+  ${boqChipsHTML}
   <div class="card"><div class="tw"><table>
-    <tr><th>Item No.</th><th>Description</th><th style="text-align:right">Qty</th><th>Unit</th><th style="text-align:right">Rate (AED)</th><th style="text-align:right">Total (AED)</th></tr>
+    <tr><th>Item No.</th><th>Description</th><th style="text-align:right">Qty</th><th>Unit</th><th style="text-align:right">Rate (AED)</th><th style="text-align:right">Total (AED)</th>${editMode?'<th></th>':''}</tr>
     ${billsHTML}
-    ${billList.length ? `<tr class="boq-grand-total"><td colspan="5" style="padding:10px 14px">CONTRACT SUM</td><td style="text-align:right;padding:10px 14px">${fmtAED(grandTotal)}</td></tr>` : ''}
+    ${billList.length ? `<tr class="boq-grand-total"><td colspan="${editMode?6:5}" style="padding:10px 14px">CONTRACT SUM</td><td style="text-align:right;padding:10px 14px">${fmtAED(grandTotal)}</td></tr>` : ''}
   </table></div></div>`;
+}
+
+function recalcBOQRow(input) {
+  const tr = input.closest('tr');
+  const inputs = tr.querySelectorAll('.boq-edit');
+  let qty = 0, rate = 0;
+  inputs.forEach(inp => {
+    if(inp.dataset.field==='qty') qty = +inp.value||0;
+    if(inp.dataset.field==='rate') rate = +inp.value||0;
+  });
+  const total = qty * rate;
+  const totalCell = tr.querySelector(`[data-total="${input.dataset.id}"]`);
+  if(totalCell) totalCell.textContent = fmtAED(total);
+}
+
+async function deleteBOQItem(id) {
+  const ok = await confirmModal('Delete this BOQ item?');
+  if(!ok) return;
+  const {error} = await sb.from('boq_items').delete().eq('id',id);
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  toast('Item deleted','success'); render();
+}
+
+async function addBOQItem(billId) {
+  const {data:bills} = await sb.from('boq_bills').select('*').eq('id',billId).single();
+  if(!bills) { toast('Bill not found','error'); return; }
+  const {data:items} = await sb.from('boq_items').select('item_no').eq('bill_id',billId).order('sort_order',{ascending:false}).limit(1);
+  let nextNo = '1';
+  if(items?.[0]?.item_no) {
+    const m = items[0].item_no.match(/^(\d+)$/);
+    if(m) nextNo = String(parseInt(m[1])+1);
+  }
+  const {error} = await sb.from('boq_items').insert({
+    bill_id: billId, item_no: nextNo, description: 'New item', qty: 0, unit: 'Item', rate: 0, total: 0,
+    sort_order: (items?.length||0)
+  });
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  toast('Item added','success'); render();
+}
+
+async function toggleBOQEdit() {
+  if(window._boqEditMode) {
+    // Collect data FIRST (before DOM is destroyed by re-render)
+    const rows = document.querySelectorAll('tr[data-id]');
+    const updates = [];
+    rows.forEach(tr => {
+      const id = tr.dataset.id;
+      if(!id) return;
+      const inputs = tr.querySelectorAll('.boq-edit');
+      if(!inputs.length) return;
+      const fields = {};
+      inputs.forEach(inp => {
+        const field = inp.dataset.field;
+        if(field==='qty'||field==='rate') fields[field] = +inp.value||0;
+        else fields[field] = inp.value.trim();
+      });
+      if(fields.description && fields.item_no) {
+        fields.total = (fields.qty||0) * (fields.rate||0);
+        updates.push(sb.from('boq_items').update(fields).eq('id',id));
+      }
+    });
+    // Exit edit mode immediately
+    window._boqEditMode = false;
+    render();
+    // Save in parallel after UI re-renders
+    const results = await Promise.allSettled(updates);
+    const saved = results.filter(r => r.status==='fulfilled' && !r.value?.error).length;
+    const failed = results.length - saved;
+    if(failed) toast('Saved '+saved+', '+failed+' failed','warning');
+    else if(saved) toast('Saved '+saved+' items','success');
+  } else {
+    window._boqEditMode = true;
+    render();
+  }
+}
+
+function cancelBOQEdit() {
+  window._boqEditMode = false;
+  render();
 }
 
 async function openImportBOQ() {
@@ -5322,7 +5437,7 @@ async function viewIPC(id) {
       const pi = itemMap[item.id]||{};
       const ctrPct = pi.contractor_pct??0;
       const csPct  = pi.consultant_pct??'';
-      return `<tr data-item-id="${item.id}" data-boq-total="${item.total}">
+      return `<tr data-item-id="${item.id}" data-boq-total="${item.total}" data-bill-id="${b.id}">
         <td class="mono" style="width:80px">${esc(item.item_no)}</td>
         <td style="min-width:200px">${esc(item.description)}</td>
         <td style="text-align:right;width:90px">${fmtAED(item.total)}</td>
@@ -5337,7 +5452,7 @@ async function viewIPC(id) {
       </tr>`;
     }).join('');
 
-    return `<tr class="boq-bill-header">
+    return `<tr class="boq-bill-header" data-bill-id="${b.id}">
       <td colspan="2" style="padding:8px 14px">${esc(b.bill_no)}. ${esc(b.title)}</td>
       <td></td>
       <td colspan="2" style="text-align:right;padding:8px 14px;font-family:monospace;font-size:11px">${fmtAED(billContrAmt)}</td>
@@ -5357,21 +5472,26 @@ async function viewIPC(id) {
   const vatAmt = nbv * vatPct / 100;
   const netCert = nbv + vatAmt;
 
-  const retEdit  = canEditConsultant ? `(<input type="number" min="0" max="100" step="0.5" id="ipc-ret-pct" value="${retPct}" style="width:40px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--red);font-size:11px" onchange="recalcIPCSummary()">%)` : `(${retPct}%)`;
-  const advEdit  = canEditConsultant ? `<input type="number" min="0" id="ipc-adv" value="${adv}" style="width:90px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--red);font-size:11px" onchange="recalcIPCSummary()">` : fmtAED(adv);
-  const vatEdit  = canEditConsultant ? `(<input type="number" min="0" max="30" step="0.5" id="ipc-vat-pct" value="${vatPct}" style="width:35px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--text2);font-size:11px" onchange="recalcIPCSummary()">%)` : `(${vatPct}%)`;
+  const retEdit  = canEditConsultant ? `(<input type="number" min="0" max="100" step="0.5" id="ipc-ret-pct" value="${retPct}" style="width:40px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--red);font-size:11px;font-family:inherit" onchange="recalcIPCSummary()">%)` : `(${retPct}%)`;
+  const advEdit  = canEditConsultant ? `<input type="number" min="0" id="ipc-adv" value="${adv}" style="width:90px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--red);font-size:11px;font-family:inherit" onchange="recalcIPCSummary()">` : fmtAED(adv);
+  const vatEdit  = canEditConsultant ? `(<input type="number" min="0" max="30" step="0.5" id="ipc-vat-pct" value="${vatPct}" style="width:35px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--text2);font-size:11px;font-family:inherit" onchange="recalcIPCSummary()">%)` : `(${vatPct}%)`;
 
   const summaryHTML = `<div class="ipc-summary" id="ipc-financial-summary">
     <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:6px">Financial Summary</div>
     <div class="ipc-row"><span class="ipc-label">Contractor Claimed</span><span class="ipc-val" id="sum-contractor">${fmtAED(grossContr)}</span></div>
     <div class="ipc-row"><span class="ipc-label">Gross Certified Amount</span><span class="ipc-val" id="sum-gross">${gross?fmtAED(gross):'&mdash;'}</span></div>
     <div class="ipc-row deduct"><span class="ipc-label">Less: Retention ${retEdit}</span><span class="ipc-val deduct" id="sum-retention">${gross?'('+fmtAED(retention)+')':'&mdash;'}</span></div>
-    <div class="ipc-row deduct"><span class="ipc-label">Less: Advance Recovery ${advEdit}</span><span class="ipc-val deduct" id="sum-advance">${adv?'('+fmtAED(adv)+')':'AED 0.00'}</span></div>
+    <div class="ipc-row deduct"><span class="ipc-label">Less: Advance Recovery ${advEdit}</span><span class="ipc-val deduct" id="sum-advance">${adv?'('+fmtAED(adv)+')':'&mdash;'}</span></div>
     <div class="ipc-row deduct"><span class="ipc-label">Less: Previously Paid</span><span class="ipc-val deduct" id="sum-prev">${prevPaid?'('+fmtAED(prevPaid)+')':'AED 0.00'}</span></div>
     <div class="ipc-row"><span class="ipc-label">Net Before VAT</span><span class="ipc-val" id="sum-net-before-vat">${gross?fmtAED(nbv):'&mdash;'}</span></div>
     <div class="ipc-row vat"><span class="ipc-label">VAT ${vatEdit}</span><span class="ipc-val vat" id="sum-vat">${gross?fmtAED(vatAmt):'&mdash;'}</span></div>
     <div class="ipc-row total"><span class="ipc-label">NET CERTIFIED</span><span class="ipc-val total" id="sum-net">${gross?fmtAED(netCert):'&mdash;'}</span></div>
   </div>`;
+
+  const ipcChipsHTML = (bills||[]).length ? `<div class="fbar" style="margin-bottom:10px">
+    <span class="chip ipc-chip active" onclick="filtIPC(this,'all')">All Bills</span>
+    ${(bills||[]).map(b=>`<span class="chip ipc-chip" onclick="filtIPC(this,'${b.id}')" title="${esc(b.bill_no+'. '+b.title)}">${esc(b.bill_no)}. ${esc(b.title.length>24?b.title.substring(0,24)+'\u2026':b.title)}</span>`).join('')}
+  </div>` : '';
 
   const headerHTML = `<div class="detail-grid">
     <div class="detail-item"><div class="detail-label">Reference</div><div class="detail-value mono" style="font-weight:600;color:var(--sand)">${esc(cert.ref_no)}</div></div>
@@ -5386,6 +5506,7 @@ async function viewIPC(id) {
     ${headerHTML}
     <div class="detail-section">
       <div class="section-header"><span class="section-title">Bill of Quantities — Progress Claims</span></div>
+      ${ipcChipsHTML}
       <div style="overflow-x:auto;max-height:380px;overflow-y:auto;border:0.5px solid var(--border);border-radius:var(--radius)">
         <table style="font-size:11px">
           <tr><th>Item No.</th><th>Description</th><th style="text-align:right">BOQ Total</th><th style="text-align:right">Contr. %</th><th style="text-align:right">Contr. Amt</th><th style="text-align:right">Consult. %</th><th style="text-align:right">Consult. Amt</th></tr>
@@ -5450,7 +5571,7 @@ function recalcIPCSummary() {
   set('sum-contractor', fmtAED(grossContr));
   set('sum-gross', gross ? fmtAED(gross) : '—');
   set('sum-retention', gross ? '('+fmtAED(retention)+')' : '—');
-  set('sum-advance', adv ? '('+fmtAED(adv)+')' : 'AED 0.00');
+  set('sum-advance', adv ? '('+fmtAED(adv)+')' : '—');
   set('sum-net-before-vat', gross ? fmtAED(nbv) : '—');
   set('sum-vat', gross ? fmtAED(vatAmt) : '—');
   set('sum-net', gross ? fmtAED(nbv + vatAmt) : '—');
@@ -5483,6 +5604,8 @@ async function saveIPCClaims(id, action) {
 }
 
 async function beginReviewIPC(id) {
+  const ok = await confirmModal('Begin review? The contractor will no longer be able to edit this application.');
+  if(!ok) return;
   const {error} = await sb.from('payment_certificates').update({status:'Under Review'}).eq('id',id);
   if(error) { toast('Error: '+error.message,'error'); return; }
   toast('Review started','success'); closeModal(); viewIPC(id);
