@@ -5080,8 +5080,8 @@ function fmtAED(n) {
 
 async function renderBOQ() {
   const [{data:bills},{data:items}] = await Promise.all([
-    sb.from('boq_bills').select('*').order('sort_order'),
-    sb.from('boq_items').select('*').order('sort_order')
+    sb.from('boq_bills').select('*').order('sort_order').order('created_at'),
+    sb.from('boq_items').select('*').order('sort_order').order('created_at')
   ]);
   const billList = bills||[];
   const itemList = items||[];
@@ -5475,8 +5475,8 @@ async function viewIPC(id) {
   const [{data:cert},{data:pitems},{data:bills},{data:boqItems}] = await Promise.all([
     sb.from('payment_certificates').select('*').eq('id',id).single(),
     sb.from('payment_certificate_items').select('*').eq('cert_id',id),
-    sb.from('boq_bills').select('*').order('sort_order'),
-    sb.from('boq_items').select('*').order('sort_order')
+    sb.from('boq_bills').select('*').order('sort_order').order('created_at'),
+    sb.from('boq_items').select('*').order('sort_order').order('created_at')
   ]);
   if(!cert) { toast('Certificate not found','error'); return; }
 
@@ -5587,6 +5587,9 @@ function ipcActionButtons(cert, id) {
   const role = currentProfile?.role;
   const s = cert.status;
   let btns = `<button class="btn" onclick="closeModal()">Close</button>`;
+  const canDelete = role==='developer' || (s==='Draft' && role==='contractor');
+  if(canDelete)
+    btns = `<button class="btn btn-danger" onclick="deleteIPC('${id}')" style="margin-right:auto">Delete</button>` + btns;
   if(s==='Draft' && (role==='contractor'||role==='developer'))
     btns = `<button class="btn btn-primary" onclick="saveIPCClaims('${id}','submit')">Save &amp; Submit</button>
             <button class="btn" onclick="saveIPCClaims('${id}','draft')">Save Draft</button>` + btns;
@@ -5600,6 +5603,14 @@ function ipcActionButtons(cert, id) {
   if(s==='Certified' && role==='developer')
     btns = `<button class="btn btn-primary" onclick="openRecordPayment('${id}')">Record Payment</button>` + btns;
   return btns;
+}
+
+async function deleteIPC(id) {
+  const ok = await confirmModal('Permanently delete this payment application? This cannot be undone.');
+  if(!ok) return;
+  const {error} = await sb.from('payment_certificates').delete().eq('id',id);
+  if(error) { toast('Error deleting IPC: '+error.message,'error'); return; }
+  toast('Application deleted','success'); closeModal(); render();
 }
 
 function recalcIPCRow(input, party) {
