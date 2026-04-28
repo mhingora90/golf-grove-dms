@@ -5461,30 +5461,51 @@ async function openNewIPC() {
 
   // Calculate previously_paid from all prior certified/paid certs
   const {data:priorCerts} = await sb.from('payment_certificates')
-    .select('id,retention_pct,advance_recovery,vat_pct').in('status',['Certified','Paid']);
+    .select('id,retention_pct,advance_recovery_pct,vat_pct').in('status',['Certified','Paid']);
   let prevPaid = 0;
   for(const pc of priorCerts||[]) {
     const {data:pit} = await sb.from('payment_certificate_items').select('consultant_amount').eq('cert_id',pc.id);
     const gross = (pit||[]).reduce((s,i)=>s+(+i.consultant_amount||0),0);
     const ret = gross * (+pc.retention_pct||10) / 100;
-    const adv = +pc.advance_recovery||0;
-    const nbv = gross - ret - adv;
+    const advRecovery = gross * (+pc.advance_recovery_pct||10) / 100;
+    const nbv = gross - ret - advRecovery;
     prevPaid += nbv + nbv * (+pc.vat_pct||5) / 100;
   }
+
+  // Get defaults from last IPC or use contract defaults
+  const {data:lastIPC} = await sb.from('payment_certificates').select('retention_pct,advance_recovery_pct,mobilisation_advance,vat_pct').order('created_at',{ascending:false}).limit(1);
+  const defRet = lastIPC?.[0]?.retention_pct ?? 10;
+  const defAdv = lastIPC?.[0]?.advance_recovery_pct ?? 10;
+  const defMob = lastIPC?.[0]?.mobilisation_advance ?? 0;
+  const defVat = lastIPC?.[0]?.vat_pct ?? 5;
 
   openModal('New Payment Application', `
     <div class="detail-grid">
       <div class="detail-item"><div class="detail-label">Reference</div><div class="detail-value mono" style="color:var(--sand);font-weight:600">${esc(refNo)}</div></div>
       <div class="detail-item"><div class="detail-label">Previously Paid (cumulative)</div><div class="detail-value">${fmtAED(prevPaid)}</div></div>
     </div>
-    <p style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.6">This will create a new Draft application. Enter your percentage claims against each BOQ item before submitting to the consultant.</p>`,
+    <div class="frow" style="margin-top:12px">
+      <div class="form-group"><label class="form-label-dark">Retention (%)</label><input type="number" min="0" max="100" step="0.5" class="form-control" id="ipc-new-ret" value="${defRet}" /></div>
+      <div class="form-group"><label class="form-label-dark">Advance Recovery (%)</label><input type="number" min="0" max="100" step="0.5" class="form-control" id="ipc-new-adv" value="${defAdv}" /></div>
+    </div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Mobilisation Advance (AED)</label><input type="number" min="0" class="form-control" id="ipc-new-mob" value="${defMob}" /></div>
+      <div class="form-group"><label class="form-label-dark">VAT (%)</label><input type="number" min="0" max="30" step="0.5" class="form-control" id="ipc-new-vat" value="${defVat}" /></div>
+    </div>
+    <p style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.6">These contract-level settings apply to all applications. Enter your percentage claims against each BOQ item before submitting to the consultant.</p>`,
     `<button class="btn btn-primary" onclick="doNewIPC('${esc(refNo)}',${nextNo},${prevPaid})">Create Application</button>
      <button class="btn" onclick="closeModal()">Cancel</button>`);
 }
 
 async function doNewIPC(refNo, certNo, prevPaid) {
+  const retPct = +(document.getElementById('ipc-new-ret')?.value ?? 10);
+  const advPct = +(document.getElementById('ipc-new-adv')?.value ?? 10);
+  const mobAmt = +(document.getElementById('ipc-new-mob')?.value ?? 0);
+  const vatPct = +(document.getElementById('ipc-new-vat')?.value ?? 5);
+
   const {data:cert, error:certErr} = await sb.from('payment_certificates').insert({
-    cert_no:certNo, ref_no:refNo, status:'Draft', previously_paid:prevPaid
+    cert_no:certNo, ref_no:refNo, status:'Draft', previously_paid:prevPaid,
+    retention_pct:retPct, advance_recovery_pct:advPct, mobilisation_advance:mobAmt, vat_pct:vatPct
   }).select('id').single();
   if(certErr) { toast('Error creating IPC: '+certErr.message,'error'); return; }
 
@@ -5510,8 +5531,6 @@ async function viewIPC(id) {
   const canEditContractor = (role==='contractor'||role==='developer') && (cert.status==='Draft'||cert.status==='Submitted');
   // Consultant/developer can edit certified %s when Under Review
   const canEditConsultant = (role==='consultant'||role==='developer') && cert.status==='Under Review';
-  // Financial params (retention, advance recovery, VAT, prev paid, mobilisation) editable in Draft or Under Review
-  const canEditFinancials = (role==='consultant'||role==='developer') && (cert.status==='Draft'||cert.status==='Under Review');
 
   const sortedBills = (bills||[]).sort((a,b)=>(+a.bill_no||0)-(+b.bill_no||0)||a.bill_no.localeCompare(b.bill_no));
 
@@ -5555,40 +5574,35 @@ async function viewIPC(id) {
 
   // Financial summary calcs
   const allPitems = (pitems||[]);
-  const gross = allPitems.reduce((s,i)=>s+(+i.consultant_amount||0),0);
   const grossContr = allPitems.reduce((s,i)=>s+(+i.contractor_amount||0),0);
+  const gross = allPitems.reduce((s,i)=>s+(+i.consultant_amount||0),0);
   const retPct = +cert.retention_pct||10;
   const advPct = +cert.advance_recovery_pct||10;
   const vatPct = +cert.vat_pct||5;
   const mobAdvance = +cert.mobilisation_advance||0;
-  const valueOfWorks = +cert.value_of_works||gross;
-  const pcPsAdjustments = +cert.pc_ps_adjustments||0;
+  const pcPsAdjustments = 0;
+  // Value of Works = consultant gross (auto-calculated, not editable)
+  const valueOfWorks = gross;
   const valueOfWorksCompleted = valueOfWorks + pcPsAdjustments;
-  const advancePayment = +cert.advance_payment||0;
-  const retention = valueOfWorksCompleted * retPct / 100;
-  const advanceRecovery = valueOfWorksCompleted * advPct / 100;
-  const subTotal = valueOfWorksCompleted + advancePayment - retention - advanceRecovery;
+  const advancePayment = 0;
+  // Retention & Advance Recovery: use consultant amount if available, else contractor amount
+  const base = gross > 0 ? gross : grossContr;
+  const retention = base * retPct / 100;
+  const advanceRecovery = base * advPct / 100;
+  const subTotal = valueOfWorksCompleted + advancePayment - retention - advanceRecovery - mobAdvance - (+cert.previously_paid||0);
   const vatAmt = subTotal * vatPct / 100;
   const netCert = subTotal + vatAmt;
-
-  const retEdit  = canEditFinancials ? `(<input type="number" min="0" max="100" step="0.5" id="ipc-ret-pct" value="${retPct}" style="width:40px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--red);font-size:11px;font-family:inherit" onchange="recalcIPCSummary()">%)` : `(${retPct}%)`;
-  const advEdit  = canEditFinancials ? `(<input type="number" min="0" max="100" step="0.5" id="ipc-adv-pct" value="${advPct}" style="width:40px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--red);font-size:11px;font-family:inherit" onchange="recalcIPCSummary()">%)` : `(${advPct}%)`;
-  const mobEdit = canEditFinancials ? `<input type="number" min="0" id="ipc-mobilisation" value="${mobAdvance}" style="width:90px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--red);font-size:11px;font-family:inherit" onchange="recalcIPCSummary()">` : fmtAED(mobAdvance);
-  const vatEdit  = canEditFinancials ? `(<input type="number" min="0" max="30" step="0.5" id="ipc-vat-pct" value="${vatPct}" style="width:35px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--text2);font-size:11px;font-family:inherit" onchange="recalcIPCSummary()">%)` : `(${vatPct}%)`;
 
   const summaryHTML = `<div class="ipc-summary" id="ipc-financial-summary">
     <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:6px">Financial Summary</div>
     <div class="ipc-row"><span class="ipc-label">Contractor Claimed</span><span class="ipc-val" id="sum-contractor">${fmtAED(grossContr)}</span></div>
-    <div class="ipc-row"><span class="ipc-label">Gross Certified Amount</span><span class="ipc-val" id="sum-gross">${gross?fmtAED(gross):'&mdash;'}</span></div>
-    <div class="ipc-row"><span class="ipc-label">Value of Works Completed ${canEditFinancials?`<input type="number" min="0" id="ipc-value-works" value="${valueOfWorks}" style="width:90px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--charcoal);font-size:11px;font-family:inherit" onchange="recalcIPCSummary()">`:`${fmtAED(valueOfWorks)}`}</span><span class="ipc-val" id="sum-value-works">${fmtAED(valueOfWorks)}</span></div>
-    <div class="ipc-row"><span class="ipc-label">PC &amp; PS Adjustments ${canEditFinancials?`<input type="number" id="ipc-pc-ps" value="${pcPsAdjustments}" style="width:90px;text-align:right;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--charcoal);font-size:11px;font-family:inherit" onchange="recalcIPCSummary()">`:`${fmtAED(pcPsAdjustments)}`}</span><span class="ipc-val" id="sum-pc-ps">${fmtAED(pcPsAdjustments)}</span></div>
-    <div class="ipc-row deduct"><span class="ipc-label">Less: Retention ${retEdit}</span><span class="ipc-val deduct" id="sum-retention">${valueOfWorksCompleted?'('+fmtAED(retention)+')':'&mdash;'}</span></div>
-    <div class="ipc-row deduct"><span class="ipc-label">Less: Advance Recovery ${advEdit}</span><span class="ipc-val deduct" id="sum-advance">${valueOfWorksCompleted?'('+fmtAED(advanceRecovery)+')':'&mdash;'}</span></div>
-    <div class="ipc-row deduct"><span class="ipc-label">Less: Mobilisation Advance ${mobEdit}</span><span class="ipc-val deduct" id="sum-mobilisation">${mobAdvance?'('+fmtAED(mobAdvance)+')':'&mdash;'}</span></div>
-    <div class="ipc-row deduct"><span class="ipc-label">Less: Previously Paid <span id="sum-prev-label">${fmtAED(+cert.previously_paid||0)}</span></span><span class="ipc-val deduct" id="sum-prev">${(+cert.previously_paid||0)?'('+fmtAED(+cert.previously_paid||0)+')':'&mdash;'}</span></div>
-    <div class="ipc-row"><span class="ipc-label">Net Before VAT</span><span class="ipc-val" id="sum-net-before-vat">${valueOfWorksCompleted?fmtAED(subTotal):'&mdash;'}</span></div>
-    <div class="ipc-row vat"><span class="ipc-label">VAT ${vatEdit}</span><span class="ipc-val vat" id="sum-vat">${valueOfWorksCompleted?fmtAED(vatAmt):'&mdash;'}</span></div>
-    <div class="ipc-row total"><span class="ipc-label">NET CERTIFIED</span><span class="ipc-val total" id="sum-net">${valueOfWorksCompleted?fmtAED(netCert):'&mdash;'}</span></div>
+    <div class="ipc-row"><span class="ipc-label">Value of Works Certified</span><span class="ipc-val" id="sum-gross">${gross?fmtAED(gross):'&mdash;'}</span></div>
+    <div class="ipc-row deduct"><span class="ipc-label">Less: Retention (${retPct}%)</span><span class="ipc-val deduct" id="sum-retention">${base?'('+fmtAED(retention)+')':'&mdash;'}</span></div>
+    <div class="ipc-row deduct"><span class="ipc-label">Less: Advance Recovery (${advPct}%)</span><span class="ipc-val deduct" id="sum-advance">${base?'('+fmtAED(advanceRecovery)+')':'&mdash;'}</span></div>
+    <div class="ipc-row deduct"><span class="ipc-label">Less: Previously Paid</span><span class="ipc-val deduct" id="sum-prev">${(+cert.previously_paid||0)?'('+fmtAED(+cert.previously_paid||0)+')':'&mdash;'}</span></div>
+    <div class="ipc-row"><span class="ipc-label">Net Before VAT</span><span class="ipc-val" id="sum-net-before-vat">${base?fmtAED(subTotal):'&mdash;'}</span></div>
+    <div class="ipc-row vat"><span class="ipc-label">VAT (${vatPct}%)</span><span class="ipc-val vat" id="sum-vat">${base?fmtAED(vatAmt):'&mdash;'}</span></div>
+    <div class="ipc-row total"><span class="ipc-label">NET CERTIFIED</span><span class="ipc-val total" id="sum-net">${base?fmtAED(netCert):'&mdash;'}</span></div>
   </div>`;
 
   const ipcChipsHTML = (bills||[]).length ? `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
@@ -5677,52 +5691,29 @@ function recalcIPCSummary() {
   const cert = window._ipcCert||{};
   const grossContr = pitems.reduce((s,i)=>s+(+i.contractor_amount||0),0);
   const gross = pitems.reduce((s,i)=>s+(+i.consultant_amount||0),0);
-  const retPct = +(document.getElementById('ipc-ret-pct')?.value ?? cert.retention_pct ?? 10);
-  const advPct = +(document.getElementById('ipc-adv-pct')?.value ?? cert.advance_recovery_pct ?? 10);
-  const vatPct = +(document.getElementById('ipc-vat-pct')?.value ?? cert.vat_pct ?? 5);
-  const mobAdvance = +(document.getElementById('ipc-mobilisation')?.value ?? cert.mobilisation_advance ?? 0);
-  const valueOfWorks = +(document.getElementById('ipc-value-works')?.value ?? cert.value_of_works ?? gross);
-  const pcPsAdjustments = +(document.getElementById('ipc-pc-ps')?.value ?? cert.pc_ps_adjustments ?? 0);
-  const valueOfWorksCompleted = valueOfWorks + pcPsAdjustments;
-  const advancePayment = +cert.advance_payment||0;
-  const retention = valueOfWorksCompleted * retPct / 100;
-  const advanceRecovery = valueOfWorksCompleted * advPct / 100;
-  const subTotal = valueOfWorksCompleted + advancePayment - retention - advanceRecovery - mobAdvance - (+cert.previously_paid||0);
+  const retPct = +cert.retention_pct||10;
+  const advPct = +cert.advance_recovery_pct||10;
+  const vatPct = +cert.vat_pct||5;
+  const mobAdvance = +cert.mobilisation_advance||0;
+  const base = gross > 0 ? gross : grossContr;
+  const retention = base * retPct / 100;
+  const advanceRecovery = base * advPct / 100;
+  const subTotal = gross + 0 - retention - advanceRecovery - mobAdvance - (+cert.previously_paid||0);
   const vatAmt = subTotal * vatPct / 100;
   const netCert = subTotal + vatAmt;
   const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
   set('sum-contractor', fmtAED(grossContr));
   set('sum-gross', gross ? fmtAED(gross) : '—');
-  set('sum-value-works', valueOfWorks ? fmtAED(valueOfWorks) : '—');
-  set('sum-pc-ps', pcPsAdjustments ? fmtAED(pcPsAdjustments) : '—');
-  set('sum-retention', valueOfWorksCompleted ? '('+fmtAED(retention)+')' : '—');
-  set('sum-advance', valueOfWorksCompleted ? '('+fmtAED(advanceRecovery)+')' : '—');
-  set('sum-mobilisation', mobAdvance ? '('+fmtAED(mobAdvance)+')' : '—');
+  set('sum-retention', base ? '('+fmtAED(retention)+')' : '—');
+  set('sum-advance', base ? '('+fmtAED(advanceRecovery)+')' : '—');
   set('sum-prev', (+cert.previously_paid||0) ? '('+fmtAED(+cert.previously_paid||0)+')' : '—');
-  set('sum-net-before-vat', valueOfWorksCompleted ? fmtAED(subTotal) : '—');
-  set('sum-vat', valueOfWorksCompleted ? fmtAED(vatAmt) : '—');
-  set('sum-net', valueOfWorksCompleted ? fmtAED(netCert) : '—');
+  set('sum-net-before-vat', base ? fmtAED(subTotal) : '—');
+  set('sum-vat', base ? fmtAED(vatAmt) : '—');
+  set('sum-net', base ? fmtAED(netCert) : '—');
 }
 
 async function saveIPCClaims(id, action) {
   const cert = window._ipcCert||{};
-  // Save financial params from inputs
-  const retPct = +(document.getElementById('ipc-ret-pct')?.value ?? cert.retention_pct ?? 10);
-  const advPct = +(document.getElementById('ipc-adv-pct')?.value ?? cert.advance_recovery_pct ?? 10);
-  const vatPct = +(document.getElementById('ipc-vat-pct')?.value ?? cert.vat_pct ?? 5);
-  const mobAdvance = +(document.getElementById('ipc-mobilisation')?.value ?? cert.mobilisation_advance ?? 0);
-  const valueOfWorks = +(document.getElementById('ipc-value-works')?.value ?? cert.value_of_works ?? 0);
-  const pcPsAdjustments = +(document.getElementById('ipc-pc-ps')?.value ?? cert.pc_ps_adjustments ?? 0);
-
-  // Save financial params to DB
-  const {error: finErr} = await sb.from('payment_certificates')
-    .update({
-      retention_pct:retPct, advance_recovery_pct:advPct, vat_pct:vatPct,
-      mobilisation_advance:mobAdvance, value_of_works:valueOfWorks, pc_ps_adjustments:pcPsAdjustments,
-      previously_paid:cert.previously_paid||0
-    })
-    .eq('id',id);
-  if(finErr) { toast('Error saving financial params: '+finErr.message,'error'); return; }
 
   // Save item-level claims
   const rows = document.querySelectorAll('tr[data-item-id]');
@@ -5767,6 +5758,7 @@ async function retractIPC(id) {
 }
 
 async function saveIPCCertification(id, action) {
+  const cert = window._ipcCert||{};
   const rows = document.querySelectorAll('tr[data-item-id]');
   for(const tr of rows) {
     const itemId = tr.dataset.itemId;
@@ -5778,20 +5770,17 @@ async function saveIPCCertification(id, action) {
       .update({consultant_pct:pct, consultant_amount:boqTotal*pct/100})
       .eq('cert_id',id).eq('boq_item_id',itemId);
   }
-  const retPct = +(document.getElementById('ipc-ret-pct')?.value ?? window._ipcCert?.retention_pct ?? 10);
-  const adv    = +(document.getElementById('ipc-adv')?.value ?? 0);
-  const vatPct = +(document.getElementById('ipc-vat-pct')?.value ?? window._ipcCert?.vat_pct ?? 5);
 
   if(action==='certify') {
     const {error} = await sb.from('payment_certificates').update({
-      status:'Certified', retention_pct:retPct, advance_recovery:adv, vat_pct:vatPct,
+      status:'Certified',
       certified_by_name: currentProfile?.full_name||currentUser?.email,
       certified_date: new Date().toISOString()
     }).eq('id',id);
     if(error) { toast('Error: '+error.message,'error'); return; }
     toast('IPC certified and issued','success'); closeModal(); render();
   } else {
-    await sb.from('payment_certificates').update({status:'Submitted',retention_pct:retPct,advance_recovery:adv,vat_pct:vatPct}).eq('id',id);
+    await sb.from('payment_certificates').update({status:'Submitted'}).eq('id',id);
     toast('Application returned to contractor','info'); closeModal(); render();
   }
 }
