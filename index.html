@@ -5596,8 +5596,8 @@ async function viewIPC(id) {
   const ctrVat = ctrNetBeforeVat * vatPct / 100;
   const ctrNet = ctrNetBeforeVat + ctrVat;
 
-  // When consultant has certified, show comparison table
-  const hasConsultant = gross > 0;
+  // When consultant has entered amounts OR status allows consultant editing, show comparison table
+  const hasConsultant = gross > 0 || canEditConsultant;
   const compRow = (label, ctrVal, consVal, ded, id) => {
     const ctr = ded ? '('+fmtAED(ctrVal)+')' : fmtAED(ctrVal);
     const cons = ded ? '('+fmtAED(consVal)+')' : fmtAED(consVal);
@@ -5752,15 +5752,20 @@ function recalcIPCSummary() {
   const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
   const hasConsultant = gross > 0;
   if(hasConsultant) {
-    set('sum-contractor', fmtAED(grossContr));
-    set('sum-gross', fmtAED(gross));
-    set('sum-retention', '('+fmtAED(consRetention)+')');
-    set('sum-advance', '('+fmtAED(consAdvRecovery)+')');
-    set('sum-net-before-vat', fmtAED(consNetBeforeVat));
-    set('sum-vat', fmtAED(consVat));
-    set('NET-CERTIFIED', fmtAED(consNet)+' \u2713');
+    // Comparison mode: update both columns
+    const setPair = (id, ctrVal, consVal) => {
+      const el = document.getElementById(id);
+      if(el) { const vals = el.querySelectorAll('.ipc-val'); if(vals[0]) vals[0].textContent=ctrVal; if(vals[1]) vals[1].textContent=consVal; };
+    };
+    setPair('sum-gross', fmtAED(grossContr), fmtAED(gross));
+    setPair('sum-retention', '('+fmtAED(ctrRetention)+')', '('+fmtAED(consRetention)+')');
+    setPair('sum-advance', '('+fmtAED(ctrAdvRecovery)+')', '('+fmtAED(consAdvRecovery)+')');
+    setPair('sum-prev', '('+fmtAED(prevPaid)+')', '('+fmtAED(prevPaid)+')');
+    setPair('sum-net-before-vat', fmtAED(ctrNetBeforeVat), fmtAED(consNetBeforeVat));
+    setPair('sum-vat', fmtAED(ctrVat), fmtAED(consVat));
+    setPair('NET-CERTIFIED', fmtAED(ctrNet), fmtAED(consNet)+' ✓');
   } else {
-    set('sum-contractor', fmtAED(grossContr));
+    // Single column mode
     set('sum-gross', grossContr ? fmtAED(grossContr) : '—');
     set('sum-retention', grossContr ? '('+fmtAED(ctrRetention)+')' : '—');
     set('sum-advance', grossContr ? '('+fmtAED(ctrAdvRecovery)+')' : '—');
