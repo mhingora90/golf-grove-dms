@@ -5197,18 +5197,43 @@ async function deleteBOQItem(id) {
   toast('Item deleted','success'); render();
 }
 
+async function savePendingBOQEdits() {
+  const updates = [];
+  document.querySelectorAll('tr[data-id]').forEach(tr => {
+    const id = tr.dataset.id;
+    if(!id) return;
+    const inputs = tr.querySelectorAll('.boq-edit');
+    if(!inputs.length) return;
+    const fields = {};
+    inputs.forEach(inp => {
+      if(inp.dataset.field==='qty'||inp.dataset.field==='rate') fields[inp.dataset.field] = +inp.value||0;
+      else fields[inp.dataset.field] = inp.value.trim();
+    });
+    if(fields.description && fields.item_no) {
+      fields.total = (fields.qty||0) * (fields.rate||0);
+      updates.push(sb.from('boq_items').update(fields).eq('id',id));
+    }
+  });
+  if(updates.length) await Promise.allSettled(updates);
+}
+
 async function addBOQItem(billId) {
   const {data:bills} = await sb.from('boq_bills').select('*').eq('id',billId).single();
   if(!bills) { toast('Bill not found','error'); return; }
-  const {data:items} = await sb.from('boq_items').select('item_no').eq('bill_id',billId).order('sort_order',{ascending:false}).limit(1);
+  const [{data:lastBillItem},{data:globalMax}] = await Promise.all([
+    sb.from('boq_items').select('item_no').eq('bill_id',billId).order('sort_order',{ascending:false}).limit(1),
+    sb.from('boq_items').select('sort_order').order('sort_order',{ascending:false}).limit(1)
+  ]);
   let nextNo = '1';
-  if(items?.[0]?.item_no) {
-    const m = items[0].item_no.match(/^(\d+)$/);
+  if(lastBillItem?.[0]?.item_no) {
+    const m = lastBillItem[0].item_no.match(/^(\d+)$/);
     if(m) nextNo = String(parseInt(m[1])+1);
   }
+  const nextSortOrder = ((globalMax?.[0]?.sort_order)??-1) + 1;
+  await savePendingBOQEdits();
   const {error} = await sb.from('boq_items').insert({
     bill_id: billId, item_no: nextNo, description: 'New item', qty: 0, unit: 'Item', rate: 0, total: 0,
-    sort_order: (items?.length||0)
+    sort_order: nextSortOrder
   });
   if(error) { toast('Error: '+error.message,'error'); return; }
   toast('Item added','success'); render();
@@ -5373,6 +5398,7 @@ async function doAddBill() {
   const sortOrder = ((existing?.[0]?.sort_order)??-1) + 1;
   const {error} = await sb.from('boq_bills').insert({bill_no:billNo, title, sort_order:sortOrder});
   if(error) { toast('Error adding bill: '+error.message,'error'); return; }
+  await savePendingBOQEdits();
   toast(`Bill ${billNo} added`,'success'); closeModal(); render();
 }
 
