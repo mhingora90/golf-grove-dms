@@ -458,6 +458,10 @@ textarea.form-control{resize:vertical;min-height:70px}
       <span class="nav-badge" id="nb-punch">0</span>
     </div>
     <div class="sb-section">Finance</div>
+    <div class="nav-item" id="n-finance" onclick="nav('finance',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M2 12V6l6-4 6 4v6" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M6 16v-5h4v5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M2 16h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Finance Overview
+    </div>
     <div class="nav-item" id="n-ipc" onclick="nav('ipc',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 6h3M4 9h2M9 6h3M9 9h2" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><path d="M1 5h14" stroke="currentColor" stroke-width="1"/></svg>
       Payment Certificates
@@ -623,13 +627,13 @@ async function loadApp(user) {
   if(dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   // Restore page from URL hash, or default to dash
   const hash = location.hash.replace('#','');
-  const defaultPage = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq'].includes(hash) ? hash : 'dash';
+  const defaultPage = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq','finance'].includes(hash) ? hash : 'dash';
   const navEl = document.getElementById('n-'+defaultPage);
   nav(defaultPage, navEl);
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview'};
 
 function canCreateOnPage(page) {
   if(page==='draw') return can('upload');
@@ -693,6 +697,7 @@ async function render() {
   else if(currentPage==='users') await renderUsers();
   else if(currentPage==='ipc') await renderIPC();
   else if(currentPage==='boq') await renderBOQ();
+  else if(currentPage==='finance') await renderFinance();
   await updateBadges();
 }
 
@@ -5914,6 +5919,323 @@ async function doRecordPayment(id) {
     }
   });
 })();
+
+// ─── FINANCE OVERVIEW ────────────────────────────────────────────
+async function renderFinance() {
+  document.getElementById('content').innerHTML = `<div class="loading"><div class="spinner"></div>Loading financial data…</div>`;
+
+  const [{data:boqItems},{data:certs},{data:allItems}] = await Promise.all([
+    sb.from('boq_items').select('total'),
+    sb.from('payment_certificates').select('*').order('cert_no'),
+    sb.from('payment_certificate_items').select('cert_id,contractor_amount,consultant_amount'),
+  ]);
+
+  const contractSum = (boqItems||[]).reduce((s,i)=>s+(+i.total||0),0);
+  const doneCerts   = (certs||[]).filter(c=>c.status==='Certified'||c.status==='Paid');
+  const paidCerts   = (certs||[]).filter(c=>c.status==='Paid');
+
+  // Build per-cert aggregates
+  const certAmt = {}; // cert_id → {claimed, certified}
+  for(const it of allItems||[]) {
+    if(!certAmt[it.cert_id]) certAmt[it.cert_id]={claimed:0,certified:0};
+    certAmt[it.cert_id].claimed   += +it.contractor_amount||0;
+    certAmt[it.cert_id].certified += +it.consultant_amount||0;
+  }
+
+  function netOfCert(c) {
+    const gross   = certAmt[c.id]?.certified||0;
+    const ret     = gross * (+c.retention_pct||0) / 100;
+    const adv     = gross * (+c.advance_recovery_pct||0) / 100;
+    const mob     = +c.mobilisation_advance||0;
+    const prev    = +c.previously_paid||0;
+    const nbv     = gross - ret - adv - mob - prev;
+    return nbv + nbv * (+c.vat_pct||0) / 100;
+  }
+
+  let totalCertified=0, totalPaid=0, totalRetention=0, totalAdvRecovered=0;
+  for(const c of doneCerts) {
+    const gross = certAmt[c.id]?.certified||0;
+    totalCertified += gross;
+    totalRetention += gross * (+c.retention_pct||0)/100;
+    totalAdvRecovered += gross * (+c.advance_recovery_pct||0)/100;
+  }
+  for(const c of paidCerts) totalPaid += netOfCert(c);
+
+  const mobAdvance = (certs||[]).reduce((s,c)=>Math.max(s,+c.mobilisation_advance||0),0);
+  const pctComplete = contractSum>0 ? (totalCertified/contractSum*100) : 0;
+  const outstanding = totalCertified - totalRetention - totalAdvRecovered - totalPaid;
+
+  // ── Summary strip ───────────────────────────────────────────────
+  const summaryHTML = `
+  <div class="module-bar" style="flex-wrap:wrap;gap:10px;margin-bottom:20px">
+    <div class="module-stat" style="flex:1;min-width:140px">
+      <div class="module-stat-val" style="color:var(--sand)">${fmtAED(contractSum)}</div>
+      <div class="module-stat-label">Contract Sum</div>
+    </div>
+    <div class="module-stat" style="flex:1;min-width:140px">
+      <div class="module-stat-val">${fmtAED(totalCertified)}</div>
+      <div class="module-stat-label">Total Certified (Gross)</div>
+    </div>
+    <div class="module-stat" style="flex:1;min-width:140px">
+      <div class="module-stat-val" style="color:var(--green)">${fmtAED(totalPaid)}</div>
+      <div class="module-stat-label">Total Paid (Net)</div>
+    </div>
+    <div class="module-stat" style="flex:1;min-width:140px">
+      <div class="module-stat-val ${outstanding>0?'warn':''}">${fmtAED(Math.max(0,outstanding))}</div>
+      <div class="module-stat-label">Outstanding (Certified–Paid)</div>
+    </div>
+    <div class="module-stat" style="flex:1;min-width:140px">
+      <div class="module-stat-val">${fmtAED(totalRetention)}</div>
+      <div class="module-stat-label">Retention Held</div>
+    </div>
+    <div class="module-stat" style="flex:1;min-width:140px">
+      <div class="module-stat-val">${pctComplete.toFixed(1)}%</div>
+      <div class="module-stat-label">% Certified vs Contract</div>
+    </div>
+  </div>
+  <div class="card" style="padding:14px 18px;margin-bottom:20px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span style="font-size:11px;font-weight:500;color:var(--charcoal)">Contract Progress</span>
+      <span style="font-size:11px;color:var(--text2)">${fmtAED(totalCertified)} of ${fmtAED(contractSum)}</span>
+    </div>
+    <div style="height:10px;background:var(--bg3);border-radius:5px;overflow:hidden">
+      <div style="height:100%;width:${Math.min(pctComplete,100).toFixed(1)}%;background:var(--green);border-radius:5px;transition:width .4s"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--text3)">
+      <span>0</span><span>${fmtAED(contractSum)} Contract Sum</span>
+    </div>
+  </div>`;
+
+  // ── Monthly bar chart ───────────────────────────────────────────
+  const monthMap = {}; // 'YYYY-MM' → {claimed, certified, paid}
+  function ensureMonth(ym) { if(!monthMap[ym]) monthMap[ym]={claimed:0,certified:0,paid:0}; }
+  for(const c of certs||[]) {
+    const a = certAmt[c.id]||{claimed:0,certified:0};
+    if(c.submitted_date) { const ym=c.submitted_date.slice(0,7); ensureMonth(ym); monthMap[ym].claimed+=a.claimed; }
+    if(c.certified_date) { const ym=c.certified_date.slice(0,7); ensureMonth(ym); monthMap[ym].certified+=a.certified; }
+    if(c.paid_date)      { const ym=c.paid_date.slice(0,7);      ensureMonth(ym); monthMap[ym].paid+=netOfCert(c); }
+  }
+  const months = Object.keys(monthMap).sort();
+  const barChartHTML = months.length < 1 ? '' : (()=>{
+    const maxVal = Math.max(...months.map(m=>Math.max(monthMap[m].claimed,monthMap[m].certified,monthMap[m].paid)),1);
+    const BAR_W=18, BAR_GAP=4, GROUP_W=BAR_W*3+BAR_GAP*2, GROUP_GAP=20;
+    const svgW = months.length*(GROUP_W+GROUP_GAP)+60;
+    const svgH = 180;
+    const plotH = 130;
+    const plotTop = 16;
+
+    // Y-axis labels
+    const ySteps = 4;
+    const yLabels = Array.from({length:ySteps+1},(_,i)=>{
+      const v = maxVal*(ySteps-i)/ySteps;
+      return `<text x="52" y="${plotTop+plotH*i/ySteps+4}" text-anchor="end" font-size="9" fill="#B4A88C">${v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v.toFixed(0)}</text>
+      <line x1="56" y1="${plotTop+plotH*i/ySteps}" x2="${svgW}" y2="${plotTop+plotH*i/ySteps}" stroke="#E8E4DC" stroke-width="0.5"/>`;
+    }).join('');
+
+    const bars = months.map((m,mi)=>{
+      const x0 = 60 + mi*(GROUP_W+GROUP_GAP);
+      const d = monthMap[m];
+      const bh = (v)=>Math.max(0,(v/maxVal)*plotH);
+      const bar = (x,h,color)=>`<rect x="${x}" y="${plotTop+plotH-h}" width="${BAR_W}" height="${h}" rx="2" fill="${color}"/>`;
+      const label = new Date(m+'-01').toLocaleDateString('en-GB',{month:'short',year:'2-digit'});
+      return bar(x0, bh(d.claimed), '#C4A882')
+           + bar(x0+BAR_W+BAR_GAP, bh(d.certified), '#3B6D11')
+           + bar(x0+(BAR_W+BAR_GAP)*2, bh(d.paid), '#185FA5')
+           + `<text x="${x0+GROUP_W/2}" y="${plotTop+plotH+14}" text-anchor="middle" font-size="9" fill="#7A6E5F">${label}</text>`;
+    }).join('');
+
+    return `<div class="card" style="padding:16px 18px;margin-bottom:20px;overflow-x:auto">
+      <div style="font-size:12px;font-weight:500;color:var(--charcoal);margin-bottom:12px">Monthly Claimed / Certified / Paid</div>
+      <div style="display:flex;gap:16px;margin-bottom:10px;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><span style="width:10px;height:10px;border-radius:2px;background:var(--sand-light);flex-shrink:0"></span>Claimed</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><span style="width:10px;height:10px;border-radius:2px;background:var(--green);flex-shrink:0"></span>Certified</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><span style="width:10px;height:10px;border-radius:2px;background:var(--blue);flex-shrink:0"></span>Paid</span>
+      </div>
+      <svg width="${svgW}" height="${svgH+30}" style="min-width:${svgW}px;display:block">
+        ${yLabels}${bars}
+      </svg>
+    </div>`;
+  })();
+
+  // ── S-curve ─────────────────────────────────────────────────────
+  const sCurveHTML = (()=>{
+    const pts = doneCerts
+      .filter(c=>c.certified_date)
+      .sort((a,b)=>a.certified_date.localeCompare(b.certified_date));
+    if(!pts.length) return '';
+    let cum = 0;
+    const points = pts.map(c=>{ cum+=certAmt[c.id]?.certified||0; return {date:c.certified_date.slice(0,7),cum,label:c.ref_no}; });
+    const maxCum = Math.max(cum,1);
+    const W=560, H=130, PAD_L=60, PAD_B=24, PAD_T=16;
+    const plotW=W-PAD_L, plotH=H-PAD_B-PAD_T;
+    const px=(i)=>PAD_L+i*(plotW/(points.length-1||1));
+    const py=(v)=>PAD_T+plotH-(v/maxCum)*plotH;
+    const polyline = points.map((p,i)=>`${px(i).toFixed(1)},${py(p.cum).toFixed(1)}`).join(' ');
+    const dots = points.map((p,i)=>`<circle cx="${px(i).toFixed(1)}" cy="${py(p.cum).toFixed(1)}" r="3" fill="var(--green)" stroke="var(--bg2)" stroke-width="1.5"/>`).join('');
+    const xLabels = points.map((p,i)=>`<text x="${px(i).toFixed(1)}" y="${H-6}" text-anchor="middle" font-size="9" fill="#7A6E5F">${p.label}</text>`).join('');
+    const ySteps=4;
+    const yGrid = Array.from({length:ySteps+1},(_,i)=>{
+      const v=maxCum*(ySteps-i)/ySteps;
+      const y=(PAD_T+plotH*i/ySteps).toFixed(1);
+      return `<line x1="${PAD_L}" y1="${y}" x2="${W}" y2="${y}" stroke="#E8E4DC" stroke-width="0.5"/>
+      <text x="${PAD_L-4}" y="${+y+4}" text-anchor="end" font-size="9" fill="#B4A88C">${v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v.toFixed(0)}</text>`;
+    }).join('');
+    // shaded area under curve
+    const areaPath = `M${px(0).toFixed(1)},${PAD_T+plotH} `+points.map((p,i)=>`L${px(i).toFixed(1)},${py(p.cum).toFixed(1)}`).join(' ')+` L${px(points.length-1).toFixed(1)},${PAD_T+plotH} Z`;
+    return `<div class="card" style="padding:16px 18px;margin-bottom:20px;overflow-x:auto">
+      <div style="font-size:12px;font-weight:500;color:var(--charcoal);margin-bottom:12px">Cumulative Certified (S-Curve)</div>
+      <svg width="${W}" height="${H}" style="display:block;min-width:${W}px">
+        ${yGrid}
+        <path d="${areaPath}" fill="var(--green)" opacity="0.08"/>
+        <polyline points="${polyline}" fill="none" stroke="var(--green)" stroke-width="2" stroke-linejoin="round"/>
+        ${dots}
+        ${xLabels}
+      </svg>
+    </div>`;
+  })();
+
+  // ── Retention & Advance ─────────────────────────────────────────
+  const retAdvHTML = `
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+    <div class="card" style="padding:16px 18px">
+      <div style="font-size:12px;font-weight:500;color:var(--charcoal);margin-bottom:14px">Retention</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:5px">
+            <span>Withheld to Date</span><span style="font-weight:600;color:var(--charcoal)">${fmtAED(totalRetention)}</span>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:5px">
+            <span>On Practical Completion (50%)</span><span>${fmtAED(totalRetention*0.5)}</span>
+          </div>
+          <div style="height:6px;background:var(--bg3);border-radius:3px"><div style="height:100%;width:50%;background:var(--sand-light);border-radius:3px"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:5px">
+            <span>On Defects Liability (50%)</span><span>${fmtAED(totalRetention*0.5)}</span>
+          </div>
+          <div style="height:6px;background:var(--bg3);border-radius:3px"><div style="height:100%;width:50%;background:var(--border2);border-radius:3px"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:16px 18px">
+      <div style="font-size:12px;font-weight:500;color:var(--charcoal);margin-bottom:14px">Mobilisation Advance</div>
+      ${mobAdvance>0 ? `
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:6px">
+        <span>Advance Issued</span><span style="font-weight:600;color:var(--charcoal)">${fmtAED(mobAdvance)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:8px">
+        <span>Recovered to Date</span><span style="color:var(--green)">${fmtAED(totalAdvRecovered)}</span>
+      </div>
+      <div style="height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-bottom:6px">
+        <div style="height:100%;width:${Math.min(mobAdvance>0?totalAdvRecovered/mobAdvance*100:0,100).toFixed(1)}%;background:var(--green);border-radius:4px"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3)">
+        <span>${(mobAdvance>0?totalAdvRecovered/mobAdvance*100:0).toFixed(1)}% recovered</span>
+        <span>${fmtAED(Math.max(0,mobAdvance-totalAdvRecovered))} outstanding</span>
+      </div>` : `<div style="font-size:11px;color:var(--text3);padding:20px 0;text-align:center">No mobilisation advance recorded</div>`}
+    </div>
+  </div>`;
+
+  // ── Contractor vs Consultant variance per bill ──────────────────
+  const {data:bills} = await sb.from('boq_bills').select('id,bill_no,title').order('sort_order').order('created_at');
+  const sortedBills = (bills||[]).sort((a,b)=>(+a.bill_no||0)-(+b.bill_no||0)||a.bill_no.localeCompare(b.bill_no));
+
+  // Build per-bill sums across all certs
+  const {data:allBoqItems} = await sb.from('boq_items').select('id,bill_id,total');
+  const boqItemBill = {}; for(const i of allBoqItems||[]) boqItemBill[i.id]=i.bill_id;
+
+  const billClaimed={}, billCertified={};
+  for(const c of doneCerts) {
+    const items = (allItems||[]).filter(i=>i.cert_id===c.id);
+    for(const it of items) {
+      const bid = boqItemBill[it.boq_item_id]; if(!bid) continue;
+      billClaimed[bid]  = (billClaimed[bid]||0)  + (+it.contractor_amount||0);
+      billCertified[bid]= (billCertified[bid]||0) + (+it.consultant_amount||0);
+    }
+  }
+
+  const varianceRows = sortedBills.map(b=>{
+    const claimed   = billClaimed[b.id]||0;
+    const certified = billCertified[b.id]||0;
+    if(!claimed && !certified) return '';
+    const maxVal = Math.max(claimed,certified,1);
+    const variance = certified - claimed;
+    const varPct   = claimed>0 ? (variance/claimed*100) : 0;
+    return `<tr>
+      <td style="font-size:11px;white-space:nowrap">${esc(b.bill_no)}. ${esc(b.title)}</td>
+      <td style="width:200px;padding:8px 14px">
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div style="width:${(claimed/maxVal*140).toFixed(0)}px;height:6px;background:var(--sand-light);border-radius:3px;min-width:2px"></div>
+            <span style="font-size:10px;color:var(--text2);white-space:nowrap">${fmtAED(claimed)}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <div style="width:${(certified/maxVal*140).toFixed(0)}px;height:6px;background:var(--green);border-radius:3px;min-width:2px"></div>
+            <span style="font-size:10px;color:var(--text2);white-space:nowrap">${fmtAED(certified)}</span>
+          </div>
+        </div>
+      </td>
+      <td style="text-align:right;font-size:11px;font-variant-numeric:tabular-nums;color:${variance<0?'var(--red)':variance>0?'var(--green)':'var(--text3)'};white-space:nowrap">
+        ${variance!==0?(variance>0?'+':'')+fmtAED(Math.abs(variance)):'—'}
+      </td>
+      <td style="text-align:right;font-size:10px;color:var(--text3);white-space:nowrap">${varPct!==0?varPct.toFixed(1)+'%':'—'}</td>
+    </tr>`;
+  }).join('');
+
+  const varianceHTML = varianceRows ? `<div class="card" style="margin-bottom:20px">
+    <div style="padding:14px 18px 10px;border-bottom:0.5px solid var(--border);display:flex;gap:16px;align-items:center">
+      <span style="font-size:12px;font-weight:500;color:var(--charcoal)">Contractor vs Consultant — by Bill</span>
+      <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><span style="width:10px;height:6px;border-radius:2px;background:var(--sand-light);display:inline-block"></span>Claimed</span>
+      <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><span style="width:10px;height:6px;border-radius:2px;background:var(--green);display:inline-block"></span>Certified</span>
+    </div>
+    <div class="tw"><table>
+      <tr><th>Bill</th><th>Claimed vs Certified</th><th style="text-align:right">Variance</th><th style="text-align:right">%</th></tr>
+      ${varianceRows}
+    </table></div>
+  </div>` : '';
+
+  // ── IPC summary table ───────────────────────────────────────────
+  const ipcTableRows = (certs||[]).filter(c=>c.status==='Certified'||c.status==='Paid').map(c=>{
+    const a = certAmt[c.id]||{claimed:0,certified:0};
+    const gross = a.certified;
+    const ret   = gross*(+c.retention_pct||0)/100;
+    const adv   = gross*(+c.advance_recovery_pct||0)/100;
+    const net   = netOfCert(c);
+    return `<tr>
+      <td class="mono" style="color:var(--sand);font-weight:500">${esc(c.ref_no)}</td>
+      <td style="font-size:11px;color:var(--text2)">${c.certified_date?new Date(c.certified_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</td>
+      <td style="text-align:right;font-variant-numeric:tabular-nums">${fmtAED(a.claimed)}</td>
+      <td style="text-align:right;font-variant-numeric:tabular-nums">${fmtAED(gross)}</td>
+      <td style="text-align:right;font-variant-numeric:tabular-nums;color:var(--red)">(${fmtAED(ret)})</td>
+      <td style="text-align:right;font-variant-numeric:tabular-nums;color:var(--red)">(${fmtAED(adv)})</td>
+      <td style="text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:var(--green)">${fmtAED(net)}</td>
+      <td>${sbadge(c.status)}</td>
+    </tr>`;
+  }).join('');
+
+  const ipcTableHTML = ipcTableRows ? `<div class="card" style="margin-bottom:20px">
+    <div style="padding:14px 18px 10px;border-bottom:0.5px solid var(--border)">
+      <span style="font-size:12px;font-weight:500;color:var(--charcoal)">Certificate Ledger</span>
+    </div>
+    <div class="tw"><table>
+      <tr><th>Ref</th><th>Certified Date</th><th style="text-align:right">Claimed</th><th style="text-align:right">Gross Certified</th><th style="text-align:right">Retention</th><th style="text-align:right">Adv. Recovery</th><th style="text-align:right">Net Payable</th><th>Status</th></tr>
+      ${ipcTableRows}
+      <tr style="background:var(--bg3)">
+        <td colspan="2" style="font-weight:600;font-size:11px">Totals</td>
+        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${fmtAED((certs||[]).filter(c=>c.status==='Certified'||c.status==='Paid').reduce((s,c)=>s+(certAmt[c.id]?.claimed||0),0))}</td>
+        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${fmtAED(totalCertified)}</td>
+        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--red)">(${fmtAED(totalRetention)})</td>
+        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--red)">(${fmtAED(totalAdvRecovered)})</td>
+        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--green)">${fmtAED(totalPaid)}</td>
+        <td></td>
+      </tr>
+    </table></div>
+  </div>` : `<div class="empty-state" style="padding:48px;text-align:center;color:var(--text3);font-size:12px">No certified or paid certificates yet.</div>`;
+
+  document.getElementById('content').innerHTML = summaryHTML + barChartHTML + sCurveHTML + retAdvHTML + varianceHTML + ipcTableHTML;
+}
 </script>
 </body>
 </html>
