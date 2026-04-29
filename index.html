@@ -5113,6 +5113,13 @@ function esc(s) {
 function fmtAED(n) {
   return 'AED ' + (+n||0).toLocaleString('en-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
+function fmtCompact(n) {
+  const v = +n||0;
+  if(v>=1e9) return 'AED '+(v/1e9).toFixed(2)+'B';
+  if(v>=1e6) return 'AED '+(v/1e6).toFixed(2)+'M';
+  if(v>=1e3) return 'AED '+(v/1e3).toFixed(1)+'K';
+  return fmtAED(v);
+}
 
 async function renderBOQ() {
   const [{data:bills},{data:items}] = await Promise.all([
@@ -5963,29 +5970,31 @@ async function renderFinance() {
 
   const mobAdvance = (certs||[]).reduce((s,c)=>Math.max(s,+c.mobilisation_advance||0),0);
   const pctComplete = contractSum>0 ? (totalCertified/contractSum*100) : 0;
-  const outstanding = totalCertified - totalRetention - totalAdvRecovered - totalPaid;
+  // Outstanding = net payable on Certified certs not yet paid
+  const certifiedOnly = (certs||[]).filter(c=>c.status==='Certified');
+  const outstanding = certifiedOnly.reduce((s,c)=>s+netOfCert(c),0);
 
   // ── Summary strip ───────────────────────────────────────────────
   const summaryHTML = `
   <div class="module-bar" style="flex-wrap:wrap;gap:10px;margin-bottom:20px">
     <div class="module-stat" style="flex:1;min-width:140px">
-      <div class="module-stat-val" style="color:var(--sand)">${fmtAED(contractSum)}</div>
+      <div class="module-stat-val" style="color:var(--sand)" title="${fmtAED(contractSum)}">${fmtCompact(contractSum)}</div>
       <div class="module-stat-label">Contract Sum</div>
     </div>
     <div class="module-stat" style="flex:1;min-width:140px">
-      <div class="module-stat-val">${fmtAED(totalCertified)}</div>
+      <div class="module-stat-val" title="${fmtAED(totalCertified)}">${fmtCompact(totalCertified)}</div>
       <div class="module-stat-label">Total Certified (Gross)</div>
     </div>
     <div class="module-stat" style="flex:1;min-width:140px">
-      <div class="module-stat-val" style="color:var(--green)">${fmtAED(totalPaid)}</div>
+      <div class="module-stat-val" style="color:var(--green)" title="${fmtAED(totalPaid)}">${fmtCompact(totalPaid)}</div>
       <div class="module-stat-label">Total Paid (Net)</div>
     </div>
     <div class="module-stat" style="flex:1;min-width:140px">
-      <div class="module-stat-val ${outstanding>0?'warn':''}">${fmtAED(Math.max(0,outstanding))}</div>
+      <div class="module-stat-val ${outstanding>0?'warn':''}" title="${fmtAED(Math.max(0,outstanding))}">${fmtCompact(Math.max(0,outstanding))}</div>
       <div class="module-stat-label">Outstanding (Certified–Paid)</div>
     </div>
     <div class="module-stat" style="flex:1;min-width:140px">
-      <div class="module-stat-val">${fmtAED(totalRetention)}</div>
+      <div class="module-stat-val" title="${fmtAED(totalRetention)}">${fmtCompact(totalRetention)}</div>
       <div class="module-stat-label">Retention Held</div>
     </div>
     <div class="module-stat" style="flex:1;min-width:140px">
@@ -6018,7 +6027,9 @@ async function renderFinance() {
   const months = Object.keys(monthMap).sort();
   const barChartHTML = months.length < 1 ? '' : (()=>{
     const maxVal = Math.max(...months.map(m=>Math.max(monthMap[m].claimed,monthMap[m].certified,monthMap[m].paid)),1);
-    const BAR_W=18, BAR_GAP=4, GROUP_W=BAR_W*3+BAR_GAP*2, GROUP_GAP=20;
+    // Scale bar width up when there are few months so chart fills space naturally
+    const BAR_W = months.length<=3 ? 32 : months.length<=6 ? 24 : 18;
+    const BAR_GAP=4, GROUP_W=BAR_W*3+BAR_GAP*2, GROUP_GAP=months.length<=3?32:20;
     const svgW = months.length*(GROUP_W+GROUP_GAP)+60;
     const svgH = 180;
     const plotH = 130;
@@ -6063,16 +6074,27 @@ async function renderFinance() {
       .filter(c=>c.certified_date)
       .sort((a,b)=>a.certified_date.localeCompare(b.certified_date));
     if(!pts.length) return '';
+    if(pts.length < 2) return `<div class="card" style="padding:16px 18px;margin-bottom:20px">
+      <div style="font-size:12px;font-weight:500;color:var(--charcoal);margin-bottom:8px">Cumulative Certified (S-Curve)</div>
+      <div style="font-size:11px;color:var(--text3);padding:20px 0;text-align:center">Need at least 2 certified certificates to plot an S-curve.</div>
+    </div>`;
     let cum = 0;
     const points = pts.map(c=>{ cum+=certAmt[c.id]?.certified||0; return {date:c.certified_date.slice(0,7),cum,label:c.ref_no}; });
     const maxCum = Math.max(cum,1);
-    const W=560, H=130, PAD_L=60, PAD_B=24, PAD_T=16;
+    const PAD_L=60, PAD_B=42, PAD_T=16;
+    // Scale width with number of points; min 320, grows 60px per cert
+    const W=Math.max(320,points.length*60+PAD_L+20);
+    const H=130+PAD_B;
     const plotW=W-PAD_L, plotH=H-PAD_B-PAD_T;
-    const px=(i)=>PAD_L+i*(plotW/(points.length-1||1));
+    const px=(i)=>PAD_L+i*(plotW/(points.length-1));
     const py=(v)=>PAD_T+plotH-(v/maxCum)*plotH;
     const polyline = points.map((p,i)=>`${px(i).toFixed(1)},${py(p.cum).toFixed(1)}`).join(' ');
     const dots = points.map((p,i)=>`<circle cx="${px(i).toFixed(1)}" cy="${py(p.cum).toFixed(1)}" r="3" fill="var(--green)" stroke="var(--bg2)" stroke-width="1.5"/>`).join('');
-    const xLabels = points.map((p,i)=>`<text x="${px(i).toFixed(1)}" y="${H-6}" text-anchor="middle" font-size="9" fill="#7A6E5F">${p.label}</text>`).join('');
+    // Rotate x-axis labels to prevent overlap
+    const xLabels = points.map((p,i)=>{
+      const x=px(i).toFixed(1), y=(PAD_T+plotH+14).toFixed(1);
+      return `<text transform="rotate(-35,${x},${y})" x="${x}" y="${y}" text-anchor="end" font-size="9" fill="#7A6E5F">${p.label}</text>`;
+    }).join('');
     const ySteps=4;
     const yGrid = Array.from({length:ySteps+1},(_,i)=>{
       const v=maxCum*(ySteps-i)/ySteps;
@@ -6100,22 +6122,14 @@ async function renderFinance() {
     <div class="card" style="padding:16px 18px">
       <div style="font-size:12px;font-weight:500;color:var(--charcoal);margin-bottom:14px">Retention</div>
       <div style="display:flex;flex-direction:column;gap:10px">
-        <div>
-          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:5px">
-            <span>Withheld to Date</span><span style="font-weight:600;color:var(--charcoal)">${fmtAED(totalRetention)}</span>
-          </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2)">
+          <span>Withheld to Date</span><span style="font-weight:600;color:var(--charcoal)">${fmtAED(totalRetention)}</span>
         </div>
-        <div>
-          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:5px">
-            <span>On Practical Completion (50%)</span><span>${fmtAED(totalRetention*0.5)}</span>
-          </div>
-          <div style="height:6px;background:var(--bg3);border-radius:3px"><div style="height:100%;width:50%;background:var(--sand-light);border-radius:3px"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2)">
+          <span>On Practical Completion (50%)</span><span>${fmtAED(totalRetention*0.5)}</span>
         </div>
-        <div>
-          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:5px">
-            <span>On Defects Liability (50%)</span><span>${fmtAED(totalRetention*0.5)}</span>
-          </div>
-          <div style="height:6px;background:var(--bg3);border-radius:3px"><div style="height:100%;width:50%;background:var(--border2);border-radius:3px"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2)">
+          <span>On Defects Liability (50%)</span><span>${fmtAED(totalRetention*0.5)}</span>
         </div>
       </div>
     </div>
