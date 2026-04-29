@@ -1376,6 +1376,52 @@ function handleBulkDrop(event) {
   if(file) parseBulkCSV({target:{files:[file]}});
 }
 
+// FIX 3: Robust state-machine CSV line parser.
+// The previous regex (/(".*?"|[^,]+)(?=,|$)/g) had two failure modes:
+//   1. Commas inside quoted strings (e.g. "Concrete, Grade C40") shifted all
+//      subsequent columns, silently corrupting quantities, rates, and status fields.
+//   2. Empty fields between consecutive commas were dropped entirely, also
+//      shifting subsequent columns.
+// This parser processes one character at a time, respecting RFC 4180 quoting
+// rules including doubled-quote escaping (""). It correctly handles:
+//   - Commas within quoted fields
+//   - Empty fields (consecutive commas)
+//   - Escaped quotes ("")
+//   - Leading/trailing spaces stripped from unquoted fields
+function parseCSVLine(line) {
+  const fields = [];
+  let i = 0;
+  while(i <= line.length) {
+    if(i === line.length) { fields.push(''); break; }
+    if(line[i] === '"') {
+      // Quoted field: consume until closing unescaped quote
+      let field = '';
+      i++; // skip opening quote
+      while(i < line.length) {
+        if(line[i] === '"') {
+          if(line[i+1] === '"') { field += '"'; i += 2; } // escaped ""
+          else { i++; break; } // closing quote
+        } else {
+          field += line[i++];
+        }
+      }
+      fields.push(field);
+      if(line[i] === ',') i++; // skip delimiter after closing quote
+    } else {
+      // Unquoted field: read until next comma or end of line
+      const end = line.indexOf(',', i);
+      if(end === -1) {
+        fields.push(line.slice(i).trim());
+        break;
+      } else {
+        fields.push(line.slice(i, end).trim());
+        i = end + 1;
+      }
+    }
+  }
+  return fields;
+}
+
 function parseBulkCSV(event) {
   const file = event.target.files[0];
   if(!file) return;
@@ -1384,16 +1430,18 @@ function parseBulkCSV(event) {
     const text = e.target.result;
     const lines = text.split(/\r?\n/).filter(l=>l.trim());
     if(lines.length < 2) { toast('CSV must have a header row and at least one data row','error'); return; }
-    const headers = lines[0].split(',').map(h=>h.replace(/"/g,'').trim().toLowerCase());
+    // Use parseCSVLine for header row too so quoted column names work correctly
+    const headers = parseCSVLine(lines[0]).map(h=>h.toLowerCase());
     const reqFields = ['drawing_no','title','discipline'];
     const missing = reqFields.filter(f=>!headers.includes(f));
     if(missing.length) { toast('Missing required columns: '+missing.join(', '),'error'); return; }
     bulkRows = [];
     const errors = [];
     for(let i=1;i<lines.length;i++) {
-      const vals = lines[i].match(/(".*?"|[^,]+)(?=,|$)/g)||lines[i].split(',');
+      // Use the quote-aware parser; values are already stripped of outer quotes
+      const vals = parseCSVLine(lines[i]);
       const row = {};
-      headers.forEach((h,j)=>{ row[h]=(vals[j]||'').replace(/"/g,'').trim(); });
+      headers.forEach((h,j)=>{ row[h]=(vals[j]||'').trim(); });
       if(!row.drawing_no){errors.push(`Row ${i+1}: drawing_no is required`);continue;}
       if(!row.title){errors.push(`Row ${i+1}: title is required`);continue;}
       row.revision = row.revision||'Rev A';
@@ -1668,12 +1716,20 @@ async function doBatchSubAction(action) {
     return;
   }
   if(action==='review') {
+    const role = currentProfile?.role;
+    if(role !== 'consultant' && role !== 'developer') {
+      toast('Only consultants and developers can bulk-approve submittals','error'); return;
+    }
     const {error} = await sb.from('submittals').update({status:'Approved',outcome:'1'}).in('id', ids);
     if(error){toast('Batch review failed: '+error.message,'error');return;}
     const user = (await sb.auth.getUser()).data?.user;
     if(!user){toast('Session expired — please refresh','error');return;}
     const name = user?.user_metadata?.full_name||user?.email||'Unknown';
-    await sb.from('document_audit_log').insert(ids.map(id=>({document_id:id,document_type:'submittal',action:'Submittal Reviewed: Code 1 \u2013 Approved (bulk)',performed_by_name:name,performed_by_id:user.id})));
+    const {error:auditErr} = await sb.from('document_audit_log').insert(ids.map(id=>({document_id:id,document_type:'submittal',action:'Submittal Reviewed: Code 1 \u2013 Approved (bulk)',performed_by_name:name,performed_by_id:user.id})));
+    if(auditErr) {
+      await sb.from('submittals').update({status:'Pending Review',outcome:null}).in('id', ids);
+      toast('Batch approval reverted — audit log failed. Please try again.','error'); return;
+    }
     toast(`Marked ${ids.length} submittal${ids.length!==1?'s':''} as Approved`, 'success');
   }
   clearSubSelection();
@@ -1797,7 +1853,12 @@ async function advanceCDE(id, newState) {
   if(!await confirmModal(label)) return;
   const {error} = await sb.from('drawings').update({cde_state: newState}).eq('id', id);
   if(error){toast('Error: '+error.message,'error');return;}
-  await logAudit(id, 'drawing', 'CDE State Change \u2192 ' + newState);
+  const audited = await logAudit(id, 'drawing', 'CDE State Change \u2192 ' + newState);
+  if(!audited) {
+    await sb.from('drawings').update({cde_state: currentState}).eq('id', id);
+    toast('State change reverted — audit log failed. Please try again.','error');
+    return;
+  }
   toast('Document advanced to ' + newState, 'success');
   closeModal();
   renderDrawings();
@@ -1823,7 +1884,8 @@ async function logAudit(document_id, document_type, action) {
     performed_by_name: currentProfile?.full_name || currentUser?.email || 'Unknown',
     performed_by_id: currentUser?.id,
   });
-  if(error) console.error('[audit_log] insert failed:', document_type, action, error);
+  if(error) { console.error('[audit_log] insert failed:', document_type, action, error); return false; }
+  return true;
 }
 function filtDraw(field, val) {
   drawFilters[field] = val;
@@ -1859,19 +1921,26 @@ function filt(page, field, val) {
     r.style.display=vis?'':'none';
   });
 }
+// FIX 1: Search respects active filter state without coupling to it.
+// srch-hide is toggled purely on text match; filter visibility (style.display)
+// is owned exclusively by filt()/filtDraw(). CSS combines both:
+// a row is hidden if it has srch-hide OR style.display:none.
+// Previously, searchReg read style.display to copy filter state into srch-hide,
+// causing rows to remain permanently hidden after the filter was later cleared.
 function searchReg(page, q) {
   q = q.trim().toLowerCase();
   const cls = {draw:'.draw-row',sub:'.sub-row',ir:'.ir-row',ncr:'.ncr-row',rfi:'.rfi-row',trans:'.trans-row',corr:'.corr-row',punch:'.punch-row',ms:'.ms-row'}[page];
   if(!cls) return;
-  let vis = 0;
-  document.querySelectorAll(cls).forEach(r=>{
-    const ok = !q||(r.dataset.search||'').includes(q);
-    const filtered = r.style.display==='none';
-    r.classList.toggle('srch-hide',!ok||filtered);
-    if(ok&&!filtered) vis++;
+  const rows = document.querySelectorAll(cls);
+  rows.forEach(r=>{
+    // Toggle srch-hide based solely on whether the row matches the search text.
+    // Do NOT read or write style.display here — that is the filter's responsibility.
+    r.classList.toggle('srch-hide', q !== '' && !(r.dataset.search||'').includes(q));
   });
+  // Count rows visible under BOTH search and filter for the empty-state row.
+  const vis = [...rows].filter(r=>!r.classList.contains('srch-hide') && r.style.display!=='none').length;
   const el=document.getElementById('srch-empty-'+page);
-  if(el){el.style.display=(!vis&&q)?'':'none';if(!vis&&q)el.querySelector('td').textContent=`No results for "${q}"`;}
+  if(el){el.style.display=(vis===0&&q)?'':'none';if(vis===0&&q)el.querySelector('td').textContent=`No results for "${q}"`;}
 }
 function filtBOQ(billId) {
   document.querySelectorAll('#content [data-bill-id]').forEach(r=>{
@@ -2599,11 +2668,21 @@ function exportDrawingRegister() {
 
 // ─── ACTIONS ──────────────────────────────────────────────────────
 async function approveDrawing(id) {
-  const {data:d} = await sb.from('drawings').select('revision').eq('id',id).maybeSingle();
+  const role = currentProfile?.role;
+  if(role !== 'consultant' && role !== 'developer') {
+    toast('Only consultants and developers can approve drawings','error'); return;
+  }
+  const {data:d} = await sb.from('drawings').select('revision,status').eq('id',id).maybeSingle();
   if(!d){toast('Drawing not found','error');return;}
+  const prevStatus = d.status;
   const {error} = await sb.from('drawings').update({status:'Approved'}).eq('id',id);
   if(error){toast('Error: '+error.message,'error');return;}
-  await logAudit(id, 'drawing', 'Drawing Approved');
+  const audited = await logAudit(id, 'drawing', 'Drawing Approved');
+  if(!audited) {
+    await sb.from('drawings').update({status: prevStatus}).eq('id', id);
+    toast('Approval reverted — audit log failed. Please try again.','error');
+    return;
+  }
   // Update revision record with approval details
   const {error:revErr} = await sb.from('drawing_revisions')
     .update({
@@ -2687,13 +2766,23 @@ async function doRespondIR(id) {
 }
 
 async function doCloseNCR(id) {
+  const role = currentProfile?.role;
+  if(role !== 'consultant' && role !== 'developer') {
+    toast('Only consultants and developers can close NCRs','error'); return;
+  }
   const ca = document.getElementById('ncr-ca-'+id);
-  await sb.from('ncrs').update({
+  const {error} = await sb.from('ncrs').update({
     status:'Closed',
     corrective_action: ca?ca.value:'Corrective action completed.',
     closed_date: new Date().toISOString().split('T')[0]
   }).eq('id',id);
-  await logAudit(id, 'ncr', 'NCR: Closed');
+  if(error){toast('Error: '+error.message,'error');return;}
+  const audited = await logAudit(id, 'ncr', 'NCR: Closed');
+  if(!audited) {
+    await sb.from('ncrs').update({status:'Open', closed_date:null}).eq('id',id);
+    toast('NCR closure reverted — audit log failed. Please try again.','error');
+    return;
+  }
   toast('NCR closed','success'); closeModal(); render();
 }
 
@@ -3651,6 +3740,12 @@ function closeModal(){
   if(_modalDirty && !confirm('You have unsaved changes. Close anyway?')) return;
   _modalDirty = false;
   document.getElementById('modal-bg').classList.remove('open');
+  // FIX 2: Clear all staged file state on modal close to prevent files from a
+  // previous modal session being silently attached to a different record.
+  // uploadStagedFiles() deletes its key on success; we clear any remaining keys
+  // here to handle the case where the user staged files but cancelled.
+  Object.keys(stagedFiles).forEach(k => delete stagedFiles[k]);
+  Object.keys(markupFiles).forEach(k => delete markupFiles[k]);
 }
 function closeBg(e){if(e.target===document.getElementById('modal-bg'))closeModal();}
 
@@ -4707,10 +4802,10 @@ const stagedFiles = {};
 
 function stageFiles(fileList, stagingId) {
   if(!stagedFiles[stagingId]) stagedFiles[stagingId] = [];
-  Array.from(fileList).forEach(f => {
-    if(f.size > 50*1024*1024) { toast(`${f.name} exceeds 50MB`,'error'); return; }
+  for(const f of Array.from(fileList)) {
+    if(f.size > 50*1024*1024) { toast(`${f.name} exceeds 50MB — file skipped`,'error'); continue; }
     stagedFiles[stagingId].push(f);
-  });
+  }
   renderStagedFiles(stagingId);
 }
 
@@ -5122,10 +5217,14 @@ function fmtCompact(n) {
 }
 
 async function renderBOQ() {
-  const [{data:bills},{data:items}] = await Promise.all([
+  const [{data:bills,error:billsErr},{data:items,error:itemsErr}] = await Promise.all([
     sb.from('boq_bills').select('*').order('sort_order').order('created_at'),
     sb.from('boq_items').select('*').order('sort_order').order('created_at')
   ]);
+  if(billsErr||itemsErr) {
+    document.getElementById('content').innerHTML = `<div class="empty-state" style="padding:48px;text-align:center;color:var(--red)">Failed to load BOQ: ${(billsErr||itemsErr).message}</div>`;
+    return;
+  }
   const billList = (bills||[]).sort((a,b)=>(+a.bill_no||0)-(+b.bill_no||0)||a.bill_no.localeCompare(b.bill_no));
   const itemList = items||[];
   const grandTotal = itemList.reduce((s,i)=>s+(+i.total||0),0);
@@ -5349,10 +5448,16 @@ function previewBOQ(input) {
       const dataRows = rows.filter(r=>r[0]!==undefined && r[0]!=='');
       const isHeader = typeof dataRows[0]?.[0]==='string' && isNaN(dataRows[0]?.[0]);
       const data = isHeader ? dataRows.slice(1) : dataRows;
+      // Validate minimum column count: bill_no, bill_title, item_no, description, qty, unit, rate = 7
+      const shortRows = data.filter(r=>r.length < 7);
+      if(shortRows.length > 0) {
+        document.getElementById('boq-preview').textContent = `Column mismatch: ${shortRows.length} row(s) have fewer than 7 columns. Expected: Bill No, Bill Title, Item No, Description, Qty, Unit, Rate.`;
+        return;
+      }
       window._boqImportData = data;
       const previewRows = data.slice(0,10).map(r=>`<tr>
-        <td class="mono">${esc(r[0])}</td><td>${esc(r[1])}</td><td class="mono">${esc(r[2])}</td>
-        <td>${esc(r[3])}</td><td style="text-align:right">${esc(r[4])}</td><td>${esc(r[5])}</td>
+        <td class="mono">${esc(String(r[0]??''))}</td><td>${esc(String(r[1]??''))}</td><td class="mono">${esc(String(r[2]??''))}</td>
+        <td>${esc(String(r[3]??''))}</td><td style="text-align:right">${esc(String(r[4]??''))}</td><td>${esc(String(r[5]??''))}</td>
         <td style="text-align:right">${(+r[6]||0).toLocaleString()}</td></tr>`).join('');
       const previewEl = document.getElementById('boq-preview');
       previewEl.innerHTML = `
@@ -5388,6 +5493,13 @@ async function doImportBOQ() {
   const billIdMap = {};
   (insertedBills||[]).forEach(b => billIdMap[b.bill_no] = b.id);
 
+  // Guard: verify every bill_no in the data resolved to an ID
+  const unresolvedBills = [...new Set(data.map(r=>String(r[0]||'').trim()))].filter(bn=>bn && !billIdMap[bn]);
+  if(unresolvedBills.length) {
+    toast(`Import failed — could not resolve bill IDs for: ${unresolvedBills.join(', ')}`, 'error');
+    if(btn) btn.disabled=false; return;
+  }
+
   const items = data.map((r,idx) => ({
     bill_id: billIdMap[String(r[0]||'').trim()],
     item_no: String(r[2]||'').trim(),
@@ -5398,6 +5510,8 @@ async function doImportBOQ() {
     total: (+r[4]||0) * (+r[6]||0),
     sort_order: idx
   })).filter(i=>i.bill_id && i.item_no);
+
+  if(!items.length) { toast('No valid items found to import — check Bill No and Item No columns','error'); if(btn) btn.disabled=false; return; }
 
   const {error:itemErr} = await sb.from('boq_items').insert(items);
   if(itemErr) { toast('Error inserting items: '+itemErr.message,'error'); if(btn) btn.disabled=false; return; }
@@ -5614,8 +5728,8 @@ async function viewIPC(id) {
     return `<tr class="boq-bill-header" data-bill-id="${b.id}">
       <td colspan="4" style="padding:8px 14px">${esc(b.bill_no)}. ${esc(b.title)}</td>
       <td></td>
-      <td colspan="2" style="text-align:right;padding:8px 14px;font-variant-numeric:tabular-nums">${fmtAED(billContrAmt)}</td>
-      <td colspan="2" style="text-align:right;padding:8px 14px;font-variant-numeric:tabular-nums">${billConsAmt?fmtAED(billConsAmt):'&mdash;'}</td>
+      <td colspan="2" style="text-align:right;padding:8px 14px;font-variant-numeric:tabular-nums" id="bill-contr-${b.id}">${fmtAED(billContrAmt)}</td>
+      <td colspan="2" style="text-align:right;padding:8px 14px;font-variant-numeric:tabular-nums" id="bill-cons-${b.id}">${billConsAmt?fmtAED(billConsAmt):'&mdash;'}</td>
     </tr>${itemRows}`;
   }).join('');
 
@@ -5756,6 +5870,7 @@ function recalcIPCRow(input, party) {
   const tr = input.closest('tr');
   const boqTotal = +tr.dataset.boqTotal||0;
   const itemId = tr.dataset.itemId;
+  const billId = tr.dataset.billId;
   const pct = +input.value||0;
   const amt = boqTotal * pct / 100;
   if(party==='contractor') {
@@ -5766,6 +5881,16 @@ function recalcIPCRow(input, party) {
     const el = document.getElementById('consult-amt-'+itemId);
     if(el) el.textContent = fmtAED(amt);
     if(window._ipcPitems[itemId]) { window._ipcPitems[itemId].consultant_pct=pct; window._ipcPitems[itemId].consultant_amount=amt; }
+  }
+  // Refresh bill-header subtotals so the group totals stay in sync
+  if(billId) {
+    const billBoqIds = (window._ipcBoqItems||[]).filter(b=>b.bill_id===billId).map(b=>b.id);
+    const billContr = billBoqIds.reduce((s,k)=>s+(+window._ipcPitems[k]?.contractor_amount||0),0);
+    const billCons  = billBoqIds.reduce((s,k)=>s+(+window._ipcPitems[k]?.consultant_amount||0),0);
+    const hContr = document.getElementById('bill-contr-'+billId);
+    const hCons  = document.getElementById('bill-cons-'+billId);
+    if(hContr) hContr.textContent = fmtAED(billContr);
+    if(hCons)  hCons.textContent  = billCons ? fmtAED(billCons) : '—';
   }
   recalcIPCSummary();
 }
