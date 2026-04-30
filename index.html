@@ -2241,6 +2241,27 @@ async function doChangeRole(uid) {
   toast('Role updated','success'); closeModal(); render();
 }
 
+async function deleteDraw(id, drawingNo) {
+  const ok = await confirmModal(`Permanently delete drawing <strong>${drawingNo}</strong> and all its revision history? This cannot be undone.`);
+  if(!ok) return;
+  const {data:revs} = await sb.from('drawing_revisions').select('file_path').eq('drawing_id',id);
+  const {data:draw} = await sb.from('drawings').select('file_path').eq('id',id).single();
+  // Delete revision storage files
+  if(revs?.length) {
+    const paths = revs.map(r=>r.file_path).filter(Boolean);
+    if(paths.length) await sb.storage.from('drawings').remove(paths);
+  }
+  // Delete drawing storage file if not already covered by revisions
+  if(draw?.file_path && !revs?.some(r=>r.file_path===draw.file_path)) {
+    await sb.storage.from('drawings').remove([draw.file_path]);
+  }
+  await sb.from('drawing_revisions').delete().eq('drawing_id',id);
+  const {error} = await sb.from('drawings').delete().eq('id',id);
+  if(error){toast('Delete failed — '+error.message,'error');return;}
+  toast(`Drawing ${drawingNo} deleted`,'success');
+  closeModal(); render();
+}
+
 // ─── VIEW MODALS ──────────────────────────────────────────────────
 async function viewDraw(id) {
   const [{data:d},{data:revs},atts] = await Promise.all([
@@ -2363,7 +2384,9 @@ async function viewDraw(id) {
      ${can('approve')&&d.status!=='Void'?`<button class="btn" onclick="voidDrawing('${id}','${d.drawing_no}')">Void Drawing</button>`:''}
      ${d.cde_state==='Superseded'?'<span style="font-size:11px;color:var(--amber);padding:0 8px">⚠ Superseded — download with caution</span>':''}
      <button class="btn" onclick="linkDrawings('${id}','${d.drawing_no}')">Link Drawings</button>
+     ${currentProfile?.role==='developer'?`<button class="btn btn-danger" onclick="deleteDraw('${id}','${d.drawing_no}')">Delete Drawing</button>`:''}
      <button class="btn" onclick="closeModal()">Close</button>`, true);
+  if(pdfUrl) setTimeout(()=>initPdfViewer(id, pdfUrl, `${d.drawing_no} – ${d.title} (${d.revision})`), 200);
 }
 
 async function viewSub(id) {
@@ -3182,10 +3205,12 @@ async function doNewDraw() {
     superseded_revisions:'[]',
     related_drawings:[]
   }).select().single();
+  let finalPath = filePath;
   if(filePath&&inserted){
     const newPath = `${inserted.id}/Rev_A_${Date.now()}.pdf`;
     await sb.storage.from('drawings').move(filePath, newPath);
-    await sb.from('drawings').update({file_path:newPath}).eq('id',inserted.id);
+    const {error:updErr} = await sb.from('drawings').update({file_path:newPath}).eq('id',inserted.id);
+    if(!updErr) finalPath = newPath;
   }
   delete selectedFiles['new'];
   if(error){toast('Error creating drawing: '+error.message,'error');return;}
@@ -3197,7 +3222,7 @@ async function doNewDraw() {
       status:document.getElementById('nd-status').value,
       uploaded_by_name:currentProfile?.full_name||currentUser?.email,
       uploaded_by_id:currentUser?.id,
-      file_path:inserted.file_path
+      file_path:finalPath
     });
     if(revErr){
       await sb.from('drawings').delete().eq('id',inserted.id);
@@ -3465,11 +3490,11 @@ async function resubmitSub(parentId) {
       <input type="file" id="rs-files" multiple style="display:none" onchange="stageFiles(this.files,'rs-staged')" />
       <div id="rs-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
     </div>`,
-    `<button class="btn btn-primary" onclick="doResubmit('${parentId}',${nextRev})">Submit Revision ${nextRev}</button>
+    `<button class="btn btn-primary" onclick="doResubmitList('${parentId}',${nextRev})">Submit Revision ${nextRev}</button>
      <button class="btn" onclick="closeModal()">Cancel</button>`);
 }
 
-async function doResubmit(parentId, nextRev) {
+async function doResubmitList(parentId, nextRev) {
   const {data:parent} = await sb.from('submittals').select('*').eq('id',parentId).single();
   const changes = document.getElementById('rs-changes')?.value||'';
   const {data:newSub,error} = await sb.from('submittals').insert({
@@ -4510,10 +4535,10 @@ async function createResubmission(parentId) {
       <div class="form-group"><label class="form-label-dark">New Due Date</label><input type="date" class="form-control" id="rs-due" /></div>
       <div class="form-group"><label class="form-label-dark">From</label><input type="text" class="form-control" id="rs-from" value="${parent.from_party||'MBC'}" /></div>
     </div>`,
-    `<button class="btn btn-primary" onclick="doResubmit('${parentId}','${newRevNo}')">Create Resubmission</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+    `<button class="btn btn-primary" onclick="doResubmitDetail('${parentId}','${newRevNo}')">Create Resubmission</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 }
 
-async function doResubmit(parentId, revNo) {
+async function doResubmitDetail(parentId, revNo) {
   const {data:parent} = await sb.from('submittals').select('*').eq('id',parentId).single();
   const changes = document.getElementById('rs-changes')?.value||'';
   const {error} = await sb.from('submittals').insert({
@@ -5147,9 +5172,9 @@ async function viewRevisionPDF(filePath, revision, isSuperseded, currentRev) {
     const proceed = await confirmModal(`⚠️ <strong>Superseded Revision</strong><br><br><strong>${revision}</strong> is not the current revision — the latest is <strong>${currentRev}</strong>.<br><br>This file should not be used on site. View for reference only?`);
     if(!proceed) return;
   }
-  const {data} = sb.storage.from('drawings').getPublicUrl(filePath);
-  if(data?.publicUrl) window.open(data.publicUrl, '_blank');
-  else toast('Could not load PDF','error');
+  const {data, error} = await sb.storage.from('drawings').createSignedUrl(filePath, 3600);
+  if(error||!data?.signedUrl) { toast('Could not load PDF — storage error','error'); return; }
+  window.open(data.signedUrl, '_blank');
 }
 
 // ─── VIEW ATTACHMENT PDF ──────────────────────────────────────────
