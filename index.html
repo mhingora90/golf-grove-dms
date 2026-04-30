@@ -3180,16 +3180,19 @@ async function doNewDraw() {
     if(warnEl){ warnEl.textContent = revWarn.msg; warnEl.style.display=''; }
     return;
   }
+  // Generate UUID upfront so storage path matches DB id — no move or update needed after insert.
+  // This ensures all roles (including contractor who cannot UPDATE drawings) get a correct file_path.
+  const drawingId = crypto.randomUUID();
   const file = selectedFiles['new'];
   let filePath = null;
   if(file) {
-    const tempId = Date.now().toString();
-    const path = `new/${tempId}_${file.name}`;
-    const {error,data} = await sb.storage.from('drawings').upload(path, file, {upsert:true});
-    if(error){toast('Storage upload failed — '+error.message,'error');return;}
-    filePath = path;
+    const storagePath = `${drawingId}/Rev_A_${Date.now()}.pdf`;
+    const {error:upErr} = await sb.storage.from('drawings').upload(storagePath, file, {upsert:false});
+    if(upErr){toast('Storage upload failed — '+upErr.message,'error');return;}
+    filePath = storagePath;
   }
   const {data:inserted,error} = await sb.from('drawings').insert({
+    id:drawingId,
     drawing_no:id,title,discipline:document.getElementById('nd-disc').value,
     revision:document.getElementById('nd-rev').value,
     status:document.getElementById('nd-status').value,
@@ -3205,13 +3208,6 @@ async function doNewDraw() {
     superseded_revisions:'[]',
     related_drawings:[]
   }).select().single();
-  let finalPath = filePath;
-  if(filePath&&inserted){
-    const newPath = `${inserted.id}/Rev_A_${Date.now()}.pdf`;
-    await sb.storage.from('drawings').move(filePath, newPath);
-    const {error:updErr} = await sb.from('drawings').update({file_path:newPath}).eq('id',inserted.id);
-    if(!updErr) finalPath = newPath;
-  }
   delete selectedFiles['new'];
   if(error){toast('Error creating drawing: '+error.message,'error');return;}
   // Log initial revision event — wrapped to delete orphaned drawing on failure
@@ -3222,7 +3218,7 @@ async function doNewDraw() {
       status:document.getElementById('nd-status').value,
       uploaded_by_name:currentProfile?.full_name||currentUser?.email,
       uploaded_by_id:currentUser?.id,
-      file_path:finalPath
+      file_path:filePath
     });
     if(revErr){
       await sb.from('drawings').delete().eq('id',inserted.id);
