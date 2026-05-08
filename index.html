@@ -4796,8 +4796,9 @@ function refreshAttList(recordType, recordId, atts) {
         <div style="font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.file_name}</div>
         <div style="font-size:10px;color:var(--text3)">${formatFileSize(a.file_size)} · ${a.uploaded_by_name||'—'} · ${a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</div>
       </div>
-      <button class="btn btn-sm" onclick="downloadAttachment(${JSON.stringify(a.file_path)},${JSON.stringify(a.file_name)})">Download</button>
-      ${canDel&&a.uploaded_by_id===currentUser?.id?`<button class="btn btn-sm btn-danger" onclick="deleteAttachment(${JSON.stringify(a.id)},${JSON.stringify(a.file_path)},${JSON.stringify(recordType)},${JSON.stringify(recordId)})">Remove</button>`:''}
+      ${(a.file_name?.toLowerCase().endsWith('.pdf')||a.file_type?.includes('pdf'))?`<button class="btn btn-sm" onclick="viewAttachmentPDF('${a.id}','${a.file_path}','${a.file_name}')">View</button>`:''}
+      <button class="btn btn-sm" onclick="downloadAttachment('${a.file_path}','${a.file_name}')">Download</button>
+      ${canDel&&a.uploaded_by_id===currentUser?.id?`<button class="btn btn-sm btn-danger" onclick="deleteAttachment('${a.id}','${a.file_path}','${recordType}','${recordId}')">Remove</button>`:''}
     </div>`).join('') : '<div style="font-size:11px;color:var(--text3);padding:4px">No attachments yet.</div>';
 }
 

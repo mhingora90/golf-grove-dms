@@ -375,6 +375,154 @@ async function testModuleView(browser) {
 }
 
 // =============================================================================
+// SECTION 5 — Attachment Upload / Signed URL / Delete (all modules)
+// =============================================================================
+async function testAttachmentWorkflow(browser) {
+  section('5 — ATTACHMENT UPLOAD → SIGNED URL → DELETE (Playwright, developer)');
+  const TODAY = new Date().toISOString().split('T')[0];
+  const TS5   = Date.now();
+
+  const MODS = [
+    { nav:'sub',   table:'submittals',        row:'.sub-row',    recordType:'submittal',      label:'Submittals',
+      seed:{ ref_no:'ATT-SUB-'+TS5, title:'ATT Sub', discipline:'Architecture', status:'Pending Review', submit_date:TODAY, from_party:'Contractor', to_party:'Consultant' } },
+    { nav:'ir',    table:'inspections',       row:'.ir-row',     recordType:'inspection',     label:'Inspections',
+      seed:{ ref_no:'ATT-IR-'+TS5, location:'L1', elements:'Concrete', status:'Pending', request_date:TODAY } },
+    { nav:'ncr',   table:'ncrs',              row:'.ncr-row',    recordType:'ncr',            label:'NCRs',
+      seed:{ ref_no:'ATT-NCR-'+TS5, title:'ATT NCR', status:'Open', severity:'Minor' } },
+    { nav:'rfi',   table:'rfis',              row:'.rfi-row',    recordType:'rfi',            label:'RFIs',
+      seed:{ ref_no:'ATT-RFI-'+TS5, subject:'ATT RFI', status:'Open', from_party:'Contractor', to_party:'Consultant', priority:'Normal' } },
+    { nav:'corr',  table:'correspondence',    row:'.corr-row',   recordType:'correspondence', label:'Correspondence',
+      seed:{ ref_no:'ATT-COR-'+TS5, subject:'ATT Cor', type:'Letter', status:'Open', correspondence_date:TODAY, from_party:'Consultant', to_party:'Contractor' } },
+    { nav:'punch', table:'punch_list',        row:'.punch-row',  recordType:'punch',          label:'Punch List',
+      seed:{ description:'ATT Punch', location:'L1', status:'Open', severity:'Minor' } },
+    { nav:'ms',    table:'method_statements', row:'.ms-row',     recordType:'ms',             label:'Method Statements',
+      seed:{ ref_no:'ATT-MS-'+TS5, title:'ATT MS', activity:'Concrete', status:'Pending Review', submitted_date:TODAY } },
+  ];
+
+  // Seed all records via service-role API
+  const seeds = {};
+  for (const mod of MODS) {
+    const r = await api('POST', '/rest/v1/' + mod.table, mod.seed);
+    if (r.ok && r.data?.[0]?.id) {
+      seeds[mod.table] = r.data[0].id;
+      track(mod.table, r.data[0].id);
+    } else {
+      console.warn('  WARNING seed ' + mod.table + ': ' + JSON.stringify(r.data).substring(0, 80));
+    }
+  }
+
+  const fakePdf = Buffer.from(
+    '%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj ' +
+    '2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj ' +
+    '3 0 obj<</Type/Page/MediaBox[0 0 612 792]>>endobj\n' +
+    'xref\n0 4\n0000000000 65535 f\n0000000009 00000 n\n' +
+    'trailer<</Size 4/Root 1 0 R>>\nstartxref\n%%EOF'
+  );
+
+  const page = await browser.newPage();
+  try {
+    await loginAs(page, 'developer');
+    try { await page.waitForLoadState('networkidle', { timeout: 10000 }); } catch { /* ignore */ }
+
+    for (const mod of MODS) {
+      const recordId = seeds[mod.table];
+      if (!recordId) { skip(mod.label + ' — attachment workflow', 'seed failed'); continue; }
+
+      try {
+        await navTo(page, mod.nav);
+        try { await page.waitForSelector(mod.row, { timeout: 6000 }); } catch { /* ignore */ }
+
+        const rowEl = page.locator(mod.row + '[data-id="' + recordId + '"]');
+        if (await rowEl.count() === 0) {
+          skip(mod.label + ' — attachment workflow', 'seeded row not found');
+          continue;
+        }
+
+        // Open detail modal
+        const viewBtn = rowEl.locator('button.btn-sm').first();
+        if (await viewBtn.count() > 0) await viewBtn.click();
+        else await rowEl.click();
+        await page.waitForSelector('#modal-bg.open', { timeout: 8000 });
+
+        // Confirm attachment upload input exists
+        const uploadInput = page.locator('#att-upload-' + recordId);
+        if (await uploadInput.count() === 0) {
+          fail(mod.label + ' — attachment upload input present', '#att-upload-' + recordId + ' not found');
+          try { await page.click('.modal-close', { timeout: 2000 }); } catch { /* ignore */ }
+          try { await page.waitForSelector('#modal-bg.open', { state: 'hidden', timeout: 3000 }); } catch { /* ignore */ }
+          continue;
+        }
+        pass(mod.label + ' — attachment upload input present');
+
+        // Trigger upload via fake PDF buffer
+        await uploadInput.setInputFiles({ name: 'test-att.pdf', mimeType: 'application/pdf', buffer: fakePdf });
+
+        // Wait for Remove button — confirms storage upload + DB insert + refreshAttList completed
+        let removeBtn;
+        try {
+          await page.waitForSelector('#att-list-' + recordId + ' button[onclick*="deleteAttachment"]', { timeout: 20000 });
+          removeBtn = page.locator('#att-list-' + recordId + ' button[onclick*="deleteAttachment"]').first();
+          pass(mod.label + ' — attachment uploaded (Remove button appeared)');
+        } catch {
+          fail(mod.label + ' — attachment uploaded', 'Remove button did not appear after 20s');
+          try { await page.click('.modal-close', { timeout: 2000 }); } catch { /* ignore */ }
+          try { await page.waitForSelector('#modal-bg.open', { state: 'hidden', timeout: 3000 }); } catch { /* ignore */ }
+          continue;
+        }
+
+        // Extract file_path from onclick: deleteAttachment('attId','file/path','type','recordId')
+        const onclickAttr = await removeBtn.getAttribute('onclick') || '';
+        const pathMatch   = onclickAttr.match(/deleteAttachment\('[^']+','([^']+)'/);
+        const filePath    = pathMatch ? pathMatch[1] : null;
+
+        if (filePath) {
+          const signCheck = await verifySignedUrl('attachments', filePath);
+          if (signCheck.ok) pass(mod.label + ' — signed URL accessible (HTTP ' + signCheck.status + ')');
+          else              fail(mod.label + ' — signed URL accessible', 'HTTP ' + signCheck.status + (signCheck.detail ? ' — ' + signCheck.detail : ''));
+          trackSt('attachments', filePath);  // track for cleanup if delete test fails
+        } else {
+          fail(mod.label + ' — extract file_path from onclick', 'onclick="' + onclickAttr.substring(0, 100) + '"');
+        }
+
+        // Click Remove → confirmModal replaces body → click #confirm-yes
+        await removeBtn.click();
+        await page.waitForSelector('#confirm-yes', { timeout: 5000 });
+        await page.click('#confirm-yes');
+
+        // toast('Attachment removed', 'info') appears after delete
+        // Use waitForFunction to avoid catching the still-visible upload success toast
+        try {
+          await page.waitForFunction(
+            () => [...document.querySelectorAll('.toast')].some(el => el.textContent.toLowerCase().includes('attachment removed')),
+            { timeout: 12000 }
+          );
+          pass(mod.label + ' — attachment deleted (toast confirmed)');
+        } catch {
+          const toastTxt = await page.locator('.toast').first().textContent().catch(() => '');
+          fail(mod.label + ' — attachment deleted', 'no "Attachment removed" toast — visible: "' + toastTxt.substring(0, 60) + '"');
+        }
+
+        // confirmModal replaced body; close modal
+        try { await page.click('.modal-close', { timeout: 3000 }); } catch { /* ignore */ }
+        try { await page.waitForSelector('#modal-bg.open', { state: 'hidden', timeout: 5000 }); } catch { /* ignore */ }
+        await page.waitForTimeout(300);
+
+      } catch (e) {
+        fail(mod.label + ' — attachment workflow', e);
+        try { await page.click('.modal-close', { timeout: 2000 }); } catch { /* ignore */ }
+        try { await page.waitForSelector('#modal-bg.open', { state: 'hidden', timeout: 3000 }); } catch { /* ignore */ }
+        await page.waitForTimeout(300);
+      }
+    }
+  } catch (e) {
+    fail('attachment workflow suite crashed', e);
+  } finally {
+    await logout(page);
+    await page.close();
+  }
+}
+
+// =============================================================================
 // Cleanup
 // =============================================================================
 async function doCleanup() {
@@ -410,6 +558,7 @@ async function doCleanup() {
     await testDrawingUploadView(browser);
     await testDeletePermissions(browser);
     await testModuleView(browser);
+    await testAttachmentWorkflow(browser);
   } finally {
     await browser.close();
     await doCleanup();

@@ -15,7 +15,7 @@ module.exports = {
   SERVICE_KEY  : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkeHZocndubmVoaWNnZHJ5b3d1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTY1ODY2MywiZXhwIjoyMDkxMjM0NjYzfQ.q9i53Jx2GXHpX5t89Tdzly0WPiS-TOeiuY36D6uRnUA',
 
   // Vercel deployment (use for full E2E; storage uploads require HTTPS)
-  APP_URL  : 'https://golf-grove-dms.vercel.app',
+  APP_URL  : process.env.APP_URL || 'https://golf-grove-dms.vercel.app',
   // Local file URL (use for fast JS / RLS tests that don't upload files)
   LOCAL_URL: 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/'),
 
