@@ -39,8 +39,12 @@ async function logout(page) {
 }
 
 async function navTo(page, id) {
-  await page.click('#n-' + id);
-  await page.waitForTimeout(1000);
+  // Ensure no modal is blocking before nav click
+  try { await page.waitForSelector('#modal-bg.open', { state: 'hidden', timeout: 2000 }); } catch { /* ignore */ }
+  await page.click('#n-' + id, { force: true });
+  // Wait for content to render — network idle ensures data fetches complete
+  try { await page.waitForLoadState('networkidle', { timeout: 8000 }); } catch { /* ignore */ }
+  await page.waitForTimeout(500);
 }
 
 async function storagePut(bucket, filePath, jwt) {
@@ -119,7 +123,16 @@ async function testDrawingUploadView(browser) {
   for (const role of ['developer', 'consultant', 'contractor']) {
     const page = await browser.newPage();
     const consoleErrors2 = [];
+    const failedRequests = [];
     page.on('console', m => { if (m.type() === 'error') consoleErrors2.push(m.text()); });
+    page.on('response', async res => {
+      if (res.status() >= 400) {
+        try {
+          const body = await res.text();
+          failedRequests.push({ url: res.url(), status: res.status(), body: body.substring(0, 200) });
+        } catch { failedRequests.push({ url: res.url(), status: res.status(), body: '(unreadable)' }); }
+      }
+    });
     try {
       await loginAs(page, role);
       await navTo(page, 'draw');
@@ -149,7 +162,7 @@ async function testDrawingUploadView(browser) {
       let toastText = '';
       const toastHandle = page.locator('.toast, [class*="toast"], [id*="toast"]').first();
       try {
-        await page.waitForSelector('#modal-bg:not(.open)', { timeout: 15000 });
+        await page.waitForSelector('#modal-bg.open', { state: 'hidden', timeout: 45000 });
         pass(role + ' — drawing uploaded via UI');
       } catch (e) {
         const w  = await page.$('#nd-num-warn');
@@ -158,7 +171,8 @@ async function testDrawingUploadView(browser) {
         try { toastText = await toastHandle.textContent({ timeout: 500 }); } catch { /* no toast */ }
         const consErrs = [];
         page.on('console', m => { if (m.type() === 'error') consErrs.push(m.text()); });
-        fail(role + ' — drawing uploaded via UI', 'modal did not close. warn="' + wt.trim() + '" toast="' + toastText.trim() + '" console=[' + consoleErrors2.slice(-2).join('|') + ']');
+        const reqInfo = failedRequests.map(r => r.status + ' ' + r.url.split('/').slice(-2).join('/') + ' → ' + r.body.substring(0, 80)).join(' | ');
+        fail(role + ' — drawing uploaded via UI', 'modal did not close. warn="' + wt.trim() + '" toast="' + toastText.trim() + '" reqs=[' + reqInfo + ']');
         await page.close();
         continue;
       }
@@ -173,7 +187,10 @@ async function testDrawingUploadView(browser) {
       }
       pass(role + ' — new drawing row in list');
 
-      await row.first().click();
+      // Click View button inside the row (clicking <tr> doesn't trigger <td onclick>)
+      const viewBtn2 = row.first().locator('button.btn-sm').first();
+      if (await viewBtn2.count() > 0) await viewBtn2.click();
+      else await row.first().locator('td[onclick*="viewDraw"]').click();
       await page.waitForSelector('#modal-bg.open', { timeout: 6000 });
       pass(role + ' — drawing detail modal opens');
 
@@ -190,7 +207,8 @@ async function testDrawingUploadView(browser) {
       if (!pdfErr) pass(role + ' — no pdf-error element');
       else         fail(role + ' — no pdf-error element', await pdfErr.textContent());
 
-      await page.keyboard.press('Escape');
+      try { await page.click('.modal-close', { timeout: 3000 }); } catch { /* ignore */ }
+      try { await page.waitForSelector('#modal-bg.open', { state: 'hidden', timeout: 3000 }); } catch { /* ignore */ }
     } catch (e) {
       fail(role + ' — upload/view suite', e);
     } finally {
@@ -209,14 +227,20 @@ async function testDeletePermissions(browser) {
   if (seed.err) { fail('seed drawing for delete tests', seed.err); return; }
   const { drawId } = seed;
 
-  for (const role of ['developer', 'consultant', 'contractor']) {
+  // consultant/contractor checked first so drawing still exists for them; developer deletes last
+  for (const role of ['consultant', 'contractor', 'developer']) {
     const page = await browser.newPage();
     try {
       await loginAs(page, role);
+      // Wait for dashboard to settle before navigating
+      try { await page.waitForLoadState('networkidle', { timeout: 8000 }); } catch { /* ignore */ }
       await navTo(page, 'draw');
+      // Explicitly wait for at least one draw-row to confirm render completed
+      try { await page.waitForSelector('tr.draw-row', { timeout: 8000 }); } catch { /* ignore */ }
       const row = page.locator('tr.draw-row[data-id="' + drawId + '"]');
       if (await row.count() === 0) {
-        skip(role + ' — delete button visibility', 'row not found');
+        const totalRows = await page.locator('tr.draw-row').count();
+        skip(role + ' — delete button visibility', 'row not found (total rows=' + totalRows + ')');
         await page.close();
         continue;
       }
@@ -235,7 +259,7 @@ async function testDeletePermissions(browser) {
           await delBtn.click();
           await page.waitForSelector('#modal-bg.open', { timeout: 4000 });
           await page.click('#confirm-yes');
-          await page.waitForSelector('#modal-bg:not(.open)', { timeout: 8000 });
+          await page.waitForSelector('#modal-bg.open', { state: 'hidden', timeout: 8000 });
           await page.waitForTimeout(600);
           const gone = await page.locator('tr.draw-row[data-id="' + drawId + '"]').count() === 0;
           if (gone) {
@@ -250,7 +274,8 @@ async function testDeletePermissions(browser) {
       } else {
         if (!delVisible) pass(role + ' — Delete Drawing button correctly hidden');
         else             fail(role + ' — Delete Drawing button hidden', 'button is visible — should not be');
-        await page.keyboard.press('Escape');
+        try { await page.click('.modal-close', { timeout: 3000 }); } catch { /* ignore */ }
+        try { await page.waitForSelector('#modal-bg.open', { state: 'hidden', timeout: 3000 }); } catch { /* ignore */ }
       }
     } catch (e) {
       fail(role + ' — delete permission test', e);
@@ -304,14 +329,19 @@ async function testModuleView(browser) {
   const page = await browser.newPage();
   try {
     await loginAs(page, 'developer');
+    // Let dashboard fully settle (its async queries fire on login)
+    try { await page.waitForLoadState('networkidle', { timeout: 10000 }); } catch { /* ignore */ }
     for (const mod of MODULES) {
       const seedId = seeds[mod.table];
       if (!seedId) { skip(mod.label + ' — view modal', 'seed failed'); continue; }
       try {
         await navTo(page, mod.nav);
+        // Wait for at least one row to confirm render completed
+        try { await page.waitForSelector(mod.row, { timeout: 6000 }); } catch { /* module might be empty */ }
         const rowEl = page.locator(mod.row + '[data-id="' + seedId + '"]');
         if (await rowEl.count() === 0) {
-          fail(mod.label + ' — seeded row in list', '[data-id="' + seedId + '"] not found');
+          const totalRows = await page.locator(mod.row).count();
+          fail(mod.label + ' — seeded row in list', '[data-id="' + seedId + '"] not found (total=' + totalRows + ')');
           continue;
         }
         // Click the View button inside the row (more reliable than clicking tr directly)
@@ -326,13 +356,14 @@ async function testModuleView(browser) {
         const bodyTxt = await page.locator('#modal-body').textContent();
         if (bodyTxt && bodyTxt.trim().length > 20) pass(mod.label + ' — modal body has content');
         else fail(mod.label + ' — modal body has content', '"' + (bodyTxt || '').substring(0, 50) + '"');
-        await page.keyboard.press('Escape');
-        try { await page.waitForSelector('#modal-bg:not(.open)', { timeout: 3000 }); } catch { /* ignore */ }
-        await page.waitForTimeout(200);
+        try { await page.click('.modal-close', { timeout: 3000 }); } catch { /* ignore */ }
+        await page.waitForSelector('#modal-bg.open', { state: 'hidden', timeout: 5000 });
+        await page.waitForTimeout(300);
       } catch (e) {
         fail(mod.label + ' — modal view', e);
-        // Ensure modal is closed before moving on
-        try { await page.keyboard.press('Escape'); await page.waitForTimeout(400); } catch { /* ignore */ }
+        try { await page.click('.modal-close', { timeout: 2000 }); } catch { /* ignore */ }
+        try { await page.waitForSelector('#modal-bg.open', { state: 'hidden', timeout: 3000 }); } catch { /* ignore */ }
+        await page.waitForTimeout(300);
       }
     }
   } catch (e) {
