@@ -682,7 +682,7 @@ function can(action) {
 async function render() {
   const el = document.getElementById('content');
   el.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
-  if(currentPage==='dash') await renderDash();
+  if(currentPage==='dash') { if(localStorage.getItem('dashTheme')==='v2') await renderDashV2(); else await renderDash(); }
   else if(currentPage==='draw') await renderDrawings();
   else if(currentPage==='sub') await renderSubmittals();
   else if(currentPage==='sreg') await renderSubmittalRegister();
@@ -906,6 +906,9 @@ async function renderDash() {
   ];
   const slaTotalOverdue = slaRows.reduce((s,r)=>s+r.count,0);
   document.getElementById('content').innerHTML = `
+  <div style="display:flex;justify-content:flex-end;margin-bottom:4px">
+    <button onclick="localStorage.setItem('dashTheme','v2');renderDashV2()" style="font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);border:0.5px solid var(--border2);background:transparent;padding:4px 11px;cursor:pointer;border-radius:3px;transition:.15s" onmouseover="this.style.color='var(--charcoal)'" onmouseout="this.style.color='var(--text3)'">Studio \u2197</button>
+  </div>
   ${overdueAll.length?`<div style="background:var(--amber-bg);border:0.5px solid #FAC775;border-radius:var(--radius-lg);padding:12px 16px;margin-bottom:16px">
     <div style="font-size:11px;font-weight:500;color:var(--amber);margin-bottom:8px">${overdueAll.length} overdue item${overdueAll.length>1?'s':''}</div>
     <div style="display:flex;flex-direction:column;gap:4px">
@@ -1094,6 +1097,273 @@ async function renderDash() {
         + '<div style="flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden">'
         + '<div style="height:100%;width:'+pct+'%;background:var(--sand);border-radius:3px"></div></div>'
         + '<div style="font-size:11px;font-weight:500;color:var(--charcoal);width:30px;text-align:right">'+pct+'%</div></div>';
+    }).join('');
+  })();
+}
+
+// ─── DASHBOARD V2 (Studio View) ──────────────────────────────────────
+async function renderDashV2() {
+  if(!document.getElementById('v2-fonts')) {
+    const lk=document.createElement('link'); lk.id='v2-fonts'; lk.rel='stylesheet';
+    lk.href='https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap';
+    document.head.appendChild(lk);
+  }
+  const today=new Date().toISOString().split('T')[0];
+  const thirtyAgo=new Date(Date.now()-30*86400000).toISOString().split('T')[0];
+  const counts=await Promise.all([
+    sb.from('drawings').select('*',{head:true,count:'exact'}),
+    sb.from('submittals').select('*',{head:true,count:'exact'}),
+    sb.from('inspections').select('*',{head:true,count:'exact'}),
+    sb.from('ncrs').select('*',{head:true,count:'exact'}),
+    sb.from('subcontractors').select('*',{head:true,count:'exact'}),
+    sb.from('rfis').select('*',{head:true,count:'exact'}),
+    sb.from('submittals').select('*',{head:true,count:'exact'}).eq('status','Pending Review'),
+    sb.from('inspections').select('*',{head:true,count:'exact'}).eq('status','Pending'),
+    sb.from('ncrs').select('*',{head:true,count:'exact'}).eq('status','Open'),
+    sb.from('rfis').select('*',{head:true,count:'exact'}).eq('status','Open'),
+    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('status','Approved'),
+    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('status','Issued for Construction'),
+    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('status','Under Review'),
+    sb.from('submittals').select('*',{head:true,count:'exact'}).lt('due_date',today).eq('status','Pending Review'),
+    sb.from('inspections').select('*',{head:true,count:'exact'}).lt('due_date',today).eq('status','Pending'),
+    sb.from('rfis').select('*',{head:true,count:'exact'}).lt('due_date',today).eq('status','Open'),
+    sb.from('ncrs').select('*',{head:true,count:'exact'}).lt('raised_date',thirtyAgo).neq('status','Closed'),
+  ]);
+  const [drawCnt,subCnt,irCnt,ncrCnt,,rfiCnt,pSubCnt,pIRCnt,oNCRCnt,oRFICnt,apprCnt,ifcCnt,revCnt,oSubCnt,oIRCnt,oRFIOvdCnt,oNCROvdCnt]=counts;
+  const {data:ipcData}=await sb.from('payment_certificates').select('id,status,retention_pct,advance_recovery_pct,vat_pct,previously_paid').in('status',['Certified','Paid']);
+  let ipcTotalCertified=0;
+  for(const pc of ipcData||[]){const{data:pit}=await sb.from('payment_certificate_items').select('consultant_amount').eq('cert_id',pc.id);const gross=(pit||[]).reduce((s,i)=>s+(+i.consultant_amount||0),0);const ret=gross*(+pc.retention_pct||10)/100;const adv=gross*(+pc.advance_recovery_pct||10)/100;const nbv=gross-ret-adv-(+pc.previously_paid||0);ipcTotalCertified+=nbv+nbv*(+pc.vat_pct||5)/100;}
+  const ipcCount=(ipcData||[]).length;
+  const ipcPaid=(ipcData||[]).filter(c=>c.status==='Paid').length;
+  const rows=await Promise.all([
+    sb.from('submittals').select('id,ref_no,title,status').eq('status','Pending Review').limit(5),
+    sb.from('inspections').select('id,ref_no,elements,inspection_date').eq('status','Pending').limit(5),
+    sb.from('ncrs').select('id,ref_no,title,severity').eq('status','Open').limit(5),
+    sb.from('drawings').select('id,drawing_no,title,revision,status').order('created_at',{ascending:false}).limit(4),
+    sb.from('submittals').select('ref_no,title,due_date').eq('status','Pending Review').lt('due_date',today).limit(20),
+    sb.from('inspections').select('ref_no,elements:title,due_date').eq('status','Pending').lt('due_date',today).limit(20),
+    sb.from('rfis').select('ref_no,subject:title,due_date').eq('status','Open').lt('due_date',today).limit(20),
+  ]);
+  const [pSubR,pIRR,oNCRR,rDrawR,oSubR,oIRR,oRFIR]=rows;
+  const pendSubs=pSubR.data||[]; const pendIRs=pIRR.data||[];
+  const openNCRs=oNCRR.data||[]; const recentDraws=rDrawR.data||[];
+  const overdueAll=[...(oSubR.data||[]).map(s=>({...s,_type:'Submittal'})),...(oIRR.data||[]).map(i=>({...i,_type:'Inspection'})),...(oRFIR.data||[]).map(r=>({...r,_type:'RFI'}))];
+  const slaRows=[{label:'Overdue IRs',count:oIRCnt.count||0,page:'ir'},{label:'Overdue NCRs',count:oNCROvdCnt.count||0,page:'ncr'},{label:'Overdue RFIs',count:oRFIOvdCnt.count||0,page:'rfi'},{label:'Overdue Submittals',count:oSubCnt.count||0,page:'sub'}];
+  const slaTotalOverdue=slaRows.reduce((s,r)=>s+r.count,0);
+  const tot=drawCnt.count||0; const appr=apprCnt.count||0; const ifc=ifcCnt.count||0; const rev=revCnt.count||0; const pend=Math.max(0,tot-appr-rev);
+  const circ=2*Math.PI*52; const pct=tot>0?Math.round((appr/tot)*100):0;
+  const aDash=tot>0?(appr/tot)*circ:0; const rDash=tot>0?(rev/tot)*circ:0; const pDash=tot>0?(pend/tot)*circ:0; const offset=circ/4;
+  const dateStr=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+
+  document.getElementById('content').innerHTML=`<style id="dv2-css">
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+.dv2{--bg:#0B0C0F;--surf:#0F1014;--ln:#1C1F28;--ln2:#282D3A;--tx:#CDD2E0;--dim:#616880;--mt:#343848;--gd:#C4A472;--am:#CE7840;--gr:#588A4E;--bl:#4878BE;--rd:#B84848;--nf:'Cormorant Garamond',Georgia,serif;--sf:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--tx);font-family:var(--sf);margin:-20px -24px;min-height:calc(100% + 40px)}
+.dv2 *{box-sizing:border-box}
+.dv2-hdr{display:flex;align-items:flex-start;justify-content:space-between;padding:26px 32px 22px;border-bottom:1px solid var(--ln)}
+.dv2-proj{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gd);margin-bottom:5px}
+.dv2-sub{font-size:12px;font-weight:300;color:var(--dim);letter-spacing:.03em}
+.dv2-hdr-r{display:flex;align-items:center;gap:16px}
+.dv2-dt{font-size:10px;font-weight:300;letter-spacing:.14em;color:var(--dim)}
+.dv2-tog{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mt);border:1px solid var(--ln2);background:transparent;padding:5px 12px;cursor:pointer;transition:.15s;font-family:var(--sf)}
+.dv2-tog:hover{color:var(--tx);border-color:var(--dim)}
+.dv2-ovd{display:flex;align-items:center;gap:14px;padding:9px 32px;background:#170E08;border-bottom:1px solid var(--am);font-size:10px}
+.dv2-ovd-lbl{font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--am);flex-shrink:0}
+.dv2-stats{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--ln)}
+.dv2-st{padding:22px 26px 18px;border-right:1px solid var(--ln)}
+.dv2-st:last-child{border-right:none}
+.dv2-stl{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.dv2-stn{font-family:var(--nf);font-size:62px;font-weight:300;line-height:1;color:var(--tx);margin-bottom:5px;letter-spacing:-.02em}
+.dv2-stn.w{color:var(--am)}.dv2-stn.a{color:var(--rd)}
+.dv2-sts{font-size:10px;font-weight:300;color:var(--dim)}
+.dv2-sts.g{color:var(--gr)}
+.dv2-cmp{display:flex;align-items:center;gap:0;padding:14px 32px;border-bottom:1px solid var(--ln)}
+.dv2-iso{min-width:72px}
+.dv2-iso-n{font-family:var(--nf);font-size:38px;font-weight:300;color:var(--gd);letter-spacing:-.02em}
+.dv2-iso-l{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:2px}
+.dv2-div{width:1px;background:var(--ln2);align-self:stretch;margin:0 22px;flex-shrink:0}
+.dv2-bars{flex:1;display:flex;flex-direction:column;gap:9px}
+.dv2-br{display:flex;align-items:center;gap:12px}
+.dv2-br-nm{font-size:10px;color:var(--dim);width:190px;flex-shrink:0}
+.dv2-br-tr{flex:1;height:2px;background:var(--ln2);position:relative;overflow:hidden}
+.dv2-br-fi{position:absolute;top:0;left:0;height:100%;background:var(--gd);transition:width .5s ease}
+.dv2-br-pc{font-family:var(--nf);font-size:14px;color:var(--tx);min-width:34px;text-align:right}
+.dv2-ct{font-size:9px;color:var(--mt);margin-left:20px;text-align:right;line-height:1.7;flex-shrink:0}
+.dv2-grid{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--ln)}
+.dv2-ch{padding:18px 22px;border-right:1px solid var(--ln)}
+.dv2-ch:last-child{border-right:none}
+.dv2-ch-t{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:3px}
+.dv2-ch-s{font-size:10px;font-weight:300;color:var(--mt);margin-bottom:14px}
+.dv2-leg{display:flex;flex-direction:column;gap:7px;width:100%}
+.dv2-leg-r{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--dim)}
+.dv2-leg-d{width:4px;height:4px;border-radius:50%;flex-shrink:0}
+.dv2-leg-v{font-family:var(--nf);font-size:14px;color:var(--tx);margin-left:auto}
+.dv2-disc-r{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.dv2-disc-n{font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);width:52px;flex-shrink:0}
+.dv2-disc-tr{flex:1;height:1px;background:var(--ln2);position:relative}
+.dv2-disc-fi{position:absolute;top:0;left:0;height:100%;background:var(--gd)}
+.dv2-disc-pc{font-family:var(--nf);font-size:16px;color:var(--tx);min-width:36px;text-align:right}
+.dv2-oi-g{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.dv2-oi{text-align:center}
+.dv2-oi-l{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mt);margin-bottom:3px}
+.dv2-oi-n{font-family:var(--nf);font-size:48px;font-weight:300;line-height:1;letter-spacing:-.02em}
+.dv2-oi-c{font-size:9px;color:var(--mt);margin-top:3px}
+.dv2-sb{border-top:1px solid var(--ln);padding-top:11px}
+.dv2-sb-l{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mt);margin-bottom:7px}
+.dv2-sb-tr{height:1px;background:var(--ln2);position:relative;margin-bottom:4px}
+.dv2-sb-fi{position:absolute;top:0;left:0;height:1px;background:var(--gd)}
+.dv2-sb-c{font-family:var(--nf);font-size:14px;color:var(--dim);text-align:right}
+.dv2-sla-r{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--ln)}
+.dv2-sla-d{width:4px;height:4px;border-radius:50%;flex-shrink:0}
+.dv2-sla-l{flex:1;font-size:10px}
+.dv2-sla-n{font-family:var(--nf);font-size:20px;min-width:22px;text-align:right}
+.dv2-sla-lk{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:6px;color:var(--bl)}
+.dv2-tbl-g{display:grid;grid-template-columns:1fr 1fr}
+.dv2-tbl{padding:18px 26px;border-right:1px solid var(--ln);border-top:1px solid var(--ln)}
+.dv2-tbl:nth-child(2n){border-right:none}
+.dv2-tbl:nth-child(1),.dv2-tbl:nth-child(2){border-top:none}
+.dv2-tbl-t{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.dv2 table{width:100%;border-collapse:collapse;font-size:11px}
+.dv2 th{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mt);text-align:left;padding:0 8px 7px 0;border-bottom:1px solid var(--ln)}
+.dv2 td{padding:8px 8px 8px 0;border-bottom:1px solid var(--ln);color:var(--dim);vertical-align:middle}
+.dv2 td:first-child{font-family:var(--nf);font-size:12px;color:var(--gd);white-space:nowrap}
+.dv2 tr:last-child td{border-bottom:none}
+.dv2 tr[onclick]{cursor:pointer}
+.dv2 tr[onclick]:hover td{color:var(--tx)}
+.dv2 .emp{color:var(--mt);font-size:10px;padding:14px 0}
+</style>
+<div class="dv2">
+  <div class="dv2-hdr">
+    <div>
+      <div class="dv2-proj">Golf Grove &nbsp;—&nbsp; Regent Developments</div>
+      <div class="dv2-sub">Residential Building B+G+P+7+Roof &nbsp;&middot;&nbsp; Document Management System</div>
+    </div>
+    <div class="dv2-hdr-r">
+      <div class="dv2-dt">${dateStr}</div>
+      <button class="dv2-tog" onclick="localStorage.removeItem('dashTheme');renderDash()">&larr; Classic View</button>
+    </div>
+  </div>
+  ${overdueAll.length?`<div class="dv2-ovd"><div class="dv2-ovd-lbl">${overdueAll.length} Overdue</div><div style="display:flex;flex-wrap:wrap;gap:10px;color:#907060">${overdueAll.slice(0,5).map(o=>`<span>${o.ref_no||''}&thinsp;&mdash;&thinsp;${(o.title||o.subject||'').substring(0,30)} <span style="color:var(--am)">${o.due_date}</span></span>`).join('<span style="color:var(--mt)">&nbsp;&middot;&nbsp;</span>')}</div></div>`:''}
+  <div class="dv2-stats">
+    <div class="dv2-st"><div class="dv2-stl">Drawings</div><div class="dv2-stn">${drawCnt.count||0}</div><div class="dv2-sts">${apprCnt.count||0} approved</div></div>
+    <div class="dv2-st"><div class="dv2-stl">Submittals</div><div class="dv2-stn">${subCnt.count||0}</div><div class="dv2-sts">${pSubCnt.count||0} pending review</div></div>
+    <div class="dv2-st"><div class="dv2-stl">Inspections</div><div class="dv2-stn">${irCnt.count||0}</div><div class="dv2-sts">${pIRCnt.count||0} awaiting response</div></div>
+    <div class="dv2-st"><div class="dv2-stl">Open NCRs</div><div class="dv2-stn ${(oNCRCnt.count||0)>0?'w':''}">${oNCRCnt.count||0}</div><div class="dv2-sts">${(ncrCnt.count||0)-(oNCRCnt.count||0)} closed</div></div>
+    <div class="dv2-st"><div class="dv2-stl">Open RFIs</div><div class="dv2-stn ${(oRFICnt.count||0)>0?'w':''}">${oRFICnt.count||0}</div><div class="dv2-sts">${(rfiCnt.count||0)-(oRFICnt.count||0)} closed</div></div>
+    <div class="dv2-st" style="cursor:pointer" onclick="nav('ipc',document.getElementById('n-ipc'))"><div class="dv2-stl">Payment Certs</div><div class="dv2-stn">${ipcCount}</div><div class="dv2-sts ${ipcTotalCertified>0?'g':''}">${ipcTotalCertified>0?fmtAED(ipcTotalCertified)+' cert.':ipcPaid+' paid'}</div></div>
+  </div>
+  <div class="dv2-cmp">
+    <div class="dv2-iso">
+      <div class="dv2-iso-n" id="dv2-iso-score">&mdash;</div>
+      <div class="dv2-iso-l">ISO 19650</div>
+    </div>
+    <div class="dv2-div"></div>
+    <div class="dv2-bars">
+      <div class="dv2-br"><div class="dv2-br-nm">Published or Archived</div><div class="dv2-br-tr"><div class="dv2-br-fi" id="dv2-pub-fill" style="width:0%"></div></div><div class="dv2-br-pc" id="dv2-pub-pct">&mdash;</div></div>
+      <div class="dv2-br"><div class="dv2-br-nm">Complete metadata &middot; ISO &sect;5.3.2</div><div class="dv2-br-tr"><div class="dv2-br-fi" id="dv2-meta-fill" style="width:0%"></div></div><div class="dv2-br-pc" id="dv2-meta-pct">&mdash;</div></div>
+    </div>
+    <div class="dv2-ct" id="dv2-ct">&mdash;<br>tracked</div>
+  </div>
+  <div class="dv2-grid">
+    <div class="dv2-ch">
+      <div class="dv2-ch-t">Drawing Approval</div>
+      <div class="dv2-ch-s">${tot} total drawings</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
+        <svg width="118" height="118" viewBox="0 0 130 130">
+          <circle cx="65" cy="65" r="52" fill="none" stroke="#1C2030" stroke-width="10"/>
+          ${tot>0?`<circle cx="65" cy="65" r="52" fill="none" stroke="#4A8040" stroke-width="10" stroke-dasharray="${aDash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}" stroke-linecap="butt"/>
+          <circle cx="65" cy="65" r="52" fill="none" stroke="#4070B0" stroke-width="10" stroke-dasharray="${rDash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${(offset-aDash).toFixed(1)}" stroke-linecap="butt"/>
+          <circle cx="65" cy="65" r="52" fill="none" stroke="#C4A472" stroke-width="10" stroke-dasharray="${pDash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${(offset-aDash-rDash).toFixed(1)}" stroke-linecap="butt"/>`:''}
+          <text x="65" y="60" text-anchor="middle" font-size="26" font-weight="300" fill="#CDD2E0" font-family="Cormorant Garamond,Georgia,serif">${pct}%</text>
+          <text x="65" y="76" text-anchor="middle" font-size="8" fill="#616880" font-family="DM Sans,sans-serif" letter-spacing="2">APPROVED</text>
+        </svg>
+        <div class="dv2-leg">
+          <div class="dv2-leg-r"><div class="dv2-leg-d" style="background:#4A8040"></div>IFC<div class="dv2-leg-v">${ifc}</div></div>
+          <div class="dv2-leg-r"><div class="dv2-leg-d" style="background:#2E5020"></div>Approved<div class="dv2-leg-v">${appr}</div></div>
+          <div class="dv2-leg-r"><div class="dv2-leg-d" style="background:#4070B0"></div>Review<div class="dv2-leg-v">${rev}</div></div>
+          <div class="dv2-leg-r"><div class="dv2-leg-d" style="background:#C4A472"></div>Pending<div class="dv2-leg-v">${pend}</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="dv2-ch">
+      <div class="dv2-ch-t">Discipline Status</div>
+      <div class="dv2-ch-s">by approved drawings</div>
+      <div id="dv2-disc"></div>
+    </div>
+    <div class="dv2-ch">
+      <div class="dv2-ch-t">Open Items</div>
+      <div class="dv2-ch-s">NCRs + RFIs</div>
+      <div class="dv2-oi-g">
+        <div class="dv2-oi"><div class="dv2-oi-l">NCRs</div><div class="dv2-oi-n" style="color:${(oNCRCnt.count||0)>0?'var(--am)':'var(--dim)'}">${oNCRCnt.count||0}</div><div class="dv2-oi-c">${(ncrCnt.count||0)-(oNCRCnt.count||0)} closed</div></div>
+        <div class="dv2-oi"><div class="dv2-oi-l">RFIs</div><div class="dv2-oi-n" style="color:${(oRFICnt.count||0)>0?'var(--am)':'var(--dim)'}">${oRFICnt.count||0}</div><div class="dv2-oi-c">${(rfiCnt.count||0)-(oRFICnt.count||0)} closed</div></div>
+      </div>
+      <div class="dv2-sb">
+        <div class="dv2-sb-l">Submittals Pending</div>
+        <div class="dv2-sb-tr"><div class="dv2-sb-fi" style="width:${(subCnt.count||0)>0?Math.round(((pSubCnt.count||0)/(subCnt.count||1))*100):0}%"></div></div>
+        <div class="dv2-sb-c">${pSubCnt.count||0} / ${subCnt.count||0}</div>
+      </div>
+    </div>
+    <div class="dv2-ch">
+      <div class="dv2-ch-t">SLA Status</div>
+      <div class="dv2-ch-s" style="color:${slaTotalOverdue>0?'var(--rd)':'var(--gr)'}">${slaTotalOverdue>0?slaTotalOverdue+' overdue':'All clear'}</div>
+      ${slaRows.map(r=>`<div class="dv2-sla-r"><div class="dv2-sla-d" style="background:${r.count>0?'var(--rd)':'var(--mt)'}"></div><div class="dv2-sla-l" style="color:${r.count>0?'var(--tx)':'var(--mt)'}">${r.label}</div><div class="dv2-sla-n" style="color:${r.count>0?'var(--rd)':'var(--mt)'}">${r.count}</div>${r.count>0?`<span class="dv2-sla-lk" onclick="nav('${r.page}',null,{filter:'overdue'})">View</span>`:''}</div>`).join('')}
+    </div>
+  </div>
+  <div class="dv2-tbl-g">
+    <div class="dv2-tbl">
+      <div class="dv2-tbl-t">Pending Submittals</div>
+      <table><thead><tr><th>Ref</th><th>Title</th><th>Status</th></tr></thead><tbody>
+      ${pendSubs.length?pendSubs.map(s=>`<tr onclick="viewSub('${s.id}')"><td>${s.ref_no}</td><td style="color:var(--tx)">${s.title}</td><td>${s.status}</td></tr>`).join(''):'<tr><td colspan="3" class="emp">No pending submittals</td></tr>'}
+      </tbody></table>
+    </div>
+    <div class="dv2-tbl">
+      <div class="dv2-tbl-t">Pending Inspections</div>
+      <table><thead><tr><th>Ref</th><th>Description</th><th>Date</th></tr></thead><tbody>
+      ${pendIRs.length?pendIRs.map(i=>`<tr onclick="viewIR('${i.id}')"><td>${i.ref_no}</td><td style="color:var(--tx)">${(i.elements||'').substring(0,38)}</td><td>${i.inspection_date||'&mdash;'}</td></tr>`).join(''):'<tr><td colspan="3" class="emp">No pending inspections</td></tr>'}
+      </tbody></table>
+    </div>
+    <div class="dv2-tbl">
+      <div class="dv2-tbl-t">Open NCRs</div>
+      <table><thead><tr><th>Ref</th><th>Title</th><th>Severity</th></tr></thead><tbody>
+      ${openNCRs.length?openNCRs.map(n=>`<tr onclick="viewNCR('${n.id}')"><td>${n.ref_no}</td><td style="color:var(--tx)">${n.title}</td><td style="color:var(--am)">${n.severity}</td></tr>`).join(''):'<tr><td colspan="3" class="emp">No open NCRs</td></tr>'}
+      </tbody></table>
+    </div>
+    <div class="dv2-tbl">
+      <div class="dv2-tbl-t">Recent Drawings</div>
+      <table><thead><tr><th>No.</th><th>Title</th><th>Rev</th><th>Status</th></tr></thead><tbody>
+      ${recentDraws.length?recentDraws.map(d=>`<tr onclick="viewDraw('${d.id}')"><td>${d.drawing_no}</td><td style="color:var(--tx)">${d.title}</td><td style="color:var(--gd)">${d.revision}</td><td>${d.status}</td></tr>`).join(''):'<tr><td colspan="4" class="emp">No drawings yet</td></tr>'}
+      </tbody></table>
+    </div>
+  </div>
+</div>`;
+
+  (async()=>{
+    const [allD,pubD,metaD]=await Promise.all([
+      sb.from('drawings').select('*',{head:true,count:'exact'}),
+      sb.from('drawings').select('*',{head:true,count:'exact'}).in('cde_state',['Published','Archived']),
+      sb.from('drawings').select('*',{head:true,count:'exact'}).not('originator','is',null).not('zone','is',null).not('level','is',null),
+    ]);
+    const total=allD.count||0; const published=pubD.count||0; const withMeta=metaD.count||0;
+    const pubPct=total>0?Math.round((published/total)*100):0;
+    const metaPct=total>0?Math.round((withMeta/total)*100):0;
+    const score=Math.round((pubPct+metaPct)/2);
+    const scoreEl=document.getElementById('dv2-iso-score'); if(scoreEl) scoreEl.textContent=score+'%';
+    const pf=document.getElementById('dv2-pub-fill'); if(pf) pf.style.width=pubPct+'%';
+    const pp=document.getElementById('dv2-pub-pct'); if(pp) pp.textContent=pubPct+'%';
+    const mf=document.getElementById('dv2-meta-fill'); if(mf) mf.style.width=metaPct+'%';
+    const mp=document.getElementById('dv2-meta-pct'); if(mp) mp.textContent=metaPct+'%';
+    const ct=document.getElementById('dv2-ct'); if(ct) ct.innerHTML=total+'<br>tracked';
+  })();
+
+  (async()=>{
+    const disciplines=['Architecture','Structure','MEP','Civil'];
+    const dc=await Promise.all(disciplines.map(d=>Promise.all([
+      sb.from('drawings').select('*',{count:'exact',head:true}).eq('discipline',d),
+      sb.from('drawings').select('*',{count:'exact',head:true}).eq('discipline',d).eq('status','Approved')
+    ])));
+    const el=document.getElementById('dv2-disc'); if(!el) return;
+    el.innerHTML=disciplines.map((d,i)=>{
+      const t=dc[i][0].count||0; const a=dc[i][1].count||0; const p=t>0?Math.round((a/t)*100):0;
+      return `<div class="dv2-disc-r"><div class="dv2-disc-n">${d.substring(0,4).toUpperCase()}</div><div class="dv2-disc-tr"><div class="dv2-disc-fi" style="width:${p}%"></div></div><div class="dv2-disc-pc">${p}%</div></div>`;
     }).join('');
   })();
 }
