@@ -5251,6 +5251,18 @@ function esc(s) {
 function fmtAED(n) {
   return 'AED ' + (+n||0).toLocaleString('en-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
+function showBarTip(e,text) {
+  let t=document.getElementById('bar-tip');
+  if(!t){t=document.createElement('div');t.id='bar-tip';t.style.cssText='position:fixed;pointer-events:none;background:#2A2420;color:#F5F0E8;font-size:11px;padding:5px 10px;border-radius:5px;white-space:nowrap;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.25);display:none';document.body.appendChild(t);}
+  t.textContent=text;t.style.display='block';moveBarTip(e);
+}
+function moveBarTip(e) {
+  const t=document.getElementById('bar-tip');if(!t||t.style.display==='none')return;
+  t.style.left=(e.clientX+12)+'px';t.style.top=(e.clientY-28)+'px';
+}
+function hideBarTip() {
+  const t=document.getElementById('bar-tip');if(t)t.style.display='none';
+}
 function fmtCompact(n) {
   const v = +n||0;
   if(v>=1e9) return 'AED '+(v/1e9).toFixed(2)+'B';
@@ -6244,22 +6256,23 @@ async function renderFinance() {
       const x0 = 60 + mi*(GROUP_W+GROUP_GAP);
       const d = monthMap[m];
       const bh = (v)=>Math.max(0,(v/maxVal)*plotH);
-      const bar = (x,h,color)=>`<rect x="${x}" y="${plotTop+plotH-h}" width="${BAR_W}" height="${h}" rx="2" fill="${color}"/>`;
+      const monthLabel = new Date(m+'-01').toLocaleDateString('en-GB',{month:'short',year:'numeric'});
+      const bar = (x,h,color,tip)=>h>0?`<rect x="${x}" y="${plotTop+plotH-h}" width="${BAR_W}" height="${h}" rx="2" fill="${color}" style="cursor:default" onmouseenter="showBarTip(event,'${tip}')" onmouseleave="hideBarTip()"/>`:'' ;
       const label = new Date(m+'-01').toLocaleDateString('en-GB',{month:'short',year:'2-digit'});
-      return bar(x0, bh(d.claimed), '#C4A882')
-           + bar(x0+BAR_W+BAR_GAP, bh(d.certified), '#3B6D11')
-           + bar(x0+(BAR_W+BAR_GAP)*2, bh(d.paid), '#185FA5')
+      return bar(x0, bh(d.claimed), '#C4A882', `${monthLabel} · Claimed: AED ${d.claimed.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2})}`)
+           + bar(x0+BAR_W+BAR_GAP, bh(d.certified), '#3B6D11', `${monthLabel} · Certified: AED ${d.certified.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2})}`)
+           + bar(x0+(BAR_W+BAR_GAP)*2, bh(d.paid), '#185FA5', `${monthLabel} · Paid: AED ${d.paid.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2})}`)
            + `<text x="${x0+GROUP_W/2}" y="${plotTop+plotH+14}" text-anchor="middle" font-size="9" fill="#7A6E5F">${label}</text>`;
     }).join('');
 
-    return `<div class="card" style="padding:16px 18px;margin-bottom:20px;overflow-x:auto">
+    return `<div class="card" style="padding:16px 18px;margin-bottom:20px;overflow-x:auto;position:relative">
       <div style="font-size:12px;font-weight:500;color:var(--charcoal);margin-bottom:12px">Monthly Claimed / Certified / Paid</div>
       <div style="display:flex;gap:16px;margin-bottom:10px;flex-wrap:wrap">
         <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><span style="width:10px;height:10px;border-radius:2px;background:var(--sand-light);flex-shrink:0"></span>Claimed</span>
         <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><span style="width:10px;height:10px;border-radius:2px;background:var(--green);flex-shrink:0"></span>Certified</span>
         <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><span style="width:10px;height:10px;border-radius:2px;background:var(--blue);flex-shrink:0"></span>Paid</span>
       </div>
-      <svg width="${svgW}" height="${svgH+30}" style="min-width:${svgW}px;display:block">
+      <svg width="${svgW}" height="${svgH+30}" style="min-width:${svgW}px;display:block" onmousemove="moveBarTip(event)">
         ${yLabels}${bars}
       </svg>
     </div>`;
