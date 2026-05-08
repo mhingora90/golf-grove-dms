@@ -6188,7 +6188,8 @@ async function renderFinance() {
   function ensureMonth(ym) { if(!monthMap[ym]) monthMap[ym]={claimed:0,certified:0,paid:0}; }
   for(const c of certs||[]) {
     const a = certAmt[c.id]||{claimed:0,certified:0};
-    if(c.submitted_date) { const ym=c.submitted_date.slice(0,7); ensureMonth(ym); monthMap[ym].claimed+=a.claimed; }
+    const claimDate = c.submitted_date||c.certified_date;
+    if(claimDate) { const ym=claimDate.slice(0,7); ensureMonth(ym); monthMap[ym].claimed+=a.claimed; }
     if(c.certified_date) { const ym=c.certified_date.slice(0,7); ensureMonth(ym); monthMap[ym].certified+=a.certified; }
     if(c.paid_date)      { const ym=c.paid_date.slice(0,7);      ensureMonth(ym); monthMap[ym].paid+=netOfCert(c); }
   }
