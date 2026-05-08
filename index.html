@@ -829,7 +829,7 @@ function sbadge(s) {
     'Revise & Resubmit':'badge-warning','Correction':'badge-warning','Open':'badge-warning','High':'badge-warning',
     'Rejected':'badge-danger','Major':'badge-danger','Critical':'badge-danger',
     'Normal':'badge-neutral','Minor':'badge-neutral','Void':'badge-danger','Cancelled':'badge-danger',
-    'Draft':'badge-neutral','Submitted':'badge-info','Under Review':'badge-warning','Certified':'badge-success','Paid':'badge-success',
+    'Draft':'badge-neutral','Submitted':'badge-info','Under Review':'badge-warning','Certified':'badge-success','Paid':'badge-success','Part Paid':'badge-warning',
   };
   return `<span class="badge ${m[norm]||'badge-neutral'}">${s}</span>`;
 }
@@ -868,7 +868,7 @@ async function renderDash() {
          oSubCnt,oIRCnt,oRFIOvdCnt,oNCROvdCnt] = counts;
 
   // IPC summary — latest certified net amount
-  const {data:ipcData} = await sb.from('payment_certificates').select('id,status,retention_pct,advance_recovery_pct,vat_pct,previously_paid').in('status',['Certified','Paid']);
+  const {data:ipcData} = await sb.from('payment_certificates').select('id,status,retention_pct,advance_recovery_pct,vat_pct,previously_paid,amount_paid').in('status',['Certified','Paid']);
   let ipcTotalCertified = 0;
   for(const pc of ipcData||[]) {
     const {data:pit} = await sb.from('payment_certificate_items').select('consultant_amount').eq('cert_id',pc.id);
@@ -6060,23 +6060,47 @@ async function saveIPCCertification(id, action) {
 }
 
 function openRecordPayment(id) {
+  const cert = window._ipcCert||{};
+  const pitems = window._ipcPitems||{};
+  const gross = Object.values(pitems).reduce((s,pi)=>s+(+pi.consultant_amount||0),0);
+  const ret = gross*(+cert.retention_pct||0)/100;
+  const adv = gross*(+cert.advance_recovery_pct||0)/100;
+  const prev = +cert.previously_paid||0;
+  const nbv = gross-ret-adv-prev;
+  const netCertified = Math.round((nbv+nbv*(+cert.vat_pct||0)/100)*100)/100;
+  const alreadyPaid = Math.round((+cert.amount_paid||0)*100)/100;
+  const remaining = Math.max(0, Math.round((netCertified-alreadyPaid)*100)/100);
+  window._payCtx = {id, netCertified, alreadyPaid};
   openModal('Record Payment', `
-    <p style="font-size:12px;color:var(--text2);line-height:1.6">Confirm payment has been made against this certified IPC.</p>
+    <div style="background:var(--bg3);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <div><div style="color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Net Certified</div><div style="font-weight:600;color:var(--charcoal)">${fmtAED(netCertified)}</div></div>
+      <div><div style="color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Already Paid</div><div style="font-weight:600;color:var(--text2)">${fmtAED(alreadyPaid)}</div></div>
+      <div><div style="color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Balance Due</div><div style="font-weight:600;color:var(--green)">${fmtAED(remaining)}</div></div>
+    </div>
     <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Amount Being Paid (AED)</label><input type="number" class="form-control" id="pay-amount" value="${remaining.toFixed(2)}" min="0.01" step="0.01" /></div>
       <div class="form-group"><label class="form-label-dark">Payment Date</label><input type="date" class="form-control" id="pay-date" value="${new Date().toISOString().split('T')[0]}" /></div>
-      <div class="form-group"><label class="form-label-dark">Payment Reference</label><input type="text" class="form-control" id="pay-ref" placeholder="Bank ref / cheque no." /></div>
-    </div>`,
-    `<button class="btn btn-primary" onclick="doRecordPayment('${id}')">Confirm Payment</button>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Payment Reference</label><input type="text" class="form-control" id="pay-ref" placeholder="Bank ref / cheque no." /></div>`,
+    `<button class="btn btn-primary" onclick="doRecordPayment()">Confirm Payment</button>
      <button class="btn" onclick="closeModal()">Cancel</button>`);
 }
 
-async function doRecordPayment(id) {
-  const date = document.getElementById('pay-date').value;
-  const ref  = document.getElementById('pay-ref').value.trim();
+async function doRecordPayment() {
+  const {id, netCertified, alreadyPaid} = window._payCtx||{};
+  const amtNow = parseFloat(document.getElementById('pay-amount').value)||0;
+  const date   = document.getElementById('pay-date').value;
+  const ref    = document.getElementById('pay-ref').value.trim();
   if(!date) { toast('Payment date is required','error'); return; }
-  const {error} = await sb.from('payment_certificates').update({status:'Paid',paid_date:date,payment_ref:ref}).eq('id',id);
+  if(amtNow <= 0) { toast('Amount must be greater than 0','error'); return; }
+  const newTotal = Math.round((alreadyPaid + amtNow)*100)/100;
+  const newStatus = newTotal >= netCertified ? 'Paid' : 'Certified';
+  const {error} = await sb.from('payment_certificates').update({
+    amount_paid: newTotal, paid_date: date, payment_ref: ref, status: newStatus
+  }).eq('id',id);
   if(error) { toast('Error: '+error.message,'error'); return; }
-  toast('Payment recorded','success'); closeModal(); render();
+  toast(newStatus==='Paid'?'Payment recorded — certificate fully paid':'Partial payment recorded','success');
+  closeModal(); render();
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────
@@ -6125,22 +6149,26 @@ async function renderFinance() {
     const nbv     = gross - ret - adv - prev;
     return nbv + nbv * (+c.vat_pct||0) / 100;
   }
+  function balanceOfCert(c) {
+    return Math.max(0, netOfCert(c) - (+c.amount_paid||0));
+  }
 
-  let totalCertified=0, totalPaid=0, totalRetention=0, totalAdvRecovered=0, totalNetPayable=0;
+  let totalCertified=0, totalAmountPaid=0, totalRetention=0, totalAdvRecovered=0, totalNetPayable=0;
   for(const c of doneCerts) {
     const gross = certAmt[c.id]?.certified||0;
-    totalCertified += gross;
-    totalRetention += gross * (+c.retention_pct||0)/100;
+    totalCertified    += gross;
+    totalRetention    += gross * (+c.retention_pct||0)/100;
     totalAdvRecovered += gross * (+c.advance_recovery_pct||0)/100;
-    totalNetPayable += netOfCert(c);
+    totalNetPayable   += netOfCert(c);
+    totalAmountPaid   += +c.amount_paid||0;
   }
-  for(const c of paidCerts) totalPaid += netOfCert(c);
+  const totalBalance = Math.max(0, totalNetPayable - totalAmountPaid);
 
   const mobAdvance = (certs||[]).reduce((s,c)=>Math.max(s,+c.mobilisation_advance||0),0);
   const pctComplete = contractSum>0 ? (totalCertified/contractSum*100) : 0;
-  // Outstanding = net payable on Certified certs not yet paid
+  // Outstanding = unpaid balance across all Certified certs (including partial payments)
   const certifiedOnly = (certs||[]).filter(c=>c.status==='Certified');
-  const outstanding = certifiedOnly.reduce((s,c)=>s+netOfCert(c),0);
+  const outstanding = certifiedOnly.reduce((s,c)=>s+balanceOfCert(c),0);
 
   // ── Summary strip ───────────────────────────────────────────────
   const summaryHTML = `
@@ -6154,7 +6182,7 @@ async function renderFinance() {
       <div class="module-stat-label">Total Certified (Gross)</div>
     </div>
     <div class="module-stat" style="flex:1;min-width:140px">
-      <div class="module-stat-val" style="color:var(--green)" title="${fmtAED(totalPaid)}">${fmtCompact(totalPaid)}</div>
+      <div class="module-stat-val" style="color:var(--green)" title="${fmtAED(totalAmountPaid)}">${fmtCompact(totalAmountPaid)}</div>
       <div class="module-stat-label">Total Paid (Net)</div>
     </div>
     <div class="module-stat" style="flex:1;min-width:140px">
@@ -6386,6 +6414,10 @@ async function renderFinance() {
     const ret   = gross*(+c.retention_pct||0)/100;
     const adv   = gross*(+c.advance_recovery_pct||0)/100;
     const net   = netOfCert(c);
+    const paid  = +c.amount_paid||0;
+    const bal   = Math.max(0, net - paid);
+    const partPaid = c.status==='Certified' && paid>0;
+    const badgeLabel = partPaid ? 'Part Paid' : c.status;
     return `<tr>
       <td class="mono" style="color:var(--sand);font-weight:500">${esc(c.ref_no)}</td>
       <td style="font-size:11px;color:var(--text2)">${c.certified_date?new Date(c.certified_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</td>
@@ -6393,8 +6425,10 @@ async function renderFinance() {
       <td style="text-align:right;font-variant-numeric:tabular-nums">${fmtAED(gross)}</td>
       <td style="text-align:right;font-variant-numeric:tabular-nums;color:var(--red)">(${fmtAED(ret)})</td>
       <td style="text-align:right;font-variant-numeric:tabular-nums;color:var(--red)">(${fmtAED(adv)})</td>
-      <td style="text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:var(--green)">${fmtAED(net)}</td>
-      <td>${sbadge(c.status)}</td>
+      <td style="text-align:right;font-variant-numeric:tabular-nums;font-weight:600">${fmtAED(net)}</td>
+      <td style="text-align:right;font-variant-numeric:tabular-nums;color:var(--green)">${paid>0?fmtAED(paid):'—'}</td>
+      <td style="text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:${bal>0?'var(--amber, #C4863A)':'var(--text3)'}">${bal>0?fmtAED(bal):'—'}</td>
+      <td>${sbadge(badgeLabel)}</td>
     </tr>`;
   }).join('');
 
@@ -6403,7 +6437,7 @@ async function renderFinance() {
       <span style="font-size:12px;font-weight:500;color:var(--charcoal)">Certificate Ledger</span>
     </div>
     <div class="tw"><table>
-      <tr><th>Ref</th><th>Certified Date</th><th style="text-align:right">Claimed</th><th style="text-align:right">Gross Certified</th><th style="text-align:right">Retention</th><th style="text-align:right">Adv. Recovery</th><th style="text-align:right">Net Payable</th><th>Status</th></tr>
+      <tr><th>Ref</th><th>Certified Date</th><th style="text-align:right">Claimed</th><th style="text-align:right">Gross Certified</th><th style="text-align:right">Retention</th><th style="text-align:right">Adv. Recovery</th><th style="text-align:right">Net Certified</th><th style="text-align:right">Paid</th><th style="text-align:right">Balance Due</th><th>Status</th></tr>
       ${ipcTableRows}
       <tr style="background:var(--bg3)">
         <td colspan="2" style="font-weight:600;font-size:11px">Totals</td>
@@ -6411,7 +6445,9 @@ async function renderFinance() {
         <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${fmtAED(totalCertified)}</td>
         <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--red)">(${fmtAED(totalRetention)})</td>
         <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--red)">(${fmtAED(totalAdvRecovered)})</td>
-        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--green)">${fmtAED(totalNetPayable)}</td>
+        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${fmtAED(totalNetPayable)}</td>
+        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--green)">${fmtAED(totalAmountPaid)}</td>
+        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--amber,#C4863A)">${totalBalance>0?fmtAED(totalBalance):'—'}</td>
         <td></td>
       </tr>
     </table></div>

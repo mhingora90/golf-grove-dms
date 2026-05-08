@@ -1,0 +1,1 @@
+ALTER TABLE payment_certificates ADD COLUMN IF NOT EXISTS amount_paid NUMERIC(15,2) DEFAULT 0;
