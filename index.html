@@ -6194,8 +6194,8 @@ async function renderFinance() {
       <div class="module-stat-label">Total Certified (Gross)</div>
     </div>
     <div class="module-stat" style="flex:1;min-width:140px">
-      <div class="module-stat-val" style="color:var(--green)" title="${fmtAED(totalAmountPaid)}">${fmtCompact(totalAmountPaid)}</div>
-      <div class="module-stat-label">Total Paid (Net)</div>
+      <div class="module-stat-val" style="color:var(--green)" title="${fmtAED(totalAmountPaid+mobAdvance)}">${fmtCompact(totalAmountPaid+mobAdvance)}</div>
+      <div class="module-stat-label">Total Paid (Net + Mob. Advance)</div>
     </div>
     <div class="module-stat" style="flex:1;min-width:140px">
       <div class="module-stat-val ${outstanding>0?'warn':''}" title="${fmtAED(Math.max(0,outstanding))}">${fmtCompact(Math.max(0,outstanding))}</div>
