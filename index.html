@@ -887,8 +887,8 @@ async function renderDash() {
     sb.from('drawings').select('id,drawing_no,title,revision,status').order('created_at',{ascending:false}).limit(4),
     // Overdue rows for banner
     sb.from('submittals').select('ref_no,title,due_date').eq('status','Pending Review').lt('due_date',today).limit(20),
-    sb.from('inspections').select('ref_no,title,elements as title,due_date').eq('status','Pending').lt('due_date',today).limit(20),
-    sb.from('rfis').select('ref_no,subject as title,due_date').eq('status','Open').lt('due_date',today).limit(20),
+    sb.from('inspections').select('ref_no,elements:title,due_date').eq('status','Pending').lt('due_date',today).limit(20),
+    sb.from('rfis').select('ref_no,subject:title,due_date').eq('status','Open').lt('due_date',today).limit(20),
   ]);
   const [pendSubs,pendIRs,openNCRs,recentDraws,
          oSubRows,oIRRows,oRFIRows] = rows;
