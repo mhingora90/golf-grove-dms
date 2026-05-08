@@ -874,7 +874,7 @@ async function renderDash() {
     const {data:pit} = await sb.from('payment_certificate_items').select('consultant_amount').eq('cert_id',pc.id);
     const gross = (pit||[]).reduce((s,i)=>s+(+i.consultant_amount||0),0);
     const ret = gross * (+pc.retention_pct||10)/100;
-    const advRecovery = gross * (+pc.advance_recovery_pct||10)/100;
+    const advRecovery = gross * (+pc.advance_recovery_pct||0)/100;
     const nbv = gross - ret - advRecovery - (+pc.previously_paid||0);
     ipcTotalCertified += nbv + nbv * (+pc.vat_pct||5)/100;
   }
@@ -6121,9 +6121,8 @@ async function renderFinance() {
     const gross   = certAmt[c.id]?.certified||0;
     const ret     = gross * (+c.retention_pct||0) / 100;
     const adv     = gross * (+c.advance_recovery_pct||0) / 100;
-    const mob     = +c.mobilisation_advance||0;
     const prev    = +c.previously_paid||0;
-    const nbv     = gross - ret - adv - mob - prev;
+    const nbv     = gross - ret - adv - prev;
     return nbv + nbv * (+c.vat_pct||0) / 100;
   }
 
