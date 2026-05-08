@@ -444,8 +444,17 @@ async function testAttachmentWorkflow(browser) {
         else await rowEl.click();
         await page.waitForSelector('#modal-bg.open', { timeout: 8000 });
 
-        // Confirm attachment upload input exists
-        const uploadInput = page.locator('#att-upload-' + recordId);
+        // Confirm attachment upload input exists — wait up to 5s for modal body to fully render
+        let uploadInput;
+        try {
+          await page.waitForSelector('#att-upload-' + recordId, { state: 'attached', timeout: 5000 });
+          uploadInput = page.locator('#att-upload-' + recordId);
+        } catch {
+          fail(mod.label + ' — attachment upload input present', '#att-upload-' + recordId + ' not found');
+          try { await page.click('.modal-close', { timeout: 2000 }); } catch { /* ignore */ }
+          try { await page.waitForSelector('#modal-bg.open', { state: 'hidden', timeout: 3000 }); } catch { /* ignore */ }
+          continue;
+        }
         if (await uploadInput.count() === 0) {
           fail(mod.label + ' — attachment upload input present', '#att-upload-' + recordId + ' not found');
           try { await page.click('.modal-close', { timeout: 2000 }); } catch { /* ignore */ }
