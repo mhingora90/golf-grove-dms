@@ -113,7 +113,7 @@ tr:hover td{background:var(--bg3);cursor:pointer;color:var(--charcoal)}
 .badge-danger{background:var(--red-bg);color:var(--red);border:0.5px solid #F7C1C1}
 .badge-info{background:var(--blue-bg);color:var(--blue);border:0.5px solid #B5D4F4}
 .badge-neutral{background:var(--bg3);color:var(--text2);border:0.5px solid var(--border)}
-.rev-chip{font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;background:var(--sand-bg);color:var(--sand);border:0.5px solid var(--border2)}
+.rev-chip{font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;background:var(--sand-bg);color:var(--sand);border:0.5px solid var(--border2);white-space:nowrap;display:inline-block;max-width:90px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
 
 /* FILTER BAR */
 .fbar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
@@ -1797,7 +1797,7 @@ async function renderDrawings() {
   <div class="card"><div class="tw"><table>
     <tr>
       <th style="width:32px;text-align:center"><input type="checkbox" id="draw-select-all" onchange="selectAllDrawings(this)" /></th>
-      <th>Drawing No.</th><th>Title</th><th>Discipline</th><th>Rev</th><th>POI</th><th>CDE State</th><th>Review Status</th><th>Actions</th>
+      <th>Drawing No.</th><th>Title</th><th>Discipline</th><th>Rev</th><th>CDE State</th><th>Review Status</th><th>Actions</th>
     </tr>
     ${rows.length?rows.map(d=>`<tr class="draw-row" data-disc="${d.discipline||''}" data-status="${d.status||''}" data-cde="${d.cde_state||'WIP'}" data-poi="${d.poi_code||''}" data-id="${d.id}" data-search="${[d.drawing_no,d.title,d.discipline,d.originator].filter(Boolean).join(' ').replace(/"/g,' ').toLowerCase()}">
       <td style="text-align:center"><input type="checkbox" class="row-cb" id="dcb-${d.id}" ${d.cde_state==='Superseded'||d.status==='Void'?'disabled':''} onchange="toggleDrawSelect('${d.id}',this)" /></td>
@@ -1805,7 +1805,6 @@ async function renderDrawings() {
       <td style="color:var(--blue);cursor:pointer;${d.cde_state==='Superseded'||d.status==='Void'?'opacity:.5':''}" onclick="viewDraw('${d.id}')">${d.title}${d.cde_state==='Superseded'?'<span style="font-size:9px;color:var(--text3);margin-left:6px">superseded</span>':''}${d.status==='Void'?'<span style="font-size:9px;color:var(--red);margin-left:6px">void</span>':''}</td>
       <td style="color:var(--text2);font-size:11px">${d.discipline||'—'}</td>
       <td><span class="rev-chip">${d.revision||'Rev A'}</span></td>
-      <td>${d.poi_code?poiBadge(d.poi_code):'<span style="color:var(--text3);font-size:10px">—</span>'}</td>
       <td>${cdeBadge(d.cde_state||'WIP')}</td>
       <td>${sbadge(d.status)}</td>
       <td><div style="display:flex;gap:4px">
@@ -1814,8 +1813,8 @@ async function renderDrawings() {
         ${can('approve')&&d.status==='Under Review'?`<button class="btn btn-sm btn-success" onclick="viewDraw('${d.id}')">Review</button>`:''}
         ${can('approve')&&d.status!=='Void'?`<button class="btn btn-sm btn-danger" onclick="voidDrawing('${d.id}',${JSON.stringify(d.drawing_no)})">Void</button>`:''}
       </div></td>
-    </tr>`).join(''):'<tr><td colspan="9" class="empty-state">No drawings yet. Upload the first one.</td></tr>'}
-    <tr id="srch-empty-draw" style="display:none"><td colspan="9" class="empty-state"></td></tr>
+    </tr>`).join(''):'<tr><td colspan="8" class="empty-state">No drawings yet. Upload the first one.</td></tr>'}
+    <tr id="srch-empty-draw" style="display:none"><td colspan="8" class="empty-state"></td></tr>
   </table>
   <div class="record-footer">Showing ${rows.length} record${rows.length!==1?'s':''}</div>
   </div></div>
