@@ -6126,12 +6126,13 @@ async function renderFinance() {
     return nbv + nbv * (+c.vat_pct||0) / 100;
   }
 
-  let totalCertified=0, totalPaid=0, totalRetention=0, totalAdvRecovered=0;
+  let totalCertified=0, totalPaid=0, totalRetention=0, totalAdvRecovered=0, totalNetPayable=0;
   for(const c of doneCerts) {
     const gross = certAmt[c.id]?.certified||0;
     totalCertified += gross;
     totalRetention += gross * (+c.retention_pct||0)/100;
     totalAdvRecovered += gross * (+c.advance_recovery_pct||0)/100;
+    totalNetPayable += netOfCert(c);
   }
   for(const c of paidCerts) totalPaid += netOfCert(c);
 
@@ -6409,7 +6410,7 @@ async function renderFinance() {
         <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${fmtAED(totalCertified)}</td>
         <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--red)">(${fmtAED(totalRetention)})</td>
         <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--red)">(${fmtAED(totalAdvRecovered)})</td>
-        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--green)">${fmtAED(totalPaid)}</td>
+        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--green)">${fmtAED(totalNetPayable)}</td>
         <td></td>
       </tr>
     </table></div>
