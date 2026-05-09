@@ -6606,6 +6606,54 @@ async function deleteUnit(id, unitNo) {
   toast('Unit deleted','success');
   render();
 }
+
+function downloadUnitCSVTemplate() {
+  const csv = 'unit_no,floor,unit_type,area_sqft,listed_price\n101,1,Studio,490,625000\n201,2,1BHK,720,950000\n';
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'unit-import-template.csv';
+  a.click();
+}
+
+async function handleUnitCSV(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const text = await file.text();
+  const lines = text.trim().split('\n').filter(l=>l.trim());
+  if(lines.length < 2) { toast('CSV is empty or has no data rows','error'); return; }
+  const headers = lines[0].split(',').map(h=>h.trim().toLowerCase());
+  const required = ['unit_no','floor','unit_type','area_sqft','listed_price'];
+  const missing = required.filter(r=>!headers.includes(r));
+  if(missing.length) { toast('CSV missing columns: ' + missing.join(', '),'error'); return; }
+
+  const rows = [];
+  for(let i=1; i<lines.length; i++) {
+    const vals = lines[i].split(',').map(v=>v.trim());
+    const obj = {};
+    headers.forEach((h,idx)=>{ obj[h]=vals[idx]??''; });
+    if(!obj.unit_no || !obj.floor || !obj.unit_type || !obj.area_sqft || !obj.listed_price) {
+      toast('Row ' + (i+1) + ' incomplete \u2014 skipped','warning');
+      continue;
+    }
+    if(!['Studio','1BHK'].includes(obj.unit_type)) {
+      toast('Row ' + (i+1) + ': unit_type must be Studio or 1BHK \u2014 skipped','warning');
+      continue;
+    }
+    rows.push({
+      unit_no: obj.unit_no,
+      floor: parseInt(obj.floor),
+      unit_type: obj.unit_type,
+      area_sqft: parseFloat(obj.area_sqft),
+      listed_price: parseFloat(obj.listed_price),
+    });
+  }
+  if(!rows.length) { toast('No valid rows to import','error'); return; }
+  const {error} = await sb.from('units').upsert(rows, {onConflict:'unit_no'});
+  if(error) { toast('Import error: ' + error.message,'error'); return; }
+  toast('Imported ' + rows.length + ' units','success');
+  event.target.value = '';
+  render();
+}
 </script>
 </body>
 </html>
