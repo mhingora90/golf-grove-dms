@@ -471,6 +471,21 @@ textarea.form-control{resize:vertical;min-height:70px}
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 5h8M4 8h8M4 11h5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
       BOQ Setup
     </div>
+    <div id="n-sales-wrap" style="display:none">
+      <div class="sb-section">Sales</div>
+      <div class="nav-item" id="n-usetup" onclick="nav('usetup',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 4v8M4 8h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Unit Setup
+      </div>
+      <div class="nav-item" id="n-ureg" onclick="nav('ureg',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 6h8M4 9h5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><path d="M1 5h14" stroke="currentColor" stroke-width="1"/></svg>
+        Unit Register
+      </div>
+      <div class="nav-item" id="n-srev" onclick="nav('srev',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M2 13L5 9l3 2 3-4 3-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 2v11h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Sales Revenue
+      </div>
+    </div>
     <div class="sb-section">Admin</div>
     <div class="nav-item" id="n-subs" onclick="nav('subs',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" stroke-width="1.3"/><circle cx="12.5" cy="5" r="2" stroke="currentColor" stroke-width="1.1"/><path d="M12 9.5c1.657 0 3 1.343 3 3" stroke="currentColor" stroke-width="1.1"/></svg>
@@ -622,19 +637,20 @@ async function loadApp(user) {
   document.getElementById('role-badge-top').textContent=profile?.role||'user';
   if(profile?.role==='developer'){
     document.getElementById('n-users-wrap').style.display='';
+    document.getElementById('n-sales-wrap').style.display='';
   }
   // Set topbar date
   const dateEl = document.getElementById('topbar-date');
   if(dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   // Restore page from URL hash, or default to dash
   const hash = location.hash.replace('#','');
-  const defaultPage = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq','finance'].includes(hash) ? hash : 'dash';
+  const defaultPage = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq','finance','usetup','ureg','srev'].includes(hash) ? hash : 'dash';
   const navEl = document.getElementById('n-'+defaultPage);
   nav(defaultPage, navEl);
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue'};
 
 function canCreateOnPage(page) {
   if(page==='draw') return can('upload');
@@ -651,6 +667,8 @@ function canCreateOnPage(page) {
   if(page==='users') return can('manageUsers');
   if(page==='ipc') return can('submit') || currentProfile?.role==='developer';
   if(page==='boq') return can('manageRegister');
+  if(page==='usetup') return currentProfile?.role==='developer';
+  if(page==='ureg') return currentProfile?.role==='developer';
   return false;
 }
 
@@ -699,6 +717,9 @@ async function render() {
   else if(currentPage==='ipc') await renderIPC();
   else if(currentPage==='boq') await renderBOQ();
   else if(currentPage==='finance') await renderFinance();
+  else if(currentPage==='usetup') await renderUnitSetup();
+  else if(currentPage==='ureg') await renderUnitRegister();
+  else if(currentPage==='srev') await renderSalesRevenue();
   await updateBadges();
 }
 
@@ -2932,6 +2953,8 @@ async function doUploadRev(id) {
 
 // ─── NEW ITEM FORMS ───────────────────────────────────────────────
 async function openNew() {
+  if(currentPage==='usetup') { openAddUnitForm(); return; }
+  if(currentPage==='ureg')   { openSaleForm(null, null);  return; }
   const {data:scs} = await sb.from('subcontractors').select('*');
   const scOpts = (scs||[]).map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
 
