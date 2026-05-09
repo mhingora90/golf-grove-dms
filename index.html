@@ -688,7 +688,7 @@ function nav(page, el, opts) {
 function can(action) {
   const role = currentProfile?.role;
   const perms = {
-    developer:    {approve:true, upload:true, raise:true, submit:true, manageUsers:true, manageSubs:true, submitMS:false, manageRegister:true},
+    developer:    {approve:true, upload:true, raise:true, submit:true, manageUsers:true, manageSubs:true, submitMS:false, manageRegister:true, delete_drawing:true},
     consultant:   {approve:true, upload:true, raise:true, submit:true, manageUsers:false,manageSubs:false,submitMS:false,manageRegister:true},
     contractor:   {approve:false,upload:true, raise:false,submit:true, manageUsers:false,manageSubs:true, submitMS:true, manageRegister:false},
     subcontractor:{approve:false,upload:false,raise:false,submit:true, manageUsers:false,manageSubs:false,submitMS:true, manageRegister:false},
@@ -1685,10 +1685,13 @@ function clearSubSelection() {
 function batchDrawAction(action) {
   const ids = [...selectedDrawings];
   if(!ids.length) return;
-  const labels = {approve:'Approve',advanceCDE:'Advance CDE',export:'Export'};
-  const bodyHtml = `<p style="font-size:14px;color:var(--text)">Apply <strong>${labels[action]||action}</strong> to <strong>${ids.length}</strong> selected drawing${ids.length!==1?'s':''}?</p>`;
+  const labels = {approve:'Approve',advanceCDE:'Advance CDE',export:'Export',delete:'Delete'};
+  const isDanger = action==='delete';
+  const bodyHtml = isDanger
+    ? `<p style="font-size:14px;color:var(--text)">Permanently delete <strong>${ids.length}</strong> selected drawing${ids.length!==1?'s':''}? This cannot be undone.</p>`
+    : `<p style="font-size:14px;color:var(--text)">Apply <strong>${labels[action]||action}</strong> to <strong>${ids.length}</strong> selected drawing${ids.length!==1?'s':''}?</p>`;
   openModal(`Confirm Bulk Action`, bodyHtml,
-    `<button class="btn btn-success" onclick="closeModal();doBatchDrawAction('${action}')">Confirm</button>
+    `<button class="btn ${isDanger?'btn-danger':'btn-success'}" onclick="closeModal();doBatchDrawAction('${action}')">${isDanger?'Delete':'Confirm'}</button>
      <button class="btn" onclick="closeModal()">Cancel</button>`);
 }
 function batchSubAction(action) {
@@ -1705,6 +1708,15 @@ async function doBatchDrawAction(action) {
   if(action==='export') {
     toast(`Exported ${ids.length} drawing${ids.length!==1?'s':''}`, 'success');
     clearDrawSelection();
+    return;
+  }
+  if(action==='delete') {
+    const {error} = await sb.from('drawings').delete().in('id', ids);
+    if(error){toast('Bulk delete failed: '+error.message,'error');return;}
+    await logAudit(ids[0], 'drawing', `Bulk delete — ${ids.length} drawing${ids.length!==1?'s':''} removed`);
+    toast(`Deleted ${ids.length} drawing${ids.length!==1?'s':''}`, 'success');
+    clearDrawSelection();
+    renderDrawings();
     return;
   }
   if(action==='approve') {
@@ -1844,6 +1856,7 @@ async function renderDrawings() {
       ${can('approve')?`<button class="btn btn-sm btn-success" onclick="batchDrawAction('approve')">Approve Selected</button>`:''}
       ${can('approve')?`<button class="btn btn-sm" onclick="batchDrawAction('advanceCDE')">Advance CDE</button>`:''}
       <button class="btn btn-sm" onclick="batchDrawAction('export')">Export Selected</button>
+      ${can('delete_drawing')?`<button class="btn btn-sm btn-danger" onclick="batchDrawAction('delete')">Delete Selected</button>`:''}
       <button class="btn btn-sm" style="margin-left:auto" onclick="clearDrawSelection()">Clear</button>
     </div>
   </div>`;
