@@ -6490,6 +6490,122 @@ async function renderFinance() {
 
   document.getElementById('content').innerHTML = summaryHTML + barChartHTML + sCurveHTML + retAdvHTML + varianceHTML + ipcTableHTML;
 }
+
+// ─── UNIT SETUP ──────────────────────────────────────────────────────────────
+
+async function renderUnitSetup() {
+  const {data:units, error} = await sb.from('units').select('*').order('floor').order('unit_no');
+  if(error) {
+    document.getElementById('content').innerHTML =
+      '<div class="empty-state" style="padding:48px;text-align:center;color:var(--red)">Failed to load units: ' + esc(error.message) + '</div>';
+    return;
+  }
+  const list = units||[];
+  const studioCount = list.filter(u=>u.unit_type==='Studio').length;
+  const bhkCount    = list.filter(u=>u.unit_type==='1BHK').length;
+
+  const rowsHTML = list.length
+    ? list.map(u =>
+        '<tr>' +
+        '<td style="font-weight:600">' + esc(u.unit_no) + '</td>' +
+        '<td>' + esc(u.floor) + '</td>' +
+        '<td>' + esc(u.unit_type) + '</td>' +
+        '<td style="text-align:right">' + (+u.area_sqft).toLocaleString() + '</td>' +
+        '<td style="text-align:right">' + fmtAED(u.listed_price) + '</td>' +
+        '<td style="width:90px">' +
+          '<button class="btn btn-sm" onclick="openEditUnit(\'' + u.id + '\')">Edit</button>' +
+          '<button class="btn btn-sm btn-danger" onclick="deleteUnit(\'' + u.id + '\',\'' + esc(u.unit_no) + '\')" style="margin-left:4px">&times;</button>' +
+        '</td></tr>'
+      ).join('')
+    : '<tr><td colspan="6" class="empty-state">No units yet. Use \u201c+ New\u201d or Import CSV to add units.</td></tr>';
+
+  const statsBar = list.length
+    ? '<div class="module-bar" style="margin-bottom:14px">' +
+        '<div class="module-stat"><div class="module-stat-val">' + list.length + '</div><div class="module-stat-label">Total Units</div></div>' +
+        '<div class="module-stat"><div class="module-stat-val">' + studioCount + '</div><div class="module-stat-label">Studio</div></div>' +
+        '<div class="module-stat"><div class="module-stat-val">' + bhkCount + '</div><div class="module-stat-label">1BHK</div></div>' +
+      '</div>'
+    : '';
+
+  document.getElementById('content').innerHTML =
+    '<div class="fbar" style="margin-bottom:14px">' +
+      '<button class="btn" onclick="downloadUnitCSVTemplate()">Download CSV Template</button>' +
+      '<label class="btn" style="margin-left:6px;cursor:pointer">Import CSV' +
+        '<input type="file" accept=".csv" style="display:none" onchange="handleUnitCSV(event)">' +
+      '</label>' +
+    '</div>' +
+    statsBar +
+    '<div class="card"><div class="tw"><table>' +
+      '<tr><th>Unit No.</th><th>Floor</th><th>Type</th><th style="text-align:right">Area (sqft)</th><th style="text-align:right">Listed Price</th><th></th></tr>' +
+      rowsHTML +
+    '</table></div></div>';
+}
+
+function openAddUnitForm() {
+  openModal('Add Unit',
+    '<div class="form-group"><label class="form-label">Unit No.</label><input id="uf-no" class="form-input" placeholder="e.g. 101" /></div>' +
+    '<div class="form-group"><label class="form-label">Floor</label><input id="uf-floor" type="number" min="1" class="form-input" placeholder="1" /></div>' +
+    '<div class="form-group"><label class="form-label">Type</label><select id="uf-type" class="form-input"><option value="Studio">Studio</option><option value="1BHK">1BHK</option></select></div>' +
+    '<div class="form-group"><label class="form-label">Area (sqft)</label><input id="uf-sqft" type="number" min="1" class="form-input" placeholder="490" /></div>' +
+    '<div class="form-group"><label class="form-label">Listed Price (AED)</label><input id="uf-price" type="number" min="1" class="form-input" placeholder="625000" /></div>',
+    '<button class="btn btn-primary" onclick="saveNewUnit()">Add Unit</button><button class="btn" onclick="closeModal()">Cancel</button>'
+  );
+}
+
+async function saveNewUnit() {
+  const unit_no      = document.getElementById('uf-no')?.value.trim();
+  const floor        = parseInt(document.getElementById('uf-floor')?.value);
+  const unit_type    = document.getElementById('uf-type')?.value;
+  const area_sqft    = parseFloat(document.getElementById('uf-sqft')?.value);
+  const listed_price = parseFloat(document.getElementById('uf-price')?.value);
+  if(!unit_no || !floor || !area_sqft || !listed_price) { toast('Fill in all fields','error'); return; }
+  const {error} = await sb.from('units').insert({unit_no, floor, unit_type, area_sqft, listed_price});
+  if(error) { toast('Error: ' + error.message,'error'); return; }
+  toast('Unit added','success');
+  closeModal();
+  render();
+}
+
+async function openEditUnit(id) {
+  const {data:u, error} = await sb.from('units').select('*').eq('id',id).single();
+  if(error||!u) { toast('Failed to load unit','error'); return; }
+  openModal('Edit Unit ' + esc(u.unit_no),
+    '<div class="form-group"><label class="form-label">Unit No.</label><input id="eu-no" class="form-input" value="' + esc(u.unit_no) + '" /></div>' +
+    '<div class="form-group"><label class="form-label">Floor</label><input id="eu-floor" type="number" class="form-input" value="' + esc(u.floor) + '" /></div>' +
+    '<div class="form-group"><label class="form-label">Type</label><select id="eu-type" class="form-input">' +
+      '<option value="Studio"' + (u.unit_type==='Studio'?' selected':'') + '>Studio</option>' +
+      '<option value="1BHK"' + (u.unit_type==='1BHK'?' selected':'') + '>1BHK</option>' +
+    '</select></div>' +
+    '<div class="form-group"><label class="form-label">Area (sqft)</label><input id="eu-sqft" type="number" class="form-input" value="' + esc(u.area_sqft) + '" /></div>' +
+    '<div class="form-group"><label class="form-label">Listed Price (AED)</label><input id="eu-price" type="number" class="form-input" value="' + esc(u.listed_price) + '" /></div>',
+    '<button class="btn btn-primary" onclick="saveEditUnit(\'' + id + '\')">Save</button><button class="btn" onclick="closeModal()">Cancel</button>'
+  );
+}
+
+async function saveEditUnit(id) {
+  const unit_no      = document.getElementById('eu-no')?.value.trim();
+  const floor        = parseInt(document.getElementById('eu-floor')?.value);
+  const unit_type    = document.getElementById('eu-type')?.value;
+  const area_sqft    = parseFloat(document.getElementById('eu-sqft')?.value);
+  const listed_price = parseFloat(document.getElementById('eu-price')?.value);
+  if(!unit_no || !floor || !area_sqft || !listed_price) { toast('Fill in all fields','error'); return; }
+  const {error} = await sb.from('units').update({unit_no, floor, unit_type, area_sqft, listed_price}).eq('id',id);
+  if(error) { toast('Error: ' + error.message,'error'); return; }
+  toast('Unit updated','success');
+  closeModal();
+  render();
+}
+
+async function deleteUnit(id, unitNo) {
+  const {count} = await sb.from('unit_sales').select('*',{head:true,count:'exact'}).eq('unit_id',id);
+  if(count > 0) { toast('Unit ' + unitNo + ' has a sale record \u2014 remove it first','error'); return; }
+  const ok = await confirmModal('Delete unit ' + unitNo + '? This cannot be undone.');
+  if(!ok) return;
+  const {error} = await sb.from('units').delete().eq('id',id);
+  if(error) { toast('Error: ' + error.message,'error'); return; }
+  toast('Unit deleted','success');
+  render();
+}
 </script>
 </body>
 </html>
