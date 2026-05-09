@@ -1113,7 +1113,7 @@ async function renderDash() {
 
   // Async: load discipline completion bars
   (async () => {
-    const disciplines = ['Architecture','Structure','MEP','Civil'];
+    const disciplines = ['Architecture','Structure','MEP','Civil','General','Interior Design'];
     const counts = await Promise.all(disciplines.map(d =>
       Promise.all([
         sb.from('drawings').select('*',{count:'exact',head:true}).eq('discipline',d),
@@ -1811,7 +1811,7 @@ async function renderDrawings() {
   <div class="fbar" style="margin-bottom:12px">
     <select class="filter-sel" onchange="filtDraw('disc',this.value)">
       <option value="All">All Disciplines</option>
-      <option>Architecture</option><option>Structure</option><option>MEP</option><option>Civil</option>
+      <option>Architecture</option><option>Structure</option><option>MEP</option><option>Civil</option><option>General</option><option>Interior Design</option>
     </select>
     <select class="filter-sel" onchange="filtDraw('status',this.value)">
       <option value="All">All Statuses</option>
@@ -3004,7 +3004,7 @@ async function openNew() {
       <div class="form-group"><label class="form-label-dark">Title</label><input type="text" class="form-control" id="nd-title" placeholder="Drawing title" /><div id="nd-title-err" class="form-err"></div></div>
       <div class="frow">
         <div class="form-group"><label class="form-label-dark">Discipline</label>
-          <select class="form-control" id="nd-disc"><option>Architecture</option><option>Structure</option><option>MEP</option><option>Civil</option></select>
+          <select class="form-control" id="nd-disc"><option>Architecture</option><option>Structure</option><option>MEP</option><option>Civil</option><option>General</option><option>Interior Design</option></select>
         </div>
         <div class="form-group"><label class="form-label-dark">Review Status</label>
           <select class="form-control" id="nd-status" onchange="checkRevScheme()"><option>Under Review</option><option>Issued for Construction</option><option>Approved</option></select>
