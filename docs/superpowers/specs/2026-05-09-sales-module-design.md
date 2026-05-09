@@ -7,27 +7,28 @@
 
 ## Overview
 
-New Sales module for tracking unit sales, buyer details, SPA/Oqood status, payment collections, commissions, and discounts for a 98-unit residential development (56 Studio, 42 1BHK).
+New Sales module for tracking unit sales, buyer details, SPA/Oqood status, payment plan schedules, commissions, and discounts for a 98-unit residential development (56 Studio, 42 1BHK). No actual payment receipt tracking — revenue figures are plan-based only.
 
 ---
 
 ## Navigation
 
-Two sidebar nav items under a "Sales" section group, mirroring the Finance/BOQ/IPC pattern:
+Three sidebar nav items under a "Sales" section group:
 
 | Nav ID | Label | Icon |
 |--------|-------|------|
+| `usetup` | Unit Setup | ⚙️ |
 | `ureg` | Unit Register | 🏠 |
 | `srev` | Sales Revenue | 📈 |
 
-Both visible to `developer` role only (Regent Developments). Consultant/contractor/subcontractor have no access.
+All visible to `developer` role only. No access for other roles.
 
 ---
 
 ## Database Schema
 
 ### `units` table
-Master list of all 98 units. Set up once; rarely changes.
+Master list of all units. Populated via Unit Setup.
 
 ```sql
 CREATE TABLE units (
@@ -42,13 +43,13 @@ CREATE TABLE units (
 ```
 
 ### `unit_sales` table
-One row per unit when sold or reserved. NULL = available.
+One row per unit when sold or reserved.
 
 ```sql
 CREATE TABLE unit_sales (
   id                  uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   unit_id             uuid NOT NULL UNIQUE REFERENCES units(id),
-  status              text NOT NULL DEFAULT 'available', -- 'available' | 'reserved' | 'sold'
+  status              text NOT NULL DEFAULT 'reserved', -- 'reserved' | 'sold'
   buyer_name          text,
   sale_date           date,
   sold_price          numeric,
@@ -68,24 +69,39 @@ CREATE TABLE unit_sales (
 Derived fields (computed in JS, not stored):
 - `commission_value` = `sold_price × commission_pct / 100`
 - `discount_pct` = `discount_amount / listed_price × 100`
-- Unit status = derived from `unit_sales.status` (NULL row = available)
+- Unit "available" = no row in `unit_sales`
 
 ### `payment_milestones` table
-Payment plan rows per sale.
+Payment plan schedule per sale — plan-based, not tracking actual receipts.
 
 ```sql
 CREATE TABLE payment_milestones (
   id              uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   unit_sale_id    uuid NOT NULL REFERENCES unit_sales(id) ON DELETE CASCADE,
-  milestone_name  text NOT NULL,        -- 'Booking Deposit', '1st Instalment', etc.
+  milestone_name  text NOT NULL,   -- 'Booking Deposit', '1st Instalment', 'Handover', etc.
   amount          numeric NOT NULL,
   pct_of_sale     numeric NOT NULL,
-  due_date        date,
-  received_date   date,
-  status          text NOT NULL DEFAULT 'upcoming', -- 'upcoming' | 'pending' | 'paid'
+  due_date        date,            -- NULL = 'On Handover' / event-based
   sort_order      integer NOT NULL DEFAULT 0
 );
 ```
+
+No `received_date` or `status` — plan-based only.
+
+---
+
+## Module 0: Unit Setup (`usetup`)
+
+Modelled after the BOQ import flow. Allows developer to populate the units master list.
+
+### Features
+- **Add single unit** — form: Unit No, Floor, Type, Area sqft, Listed Price
+- **Bulk import** — CSV upload with columns: `unit_no, floor, unit_type, area_sqft, listed_price`
+- **Edit unit** — edit listed price and area sqft (unit_no, floor, type are identity fields, change with caution)
+- **Delete unit** — only if no `unit_sales` row exists (prevents orphan data)
+- **Unit list table** — shows all units with edit/delete actions
+
+CSV template downloadable from the page.
 
 ---
 
@@ -100,7 +116,7 @@ CREATE TABLE payment_milestones (
 | Type | Studio / 1BHK |
 | Sqft | Area in sqft |
 | Listed Price | AED formatted |
-| Buyer | Buyer name (blue link style) or — |
+| Buyer | Buyer name (blue style) or — |
 | SPA | Status badge |
 | Oqood | Status badge |
 | Status | Available / Reserved / Sold badge |
@@ -108,35 +124,34 @@ CREATE TABLE payment_milestones (
 ### Filters (dropdowns)
 - Type: All / Studio / 1BHK
 - Status: All / Available / Reserved / Sold
-- Floor: All / 1–8 (or however many floors exist)
+- Floor: All / dynamic from data
 
 ### Search
-Free-text search on unit number and buyer name.
+Free-text on unit number and buyer name.
 
 ### Unit Detail Modal
-Triggered on row click. Structured in four sections:
+Triggered on row click.
 
 **Header:** `Unit {no} — {type} · Floor {floor}`
 
 **1. Unit Info strip** (4 cols): Unit No · Type · Floor · Area (sqft)
 
-**2. Sale Details grid** (2 cols):
+**2. Sale Details grid** (2 cols) — shown for Reserved/Sold only:
 - Buyer Name / Sale Date
 - Listed Price / Discount (AED + %)
 - Sold Price / (empty)
 - Commission % / Commission Value (AED)
 - Broker Name / Brokerage
 
-**3. SPA + Oqood** (side-by-side, shaded bg):
+**3. SPA + Oqood** (shaded, side-by-side) — Reserved/Sold only:
 - SPA Status badge + date
 - Oqood Status badge + date
 
-**4. Payment Plan Milestones table:**
-- Columns: Milestone | Amount | % | Due Date | Received Date | Status
-- Progress bar at bottom (collected / total sold price)
-- Header shows running total: `AED X of Y received (Z%)`
+**4. Payment Plan Milestones table** — Reserved/Sold only:
+- Columns: Milestone | Amount | % | Due Date
+- Header shows contract total: `AED {sold_price} contracted`
 
-For Available units: modal shows unit info only, no sale/payment sections.
+For Available units: modal shows unit info only with "No sale recorded" note.
 
 ### Status Badges
 | Status | Background | Color |
@@ -149,47 +164,47 @@ For Available units: modal shows unit info only, no sale/payment sections.
 | SPA: Fully Signed | `#d4edbc` | `#2d6a0a` |
 | Oqood: Not Registered | `#e8e4dc` | `#666` |
 | Oqood: Registered | `#d4edbc` | `#2d6a0a` |
-| Milestone: Upcoming | `#e8e4dc` | `#888` |
-| Milestone: Pending | `#FEF3E8` | `#854F0B` |
-| Milestone: Paid | `#d4edbc` | `#2d6a0a` |
 
 ### Edit
-Modal has Edit button (developer only). Opens editable form with all sale detail fields. Save updates `unit_sales` row and `payment_milestones` rows. No inline editing in table.
+Modal has Edit button (developer only). Opens editable form with all sale detail fields + milestone rows. Save updates `unit_sales` and `payment_milestones`. "Mark as Available" removes sale record (with confirmation).
+
+### Add Sale
+"+ Add Sale" button in modal for Available units (developer only). Same form as Edit.
 
 ---
 
 ## Module 2: Sales Revenue (`srev`)
 
 ### Stats strip (5 cards)
-1. Total Units — `98` (sub: `56 Studio · 42 1BHK`)
+1. Total Units — count (sub: `X Studio · Y 1BHK`)
 2. Sold — count, % of total
-3. Reserved — count, `SPA in progress` note
+3. Reserved — count, `SPA in progress` sub-label
 4. Available — count, % remaining
 5. Total sqft sold — of total sqft
 
-### Revenue strip (4 cards)
-1. Total GDV (Listed) — sum of all listed prices — green bg
-2. Total Sold Revenue — sum of sold prices — green bg
-3. Revenue Collected — sum of paid milestone amounts — amber bg
-4. Outstanding — contracted but uncollected — neutral bg
+### Revenue strip (3 cards — plan-based only)
+1. **Total GDV** — sum of all `listed_price` — green bg
+2. **Total Contracted Revenue** — sum of `sold_price` for sold + reserved units — green bg
+3. **Remaining GDV** — sum of `listed_price` for available units — neutral bg
 
-### Collection Progress bar
-`AED {collected} of {contracted} contracted ({pct}%)`  
-Styled with `#3B6D11` fill.
+### Expected Revenue by Month
+Bar chart or table showing sum of `payment_milestones.amount` grouped by `due_date` month/year. Covers all milestones with a due_date. Event-based milestones (null due_date, e.g. Handover) shown separately as "On Handover: AED X".
+
+Layout: simple table with columns Month | Expected AED | Cumulative AED, sorted chronologically.
 
 ### Commission + Discount summary (2-col)
 **Commission:**
-- Total Commission Payable (sum of commission_value for sold units)
+- Total Commission Payable — sum of `sold_price × commission_pct / 100`
 - Avg Commission Rate
-- Units with broker (count where broker_name not null)
+- Units with broker (count where `broker_name` not null)
 
 **Discount:**
-- Total Discount Given (sum of discount_amount)
+- Total Discount Given — sum of `discount_amount`
 - Avg Discount Rate
-- Units with discount (count where discount_amount > 0)
+- Units with discount (count where `discount_amount > 0`)
 
 ### Revenue by Unit Type table
-Columns: Type | Total | Sold | Avg sqft | Avg Sold Price | Total Revenue | Collected  
+Columns: Type | Total | Sold | Avg sqft | Avg Sold Price | Total Revenue  
 Rows: Studio, 1BHK
 
 ---
@@ -197,37 +212,35 @@ Rows: Studio, 1BHK
 ## Data Flow
 
 ```
-units (master list, 98 rows)
-  └── unit_sales (1 row when reserved/sold)
-        └── payment_milestones (N rows per sale, typically 4)
+units (master list via Unit Setup)
+  └── unit_sales (1 row per reserved/sold unit)
+        └── payment_milestones (plan schedule, typically 4 rows)
 ```
 
-Revenue page aggregates by JOIN + GROUP BY unit_type.  
 All reads: `sb.from('units').select('*, unit_sales(*, payment_milestones(*))')`
 
 ---
 
 ## RLS Policies
 
-- `units`, `unit_sales`, `payment_milestones`: SELECT/INSERT/UPDATE/DELETE for `developer` role only.
-- No access for consultant, contractor, subcontractor.
+`units`, `unit_sales`, `payment_milestones`: SELECT/INSERT/UPDATE/DELETE for `developer` role only.
 
 ---
 
 ## Implementation Scope
 
-1. **Migration**: Create `units`, `unit_sales`, `payment_milestones` tables with RLS.
-2. **Seed**: Insert 98 units (56 Studio, 42 1BHK) with listed prices and floor assignments.
-3. **Unit Register page** (`ureg`): table + filters + search + click-to-modal.
-4. **Unit Detail Modal**: four-section layout, edit form for developer.
-5. **Sales Revenue page** (`srev`): all stats, progress bar, commission/discount, type breakdown.
-6. **Nav items**: add `ureg` and `srev` to sidebar under "Sales" section.
+1. **Migration** — create `units`, `unit_sales`, `payment_milestones` tables + RLS policies
+2. **Unit Setup page** (`usetup`) — add/edit/delete single unit + CSV bulk import with template download
+3. **Unit Register page** (`ureg`) — table + filters + search + unit detail modal (view + edit + add sale)
+4. **Sales Revenue page** (`srev`) — stats strip, revenue cards, monthly expected revenue table, commission/discount summary, by-type breakdown
+5. **Nav items** — add `usetup`, `ureg`, `srev` to sidebar under "Sales" section
 
 ---
 
 ## Out of Scope
 
-- Document uploads per unit (SPA PDF, Oqood certificate) — future phase.
-- Buyer contact details — not stored by design decision.
-- Multi-project support — single project only.
-- Public buyer portal.
+- Actual payment receipt tracking
+- Document uploads per unit (SPA PDF, Oqood certificate)
+- Buyer contact details
+- Multi-project support
+- Public buyer portal
