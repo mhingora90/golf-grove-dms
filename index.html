@@ -6510,9 +6510,9 @@ async function renderUnitSetup() {
         '<td>' + esc(u.unit_type) + '</td>' +
         '<td style="text-align:right">' + (+u.area_sqft).toLocaleString() + '</td>' +
         '<td style="text-align:right">' + fmtAED(u.listed_price) + '</td>' +
-        '<td style="width:90px">' +
+        '<td style="white-space:nowrap">' +
           '<button class="btn btn-sm" onclick="openEditUnit(\'' + u.id + '\')">Edit</button>' +
-          '<button class="btn btn-sm btn-danger" onclick="deleteUnit(\'' + u.id + '\',\'' + esc(u.unit_no) + '\')" style="margin-left:4px">&times;</button>' +
+          '<button class="btn btn-sm btn-danger" onclick="deleteUnit(\'' + u.id + '\',\'' + esc(u.unit_no) + '\')" style="margin-left:4px">Delete</button>' +
         '</td></tr>'
       ).join('')
     : '<tr><td colspan="6" class="empty-state">No units yet. Use \u201c+ New\u201d or Import CSV to add units.</td></tr>';
