@@ -6654,6 +6654,134 @@ async function handleUnitCSV(event) {
   event.target.value = '';
   render();
 }
+
+// ─── UNIT REGISTER ───────────────────────────────────────────────────────────
+
+function _unitSaleStatus(u) {
+  return u.unit_sales ? u.unit_sales.status : 'available';
+}
+
+function _unitStatusBadge(status) {
+  const cfg = {
+    available: ['#EAF3DE','#3B6D11','Available'],
+    reserved:  ['#FEF3E8','#854F0B','Reserved'],
+    sold:      ['#d4edbc','#2d6a0a','Sold'],
+  };
+  const [bg,color,label] = cfg[status]||cfg.available;
+  return '<span style="background:' + bg + ';color:' + color + ';padding:1px 8px;border-radius:4px;font-size:10px;font-weight:500">' + label + '</span>';
+}
+
+function _spaBadge(s) {
+  const cfg = {
+    not_signed:   ['#e8e4dc','#666','Not Signed'],
+    signed_buyer: ['#FEF3E8','#854F0B','Signed \u2014 Buyer'],
+    fully_signed: ['#d4edbc','#2d6a0a','Fully Signed'],
+  };
+  const [bg,color,label] = cfg[s||'not_signed']||cfg.not_signed;
+  return '<span style="background:' + bg + ';color:' + color + ';padding:1px 6px;border-radius:4px;font-size:10px">' + label + '</span>';
+}
+
+function _oqoodBadge(s) {
+  const cfg = {
+    not_registered: ['#e8e4dc','#666','Not Registered'],
+    registered:     ['#d4edbc','#2d6a0a','Registered'],
+  };
+  const [bg,color,label] = cfg[s||'not_registered']||cfg.not_registered;
+  return '<span style="background:' + bg + ';color:' + color + ';padding:1px 6px;border-radius:4px;font-size:10px">' + label + '</span>';
+}
+
+async function renderUnitRegister() {
+  const {data:units, error} = await sb
+    .from('units')
+    .select('*, unit_sales(*, payment_milestones(*))')
+    .order('floor')
+    .order('unit_no');
+  if(error) {
+    document.getElementById('content').innerHTML =
+      '<div class="empty-state" style="padding:48px;text-align:center;color:var(--red)">Failed to load: ' + esc(error.message) + '</div>';
+    return;
+  }
+  window._uregData = units||[];
+  _renderUregTable();
+}
+
+function _renderUregTable() {
+  const units  = window._uregData||[];
+  const typeF   = document.getElementById('urf-type')?.value   || 'all';
+  const statusF = document.getElementById('urf-status')?.value || 'all';
+  const floorF  = document.getElementById('urf-floor')?.value  || 'all';
+  const search  = (document.getElementById('urf-search')?.value||'').toLowerCase().trim();
+
+  const floors = [...new Set(units.map(u=>u.floor))].sort((a,b)=>a-b);
+
+  const filtered = units.filter(u => {
+    const st = _unitSaleStatus(u);
+    if(typeF !== 'all' && u.unit_type !== typeF) return false;
+    if(statusF !== 'all' && st !== statusF) return false;
+    if(floorF !== 'all' && String(u.floor) !== floorF) return false;
+    if(search) {
+      const buyer = (u.unit_sales?.buyer_name||'').toLowerCase();
+      if(!u.unit_no.toLowerCase().includes(search) && !buyer.includes(search)) return false;
+    }
+    return true;
+  });
+
+  const rowsHTML = filtered.length
+    ? filtered.map(u => {
+        const sale = u.unit_sales;
+        const st   = _unitSaleStatus(u);
+        return '<tr style="cursor:pointer" onclick="openUnitModal(\'' + u.id + '\')">' +
+          '<td style="font-weight:600">' + esc(u.unit_no) + '</td>' +
+          '<td>' + esc(u.floor) + '</td>' +
+          '<td>' + esc(u.unit_type) + '</td>' +
+          '<td style="text-align:right">' + (+u.area_sqft).toLocaleString() + '</td>' +
+          '<td style="text-align:right">' + fmtAED(u.listed_price) + '</td>' +
+          '<td style="color:var(--blue)">' + (sale ? esc(sale.buyer_name||'\u2014') : '\u2014') + '</td>' +
+          '<td>' + (sale ? _spaBadge(sale.spa_status) : '\u2014') + '</td>' +
+          '<td>' + (sale ? _oqoodBadge(sale.oqood_status) : '\u2014') + '</td>' +
+          '<td>' + _unitStatusBadge(st) + '</td>' +
+          '</tr>';
+      }).join('')
+    : '<tr><td colspan="9" class="empty-state">No units match filters.</td></tr>';
+
+  const floorOpts = floors.map(f=>'<option value="' + f + '">Floor ' + f + '</option>').join('');
+
+  const filterBar =
+    '<div class="fbar" style="margin-bottom:14px">' +
+      '<select id="urf-type" class="form-control" style="width:auto;padding:5px 8px;font-size:12px" onchange="_renderUregTable()">' +
+        '<option value="all">All Types</option><option value="Studio">Studio</option><option value="1BHK">1BHK</option>' +
+      '</select>' +
+      '<select id="urf-status" class="form-control" style="width:auto;padding:5px 8px;font-size:12px;margin-left:6px" onchange="_renderUregTable()">' +
+        '<option value="all">All Statuses</option><option value="available">Available</option><option value="reserved">Reserved</option><option value="sold">Sold</option>' +
+      '</select>' +
+      '<select id="urf-floor" class="form-control" style="width:auto;padding:5px 8px;font-size:12px;margin-left:6px" onchange="_renderUregTable()">' +
+        '<option value="all">All Floors</option>' + floorOpts +
+      '</select>' +
+      '<input id="urf-search" class="form-control" style="width:180px;padding:5px 8px;font-size:12px;margin-left:6px" placeholder="Search unit / buyer\u2026" oninput="_renderUregTable()" />' +
+    '</div>';
+
+  // Preserve filter state across re-renders
+  const savedType   = typeF;
+  const savedStatus = statusF;
+  const savedFloor  = floorF;
+  const savedSearch = search;
+
+  document.getElementById('content').innerHTML =
+    filterBar +
+    '<div class="card"><div class="tw"><table>' +
+      '<tr><th>Unit</th><th>Floor</th><th>Type</th><th style="text-align:right">Sqft</th><th style="text-align:right">Listed Price</th><th>Buyer</th><th>SPA</th><th>Oqood</th><th>Status</th></tr>' +
+      rowsHTML +
+    '</table></div></div>';
+
+  // Restore filter values after innerHTML wipe
+  const t = document.getElementById('urf-type');
+  if(t) {
+    t.value = savedType;
+    document.getElementById('urf-status').value = savedStatus;
+    document.getElementById('urf-floor').value  = savedFloor;
+    document.getElementById('urf-search').value = savedSearch;
+  }
+}
 </script>
 </body>
 </html>
