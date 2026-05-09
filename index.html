@@ -7012,6 +7012,156 @@ async function markUnitAvailable(saleId, unitNo) {
   closeModal();
   render();
 }
+
+// ─── SALES REVENUE ───────────────────────────────────────────────────────────
+
+async function renderSalesRevenue() {
+  const {data:units, error} = await sb
+    .from('units')
+    .select('*, unit_sales(*, payment_milestones(*))');
+  if(error) {
+    document.getElementById('content').innerHTML =
+      '<div class="empty-state" style="padding:48px;text-align:center;color:var(--red)">Failed to load: ' + esc(error.message) + '</div>';
+    return;
+  }
+  const all = units||[];
+  const soldUnits     = all.filter(u=>u.unit_sales?.status==='sold');
+  const reservedUnits = all.filter(u=>u.unit_sales?.status==='reserved');
+  const availUnits    = all.filter(u=>!u.unit_sales);
+  const contracted    = [...soldUnits,...reservedUnits];
+  const studios       = all.filter(u=>u.unit_type==='Studio');
+  const bhks          = all.filter(u=>u.unit_type==='1BHK');
+
+  const totalGDV        = all.reduce((s,u)=>s+(+u.listed_price||0),0);
+  const totalContracted = contracted.reduce((s,u)=>s+(+u.unit_sales.sold_price||0),0);
+  const remainingGDV    = availUnits.reduce((s,u)=>s+(+u.listed_price||0),0);
+  const totalSqftSold   = soldUnits.reduce((s,u)=>s+(+u.area_sqft||0),0);
+  const totalSqft       = all.reduce((s,u)=>s+(+u.area_sqft||0),0);
+  const soldPct         = all.length ? (soldUnits.length/all.length*100).toFixed(1) : '0.0';
+  const availPct        = all.length ? (availUnits.length/all.length*100).toFixed(1) : '0.0';
+
+  // Commission
+  const totalComm = contracted.reduce((s,u)=>s+((+u.unit_sales.sold_price||0)*(+u.unit_sales.commission_pct||0)/100),0);
+  const commRates = contracted.filter(u=>+u.unit_sales.commission_pct>0).map(u=>+u.unit_sales.commission_pct);
+  const avgComm   = commRates.length ? commRates.reduce((s,v)=>s+v,0)/commRates.length : 0;
+  const withBroker= contracted.filter(u=>u.unit_sales.broker_name).length;
+
+  // Discount
+  const totalDisc = contracted.reduce((s,u)=>s+(+u.unit_sales.discount_amount||0),0);
+  const discPcts  = contracted.filter(u=>+u.unit_sales.discount_amount>0)
+    .map(u=>((+u.unit_sales.discount_amount)/(+u.listed_price||1))*100);
+  const avgDisc   = discPcts.length ? discPcts.reduce((s,v)=>s+v,0)/discPcts.length : 0;
+  const withDisc  = contracted.filter(u=>+u.unit_sales.discount_amount>0).length;
+
+  // Monthly expected revenue
+  const monthMap = {};
+  let onHandover = 0;
+  for(const u of contracted) {
+    for(const m of (u.unit_sales.payment_milestones||[])) {
+      if(!m.due_date) { onHandover += (+m.amount||0); continue; }
+      const key = m.due_date.substring(0,7);
+      monthMap[key] = (monthMap[key]||0) + (+m.amount||0);
+    }
+  }
+  const sortedMonths = Object.keys(monthMap).sort();
+  let cum = 0;
+  const monthRowsHTML = sortedMonths.map(k=>{
+    cum += monthMap[k];
+    const [yr,mo] = k.split('-');
+    const label = new Date(+yr,+mo-1,1).toLocaleDateString('en-GB',{month:'short',year:'numeric'});
+    return '<tr style="border-bottom:0.5px solid var(--border)">' +
+      '<td style="padding:5px 10px">' + label + '</td>' +
+      '<td style="padding:5px 10px;text-align:right;font-weight:500">' + fmtAED(monthMap[k]) + '</td>' +
+      '<td style="padding:5px 10px;text-align:right;color:var(--text2)">' + fmtAED(cum) + '</td>' +
+      '</tr>';
+  }).join('');
+  const handoverRow = onHandover > 0
+    ? '<tr style="border-top:1px solid var(--border2);font-style:italic">' +
+        '<td style="padding:5px 10px;color:var(--text2)">On Handover (event-based)</td>' +
+        '<td style="padding:5px 10px;text-align:right;font-weight:500">' + fmtAED(onHandover) + '</td>' +
+        '<td style="padding:5px 10px;text-align:right;color:var(--text2)">\u2014</td>' +
+      '</tr>'
+    : '';
+
+  // By type
+  const typeRows = ['Studio','1BHK'].map(type=>{
+    const ta   = all.filter(u=>u.unit_type===type);
+    const ts   = ta.filter(u=>u.unit_sales?.status==='sold');
+    const tc   = ta.filter(u=>u.unit_sales);
+    const avgS = ta.length ? ta.reduce((s,u)=>s+(+u.area_sqft||0),0)/ta.length : 0;
+    const avgP = ts.length ? ts.reduce((s,u)=>s+(+u.unit_sales.sold_price||0),0)/ts.length : 0;
+    const totR = tc.reduce((s,u)=>s+(+u.unit_sales.sold_price||0),0);
+    return '<tr style="border-bottom:0.5px solid var(--border)">' +
+      '<td style="padding:6px 10px;font-weight:500">' + type + '</td>' +
+      '<td style="padding:6px 10px;text-align:center">' + ta.length + '</td>' +
+      '<td style="padding:6px 10px;text-align:center;color:var(--green);font-weight:500">' + ts.length + '</td>' +
+      '<td style="padding:6px 10px;text-align:right">' + avgS.toFixed(0) + ' sqft</td>' +
+      '<td style="padding:6px 10px;text-align:right">' + (ts.length ? fmtAED(avgP) : '\u2014') + '</td>' +
+      '<td style="padding:6px 10px;text-align:right;font-weight:600">' + (totR > 0 ? fmtAED(totR) : '\u2014') + '</td>' +
+      '</tr>';
+  }).join('');
+
+  // Helper: stat card
+  const sc = (val,label,sub,valColor) =>
+    '<div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:8px;padding:12px">' +
+    '<div style="font-size:20px;font-weight:700;color:' + (valColor||'var(--charcoal)') + '">' + val + '</div>' +
+    '<div style="font-size:10px;color:var(--text2);margin-top:2px">' + label + '</div>' +
+    (sub ? '<div style="font-size:10px;color:var(--text3);margin-top:4px">' + sub + '</div>' : '') +
+    '</div>';
+
+  const rc = (val,label,sub,bg,border,vc) =>
+    '<div style="background:' + bg + ';border:0.5px solid ' + border + ';border-radius:8px;padding:12px">' +
+    '<div style="font-size:18px;font-weight:700;color:' + vc + '">' + val + '</div>' +
+    '<div style="font-size:10px;color:' + vc + ';margin-top:2px">' + label + '</div>' +
+    (sub ? '<div style="font-size:10px;color:var(--text3);margin-top:4px">' + sub + '</div>' : '') +
+    '</div>';
+
+  document.getElementById('content').innerHTML =
+    // Stats strip
+    '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px">' +
+      sc(all.length,'Total Units', studios.length + ' Studio \u00b7 ' + bhks.length + ' 1BHK') +
+      sc(soldUnits.length,'Sold', soldPct + '% of total','var(--green)') +
+      sc(reservedUnits.length,'Reserved','SPA in progress','var(--amber)') +
+      sc(availUnits.length,'Available', availPct + '% remaining','var(--blue)') +
+      sc((totalSqftSold/1000).toFixed(1)+'K sqft','Sqft Sold','of ' + (totalSqft/1000).toFixed(1) + 'K total') +
+    '</div>' +
+    // Revenue strip
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">' +
+      rc(fmtCompact(totalGDV),'Total GDV (Listed)','Gross Development Value','var(--green-bg)','#C0DD97','var(--green)') +
+      rc(fmtCompact(totalContracted),'Total Contracted Revenue', contracted.length + ' units (sold + reserved)','var(--green-bg)','#C0DD97','var(--green)') +
+      rc(fmtCompact(remainingGDV),'Remaining GDV', availUnits.length + ' available units','var(--bg2)','var(--border)','var(--charcoal)') +
+    '</div>' +
+    // Monthly revenue table
+    '<div class="card" style="margin-bottom:16px"><div style="padding:14px 18px">' +
+      '<div style="font-size:11px;font-weight:600;color:var(--charcoal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Expected Revenue by Month (Payment Plan)</div>' +
+      (sortedMonths.length || onHandover > 0
+        ? '<table style="width:100%;font-size:11px;border-collapse:collapse"><tr style="background:var(--bg3)"><th style="padding:5px 10px;text-align:left">Month</th><th style="padding:5px 10px;text-align:right">Expected (AED)</th><th style="padding:5px 10px;text-align:right">Cumulative (AED)</th></tr>' + monthRowsHTML + handoverRow + '</table>'
+        : '<div class="empty-state" style="padding:16px 0">No payment milestones with due dates yet.</div>') +
+    '</div></div>' +
+    // Commission + Discount
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">' +
+      '<div class="card"><div style="padding:14px 18px">' +
+        '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em">Commission Summary</div>' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px"><span style="color:var(--text2)">Total Commission Payable</span><span style="font-weight:600;color:var(--blue)">' + fmtAED(totalComm) + '</span></div>' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px"><span style="color:var(--text2)">Avg Commission Rate</span><span>' + avgComm.toFixed(2) + '%</span></div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text2)">Units with broker</span><span>' + withBroker + ' of ' + contracted.length + ' contracted</span></div>' +
+      '</div></div>' +
+      '<div class="card"><div style="padding:14px 18px">' +
+        '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em">Discount Summary</div>' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px"><span style="color:var(--text2)">Total Discount Given</span><span style="font-weight:600;color:var(--amber)">' + fmtAED(totalDisc) + '</span></div>' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px"><span style="color:var(--text2)">Avg Discount Rate</span><span>' + avgDisc.toFixed(2) + '%</span></div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text2)">Units with discount</span><span>' + withDisc + ' of ' + contracted.length + ' contracted</span></div>' +
+      '</div></div>' +
+    '</div>' +
+    // By unit type
+    '<div class="card"><div style="padding:14px 18px">' +
+      '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em">Revenue by Unit Type</div>' +
+      '<table style="width:100%;font-size:11px;border-collapse:collapse">' +
+        '<tr style="background:var(--bg3)"><th style="padding:6px 10px;text-align:left">Type</th><th style="padding:6px 10px;text-align:center">Total</th><th style="padding:6px 10px;text-align:center">Sold</th><th style="padding:6px 10px;text-align:right">Avg Sqft</th><th style="padding:6px 10px;text-align:right">Avg Sold Price</th><th style="padding:6px 10px;text-align:right">Total Revenue</th></tr>' +
+        typeRows +
+      '</table>' +
+    '</div></div>';
+}
 </script>
 </body>
 </html>
