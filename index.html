@@ -668,7 +668,6 @@ function canCreateOnPage(page) {
   if(page==='ipc') return can('submit') || currentProfile?.role==='developer';
   if(page==='boq') return can('manageRegister');
   if(page==='usetup') return currentProfile?.role==='developer';
-  if(page==='ureg') return currentProfile?.role==='developer';
   return false;
 }
 
@@ -2954,7 +2953,6 @@ async function doUploadRev(id) {
 // ─── NEW ITEM FORMS ───────────────────────────────────────────────
 async function openNew() {
   if(currentPage==='usetup') { openAddUnitForm(); return; }
-  if(currentPage==='ureg')   { openSaleForm(null, null);  return; }
   const {data:scs} = await sb.from('subcontractors').select('*');
   const scOpts = (scs||[]).map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
 
