@@ -6880,6 +6880,138 @@ function openUnitModal(unitId) {
 
   openModal('Unit ' + esc(u.unit_no) + ' \u2014 ' + esc(u.unit_type) + ' \u00b7 Floor ' + esc(u.floor), body, footer, true);
 }
+
+// ─── SALE FORM ───────────────────────────────────────────────────────────────
+
+function openSaleForm(unitId, saleId) {
+  const u = (window._uregData||[]).find(x=>x.id===unitId);
+  if(!u) { toast('Unit not found','error'); return; }
+  const sale = u.unit_sales;
+  const ms   = (sale?.payment_milestones||[]).sort((a,b)=>a.sort_order-b.sort_order);
+  const isEdit = !!saleId;
+
+  const defaultMS = [
+    {milestone_name:'Booking Deposit', pct_of_sale:10, amount:'', due_date:'', sort_order:0},
+    {milestone_name:'1st Instalment',  pct_of_sale:30, amount:'', due_date:'', sort_order:1},
+    {milestone_name:'2nd Instalment',  pct_of_sale:30, amount:'', due_date:'', sort_order:2},
+    {milestone_name:'Handover',        pct_of_sale:30, amount:'', due_date:'',  sort_order:3},
+  ];
+  const msSource = (isEdit && ms.length) ? ms : defaultMS;
+
+  const msRows = msSource.map((m,i) =>
+    '<tr>' +
+    '<td><input class="form-control" data-ms="name" data-i="' + i + '" value="' + esc(m.milestone_name) + '" style="width:100%;padding:4px 6px;font-size:11px" /></td>' +
+    '<td><input type="number" class="form-control" data-ms="amount" data-i="' + i + '" value="' + (m.amount||'') + '" style="width:95px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
+    '<td><input type="number" class="form-control" data-ms="pct" data-i="' + i + '" value="' + (m.pct_of_sale||'') + '" style="width:55px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
+    '<td><input type="date" class="form-control" data-ms="due" data-i="' + i + '" value="' + (m.due_date||'') + '" style="padding:4px 6px;font-size:11px" /></td>' +
+    '</tr>'
+  ).join('');
+
+  const sel = (id, opts, val) =>
+    '<select id="' + id + '" class="form-input">' +
+    opts.map(o=>'<option value="' + o[0] + '"' + (val===o[0]?' selected':'') + '>' + o[1] + '</option>').join('') +
+    '</select>';
+
+  const body =
+    '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">Sale Details</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Buyer Name</label><input id="sf-buyer" class="form-input" value="' + esc(sale?.buyer_name||'') + '" /></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Sale Date</label><input id="sf-saledate" type="date" class="form-input" value="' + esc(sale?.sale_date||'') + '" /></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Sold Price (AED)</label><input id="sf-price" type="number" class="form-input" value="' + (sale?.sold_price||'') + '" /></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Discount (AED)</label><input id="sf-discount" type="number" class="form-input" value="' + (sale?.discount_amount||0) + '" /></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Commission %</label><input id="sf-commpct" type="number" step="0.1" class="form-input" value="' + (sale?.commission_pct||0) + '" /></div>' +
+      '<div></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Broker Name</label><input id="sf-broker" class="form-input" value="' + esc(sale?.broker_name||'') + '" /></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Brokerage</label><input id="sf-brokerage" class="form-input" value="' + esc(sale?.brokerage_name||'') + '" /></div>' +
+    '</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Unit Status</label>' + sel('sf-status',[['reserved','Reserved'],['sold','Sold']], sale?.status||'reserved') + '</div>' +
+      '<div></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">SPA Status</label>' + sel('sf-spa',[['not_signed','Not Signed'],['signed_buyer','Signed \u2014 Buyer'],['fully_signed','Fully Signed']], sale?.spa_status||'not_signed') + '</div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">SPA Date</label><input id="sf-spadate" type="date" class="form-input" value="' + esc(sale?.spa_date||'') + '" /></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Oqood Status</label>' + sel('sf-oqood',[['not_registered','Not Registered'],['registered','Registered']], sale?.oqood_status||'not_registered') + '</div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Oqood Date</label><input id="sf-oqooddate" type="date" class="form-input" value="' + esc(sale?.oqood_date||'') + '" /></div>' +
+    '</div>' +
+    '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Payment Plan Milestones</div>' +
+    '<table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:14px">' +
+      '<tr style="background:var(--bg3)"><th style="padding:4px 6px;text-align:left">Milestone</th><th style="padding:4px 6px;text-align:right">Amount (AED)</th><th style="padding:4px 6px;text-align:right">%</th><th style="padding:4px 6px">Due Date</th></tr>' +
+      msRows +
+    '</table>';
+
+  openModal(
+    (isEdit ? 'Edit Sale \u2014 Unit ' : 'Add Sale \u2014 Unit ') + esc(u.unit_no),
+    body,
+    '<button class="btn btn-primary" onclick="saveSaleForm(\'' + unitId + '\',\'' + (saleId||'') + '\')">Save</button><button class="btn" onclick="closeModal()">Cancel</button>',
+    true
+  );
+}
+
+async function saveSaleForm(unitId, saleId) {
+  const buyer_name      = document.getElementById('sf-buyer')?.value.trim()||null;
+  const sale_date       = document.getElementById('sf-saledate')?.value||null;
+  const sold_price      = parseFloat(document.getElementById('sf-price')?.value)||null;
+  const discount_amount = parseFloat(document.getElementById('sf-discount')?.value)||0;
+  const commission_pct  = parseFloat(document.getElementById('sf-commpct')?.value)||0;
+  const broker_name     = document.getElementById('sf-broker')?.value.trim()||null;
+  const brokerage_name  = document.getElementById('sf-brokerage')?.value.trim()||null;
+  const status          = document.getElementById('sf-status')?.value||'reserved';
+  const spa_status      = document.getElementById('sf-spa')?.value||'not_signed';
+  const spa_date        = document.getElementById('sf-spadate')?.value||null;
+  const oqood_status    = document.getElementById('sf-oqood')?.value||'not_registered';
+  const oqood_date      = document.getElementById('sf-oqooddate')?.value||null;
+
+  const nameEls   = [...document.querySelectorAll('[data-ms="name"]')];
+  const amountEls = [...document.querySelectorAll('[data-ms="amount"]')];
+  const pctEls    = [...document.querySelectorAll('[data-ms="pct"]')];
+  const dueEls    = [...document.querySelectorAll('[data-ms="due"]')];
+  const milestones = nameEls
+    .map((el,i)=>({
+      milestone_name: el.value.trim(),
+      amount: parseFloat(amountEls[i]?.value)||0,
+      pct_of_sale: parseFloat(pctEls[i]?.value)||0,
+      due_date: dueEls[i]?.value||null,
+      sort_order: i,
+    }))
+    .filter(m=>m.milestone_name);
+
+  const saleData = {
+    unit_id:unitId, status, buyer_name, sale_date, sold_price, discount_amount,
+    commission_pct, broker_name, brokerage_name, spa_status, spa_date, oqood_status,
+    oqood_date, updated_at: new Date().toISOString()
+  };
+
+  let targetSaleId = saleId;
+  if(saleId) {
+    const {error} = await sb.from('unit_sales').update(saleData).eq('id',saleId);
+    if(error) { toast('Save error: ' + error.message,'error'); return; }
+  } else {
+    const {data, error} = await sb.from('unit_sales').insert(saleData).select().single();
+    if(error) { toast('Save error: ' + error.message,'error'); return; }
+    targetSaleId = data.id;
+  }
+
+  // Replace milestones: delete all then insert fresh
+  await sb.from('payment_milestones').delete().eq('unit_sale_id', targetSaleId);
+  if(milestones.length) {
+    const rows = milestones.map(m=>({...m, unit_sale_id:targetSaleId}));
+    const {error:msErr} = await sb.from('payment_milestones').insert(rows);
+    if(msErr) { toast('Milestone error: ' + msErr.message,'error'); return; }
+  }
+
+  toast('Sale saved','success');
+  closeModal();
+  render();
+}
+
+async function markUnitAvailable(saleId, unitNo) {
+  const ok = await confirmModal('Remove sale record for Unit ' + unitNo + ' and mark it Available? Payment milestones will also be deleted.');
+  if(!ok) return;
+  const {error} = await sb.from('unit_sales').delete().eq('id',saleId);
+  if(error) { toast('Error: ' + error.message,'error'); return; }
+  toast('Unit ' + unitNo + ' is now available','success');
+  closeModal();
+  render();
+}
 </script>
 </body>
 </html>
