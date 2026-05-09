@@ -1,0 +1,268 @@
+- generic [ref=e19]:
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e22]: Active Project
+      - generic [ref=e23]: Golf Grove – Residential Building (B+G+P+7+Roof)
+    - generic [ref=e24]:
+      - generic [ref=e25]: MH
+      - generic [ref=e26]:
+        - generic [ref=e27]: Mohammed Hingora
+        - generic [ref=e28]: developer
+    - generic [ref=e29]: Main
+    - generic [ref=e30] [cursor=pointer]:
+      - img [ref=e31]
+      - text: Dashboard
+    - generic [ref=e36]: Document Control
+    - generic [ref=e37] [cursor=pointer]:
+      - img [ref=e38]
+      - text: Drawing Register
+    - generic [ref=e40] [cursor=pointer]:
+      - img [ref=e41]
+      - text: Submittals (DSUB)
+      - generic [ref=e44]: "1"
+    - generic [ref=e45] [cursor=pointer]:
+      - img [ref=e46]
+      - text: Submittal Register
+    - generic [ref=e48]: Site
+    - generic [ref=e49] [cursor=pointer]:
+      - img [ref=e50]
+      - text: Inspection Requests
+      - generic [ref=e53]: "2"
+    - generic [ref=e54] [cursor=pointer]:
+      - img [ref=e55]
+      - text: NCRs
+      - generic [ref=e58]: "2"
+    - generic [ref=e59] [cursor=pointer]:
+      - img [ref=e60]
+      - text: RFIs
+      - generic [ref=e64]: "1"
+    - generic [ref=e65] [cursor=pointer]:
+      - img [ref=e66]
+      - text: Transmittals
+    - generic [ref=e68] [cursor=pointer]:
+      - img [ref=e69]
+      - text: Method Statements
+    - generic [ref=e72] [cursor=pointer]:
+      - img [ref=e73]
+      - text: Correspondence
+    - generic [ref=e76] [cursor=pointer]:
+      - img [ref=e77]
+      - text: Punch List
+      - generic [ref=e80]: "0"
+    - generic [ref=e81]: Finance
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: Finance Overview
+    - generic [ref=e86] [cursor=pointer]:
+      - img [ref=e87]
+      - text: Payment Certificates
+    - generic [ref=e90] [cursor=pointer]:
+      - img [ref=e91]
+      - text: BOQ Setup
+    - generic [ref=e94]: Admin
+    - generic [ref=e95] [cursor=pointer]:
+      - img [ref=e96]
+      - text: Subcontractors
+    - generic [ref=e102] [cursor=pointer]:
+      - img [ref=e103]
+      - text: User Management
+    - button "Sign Out" [ref=e107] [cursor=pointer]
+  - generic [ref=e108]:
+    - generic [ref=e109]:
+      - generic [ref=e110]:
+        - generic [ref=e111]: Dashboard
+        - generic [ref=e112]: Saturday, 9 May 2026
+      - generic [ref=e114]: developer
+    - generic [ref=e309]:
+      - generic [ref=e310]:
+        - generic [ref=e311]:
+          - generic [ref=e312]: Golf Grove — Regent Developments
+          - generic [ref=e313]: Residential Building B+G+P+7+Roof · Document Management System
+        - generic [ref=e314]:
+          - generic [ref=e315]: 09 MAY 2026
+          - button "← Classic View" [ref=e316] [cursor=pointer]
+      - generic [ref=e317]:
+        - generic [ref=e318]:
+          - generic [ref=e319]: Drawings
+          - generic [ref=e320]: "71"
+          - generic [ref=e321]: 3 approved
+        - generic [ref=e322]:
+          - generic [ref=e323]: Submittals
+          - generic [ref=e324]: "9"
+          - generic [ref=e325]: 1 pending review
+        - generic [ref=e326]:
+          - generic [ref=e327]: Inspections
+          - generic [ref=e328]: "13"
+          - generic [ref=e329]: 2 awaiting response
+        - generic [ref=e330]:
+          - generic [ref=e331]: Open NCRs
+          - generic [ref=e332]: "2"
+          - generic [ref=e333]: 3 closed
+        - generic [ref=e334]:
+          - generic [ref=e335]: Open RFIs
+          - generic [ref=e336]: "1"
+          - generic [ref=e337]: 2 closed
+        - generic [ref=e338] [cursor=pointer]:
+          - generic [ref=e339]: Payment Certs
+          - generic [ref=e340]: "0"
+          - generic [ref=e341]: 0 paid
+      - generic [ref=e342]:
+        - generic [ref=e343]:
+          - generic [ref=e344]: 47%
+          - generic [ref=e345]: ISO 19650
+        - generic [ref=e347]:
+          - generic [ref=e348]:
+            - generic [ref=e349]: Published or Archived
+            - generic [ref=e352]: 4%
+          - generic [ref=e353]:
+            - generic [ref=e354]: Complete metadata · ISO §5.3.2
+            - generic [ref=e357]: 89%
+        - generic [ref=e358]:
+          - text: "71"
+          - text: tracked
+      - generic [ref=e359]:
+        - generic [ref=e360]:
+          - generic [ref=e361]: Drawing Approval
+          - generic [ref=e362]: 71 total drawings
+          - generic [ref=e363]:
+            - img [ref=e364]:
+              - generic [ref=e369]: 4%
+              - generic [ref=e370]: APPROVED
+            - generic [ref=e371]:
+              - generic [ref=e372]:
+                - text: IFC
+                - generic [ref=e374]: "0"
+              - generic [ref=e375]:
+                - text: Approved
+                - generic [ref=e377]: "3"
+              - generic [ref=e378]:
+                - text: Review
+                - generic [ref=e380]: "60"
+              - generic [ref=e381]:
+                - text: Pending
+                - generic [ref=e383]: "8"
+        - generic [ref=e384]:
+          - generic [ref=e385]: Discipline Status
+          - generic [ref=e386]: by approved drawings
+          - generic [ref=e387]:
+            - generic [ref=e388]:
+              - generic [ref=e389]: ARCH
+              - generic [ref=e392]: 2%
+            - generic [ref=e393]:
+              - generic [ref=e394]: STRU
+              - generic [ref=e397]: 33%
+            - generic [ref=e398]:
+              - generic [ref=e399]: MEP
+              - generic [ref=e401]: 0%
+            - generic [ref=e402]:
+              - generic [ref=e403]: CIVI
+              - generic [ref=e406]: 33%
+        - generic [ref=e407]:
+          - generic [ref=e408]: Open Items
+          - generic [ref=e409]: NCRs + RFIs
+          - generic [ref=e410]:
+            - generic [ref=e411]:
+              - generic [ref=e412]: NCRs
+              - generic [ref=e413]: "2"
+              - generic [ref=e414]: 3 closed
+            - generic [ref=e415]:
+              - generic [ref=e416]: RFIs
+              - generic [ref=e417]: "1"
+              - generic [ref=e418]: 2 closed
+          - generic [ref=e419]:
+            - generic [ref=e420]: Submittals Pending
+            - generic [ref=e423]: 1 / 9
+        - generic [ref=e424]:
+          - generic [ref=e425]: SLA Status
+          - generic [ref=e426]: 1 overdue
+          - generic [ref=e427]:
+            - generic [ref=e429]: Overdue IRs
+            - generic [ref=e430]: "1"
+            - generic [ref=e431] [cursor=pointer]: View
+          - generic [ref=e432]:
+            - generic [ref=e434]: Overdue NCRs
+            - generic [ref=e435]: "0"
+          - generic [ref=e436]:
+            - generic [ref=e438]: Overdue RFIs
+            - generic [ref=e439]: "0"
+          - generic [ref=e440]:
+            - generic [ref=e442]: Overdue Submittals
+            - generic [ref=e443]: "0"
+      - generic [ref=e444]:
+        - generic [ref=e445]:
+          - generic [ref=e446]: Pending Submittals
+          - table [ref=e447]:
+            - rowgroup [ref=e448]:
+              - row "Ref Title Status" [ref=e449]:
+                - columnheader "Ref" [ref=e450]
+                - columnheader "Title" [ref=e451]
+                - columnheader "Status" [ref=e452]
+            - rowgroup [ref=e453]:
+              - row "CONS-SUB-TEST-1776637831756 Consultant Test Submittal Pending Review" [ref=e454] [cursor=pointer]:
+                - cell "CONS-SUB-TEST-1776637831756" [ref=e455]
+                - cell "Consultant Test Submittal" [ref=e456]
+                - cell "Pending Review" [ref=e457]
+        - generic [ref=e458]:
+          - generic [ref=e459]: Pending Inspections
+          - table [ref=e460]:
+            - rowgroup [ref=e461]:
+              - row "Ref Description Date" [ref=e462]:
+                - columnheader "Ref" [ref=e463]
+                - columnheader "Description" [ref=e464]
+                - columnheader "Date" [ref=e465]
+            - rowgroup [ref=e466]:
+              - row "MBC-IR-001 Reinforcement bar placement and cover 2026-04-20" [ref=e467] [cursor=pointer]:
+                - cell "MBC-IR-001" [ref=e468]
+                - cell "Reinforcement bar placement and cover" [ref=e469]
+                - cell "2026-04-20" [ref=e470]
+              - row "CONS-IR-TEST-1776637831756 Concrete works - column C3 2026-04-19" [ref=e471] [cursor=pointer]:
+                - cell "CONS-IR-TEST-1776637831756" [ref=e472]
+                - cell "Concrete works - column C3" [ref=e473]
+                - cell "2026-04-19" [ref=e474]
+        - generic [ref=e475]:
+          - generic [ref=e476]: Open NCRs
+          - table [ref=e477]:
+            - rowgroup [ref=e478]:
+              - row "Ref Title Severity" [ref=e479]:
+                - columnheader "Ref" [ref=e480]
+                - columnheader "Title" [ref=e481]
+                - columnheader "Severity" [ref=e482]
+            - rowgroup [ref=e483]:
+              - row "NCR-CONS-1776637831756 Consultant Test NCR Minor" [ref=e484] [cursor=pointer]:
+                - cell "NCR-CONS-1776637831756" [ref=e485]
+                - cell "Consultant Test NCR" [ref=e486]
+                - cell "Minor" [ref=e487]
+              - row "NCR-2305 Audit Trail Test - Phase 3 Minor" [ref=e488] [cursor=pointer]:
+                - cell "NCR-2305" [ref=e489]
+                - cell "Audit Trail Test - Phase 3" [ref=e490]
+                - cell "Minor" [ref=e491]
+        - generic [ref=e492]:
+          - generic [ref=e493]: Recent Drawings
+          - table [ref=e494]:
+            - rowgroup [ref=e495]:
+              - row "No. Title Rev Status" [ref=e496]:
+                - columnheader "No." [ref=e497]
+                - columnheader "Title" [ref=e498]
+                - columnheader "Rev" [ref=e499]
+                - columnheader "Status" [ref=e500]
+            - rowgroup [ref=e501]:
+              - row "GG-TST-Z1-L1-DR-A-1692-RT UVD PDF Test contractor Rev A Under Review" [ref=e502] [cursor=pointer]:
+                - cell "GG-TST-Z1-L1-DR-A-1692-RT" [ref=e503]
+                - cell "UVD PDF Test contractor" [ref=e504]
+                - cell "Rev A" [ref=e505]
+                - cell "Under Review" [ref=e506]
+              - row "GG-TST-Z1-L1-DR-A-1692-RC UVD PDF Test consultant Rev A Under Review" [ref=e507] [cursor=pointer]:
+                - cell "GG-TST-Z1-L1-DR-A-1692-RC" [ref=e508]
+                - cell "UVD PDF Test consultant" [ref=e509]
+                - cell "Rev A" [ref=e510]
+                - cell "Under Review" [ref=e511]
+              - row "GG-TST-Z1-L1-DR-A-1692-RD UVD PDF Test developer Rev A Under Review" [ref=e512] [cursor=pointer]:
+                - cell "GG-TST-Z1-L1-DR-A-1692-RD" [ref=e513]
+                - cell "UVD PDF Test developer" [ref=e514]
+                - cell "Rev A" [ref=e515]
+                - cell "Under Review" [ref=e516]
+              - row "GG-TST-Z1-L1-DR-A-1086-RT UVD PDF Test contractor Rev A Under Review" [ref=e517] [cursor=pointer]:
+                - cell "GG-TST-Z1-L1-DR-A-1086-RT" [ref=e518]
+                - cell "UVD PDF Test contractor" [ref=e519]
+                - cell "Rev A" [ref=e520]
+                - cell "Under Review" [ref=e521]

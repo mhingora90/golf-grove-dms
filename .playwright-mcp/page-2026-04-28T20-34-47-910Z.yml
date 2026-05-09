@@ -1,0 +1,225 @@
+- generic [ref=e19]:
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e22]: Active Project
+      - generic [ref=e23]: Golf Grove – Residential Building (B+G+P+7+Roof)
+    - generic [ref=e24]:
+      - generic [ref=e25]: MH
+      - generic [ref=e26]:
+        - generic [ref=e27]: Mohammed Hingora
+        - generic [ref=e28]: contractor
+    - generic [ref=e29]: Main
+    - generic [ref=e30] [cursor=pointer]:
+      - img [ref=e31]
+      - text: Dashboard
+    - generic [ref=e36]: Document Control
+    - generic [ref=e37] [cursor=pointer]:
+      - img [ref=e38]
+      - text: Drawing Register
+    - generic [ref=e40] [cursor=pointer]:
+      - img [ref=e41]
+      - text: Submittals (DSUB)
+      - generic [ref=e44]: "1"
+    - generic [ref=e45] [cursor=pointer]:
+      - img [ref=e46]
+      - text: Submittal Register
+    - generic [ref=e48]: Site
+    - generic [ref=e49] [cursor=pointer]:
+      - img [ref=e50]
+      - text: Inspection Requests
+      - generic [ref=e53]: "2"
+    - generic [ref=e54] [cursor=pointer]:
+      - img [ref=e55]
+      - text: NCRs
+      - generic [ref=e58]: "2"
+    - generic [ref=e59] [cursor=pointer]:
+      - img [ref=e60]
+      - text: RFIs
+      - generic [ref=e64]: "1"
+    - generic [ref=e65] [cursor=pointer]:
+      - img [ref=e66]
+      - text: Transmittals
+    - generic [ref=e68] [cursor=pointer]:
+      - img [ref=e69]
+      - text: Payment Certificates
+    - generic [ref=e72] [cursor=pointer]:
+      - img [ref=e73]
+      - text: Method Statements
+    - generic [ref=e76] [cursor=pointer]:
+      - img [ref=e77]
+      - text: Correspondence
+    - generic [ref=e80] [cursor=pointer]:
+      - img [ref=e81]
+      - text: Punch List
+      - generic [ref=e84]: "0"
+    - generic [ref=e85]: Admin
+    - generic [ref=e86] [cursor=pointer]:
+      - img [ref=e87]
+      - text: BOQ Setup
+    - generic [ref=e90] [cursor=pointer]:
+      - img [ref=e91]
+      - text: Subcontractors
+    - button "Sign Out" [ref=e97] [cursor=pointer]
+  - generic [ref=e98]:
+    - generic [ref=e99]:
+      - generic [ref=e100]:
+        - generic [ref=e101]: Dashboard
+        - generic [ref=e102]: Wednesday, 29 April 2026
+      - generic [ref=e104]: contractor
+    - generic [ref=e105]:
+      - generic [ref=e106]:
+        - generic [ref=e107]:
+          - generic [ref=e108]: Drawings
+          - generic [ref=e109]: "19"
+          - generic [ref=e110]: 3 approved
+        - generic [ref=e111]:
+          - generic [ref=e112]: Submittals
+          - generic [ref=e113]: "8"
+          - generic [ref=e114]: 1 pending review
+        - generic [ref=e115]:
+          - generic [ref=e116]: Inspections
+          - generic [ref=e117]: "7"
+          - generic [ref=e118]: 2 awaiting response
+        - generic [ref=e119]:
+          - generic [ref=e120]: Open NCRs
+          - generic [ref=e121]: "2"
+          - generic [ref=e122]: 3 closed
+        - generic [ref=e123]:
+          - generic [ref=e124]: Open RFIs
+          - generic [ref=e125]: "1"
+          - generic [ref=e126]: 2 closed
+        - generic [ref=e127] [cursor=pointer]:
+          - generic [ref=e128]: Payment Certs
+          - generic [ref=e129]: "0"
+          - generic [ref=e130]: 0 paid
+      - generic [ref=e132]:
+        - generic [ref=e133]:
+          - generic [ref=e134]: 35%
+          - generic [ref=e135]: ISO Compliance
+        - generic [ref=e136]:
+          - generic [ref=e138]:
+            - generic [ref=e139]: Published or Archived
+            - generic [ref=e140]: 11%
+          - generic [ref=e144]:
+            - generic [ref=e145]: Complete metadata (ISO §5.3.2)
+            - generic [ref=e146]: 58%
+        - generic [ref=e149]:
+          - text: 19 drawings
+          - text: tracked
+      - generic [ref=e150]:
+        - generic [ref=e151]:
+          - generic [ref=e152]:
+            - generic [ref=e153]: Drawing approval
+            - generic [ref=e154]: 19 total
+          - generic [ref=e155]:
+            - img [ref=e156]:
+              - generic [ref=e161]: 16%
+              - generic [ref=e162]: approved
+            - generic [ref=e163]:
+              - generic [ref=e164]:
+                - text: IFC
+                - generic [ref=e166]: "0"
+              - generic [ref=e167]:
+                - text: Approved
+                - generic [ref=e169]: "3"
+              - generic [ref=e170]:
+                - text: Review
+                - generic [ref=e172]: "12"
+              - generic [ref=e173]:
+                - text: Pending
+                - generic [ref=e175]: "4"
+        - generic [ref=e176]:
+          - generic [ref=e177]:
+            - generic [ref=e178]: Discipline completion
+            - generic [ref=e179]: by approved drawings
+          - generic [ref=e180]:
+            - generic [ref=e181]:
+              - generic [ref=e182]: Architecture
+              - generic [ref=e185]: 7%
+            - generic [ref=e186]:
+              - generic [ref=e187]: Structure
+              - generic [ref=e190]: 50%
+            - generic [ref=e191]:
+              - generic [ref=e192]: MEP
+              - generic [ref=e194]: 0%
+            - generic [ref=e195]:
+              - generic [ref=e196]: Civil
+              - generic [ref=e199]: 33%
+        - generic [ref=e200]:
+          - generic [ref=e201]:
+            - generic [ref=e202]: Open items
+            - generic [ref=e203]: NCRs + RFIs
+          - generic [ref=e204]:
+            - generic [ref=e205]:
+              - generic [ref=e206]:
+                - generic [ref=e207]: NCRs
+                - generic [ref=e208]: "2"
+                - generic [ref=e209]: 3 closed
+              - generic [ref=e210]:
+                - generic [ref=e211]: RFIs
+                - generic [ref=e212]: "1"
+                - generic [ref=e213]: 2 closed
+            - generic [ref=e214]:
+              - generic [ref=e215]: Submittals pending
+              - generic [ref=e219]: 1/8
+        - generic [ref=e220]:
+          - generic [ref=e221]:
+            - generic [ref=e222]: SLA Status
+            - generic [ref=e223]: 1 overdue
+          - generic [ref=e224]:
+            - generic [ref=e225]:
+              - generic [ref=e227]: Overdue IRs
+              - generic [ref=e228]: "1"
+              - generic [ref=e229] [cursor=pointer]: View →
+            - generic [ref=e230]:
+              - generic [ref=e232]: Overdue NCRs
+              - generic [ref=e233]: "0"
+              - generic [ref=e234]: —
+            - generic [ref=e235]:
+              - generic [ref=e237]: Overdue RFIs
+              - generic [ref=e238]: "0"
+              - generic [ref=e239]: —
+            - generic [ref=e240]:
+              - generic [ref=e242]: Overdue Submittals
+              - generic [ref=e243]: "0"
+              - generic [ref=e244]: —
+      - generic [ref=e245]:
+        - generic [ref=e246]:
+          - generic [ref=e248]: Pending submittals
+          - table [ref=e251]:
+            - rowgroup [ref=e252]:
+              - row "Ref Title Status" [ref=e253]:
+                - columnheader "Ref" [ref=e254]
+                - columnheader "Title" [ref=e255]
+                - columnheader "Status" [ref=e256]
+              - row "No pending submittals" [ref=e257]:
+                - cell "No pending submittals" [ref=e258]
+          - generic [ref=e260]: Open NCRs
+          - table [ref=e263]:
+            - rowgroup [ref=e264]:
+              - row "Ref Title Severity" [ref=e265]:
+                - columnheader "Ref" [ref=e266]
+                - columnheader "Title" [ref=e267]
+                - columnheader "Severity" [ref=e268]
+              - row "No open NCRs" [ref=e269]:
+                - cell "No open NCRs" [ref=e270]
+        - generic [ref=e271]:
+          - generic [ref=e273]: Pending inspections
+          - table [ref=e276]:
+            - rowgroup [ref=e277]:
+              - row "Ref Description Date" [ref=e278]:
+                - columnheader "Ref" [ref=e279]
+                - columnheader "Description" [ref=e280]
+                - columnheader "Date" [ref=e281]
+              - row "No pending inspections" [ref=e282]:
+                - cell "No pending inspections" [ref=e283]
+          - generic [ref=e285]: Recent drawings
+          - table [ref=e288]:
+            - rowgroup [ref=e289]:
+              - row "No. Title Rev Status" [ref=e290]:
+                - columnheader "No." [ref=e291]
+                - columnheader "Title" [ref=e292]
+                - columnheader "Rev" [ref=e293]
+                - columnheader "Status" [ref=e294]
+              - row "No drawings uploaded yet" [ref=e295]:
+                - cell "No drawings uploaded yet" [ref=e296]

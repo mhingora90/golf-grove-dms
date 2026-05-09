@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(C:\\Users\\USER\\.qwen/**)",
+      "Read(C:\\Users\\USER\\.qwen\\debug/**)",
+      "Bash(git add *)",
+      "Bash(npm install *)"
+    ]
+  },
+  "$version": 3
+}

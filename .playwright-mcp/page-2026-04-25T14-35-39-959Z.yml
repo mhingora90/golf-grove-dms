@@ -1,0 +1,517 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - generic [ref=e22]: Active Project
+        - generic [ref=e23]: Golf Grove – Residential Building (B+G+P+7+Roof)
+      - generic [ref=e24]:
+        - generic [ref=e25]: MH
+        - generic [ref=e26]:
+          - generic [ref=e27]: Mohammed Hingora
+          - generic [ref=e28]: consultant
+      - generic [ref=e29]: Main
+      - generic [ref=e30] [cursor=pointer]:
+        - img [ref=e31]
+        - text: Dashboard
+      - generic [ref=e36]: Document Control
+      - generic [ref=e37] [cursor=pointer]:
+        - img [ref=e38]
+        - text: Drawing Register
+      - generic [ref=e40] [cursor=pointer]:
+        - img [ref=e41]
+        - text: Submittals (DSUB)
+        - generic [ref=e44]: "1"
+      - generic [ref=e45] [cursor=pointer]:
+        - img [ref=e46]
+        - text: Submittal Register
+      - generic [ref=e48]: Site
+      - generic [ref=e49] [cursor=pointer]:
+        - img [ref=e50]
+        - text: Inspection Requests
+        - generic [ref=e53]: "2"
+      - generic [ref=e54] [cursor=pointer]:
+        - img [ref=e55]
+        - text: NCRs
+        - generic [ref=e58]: "2"
+      - generic [ref=e59] [cursor=pointer]:
+        - img [ref=e60]
+        - text: RFIs
+        - generic [ref=e64]: "1"
+      - generic [ref=e65] [cursor=pointer]:
+        - img [ref=e66]
+        - text: Transmittals
+      - generic [ref=e68] [cursor=pointer]:
+        - img [ref=e69]
+        - text: Method Statements
+      - generic [ref=e72] [cursor=pointer]:
+        - img [ref=e73]
+        - text: Correspondence
+      - generic [ref=e76] [cursor=pointer]:
+        - img [ref=e77]
+        - text: Punch List
+        - generic [ref=e80]: "0"
+      - generic [ref=e81]: Admin
+      - generic [ref=e82] [cursor=pointer]:
+        - img [ref=e83]
+        - text: Subcontractors
+      - button "Sign Out" [ref=e89] [cursor=pointer]
+    - generic [ref=e90]:
+      - generic [ref=e91]:
+        - generic [ref=e92]:
+          - generic [ref=e93]: Drawing Register
+          - generic [ref=e94]: Saturday, 25 April 2026
+        - generic [ref=e95]:
+          - generic [ref=e96]: consultant
+          - button "+ New" [ref=e287] [cursor=pointer]
+      - generic [ref=e97]:
+        - generic [ref=e288]:
+          - generic [ref=e289]:
+            - generic [ref=e290]: "17"
+            - generic [ref=e291]: Total
+          - generic [ref=e292]:
+            - generic [ref=e293]: "2"
+            - generic [ref=e294]: Published
+          - generic [ref=e295]:
+            - generic [ref=e296]: "10"
+            - generic [ref=e297]: Under Review
+          - generic [ref=e298]:
+            - generic [ref=e299]: "13"
+            - generic [ref=e300]: WIP
+        - generic [ref=e301]:
+          - generic [ref=e302]:
+            - generic [ref=e303]: "Discipline:"
+            - generic [ref=e304] [cursor=pointer]: All
+            - generic [ref=e305] [cursor=pointer]: Architecture
+            - generic [ref=e306] [cursor=pointer]: Structure
+            - generic [ref=e307] [cursor=pointer]: MEP
+            - generic [ref=e308] [cursor=pointer]: Civil
+            - generic [ref=e310]: "Status:"
+            - generic [ref=e311] [cursor=pointer]: All
+            - generic [ref=e312] [cursor=pointer]: Under Review
+            - generic [ref=e313] [cursor=pointer]: Approved
+            - generic [ref=e314] [cursor=pointer]: Issued for Construction
+            - generic [ref=e315] [cursor=pointer]: Revise & Resubmit
+            - textbox "Search drawings..." [ref=e316]
+          - generic [ref=e317]:
+            - generic [ref=e318]: "CDE:"
+            - generic [ref=e319] [cursor=pointer]: All
+            - generic [ref=e320] [cursor=pointer]: WIP
+            - generic [ref=e321] [cursor=pointer]: Shared
+            - generic [ref=e322] [cursor=pointer]: Published
+            - generic [ref=e323] [cursor=pointer]: Archived
+            - generic [ref=e324] [cursor=pointer]: Superseded
+            - generic [ref=e326]: "POI:"
+            - generic [ref=e327] [cursor=pointer]: All
+            - generic [ref=e328] [cursor=pointer]: S0
+            - generic [ref=e329] [cursor=pointer]: S1
+            - generic [ref=e330] [cursor=pointer]: S2
+            - generic [ref=e331] [cursor=pointer]: S3
+            - generic [ref=e332] [cursor=pointer]: S4
+            - generic [ref=e333] [cursor=pointer]: S5
+            - button "Export Register" [ref=e334] [cursor=pointer]
+            - button "Bulk Import" [ref=e335] [cursor=pointer]
+        - generic [ref=e337]:
+          - table [ref=e338]:
+            - rowgroup [ref=e339]:
+              - row "Drawing No. Title Discipline Rev POI CDE State Review Status Actions" [ref=e340]:
+                - columnheader [ref=e341]:
+                  - checkbox [ref=e342]
+                - columnheader "Drawing No." [ref=e343]
+                - columnheader "Title" [ref=e344]
+                - columnheader "Discipline" [ref=e345]
+                - columnheader "Rev" [ref=e346]
+                - columnheader "POI" [ref=e347]
+                - columnheader "CDE State" [ref=e348]
+                - columnheader "Review Status" [ref=e349]
+                - columnheader "Actions" [ref=e350]
+              - row "DWG-CON-1776594763429 Contractor Upload Test Civil Rev 0 — WIP Approved View New Rev Void" [ref=e351]:
+                - cell [ref=e352]:
+                  - checkbox [ref=e353]
+                - cell "DWG-CON-1776594763429" [ref=e354]
+                - cell "Contractor Upload Test" [ref=e355] [cursor=pointer]
+                - cell "Civil" [ref=e356]
+                - cell "Rev 0" [ref=e357]
+                - cell "—" [ref=e358]
+                - cell "WIP" [ref=e359]:
+                  - generic [ref=e360]: WIP
+                - cell "Approved" [ref=e361]:
+                  - generic [ref=e362]: Approved
+                - cell "View New Rev Void" [ref=e363]:
+                  - generic [ref=e364]:
+                    - button "View" [ref=e365] [cursor=pointer]
+                    - button "New Rev" [ref=e366] [cursor=pointer]
+                    - button "Void" [ref=e367] [cursor=pointer]
+              - row "DWG-TEST-1776594133675 Test Drawing Civil Rev A — WIP Under Review View New Rev Review Void" [ref=e368]:
+                - cell [ref=e369]:
+                  - checkbox [ref=e370]
+                - cell "DWG-TEST-1776594133675" [ref=e371]
+                - cell "Test Drawing" [ref=e372] [cursor=pointer]
+                - cell "Civil" [ref=e373]
+                - cell "Rev A" [ref=e374]
+                - cell "—" [ref=e375]
+                - cell "WIP" [ref=e376]:
+                  - generic [ref=e377]: WIP
+                - cell "Under Review" [ref=e378]:
+                  - generic [ref=e379]: Under Review
+                - cell "View New Rev Review Void" [ref=e380]:
+                  - generic [ref=e381]:
+                    - button "View" [ref=e382] [cursor=pointer]
+                    - button "New Rev" [ref=e383] [cursor=pointer]
+                    - button "Review" [ref=e384] [cursor=pointer]
+                    - button "Void" [ref=e385] [cursor=pointer]
+              - row "GG-BATCH-A-1776637878729 Batch Test A Architecture Rev A — WIP Approved View New Rev Void" [ref=e386]:
+                - cell [ref=e387]:
+                  - checkbox [ref=e388]
+                - cell "GG-BATCH-A-1776637878729" [ref=e389]
+                - cell "Batch Test A" [ref=e390] [cursor=pointer]
+                - cell "Architecture" [ref=e391]
+                - cell "Rev A" [ref=e392]
+                - cell "—" [ref=e393]
+                - cell "WIP" [ref=e394]:
+                  - generic [ref=e395]: WIP
+                - cell "Approved" [ref=e396]:
+                  - generic [ref=e397]: Approved
+                - cell "View New Rev Void" [ref=e398]:
+                  - generic [ref=e399]:
+                    - button "View" [ref=e400] [cursor=pointer]
+                    - button "New Rev" [ref=e401] [cursor=pointer]
+                    - button "Void" [ref=e402] [cursor=pointer]
+              - row "GG-BATCH-B-1776637878729 Batch Test B Structure Rev A — WIP Approved View New Rev Void" [ref=e403]:
+                - cell [ref=e404]:
+                  - checkbox [ref=e405]
+                - cell "GG-BATCH-B-1776637878729" [ref=e406]
+                - cell "Batch Test B" [ref=e407] [cursor=pointer]
+                - cell "Structure" [ref=e408]
+                - cell "Rev A" [ref=e409]
+                - cell "—" [ref=e410]
+                - cell "WIP" [ref=e411]:
+                  - generic [ref=e412]: WIP
+                - cell "Approved" [ref=e413]:
+                  - generic [ref=e414]: Approved
+                - cell "View New Rev Void" [ref=e415]:
+                  - generic [ref=e416]:
+                    - button "View" [ref=e417] [cursor=pointer]
+                    - button "New Rev" [ref=e418] [cursor=pointer]
+                    - button "Void" [ref=e419] [cursor=pointer]
+              - row "GG-BULK-CSV-A-1776638550416 CSV Bulk Import Test A Architecture Rev A — WIP Under Review View New Rev Review Void" [ref=e420]:
+                - cell [ref=e421]:
+                  - checkbox [ref=e422]
+                - cell "GG-BULK-CSV-A-1776638550416" [ref=e423]
+                - cell "CSV Bulk Import Test A" [ref=e424] [cursor=pointer]
+                - cell "Architecture" [ref=e425]
+                - cell "Rev A" [ref=e426]
+                - cell "—" [ref=e427]
+                - cell "WIP" [ref=e428]:
+                  - generic [ref=e429]: WIP
+                - cell "Under Review" [ref=e430]:
+                  - generic [ref=e431]: Under Review
+                - cell "View New Rev Review Void" [ref=e432]:
+                  - generic [ref=e433]:
+                    - button "View" [ref=e434] [cursor=pointer]
+                    - button "New Rev" [ref=e435] [cursor=pointer]
+                    - button "Review" [ref=e436] [cursor=pointer]
+                    - button "Void" [ref=e437] [cursor=pointer]
+              - row "GG-BULK-CSV-B-1776638550416 CSV Bulk Import Test B Structure Rev A — WIP Under Review View New Rev Review Void" [ref=e438]:
+                - cell [ref=e439]:
+                  - checkbox [ref=e440]
+                - cell "GG-BULK-CSV-B-1776638550416" [ref=e441]
+                - cell "CSV Bulk Import Test B" [ref=e442] [cursor=pointer]
+                - cell "Structure" [ref=e443]
+                - cell "Rev A" [ref=e444]
+                - cell "—" [ref=e445]
+                - cell "WIP" [ref=e446]:
+                  - generic [ref=e447]: WIP
+                - cell "Under Review" [ref=e448]:
+                  - generic [ref=e449]: Under Review
+                - cell "View New Rev Review Void" [ref=e450]:
+                  - generic [ref=e451]:
+                    - button "View" [ref=e452] [cursor=pointer]
+                    - button "New Rev" [ref=e453] [cursor=pointer]
+                    - button "Review" [ref=e454] [cursor=pointer]
+                    - button "Void" [ref=e455] [cursor=pointer]
+              - row "GG-MBC-B1-L01-DR-C-9001-RevA Test Bulk Import Drawing 1 Civil Rev A — WIP Under Review View New Rev Review Void" [ref=e456]:
+                - cell [ref=e457]:
+                  - checkbox [ref=e458]
+                - cell "GG-MBC-B1-L01-DR-C-9001-RevA" [ref=e459]
+                - cell "Test Bulk Import Drawing 1" [ref=e460] [cursor=pointer]
+                - cell "Civil" [ref=e461]
+                - cell "Rev A" [ref=e462]
+                - cell "—" [ref=e463]
+                - cell "WIP" [ref=e464]:
+                  - generic [ref=e465]: WIP
+                - cell "Under Review" [ref=e466]:
+                  - generic [ref=e467]: Under Review
+                - cell "View New Rev Review Void" [ref=e468]:
+                  - generic [ref=e469]:
+                    - button "View" [ref=e470] [cursor=pointer]
+                    - button "New Rev" [ref=e471] [cursor=pointer]
+                    - button "Review" [ref=e472] [cursor=pointer]
+                    - button "Void" [ref=e473] [cursor=pointer]
+              - row "GG-MBC-B1-L02-DR-A-9002-RevA Test Bulk Import Drawing 2 Architecture Rev A — WIP Under Review View New Rev Review Void" [ref=e474]:
+                - cell [ref=e475]:
+                  - checkbox [ref=e476]
+                - cell "GG-MBC-B1-L02-DR-A-9002-RevA" [ref=e477]
+                - cell "Test Bulk Import Drawing 2" [ref=e478] [cursor=pointer]
+                - cell "Architecture" [ref=e479]
+                - cell "Rev A" [ref=e480]
+                - cell "—" [ref=e481]
+                - cell "WIP" [ref=e482]:
+                  - generic [ref=e483]: WIP
+                - cell "Under Review" [ref=e484]:
+                  - generic [ref=e485]: Under Review
+                - cell "View New Rev Review Void" [ref=e486]:
+                  - generic [ref=e487]:
+                    - button "View" [ref=e488] [cursor=pointer]
+                    - button "New Rev" [ref=e489] [cursor=pointer]
+                    - button "Review" [ref=e490] [cursor=pointer]
+                    - button "Void" [ref=e491] [cursor=pointer]
+              - row "GG-MBC-B1-L03-DR-A-0001-RevA Ground Floor Structural Plan Architecture Rev B — Published Under Review View New Rev Review Void" [ref=e492]:
+                - cell [ref=e493]:
+                  - checkbox [ref=e494]
+                - cell "GG-MBC-B1-L03-DR-A-0001-RevA" [ref=e495]
+                - cell "Ground Floor Structural Plan" [ref=e496] [cursor=pointer]
+                - cell "Architecture" [ref=e497]
+                - cell "Rev B" [ref=e498]
+                - cell "—" [ref=e499]
+                - cell "Published" [ref=e500]:
+                  - generic [ref=e501]: Published
+                - cell "Under Review" [ref=e502]:
+                  - generic [ref=e503]: Under Review
+                - cell "View New Rev Review Void" [ref=e504]:
+                  - generic [ref=e505]:
+                    - button "View" [ref=e506] [cursor=pointer]
+                    - button "New Rev" [ref=e507] [cursor=pointer]
+                    - button "Review" [ref=e508] [cursor=pointer]
+                    - button "Void" [ref=e509] [cursor=pointer]
+              - row "GG-MBC-B1-L03-DR-A-0002-RevA Consultant Test Drawing Architecture Rev A — WIP Under Review View New Rev Review Void" [ref=e510]:
+                - cell [ref=e511]:
+                  - checkbox [ref=e512]
+                - cell "GG-MBC-B1-L03-DR-A-0002-RevA" [ref=e513]
+                - cell "Consultant Test Drawing" [ref=e514] [cursor=pointer]
+                - cell "Architecture" [ref=e515]
+                - cell "Rev A" [ref=e516]
+                - cell "—" [ref=e517]
+                - cell "WIP" [ref=e518]:
+                  - generic [ref=e519]: WIP
+                - cell "Under Review" [ref=e520]:
+                  - generic [ref=e521]: Under Review
+                - cell "View New Rev Review Void" [ref=e522]:
+                  - generic [ref=e523]:
+                    - button "View" [ref=e524] [cursor=pointer]
+                    - button "New Rev" [ref=e525] [cursor=pointer]
+                    - button "Review" [ref=e526] [cursor=pointer]
+                    - button "Void" [ref=e527] [cursor=pointer]
+              - row "GG-POE-B1-L01-DR-A-1776597822149-CDE CDE Advance Test Drawing Architecture Rev A — Published Under Review View New Rev Review Void" [ref=e528]:
+                - cell [ref=e529]:
+                  - checkbox [ref=e530]
+                - cell "GG-POE-B1-L01-DR-A-1776597822149-CDE" [ref=e531]
+                - cell "CDE Advance Test Drawing" [ref=e532] [cursor=pointer]
+                - cell "Architecture" [ref=e533]
+                - cell "Rev A" [ref=e534]
+                - cell "—" [ref=e535]
+                - cell "Published" [ref=e536]:
+                  - generic [ref=e537]: Published
+                - cell "Under Review" [ref=e538]:
+                  - generic [ref=e539]: Under Review
+                - cell "View New Rev Review Void" [ref=e540]:
+                  - generic [ref=e541]:
+                    - button "View" [ref=e542] [cursor=pointer]
+                    - button "New Rev" [ref=e543] [cursor=pointer]
+                    - button "Review" [ref=e544] [cursor=pointer]
+                    - button "Void" [ref=e545] [cursor=pointer]
+              - row "GG-POE-B1-L01-DR-A-6107-REV Drawing Review Test Architecture Rev A — WIP Approved with Comments View New Rev Void" [ref=e546]:
+                - cell [ref=e547]:
+                  - checkbox [ref=e548]
+                - cell "GG-POE-B1-L01-DR-A-6107-REV" [ref=e549]
+                - cell "Drawing Review Test" [ref=e550] [cursor=pointer]
+                - cell "Architecture" [ref=e551]
+                - cell "Rev A" [ref=e552]
+                - cell "—" [ref=e553]
+                - cell "WIP" [ref=e554]:
+                  - generic [ref=e555]: WIP
+                - cell "Approved with Comments" [ref=e556]:
+                  - generic [ref=e557]: Approved with Comments
+                - cell "View New Rev Void" [ref=e558]:
+                  - generic [ref=e559]:
+                    - button "View" [ref=e560] [cursor=pointer]
+                    - button "New Rev" [ref=e561] [cursor=pointer]
+                    - button "Void" [ref=e562] [cursor=pointer]
+              - row "GG-POE-B1-L01-DR-A-9901-RevA Consultant Upload Test Architecture Rev B — WIP Under Review View New Rev Review Void" [ref=e563]:
+                - cell [ref=e564]:
+                  - checkbox [ref=e565]
+                - cell "GG-POE-B1-L01-DR-A-9901-RevA" [ref=e566]
+                - cell "Consultant Upload Test" [ref=e567] [cursor=pointer]
+                - cell "Architecture" [ref=e568]
+                - cell "Rev B" [ref=e569]
+                - cell "—" [ref=e570]
+                - cell "WIP" [ref=e571]:
+                  - generic [ref=e572]: WIP
+                - cell "Under Review" [ref=e573]:
+                  - generic [ref=e574]: Under Review
+                - cell "View New Rev Review Void" [ref=e575]:
+                  - generic [ref=e576]:
+                    - button "View" [ref=e577] [cursor=pointer]
+                    - button "New Rev" [ref=e578] [cursor=pointer]
+                    - button "Review" [ref=e579] [cursor=pointer]
+                    - button "Void" [ref=e580] [cursor=pointer]
+              - row "GG-POE-B1-L01-DR-A-VOID-TEST Void Test Drawingvoid Architecture Rev A — WIP Void View" [ref=e581]:
+                - cell [ref=e582]:
+                  - checkbox [disabled] [ref=e583]
+                - cell "GG-POE-B1-L01-DR-A-VOID-TEST" [ref=e584]
+                - cell "Void Test Drawingvoid" [ref=e585] [cursor=pointer]
+                - cell "Architecture" [ref=e586]
+                - cell "Rev A" [ref=e587]
+                - cell "—" [ref=e588]
+                - cell "WIP" [ref=e589]:
+                  - generic [ref=e590]: WIP
+                - cell "Void" [ref=e591]:
+                  - generic [ref=e592]: Void
+                - cell "View" [ref=e593]:
+                  - button "View" [ref=e595] [cursor=pointer]
+              - row "GG-POE-B1-L03-DR-A-0416-RevA Consultant Upload Test Drawing Architecture Rev A — WIP Under Review View New Rev Review Void" [ref=e596]:
+                - cell [ref=e597]:
+                  - checkbox [ref=e598]
+                - cell "GG-POE-B1-L03-DR-A-0416-RevA" [ref=e599]
+                - cell "Consultant Upload Test Drawing" [ref=e600] [cursor=pointer]
+                - cell "Architecture" [ref=e601]
+                - cell "Rev A" [ref=e602]
+                - cell "—" [ref=e603]
+                - cell "WIP" [ref=e604]:
+                  - generic [ref=e605]: WIP
+                - cell "Under Review" [ref=e606]:
+                  - generic [ref=e607]: Under Review
+                - cell "View New Rev Review Void" [ref=e608]:
+                  - generic [ref=e609]:
+                    - button "View" [ref=e610] [cursor=pointer]
+                    - button "New Rev" [ref=e611] [cursor=pointer]
+                    - button "Review" [ref=e612] [cursor=pointer]
+                    - button "Void" [ref=e613] [cursor=pointer]
+              - row "TST-GG-ZZ-00-DR-A-2424-RevA TEST Drawing 1776524262231void Architecture RevA — Shared Void View" [ref=e614]:
+                - cell [ref=e615]:
+                  - checkbox [disabled] [ref=e616]
+                - cell "TST-GG-ZZ-00-DR-A-2424-RevA" [ref=e617]
+                - cell "TEST Drawing 1776524262231void" [ref=e618] [cursor=pointer]
+                - cell "Architecture" [ref=e619]
+                - cell "RevA" [ref=e620]
+                - cell "—" [ref=e621]
+                - cell "Shared" [ref=e622]:
+                  - generic [ref=e623]: Shared
+                - cell "Void" [ref=e624]:
+                  - generic [ref=e625]: Void
+                - cell "View" [ref=e626]:
+                  - button "View" [ref=e628] [cursor=pointer]
+              - row "TST-GG-ZZ-00-DR-A-7758-RevA TEST Drawing 1776523427649void Architecture RevA — Shared Void View" [ref=e629]:
+                - cell [ref=e630]:
+                  - checkbox [disabled] [ref=e631]
+                - cell "TST-GG-ZZ-00-DR-A-7758-RevA" [ref=e632]
+                - cell "TEST Drawing 1776523427649void" [ref=e633] [cursor=pointer]
+                - cell "Architecture" [ref=e634]
+                - cell "RevA" [ref=e635]
+                - cell "—" [ref=e636]
+                - cell "Shared" [ref=e637]:
+                  - generic [ref=e638]: Shared
+                - cell "Void" [ref=e639]:
+                  - generic [ref=e640]: Void
+                - cell "View" [ref=e641]:
+                  - button "View" [ref=e643] [cursor=pointer]
+          - generic [ref=e644]: Showing 17 records
+        - generic [ref=e646]:
+          - generic [ref=e647]: 0 selected
+          - button "Approve Selected" [ref=e648] [cursor=pointer]
+          - button "Advance CDE" [ref=e649] [cursor=pointer]
+          - button "Export Selected" [ref=e650] [cursor=pointer]
+          - button "Clear" [ref=e651] [cursor=pointer]
+  - generic [ref=e653]:
+    - generic [ref=e654]:
+      - generic [ref=e655]: GG-MBC-B1-L03-DR-A-0001-RevA – Ground Floor Structural Plan
+      - button "×" [ref=e656] [cursor=pointer]
+    - generic [ref=e657]:
+      - generic [ref=e658]:
+        - generic [ref=e659]: CDE Lifecycle
+        - generic [ref=e660]:
+          - generic "WIP" [ref=e661]
+          - generic [ref=e662]: ›
+          - generic "Shared" [ref=e663]
+          - generic [ref=e664]: ›
+          - generic "Published" [ref=e665]
+          - generic [ref=e666]: ›
+          - generic "Archived" [ref=e667]
+      - generic [ref=e668]:
+        - generic [ref=e669]:
+          - generic [ref=e670]: Discipline
+          - generic [ref=e671]: Architecture
+        - generic [ref=e672]:
+          - generic [ref=e673]: Current Revision
+          - generic [ref=e674]: Rev B
+        - generic [ref=e675]:
+          - generic [ref=e676]: Review Status
+          - generic [ref=e678]: Under Review
+        - generic [ref=e679]:
+          - generic [ref=e680]: CDE State
+          - generic [ref=e682]: Published
+        - generic [ref=e683]:
+          - generic [ref=e684]: Originator
+          - generic [ref=e685]: MBC
+        - generic [ref=e686]:
+          - generic [ref=e687]: Zone / Level
+          - generic [ref=e688]: B1 / L03
+        - generic [ref=e689]:
+          - generic [ref=e690]: Type
+          - generic [ref=e691]: DR
+        - generic [ref=e692]:
+          - generic [ref=e693]: Purpose of Issue
+          - generic [ref=e694]: —
+        - generic [ref=e695]:
+          - generic [ref=e696]: AR / FI
+          - generic [ref=e698]: AR
+        - generic [ref=e699]:
+          - generic [ref=e700]: Uploaded
+          - generic [ref=e701]: 2026-04-18
+      - generic [ref=e702]:
+        - generic [ref=e703]: Full Revision History & Audit Trail
+        - table [ref=e705]:
+          - rowgroup [ref=e706]:
+            - row "Revision Status Uploaded By Upload Date Approved By Approval Date Review Comments File" [ref=e707]:
+              - columnheader "Revision" [ref=e708]
+              - columnheader "Status" [ref=e709]
+              - columnheader "Uploaded By" [ref=e710]
+              - columnheader "Upload Date" [ref=e711]
+              - columnheader "Approved By" [ref=e712]
+              - columnheader "Approval Date" [ref=e713]
+              - columnheader "Review Comments" [ref=e714]
+              - columnheader "File" [ref=e715]
+            - row "Rev A Superseded Approved Mohammed Hingora 18 Apr 2026 Mohammed Hingora 18 Apr 2026 — —" [ref=e716]:
+              - cell "Rev A Superseded" [ref=e717]:
+                - generic [ref=e718]:
+                  - generic [ref=e719]: Rev A
+                  - generic [ref=e720]: Superseded
+              - cell "Approved" [ref=e721]:
+                - generic [ref=e722]: Approved
+              - cell "Mohammed Hingora" [ref=e723]:
+                - generic [ref=e724]: Mohammed Hingora
+              - cell "18 Apr 2026" [ref=e725]
+              - cell "Mohammed Hingora" [ref=e726]:
+                - generic [ref=e727]: Mohammed Hingora
+              - cell "18 Apr 2026" [ref=e728]
+              - cell "—" [ref=e729]
+              - cell "—" [ref=e730]
+            - row "Rev B Current Issued for Construction Mohammed Hingora 18 Apr 2026 — — — —" [ref=e731]:
+              - cell "Rev B Current" [ref=e732]:
+                - generic [ref=e733]:
+                  - generic [ref=e734]: Rev B
+                  - generic [ref=e735]: Current
+              - cell "Issued for Construction" [ref=e736]:
+                - generic [ref=e737]: Issued for Construction
+              - cell "Mohammed Hingora" [ref=e738]:
+                - generic [ref=e739]: Mohammed Hingora
+              - cell "18 Apr 2026" [ref=e740]
+              - cell "—" [ref=e741]
+              - cell "—" [ref=e742]
+              - cell "—" [ref=e743]
+              - cell "—" [ref=e744]
+    - generic [ref=e745]:
+      - button "Upload New Revision" [ref=e746] [cursor=pointer]
+      - button "Approve" [ref=e747] [cursor=pointer]
+      - button "Void Drawing" [ref=e748] [cursor=pointer]
+      - button "Link Drawings" [ref=e749] [cursor=pointer]
+      - button "Close" [ref=e750] [cursor=pointer]

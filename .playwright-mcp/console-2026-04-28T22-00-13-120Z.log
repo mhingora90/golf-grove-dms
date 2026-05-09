@@ -1,0 +1,25 @@
+[  169651ms] Identifier 'pitems' has already been declared
+[  169660ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/#ipc:0
+[  169661ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/#ipc:0
+[  178267ms] ReferenceError: doLogin is not defined
+    at HTMLInputElement.onkeydown (http://localhost:5173/#ipc:352:164)
+[  179606ms] ReferenceError: doLogin is not defined
+    at HTMLButtonElement.onclick (http://localhost:5173/#ipc:354:67)
+[  181889ms] ReferenceError: doLogin is not defined
+    at HTMLInputElement.onkeydown (http://localhost:5173/#ipc:352:164)
+[  183336ms] ReferenceError: doLogin is not defined
+    at HTMLButtonElement.onclick (http://localhost:5173/#ipc:354:67)
+[  183529ms] ReferenceError: doLogin is not defined
+    at HTMLButtonElement.onclick (http://localhost:5173/#ipc:354:67)
+[  214059ms] ReferenceError: doLogin is not defined
+    at HTMLButtonElement.onclick (http://localhost:5173/#ipc:354:67)
+[  364711ms] ReferenceError: doLogin is not defined
+    at HTMLButtonElement.onclick (http://localhost:5173/#ipc:354:67)
+[  364903ms] ReferenceError: doLogin is not defined
+    at HTMLButtonElement.onclick (http://localhost:5173/#ipc:354:67)
+[  366651ms] Identifier 'pitems' has already been declared
+[  366654ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/#ipc:0
+[  366654ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/#ipc:0
+[  367555ms] Identifier 'pitems' has already been declared
+[  367561ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/#ipc:0
+[  367562ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/#ipc:0

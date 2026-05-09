@@ -1,0 +1,12 @@
+[     807ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:3000/:0
+[     808ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:3000/:0
+[     908ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/favicon.ico:0
+[    1407ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[    1416ms] [ERROR] AuthApiError: Invalid Refresh Token: Refresh Token Not Found
+    at kr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:105022)
+    at async https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:105632
+    at async vr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:105264)
+    at async s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:164263)
+    at async https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:164019 @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[   81259ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/profiles?id=eq.4936665c-b65b-4f93-ac4d-09770a578ea5:0
+[  288127ms] [ERROR] Failed to load resource: the server responded with a status of 406 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/profiles?select=*:0

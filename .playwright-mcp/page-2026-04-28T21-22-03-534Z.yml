@@ -1,0 +1,107 @@
+- generic [ref=e21]:
+  - generic [ref=e22]:
+    - generic [ref=e23]:
+      - generic [ref=e24]: Active Project
+      - generic [ref=e25]: Golf Grove – Residential Building (B+G+P+7+Roof)
+    - generic [ref=e26]:
+      - generic [ref=e27]: MH
+      - generic [ref=e28]:
+        - generic [ref=e29]: Mohammed Hingora
+        - generic [ref=e30]: developer
+    - generic [ref=e31]: Main
+    - generic [ref=e32] [cursor=pointer]:
+      - img [ref=e33]
+      - text: Dashboard
+    - generic [ref=e38]: Document Control
+    - generic [ref=e39] [cursor=pointer]:
+      - img [ref=e40]
+      - text: Drawing Register
+    - generic [ref=e42] [cursor=pointer]:
+      - img [ref=e43]
+      - text: Submittals (DSUB)
+      - generic [ref=e46]: "1"
+    - generic [ref=e47] [cursor=pointer]:
+      - img [ref=e48]
+      - text: Submittal Register
+    - generic [ref=e50]: Site
+    - generic [ref=e51] [cursor=pointer]:
+      - img [ref=e52]
+      - text: Inspection Requests
+      - generic [ref=e55]: "2"
+    - generic [ref=e56] [cursor=pointer]:
+      - img [ref=e57]
+      - text: NCRs
+      - generic [ref=e60]: "2"
+    - generic [ref=e61] [cursor=pointer]:
+      - img [ref=e62]
+      - text: RFIs
+      - generic [ref=e66]: "1"
+    - generic [ref=e67] [cursor=pointer]:
+      - img [ref=e68]
+      - text: Transmittals
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: Payment Certificates
+    - generic [ref=e74] [cursor=pointer]:
+      - img [ref=e75]
+      - text: Method Statements
+    - generic [ref=e78] [cursor=pointer]:
+      - img [ref=e79]
+      - text: Correspondence
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: Punch List
+      - generic [ref=e86]: "0"
+    - generic [ref=e87]: Admin
+    - generic [ref=e88] [cursor=pointer]:
+      - img [ref=e89]
+      - text: BOQ Setup
+    - generic [ref=e92] [cursor=pointer]:
+      - img [ref=e93]
+      - text: Subcontractors
+    - generic [ref=e99] [cursor=pointer]:
+      - img [ref=e100]
+      - text: User Management
+    - button "Sign Out" [ref=e104] [cursor=pointer]
+  - generic [ref=e105]:
+    - generic [ref=e106]:
+      - generic [ref=e107]:
+        - generic [ref=e108]: Payment Certificates
+        - generic [ref=e109]: Wednesday, 29 April 2026
+      - generic [ref=e110]:
+        - generic [ref=e111]: developer
+        - button "+ New" [active] [ref=e306] [cursor=pointer]
+    - generic [ref=e112]:
+      - generic [ref=e8742]:
+        - generic [ref=e8743]:
+          - generic [ref=e8744]: "1"
+          - generic [ref=e8745]: Total IPCs
+        - generic [ref=e8746]:
+          - generic [ref=e8747]: "1"
+          - generic [ref=e8748]: In Progress
+        - generic [ref=e8749]:
+          - generic [ref=e8750]: "0"
+          - generic [ref=e8751]: Certified
+        - generic [ref=e8752]:
+          - generic [ref=e8753]: "0"
+          - generic [ref=e8754]: Paid
+      - table [ref=e8757]:
+        - rowgroup [ref=e8758]:
+          - row "Ref No. Submission Date Submitted By Contractor Claimed Consultant Certified Status Actions" [ref=e8759]:
+            - columnheader "Ref No." [ref=e8760]
+            - columnheader "Submission Date" [ref=e8761]
+            - columnheader "Submitted By" [ref=e8762]
+            - columnheader "Contractor Claimed" [ref=e8763]
+            - columnheader "Consultant Certified" [ref=e8764]
+            - columnheader "Status" [ref=e8765]
+            - columnheader "Actions" [ref=e8766]
+          - row "IPC-001 — — — — Draft View" [ref=e8767]:
+            - cell "IPC-001" [ref=e8768] [cursor=pointer]
+            - cell "—" [ref=e8769]
+            - cell "—" [ref=e8770]
+            - cell "—" [ref=e8771]
+            - cell "—" [ref=e8772]
+            - cell "Draft" [ref=e8773]:
+              - generic [ref=e8774]: Draft
+            - cell "View" [ref=e8775]:
+              - button "View" [ref=e8776] [cursor=pointer]

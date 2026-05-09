@@ -1,0 +1,820 @@
+- generic [ref=e3]:
+  - progressbar
+  - generic [ref=e6]:
+    - navigation "Site Wide":
+      - generic [ref=e8]:
+        - link "Skip to Main Content" [ref=e9] [cursor=pointer]:
+          - /url: javascript:void(0)
+        - link "Skip to Footer" [ref=e10] [cursor=pointer]:
+          - /url: javascript:void(0)
+        - list "Primary Navigation Desktop Menu" [ref=e11]:
+          - listitem [ref=e12]:
+            - link "Navigate to behance.net" [ref=e13] [cursor=pointer]:
+              - /url: /
+              - img [ref=e15]
+              - generic [ref=e18]: Navigate to behance.net
+          - listitem [ref=e19]:
+            - link "Explore" [ref=e20] [cursor=pointer]:
+              - /url: /?tracking_source=nav20
+              - generic [ref=e21]: Explore
+          - listitem [ref=e22]:
+            - link "Jobs" [ref=e23] [cursor=pointer]:
+              - /url: /joblist?tracking_source=nav20
+              - generic [ref=e24]: Jobs
+          - listitem [ref=e25]:
+            - generic [ref=e26] [cursor=pointer]:
+              - link "Resources" [ref=e29]:
+                - /url: /resources/commissions?tracking_source=nav20
+              - generic:
+                - generic:
+                  - button "Open Resources Options":
+                    - img
+          - listitem [ref=e30]
+          - listitem [ref=e32]:
+            - generic [ref=e33] [cursor=pointer]:
+              - link "Hire" [ref=e36]:
+                - /url: /hire?tracking_source=nav20
+              - generic:
+                - generic:
+                  - button "Open Hire Options":
+                    - img
+        - generic [ref=e39]:
+          - img [ref=e41]
+          - form "Search Behance" [ref=e44]:
+            - combobox "Search Behance" [ref=e45]
+        - link "Start Free Trial" [ref=e47] [cursor=pointer]:
+          - /url: /pro?tracking_source=nav20&promoid=MYYBRNSY&comparisonmodal=true
+        - list [ref=e49]:
+          - listitem [ref=e50]:
+            - button "Sign In" [ref=e51] [cursor=pointer]
+        - generic [ref=e52]:
+          - link "Navigate to adobe.com" [ref=e55] [cursor=pointer]:
+            - /url: https://www.adobe.com?promoid=RTQCN3LX
+            - img [ref=e56]
+            - generic [ref=e66]: Navigate to adobe.com
+          - generic:
+            - generic:
+              - button "Open Adobe Options"
+    - generic [ref=e67]:
+      - main [ref=e68]:
+        - generic [ref=e71]:
+          - generic [ref=e73]:
+            - generic [ref=e74]:
+              - generic [ref=e75]:
+                - link "Konstantin Naumenko's profile" [ref=e80] [cursor=pointer]:
+                  - /url: https://www.behance.net/nakodesign
+                  - img "Konstantin Naumenko's profile" [ref=e81]
+                - button "Follow" [ref=e85] [cursor=pointer]:
+                  - img [ref=e87]
+              - generic [ref=e90] [cursor=pointer]: Follow
+            - generic [ref=e92]:
+              - button "Message" [ref=e93] [cursor=pointer]:
+                - img [ref=e96]
+              - generic [ref=e101] [cursor=pointer]: Message
+            - generic "Tools" [ref=e102] [cursor=pointer]:
+              - link "Tools" [ref=e104]:
+                - /url: /search/projects?tools=185289859
+                - img "Adobe Photoshop" [ref=e105]
+              - text: ","
+            - generic [ref=e106] [cursor=pointer]: Tools
+            - button "Save" [ref=e109] [cursor=pointer]:
+              - img [ref=e110]
+            - generic [ref=e112] [cursor=pointer]: Save
+            - button "Share" [ref=e115] [cursor=pointer]:
+              - img [ref=e116]
+            - generic [ref=e120] [cursor=pointer]: Share
+            - generic [ref=e121]:
+              - button "Appreciate" [ref=e125] [cursor=pointer]:
+                - img [ref=e126]
+              - generic [ref=e129] [cursor=pointer]: Appreciate
+          - generic [ref=e130]:
+            - generic [ref=e131]:
+              - link "Konstantin Naumenko's profile" [ref=e137] [cursor=pointer]:
+                - /url: https://www.behance.net/nakodesign
+                - img "Konstantin Naumenko's profile" [ref=e139]
+              - generic [ref=e140]:
+                - heading "Aeros — Smart Home & Climate Control Platform" [level=1] [ref=e142]
+                - generic [ref=e143]:
+                  - link "Konstantin Naumenko" [ref=e144] [cursor=pointer]:
+                    - /url: https://www.behance.net/nakodesign
+                    - generic [ref=e147]: Konstantin Naumenko
+                  - generic [ref=e150]:
+                    - generic: Pro
+                  - generic [ref=e151]: •
+                  - 'button "Konstantin Naumenko: Follow; Click to follow" [ref=e154] [cursor=pointer]':
+                    - generic [ref=e155]: Follow
+            - generic [ref=e156]:
+              - generic [ref=e160]:
+                - region "Project Module 0" [ref=e161]:
+                  - link "Project module 1408742193 permalink" [ref=e165] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1408742193
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 1" [ref=e166]:
+                  - link "Project module 1406459725 permalink" [ref=e170] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459725
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 2" [ref=e171]:
+                  - link "Project module 1406459759 permalink" [ref=e175] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459759
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 3" [ref=e176]:
+                  - link "Project module 1406459751 permalink" [ref=e180] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459751
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 4" [ref=e182]:
+                  - link "Project module 1408742199 permalink" [ref=e186] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1408742199
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 5" [ref=e188]:
+                  - link "Project module 1406459735 permalink" [ref=e192] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459735
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 6" [ref=e194]:
+                  - link "Project module 1408742195 permalink" [ref=e198] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1408742195
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 7" [ref=e200]:
+                  - link "Project module 1410298861 permalink" [ref=e204] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1410298861
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 8" [ref=e206]:
+                  - link "Project module 1406459749 permalink" [ref=e210] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459749
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 9" [ref=e212]:
+                  - link "Project module 1410296479 permalink" [ref=e216] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1410296479
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 10" [ref=e218]:
+                  - link "Project module 1410298863 permalink" [ref=e222] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1410298863
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 11" [ref=e224]:
+                  - link "Project module 1406459767 permalink" [ref=e228] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459767
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 12" [ref=e230]:
+                  - link "Project module 1406459727 permalink" [ref=e234] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459727
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 13" [ref=e236]:
+                  - link "Project module 1427030517 permalink" [ref=e240] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1427030517
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 14" [ref=e242]:
+                  - link "Project module 1406459745 permalink" [ref=e246] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459745
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 15" [ref=e248]:
+                  - link "Project module 1408742191 permalink" [ref=e252] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1408742191
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 16" [ref=e254]:
+                  - link "Project module 1406459729 permalink" [ref=e258] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459729
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 17" [ref=e260]:
+                  - link "Project module 1406459739 permalink" [ref=e264] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459739
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 18" [ref=e266]:
+                  - link "Project module 1406459773 permalink" [ref=e270] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459773
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 19" [ref=e272]:
+                  - link "Project module 1406459769 permalink" [ref=e276] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459769
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 20" [ref=e278]:
+                  - link "Project module 1406459757 permalink" [ref=e282] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459757
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 21" [ref=e284]:
+                  - link "Project module 1410301503 permalink" [ref=e288] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1410301503
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 22" [ref=e290]:
+                  - link "Project module 1408740873 permalink" [ref=e294] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1408740873
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 23" [ref=e296]:
+                  - link "Project module 1406459775 permalink" [ref=e300] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459775
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 24" [ref=e302]:
+                  - link "Project module 1406459747 permalink" [ref=e306] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459747
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 25" [ref=e308]:
+                  - link "Project module 1406459777 permalink" [ref=e312] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459777
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+                - region "Project Module 26" [ref=e314]:
+                  - link "Project module 1406459741 permalink" [ref=e318] [cursor=pointer]:
+                    - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform/modules/1406459741
+                    - img "UI/UX app design Web Design Smart Home SAAS dashboard data visualization Wellness product design interface design"
+              - generic [ref=e321]:
+                - button "Appreciate" [ref=e325] [cursor=pointer]:
+                  - img [ref=e326]
+                - generic [ref=e329]:
+                  - generic [ref=e330]: Aeros — Smart Home & Climate Control Platform
+                  - generic [ref=e331]:
+                    - group "189 appreciations" [ref=e332]:
+                      - img [ref=e333]
+                      - generic [ref=e336]: "189"
+                    - group "NaN views" [ref=e337]:
+                      - img [ref=e338]
+                      - generic [ref=e340]: 1.9K
+                    - group "66 comments" [ref=e341]:
+                      - img [ref=e342]
+                      - generic [ref=e345]: "66"
+                  - generic [ref=e346]:
+                    - text: "Published:"
+                    - time [ref=e347]: February 10th 2026
+              - generic [ref=e348]:
+                - generic [ref=e349]:
+                  - link "Konstantin Naumenko's profile" [ref=e355] [cursor=pointer]:
+                    - /url: https://www.behance.net/nakodesign
+                    - img "Konstantin Naumenko's profile" [ref=e357]
+                  - generic [ref=e358]:
+                    - generic [ref=e359]:
+                      - link "Konstantin Naumenko" [ref=e363] [cursor=pointer]:
+                        - /url: https://www.behance.net/nakodesign
+                      - generic [ref=e366]:
+                        - generic: Pro
+                    - generic "Follow Konstantin Naumenko" [ref=e368]:
+                      - button "Follow" [ref=e369] [cursor=pointer]:
+                        - generic [ref=e370]: Follow
+                - generic [ref=e372]:
+                  - button "Slides items to the left" [ref=e373] [cursor=pointer]:
+                    - img [ref=e374]
+                  - list [ref=e377]:
+                    - listitem [ref=e378]:
+                      - generic "Ingroupp — Residential Developer Website" [ref=e379]:
+                        - generic [ref=e381]:
+                          - generic [ref=e382]:
+                            - generic:
+                              - img "Ingroupp — Residential Developer Website"
+                          - generic [ref=e384]:
+                            - link "Link to project - Ingroupp — Residential Developer Website" [ref=e385] [cursor=pointer]:
+                              - /url: /gallery/247097969/Ingroupp-Residential-Developer-Website?tracking_source=project_owner_other_projects
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - link "title" [ref=e386] [cursor=pointer]:
+                                    - /url: /gallery/247097969/Ingroupp-Residential-Developer-Website
+                                    - text: Ingroupp — Residential Developer Website
+                                  - link "Konstantin Naumenko, opens in a new tab" [ref=e392] [cursor=pointer]:
+                                    - /url: https://www.behance.net/nakodesign
+                                    - text: Konstantin Naumenko
+                              - generic:
+                                - img
+                                - generic: "47"
+                                - generic: 47 appreciations for Ingroupp — Residential Developer Website
+                                - img
+                                - generic: "309"
+                                - generic: 309 views for Ingroupp — Residential Developer Website
+                    - listitem [ref=e393]:
+                      - generic "Tekta — Client Portal • Real Estate" [ref=e394]:
+                        - generic [ref=e396]:
+                          - generic [ref=e397]:
+                            - generic:
+                              - img "Tekta — Client Portal • Real Estate"
+                          - generic [ref=e399]:
+                            - link "Link to project - Tekta — Client Portal • Real Estate" [ref=e400] [cursor=pointer]:
+                              - /url: /gallery/246260401/Tekta-Client-Portal-Real-Estate?tracking_source=project_owner_other_projects
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - link "title" [ref=e401] [cursor=pointer]:
+                                    - /url: /gallery/246260401/Tekta-Client-Portal-Real-Estate
+                                    - text: Tekta — Client Portal • Real Estate
+                                  - link "Konstantin Naumenko, opens in a new tab" [ref=e407] [cursor=pointer]:
+                                    - /url: https://www.behance.net/nakodesign
+                                    - text: Konstantin Naumenko
+                              - generic:
+                                - img
+                                - generic: "32"
+                                - generic: 32 appreciations for Tekta — Client Portal • Real Estate
+                                - img
+                                - generic: "141"
+                                - generic: 141 views for Tekta — Client Portal • Real Estate
+                    - listitem [ref=e408]:
+                      - generic "Axiom — Real Estate Agent Platform" [ref=e409]:
+                        - generic [ref=e411]:
+                          - generic [ref=e412]:
+                            - generic:
+                              - img "Axiom — Real Estate Agent Platform"
+                          - generic [ref=e414]:
+                            - link "Link to project - Axiom — Real Estate Agent Platform" [ref=e415] [cursor=pointer]:
+                              - /url: /gallery/244449727/Axiom-Real-Estate-Agent-Platform?tracking_source=project_owner_other_projects
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - link "title" [ref=e416] [cursor=pointer]:
+                                    - /url: /gallery/244449727/Axiom-Real-Estate-Agent-Platform
+                                    - text: Axiom — Real Estate Agent Platform
+                                  - link "Konstantin Naumenko, opens in a new tab" [ref=e422] [cursor=pointer]:
+                                    - /url: https://www.behance.net/nakodesign
+                                    - text: Konstantin Naumenko
+                              - generic:
+                                - img
+                                - generic: "103"
+                                - generic: 103 appreciations for Axiom — Real Estate Agent Platform
+                                - img
+                                - generic: "717"
+                                - generic: 717 views for Axiom — Real Estate Agent Platform
+                    - listitem [ref=e423]:
+                      - generic "Behomes - Real Estate App • UX/UI" [ref=e424]:
+                        - generic [ref=e426]:
+                          - generic [ref=e427]:
+                            - generic:
+                              - img "Behomes - Real Estate App • UX/UI"
+                          - generic [ref=e429]:
+                            - link "Link to project - Behomes - Real Estate App • UX/UI" [ref=e430] [cursor=pointer]:
+                              - /url: /gallery/243707089/Behomes-Real-Estate-App-UXUI?tracking_source=project_owner_other_projects
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - link "title" [ref=e431] [cursor=pointer]:
+                                    - /url: /gallery/243707089/Behomes-Real-Estate-App-UXUI
+                                    - text: Behomes - Real Estate App • UX/UI
+                                  - link "Konstantin Naumenko, opens in a new tab" [ref=e437] [cursor=pointer]:
+                                    - /url: https://www.behance.net/nakodesign
+                                    - text: Konstantin Naumenko
+                              - generic:
+                                - img
+                                - generic: "44"
+                                - generic: 44 appreciations for Behomes - Real Estate App • UX/UI
+                                - img
+                                - generic: "406"
+                                - generic: 406 views for Behomes - Real Estate App • UX/UI
+              - generic [ref=e439]:
+                - generic [ref=e440]:
+                  - generic [ref=e442]:
+                    - heading [level=2]
+                    - generic [ref=e443]: Sign in to join the conversation
+                    - generic [ref=e444]: Add your feedback for Konstantin Naumenko's project by signing in or signing up.
+                    - generic [ref=e446]:
+                      - button "Sign In" [ref=e447] [cursor=pointer]:
+                        - generic [ref=e448]: Sign In
+                      - generic [ref=e449] [cursor=pointer]: or
+                      - link "Sign in with Apple" [ref=e450] [cursor=pointer]:
+                        - /url: "#"
+                        - img [ref=e451]
+                      - link "Sign in with Facebook" [ref=e457] [cursor=pointer]:
+                        - /url: "#"
+                        - img "SuSiFacebook" [ref=e458]
+                      - link "Sign in with Google" [ref=e466] [cursor=pointer]:
+                        - /url: "#"
+                        - img [ref=e467]
+                  - list [ref=e474]:
+                    - listitem [ref=e475]:
+                      - generic [ref=e476]:
+                        - link "Konstantin Naumenko's profile" [ref=e482] [cursor=pointer]:
+                          - /url: https://www.behance.net/nakodesign
+                          - img "Konstantin Naumenko's profile" [ref=e484]
+                        - generic [ref=e485]:
+                          - generic [ref=e486]:
+                            - link "Konstantin Naumenko" [ref=e490] [cursor=pointer]:
+                              - /url: https://www.behance.net/nakodesign
+                            - button "Pro Membership Badge. Learn more about Behance PRO." [ref=e494]: Pro
+                            - generic [ref=e495]: •Apr 30, 2026
+                          - generic [ref=e496]:
+                            - link "@Ramilya Website UX/UI" [ref=e497] [cursor=pointer]:
+                              - /url: https://www.behance.net/Dobro_eee
+                            - link "@SK RADWOAN" [ref=e498] [cursor=pointer]:
+                              - /url: https://www.behance.net/skradwoan48
+                            - text: Thank you!
+                    - listitem [ref=e499]:
+                      - generic [ref=e500]:
+                        - link "SK RADWOAN's profile" [ref=e506] [cursor=pointer]:
+                          - /url: https://www.behance.net/skradwoan48
+                          - img "SK RADWOAN's profile" [ref=e508]
+                        - generic [ref=e509]:
+                          - generic [ref=e510]:
+                            - link "SK RADWOAN" [ref=e514] [cursor=pointer]:
+                              - /url: https://www.behance.net/skradwoan48
+                            - generic [ref=e515]: •Apr 23, 2026
+                          - generic [ref=e516]: Impressive!
+                    - listitem [ref=e517]:
+                      - generic [ref=e518]:
+                        - link "Ramilya Website UX/UI's profile" [ref=e524] [cursor=pointer]:
+                          - /url: https://www.behance.net/Dobro_eee
+                          - img "Ramilya Website UX/UI's profile" [ref=e526]
+                        - generic [ref=e527]:
+                          - generic [ref=e528]:
+                            - link "Ramilya Website UX/UI" [ref=e532] [cursor=pointer]:
+                              - /url: https://www.behance.net/Dobro_eee
+                            - generic [ref=e533]: •Apr 23, 2026
+                          - generic [ref=e534]: Everything is placed with purpose and care ✨
+                    - listitem [ref=e535]:
+                      - generic [ref=e536]:
+                        - link "Konstantin Naumenko's profile" [ref=e542] [cursor=pointer]:
+                          - /url: https://www.behance.net/nakodesign
+                          - img "Konstantin Naumenko's profile" [ref=e544]
+                        - generic [ref=e545]:
+                          - generic [ref=e546]:
+                            - link "Konstantin Naumenko" [ref=e550] [cursor=pointer]:
+                              - /url: https://www.behance.net/nakodesign
+                            - button "Pro Membership Badge. Learn more about Behance PRO." [ref=e554]: Pro
+                            - generic [ref=e555]: •Apr 14, 2026
+                          - generic [ref=e556]:
+                            - link "@HRIDOY BHOUMIK" [ref=e557] [cursor=pointer]:
+                              - /url: https://www.behance.net/hridoybhoumik
+                            - text: Thanks!
+                    - listitem [ref=e558]:
+                      - generic [ref=e559]:
+                        - link "HRIDOY BHOUMIK's profile" [ref=e565] [cursor=pointer]:
+                          - /url: https://www.behance.net/hridoybhoumik
+                          - img "HRIDOY BHOUMIK's profile" [ref=e567]
+                        - generic [ref=e568]:
+                          - generic [ref=e569]:
+                            - link "HRIDOY BHOUMIK" [ref=e573] [cursor=pointer]:
+                              - /url: https://www.behance.net/hridoybhoumik
+                            - generic [ref=e574]: •Apr 11, 2026
+                          - generic [ref=e575]: Impressive
+                    - listitem [ref=e576]:
+                      - generic [ref=e577]:
+                        - link "Konstantin Naumenko's profile" [ref=e583] [cursor=pointer]:
+                          - /url: https://www.behance.net/nakodesign
+                          - img "Konstantin Naumenko's profile" [ref=e585]
+                        - generic [ref=e586]:
+                          - generic [ref=e587]:
+                            - link "Konstantin Naumenko" [ref=e591] [cursor=pointer]:
+                              - /url: https://www.behance.net/nakodesign
+                            - button "Pro Membership Badge. Learn more about Behance PRO." [ref=e595]: Pro
+                            - generic [ref=e596]: •Apr 11, 2026
+                          - generic [ref=e597]:
+                            - link "@Al Ekrama" [ref=e598] [cursor=pointer]:
+                              - /url: https://www.behance.net/al-ekrama
+                            - text: thank you!
+                    - listitem [ref=e599]:
+                      - generic [ref=e600]:
+                        - link "Svitlana Naumenko's profile" [ref=e606] [cursor=pointer]:
+                          - /url: https://www.behance.net/svitlannaumenk
+                          - img "Svitlana Naumenko's profile" [ref=e608]
+                        - generic [ref=e609]:
+                          - generic [ref=e610]:
+                            - link "Svitlana Naumenko" [ref=e614] [cursor=pointer]:
+                              - /url: https://www.behance.net/svitlannaumenk
+                            - generic [ref=e615]: •Apr 8, 2026
+                          - generic [ref=e616]: Interesting project
+                    - listitem [ref=e617]:
+                      - generic [ref=e618]:
+                        - link "Al Ekrama's profile" [ref=e624] [cursor=pointer]:
+                          - /url: https://www.behance.net/al-ekrama
+                          - img "Al Ekrama's profile" [ref=e626]
+                        - generic [ref=e627]:
+                          - generic [ref=e628]:
+                            - link "Al Ekrama" [ref=e632] [cursor=pointer]:
+                              - /url: https://www.behance.net/al-ekrama
+                            - generic [ref=e633]: •Apr 8, 2026
+                          - generic [ref=e634]: Great work
+                    - listitem [ref=e635]:
+                      - generic [ref=e636]:
+                        - link "Sasha Nikeshin's profile" [ref=e642] [cursor=pointer]:
+                          - /url: https://www.behance.net/snikeshin
+                          - img "Sasha Nikeshin's profile" [ref=e644]
+                        - generic [ref=e645]:
+                          - generic [ref=e646]:
+                            - link "Sasha Nikeshin" [ref=e650] [cursor=pointer]:
+                              - /url: https://www.behance.net/snikeshin
+                            - generic [ref=e651]: •Apr 8, 2026
+                          - generic [ref=e652]: ⭐
+                    - listitem [ref=e653]:
+                      - generic [ref=e654]:
+                        - link "Konstantin Naumenko's profile" [ref=e660] [cursor=pointer]:
+                          - /url: https://www.behance.net/nakodesign
+                          - img "Konstantin Naumenko's profile" [ref=e662]
+                        - generic [ref=e663]:
+                          - generic [ref=e664]:
+                            - link "Konstantin Naumenko" [ref=e668] [cursor=pointer]:
+                              - /url: https://www.behance.net/nakodesign
+                            - button "Pro Membership Badge. Learn more about Behance PRO." [ref=e672]: Pro
+                            - generic [ref=e673]: •Apr 8, 2026
+                          - generic [ref=e674]:
+                            - link "@Prisca Osakwe" [ref=e675] [cursor=pointer]:
+                              - /url: https://www.behance.net/priscaosakwe1
+                            - link "@Empat Tech" [ref=e676] [cursor=pointer]:
+                              - /url: https://www.behance.net/empattech
+                            - text: thanks 🤝
+                  - button "See More Comments" [ref=e677] [cursor=pointer]:
+                    - text: See More Comments
+                    - img [ref=e678]
+                - generic [ref=e680]:
+                  - generic [ref=e681]:
+                    - heading "Owner" [level=2] [ref=e682]
+                    - generic [ref=e683]:
+                      - link "Konstantin Naumenko's profile" [ref=e689] [cursor=pointer]:
+                        - /url: https://www.behance.net/nakodesign
+                        - img "Konstantin Naumenko's profile" [ref=e691]
+                      - generic [ref=e692]:
+                        - generic [ref=e696] [cursor=pointer]:
+                          - link "Konstantin Naumenko" [ref=e697]:
+                            - /url: https://www.behance.net/nakodesign
+                          - generic [ref=e700]:
+                            - generic: Pro
+                        - link "Chișinău, Moldova, Republic of" [ref=e701] [cursor=pointer]:
+                          - /url: https://www.behance.net/search/users?country=MD&city=Chi%C8%99in%C4%83u
+                          - img [ref=e702]
+                          - text: Chișinău, Moldova, Republic of
+                      - generic [ref=e708] [cursor=pointer]:
+                        - img [ref=e710]
+                        - generic [ref=e712]: Follow
+                    - button "Message" [ref=e714] [cursor=pointer]:
+                      - img [ref=e715]
+                      - generic [ref=e720]: Message
+                  - generic [ref=e721]:
+                    - heading "Aeros — Smart Home & Climate Control Platform" [level=2] [ref=e722]
+                    - heading "A concept UX/UI project for a home climate platform that transforms complex environmental data into a clear, intuitive, and actionable user exper Read More" [level=2] [ref=e723]:
+                      - text: A concept UX/UI project for a home climate platform that transforms complex environmental data into a clear, intuitive, and actionable user exper
+                      - generic [ref=e724] [cursor=pointer]: Read More
+                    - generic [ref=e725]:
+                      - group "189 appreciations" [ref=e726]:
+                        - img [ref=e727]
+                        - generic [ref=e730]: "189"
+                      - group "NaN views" [ref=e731]:
+                        - img [ref=e732]
+                        - generic [ref=e734]: 1.9K
+                      - group "66 comments" [ref=e735]:
+                        - img [ref=e736]
+                        - generic [ref=e739]: "66"
+                    - generic [ref=e740]:
+                      - text: "Published:"
+                      - time [ref=e741]: February 10th 2026
+                  - generic [ref=e742]:
+                    - generic [ref=e743]:
+                      - heading "Tools" [level=2] [ref=e744]
+                      - list [ref=e745]:
+                        - listitem [ref=e746]:
+                          - link "Photoshop" [ref=e747] [cursor=pointer]:
+                            - /url: /search/projects?tools=185289859
+                            - paragraph [ref=e749]: Photoshop
+                        - listitem [ref=e750]:
+                          - link "Illustrator" [ref=e751] [cursor=pointer]:
+                            - /url: /search/projects?tools=185308071
+                            - paragraph [ref=e753]: Illustrator
+                        - listitem
+                        - listitem [ref=e754]:
+                          - link "Figma" [ref=e755] [cursor=pointer]:
+                            - /url: /search/projects?tools=442140153
+                          - text: ","
+                        - listitem [ref=e756]:
+                          - link "Midjourney" [ref=e757] [cursor=pointer]:
+                            - /url: /search/projects?tools=1655508975
+                    - generic [ref=e758]:
+                      - heading "Creative Fields" [level=2] [ref=e759]
+                      - list [ref=e760]:
+                        - listitem [ref=e761]:
+                          - link "App Design" [ref=e762] [cursor=pointer]:
+                            - /url: /search/projects?field=App Design
+                            - paragraph [ref=e764]: App Design
+                        - listitem [ref=e765]:
+                          - link "UI/UX" [ref=e766] [cursor=pointer]:
+                            - /url: /search/projects?field=UI/UX
+                            - paragraph [ref=e768]: UI/UX
+                        - listitem [ref=e769]:
+                          - link "Web Design" [ref=e770] [cursor=pointer]:
+                            - /url: /search/projects?field=Web Design
+                            - paragraph [ref=e772]: Web Design
+                  - list [ref=e773]:
+                    - listitem [ref=e774]:
+                      - link "UI/UX" [ref=e775] [cursor=pointer]:
+                        - /url: /search/projects/UI%2FUX?tracking_source=project_tag
+                    - listitem [ref=e776]:
+                      - link "app design" [ref=e777] [cursor=pointer]:
+                        - /url: /search/projects/app%20design?tracking_source=project_tag
+                    - listitem [ref=e778]:
+                      - link "Web Design" [ref=e779] [cursor=pointer]:
+                        - /url: /search/projects/Web%20Design%20?tracking_source=project_tag
+                    - listitem [ref=e780]:
+                      - link "Smart Home" [ref=e781] [cursor=pointer]:
+                        - /url: /search/projects/Smart%20Home?tracking_source=project_tag
+                    - listitem [ref=e782]:
+                      - link "SAAS" [ref=e783] [cursor=pointer]:
+                        - /url: /search/projects/SAAS?tracking_source=project_tag
+                    - listitem [ref=e784]:
+                      - link "dashboard" [ref=e785] [cursor=pointer]:
+                        - /url: /search/projects/dashboard?tracking_source=project_tag
+                    - listitem [ref=e786]:
+                      - link "data visualization" [ref=e787] [cursor=pointer]:
+                        - /url: /search/projects/data%20visualization?tracking_source=project_tag
+                    - listitem [ref=e788]:
+                      - link "Wellness" [ref=e789] [cursor=pointer]:
+                        - /url: /search/projects/Wellness?tracking_source=project_tag
+                    - listitem [ref=e790]:
+                      - link "product design" [ref=e791] [cursor=pointer]:
+                        - /url: /search/projects/product%20design%20?tracking_source=project_tag
+                    - listitem [ref=e792]:
+                      - link "interface design" [ref=e793] [cursor=pointer]:
+                        - /url: /search/projects/interface%20design?tracking_source=project_tag
+                  - generic [ref=e794]:
+                    - generic [ref=e797]: © All Rights Reserved
+                    - link "Report" [ref=e800] [cursor=pointer]:
+                      - /url: /gallery/243718015/Aeros-Smart-Home-Climate-Control-Platform#report
+                      - generic [ref=e801]:
+                        - img [ref=e802]
+                        - text: Report
+      - contentinfo "primary" [ref=e807]:
+        - generic [ref=e808]:
+          - link "Jump to Main Content" [ref=e809] [cursor=pointer]:
+            - /url: javascript:void(0)
+          - button "More Behance" [ref=e813] [cursor=pointer]
+          - 'button "Language Currently Selected: English" [ref=e817] [cursor=pointer]':
+            - generic [ref=e822]: English
+          - list [ref=e824]:
+            - listitem [ref=e825] [cursor=pointer]:
+              - link "Try Behance Pro" [ref=e826]:
+                - /url: /pro?tracking_source=footer_pro_marketing_page_gallery
+                - paragraph [ref=e827]: Try Behance Pro
+          - list [ref=e829]:
+            - listitem [ref=e830]:
+              - link "TOU" [ref=e831] [cursor=pointer]:
+                - /url: https://www.adobe.com/legal/terms.html
+                - paragraph [ref=e832]: TOU
+            - listitem [ref=e833]:
+              - link "Privacy" [ref=e834] [cursor=pointer]:
+                - /url: https://www.adobe.com/privacy.html
+                - paragraph [ref=e835]: Privacy
+            - listitem [ref=e836]:
+              - link "Community" [ref=e837] [cursor=pointer]:
+                - /url: /misc/community?tracking_source=footer_infinity_gallery
+                - paragraph [ref=e838]: Community
+            - listitem [ref=e839]:
+              - link "Help" [ref=e840] [cursor=pointer]:
+                - /url: https://help.behance.net/
+                - paragraph [ref=e841]: Help
+            - listitem [ref=e842]:
+              - button "Cookie preferences" [ref=e843] [cursor=pointer]
+            - listitem [ref=e844]:
+              - link "Do not sell or share my personal information" [ref=e845] [cursor=pointer]:
+                - /url: https://www.adobe.com/privacy/us-rights.html
+                - paragraph [ref=e846]: Do not sell or share my personal information
+          - generic [ref=e847]:
+            - link "Navigate to adobe.com" [ref=e850] [cursor=pointer]:
+              - /url: https://www.adobe.com?promoid=RYGDMYVW
+              - img [ref=e851]
+              - generic [ref=e861]: Navigate to adobe.com
+            - generic:
+              - generic:
+                - button "Open Adobe Options"
+      - contentinfo "primary" [ref=e863]:
+        - generic [ref=e864]:
+          - link "Jump to Main Content" [ref=e865] [cursor=pointer]:
+            - /url: javascript:void(0)
+          - generic [ref=e866]:
+            - link "Behance" [ref=e868] [cursor=pointer]:
+              - /url: /
+              - img "Behance" [ref=e869]
+            - generic [ref=e872]:
+              - generic [ref=e873]:
+                - heading "Built For Creatives" [level=2] [ref=e874]
+                - list [ref=e876]:
+                  - listitem [ref=e877]:
+                    - link "Try Behance Pro" [ref=e878] [cursor=pointer]:
+                      - /url: /pro?tracking_source=footer_static_gallery
+                      - paragraph [ref=e879]: Try Behance Pro
+                  - listitem [ref=e880]:
+                    - link "Find Inspiration" [ref=e881] [cursor=pointer]:
+                      - /url: /galleries?tracking_source=footer_static_gallery
+                      - paragraph [ref=e882]: Find Inspiration
+                  - listitem [ref=e883]:
+                    - link "Get Hired" [ref=e884] [cursor=pointer]:
+                      - /url: /updates/get-hired-on-behance?tracking_source=footer_static_gallery
+                      - paragraph [ref=e885]: Get Hired
+                  - listitem [ref=e886]:
+                    - link "Sell Creative Assets" [ref=e887] [cursor=pointer]:
+                      - /url: /updates/behance-assets?tracking_source=footer_static_gallery
+                      - paragraph [ref=e888]: Sell Creative Assets
+                  - listitem [ref=e889]:
+                    - link "Sell Freelance Services" [ref=e890] [cursor=pointer]:
+                      - /url: /updates/get-hired-on-behance-with-services?tracking_source=footer_static_gallery
+                      - paragraph [ref=e891]: Sell Freelance Services
+              - generic [ref=e892]:
+                - heading "Find Talent" [level=2] [ref=e893]
+                - list [ref=e895]:
+                  - listitem [ref=e896]:
+                    - link "Post a Job" [ref=e897] [cursor=pointer]:
+                      - /url: /joblist?tracking_source=footer_static_gallery
+                      - paragraph [ref=e898]: Post a Job
+                  - listitem [ref=e899]:
+                    - link "Graphic Designers" [ref=e900] [cursor=pointer]:
+                      - /url: /hire/graphic-designers?tracking_source=footer_static_gallery
+                      - paragraph [ref=e901]: Graphic Designers
+                  - listitem [ref=e902]:
+                    - link "Photographers" [ref=e903] [cursor=pointer]:
+                      - /url: /hire/photographers?tracking_source=footer_static_gallery
+                      - paragraph [ref=e904]: Photographers
+                  - listitem [ref=e905]:
+                    - link "Video Editors" [ref=e906] [cursor=pointer]:
+                      - /url: /hire/video-editors?tracking_source=footer_static_gallery
+                      - paragraph [ref=e907]: Video Editors
+                  - listitem [ref=e908]:
+                    - link "Web Designers" [ref=e909] [cursor=pointer]:
+                      - /url: /hire/web-designers?tracking_source=footer_static_gallery
+                      - paragraph [ref=e910]: Web Designers
+                  - listitem [ref=e911]:
+                    - link "Illustrators" [ref=e912] [cursor=pointer]:
+                      - /url: /hire/illustrators?tracking_source=footer_static_gallery
+                      - paragraph [ref=e913]: Illustrators
+              - generic [ref=e914]:
+                - heading "Behance" [level=2] [ref=e915]
+                - list [ref=e917]:
+                  - listitem [ref=e918]:
+                    - link "About Behance" [ref=e919] [cursor=pointer]:
+                      - /url: /about?tracking_source=footer_static_gallery
+                      - paragraph [ref=e920]: About Behance
+                  - listitem [ref=e921]:
+                    - link "Adobe Portfolio" [ref=e922] [cursor=pointer]:
+                      - /url: https://portfolio.adobe.com/
+                      - paragraph [ref=e923]: Adobe Portfolio
+                  - listitem [ref=e924]:
+                    - button "Download the App" [ref=e925] [cursor=pointer]
+                  - listitem [ref=e926]:
+                    - link "Blog" [ref=e927] [cursor=pointer]:
+                      - /url: /blog?tracking_source=footer_static_gallery
+                      - paragraph [ref=e928]: Blog
+                  - listitem [ref=e929]:
+                    - link "Careers" [ref=e930] [cursor=pointer]:
+                      - /url: https://www.adobe.com/careers.html
+                      - paragraph [ref=e931]: Careers
+                  - listitem [ref=e932]:
+                    - link "Help Center" [ref=e933] [cursor=pointer]:
+                      - /url: https://help.behance.net/
+                      - paragraph [ref=e934]: Help Center
+                  - listitem [ref=e935]:
+                    - link "Contact Us" [ref=e936] [cursor=pointer]:
+                      - /url: https://help.behance.net/hc/en-us/requests/new?ticket_form_id=4164
+                      - paragraph [ref=e937]: Contact Us
+                  - listitem [ref=e938]:
+                    - link "Popular Search Terms" [ref=e939] [cursor=pointer]:
+                      - /url: /tags?tracking_source=footer_static_gallery
+                      - paragraph [ref=e940]: Popular Search Terms
+                  - listitem [ref=e941]:
+                    - link "Login" [ref=e942] [cursor=pointer]:
+                      - /url: /login?tracking_source=footer_static_gallery
+                      - paragraph [ref=e943]: Login
+              - generic [ref=e944]:
+                - heading "Social" [level=2] [ref=e945]
+                - list [ref=e947]:
+                  - listitem [ref=e948]:
+                    - link "Instagram" [ref=e949] [cursor=pointer]:
+                      - /url: http://instagram.com/behance
+                      - paragraph [ref=e950]:
+                        - img [ref=e952]
+                        - text: Instagram
+                  - listitem [ref=e954]:
+                    - link "Twitter" [ref=e955] [cursor=pointer]:
+                      - /url: http://twitter.com/behance
+                      - paragraph [ref=e956]:
+                        - img [ref=e958]
+                        - text: Twitter
+                  - listitem [ref=e961]:
+                    - link "Pinterest" [ref=e962] [cursor=pointer]:
+                      - /url: http://www.pinterest.com/behance
+                      - paragraph [ref=e963]:
+                        - img [ref=e965]
+                        - text: Pinterest
+                  - listitem [ref=e969]:
+                    - link "Facebook" [ref=e970] [cursor=pointer]:
+                      - /url: http://www.facebook.com/Behance
+                      - paragraph [ref=e971]:
+                        - img [ref=e973]
+                        - text: Facebook
+                  - listitem [ref=e976]:
+                    - link "LinkedIn" [ref=e977] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/company/151575
+                      - paragraph [ref=e978]:
+                        - img [ref=e980]
+                        - text: LinkedIn
+          - separator [ref=e985]
+          - generic [ref=e986]:
+            - generic [ref=e987]:
+              - link "Navigate to adobe.com opens in a new tab" [ref=e989] [cursor=pointer]:
+                - /url: https://www.adobe.com?promoid=RYGDMYVW
+                - img [ref=e990]
+                - generic [ref=e1000]: Navigate to adobe.com opens in a new tab
+              - generic [ref=e1001]: © 2026 Adobe Inc. All rights reserved.
+            - list [ref=e1002]:
+              - listitem [ref=e1003]:
+                - 'button "Language Currently Selected: English" [ref=e1006] [cursor=pointer]':
+                  - generic [ref=e1011]: English
+              - listitem [ref=e1012]:
+                - link "TOU" [ref=e1013] [cursor=pointer]:
+                  - /url: https://www.adobe.com/legal/terms.html
+                  - paragraph [ref=e1014]: TOU
+              - listitem [ref=e1015]:
+                - link "Privacy" [ref=e1016] [cursor=pointer]:
+                  - /url: https://www.adobe.com/privacy.html
+                  - paragraph [ref=e1017]: Privacy
+              - listitem [ref=e1018]:
+                - link "Community" [ref=e1019] [cursor=pointer]:
+                  - /url: /misc/community?tracking_source=footer_static_gallery
+                  - paragraph [ref=e1020]: Community
+              - listitem [ref=e1021]:
+                - button "Cookie preferences" [ref=e1022] [cursor=pointer]
+              - listitem [ref=e1023]:
+                - link "Do not sell or share my personal information" [ref=e1024] [cursor=pointer]:
+                  - /url: https://www.adobe.com/privacy/us-rights.html
+                  - paragraph [ref=e1025]: Do not sell or share my personal information

@@ -1,0 +1,235 @@
+- generic [ref=e36]:
+  - generic [ref=e37]:
+    - generic [ref=e38]:
+      - generic [ref=e39]: Active Project
+      - generic [ref=e40]: Golf Grove – Residential Building (B+G+P+7+Roof)
+    - generic [ref=e41]:
+      - generic [ref=e42]: MH
+      - generic [ref=e43]:
+        - generic [ref=e44]: Mohammed Hingora
+        - generic [ref=e45]: consultant
+    - generic [ref=e46]: Main
+    - generic [ref=e47] [cursor=pointer]:
+      - img [ref=e48]
+      - text: Dashboard
+    - generic [ref=e53]: Document Control
+    - generic [ref=e54] [cursor=pointer]:
+      - img [ref=e55]
+      - text: Drawing Register
+    - generic [ref=e57] [cursor=pointer]:
+      - img [ref=e58]
+      - text: Submittals (DSUB)
+      - generic [ref=e61]: "0"
+    - generic [ref=e62] [cursor=pointer]:
+      - img [ref=e63]
+      - text: Submittal Register
+    - generic [ref=e65]: Site
+    - generic [ref=e66] [cursor=pointer]:
+      - img [ref=e67]
+      - text: Inspection Requests
+      - generic [ref=e70]: "0"
+    - generic [ref=e71] [cursor=pointer]:
+      - img [ref=e72]
+      - text: NCRs
+      - generic [ref=e75]: "0"
+    - generic [ref=e76] [cursor=pointer]:
+      - img [ref=e77]
+      - text: RFIs
+      - generic [ref=e81]: "0"
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: Transmittals
+    - generic [ref=e85] [cursor=pointer]:
+      - img [ref=e86]
+      - text: Method Statements
+    - generic [ref=e89] [cursor=pointer]:
+      - img [ref=e90]
+      - text: Correspondence
+    - generic [ref=e93] [cursor=pointer]:
+      - img [ref=e94]
+      - text: Punch List
+      - generic [ref=e97]: "0"
+    - generic [ref=e98]: Admin
+    - generic [ref=e99] [cursor=pointer]:
+      - img [ref=e100]
+      - text: Subcontractors
+    - button "Sign Out" [ref=e106] [cursor=pointer]
+  - generic [ref=e107]:
+    - generic [ref=e108]:
+      - generic [ref=e109]:
+        - generic [ref=e110]: Dashboard
+        - generic [ref=e111]: Friday, 24 April 2026
+      - generic [ref=e113]: consultant
+    - generic [ref=e114]:
+      - generic [ref=e115]:
+        - generic [ref=e116]: 1 overdue item
+        - generic [ref=e118]:
+          - generic [ref=e119]:
+            - generic [ref=e120]: Inspection
+            - text: MBC-IR-001 –
+          - generic [ref=e121]: Due 2026-04-21
+      - generic [ref=e122]:
+        - generic [ref=e123]:
+          - generic [ref=e124]: Drawings
+          - generic [ref=e125]: "17"
+          - generic [ref=e126]: 3 approved
+        - generic [ref=e127]:
+          - generic [ref=e128]: Submittals
+          - generic [ref=e129]: "8"
+          - generic [ref=e130]: 1 pending review
+        - generic [ref=e131]:
+          - generic [ref=e132]: Inspections
+          - generic [ref=e133]: "7"
+          - generic [ref=e134]: 2 awaiting response
+        - generic [ref=e135]:
+          - generic [ref=e136]: Open NCRs
+          - generic [ref=e137]: "2"
+          - generic [ref=e138]: 3 closed
+        - generic [ref=e139]:
+          - generic [ref=e140]: Open RFIs
+          - generic [ref=e141]: "1"
+          - generic [ref=e142]: 2 closed
+      - generic [ref=e143]:
+        - generic [ref=e144]:
+          - generic [ref=e145]:
+            - generic [ref=e146]: Drawing approval
+            - generic [ref=e147]: 17 total
+          - generic [ref=e148]:
+            - img [ref=e149]:
+              - generic [ref=e154]: 18%
+              - generic [ref=e155]: approved
+            - generic [ref=e156]:
+              - generic [ref=e157]:
+                - text: IFC
+                - generic [ref=e159]: "0"
+              - generic [ref=e160]:
+                - text: Approved
+                - generic [ref=e162]: "3"
+              - generic [ref=e163]:
+                - text: Review
+                - generic [ref=e165]: "10"
+              - generic [ref=e166]:
+                - text: Pending
+                - generic [ref=e168]: "4"
+        - generic [ref=e169]:
+          - generic [ref=e170]:
+            - generic [ref=e171]: Discipline completion
+            - generic [ref=e172]: by approved drawings
+          - generic [ref=e174]: Loading...
+        - generic [ref=e175]:
+          - generic [ref=e176]:
+            - generic [ref=e177]: Open items
+            - generic [ref=e178]: NCRs + RFIs
+          - generic [ref=e179]:
+            - generic [ref=e180]:
+              - generic [ref=e181]:
+                - generic [ref=e182]: NCRs
+                - generic [ref=e183]: "2"
+                - generic [ref=e184]: 3 closed
+              - generic [ref=e185]:
+                - generic [ref=e186]: RFIs
+                - generic [ref=e187]: "1"
+                - generic [ref=e188]: 2 closed
+            - generic [ref=e189]:
+              - generic [ref=e190]: Submittals pending
+              - generic [ref=e194]: 1/8
+        - generic [ref=e195]:
+          - generic [ref=e196]:
+            - generic [ref=e197]: SLA Status
+            - generic [ref=e198]: 1 overdue
+          - generic [ref=e199]:
+            - generic [ref=e200]:
+              - generic [ref=e202]: Overdue IRs
+              - generic [ref=e203]: "1"
+              - generic [ref=e204] [cursor=pointer]: View →
+            - generic [ref=e205]:
+              - generic [ref=e207]: Overdue NCRs
+              - generic [ref=e208]: "0"
+              - generic [ref=e209]: —
+            - generic [ref=e210]:
+              - generic [ref=e212]: Overdue RFIs
+              - generic [ref=e213]: "0"
+              - generic [ref=e214]: —
+            - generic [ref=e215]:
+              - generic [ref=e217]: Overdue Submittals
+              - generic [ref=e218]: "0"
+              - generic [ref=e219]: —
+      - generic [ref=e220]:
+        - generic [ref=e221]:
+          - generic [ref=e223]: Pending submittals
+          - table [ref=e226]:
+            - rowgroup [ref=e227]:
+              - row "Ref Title Status" [ref=e228]:
+                - columnheader "Ref" [ref=e229]
+                - columnheader "Title" [ref=e230]
+                - columnheader "Status" [ref=e231]
+              - row "CONS-SUB-TEST-1776637831756 Consultant Test Submittal Pending Review" [ref=e232]:
+                - cell "CONS-SUB-TEST-1776637831756" [ref=e233]
+                - cell "Consultant Test Submittal" [ref=e234]
+                - cell "Pending Review" [ref=e235]:
+                  - generic [ref=e236]: Pending Review
+          - generic [ref=e238]: Open NCRs
+          - table [ref=e241]:
+            - rowgroup [ref=e242]:
+              - row "Ref Title Severity" [ref=e243]:
+                - columnheader "Ref" [ref=e244]
+                - columnheader "Title" [ref=e245]
+                - columnheader "Severity" [ref=e246]
+              - row "NCR-CONS-1776637831756 Consultant Test NCR Minor" [ref=e247]:
+                - cell "NCR-CONS-1776637831756" [ref=e248]
+                - cell "Consultant Test NCR" [ref=e249]
+                - cell "Minor" [ref=e250]:
+                  - generic [ref=e251]: Minor
+              - row "NCR-2305 Audit Trail Test - Phase 3 Minor" [ref=e252]:
+                - cell "NCR-2305" [ref=e253]
+                - cell "Audit Trail Test - Phase 3" [ref=e254]
+                - cell "Minor" [ref=e255]:
+                  - generic [ref=e256]: Minor
+        - generic [ref=e257]:
+          - generic [ref=e259]: Pending inspections
+          - table [ref=e262]:
+            - rowgroup [ref=e263]:
+              - row "Ref Description Date" [ref=e264]:
+                - columnheader "Ref" [ref=e265]
+                - columnheader "Description" [ref=e266]
+                - columnheader "Date" [ref=e267]
+              - row "MBC-IR-001 Reinforcement bar placement and cover inspect… 2026-04-20" [ref=e268]:
+                - cell "MBC-IR-001" [ref=e269]
+                - cell "Reinforcement bar placement and cover inspect…" [ref=e270]
+                - cell "2026-04-20" [ref=e271]
+              - row "CONS-IR-TEST-1776637831756 Concrete works - column C3 2026-04-19" [ref=e272]:
+                - cell "CONS-IR-TEST-1776637831756" [ref=e273]
+                - cell "Concrete works - column C3" [ref=e274]
+                - cell "2026-04-19" [ref=e275]
+          - generic [ref=e277]: Recent drawings
+          - table [ref=e280]:
+            - rowgroup [ref=e281]:
+              - row "No. Title Rev Status" [ref=e282]:
+                - columnheader "No." [ref=e283]
+                - columnheader "Title" [ref=e284]
+                - columnheader "Rev" [ref=e285]
+                - columnheader "Status" [ref=e286]
+              - row "GG-POE-B1-L01-DR-A-VOID-TEST Void Test Drawing Rev A Void" [ref=e287]:
+                - cell "GG-POE-B1-L01-DR-A-VOID-TEST" [ref=e288]
+                - cell "Void Test Drawing" [ref=e289]
+                - cell "Rev A" [ref=e290]
+                - cell "Void" [ref=e291]:
+                  - generic [ref=e292]: Void
+              - row "GG-MBC-B1-L03-DR-A-0001-RevA Ground Floor Structural Plan Rev B Under Review" [ref=e293]:
+                - cell "GG-MBC-B1-L03-DR-A-0001-RevA" [ref=e294]
+                - cell "Ground Floor Structural Plan" [ref=e295]
+                - cell "Rev B" [ref=e296]
+                - cell "Under Review" [ref=e297]:
+                  - generic [ref=e298]: Under Review
+              - row "DWG-CON-1776594763429 Contractor Upload Test Rev 0 Approved" [ref=e299]:
+                - cell "DWG-CON-1776594763429" [ref=e300]
+                - cell "Contractor Upload Test" [ref=e301]
+                - cell "Rev 0" [ref=e302]
+                - cell "Approved" [ref=e303]:
+                  - generic [ref=e304]: Approved
+              - row "GG-MBC-B1-L02-DR-A-9002-RevA Test Bulk Import Drawing 2 Rev A Under Review" [ref=e305]:
+                - cell "GG-MBC-B1-L02-DR-A-9002-RevA" [ref=e306]
+                - cell "Test Bulk Import Drawing 2" [ref=e307]
+                - cell "Rev A" [ref=e308]
+                - cell "Under Review" [ref=e309]:
+                  - generic [ref=e310]: Under Review

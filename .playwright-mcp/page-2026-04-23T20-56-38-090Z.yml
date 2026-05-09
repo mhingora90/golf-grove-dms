@@ -1,0 +1,29 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: Regent Developments
+    - generic [ref=e6]: Golf Grove DMS
+    - generic [ref=e7]: Document Management System · Production City, Dubai
+  - generic [ref=e8]:
+    - generic [ref=e9] [cursor=pointer]: Sign In
+    - generic [ref=e10] [cursor=pointer]: Register
+  - generic [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]: Full Name
+      - textbox "Eng. Ahmed Hassan" [ref=e22]
+    - generic [ref=e23]:
+      - generic [ref=e24]: Email Address
+      - textbox "you@company.com" [ref=e25]
+    - generic [ref=e26]:
+      - generic [ref=e27]: Password
+      - textbox "Min 6 characters" [ref=e28]
+    - generic [ref=e29]:
+      - generic [ref=e30]: Company
+      - textbox "Your company name" [ref=e31]
+    - generic [ref=e32]:
+      - generic [ref=e33]: Role
+      - combobox [ref=e34]:
+        - option "Main Contractor" [selected]
+        - option "Subcontractor"
+        - option "Consultant"
+        - option "Developer / Client"
+    - button "Create Account" [ref=e35] [cursor=pointer]

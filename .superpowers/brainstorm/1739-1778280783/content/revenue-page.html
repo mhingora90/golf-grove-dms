@@ -1,0 +1,146 @@
+<h2>Sales Revenue Page</h2>
+<p class="subtitle">Project-level sales financial overview. Review layout and stats — confirm or request changes.</p>
+
+<div class="mockup">
+  <div class="mockup-header">Sales Revenue</div>
+  <div class="mockup-body" style="font-family:system-ui;font-size:12px">
+
+    <!-- Stats strip -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px">
+      <div style="background:#f5f3ef;border-radius:8px;padding:12px">
+        <div style="font-size:22px;font-weight:700;color:#3B3A38">98</div>
+        <div style="font-size:10px;color:#888;margin-top:2px">Total Units</div>
+        <div style="font-size:10px;color:#666;margin-top:4px">56 Studio · 42 1BHK</div>
+      </div>
+      <div style="background:#f5f3ef;border-radius:8px;padding:12px">
+        <div style="font-size:22px;font-weight:700;color:#27500A">62</div>
+        <div style="font-size:10px;color:#888;margin-top:2px">Sold</div>
+        <div style="font-size:10px;color:#3B6D11;margin-top:4px">63.3% of total</div>
+      </div>
+      <div style="background:#f5f3ef;border-radius:8px;padding:12px">
+        <div style="font-size:22px;font-weight:700;color:#C4863A">12</div>
+        <div style="font-size:10px;color:#888;margin-top:2px">Reserved</div>
+        <div style="font-size:10px;color:#C4863A;margin-top:4px">SPA in progress</div>
+      </div>
+      <div style="background:#f5f3ef;border-radius:8px;padding:12px">
+        <div style="font-size:22px;font-weight:700;color:#185FA5">24</div>
+        <div style="font-size:10px;color:#888;margin-top:2px">Available</div>
+        <div style="font-size:10px;color:#185FA5;margin-top:4px">24.5% remaining</div>
+      </div>
+      <div style="background:#f5f3ef;border-radius:8px;padding:12px">
+        <div style="font-size:22px;font-weight:700;color:#3B3A38">48,520</div>
+        <div style="font-size:10px;color:#888;margin-top:2px">Total sqft sold</div>
+        <div style="font-size:10px;color:#666;margin-top:4px">of 71,400 sqft total</div>
+      </div>
+    </div>
+
+    <!-- Revenue strip -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
+      <div style="background:#EAF3DE;border-radius:8px;padding:12px;border:0.5px solid #C0DD97">
+        <div style="font-size:18px;font-weight:700;color:#27500A">AED 46.2M</div>
+        <div style="font-size:10px;color:#3B6D11;margin-top:2px">Total GDV (Listed)</div>
+        <div style="font-size:10px;color:#888;margin-top:4px">Gross Development Value</div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:8px;padding:12px;border:0.5px solid #C0DD97">
+        <div style="font-size:18px;font-weight:700;color:#27500A">AED 44.8M</div>
+        <div style="font-size:10px;color:#3B6D11;margin-top:2px">Total Sold Revenue</div>
+        <div style="font-size:10px;color:#888;margin-top:4px">Sum of sold prices (62 units)</div>
+      </div>
+      <div style="background:#FEF3E8;border-radius:8px;padding:12px;border:0.5px solid #FAC775">
+        <div style="font-size:18px;font-weight:700;color:#854F0B">AED 28.3M</div>
+        <div style="font-size:10px;color:#C4863A;margin-top:2px">Revenue Collected</div>
+        <div style="font-size:10px;color:#888;margin-top:4px">Payments received to date</div>
+      </div>
+      <div style="background:#f5f3ef;border-radius:8px;padding:12px">
+        <div style="font-size:18px;font-weight:700;color:#185FA5">AED 16.5M</div>
+        <div style="font-size:10px;color:#185FA5;margin-top:2px">Outstanding</div>
+        <div style="font-size:10px;color:#888;margin-top:4px">Contracted but uncollected</div>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div style="background:#fff;border:0.5px solid #e8e4dc;border-radius:8px;padding:14px;margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:#666;margin-bottom:6px">
+        <span style="font-weight:500">Collection Progress</span>
+        <span>AED 28.3M of AED 44.8M contracted (63.2%)</span>
+      </div>
+      <div style="height:10px;background:#e8e4dc;border-radius:5px;overflow:hidden">
+        <div style="width:63%;height:100%;background:#3B6D11;border-radius:5px"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:#aaa">
+        <span>0</span><span>AED 44.8M (contracted revenue)</span>
+      </div>
+    </div>
+
+    <!-- Commission + Discount summary -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+      <div style="background:#fff;border:0.5px solid #e8e4dc;border-radius:8px;padding:14px">
+        <div style="font-size:11px;font-weight:600;color:#3B3A38;margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em">Commission Summary</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px">
+          <span style="color:#666">Total Commission Payable</span>
+          <span style="font-weight:600;color:#185FA5">AED 896,000</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px">
+          <span style="color:#666">Avg Commission Rate</span>
+          <span>2.0%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px">
+          <span style="color:#666">Units with broker</span>
+          <span>48 of 62 sold</span>
+        </div>
+      </div>
+      <div style="background:#fff;border:0.5px solid #e8e4dc;border-radius:8px;padding:14px">
+        <div style="font-size:11px;font-weight:600;color:#3B3A38;margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em">Discount Summary</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px">
+          <span style="color:#666">Total Discount Given</span>
+          <span style="font-weight:600;color:#C4863A">AED 1,400,000</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px">
+          <span style="color:#666">Avg Discount Rate</span>
+          <span>3.1%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px">
+          <span style="color:#666">Units with discount</span>
+          <span>38 of 62 sold</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- By type breakdown -->
+    <div style="background:#fff;border:0.5px solid #e8e4dc;border-radius:8px;padding:14px">
+      <div style="font-size:11px;font-weight:600;color:#3B3A38;margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em">Revenue by Unit Type</div>
+      <table style="width:100%;font-size:11px;border-collapse:collapse">
+        <tr style="background:#f5f3ef;text-align:left">
+          <th style="padding:6px 10px">Type</th>
+          <th style="padding:6px 10px;text-align:center">Total</th>
+          <th style="padding:6px 10px;text-align:center">Sold</th>
+          <th style="padding:6px 10px;text-align:right">Avg sqft</th>
+          <th style="padding:6px 10px;text-align:right">Avg Sold Price</th>
+          <th style="padding:6px 10px;text-align:right">Total Revenue</th>
+          <th style="padding:6px 10px;text-align:right">Collected</th>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e4dc">
+          <td style="padding:6px 10px;font-weight:500">Studio</td>
+          <td style="padding:6px 10px;text-align:center">56</td>
+          <td style="padding:6px 10px;text-align:center;color:#27500A;font-weight:500">38</td>
+          <td style="padding:6px 10px;text-align:right">487 sqft</td>
+          <td style="padding:6px 10px;text-align:right">AED 618,000</td>
+          <td style="padding:6px 10px;text-align:right;font-weight:600">AED 23.5M</td>
+          <td style="padding:6px 10px;text-align:right;color:#3B6D11">AED 14.8M</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 10px;font-weight:500">1BHK</td>
+          <td style="padding:6px 10px;text-align:center">42</td>
+          <td style="padding:6px 10px;text-align:center;color:#27500A;font-weight:500">24</td>
+          <td style="padding:6px 10px;text-align:right">718 sqft</td>
+          <td style="padding:6px 10px;text-align:right">AED 887,000</td>
+          <td style="padding:6px 10px;text-align:right;font-weight:600">AED 21.3M</td>
+          <td style="padding:6px 10px;text-align:right;color:#3B6D11">AED 13.5M</td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:16px">Does this Revenue page cover what you need? Anything to add or remove?</p>

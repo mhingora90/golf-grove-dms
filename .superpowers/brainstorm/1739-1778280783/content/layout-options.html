@@ -1,0 +1,47 @@
+<h2>Sales Module — Layout Options</h2>
+<p class="subtitle">How should the sales module be structured in the sidebar and on screen?</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Single nav item — tabbed inside</h3>
+      <p>One "Sales" nav entry. Inside: tabs for <strong>Unit Register</strong> and <strong>Revenue Overview</strong>. Clean sidebar, everything in one place.</p>
+      <div style="margin-top:12px;background:#f5f3ef;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;color:#555">
+        <div style="color:#999;margin-bottom:6px">── Finance ──</div>
+        <div style="padding:4px 8px;background:#e8e4dc;border-radius:4px;margin-bottom:2px">💰 Finance Overview</div>
+        <div style="padding:4px 8px;margin-bottom:2px">📄 Payment Certs</div>
+        <div style="padding:4px 8px;margin-bottom:2px">📊 BOQ</div>
+        <div style="color:#999;margin:6px 0">── Sales ──</div>
+        <div style="padding:4px 8px;background:#e8e4dc;border-radius:4px">🏠 Sales</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Two nav items — Unit Register + Revenue</h3>
+      <p>Separate sidebar entries: <strong>Unit Register</strong> (the 98-unit table) and <strong>Sales Revenue</strong> (the financial overview). Mirrors the Finance/BOQ/IPC pattern already in the app.</p>
+      <div style="margin-top:12px;background:#f5f3ef;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;color:#555">
+        <div style="color:#999;margin-bottom:6px">── Sales ──</div>
+        <div style="padding:4px 8px;background:#e8e4dc;border-radius:4px;margin-bottom:2px">🏠 Unit Register</div>
+        <div style="padding:4px 8px">📈 Sales Revenue</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Three nav items — Register, Revenue, Setup</h3>
+      <p>Separate entries for <strong>Unit Register</strong>, <strong>Sales Revenue</strong>, and <strong>Unit Setup</strong> (bulk import / edit master list). Setup stays hidden once units are configured.</p>
+      <div style="margin-top:12px;background:#f5f3ef;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;color:#555">
+        <div style="color:#999;margin-bottom:6px">── Sales ──</div>
+        <div style="padding:4px 8px;background:#e8e4dc;border-radius:4px;margin-bottom:2px">🏠 Unit Register</div>
+        <div style="padding:4px 8px;margin-bottom:2px">📈 Sales Revenue</div>
+        <div style="padding:4px 8px;color:#999">⚙️ Unit Setup</div>
+      </div>
+    </div>
+  </div>
+</div>

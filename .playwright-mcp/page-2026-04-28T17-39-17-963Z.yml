@@ -1,0 +1,191 @@
+- generic [ref=e1]:
+  - generic [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - generic [ref=e22]: Active Project
+        - generic [ref=e23]: Golf Grove – Residential Building (B+G+P+7+Roof)
+      - generic [ref=e24]:
+        - generic [ref=e25]: MH
+        - generic [ref=e26]:
+          - generic [ref=e27]: Mohammed Hingora
+          - generic [ref=e28]: consultant
+      - generic [ref=e29]: Main
+      - generic [ref=e30] [cursor=pointer]:
+        - img [ref=e31]
+        - text: Dashboard
+      - generic [ref=e36]: Document Control
+      - generic [ref=e37] [cursor=pointer]:
+        - img [ref=e38]
+        - text: Drawing Register
+      - generic [ref=e40] [cursor=pointer]:
+        - img [ref=e41]
+        - text: Submittals (DSUB)
+        - generic [ref=e44]: "1"
+      - generic [ref=e45] [cursor=pointer]:
+        - img [ref=e46]
+        - text: Submittal Register
+      - generic [ref=e48]: Site
+      - generic [ref=e49] [cursor=pointer]:
+        - img [ref=e50]
+        - text: Inspection Requests
+        - generic [ref=e53]: "2"
+      - generic [ref=e54] [cursor=pointer]:
+        - img [ref=e55]
+        - text: NCRs
+        - generic [ref=e58]: "2"
+      - generic [ref=e59] [cursor=pointer]:
+        - img [ref=e60]
+        - text: RFIs
+        - generic [ref=e64]: "1"
+      - generic [ref=e65] [cursor=pointer]:
+        - img [ref=e66]
+        - text: Transmittals
+      - generic [ref=e68] [cursor=pointer]:
+        - img [ref=e69]
+        - text: Payment Certificates
+      - generic [ref=e72] [cursor=pointer]:
+        - img [ref=e73]
+        - text: Method Statements
+      - generic [ref=e76] [cursor=pointer]:
+        - img [ref=e77]
+        - text: Correspondence
+      - generic [ref=e80] [cursor=pointer]:
+        - img [ref=e81]
+        - text: Punch List
+        - generic [ref=e84]: "0"
+      - generic [ref=e85]: Admin
+      - generic [ref=e86] [cursor=pointer]:
+        - img [ref=e87]
+        - text: BOQ Setup
+      - generic [ref=e90] [cursor=pointer]:
+        - img [ref=e91]
+        - text: Subcontractors
+      - button "Sign Out" [ref=e97] [cursor=pointer]
+    - generic [ref=e98]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]: BOQ Setup
+          - generic [ref=e102]: Tuesday, 28 April 2026
+        - generic [ref=e103]:
+          - generic [ref=e104]: consultant
+          - button "+ New" [ref=e260] [cursor=pointer]
+      - generic [ref=e105]:
+        - button "Import Excel" [ref=e262] [cursor=pointer]
+        - table [ref=e265]:
+          - rowgroup [ref=e266]:
+            - row "Item No. Description Qty Unit Rate (AED) Total (AED)" [ref=e267]:
+              - columnheader "Item No." [ref=e268]
+              - columnheader "Description" [ref=e269]
+              - columnheader "Qty" [ref=e270]
+              - columnheader "Unit" [ref=e271]
+              - columnheader "Rate (AED)" [ref=e272]
+              - columnheader "Total (AED)" [ref=e273]
+            - row "No BOQ loaded yet. Use Import Excel to load the Bill of Quantities." [ref=e274]:
+              - cell "No BOQ loaded yet. Use Import Excel to load the Bill of Quantities." [ref=e275]
+  - generic [ref=e277]:
+    - generic [ref=e278]:
+      - generic [ref=e279]: Import BOQ from Excel
+      - button "×" [ref=e280] [cursor=pointer]
+    - generic [ref=e281]:
+      - paragraph [ref=e282]:
+        - text: "Upload an Excel file (.xlsx) with columns in this order:"
+        - text: Bill No | Bill Title | Item No | Description | Qty | Unit | Rate
+        - text: One row per line item. Rows with the same Bill No are grouped under one bill.
+      - generic [ref=e283]:
+        - generic [ref=e284]: Excel File (.xlsx)
+        - button "Choose File" [active] [ref=e285]
+      - generic [ref=e288]:
+        - paragraph [ref=e289]: "Preview (first 10 rows of 276 total):"
+        - table [ref=e291]:
+          - rowgroup [ref=e292]:
+            - row "Bill No Bill Title Item No Description Qty Unit Rate" [ref=e293]:
+              - columnheader "Bill No" [ref=e294]
+              - columnheader "Bill Title" [ref=e295]
+              - columnheader "Item No" [ref=e296]
+              - columnheader "Description" [ref=e297]
+              - columnheader "Qty" [ref=e298]
+              - columnheader "Unit" [ref=e299]
+              - columnheader "Rate" [ref=e300]
+            - row "02 SITE WORKS 2.01.A Allow for the leveling, removal, and off-site disposal of all existing vegetation and loose materials, including but not limited to undergrowth, bushes, shrubs, debris, plants, etc., to the satisfaction of the Engineer. 1 Item 5,000.00 1 ls 5,000" [ref=e301]:
+              - cell "02" [ref=e302]
+              - cell "SITE WORKS" [ref=e303]
+              - cell "2.01.A" [ref=e304]
+              - cell "Allow for the leveling, removal, and off-site disposal of all existing vegetation and loose materials, including but not limited to undergrowth, bushes, shrubs, debris, plants, etc., to the satisfaction of the Engineer. 1 Item 5,000.00" [ref=e305]
+              - cell "1" [ref=e306]
+              - cell "ls" [ref=e307]
+              - cell "5,000" [ref=e308]
+            - row "02 SITE WORKS 2.02.A Excavate trial pits and trenches by hand, as specified and as necessary, to locate existing services within the plot area and, if applicable, outside and adjacent to the plot boundary, including backfilling, making good, and reinstatement to original condition upon completion. 1 Item 5,000.00 1 ls 5,000" [ref=e309]:
+              - cell "02" [ref=e310]
+              - cell "SITE WORKS" [ref=e311]
+              - cell "2.02.A" [ref=e312]
+              - cell "Excavate trial pits and trenches by hand, as specified and as necessary, to locate existing services within the plot area and, if applicable, outside and adjacent to the plot boundary, including backfilling, making good, and reinstatement to original condition upon completion. 1 Item 5,000.00" [ref=e313]
+              - cell "1" [ref=e314]
+              - cell "ls" [ref=e315]
+              - cell "5,000" [ref=e316]
+            - row "02 SITE WORKS 2.03.A Excavation from the existing ground level till the bottom of the PCC as per the specifications, drawings and soil report subject to Engineer's approval. 9190 cu.m 18.00 1 ls 165,420" [ref=e317]:
+              - cell "02" [ref=e318]
+              - cell "SITE WORKS" [ref=e319]
+              - cell "2.03.A" [ref=e320]
+              - cell "Excavation from the existing ground level till the bottom of the PCC as per the specifications, drawings and soil report subject to Engineer's approval. 9190 cu.m 18.00" [ref=e321]
+              - cell "1" [ref=e322]
+              - cell "ls" [ref=e323]
+              - cell "165,420" [ref=e324]
+            - row "02 SITE WORKS 2.03.B Disposal of the excavated material and other waste material, as required, form the site as per the instruction of the local authorities. 9190 cu.m 18.00 1 ls 165,420" [ref=e325]:
+              - cell "02" [ref=e326]
+              - cell "SITE WORKS" [ref=e327]
+              - cell "2.03.B" [ref=e328]
+              - cell "Disposal of the excavated material and other waste material, as required, form the site as per the instruction of the local authorities. 9190 cu.m 18.00" [ref=e329]
+              - cell "1" [ref=e330]
+              - cell "ls" [ref=e331]
+              - cell "165,420" [ref=e332]
+            - row "02 SITE WORKS 2.03.D Backfilling and compacting with imported material, as required, subject to specifications and Engineer's Approval 361.8 cu.m 25.00 1 ls 9,045" [ref=e333]:
+              - cell "02" [ref=e334]
+              - cell "SITE WORKS" [ref=e335]
+              - cell "2.03.D" [ref=e336]
+              - cell "Backfilling and compacting with imported material, as required, subject to specifications and Engineer's Approval 361.8 cu.m 25.00" [ref=e337]
+              - cell "1" [ref=e338]
+              - cell "ls" [ref=e339]
+              - cell "9,045" [ref=e340]
+            - row "02 SITE WORKS 2.04.A Supply and apply anti-termite treatment to horizontal and vertical surfaces to form a continuous chemical barrier, including all related works, surface preparation, materials, and guarantees, complete in accordance with the drawings, project specifications, and to the satisfaction of the Engineer. 1 Item 10,000.00 1 ls 10,000" [ref=e341]:
+              - cell "02" [ref=e342]
+              - cell "SITE WORKS" [ref=e343]
+              - cell "2.04.A" [ref=e344]
+              - cell "Supply and apply anti-termite treatment to horizontal and vertical surfaces to form a continuous chemical barrier, including all related works, surface preparation, materials, and guarantees, complete in accordance with the drawings, project specifications, and to the satisfaction of the Engineer. 1 Item 10,000.00" [ref=e345]
+              - cell "1" [ref=e346]
+              - cell "ls" [ref=e347]
+              - cell "10,000" [ref=e348]
+            - row "02 SITE WORKS 2.05.A Complete design, supply, installation, and operation of a dewatering system to keep all excavations free of water by any means necessary, including running costs at various platform levels, start-up, dismantling, removal, and demobilization upon completion, as per the Soil Investigation Report; the Contractor shall obtain all required Authority approvals and NOCs, and provide final clearance upon completion. 1 LS 275,000.00 1 ls 275,000" [ref=e349]:
+              - cell "02" [ref=e350]
+              - cell "SITE WORKS" [ref=e351]
+              - cell "2.05.A" [ref=e352]
+              - cell "Complete design, supply, installation, and operation of a dewatering system to keep all excavations free of water by any means necessary, including running costs at various platform levels, start-up, dismantling, removal, and demobilization upon completion, as per the Soil Investigation Report; the Contractor shall obtain all required Authority approvals and NOCs, and provide final clearance upon completion. 1 LS 275,000.00" [ref=e353]
+              - cell "1" [ref=e354]
+              - cell "ls" [ref=e355]
+              - cell "275,000" [ref=e356]
+            - row "02 SITE WORKS 2.06.B Allow for full coordination with the Shoring Contractor during the insertion of concrete panels and throughout the removal stage of the shoring system, including all necessary adjustments, sequencing, and site interface requirements to ensure smooth execution of works. 1 Item 10,000.00 1 ls 10,000" [ref=e357]:
+              - cell "02" [ref=e358]
+              - cell "SITE WORKS" [ref=e359]
+              - cell "2.06.B" [ref=e360]
+              - cell "Allow for full coordination with the Shoring Contractor during the insertion of concrete panels and throughout the removal stage of the shoring system, including all necessary adjustments, sequencing, and site interface requirements to ensure smooth execution of works. 1 Item 10,000.00" [ref=e361]
+              - cell "1" [ref=e362]
+              - cell "ls" [ref=e363]
+              - cell "10,000" [ref=e364]
+            - row "03 SUB-STRUCTURE CONCRETE WORKS 3.02.A Raft 1480 cu.m 1,390" [ref=e365]:
+              - cell "03" [ref=e366]
+              - cell "SUB-STRUCTURE CONCRETE WORKS" [ref=e367]
+              - cell "3.02.A" [ref=e368]
+              - cell "Raft" [ref=e369]
+              - cell "1480" [ref=e370]
+              - cell "cu.m" [ref=e371]
+              - cell "1,390" [ref=e372]
+            - row "03 SUB-STRUCTURE CONCRETE WORKS 3.02.B Water Tank Walls 887 cu.m 1,390" [ref=e373]:
+              - cell "03" [ref=e374]
+              - cell "SUB-STRUCTURE CONCRETE WORKS" [ref=e375]
+              - cell "3.02.B" [ref=e376]
+              - cell "Water Tank Walls" [ref=e377]
+              - cell "887" [ref=e378]
+              - cell "cu.m" [ref=e379]
+              - cell "1,390" [ref=e380]
+    - generic [ref=e286]:
+      - button "Import" [ref=e381] [cursor=pointer]
+      - button "Cancel" [ref=e287] [cursor=pointer]

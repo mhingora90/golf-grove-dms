@@ -1,0 +1,22 @@
+[    4368ms] [LOG] [viewDraw] revRows full array: [{"id":"12e02bc4-a5bc-4be1-b8b5-3d08aabec457","drawing_id":"3754f70c-ebeb-428f-909e-3eb42f859242","revision":"Rev A","status":"Approved","uploaded_by_name":"Mohammed Hingora","uploaded_by_id":"4936665c-b65b-4f93-ac4d-09770a578ea5","upload_date":"2026-04-18T09:49:05.206726+00:00","approved_by_name":"Mohammed Hingora","approved_by_id":"4936665c-b65b-4f93-ac4d-09770a578ea5","approval_date":"2026-04-18T09:54:56.867+00:00","file_path":null,"notes":null,"review_comments":null},{"id":"3d00562b-d62c-4af2-b8bb-808056e37701","drawing_id":"3754f70c-ebeb-428f-909e-3eb42f859242","revision":"Rev B","status":"Issued for Construction","uploaded_by_name":"Mohammed Hingora","uploaded_by_id":"4936665c-b65b-4f93-ac4d-09770a578ea5","upload_date":"2026-04-18T10:31:12.881995+00:00","approved_by_name":null,"approved_by_id":null,"approval_date":null,"file_path":null,"notes":"","review_comments":null}] @ https://golf-grove-dms.vercel.app/:2149
+[    4368ms] [LOG] [viewDraw] revision row 0 file_path= null keys= [id, drawing_id, revision, status, uploaded_by_name, uploaded_by_id, upload_date, approved_by_name, approved_by_id, approval_date, file_path, notes, review_comments] @ https://golf-grove-dms.vercel.app/:2166
+[    4370ms] [LOG] [viewDraw] revision row 1 file_path= null keys= [id, drawing_id, revision, status, uploaded_by_name, uploaded_by_id, upload_date, approved_by_name, approved_by_id, approval_date, file_path, notes, review_comments] @ https://golf-grove-dms.vercel.app/:2166
+[   29113ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[   29114ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[  392844ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://golf-grove-dms.vercel.app/#draw:0
+[  393044ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://golf-grove-dms.vercel.app/favicon.ico:0
+[  393606ms] [LOG] Error @ https://golf-grove-dms.vercel.app/.well-known/vercel/security/static/challenge.v2.min.js:0
+[  401568ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[  401568ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[  488636ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[  488637ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[  613834ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[  613834ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[  652732ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[  652732ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[ 1468572ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[ 1468574ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[ 1496388ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[ 1496389ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[ 1545139ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0
+[ 1545140ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#draw:0

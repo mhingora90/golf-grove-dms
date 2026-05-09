@@ -1,0 +1,12 @@
+[     464ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/:0
+[     464ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/:0
+[    2365ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Ctitle%2Celementsastitle%2Cdue_date&status=eq.Pending&due_date=lt.2026-04-28&limit=20:0
+[    2382ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubjectastitle%2Cdue_date&status=eq.Open&due_date=lt.2026-04-28&limit=20:0
+[    7877ms] TypeError: Cannot read properties of undefined (reading 'id')
+    at loadApp (https://golf-grove-dms.vercel.app/:580:90)
+    at eval (eval at <anonymous> (eval at evaluate (:302:30)), <anonymous>:1:75)
+    at eval (eval at evaluate (:302:30), <anonymous>:4:50)
+    at UtilityScript.evaluate (<anonymous>:304:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[   48151ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#ipc:0
+[   48151ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#ipc:0

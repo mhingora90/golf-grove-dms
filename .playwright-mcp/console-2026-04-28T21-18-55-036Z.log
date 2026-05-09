@@ -1,0 +1,7 @@
+[     486ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/:0
+[     486ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/:0
+[   21468ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=password:0
+[   53212ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=password:0
+[   68538ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubjectastitle%2Cdue_date&status=eq.Open&due_date=lt.2026-04-28&limit=20:0
+[   68540ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Ctitle%2Celementsastitle%2Cdue_date&status=eq.Pending&due_date=lt.2026-04-28&limit=20:0
+[  280958ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/users?select=*&email=eq.mohammed%40regent-developments.com:0

@@ -1,0 +1,87 @@
+<h2>Unit Register — Table Layout</h2>
+<p class="subtitle">How much detail shows directly in the table vs in the unit detail modal?</p>
+
+<div class="options">
+
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Full financial table</h3>
+      <p>All columns visible in the register. Dense but complete at a glance.</p>
+      <div style="margin-top:12px;overflow-x:auto">
+        <table style="width:100%;font-size:10px;border-collapse:collapse;font-family:monospace">
+          <tr style="background:#e8e4dc;text-align:left">
+            <th style="padding:4px 6px">Unit</th><th style="padding:4px 6px">Type</th><th style="padding:4px 6px">Sqft</th>
+            <th style="padding:4px 6px">Listed</th><th style="padding:4px 6px">Sold</th><th style="padding:4px 6px">Discount</th>
+            <th style="padding:4px 6px">Comm%</th><th style="padding:4px 6px">SPA</th><th style="padding:4px 6px">Oqood</th><th style="padding:4px 6px">Status</th>
+          </tr>
+          <tr style="border-bottom:1px solid #e8e4dc">
+            <td style="padding:4px 6px">101</td><td style="padding:4px 6px">Studio</td><td style="padding:4px 6px">485</td>
+            <td style="padding:4px 6px">620K</td><td style="padding:4px 6px">600K</td><td style="padding:4px 6px">3.2%</td>
+            <td style="padding:4px 6px">2%</td>
+            <td style="padding:4px 6px"><span style="background:#d4edbc;color:#2d6a0a;padding:1px 5px;border-radius:3px;font-size:9px">Complete</span></td>
+            <td style="padding:4px 6px"><span style="background:#d4edbc;color:#2d6a0a;padding:1px 5px;border-radius:3px;font-size:9px">Registered</span></td>
+            <td style="padding:4px 6px"><span style="background:#d4edbc;color:#2d6a0a;padding:1px 5px;border-radius:3px;font-size:9px">Sold</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid #e8e4dc;background:#fafaf8">
+            <td style="padding:4px 6px">102</td><td style="padding:4px 6px">1BHK</td><td style="padding:4px 6px">720</td>
+            <td style="padding:4px 6px">950K</td><td style="padding:4px 6px">—</td><td style="padding:4px 6px">—</td>
+            <td style="padding:4px 6px">—</td>
+            <td style="padding:4px 6px">—</td><td style="padding:4px 6px">—</td>
+            <td style="padding:4px 6px"><span style="background:#EAF3DE;color:#3B6D11;padding:1px 5px;border-radius:3px;font-size:9px">Available</span></td>
+          </tr>
+          <tr>
+            <td style="padding:4px 6px">103</td><td style="padding:4px 6px">Studio</td><td style="padding:4px 6px">490</td>
+            <td style="padding:4px 6px">625K</td><td style="padding:4px 6px">615K</td><td style="padding:4px 6px">1.6%</td>
+            <td style="padding:4px 6px">2%</td>
+            <td style="padding:4px 6px"><span style="background:#FEF3E8;color:#854F0B;padding:1px 5px;border-radius:3px;font-size:9px">Signed Buyer</span></td>
+            <td style="padding:4px 6px"><span style="background:#e8e4dc;color:#777;padding:1px 5px;border-radius:3px;font-size:9px">Not Reg.</span></td>
+            <td style="padding:4px 6px"><span style="background:#FEF3E8;color:#854F0B;padding:1px 5px;border-radius:3px;font-size:9px">Reserved</span></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Condensed table + detail modal</h3>
+      <p>Table shows key identity + status only. Click row → modal shows full financials, payment plan, SPA/Oqood.</p>
+      <div style="margin-top:12px;overflow-x:auto">
+        <table style="width:100%;font-size:10px;border-collapse:collapse;font-family:monospace">
+          <tr style="background:#e8e4dc;text-align:left">
+            <th style="padding:4px 6px">Unit</th><th style="padding:4px 6px">Floor</th><th style="padding:4px 6px">Type</th>
+            <th style="padding:4px 6px">Sqft</th><th style="padding:4px 6px">Listed Price</th><th style="padding:4px 6px">Buyer</th>
+            <th style="padding:4px 6px">SPA</th><th style="padding:4px 6px">Oqood</th><th style="padding:4px 6px">Status</th>
+          </tr>
+          <tr style="border-bottom:1px solid #e8e4dc">
+            <td style="padding:4px 6px;font-weight:600">101</td><td style="padding:4px 6px">1</td><td style="padding:4px 6px">Studio</td>
+            <td style="padding:4px 6px">485</td><td style="padding:4px 6px">620K</td>
+            <td style="padding:4px 6px;color:#185FA5">Ahmed Al Mansoori</td>
+            <td style="padding:4px 6px"><span style="background:#d4edbc;color:#2d6a0a;padding:1px 5px;border-radius:3px;font-size:9px">Complete</span></td>
+            <td style="padding:4px 6px"><span style="background:#d4edbc;color:#2d6a0a;padding:1px 5px;border-radius:3px;font-size:9px">Registered</span></td>
+            <td style="padding:4px 6px"><span style="background:#d4edbc;color:#2d6a0a;padding:1px 5px;border-radius:3px;font-size:9px">Sold</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid #e8e4dc;background:#fafaf8">
+            <td style="padding:4px 6px;font-weight:600">102</td><td style="padding:4px 6px">1</td><td style="padding:4px 6px">1BHK</td>
+            <td style="padding:4px 6px">720</td><td style="padding:4px 6px">950K</td>
+            <td style="padding:4px 6px;color:#bbb">—</td>
+            <td style="padding:4px 6px">—</td><td style="padding:4px 6px">—</td>
+            <td style="padding:4px 6px"><span style="background:#EAF3DE;color:#3B6D11;padding:1px 5px;border-radius:3px;font-size:9px">Available</span></td>
+          </tr>
+          <tr>
+            <td style="padding:4px 6px;font-weight:600">103</td><td style="padding:4px 6px">1</td><td style="padding:4px 6px">Studio</td>
+            <td style="padding:4px 6px">490</td><td style="padding:4px 6px">625K</td>
+            <td style="padding:4px 6px;color:#185FA5">Sara Al Hashemi</td>
+            <td style="padding:4px 6px"><span style="background:#FEF3E8;color:#854F0B;padding:1px 5px;border-radius:3px;font-size:9px">Signed Buyer</span></td>
+            <td style="padding:4px 6px"><span style="background:#e8e4dc;color:#777;padding:1px 5px;border-radius:3px;font-size:9px">Not Reg.</span></td>
+            <td style="padding:4px 6px"><span style="background:#FEF3E8;color:#854F0B;padding:1px 5px;border-radius:3px;font-size:9px">Reserved</span></td>
+          </tr>
+        </table>
+      </div>
+      <p style="font-size:11px;color:#888;margin-top:8px">↳ Click any row → modal shows: Sold Price, Discount, Commission, Payment Plan milestones</p>
+    </div>
+  </div>
+
+</div>

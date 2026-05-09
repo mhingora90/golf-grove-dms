@@ -1,0 +1,88 @@
+[     892ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?v=5:0
+[     892ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?v=5:0
+[    2142ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubjectastitle%2Cdue_date&status=eq.Open&due_date=lt.2026-04-28&limit=20:0
+[    2148ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Ctitle%2Celementsastitle%2Cdue_date&status=eq.Pending&due_date=lt.2026-04-28&limit=20:0
+[   35973ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?v=5#ipc:0
+[   35973ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?v=5#ipc:0
+[   38988ms] TypeError: Cannot read properties of undefined (reading 'id')
+    at loadApp (https://golf-grove-dms.vercel.app/?v=5:582:90)
+    at eval (eval at evaluate (:302:30), <anonymous>:1:74)
+    at UtilityScript.evaluate (<anonymous>:304:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[  217522ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?v=5#ipc:0
+[  217522ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?v=5#ipc:0
+[  220573ms] TypeError: Cannot read properties of undefined (reading 'id')
+    at loadApp (https://golf-grove-dms.vercel.app/?v=5:582:90)
+    at eval (eval at evaluate (:302:30), <anonymous>:1:74)
+    at UtilityScript.evaluate (<anonymous>:304:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[  241637ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?cb=1777416577754:0
+[  241637ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?cb=1777416577754:0
+[  242636ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubjectastitle%2Cdue_date&status=eq.Open&due_date=lt.2026-04-28&limit=20:0
+[  242636ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Ctitle%2Celementsastitle%2Cdue_date&status=eq.Pending&due_date=lt.2026-04-28&limit=20:0
+[  244841ms] TypeError: Cannot read properties of undefined (reading 'id')
+    at loadApp (https://golf-grove-dms.vercel.app/?cb=1777416577754:582:90)
+    at eval (eval at evaluate (:302:30), <anonymous>:1:74)
+    at UtilityScript.evaluate (<anonymous>:304:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[  280663ms] [LOG] Contractor Claimed → AED 0.00
+Value of Works → AED 1,580,000.00
+Less: Retention (10%) → (AED 158,000.00)
+Less: Advance Recovery (10%) → (AED 158,000.00)
+Less: Previously Paid → —
+Net Before VAT → AED 1,264,000.00
+VAT (5%) → AED 63,200.00
+NET CERTIFIED → AED 1,327,200.00 @ :12
+[  376842ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?final=1777416712238:0
+[  376842ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?final=1777416712238:0
+[  378582ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubjectastitle%2Cdue_date&status=eq.Open&due_date=lt.2026-04-28&limit=20:0
+[  378583ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Ctitle%2Celementsastitle%2Cdue_date&status=eq.Pending&due_date=lt.2026-04-28&limit=20:0
+[  379905ms] TypeError: Cannot read properties of undefined (reading 'id')
+    at loadApp (https://golf-grove-dms.vercel.app/?final=1777416712238:582:90)
+    at eval (eval at evaluate (:302:30), <anonymous>:1:74)
+    at UtilityScript.evaluate (<anonymous>:304:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[ 1183266ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?t=1777417518635:0
+[ 1183266ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?t=1777417518635:0
+[ 1184827ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Ctitle%2Celementsastitle%2Cdue_date&status=eq.Pending&due_date=lt.2026-04-28&limit=20:0
+[ 1184845ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubjectastitle%2Cdue_date&status=eq.Open&due_date=lt.2026-04-28&limit=20:0
+[ 1186312ms] TypeError: Cannot read properties of undefined (reading 'id')
+    at loadApp (https://golf-grove-dms.vercel.app/?t=1777417518635:582:90)
+    at eval (eval at evaluate (:302:30), <anonymous>:1:74)
+    at UtilityScript.evaluate (<anonymous>:304:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[ 1269448ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?v=1777417604952:0
+[ 1269448ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?v=1777417604952:0
+[ 1270887ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Ctitle%2Celementsastitle%2Cdue_date&status=eq.Pending&due_date=lt.2026-04-28&limit=20:0
+[ 1270887ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubjectastitle%2Cdue_date&status=eq.Open&due_date=lt.2026-04-28&limit=20:0
+[ 1272536ms] TypeError: Cannot read properties of undefined (reading 'id')
+    at loadApp (https://golf-grove-dms.vercel.app/?v=1777417604952:582:90)
+    at eval (eval at evaluate (:302:30), <anonymous>:1:74)
+    at UtilityScript.evaluate (<anonymous>:304:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[ 1375938ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?v=1777417604952#ipc:0
+[ 1375940ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/?v=1777417604952#ipc:0
+[63591801ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[63591801ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:101013
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:105550
+    at vr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:105718)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:164269)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:164025
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:164102
+    at new Promise (<anonymous>)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:163955
+    at cs._refreshAccessToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:164108)
+    at cs._callRefreshToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:166980) @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[79842815ms] [ERROR] Failed to load resource: net::ERR_NETWORK_IO_SUSPENDED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[79842815ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:101013
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:105550
+    at vr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:105718)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:164269)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:164025
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:164102
+    at new Promise (<anonymous>)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:163955
+    at cs._refreshAccessToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:164108)
+    at cs._callRefreshToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:166980) @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6

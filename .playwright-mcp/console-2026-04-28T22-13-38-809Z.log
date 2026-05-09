@@ -1,0 +1,13 @@
+[     777ms] Identifier 'pitems' has already been declared
+[     833ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/:0
+[     834ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/:0
+[   10399ms] ReferenceError: doLogin is not defined
+    at HTMLButtonElement.onclick (https://golf-grove-dms.vercel.app/:354:67)
+[   23896ms] ReferenceError: doLogin is not defined
+    at HTMLButtonElement.onclick (https://golf-grove-dms.vercel.app/:354:67)
+[   25488ms] ReferenceError: doLogin is not defined
+    at HTMLButtonElement.onclick (https://golf-grove-dms.vercel.app/:354:67)
+[   25580ms] ReferenceError: doLogin is not defined
+    at HTMLButtonElement.onclick (https://golf-grove-dms.vercel.app/:354:67)
+[   25843ms] ReferenceError: doLogin is not defined
+    at HTMLButtonElement.onclick (https://golf-grove-dms.vercel.app/:354:67)
