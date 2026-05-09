@@ -6501,6 +6501,8 @@ async function renderUnitSetup() {
   const list = units||[];
   const studioCount = list.filter(u=>u.unit_type==='Studio').length;
   const bhkCount    = list.filter(u=>u.unit_type==='1BHK').length;
+  const totalSqft   = list.reduce((s,u)=>s+ +u.area_sqft,0);
+  const totalGDV    = list.reduce((s,u)=>s+ +u.listed_price,0);
 
   const rowsHTML = list.length
     ? list.map(u =>
@@ -6522,6 +6524,8 @@ async function renderUnitSetup() {
         '<div class="module-stat"><div class="module-stat-val">' + list.length + '</div><div class="module-stat-label">Total Units</div></div>' +
         '<div class="module-stat"><div class="module-stat-val">' + studioCount + '</div><div class="module-stat-label">Studio</div></div>' +
         '<div class="module-stat"><div class="module-stat-val">' + bhkCount + '</div><div class="module-stat-label">1BHK</div></div>' +
+        '<div class="module-stat"><div class="module-stat-val">' + totalSqft.toLocaleString() + ' sqft</div><div class="module-stat-label">Total Area</div></div>' +
+        '<div class="module-stat"><div class="module-stat-val">' + fmtCompact(totalGDV) + '</div><div class="module-stat-label">Total Listed Value</div></div>' +
       '</div>'
     : '';
 
