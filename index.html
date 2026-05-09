@@ -1711,6 +1711,9 @@ async function doBatchDrawAction(action) {
     return;
   }
   if(action==='delete') {
+    // Delete revisions first — FK drawing_revisions.drawing_id → drawings.id
+    const {error: revErr} = await sb.from('drawing_revisions').delete().in('drawing_id', ids);
+    if(revErr){toast('Bulk delete failed (revisions): '+revErr.message,'error');return;}
     const {error} = await sb.from('drawings').delete().in('id', ids);
     if(error){toast('Bulk delete failed: '+error.message,'error');return;}
     await logAudit(ids[0], 'drawing', `Bulk delete — ${ids.length} drawing${ids.length!==1?'s':''} removed`);
