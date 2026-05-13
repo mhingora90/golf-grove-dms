@@ -1,0 +1,525 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - link "Home" [ref=e8] [cursor=pointer]:
+            - /url: /app/home
+            - generic [ref=e10]:
+              - img
+          - button "Automation products" [ref=e12] [cursor=pointer]:
+            - img [ref=e16]
+          - link "Zaps" [ref=e19] [cursor=pointer]:
+            - /url: /app/assets/zaps
+            - generic [ref=e20]:
+              - img [ref=e22]
+              - heading "Zaps" [level=1] [ref=e25]
+          - button "This Zap is using 1 Pro feature" [ref=e144] [cursor=pointer]:
+            - img [ref=e145]
+            - text: This Zap is using 1 Pro feature
+            - img [ref=e147]
+        - generic [ref=e29]:
+          - link "Mohammed Hingora (Personal) /" [ref=e149] [cursor=pointer]:
+            - /url: https://zapier.com/app/assets/zaps/folders/personal
+            - generic [ref=e150]:
+              - img [ref=e151]
+              - generic [ref=e153]: Mohammed Hingora (Personal)
+              - text: /
+          - button "Mohammed Hingora Untitled Zap Draft" [ref=e154] [cursor=pointer]:
+            - generic [ref=e31]:
+              - img "Mohammed Hingora" [ref=e156]:
+                - generic [ref=e157]: MH
+              - generic [ref=e32]: Untitled Zap
+              - generic [ref=e159]: Draft
+              - generic [ref=e33]:
+                - img
+        - generic [ref=e34]:
+          - generic "More actions" [ref=e39]:
+            - button "100%" [ref=e160] [cursor=pointer]:
+              - generic [ref=e42]:
+                - generic [ref=e43]: 100%
+                - generic [ref=e44]:
+                  - img
+          - button "Help" [ref=e46] [cursor=pointer]:
+            - generic [ref=e47]:
+              - generic [ref=e48]:
+                - img
+              - generic [ref=e49]: Help
+              - generic [ref=e50]:
+                - img
+    - generic [ref=e51]:
+      - region [ref=e161]:
+        - generic [ref=e162]:
+          - generic [ref=e163]:
+            - button "search-button" [ref=e164] [cursor=pointer]:
+              - generic [ref=e165]:
+                - img [ref=e166]
+                - generic [ref=e169]: Search
+              - generic [ref=e170]:
+                - generic [ref=e171]: Ctrl
+                - generic [ref=e173]: ⇧
+                - generic [ref=e175]: F
+            - checkbox "Turn Zap on" [disabled] [ref=e179]
+          - generic [ref=e181]:
+            - generic [ref=e182]:
+              - button "Undo" [disabled] [ref=e183]:
+                - generic [ref=e184]:
+                  - img [ref=e185]
+                  - text: Undo
+              - button "View undo history" [disabled] [ref=e188]:
+                - status [ref=e190]:
+                  - generic [ref=e191]: Loading
+                - img [ref=e193]
+            - button "Test run" [ref=e196] [cursor=pointer]:
+              - generic [ref=e197]:
+                - img [ref=e198]
+                - generic [ref=e200]: Test run
+            - generic [ref=e202]:
+              - button "Publish this Zap" [disabled]:
+                - generic:
+                  - img
+                  - generic: Publish
+      - img [ref=e54]
+      - complementary "Editor sidebar" [ref=e203]:
+        - generic [ref=e204]:
+          - list [ref=e205]:
+            - listitem [ref=e206]:
+              - button "Linked assets" [ref=e207] [cursor=pointer]:
+                - img [ref=e208]
+            - listitem [ref=e213]:
+              - button "Recent Zaps" [ref=e214] [cursor=pointer]:
+                - img [ref=e215]
+            - listitem [ref=e218]:
+              - button "Zap details" [ref=e219] [cursor=pointer]:
+                - img [ref=e220]
+            - listitem [ref=e222]:
+              - button "Notes" [ref=e223] [cursor=pointer]:
+                - img [ref=e224]
+            - listitem [ref=e228]:
+              - button "Change history" [ref=e229] [cursor=pointer]:
+                - img [ref=e230]
+            - listitem [ref=e238]:
+              - button "Zap runs" [ref=e239] [cursor=pointer]:
+                - img [ref=e240]
+            - listitem [ref=e242]:
+              - button "Status" [ref=e243] [cursor=pointer]:
+                - img [ref=e244]
+                - generic [ref=e847]: "1"
+            - listitem [ref=e246]:
+              - button "Advanced settings" [ref=e247] [cursor=pointer]:
+                - img [ref=e248]
+            - listitem [ref=e251]:
+              - button "Versions" [ref=e252] [cursor=pointer]:
+                - img [ref=e253]
+          - button "Copilot" [ref=e259] [cursor=pointer]:
+            - img [ref=e265]
+      - complementary "Copilot" [ref=e72]:
+        - status [ref=e73]
+        - generic [ref=e75]:
+          - generic [ref=e77]:
+            - generic [ref=e79]:
+              - img [ref=e82]
+              - generic [ref=e88]: Copilot
+            - generic [ref=e89]:
+              - button "Create checkpoint" [ref=e90] [cursor=pointer]:
+                - status [ref=e92]:
+                  - generic [ref=e93]: Loading
+                - img [ref=e95]
+              - button "Copilot Settings" [ref=e97] [cursor=pointer]:
+                - status [ref=e99]:
+                  - generic [ref=e100]: Loading
+                - img [ref=e102]
+              - button "Close Copilot" [ref=e105] [cursor=pointer]:
+                - status [ref=e107]:
+                  - generic [ref=e108]: Loading
+                - img [ref=e110]
+          - generic [ref=e112]:
+            - list [ref=e272]:
+              - listitem [ref=e273]:
+                - generic [ref=e274]:
+                  - generic [ref=e276]: "Configure the Data field mappings for this webhook POST. Map these keys to Facebook Lead Ads fields: full_name to Name, email to Email, phone_number to Phone Number, first_name to First Name, company_name to Company/Brokerage Name, broker_type to Broker Type, budget_range to Budget Range, property_types to Property Types, availability to Availability, lead_id to Lead ID, form_id to Form ID. Remove the _1 field. Keep URL, Payload Type Json, Wrap Request In Array No, and Unflatten Yes."
+                  - generic [ref=e278]:
+                    - button "Copy" [ref=e279] [cursor=pointer]:
+                      - status [ref=e281]:
+                        - generic [ref=e282]: Loading
+                      - img [ref=e284]
+                    - button "Edit message" [ref=e287] [cursor=pointer]:
+                      - status [ref=e289]:
+                        - generic [ref=e290]: Loading
+                      - img [ref=e292]
+              - listitem [ref=e294]:
+                - generic [ref=e295]:
+                  - generic [ref=e297]:
+                    - button "Expand thought" [ref=e298] [cursor=pointer]:
+                      - generic [ref=e299]: Worked for a moment
+                      - img [ref=e300]
+                    - generic [ref=e304]:
+                      - generic [ref=e305]:
+                        - img [ref=e308]
+                        - generic [ref=e313]:
+                          - paragraph [ref=e314]: "The user wants me to configure the webhook POST data fields by mapping Facebook Lead Ads fields to specific JSON keys. Let me break down what needs to happen:"
+                          - paragraph [ref=e315]: "Current state:"
+                          - list [ref=e316]:
+                            - listitem [ref=e317]: "Step 1: Facebook Leads trigger (ID: 364093556)"
+                            - listitem [ref=e318]: "Step 2: Webhook POST (ID: 364093557)"
+                          - paragraph [ref=e319]: "The webhook has:"
+                          - list [ref=e320]:
+                            - listitem [ref=e321]:
+                              - text: "url: \""
+                              - link "https://golf-grove-dms.vercel.app/api/meta-lead" [ref=e322] [cursor=pointer]:
+                                - /url: https://golf-grove-dms.vercel.app/api/meta-lead
+                              - text: "\""
+                            - listitem [ref=e323]: "payload_type: \"json\""
+                            - listitem [ref=e324]:
+                              - text: wrap
+                              - emphasis [ref=e325]: in
+                              - text: "array: false"
+                            - listitem [ref=e326]: "unflatten: true"
+                            - listitem [ref=e327]:
+                              - text: "data: Currently has \"full"
+                              - emphasis [ref=e328]: "name\": \"\" and \""
+                              - text: "1\": \"\""
+                          - paragraph [ref=e329]: "The user wants to:"
+                          - list [ref=e330]:
+                            - listitem [ref=e331]: Map multiple fields from the Facebook trigger to the data object
+                            - listitem [ref=e332]: Remove the _1 field
+                            - listitem [ref=e333]: Keep the existing URL, payload type, wrap, and unflatten settings
+                          - paragraph [ref=e334]: "Mappings needed:"
+                          - list [ref=e335]:
+                            - listitem [ref=e336]: full_name → Name
+                            - listitem [ref=e337]: email → Email
+                            - listitem [ref=e338]: phone_number → Phone Number
+                            - listitem [ref=e339]: first_name → First Name
+                            - listitem [ref=e340]: company_name → Company/Brokerage Name
+                            - listitem [ref=e341]: broker_type → Broker Type
+                            - listitem [ref=e342]: budget_range → Budget Range
+                            - listitem [ref=e343]: property_types → Property Types
+                            - listitem [ref=e344]: availability → Availability
+                            - listitem [ref=e345]: lead_id → Lead ID
+                            - listitem [ref=e346]: form_id → Form ID
+                          - paragraph [ref=e347]: "There's a blocking issue that the webhook step hasn't been tested. I should:"
+                          - list [ref=e348]:
+                            - listitem [ref=e349]: First get the fields from the Facebook trigger to see what output data is available
+                            - listitem [ref=e350]: Then map those fields to the webhook data object
+                            - listitem [ref=e351]: Use the first user message modifying the Zap, so I need to include zapEditCheckpoint
+                          - paragraph [ref=e352]: Actually, let me reconsider. The blocking issue says "Please test this step" for step 364093557 (the webhook). But I need data from step 364093556 (the Facebook trigger) to know what fields are available to map.
+                          - paragraph [ref=e353]: "Let me:"
+                          - list [ref=e354]:
+                            - listitem [ref=e355]: Get fields for the Facebook trigger step to see what output is available
+                            - listitem [ref=e356]: Get fields for the webhook step to understand the data structure
+                            - listitem [ref=e357]: Update the webhook step with the proper field mappings using template variables from the trigger
+                          - list [ref=e358]:
+                            - listitem [ref=e359]: Test the webhook step to resolve the blocking issue
+                          - paragraph [ref=e360]: Since this is a modification to an existing Zap (user message after the Zap was created), I should include zapEditCheckpoint on my FIRST modifying tool call. I'll start by retrieving the available fields from both steps so I can properly map the Facebook lead data to the webhook payload.
+                      - generic [ref=e361]:
+                        - img [ref=e364]
+                        - generic [ref=e369]: I'll help you configure the webhook data mappings. First, let me get the available fields from the Facebook Lead Ads trigger, then map them to your webhook data fields.
+                      - generic [ref=e370]:
+                        - img [ref=e373]
+                        - generic [ref=e378]:
+                          - generic [ref=e379]:
+                            - generic [ref=e380]: Get Fields For Steps called
+                            - img [ref=e381]
+                          - button "Expand tool call details" [ref=e383] [cursor=pointer]:
+                            - text: Tool Call
+                            - img [ref=e384]
+                      - generic [ref=e386]:
+                        - img [ref=e389]
+                        - generic [ref=e394]: "Perfect! I can see the Facebook Lead Ads output fields. Now I'll map them to your webhook data fields. I notice the Facebook form has some field names with special characters (like \"what's_your_company_/_brokerage_name?\" for Company/Brokerage Name). Let me configure the webhook data object with all your requested mappings:"
+                      - generic [ref=e395]:
+                        - img [ref=e398]
+                        - generic [ref=e401]:
+                          - generic [ref=e402]:
+                            - generic [ref=e403]: Update Zap Steps called
+                            - img [ref=e404]
+                          - button "Expand tool call details" [ref=e406] [cursor=pointer]:
+                            - text: Tool Call
+                            - img [ref=e407]
+                  - generic [ref=e411]:
+                    - paragraph [ref=e412]:
+                      - text: Great! I've configured all 11 data fields and removed the
+                      - code [ref=e413]: _1
+                      - text: "field. Your webhook is now set to POST JSON with:"
+                    - paragraph [ref=e414]:
+                      - strong [ref=e415]: "Field Mappings:"
+                    - list [ref=e416]:
+                      - listitem [ref=e417]:
+                        - code [ref=e418]: full_name
+                        - text: ← Full Name
+                      - listitem [ref=e419]:
+                        - code [ref=e420]: email
+                        - text: ← Email
+                      - listitem [ref=e421]:
+                        - code [ref=e422]: phone_number
+                        - text: ← Phone Number
+                      - listitem [ref=e423]:
+                        - code [ref=e424]: first_name
+                        - text: ← First Name
+                      - listitem [ref=e425]:
+                        - code [ref=e426]: company_name
+                        - text: ← Company/Brokerage Name
+                      - listitem [ref=e427]:
+                        - code [ref=e428]: broker_type
+                        - text: ← Broker Type
+                      - listitem [ref=e429]:
+                        - code [ref=e430]: budget_range
+                        - text: ← Budget Range
+                      - listitem [ref=e431]:
+                        - code [ref=e432]: property_types
+                        - text: ← Property Types
+                      - listitem [ref=e433]:
+                        - code [ref=e434]: availability
+                        - text: ← Availability
+                      - listitem [ref=e435]:
+                        - code [ref=e436]: lead_id
+                        - text: ← Lead ID
+                      - listitem [ref=e437]:
+                        - code [ref=e438]: form_id
+                        - text: ← Form ID
+                    - paragraph [ref=e439]:
+                      - strong [ref=e440]: "Settings (unchanged):"
+                    - list [ref=e441]:
+                      - listitem [ref=e442]:
+                        - text: "URL:"
+                        - code [ref=e443]: https://golf-grove-dms.vercel.app/api/meta-lead
+                      - listitem [ref=e444]: "Payload Type: JSON"
+                      - listitem [ref=e445]: "Wrap in Array: No"
+                      - listitem [ref=e446]: "Unflatten: Yes"
+                    - paragraph [ref=e447]: "Now let me test the webhook step to verify everything works:"
+                  - generic [ref=e449]:
+                    - generic [ref=e450]:
+                      - img [ref=e452]
+                      - generic [ref=e454]: Test "2. POST in Webhooks by Zapier"
+                    - img [ref=e456]
+                  - button "Copy" [ref=e460] [cursor=pointer]:
+                    - status [ref=e462]:
+                      - generic [ref=e463]: Loading
+                    - img [ref=e465]
+            - generic [ref=e115]:
+              - textbox "Chat with Copilot" [ref=e117]
+              - generic [ref=e118]:
+                - button "Dictate" [ref=e469] [cursor=pointer]:
+                  - status [ref=e471]:
+                    - generic [ref=e472]: Loading
+                  - img [ref=e474]
+                - generic [ref=e119]:
+                  - button "Build mode" [ref=e121] [cursor=pointer]:
+                    - img [ref=e122]
+                    - generic [ref=e124]: Build
+                  - button "Send" [disabled] [ref=e125]:
+                    - status [ref=e127]:
+                      - generic [ref=e128]: Loading
+                    - img [ref=e130]
+            - paragraph [ref=e132]: Copilot and AI may be inaccurate. Please double-check responses.
+      - main [ref=e133]:
+        - generic [ref=e134]:
+          - generic [ref=e477]:
+            - generic [ref=e849]:
+              - img [ref=e850]
+              - button "Open Copilot panel" [ref=e852]: Tested step
+            - generic [ref=e478]:
+              - generic [ref=e480]:
+                - generic:
+                  - img:
+                    - generic:
+                      - img "Edge from 364093556 to 364093556--add-step-button" [ref=e481] [cursor=pointer]
+                      - img "Edge from 364093556--add-step-button to 364093557" [ref=e483] [cursor=pointer]
+                      - img "Edge from 364093557 to 364093557--add-step-button" [ref=e485] [cursor=pointer]
+                  - generic:
+                    - button "Open New Lead in Facebook Lead Ads" [ref=e492]:
+                      - generic [ref=e493]:
+                        - generic [ref=e494]:
+                          - generic [ref=e495]:
+                            - img "complete" [ref=e855]
+                            - generic [ref=e497]:
+                              - img "Facebook Lead Ads" [ref=e499]
+                              - generic [ref=e500]: Facebook Lead Ads
+                            - button "Instant Trigger" [ref=e858]:
+                              - img "Instant Trigger" [ref=e859]
+                          - generic [ref=e501]:
+                            - generic [ref=e503]: "1."
+                            - generic [ref=e505]: New Lead
+                        - button "Toggle step menu for New Lead in Facebook Lead Ads" [ref=e510]:
+                          - img [ref=e512]
+                    - generic [ref=e517]:
+                      - button "Add step" [ref=e519] [cursor=pointer]:
+                        - img [ref=e520]
+                      - generic:
+                        - tooltip: Add step
+                    - button "Open POST in Webhooks by Zapier" [active] [ref=e527]:
+                      - generic [ref=e528]:
+                        - generic [ref=e529]:
+                          - generic [ref=e530]:
+                            - button "incomplete" [ref=e861] [cursor=pointer]:
+                              - img "incomplete" [ref=e863]
+                            - generic [ref=e532]:
+                              - img "Webhooks by Zapier" [ref=e534]
+                              - generic [ref=e535]: Webhooks by Zapier
+                          - generic [ref=e536]:
+                            - generic [ref=e538]: "2."
+                            - generic [ref=e540]: POST
+                        - button "Toggle step menu for POST in Webhooks by Zapier" [ref=e545]:
+                          - img [ref=e547]
+                      - img [ref=e550]
+                    - generic [ref=e560]:
+                      - button "Add step" [ref=e562] [cursor=pointer]:
+                        - img [ref=e563]
+                      - generic:
+                        - tooltip: Add step
+              - img [ref=e565]
+              - img [ref=e566]
+              - img [ref=e567]
+              - img [ref=e568]
+              - img [ref=e569]
+              - img [ref=e570]
+          - generic [ref=e574]:
+            - button "Manage Components" [ref=e576] [cursor=pointer]:
+              - img [ref=e577]
+              - generic [ref=e581]: Library
+            - generic [ref=e583]:
+              - button "Show Apps" [ref=e584] [cursor=pointer]:
+                - img [ref=e585]
+              - button "Show Zapier products" [ref=e590] [cursor=pointer]:
+                - img [ref=e591]
+              - button "Show Built-in tools" [ref=e593] [cursor=pointer]:
+                - img [ref=e594]
+              - button "Show Search for an app" [ref=e598] [cursor=pointer]:
+                - img [ref=e599]
+        - complementary [ref=e603]:
+          - generic [ref=e605]:
+            - generic [ref=e606]:
+              - img [ref=e610]
+              - generic [ref=e611]:
+                - generic [ref=e612]: "2."
+                - generic [ref=e615] [cursor=pointer]:
+                  - text: POST
+                  - img [ref=e617]
+              - generic [ref=e619]:
+                - button "Open step details in focus mode" [ref=e620] [cursor=pointer]:
+                  - status [ref=e622]:
+                    - generic [ref=e623]: Loading
+                  - img [ref=e625]
+                - button "Close step details" [ref=e630] [cursor=pointer]:
+                  - status [ref=e632]:
+                    - generic [ref=e633]: Loading
+                  - img [ref=e635]
+            - tablist [ref=e638]:
+              - tab "Show Setup" [ref=e639] [cursor=pointer]:
+                - generic [ref=e641]:
+                  - text: Setup
+                  - img "complete" [ref=e643]
+              - img [ref=e646]
+              - tab "Show Configure" [ref=e648] [cursor=pointer]:
+                - generic [ref=e650]:
+                  - text: Configure
+                  - img "complete" [ref=e652]
+              - img [ref=e655]
+              - tab "Show Test" [selected] [ref=e657] [cursor=pointer]:
+                - generic [ref=e659]:
+                  - text: Test
+                  - img "incomplete" [ref=e661]
+            - tabpanel "Show Test" [ref=e665]:
+              - generic [ref=e669]:
+                - generic [ref=e670]:
+                  - generic [ref=e671]:
+                    - img [ref=e673]
+                    - img [ref=e676]
+                    - img [ref=e679]
+                  - generic [ref=e680]:
+                    - generic [ref=e681]: Send request to Webhooks by Zapier
+                    - generic [ref=e682]: "To test Webhooks by Zapier, we need to create a new request. This is what will be created:"
+                - generic "MultiView Run Step Data" [ref=e683]:
+                  - tablist [ref=e685]:
+                    - tab "Show Data in" [selected] [ref=e686] [cursor=pointer]:
+                      - generic [ref=e687]: Data in
+                  - tabpanel "Show Data in" [ref=e688]:
+                    - generic [ref=e692]:
+                      - img [ref=e694]
+                      - textbox "Search item data" [ref=e697]:
+                        - /placeholder: Search item data…
+                    - generic [ref=e700]:
+                      - generic "Sample Preview" [ref=e702]:
+                        - generic [ref=e703]:
+                          - generic "payload_type" [ref=e705]:
+                            - generic [ref=e707]: payload_type
+                            - generic "json" [ref=e708]:
+                              - generic [ref=e710]: json
+                          - generic "wrap_in_array" [ref=e712]:
+                            - generic [ref=e714]: wrap_in_array
+                            - generic "false" [ref=e715]:
+                              - generic [ref=e717]: "false"
+                          - generic "unflatten" [ref=e719]:
+                            - generic [ref=e721]: unflatten
+                            - generic "true" [ref=e722]:
+                              - generic [ref=e724]: "true"
+                          - generic "url" [ref=e726]:
+                            - generic [ref=e728]: url
+                            - generic "https://golf-grove-dms.vercel.app/api/meta-lead" [ref=e729]:
+                              - generic [ref=e731]: https://golf-grove-dms.vercel.app/api/meta-lead
+                          - generic "data" [ref=e733]:
+                            - generic [ref=e735]: data
+                          - generic "data-email" [ref=e739]:
+                            - generic [ref=e741]: email
+                            - generic "praful.rawat@gmail.com" [ref=e742]:
+                              - generic [ref=e744]: praful.rawat@gmail.com
+                          - generic "data-phone_number" [ref=e746]:
+                            - generic [ref=e748]: phone_number
+                            - generic "+971558950540" [ref=e749]:
+                              - generic [ref=e751]: "+971558950540"
+                          - generic "data-first_name" [ref=e753]:
+                            - generic [ref=e755]: first_name
+                            - generic "Reyansh" [ref=e756]:
+                              - generic [ref=e758]: Reyansh
+                          - generic "data-company_name" [ref=e760]:
+                            - generic [ref=e762]: company_name
+                            - generic "Broadway Signature properties" [ref=e763]:
+                              - generic [ref=e765]: Broadway Signature properties
+                          - generic "data-broker_type" [ref=e767]:
+                            - generic [ref=e769]: broker_type
+                            - generic "Real Estate Broker / Agent" [ref=e770]:
+                              - generic [ref=e772]: Real Estate Broker / Agent
+                          - generic "data-budget_range" [ref=e774]:
+                            - generic [ref=e776]: budget_range
+                            - generic "AED 1.8M – AED 2.1M" [ref=e777]:
+                              - generic [ref=e779]: AED 1.8M – AED 2.1M
+                          - generic "data-property_types" [ref=e781]:
+                            - generic [ref=e783]: property_types
+                            - generic "2 Bedroom" [ref=e784]:
+                              - generic [ref=e786]: 2 Bedroom
+                          - generic "data-availability" [ref=e788]:
+                            - generic [ref=e790]: availability
+                            - generic "Immediately" [ref=e791]:
+                              - generic [ref=e793]: Immediately
+                          - generic "data-lead_id" [ref=e795]:
+                            - generic [ref=e797]: lead_id
+                            - generic "998199519810591" [ref=e798]:
+                              - generic [ref=e800]: "998199519810591"
+                          - generic "data-form_id" [ref=e802]:
+                            - generic [ref=e804]: form_id
+                            - generic "1552506906032143" [ref=e805]:
+                              - generic [ref=e807]: "1552506906032143"
+                      - generic [ref=e809]: "Empty fields:"
+                      - generic "Sample Preview" [ref=e811]:
+                        - generic [ref=e812]:
+                          - generic "File" [ref=e814]:
+                            - generic [ref=e816]: File
+                            - generic [ref=e818]: empty (optional)
+                          - generic "Basic Auth" [ref=e820]:
+                            - generic [ref=e822]: Basic Auth
+                            - generic [ref=e824]: empty (optional)
+                          - generic "Headers" [ref=e826]:
+                            - generic [ref=e828]: Headers
+                            - generic [ref=e830]: empty (optional)
+            - generic [ref=e834]:
+              - button "Skip test" [ref=e835] [cursor=pointer]:
+                - generic [ref=e836]: Skip test
+              - button "Test step" [ref=e838] [cursor=pointer]:
+                - generic [ref=e839]: Test step
+    - contentinfo:
+      - generic [ref=e139]: ver. v2026-05-13t20:24-033e8619
+  - alert [ref=e140]
+  - iframe [ref=e867]:
+    
+  - iframe [ref=e868]:
+    - button "Chat with us" [ref=f16e1] [cursor=pointer]:
+      - img
