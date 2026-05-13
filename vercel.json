@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/meta-lead.js": {
+      "runtime": "@vercel/node@3",
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    { "source": "/api/meta-lead", "destination": "/api/meta-lead.js" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
