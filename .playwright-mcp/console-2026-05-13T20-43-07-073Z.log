@@ -2,3 +2,7 @@
 [     578ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/api/meta-lead:0
 [    2018ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Celements%3Atitle%2Cdue_date&status=eq.Pending&due_date=lt.2026-05-13&limit=20:0
 [    2030ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubject%3Atitle%2Cdue_date&status=eq.Open&due_date=lt.2026-05-13&limit=20:0
+[ 5098719ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/api/meta-lead#dash:0
+[ 5098719ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/api/meta-lead#dash:0
+[ 5101269ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubject%3Atitle%2Cdue_date&status=eq.Open&due_date=lt.2026-05-13&limit=20:0
+[ 5101273ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Celements%3Atitle%2Cdue_date&status=eq.Pending&due_date=lt.2026-05-13&limit=20:0

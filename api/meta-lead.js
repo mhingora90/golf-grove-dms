@@ -1,19 +1,26 @@
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+// @ts-check
+export const config = {
+  runtime: 'edge',
+};
+
+export default async function handler(request) {
+  if (request.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   try {
-    const data = req.body;
+    const data = await request.json();
     const leadId = data.lead_id || data.leadgen_id || '';
     const formId = data.form_id || data.adgroup_id || '';
-    
-    // Extract fields - handle both flat and nested field_data formats
+
+    // Extract fields
     const fields = {};
     if (data.field_data && Array.isArray(data.field_data)) {
       data.field_data.forEach(f => { fields[f.name] = (f.values || []).join(', '); });
     }
-    // Also check for flat fields (Zapier sends them flat)
     if (data.full_name) fields.full_name = data.full_name;
     if (data.email) fields.email = data.email;
     if (data.phone_number) fields.phone_number = data.phone_number;
@@ -44,7 +51,10 @@ export default async function handler(req, res) {
 
     if (!SUPABASE_KEY) {
       console.log('[Meta Lead] No SUPABASE_KEY. Lead:', JSON.stringify(lead));
-      return res.status(200).json({ status: 'logged_no_key', lead });
+      return new Response(JSON.stringify({ status: 'logged_no_key', lead }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const headers = {
@@ -54,7 +64,7 @@ export default async function handler(req, res) {
       'Prefer': 'return=representation',
     };
 
-    // Check for duplicate by meta_lead_id or email
+    // Check for duplicate
     const orFilter = `meta_lead_id.eq.${leadId}` + (lead.email ? `,email.eq.${lead.email}` : '');
     const checkUrl = `${SUPABASE_URL}/rest/v1/crm_leads?select=id&or=(${orFilter})&limit=1`;
     const checkRes = await fetch(checkUrl, { headers });
@@ -62,7 +72,10 @@ export default async function handler(req, res) {
 
     if (existing && existing.length > 0) {
       console.log(`[Meta Lead] Duplicate lead ${leadId}`);
-      return res.status(200).json({ status: 'duplicate', id: existing[0].id });
+      return new Response(JSON.stringify({ status: 'duplicate', id: existing[0].id }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/crm_leads`, {
@@ -74,13 +87,22 @@ export default async function handler(req, res) {
 
     if (!insertRes.ok) {
       console.error('[Meta Lead] Error:', JSON.stringify(result));
-      return res.status(500).json({ error: result });
+      return new Response(JSON.stringify({ error: result }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     console.log(`[Meta Lead] New lead: ${lead.name} (${leadId})`);
-    return res.status(200).json({ status: 'created', id: result[0]?.id });
+    return new Response(JSON.stringify({ status: 'created', id: result[0]?.id }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (e) {
     console.error('[Meta Lead] Error:', e.message);
-    return res.status(500).json({ error: e.message });
+    return new Response(JSON.stringify({ error: e.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }
