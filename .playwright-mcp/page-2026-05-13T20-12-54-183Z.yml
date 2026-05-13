@@ -1,0 +1,89 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - button "Open Sidebar" [ref=e10] [cursor=pointer]:
+          - img [ref=e11]
+        - banner [ref=e15]:
+          - link "Go to the Zapier Homepage" [ref=e16] [cursor=pointer]:
+            - /url: /
+            - img [ref=e17]
+          - generic [ref=e26]:
+            - link "Skip to main content":
+              - /url: "#asset-management-main"
+              - text: Skip to content
+      - form "Manage your account" [ref=e27]:
+        - link "Help" [ref=e29] [cursor=pointer]:
+          - /url: /app/get-help
+          - generic [ref=e30]:
+            - img [ref=e31]
+            - text: Help
+        - link "Explore apps" [ref=e36] [cursor=pointer]:
+          - /url: /apps
+          - generic [ref=e37]:
+            - img [ref=e38]
+            - text: Explore apps
+        - link "Contact Sales" [ref=e44] [cursor=pointer]:
+          - /url: https://zapier.com/l/contact-sales?demo_source=cs_nav_header_/app/assets/zaps
+        - group [ref=e46]:
+          - generic "Accounts Settings" [ref=e47] [cursor=pointer]:
+            - img "⋯" [ref=e48]:
+              - generic [ref=e49]: ⋯
+    - navigation "Site Links" [ref=e51]:
+      - generic [ref=e52]:
+        - button "Create" [ref=e56] [cursor=pointer]:
+          - img [ref=e58]
+        - list [ref=e61]:
+          - listitem [ref=e62]:
+            - list [ref=e63]:
+              - listitem [ref=e64]:
+                - link "Home" [ref=e65] [cursor=pointer]:
+                  - /url: /app/home
+                  - generic [ref=e66]:
+                    - img [ref=e68]
+                    - generic:
+                      - generic: Home
+              - listitem [ref=e70]:
+                - link "Assets" [ref=e71] [cursor=pointer]:
+                  - /url: /app/assets
+                  - generic [ref=e72]:
+                    - img [ref=e74]
+                    - generic:
+                      - generic: Assets
+          - listitem [ref=e76]:
+            - separator [ref=e77]
+          - listitem [ref=e78]:
+            - list [ref=e79]:
+              - listitem [ref=e80]:
+                - link "App connections" [ref=e81] [cursor=pointer]:
+                  - /url: /app/connections
+                  - generic [ref=e82]:
+                    - img [ref=e84]
+                    - generic:
+                      - generic: App connections
+              - listitem [ref=e89]:
+                - link "Zap history" [ref=e90] [cursor=pointer]:
+                  - /url: /app/history
+                  - generic [ref=e91]:
+                    - img [ref=e93]
+                    - generic:
+                      - generic: Zap history
+          - listitem [ref=e95]:
+            - button "More" [ref=e97] [cursor=pointer]:
+              - generic [ref=e98]:
+                - img [ref=e100]
+                - generic [ref=e104]: More
+    - main [ref=e105]
+    - contentinfo [ref=e107]:
+      - generic [ref=e109]:
+        - paragraph [ref=e110]: © 2026 Zapier Inc.
+        - list [ref=e111]:
+          - listitem [ref=e112]:
+            - link "Legal" [ref=e113] [cursor=pointer]:
+              - /url: /legal
+          - listitem [ref=e114]:
+            - link "Privacy" [ref=e115] [cursor=pointer]:
+              - /url: /privacy
+          - listitem [ref=e116]:
+            - button "Manage cookies" [ref=e117] [cursor=pointer]
+  - alert [ref=e118]

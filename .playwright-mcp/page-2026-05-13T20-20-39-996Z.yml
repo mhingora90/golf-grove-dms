@@ -1,0 +1,336 @@
+- generic [active] [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - link "Home" [ref=e9] [cursor=pointer]:
+            - /url: /app/home
+            - generic [ref=e11]:
+              - img
+          - button "Automation products" [ref=e13] [cursor=pointer]:
+            - img [ref=e17]
+          - link "Zaps" [ref=e20] [cursor=pointer]:
+            - /url: /app/assets/zaps
+            - generic [ref=e21]:
+              - img [ref=e23]
+              - heading "Zaps" [level=1] [ref=e26]
+          - button "This Zap is using 1 Pro feature" [ref=e30] [cursor=pointer]:
+            - img [ref=e31]
+            - text: This Zap is using 1 Pro feature
+            - img [ref=e33]
+        - generic [ref=e38]:
+          - link "Mohammed Hingora (Personal) /" [ref=e39] [cursor=pointer]:
+            - /url: https://zapier.com/app/assets/zaps/folders/personal
+            - generic [ref=e40]:
+              - img [ref=e41]
+              - generic [ref=e43]: Mohammed Hingora (Personal)
+              - text: /
+          - button "Mohammed Hingora Untitled Zap Draft" [ref=e44] [cursor=pointer]:
+            - generic [ref=e45]:
+              - img "Mohammed Hingora" [ref=e47]:
+                - generic [ref=e48]: MH
+              - generic [ref=e49]: Untitled Zap
+              - generic [ref=e51]: Draft
+              - generic [ref=e52]:
+                - img
+        - generic [ref=e53]:
+          - generic "More actions" [ref=e55]:
+            - button "110%" [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]:
+                - generic [ref=e59]: 110%
+                - generic [ref=e60]:
+                  - img
+          - button "Help" [ref=e62] [cursor=pointer]:
+            - generic [ref=e63]:
+              - generic [ref=e64]:
+                - img
+              - generic [ref=e65]: Help
+              - generic [ref=e66]:
+                - img
+    - generic [ref=e67]:
+      - region [ref=e68]:
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - button "search-button" [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - img [ref=e73]
+                - generic [ref=e76]: Search
+              - generic [ref=e77]:
+                - generic [ref=e78]: Ctrl
+                - generic [ref=e80]: ⇧
+                - generic [ref=e82]: F
+            - checkbox "Turn Zap on" [disabled] [ref=e86]
+          - generic [ref=e88]:
+            - generic [ref=e359]:
+              - button "Undo" [disabled] [ref=e360]:
+                - generic [ref=e361]:
+                  - img [ref=e362]
+                  - text: Undo
+              - button "View undo history" [disabled] [ref=e365]:
+                - status [ref=e367]:
+                  - generic [ref=e368]: Loading
+                - img [ref=e370]
+            - button "Test run" [ref=e373] [cursor=pointer]:
+              - generic [ref=e374]:
+                - img [ref=e375]
+                - generic [ref=e377]: Test run
+            - generic [ref=e379]:
+              - button "Publish this Zap" [disabled]:
+                - generic:
+                  - img
+                  - generic: Publish
+      - generic [ref=e89]:
+        - img [ref=e90]
+        - generic [ref=e380]: It looks like you have this Zap open in multiple tabs. This can potentially cause unexpected issues like overriding current edits.
+      - complementary "Editor sidebar" [ref=e92]:
+        - generic [ref=e93]:
+          - list [ref=e94]:
+            - listitem [ref=e95]:
+              - button "Linked assets" [ref=e96] [cursor=pointer]:
+                - img [ref=e97]
+            - listitem [ref=e102]:
+              - button "Recent Zaps" [ref=e103] [cursor=pointer]:
+                - img [ref=e104]
+            - listitem [ref=e107]:
+              - button "Zap details" [ref=e108] [cursor=pointer]:
+                - img [ref=e109]
+            - listitem [ref=e111]:
+              - button "Notes" [ref=e112] [cursor=pointer]:
+                - img [ref=e113]
+            - listitem [ref=e117]:
+              - button "Change history" [ref=e118] [cursor=pointer]:
+                - img [ref=e119]
+            - listitem [ref=e127]:
+              - button "Zap runs" [ref=e128] [cursor=pointer]:
+                - img [ref=e129]
+            - listitem [ref=e131]:
+              - button "Status" [ref=e132] [cursor=pointer]:
+                - img [ref=e133]
+                - generic [ref=e382]: "1"
+            - listitem [ref=e135]:
+              - button "Advanced settings" [ref=e136] [cursor=pointer]:
+                - img [ref=e137]
+            - listitem [ref=e140]:
+              - button "Versions" [ref=e141] [cursor=pointer]:
+                - img [ref=e142]
+          - button "Copilot" [ref=e148] [cursor=pointer]:
+            - img [ref=e154]
+      - complementary "Copilot" [ref=e161]:
+        - status [ref=e162]
+        - generic [ref=e164]:
+          - generic [ref=e166]:
+            - generic [ref=e168]:
+              - img [ref=e171]
+              - generic [ref=e177]: Copilot
+            - generic [ref=e178]:
+              - button "Create checkpoint" [disabled] [ref=e179]:
+                - status [ref=e181]:
+                  - generic [ref=e182]: Loading
+                - img [ref=e184]
+              - button "Copilot Settings" [ref=e186] [cursor=pointer]:
+                - status [ref=e188]:
+                  - generic [ref=e189]: Loading
+                - img [ref=e191]
+              - button "Close Copilot" [ref=e194] [cursor=pointer]:
+                - status [ref=e196]:
+                  - generic [ref=e197]: Loading
+                - img [ref=e199]
+          - generic [ref=e201]:
+            - generic [ref=e202]:
+              - list
+            - generic [ref=e204]:
+              - textbox "Chat with Copilot" [ref=e206]
+              - generic [ref=e207]:
+                - button "Dictate" [ref=e209] [cursor=pointer]:
+                  - status [ref=e211]:
+                    - generic [ref=e212]: Loading
+                  - img [ref=e214]
+                - generic [ref=e217]:
+                  - button "Build mode" [ref=e219] [cursor=pointer]:
+                    - img [ref=e220]
+                    - generic [ref=e222]: Build
+                  - button "Send" [disabled] [ref=e223]:
+                    - status [ref=e225]:
+                      - generic [ref=e226]: Loading
+                    - img [ref=e228]
+            - paragraph [ref=e230]: Copilot and AI may be inaccurate. Please double-check responses.
+      - main [ref=e231]:
+        - generic [ref=e232]:
+          - generic [ref=e233]:
+            - generic [ref=e383]:
+              - generic [ref=e384]:
+                - img [ref=e385]
+                - button "Open Copilot panel" [ref=e391]: Copilot can fully configure your workflow
+              - generic [ref=e392]:
+                - button "Build it" [ref=e393] [cursor=pointer]:
+                  - generic [ref=e394]: Build it
+                - button "Close indicator" [ref=e395] [cursor=pointer]:
+                  - status [ref=e397]:
+                    - generic [ref=e398]: Loading
+                  - img [ref=e400]
+            - generic [ref=e234]:
+              - generic [ref=e236]:
+                - generic:
+                  - img:
+                    - generic:
+                      - img "Edge from 364093556 to 364093556--add-step-button" [ref=e237] [cursor=pointer]
+                      - img "Edge from 364093556--add-step-button to 364093557" [ref=e239] [cursor=pointer]
+                      - img "Edge from 364093557 to 364093557--add-step-button" [ref=e241] [cursor=pointer]
+                  - generic:
+                    - button "Open New Lead in Facebook Lead Ads" [ref=e248]:
+                      - generic [ref=e249]:
+                        - generic [ref=e250]:
+                          - generic [ref=e251]:
+                            - img "complete" [ref=e404]
+                            - generic [ref=e253]:
+                              - img "Facebook Lead Ads" [ref=e255]
+                              - generic [ref=e256]: Facebook Lead Ads
+                            - button "Instant Trigger" [ref=e407]:
+                              - img "Instant Trigger" [ref=e408]
+                          - generic [ref=e257]:
+                            - generic [ref=e259]: "1."
+                            - generic [ref=e261]: New Lead
+                        - button "Toggle step menu for New Lead in Facebook Lead Ads" [ref=e266]:
+                          - img [ref=e268]
+                    - generic [ref=e273]:
+                      - button "Add step" [ref=e275] [cursor=pointer]:
+                        - img [ref=e276]
+                      - generic:
+                        - tooltip: Add step
+                    - button "Open POST in Webhooks by Zapier" [ref=e283] [cursor=pointer]:
+                      - generic [ref=e284]:
+                        - generic [ref=e285]:
+                          - generic [ref=e286]:
+                            - button "incomplete" [ref=e410]:
+                              - img "incomplete" [ref=e412]
+                            - generic [ref=e288]:
+                              - img "Webhooks by Zapier" [ref=e290]
+                              - generic [ref=e291]: Webhooks by Zapier
+                          - generic [ref=e292]:
+                            - generic [ref=e294]: "2."
+                            - generic [ref=e296]: POST
+                        - button "Toggle step menu for POST in Webhooks by Zapier" [ref=e301]:
+                          - img [ref=e303]
+                      - img [ref=e306]
+                    - generic [ref=e316]:
+                      - button "Add step" [ref=e318] [cursor=pointer]:
+                        - img [ref=e319]
+                      - generic:
+                        - tooltip: Add step
+              - img [ref=e321]
+              - img [ref=e322]
+              - img [ref=e323]
+              - img [ref=e324]
+              - img [ref=e325]
+              - img [ref=e326]
+          - generic [ref=e330]:
+            - button "Manage Components" [ref=e332] [cursor=pointer]:
+              - img [ref=e333]
+              - generic [ref=e337]: Library
+            - generic [ref=e339]:
+              - button "Show Apps" [ref=e340] [cursor=pointer]:
+                - img [ref=e341]
+              - button "Show Zapier products" [ref=e346] [cursor=pointer]:
+                - img [ref=e347]
+              - button "Show Built-in tools" [ref=e349] [cursor=pointer]:
+                - img [ref=e350]
+              - button "Show Search for an app" [ref=e354] [cursor=pointer]:
+                - img [ref=e355]
+        - complementary [ref=e417]:
+          - generic [ref=e419]:
+            - generic [ref=e420]:
+              - img [ref=e424]
+              - generic [ref=e425]:
+                - generic [ref=e426]: "2."
+                - generic [ref=e429] [cursor=pointer]:
+                  - text: POST
+                  - img [ref=e431]
+              - generic [ref=e433]:
+                - button "Open step details in focus mode" [ref=e434] [cursor=pointer]:
+                  - status [ref=e436]:
+                    - generic [ref=e437]: Loading
+                  - img [ref=e439]
+                - button "Close step details" [ref=e444] [cursor=pointer]:
+                  - status [ref=e446]:
+                    - generic [ref=e447]: Loading
+                  - img [ref=e449]
+            - tablist [ref=e452]:
+              - tab "Show Setup" [ref=e453] [cursor=pointer]:
+                - generic [ref=e455]:
+                  - text: Setup
+                  - img "complete" [ref=e457]
+              - img [ref=e460]
+              - tab "Show Configure" [ref=e462] [cursor=pointer]:
+                - generic [ref=e464]:
+                  - text: Configure
+                  - img "complete" [ref=e466]
+              - img [ref=e469]
+              - tab "Show Test" [selected] [ref=e471] [cursor=pointer]:
+                - generic [ref=e473]:
+                  - text: Test
+                  - img "incomplete" [ref=e475]
+            - tabpanel "Show Test" [ref=e479]:
+              - generic [ref=e483]:
+                - generic [ref=e484]:
+                  - generic [ref=e485]:
+                    - img [ref=e487]
+                    - img [ref=e490]
+                    - img [ref=e493]
+                  - generic [ref=e494]:
+                    - generic [ref=e495]: Send request to Webhooks by Zapier
+                    - generic [ref=e496]: "To test Webhooks by Zapier, we need to create a new request. This is what will be created:"
+                - generic "MultiView Run Step Data" [ref=e497]:
+                  - tablist [ref=e499]:
+                    - tab "Show Data in" [selected] [ref=e500] [cursor=pointer]:
+                      - generic [ref=e501]: Data in
+                  - tabpanel "Show Data in" [ref=e502]:
+                    - generic [ref=e506]:
+                      - img [ref=e508]
+                      - textbox "Search item data" [ref=e511]:
+                        - /placeholder: Search item data…
+                    - generic [ref=e514]:
+                      - generic "Sample Preview" [ref=e516]:
+                        - generic [ref=e517]:
+                          - generic "payload_type" [ref=e519]:
+                            - generic [ref=e521]: payload_type
+                            - generic "json" [ref=e522]:
+                              - generic [ref=e524]: json
+                          - generic "wrap_in_array" [ref=e526]:
+                            - generic [ref=e528]: wrap_in_array
+                            - generic "false" [ref=e529]:
+                              - generic [ref=e531]: "false"
+                          - generic "unflatten" [ref=e533]:
+                            - generic [ref=e535]: unflatten
+                            - generic "true" [ref=e536]:
+                              - generic [ref=e538]: "true"
+                          - generic "url" [ref=e540]:
+                            - generic [ref=e542]: url
+                            - generic "https://golf-grove-dms.vercel.app/api/meta-lead" [ref=e543]:
+                              - generic [ref=e545]: https://golf-grove-dms.vercel.app/api/meta-lead
+                          - generic "data" [ref=e547]:
+                            - generic [ref=e549]: data
+                      - generic [ref=e553]: "Empty fields:"
+                      - generic "Sample Preview" [ref=e555]:
+                        - generic [ref=e556]:
+                          - generic "File" [ref=e558]:
+                            - generic [ref=e560]: File
+                            - generic [ref=e562]: empty (optional)
+                          - generic "Basic Auth" [ref=e564]:
+                            - generic [ref=e566]: Basic Auth
+                            - generic [ref=e568]: empty (optional)
+                          - generic "Headers" [ref=e570]:
+                            - generic [ref=e572]: Headers
+                            - generic [ref=e574]: empty (optional)
+            - generic [ref=e578]:
+              - button "Skip test" [ref=e579] [cursor=pointer]:
+                - generic [ref=e580]: Skip test
+              - button "Test step" [ref=e582] [cursor=pointer]:
+                - generic [ref=e583]: Test step
+    - contentinfo:
+      - generic [ref=e1]: ver. v2026-05-13t13:37-bdae9074
+  - alert [ref=e358]: Untitled Zap | Zapier
+  - iframe [ref=e590]:
+    
+  - iframe [ref=e591]:
+    - button "Chat with us" [ref=f32e1] [cursor=pointer]:
+      - img

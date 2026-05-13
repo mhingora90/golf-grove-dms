@@ -1,0 +1,70 @@
+[    2750ms] [WARNING] Replay is disabled because neither `replaysSessionSampleRate` nor `replaysOnErrorSampleRate` are set. @ https://reporting-ozff25id3.vercel.zapier-deployment.com/_next/static/chunks/pages/_app-ab2e9d46658f2578.js:27
+[  440802ms] [INFO]  Initialized Datadog RUM: {applicationId: 6aac0761-4777-4557-b857-b06252a6c5f6, clientToken: :censored:, service: zdl-editor, env: production, version: v2026-05-13t13:37-bdae907498c86b69dd9948e05bf2ec4a6759161d-production} @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
+[  440817ms] [INFO]  Set Datadog RUM user: {id: 14719313, email: mhingora@gmail.com, accountId: 14718194, userPlan: free} @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
+[  441192ms] [WARNING] CopilotProvider: No handoff tool added because registry and copilotId are required @ https://zapier.com/editor/_next/static/chunks/lib-8330.45c6c19ae68b921b.js:89
+[  441448ms] [WARNING] CopilotProvider: No handoff tool added because registry and copilotId are required @ https://zapier.com/editor/_next/static/chunks/lib-8330.45c6c19ae68b921b.js:89
+[  441489ms] [WARNING] CopilotProvider: No handoff tool added because registry and copilotId are required @ https://zapier.com/editor/_next/static/chunks/lib-8330.45c6c19ae68b921b.js:89
+[  441555ms] [WARNING] CopilotProvider: No handoff tool added because registry and copilotId are required @ https://zapier.com/editor/_next/static/chunks/lib-8330.45c6c19ae68b921b.js:89
+[  441698ms] [INFO]  Skipping Zap save because nothing has changed @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
+[  441702ms] [INFO]  Zap creation source: {source: unavailable} @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
+[  446285ms] [INFO]  ⌛️ DeferredRenderingStrategyController: priority-rendering ready @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
+[  451270ms] [INFO]  ⌛️ DeferredRenderingStrategyController: post-lcp-rendering ready @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
+[  456276ms] [INFO]  ⌛️ DeferredRenderingStrategyController: late-rendering ready @ https://edge.fullstory.com/s/fs.js:3
+[  456307ms] [INFO]  Updating editor_view_mode to "canvas" in Intercom @ https://edge.fullstory.com/s/fs.js:3
+[  463501ms] [INFO]  Skipping Zap save because nothing has changed @ https://edge.fullstory.com/s/fs.js:3
+[  637682ms] [INFO]  [handleToolCall] Tool get_fields_for_steps has no execute function {toolName: get_fields_for_steps, toolCallId: toolu_bdrk_01LvoNZLJtSBiraQ3UCtNMiY, hasComponent: false, hasExecute: false} @ https://edge.fullstory.com/s/fs.js:3
+[  646481ms] [INFO]  snapshotZapForUndoCommand {type: checkpoint} @ https://edge.fullstory.com/s/fs.js:3
+[  646486ms] [INFO]  Updating step params {stepId: 364093557, paramsKeys: Array(5), hasMetaParams: yes} @ https://edge.fullstory.com/s/fs.js:3
+[  646919ms] [INFO]  Params validation successful {selected_api: WebHookCLIAPI@1.1.1, type_of: write, action: post} @ https://edge.fullstory.com/s/fs.js:3
+[  647078ms] [INFO]  snapshotZapForUndoCommand {type: tx:start} @ https://edge.fullstory.com/s/fs.js:3
+[  647115ms] [INFO]  snapshotZapForUndoCommand {type: tx:end} @ https://edge.fullstory.com/s/fs.js:3
+[  647834ms] [INFO]  Skipping Zap save because nothing has changed @ https://edge.fullstory.com/s/fs.js:3
+[  653981ms] [INFO]  Skipping Zap save because nothing has changed @ https://edge.fullstory.com/s/fs.js:3
+[  658369ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: , toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  658371ms] [WARNING]  Attempted to get step descriptor for non-existent step  @ https://edge.fullstory.com/s/fs.js:3
+[  658397ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: , toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  658411ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 36409, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  658412ms] [WARNING]  Attempted to get step descriptor for non-existent step 36409 @ https://edge.fullstory.com/s/fs.js:3
+[  658429ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  658464ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  658465ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  658489ms] [INFO]  [TestZapStep:Active] Component MOUNTED {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestMessage: true, isSafeToAutoTest: false} @ https://edge.fullstory.com/s/fs.js:3
+[  658489ms] [INFO]  [TestZapStep:AutoTest] Skipped — no stepId yet (input-streaming?) @ https://edge.fullstory.com/s/fs.js:3
+[  658492ms] [INFO]  [handleToolCall] Tool test_zap_step has no execute function {toolName: test_zap_step, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, hasComponent: true, hasExecute: false} @ https://edge.fullstory.com/s/fs.js:3
+[  658497ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  658498ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  658504ms] [INFO]  [TestZapStep:AutoTest] Decision {stepId: 364093557, willAutoTest: false, isSafeToAutoTest: false, isAlreadyComplete: false, isProcessing: false} @ https://edge.fullstory.com/s/fs.js:3
+[  658527ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  658528ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  658549ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  658550ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  658573ms] [WARNING]  Attempted to get step descriptor for step with non-existent app undefined @ https://edge.fullstory.com/s/fs.js:3
+[  658574ms] [WARNING]  Attempted to get step descriptor for step with non-existent app undefined @ https://edge.fullstory.com/s/fs.js:3
+[  658641ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  658642ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  679316ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  679316ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  767650ms] [INFO]  set field label {stepId: 364093557, fieldName: data, currentLabelValues: undefined, newLabelDesired: , newLabelToUse: } @ https://edge.fullstory.com/s/fs.js:3
+[  767706ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  767707ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  785574ms] [INFO]  set field label {stepId: 364093557, fieldName: data, currentLabelValues: undefined, newLabelDesired: , newLabelToUse: } @ https://edge.fullstory.com/s/fs.js:3
+[  785603ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  785604ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  798674ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  798674ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  798687ms] [INFO]  Skipping Zap save because nothing has changed @ https://edge.fullstory.com/s/fs.js:3
+[  851024ms] [INFO]  set field label {stepId: 364093557, fieldName: data, currentLabelValues: undefined, newLabelDesired: , newLabelToUse: } @ https://edge.fullstory.com/s/fs.js:3
+[  851049ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  851050ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  863393ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  863394ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  863555ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  863556ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  864415ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  864416ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  864528ms] [INFO]  Skipping Zap save because nothing has changed @ https://edge.fullstory.com/s/fs.js:3
+[  864839ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  864840ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[  895880ms] [ERROR] Failed to load resource: the server responded with a status of 422 () @ https://zapier.com/api/gulliver/steptesting/v2/zaps/364093556/steps/364093557/output/test/run?account_id=14718194&origin=main:0
+[  895908ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[  895909ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3

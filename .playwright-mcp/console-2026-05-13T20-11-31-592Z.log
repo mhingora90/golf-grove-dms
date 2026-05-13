@@ -1,0 +1,28 @@
+[    9968ms] [WARNING] This package has been deprecated. We strongly encourage if you are planning to use it for the first time, please use the new library Events-Toolkit-Browser: https://github.com/zapier/events-toolkit-js @ https://identity-ol7mfs7u9.vercel.zapier-deployment.com/_next/static/chunks/pages/_app-f3be8d4efdfcfd20.js:1331
+[   10214ms] [WARNING] No CSRF token found for JWT refresh @ https://identity-ol7mfs7u9.vercel.zapier-deployment.com/_next/static/chunks/pages/_app-f3be8d4efdfcfd20.js:1331
+[   10520ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://zapier.com/_next/data/identity-f426c303f7aae19182d51db58e7ef07b26ae4f74/sign-up.json?next=%2Feditor%2F364093556%2Fdraft%2F364093557%2Ffields&redirect_cause=auth-required:0
+[   10817ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://zapier.com/api/v3/profiles:0
+[   15774ms] [ERROR] Failed to load resource: the server responded with a status of 429 () @ https://o23399.ingest.sentry.io/api/5949244/envelope/?sentry_version=7&sentry_key=44538d18b58d4a709fa09a409e48e6bc&sentry_client=sentry.javascript.nextjs%2F9.47.1:0
+[   18919ms] [LOG] %c%s color: red; background: yellow; font-size: 24px; WARNING! @ https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en.JhxErr_badU.es5.O/am=iW8AAACEQhQhA4D9_38DAAggiA74ngVoAoQMAAAAAAAAAABYAgAAjQ/d=1/excm=_b,_tp,accountchooserview/ed=1/dg=0/wt=2/ujg=1/rs=AOaEmlHLN7zCN9Xxd-EYGdodoiGlpzpzpg/dti=1/m=_b,_tp:545
+[   18920ms] [LOG] %c%s font-size: 18px; Using this console may allow attackers to impersonate you and steal your information using an attack called Self-XSS.
+Do not enter or paste code that you do not understand. @ https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en.JhxErr_badU.es5.O/am=iW8AAACEQhQhA4D9_38DAAggiA74ngVoAoQMAAAAAAAAAABYAgAAjQ/d=1/excm=_b,_tp,accountchooserview/ed=1/dg=0/wt=2/ujg=1/rs=AOaEmlHLN7zCN9Xxd-EYGdodoiGlpzpzpg/dti=1/m=_b,_tp:545
+[   22696ms] [LOG] %c%s color: red; background: yellow; font-size: 24px; WARNING! @ https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.OAuthUi.en.XkbVGrMugMQ.es5.O/am=8gMAAABQBGAA4P__N4AgOvCeAQoQAAAAAAAAAAAMAAAR/d=1/excm=_b,_tp,attributesview/ed=1/dg=0/wt=2/ujg=1/rs=AOaEmlF6q8vBnSP14WwvQH4HIVlirFIbcw/dti=1/m=_b,_tp:530
+[   22697ms] [LOG] %c%s font-size: 18px; Using this console may allow attackers to impersonate you and steal your information using an attack called Self-XSS.
+Do not enter or paste code that you do not understand. @ https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.OAuthUi.en.XkbVGrMugMQ.es5.O/am=8gMAAABQBGAA4P__N4AgOvCeAQoQAAAAAAAAAAAMAAAR/d=1/excm=_b,_tp,attributesview/ed=1/dg=0/wt=2/ujg=1/rs=AOaEmlF6q8vBnSP14WwvQH4HIVlirFIbcw/dti=1/m=_b,_tp:530
+[   27102ms] [INFO]  Initialized Datadog RUM: {applicationId: 6aac0761-4777-4557-b857-b06252a6c5f6, clientToken: :censored:, service: zdl-editor, env: production, version: v2026-05-13t13:37-bdae907498c86b69dd9948e05bf2ec4a6759161d-production} @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
+[   27130ms] [INFO]  Set Datadog RUM user: {id: 14719313, email: mhingora@gmail.com, accountId: 14718194, userPlan: free} @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
+[   27830ms] [WARNING] CopilotProvider: No handoff tool added because registry and copilotId are required @ https://zapier.com/editor/_next/static/chunks/lib-8330.45c6c19ae68b921b.js:89
+[   28124ms] [WARNING] CopilotProvider: No handoff tool added because registry and copilotId are required @ https://zapier.com/editor/_next/static/chunks/lib-8330.45c6c19ae68b921b.js:89
+[   28211ms] [WARNING] CopilotProvider: No handoff tool added because registry and copilotId are required @ https://zapier.com/editor/_next/static/chunks/lib-8330.45c6c19ae68b921b.js:89
+[   28340ms] [WARNING] CopilotProvider: No handoff tool added because registry and copilotId are required @ https://zapier.com/editor/_next/static/chunks/lib-8330.45c6c19ae68b921b.js:89
+[   28387ms] [INFO]  Skipping Zap save because nothing has changed @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
+[   28389ms] [INFO]  Zap creation source: {source: unavailable} @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
+[   30453ms] [INFO]  ⌛️ DeferredRenderingStrategyController: priority-rendering ready @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
+[   32970ms] [INFO]  ⌛️ DeferredRenderingStrategyController: post-lcp-rendering ready @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
+[   34743ms] [WARNING]  Ably presence channel error e: Connection closed
+    at e.fromValues (https://zapier.com/editor/_next/static/chunks/45cbd34e.43cf2204ded5b27e.js:1:4641)
+    at Object.closed (https://zapier.com/editor/_next/static/chunks/45cbd34e.43cf2204ded5b27e.js:1:95149)
+    at nD.close (https://zapier.com/editor/_next/static/chunks/45cbd34e.43cf2204ded5b27e.js:1:95924)
+    at e.closeImpl (https://zapier.com/editor/_next/static/chunks/45cbd34e.43cf2204ded5b27e.js:1:124299)
+    at e.requestState (https://zapier.com/editor/_next/static/chunks/45cbd34e.43cf2204ded5b27e.js:1:120532)
+    at https://zapier.com/editor/_next/static/chunks/45cbd34e.43cf2204ded5b27e.js:1:104603 @ https://zapier.com/editor/_next/static/chunks/app-9118.1b3fe98eea2340cd.js:0
