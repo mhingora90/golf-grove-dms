@@ -35,12 +35,18 @@ http.createServer((req, res) => {
         (data.field_data || []).forEach(f => { fields[f.name] = (f.values || []).join(', '); });
         
         const lead = {
-          name: fields.full_name || fields.email || 'Unknown',
+          name: fields.full_name || fields.first_name || fields.email || 'Unknown',
           email: fields.email || null,
           phone: fields.phone_number || fields.phone || null,
           source: 'meta_ads',
           meta_lead_id: leadId,
           meta_form_id: formId,
+          first_name: fields.first_name || null,
+          broker_type: fields.broker_type || null,
+          budget_range: fields.budget_range || null,
+          property_types: fields.property_types || null,
+          availability: fields.availability || null,
+          company_name: fields.company_name || null,
         };
 
         const supabaseUrl = process.env.SUPABASE_URL || 'https://kdxvhrwnnehicgdryowu.supabase.co';

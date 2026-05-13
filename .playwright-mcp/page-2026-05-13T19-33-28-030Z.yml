@@ -1,0 +1,135 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content":
+    - /url: "#geist-skip-nav"
+  - main [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e9]:
+            - link "mhingora90's projects Hobby" [ref=e10] [cursor=pointer]:
+              - /url: /mhingora90s-projects
+              - img [ref=e11]
+              - generic [ref=e12]:
+                - generic [ref=e13]: mhingora90's projects
+                - generic [ref=e15]: Hobby
+            - button [ref=e16] [cursor=pointer]:
+              - img [ref=e18]
+          - button "Find… F" [ref=e21]:
+            - generic [ref=e23]:
+              - img [ref=e25]
+              - generic [ref=e27]: Find…
+              - generic [ref=e29]: F
+        - navigation [ref=e31]:
+          - generic [ref=e34]:
+            - link "Overview" [ref=e35] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms
+              - generic [ref=e39]: Overview
+            - link "Deployments" [ref=e40] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/deployments
+              - img [ref=e42]
+              - generic [ref=e45]: Deployments
+            - link "Logs" [ref=e46] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/logs
+              - img [ref=e48]
+              - generic [ref=e51]: Logs
+            - link "Analytics" [ref=e52] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/analytics
+              - img [ref=e54]
+              - generic [ref=e57]: Analytics
+            - link "Speed Insights" [ref=e58] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/speed-insights
+              - img [ref=e60]
+              - generic [ref=e63]: Speed Insights
+            - link "Observability" [ref=e64] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/observability
+              - img [ref=e66]
+              - generic [ref=e69]: Observability
+              - img [ref=e71]
+            - link "Firewall" [ref=e73] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/firewall
+              - img [ref=e75]
+              - generic [ref=e79]: Firewall
+              - img [ref=e81]
+            - link "CDN" [ref=e83] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/cdn
+              - img [ref=e85]
+              - generic [ref=e88]: CDN
+              - img [ref=e90]
+            - separator [ref=e92]
+            - link "Environment Variables" [ref=e93] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/settings/environment-variables
+              - img [ref=e95]
+              - generic [ref=e98]: Environment Variables
+            - link "Domains" [ref=e99] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/settings/domains
+              - img [ref=e101]
+              - generic [ref=e104]: Domains
+            - link "Integrations" [ref=e105] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/settings/integrations
+              - img [ref=e107]
+              - generic [ref=e110]: Integrations
+            - link "Storage" [ref=e111] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/stores
+              - img [ref=e113]
+              - generic [ref=e116]: Storage
+            - link "Flags" [ref=e117] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/flags
+              - img [ref=e119]
+              - generic [ref=e122]: Flags
+              - img [ref=e124]
+            - link "Agent" [ref=e126] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/agent
+              - img [ref=e128]
+              - generic [ref=e131]: Agent
+              - img [ref=e133]
+            - link "AI Gateway" [ref=e135] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/ai-gateway
+              - img [ref=e137]
+              - generic [ref=e140]: AI Gateway
+              - img [ref=e142]
+            - link "Sandboxes" [ref=e144] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/sandboxes
+              - img [ref=e146]
+              - generic [ref=e149]: Sandboxes
+            - link "Workflows" [ref=e150] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/workflows
+              - img [ref=e152]
+              - generic [ref=e155]: Workflows
+            - separator [ref=e156]
+            - link "Usage" [ref=e157] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/usage
+              - img [ref=e159]
+              - generic [ref=e162]: Usage
+            - link "Support" [ref=e163] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/support
+              - img [ref=e165]
+              - generic [ref=e168]: Support
+            - link "Settings" [ref=e169] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/settings
+              - img [ref=e171]
+              - generic [ref=e174]: Settings
+              - img [ref=e176]
+        - generic [ref=e180]:
+          - button "Avatar for mhingora90 mhingora90" [disabled]:
+            - img "Avatar for mhingora90":
+              - img "Avatar for mhingora90"
+            - generic:
+              - generic: mhingora90
+            - generic:
+              - img
+          - img [ref=e183]
+      - button [ref=e186] [cursor=pointer]:
+        - img [ref=e187]
+    - generic [ref=e191]:
+      - generic [ref=e194]:
+        - link "golf-grove-dms" [ref=e195] [cursor=pointer]:
+          - /url: /mhingora90s-projects/golf-grove-dms
+          - generic [ref=e198]: golf-grove-dms
+        - button [ref=e199] [cursor=pointer]:
+          - img [ref=e201]
+        - link "Back to team view" [ref=e205] [cursor=pointer]:
+          - /url: /mhingora90s-projects/~/deployments
+          - img [ref=e207]
+      - generic [ref=e211]: Deployments
+      - button "Open page actions menu" [ref=e213] [cursor=pointer]:
+        - img [ref=e215]

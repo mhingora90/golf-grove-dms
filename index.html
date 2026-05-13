@@ -7272,8 +7272,14 @@ async function viewLead(id) {
   openModal('Lead — '+esc(lead.name), `
     <div class="detail-grid">
       <div class="detail-item"><div class="detail-label">Name</div><div class="detail-value">${esc(lead.name)}</div></div>
+      <div class="detail-item"><div class="detail-label">First Name</div><div class="detail-value">${esc(lead.first_name||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Email</div><div class="detail-value">${esc(lead.email||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Phone</div><div class="detail-value">${esc(lead.phone||'—')}</div></div>
+      <div class="detail-item"><div class="detail-label">Company</div><div class="detail-value">${esc(lead.company_name||'—')}</div></div>
+      <div class="detail-item"><div class="detail-label">Broker Type</div><div class="detail-value">${esc(lead.broker_type||'—')}</div></div>
+      <div class="detail-item"><div class="detail-label">Budget Range</div><div class="detail-value">${esc(lead.budget_range||'—')}</div></div>
+      <div class="detail-item"><div class="detail-label">Property Types</div><div class="detail-value">${esc(lead.property_types||'—')}</div></div>
+      <div class="detail-item"><div class="detail-label">Availability</div><div class="detail-value">${esc(lead.availability||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Source</div><div class="detail-value">${esc(lead.source||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Meta Lead ID</div><div class="detail-value mono">${esc(lead.meta_lead_id||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Created</div><div class="detail-value">${new Date(lead.created_at).toLocaleString('en-GB')}</div></div>

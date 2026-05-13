@@ -1,0 +1,312 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content":
+    - /url: "#geist-skip-nav"
+  - main [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e9]:
+            - link "mhingora90's projects Hobby" [ref=e10] [cursor=pointer]:
+              - /url: /mhingora90s-projects
+              - img [ref=e11]
+              - generic [ref=e12]:
+                - generic [ref=e13]: mhingora90's projects
+                - generic [ref=e15]: Hobby
+            - button [ref=e16] [cursor=pointer]:
+              - img [ref=e18]
+          - button "Find… F" [ref=e21]:
+            - generic [ref=e23]:
+              - img [ref=e25]
+              - generic [ref=e27]: Find…
+              - generic [ref=e29]: F
+        - navigation [ref=e31]:
+          - generic [ref=e34]:
+            - link "Other Overview" [ref=e654] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms
+              - img "Other" [ref=e2045]:
+                - img "Other" [ref=e2046]
+              - generic [ref=e39]: Overview
+            - link "Deployments" [ref=e40] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/deployments
+              - img [ref=e42]
+              - generic [ref=e45]: Deployments
+            - link "Logs" [ref=e46] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/logs
+              - img [ref=e48]
+              - generic [ref=e51]: Logs
+            - link "Analytics" [ref=e52] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/analytics
+              - img [ref=e54]
+              - generic [ref=e57]: Analytics
+            - link "Speed Insights" [ref=e58] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/speed-insights
+              - img [ref=e60]
+              - generic [ref=e63]: Speed Insights
+            - link "Observability" [ref=e64] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/observability
+              - img [ref=e66]
+              - generic [ref=e69]: Observability
+              - img [ref=e71]
+            - link "Firewall" [ref=e73] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/firewall
+              - img [ref=e75]
+              - generic [ref=e79]: Firewall
+              - img [ref=e81]
+            - link "CDN" [ref=e83] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/cdn
+              - img [ref=e85]
+              - generic [ref=e88]: CDN
+              - img [ref=e90]
+            - separator [ref=e92]
+            - link "Environment Variables" [ref=e93] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/settings/environment-variables
+              - img [ref=e95]
+              - generic [ref=e98]: Environment Variables
+            - link "Domains" [ref=e99] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/settings/domains
+              - img [ref=e101]
+              - generic [ref=e104]: Domains
+            - link "Integrations" [ref=e105] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/settings/integrations
+              - img [ref=e107]
+              - generic [ref=e110]: Integrations
+            - link "Storage" [ref=e111] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/stores
+              - img [ref=e113]
+              - generic [ref=e116]: Storage
+            - link "Flags" [ref=e117] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/flags
+              - img [ref=e119]
+              - generic [ref=e122]: Flags
+              - img [ref=e124]
+            - link "Agent" [ref=e126] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/agent
+              - img [ref=e128]
+              - generic [ref=e131]: Agent
+              - img [ref=e133]
+            - link "AI Gateway" [ref=e135] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/ai-gateway
+              - img [ref=e137]
+              - generic [ref=e140]: AI Gateway
+              - img [ref=e142]
+            - link "Sandboxes" [ref=e144] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/sandboxes
+              - img [ref=e146]
+              - generic [ref=e149]: Sandboxes
+            - link "Workflows" [ref=e150] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/workflows
+              - img [ref=e152]
+              - generic [ref=e155]: Workflows
+            - separator [ref=e156]
+            - link "Usage" [ref=e157] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/usage
+              - img [ref=e159]
+              - generic [ref=e162]: Usage
+            - link "Support" [ref=e163] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/support
+              - img [ref=e165]
+              - generic [ref=e168]: Support
+            - link "Settings" [ref=e169] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/settings
+              - img [ref=e171]
+              - generic [ref=e174]: Settings
+              - img [ref=e176]
+        - generic [ref=e178]:
+          - generic [ref=e2047]:
+            - generic [ref=e2048]:
+              - generic [ref=e2050]: Vercel Agent
+              - button "Dismiss" [ref=e2051] [cursor=pointer]:
+                - img [ref=e2053]
+            - generic [ref=e2055]:
+              - generic [ref=e2057]:
+                - text: Code reviews that catch bugs before they reach production.
+                - text: Get started with $100 in free credit.
+              - button "Enable" [ref=e2059] [cursor=pointer]:
+                - generic [ref=e2060]: Enable
+          - generic [ref=e180]:
+            - button "Avatar for mhingora90 mhingora90" [ref=e676] [cursor=pointer]:
+              - img "Avatar for mhingora90" [ref=e677]:
+                - img "Avatar for mhingora90" [ref=e678]
+              - generic [ref=e680]: mhingora90
+              - img [ref=e682]
+            - button "notifications" [ref=e685] [cursor=pointer]:
+              - generic [ref=e687]:
+                - img
+      - button [ref=e186] [cursor=pointer]:
+        - img [ref=e187]
+    - generic [ref=e190]:
+      - generic [ref=e2061]:
+        - generic [ref=e2064]:
+          - link "Other golf-grove-dms" [ref=e2065] [cursor=pointer]:
+            - /url: /mhingora90s-projects/golf-grove-dms
+            - img "Other" [ref=e2066]:
+              - img "Other" [ref=e2067]
+            - generic [ref=e2069]: golf-grove-dms
+          - button [ref=e2070] [cursor=pointer]:
+            - img [ref=e2072]
+          - link "Back to team view" [ref=e2076] [cursor=pointer]:
+            - /url: /mhingora90s-projects/~/deployments
+            - img [ref=e2078]
+        - generic [ref=e2080]:
+          - generic [ref=e2081]:
+            - link "Deployments" [ref=e2082] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/deployments
+            - img [ref=e2083]
+          - generic [ref=e2086]: DTatvvWws
+        - button "Open page actions menu" [ref=e2088] [cursor=pointer]:
+          - img [ref=e2090]
+      - generic [ref=e2093]:
+        - generic [ref=e2095]:
+          - link "Deployment" [ref=e2096] [cursor=pointer]:
+            - /url: /mhingora90s-projects/golf-grove-dms/DTatvvWwsZnCB1sCy8hcrrJxkpJ2
+          - link "Logs" [ref=e2097] [cursor=pointer]:
+            - /url: /mhingora90s-projects/golf-grove-dms/DTatvvWwsZnCB1sCy8hcrrJxkpJ2/logs
+          - link "Resources" [ref=e2098] [cursor=pointer]:
+            - /url: /mhingora90s-projects/golf-grove-dms/DTatvvWwsZnCB1sCy8hcrrJxkpJ2/resources
+          - link "Source" [ref=e2099] [cursor=pointer]:
+            - /url: /mhingora90s-projects/golf-grove-dms/DTatvvWwsZnCB1sCy8hcrrJxkpJ2/source
+          - link "Open Graph" [ref=e2100] [cursor=pointer]:
+            - /url: /mhingora90s-projects/golf-grove-dms/DTatvvWwsZnCB1sCy8hcrrJxkpJ2/og
+        - generic [ref=e2101]:
+          - generic [ref=e2103]:
+            - generic [ref=e2104]:
+              - heading "Deployment Details" [level=3] [ref=e2106]
+              - generic [ref=e2107]:
+                - generic [ref=e2108]:
+                  - button "Share" [ref=e2110] [cursor=pointer]:
+                    - img [ref=e2112]
+                    - generic [ref=e2114]: Share
+                  - link "Logs" [ref=e2115] [cursor=pointer]:
+                    - /url: /mhingora90s-projects/golf-grove-dms/logs?deploymentIds=dpl_DTatvvWwsZnCB1sCy8hcrrJxkpJ2
+                    - img [ref=e2117]
+                    - generic [ref=e2119]: Logs
+                  - generic [ref=e2120]:
+                    - link "Visit" [ref=e2121] [cursor=pointer]:
+                      - /url: https://golf-grove-h2b3wq2xj-mhingora90s-projects.vercel.app
+                      - generic [ref=e2122]: Visit
+                    - button "Visit with" [ref=e2123] [cursor=pointer]:
+                      - img [ref=e2125]
+                - button "Deployment Actions" [ref=e2127] [cursor=pointer]:
+                  - img [ref=e2129]
+            - generic [ref=e2131]:
+              - link "Visit Deployment" [ref=e2135] [cursor=pointer]:
+                - /url: https://golf-grove-h2b3wq2xj-mhingora90s-projects.vercel.app
+                - img [ref=e2138]
+              - generic [ref=e2140]:
+                - generic [ref=e2141]:
+                  - generic [ref=e2142]:
+                    - generic [ref=e2143]: Created
+                    - generic [ref=e2144]:
+                      - img "mhingora90 Avatar" [ref=e2148] [cursor=pointer]:
+                        - img "mhingora90 Avatar" [ref=e2149]
+                      - generic [ref=e2150]: mhingora90
+                      - generic [ref=e2152]: Just now
+                  - generic [ref=e2153]:
+                    - generic [ref=e2154]: Status
+                    - generic "This deployment is ready." [ref=e2155]:
+                      - generic [ref=e2159]: Ready
+                      - link "Latest" [ref=e2160] [cursor=pointer]:
+                        - /url: /mhingora90s-projects/golf-grove-dms/deployments?filterBranch=main
+                  - generic [ref=e2161]:
+                    - generic [ref=e2162]: Duration
+                    - generic "May 13, 2026, 11:35:54 PM GMT+4" [ref=e2163]:
+                      - img [ref=e2164]
+                      - text: 9s
+                      - generic [ref=e2167]: Just now
+                  - generic [ref=e2168]:
+                    - generic [ref=e2169]: Environment
+                    - generic [ref=e2170]:
+                      - img [ref=e2171]
+                      - link "Production" [ref=e2173] [cursor=pointer]:
+                        - /url: /mhingora90s-projects/golf-grove-dms/settings/environments/production
+                - generic [ref=e2174]:
+                  - generic [ref=e2175]: Domains
+                  - generic [ref=e2176]:
+                    - img [ref=e2177]
+                    - link "golf-grove-dms.vercel.app" [ref=e2179] [cursor=pointer]:
+                      - /url: https://golf-grove-dms.vercel.app
+                    - generic [ref=e2182] [cursor=pointer]: "+1"
+                  - generic [ref=e2183]:
+                    - img [ref=e2185]
+                    - link "golf-grove-dms-git-main-mhingora90s-projects.vercel.app" [ref=e2187] [cursor=pointer]:
+                      - /url: https://golf-grove-dms-git-main-mhingora90s-projects.vercel.app
+                  - generic [ref=e2188]:
+                    - img [ref=e2190]
+                    - link "golf-grove-h2b3wq2xj-mhingora90s-projects.vercel.app" [ref=e2192] [cursor=pointer]:
+                      - /url: https://golf-grove-h2b3wq2xj-mhingora90s-projects.vercel.app
+                - generic [ref=e2193]:
+                  - generic [ref=e2194]: Source
+                  - generic [ref=e2195]:
+                    - img [ref=e2196]
+                    - link "main" [ref=e2198] [cursor=pointer]:
+                      - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+                  - generic [ref=e2199]:
+                    - img [ref=e2200]
+                    - 'link "6555499 Add CRM module: kanban board, lead management, Meta webhook endpoint" [ref=e2202] [cursor=pointer]':
+                      - /url: https://github.com/mhingora90/golf-grove-dms/commit/6555499a73535375c7e36aaabc1e67398cffe33a
+                      - generic [ref=e2203]: "6555499"
+                      - 'generic "Add CRM module: kanban board, lead management, Meta webhook endpoint" [ref=e2204]'
+            - button "Deployment Settings 3 Recommendations" [ref=e2208] [cursor=pointer]:
+              - generic [ref=e2209]:
+                - img [ref=e2210]
+                - generic [ref=e2212]:
+                  - generic [ref=e2213]: Deployment Settings
+                  - generic [ref=e2219]: 3 Recommendations
+          - generic [ref=e2220]:
+            - generic [ref=e2221]:
+              - heading "Build Logs 9s" [level=2] [ref=e2223]:
+                - generic [ref=e2224] [cursor=pointer]:
+                  - img [ref=e2225]
+                  - generic [ref=e2229]: Build Logs
+                  - generic [ref=e2230]: 9s
+                  - img [ref=e2232]
+              - heading "Deployment Summary Resources" [level=2] [ref=e2235]:
+                - generic [ref=e2236] [cursor=pointer]:
+                  - img [ref=e2237]
+                  - generic [ref=e2240]: Deployment Summary
+                  - link "Resources" [ref=e2241]:
+                    - /url: /mhingora90s-projects/golf-grove-dms/DTatvvWwsZnCB1sCy8hcrrJxkpJ2/resources
+                    - img [ref=e2243]
+                    - generic [ref=e2245]: Resources
+                  - img [ref=e2247]
+              - heading "Deployment Checks" [level=2] [ref=e2250]:
+                - generic [ref=e2251] [cursor=pointer]:
+                  - img [ref=e2252]
+                  - generic [ref=e2255]: Deployment Checks
+                  - img [ref=e2257]
+              - heading "Assigning Custom Domains" [level=2] [ref=e2260]:
+                - generic [ref=e2261] [cursor=pointer]:
+                  - img [ref=e2262]
+                  - generic [ref=e2264]: Assigning Custom Domains
+                  - img [ref=e2266]
+            - generic [ref=e2269]:
+              - link "Runtime Logs View and debug runtime logs & errors" [ref=e2270] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/logs
+                - generic [ref=e2271]:
+                  - paragraph [ref=e2273]: Runtime Logs
+                  - paragraph [ref=e2274]: View and debug runtime logs & errors
+              - link "Observability Monitor app health & performance" [ref=e2275] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/observability/serverless-functions
+                - generic [ref=e2276]:
+                  - paragraph [ref=e2278]: Observability
+                  - paragraph [ref=e2279]: Monitor app health & performance
+              - link "Speed Insights Not Enabled Performance metrics from real users" [ref=e2280] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/speed-insights
+                - generic [ref=e2281]:
+                  - generic [ref=e2282]:
+                    - paragraph [ref=e2283]: Speed Insights
+                    - generic [ref=e2285]: Not Enabled
+                  - paragraph [ref=e2286]: Performance metrics from real users
+              - link "Web Analytics Not Enabled Analyze visitors & traffic in real-time" [ref=e2287] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/analytics
+                - generic [ref=e2288]:
+                  - generic [ref=e2289]:
+                    - paragraph [ref=e2290]: Web Analytics
+                    - generic [ref=e2292]: Not Enabled
+                  - paragraph [ref=e2293]: Analyze visitors & traffic in real-time
+  - alert [ref=e1904]
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - img

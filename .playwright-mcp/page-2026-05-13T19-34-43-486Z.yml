@@ -1,0 +1,901 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content":
+    - /url: "#geist-skip-nav"
+  - main [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e9]:
+            - link "mhingora90's projects Hobby" [ref=e10] [cursor=pointer]:
+              - /url: /mhingora90s-projects
+              - img [ref=e11]
+              - generic [ref=e12]:
+                - generic [ref=e13]: mhingora90's projects
+                - generic [ref=e15]: Hobby
+            - button [ref=e16] [cursor=pointer]:
+              - img [ref=e18]
+          - button "Find… F" [ref=e21]:
+            - generic [ref=e23]:
+              - img [ref=e25]
+              - generic [ref=e27]: Find…
+              - generic [ref=e29]: F
+        - navigation [ref=e31]:
+          - generic [ref=e34]:
+            - link "Other Overview" [ref=e654] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms
+              - img "Other" [ref=e655]:
+                - img "Other" [ref=e656]
+              - generic [ref=e39]: Overview
+            - link "Deployments" [ref=e40] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/deployments
+              - img [ref=e42]
+              - generic [ref=e45]: Deployments
+            - link "Logs" [ref=e46] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/logs
+              - img [ref=e48]
+              - generic [ref=e51]: Logs
+            - link "Analytics" [ref=e52] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/analytics
+              - img [ref=e54]
+              - generic [ref=e57]: Analytics
+            - link "Speed Insights" [ref=e58] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/speed-insights
+              - img [ref=e60]
+              - generic [ref=e63]: Speed Insights
+            - link "Observability" [ref=e64] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/observability
+              - img [ref=e66]
+              - generic [ref=e69]: Observability
+              - img [ref=e71]
+            - link "Firewall" [ref=e73] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/firewall
+              - img [ref=e75]
+              - generic [ref=e79]: Firewall
+              - img [ref=e81]
+            - link "CDN" [ref=e83] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/cdn
+              - img [ref=e85]
+              - generic [ref=e88]: CDN
+              - img [ref=e90]
+            - separator [ref=e92]
+            - link "Environment Variables" [ref=e93] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/settings/environment-variables
+              - img [ref=e95]
+              - generic [ref=e98]: Environment Variables
+            - link "Domains" [ref=e99] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/settings/domains
+              - img [ref=e101]
+              - generic [ref=e104]: Domains
+            - link "Integrations" [ref=e105] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/settings/integrations
+              - img [ref=e107]
+              - generic [ref=e110]: Integrations
+            - link "Storage" [ref=e111] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/stores
+              - img [ref=e113]
+              - generic [ref=e116]: Storage
+            - link "Flags" [ref=e117] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/flags
+              - img [ref=e119]
+              - generic [ref=e122]: Flags
+              - img [ref=e124]
+            - link "Agent" [ref=e126] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/agent
+              - img [ref=e128]
+              - generic [ref=e131]: Agent
+              - img [ref=e133]
+            - link "AI Gateway" [ref=e135] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/ai-gateway
+              - img [ref=e137]
+              - generic [ref=e140]: AI Gateway
+              - img [ref=e142]
+            - link "Sandboxes" [ref=e144] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/sandboxes
+              - img [ref=e146]
+              - generic [ref=e149]: Sandboxes
+            - link "Workflows" [ref=e150] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/workflows
+              - img [ref=e152]
+              - generic [ref=e155]: Workflows
+            - separator [ref=e156]
+            - link "Usage" [ref=e157] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/usage
+              - img [ref=e159]
+              - generic [ref=e162]: Usage
+            - link "Support" [ref=e163] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/support
+              - img [ref=e165]
+              - generic [ref=e168]: Support
+            - link "Settings" [ref=e169] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/settings
+              - img [ref=e171]
+              - generic [ref=e174]: Settings
+              - img [ref=e176]
+        - generic [ref=e178]:
+          - generic [ref=e659]:
+            - generic [ref=e660]:
+              - generic [ref=e663]:
+                - generic [ref=e664]: Ship
+                - generic [ref=e666]: "26"
+              - button "Dismiss" [ref=e667] [cursor=pointer]:
+                - img [ref=e669]
+            - generic [ref=e671]:
+              - generic [ref=e672]: Coming to five cities worldwide.
+              - button "Get your ticket" [ref=e674] [cursor=pointer]:
+                - generic [ref=e675]: Get your ticket
+          - generic [ref=e180]:
+            - button "Avatar for mhingora90 mhingora90" [ref=e676] [cursor=pointer]:
+              - img "Avatar for mhingora90" [ref=e677]:
+                - img "Avatar for mhingora90" [ref=e678]
+              - generic [ref=e680]: mhingora90
+              - img [ref=e682]
+            - button "notifications" [ref=e685] [cursor=pointer]:
+              - generic [ref=e687]:
+                - img
+      - button [ref=e186] [cursor=pointer]:
+        - img [ref=e187]
+    - generic [ref=e190]:
+      - generic [ref=e191]:
+        - generic [ref=e194]:
+          - link "Other golf-grove-dms" [ref=e688] [cursor=pointer]:
+            - /url: /mhingora90s-projects/golf-grove-dms
+            - img "Other" [ref=e689]:
+              - img "Other" [ref=e690]
+            - generic [ref=e198]: golf-grove-dms
+          - button [ref=e199] [cursor=pointer]:
+            - img [ref=e201]
+          - link "Back to team view" [ref=e205] [cursor=pointer]:
+            - /url: /mhingora90s-projects/~/deployments
+            - img [ref=e207]
+        - generic [ref=e211]: Deployments
+        - button "Open page actions menu" [ref=e213] [cursor=pointer]:
+          - img [ref=e215]
+      - generic [ref=e692]:
+        - generic [ref=e693]:
+          - combobox [ref=e695]:
+            - generic [ref=e696]:
+              - generic:
+                - img
+              - searchbox "All Branches…" [ref=e697]
+              - button "Open menu" [ref=e698] [cursor=pointer]:
+                - img [ref=e699]
+          - combobox [ref=e702]:
+            - generic [ref=e703]:
+              - generic:
+                - img
+              - searchbox "All Authors…" [ref=e704]
+              - button "Open menu" [ref=e705] [cursor=pointer]:
+                - img [ref=e706]
+          - button "Menu" [ref=e710] [cursor=pointer]:
+            - generic [ref=e711]:
+              - generic [ref=e713]: All Environments
+              - img [ref=e715]
+          - button "Select Date Range" [ref=e720] [cursor=pointer]:
+            - img [ref=e722]
+            - generic [ref=e724]: Select Date Range
+          - generic [ref=e725]:
+            - button "Filter by deployment status. 5 of 6 statuses selected" [ref=e729] [cursor=pointer]:
+              - generic [ref=e730]:
+                - generic [ref=e736]: Status
+                - generic "5 of 6 statuses selected" [ref=e737]:
+                  - generic [ref=e738]: 5/6
+              - img [ref=e741]
+            - button "Deployments actions" [ref=e744] [cursor=pointer]:
+              - img [ref=e746]
+        - generic [ref=e750]:
+          - generic [ref=e752]:
+            - link [ref=e753] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/72MWfVexMRtdCoVMsQP4coHpDA3v
+            - generic [ref=e755]:
+              - link "72MWfVexM" [ref=e758] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/72MWfVexMRtdCoVMsQP4coHpDA3v
+                - paragraph [ref=e759]: 72MWfVexM
+              - generic [ref=e761]:
+                - text: Production
+                - generic [ref=e764]:
+                  - img [ref=e766]
+                  - text: Current
+            - generic [ref=e769]:
+              - generic "This deployment is ready." [ref=e771]:
+                - generic [ref=e775]: Ready
+              - generic [ref=e779]: 9s
+            - generic [ref=e782]:
+              - generic [ref=e783]:
+                - img [ref=e784]
+                - link "main" [ref=e786] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e787]:
+                - img [ref=e788]
+                - 'link "6555499 Add CRM module: kanban board, lead management, Meta webhook endpoint" [ref=e790] [cursor=pointer]':
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/6555499a73535375c7e36aaabc1e67398cffe33a
+                  - generic [ref=e791]: "6555499"
+                  - 'generic "Add CRM module: kanban board, lead management, Meta webhook endpoint" [ref=e792]'
+            - generic [ref=e793]:
+              - generic [ref=e795]:
+                - generic [ref=e797] [cursor=pointer]: 17m ago by mhingora90
+                - img "github/mhingora90" [ref=e802] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e803]
+              - button "Deployment Actions" [ref=e805] [cursor=pointer]:
+                - img [ref=e809]
+          - generic [ref=e812]:
+            - link [ref=e813] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/4gyQDPwyoBDES2D7rHktfXwQzTmF
+            - generic [ref=e815]:
+              - link "4gyQDPwyo" [ref=e818] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/4gyQDPwyoBDES2D7rHktfXwQzTmF
+                - paragraph [ref=e819]: 4gyQDPwyo
+              - generic [ref=e821]:
+                - text: Production
+                - img [ref=e823]
+            - generic [ref=e826]:
+              - generic "This deployment is ready." [ref=e828]:
+                - generic [ref=e832]: Ready
+              - generic [ref=e836]: 11s
+            - generic [ref=e839]:
+              - generic [ref=e840]:
+                - img [ref=e841]
+                - link "main" [ref=e843] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e844]:
+                - img [ref=e845]
+                - link "3c12cea Delete 5 voided drawings; add General + Interior Design to discipline filter and dashboard bars" [ref=e847] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/3c12ceaa3ed63c255e3b633f61c0945b6cdc2e31
+                  - generic [ref=e848]: 3c12cea
+                  - generic "Delete 5 voided drawings; add General + Interior Design to discipline filter and dashboard bars" [ref=e849]
+            - generic [ref=e850]:
+              - generic [ref=e852]:
+                - generic [ref=e854] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e859] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e860]
+              - button "Deployment Actions" [ref=e862] [cursor=pointer]:
+                - img [ref=e866]
+          - generic [ref=e869]:
+            - link [ref=e870] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/GdFR4FcEwigr7A1uJLqjSsv3fznS
+            - generic [ref=e872]:
+              - link "GdFR4FcEw" [ref=e875] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/GdFR4FcEwigr7A1uJLqjSsv3fznS
+                - paragraph [ref=e876]: GdFR4FcEw
+              - generic [ref=e878]:
+                - text: Production
+                - img [ref=e880]
+            - generic [ref=e883]:
+              - generic "This deployment is ready." [ref=e885]:
+                - generic [ref=e889]: Ready
+              - generic [ref=e893]: 9s
+            - generic [ref=e896]:
+              - generic [ref=e897]:
+                - img [ref=e898]
+                - link "main" [ref=e900] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e901]:
+                - img [ref=e902]
+                - 'link "bdb5a07 Fix bulk drawing delete: delete revisions before drawings to satisfy FK constraint" [ref=e904] [cursor=pointer]':
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/bdb5a07c362023680219ee36cb63cef9ad6c465f
+                  - generic [ref=e905]: bdb5a07
+                  - 'generic "Fix bulk drawing delete: delete revisions before drawings to satisfy FK constraint" [ref=e906]'
+            - generic [ref=e907]:
+              - generic [ref=e909]:
+                - generic [ref=e911] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e916] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e917]
+              - button "Deployment Actions" [ref=e919] [cursor=pointer]:
+                - img [ref=e923]
+          - generic [ref=e926]:
+            - link [ref=e927] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/9M1xatdkRcZfJyDsyeV9Xu8NvBd5
+            - generic [ref=e929]:
+              - link "9M1xatdkR" [ref=e932] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/9M1xatdkRcZfJyDsyeV9Xu8NvBd5
+                - paragraph [ref=e933]: 9M1xatdkR
+              - generic [ref=e935]:
+                - text: Production
+                - img [ref=e937]
+            - generic [ref=e940]:
+              - generic "This deployment is ready." [ref=e942]:
+                - generic [ref=e946]: Ready
+              - generic [ref=e950]: 11s
+            - generic [ref=e953]:
+              - generic [ref=e954]:
+                - img [ref=e955]
+                - link "main" [ref=e957] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e958]:
+                - img [ref=e959]
+                - link "d9d6910 Add bulk delete to Drawing Register — developer-only, with confirmation" [ref=e961] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/d9d6910605666358e241195562743ac4f5399e70
+                  - generic [ref=e962]: d9d6910
+                  - generic "Add bulk delete to Drawing Register — developer-only, with confirmation" [ref=e963]
+            - generic [ref=e964]:
+              - generic [ref=e966]:
+                - generic [ref=e968] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e973] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e974]
+              - button "Deployment Actions" [ref=e976] [cursor=pointer]:
+                - img [ref=e980]
+          - generic [ref=e983]:
+            - link [ref=e984] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/EVcDqYqCB9hVLzZrNa3PDz1yXHuN
+            - generic [ref=e986]:
+              - link "EVcDqYqCB" [ref=e989] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/EVcDqYqCB9hVLzZrNa3PDz1yXHuN
+                - paragraph [ref=e990]: EVcDqYqCB
+              - generic [ref=e992]:
+                - text: Production
+                - img [ref=e994]
+            - generic [ref=e997]:
+              - generic "This deployment is ready." [ref=e999]:
+                - generic [ref=e1003]: Ready
+              - generic [ref=e1007]: 11s
+            - generic [ref=e1010]:
+              - generic [ref=e1011]:
+                - img [ref=e1012]
+                - link "main" [ref=e1014] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1015]:
+                - img [ref=e1016]
+                - link "9c09c5b Set default commission to 9%; update existing records from 2% to 9%" [ref=e1018] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/9c09c5b4222fd936e4874919ad7ad7849e3280b6
+                  - generic [ref=e1019]: 9c09c5b
+                  - generic "Set default commission to 9%; update existing records from 2% to 9%" [ref=e1020]
+            - generic [ref=e1021]:
+              - generic [ref=e1023]:
+                - generic [ref=e1025] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1030] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1031]
+              - button "Deployment Actions" [ref=e1033] [cursor=pointer]:
+                - img [ref=e1037]
+          - generic [ref=e1040]:
+            - link [ref=e1041] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/2fDo8yNjBrtXTuihnz63FTV1FnsB
+            - generic [ref=e1043]:
+              - link "2fDo8yNjB" [ref=e1046] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/2fDo8yNjBrtXTuihnz63FTV1FnsB
+                - paragraph [ref=e1047]: 2fDo8yNjB
+              - generic [ref=e1049]:
+                - text: Production
+                - img [ref=e1051]
+            - generic [ref=e1054]:
+              - generic "This deployment is ready." [ref=e1056]:
+                - generic [ref=e1060]: Ready
+              - generic [ref=e1064]: 10s
+            - generic [ref=e1067]:
+              - generic [ref=e1068]:
+                - img [ref=e1069]
+                - link "main" [ref=e1071] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1072]:
+                - img [ref=e1073]
+                - link "be8e9d2 Add Total Area and Total Listed Value cards to Unit Setup stats bar" [ref=e1075] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/be8e9d23c0f2c6989c94f0821ec4a21e6788cfea
+                  - generic [ref=e1076]: be8e9d2
+                  - generic "Add Total Area and Total Listed Value cards to Unit Setup stats bar" [ref=e1077]
+            - generic [ref=e1078]:
+              - generic [ref=e1080]:
+                - generic [ref=e1082] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1087] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1088]
+              - button "Deployment Actions" [ref=e1090] [cursor=pointer]:
+                - img [ref=e1094]
+          - generic [ref=e1097]:
+            - link [ref=e1098] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/EKo9ptoECs4AhfytJcPC199EREB5
+            - generic [ref=e1100]:
+              - link "EKo9ptoEC" [ref=e1103] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/EKo9ptoECs4AhfytJcPC199EREB5
+                - paragraph [ref=e1104]: EKo9ptoEC
+              - generic [ref=e1106]:
+                - text: Production
+                - img [ref=e1108]
+            - generic [ref=e1111]:
+              - generic "This deployment is ready." [ref=e1113]:
+                - generic [ref=e1117]: Ready
+              - generic [ref=e1121]: 12s
+            - generic [ref=e1124]:
+              - generic [ref=e1125]:
+                - img [ref=e1126]
+                - link "main" [ref=e1128] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1129]:
+                - img [ref=e1130]
+                - 'link "ab92dd6 Differentiate Available badge: blue instead of green (was too similar to Sold)" [ref=e1132] [cursor=pointer]':
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/ab92dd664070dca17b3206c42d02c6a9cb5f3b0a
+                  - generic [ref=e1133]: ab92dd6
+                  - 'generic "Differentiate Available badge: blue instead of green (was too similar to Sold)" [ref=e1134]'
+            - generic [ref=e1135]:
+              - generic [ref=e1137]:
+                - generic [ref=e1139] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1144] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1145]
+              - button "Deployment Actions" [ref=e1147] [cursor=pointer]:
+                - img [ref=e1151]
+          - generic [ref=e1154]:
+            - link [ref=e1155] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/GkTLpB27q5e9yH19uZZPMVjd1n87
+            - generic [ref=e1157]:
+              - link "GkTLpB27q" [ref=e1160] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/GkTLpB27q5e9yH19uZZPMVjd1n87
+                - paragraph [ref=e1161]: GkTLpB27q
+              - generic [ref=e1163]:
+                - text: Production
+                - img [ref=e1165]
+            - generic [ref=e1168]:
+              - generic "This deployment is ready." [ref=e1170]:
+                - generic [ref=e1174]: Ready
+              - generic [ref=e1178]: 9s
+            - generic [ref=e1181]:
+              - generic [ref=e1182]:
+                - img [ref=e1183]
+                - link "main" [ref=e1185] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1186]:
+                - img [ref=e1187]
+                - link "4e48293 Seed 93 unit_sales records from sales status table" [ref=e1189] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/4e48293d7017db679ade7f7d69e89f9ac66b9c11
+                  - generic [ref=e1190]: "4e48293"
+                  - generic "Seed 93 unit_sales records from sales status table" [ref=e1191]
+            - generic [ref=e1192]:
+              - generic [ref=e1194]:
+                - generic [ref=e1196] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1201] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1202]
+              - button "Deployment Actions" [ref=e1204] [cursor=pointer]:
+                - img [ref=e1208]
+          - generic [ref=e1211]:
+            - link [ref=e1212] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/Dj97LtHPn444DL9J9eNiQpEhn4FT
+            - generic [ref=e1214]:
+              - link "Dj97LtHPn" [ref=e1217] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/Dj97LtHPn444DL9J9eNiQpEhn4FT
+                - paragraph [ref=e1218]: Dj97LtHPn
+              - generic [ref=e1220]:
+                - text: Production
+                - img [ref=e1222]
+            - generic [ref=e1225]:
+              - generic "This deployment is ready." [ref=e1227]:
+                - generic [ref=e1231]: Ready
+              - generic [ref=e1235]: 3s
+            - generic [ref=e1238]:
+              - generic [ref=e1239]:
+                - img [ref=e1240]
+                - link "main" [ref=e1242] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1243]:
+                - img [ref=e1244]
+                - 'link "d6d6aa1 fix(sales): fix Unit Setup action buttons stacking — nowrap + Delete label" [ref=e1246] [cursor=pointer]':
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/d6d6aa1cdb28dc385a902b68515c68415502f61c
+                  - generic [ref=e1247]: d6d6aa1
+                  - 'generic "fix(sales): fix Unit Setup action buttons stacking — nowrap + Delete label" [ref=e1248]'
+            - generic [ref=e1249]:
+              - generic [ref=e1251]:
+                - generic [ref=e1253] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1258] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1259]
+              - button "Deployment Actions" [ref=e1261] [cursor=pointer]:
+                - img [ref=e1265]
+          - generic [ref=e1268]:
+            - link [ref=e1269] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/Entj29YwiYxmJyYKh3gkVKjLNC9r
+            - generic [ref=e1271]:
+              - link "Entj29Ywi" [ref=e1274] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/Entj29YwiYxmJyYKh3gkVKjLNC9r
+                - paragraph [ref=e1275]: Entj29Ywi
+              - generic [ref=e1277]:
+                - text: Production
+                - img [ref=e1279]
+            - generic [ref=e1282]:
+              - generic "This deployment is ready." [ref=e1284]:
+                - generic [ref=e1288]: Ready
+              - generic [ref=e1292]: 4s
+            - generic [ref=e1295]:
+              - generic [ref=e1296]:
+                - img [ref=e1297]
+                - link "main" [ref=e1299] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1300]:
+                - img [ref=e1301]
+                - 'link "464aea8 fix(sales): remove + New button from Unit Register — sales added via row modal" [ref=e1303] [cursor=pointer]':
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/464aea866c32fa479cfd8ceab31a5b46469e7817
+                  - generic [ref=e1304]: 464aea8
+                  - 'generic "fix(sales): remove + New button from Unit Register — sales added via row modal" [ref=e1305]'
+            - generic [ref=e1306]:
+              - generic [ref=e1308]:
+                - generic [ref=e1310] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1315] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1316]
+              - button "Deployment Actions" [ref=e1318] [cursor=pointer]:
+                - img [ref=e1322]
+          - generic [ref=e1325]:
+            - link [ref=e1326] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/8Pgfua8ng6zEPTs4jHALae3oDXWi
+            - generic [ref=e1328]:
+              - link "8Pgfua8ng" [ref=e1331] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/8Pgfua8ng6zEPTs4jHALae3oDXWi
+                - paragraph [ref=e1332]: 8Pgfua8ng
+              - generic [ref=e1334]:
+                - text: Production
+                - img [ref=e1336]
+            - generic [ref=e1339]:
+              - generic "This deployment is ready." [ref=e1341]:
+                - generic [ref=e1345]: Ready
+              - generic [ref=e1349]: 4s
+            - generic [ref=e1352]:
+              - generic [ref=e1353]:
+                - img [ref=e1354]
+                - link "main" [ref=e1356] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1357]:
+                - img [ref=e1358]
+                - 'link "9e8dd42 test(sales): API integration tests — CRUD and RLS for all 3 tables" [ref=e1360] [cursor=pointer]':
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/9e8dd42683fcb56c03b7bffcf964ec7130074eb6
+                  - generic [ref=e1361]: 9e8dd42
+                  - 'generic "test(sales): API integration tests — CRUD and RLS for all 3 tables" [ref=e1362]'
+            - generic [ref=e1363]:
+              - generic [ref=e1365]:
+                - generic [ref=e1367] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1372] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1373]
+              - button "Deployment Actions" [ref=e1375] [cursor=pointer]:
+                - img [ref=e1379]
+          - generic [ref=e1382]:
+            - link [ref=e1383] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/5m3Jq4A6p6Au74bvi5HDbJRjvTxQ
+            - generic [ref=e1385]:
+              - link "5m3Jq4A6p" [ref=e1388] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/5m3Jq4A6p6Au74bvi5HDbJRjvTxQ
+                - paragraph [ref=e1389]: 5m3Jq4A6p
+              - generic [ref=e1391]:
+                - text: Production
+                - img [ref=e1393]
+            - generic [ref=e1396]:
+              - generic "This deployment is ready." [ref=e1398]:
+                - generic [ref=e1402]: Ready
+              - generic [ref=e1406]: 4s
+            - generic [ref=e1409]:
+              - generic [ref=e1410]:
+                - img [ref=e1411]
+                - link "main" [ref=e1413] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1414]:
+                - img [ref=e1415]
+                - 'link "e529ce6 feat(sales): wire nav, page titles, render dispatch for usetup/ureg/srev" [ref=e1417] [cursor=pointer]':
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/e529ce6345c7dea44d52c700b661752eaa529996
+                  - generic [ref=e1418]: e529ce6
+                  - 'generic "feat(sales): wire nav, page titles, render dispatch for usetup/ureg/srev" [ref=e1419]'
+            - generic [ref=e1420]:
+              - generic [ref=e1422]:
+                - generic [ref=e1424] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1429] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1430]
+              - button "Deployment Actions" [ref=e1432] [cursor=pointer]:
+                - img [ref=e1436]
+          - generic [ref=e1439]:
+            - link [ref=e1440] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/DVz1E3r5S67zUqgAqT321nHqxPC4
+            - generic [ref=e1442]:
+              - link "DVz1E3r5S" [ref=e1445] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/DVz1E3r5S67zUqgAqT321nHqxPC4
+                - paragraph [ref=e1446]: DVz1E3r5S
+              - generic [ref=e1448]:
+                - text: Production
+                - img [ref=e1450]
+            - generic [ref=e1453]:
+              - generic "This deployment is ready." [ref=e1455]:
+                - generic [ref=e1459]: Ready
+              - generic [ref=e1463]: 3s
+            - generic [ref=e1466]:
+              - generic [ref=e1467]:
+                - img [ref=e1468]
+                - link "main" [ref=e1470] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1471]:
+                - img [ref=e1472]
+                - 'link "abaa775 feat(sales): add units, unit_sales, payment_milestones tables with RLS" [ref=e1474] [cursor=pointer]':
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/abaa7753322c0f25221efef781aad28f7de25216
+                  - generic [ref=e1475]: abaa775
+                  - 'generic "feat(sales): add units, unit_sales, payment_milestones tables with RLS" [ref=e1476]'
+            - generic [ref=e1477]:
+              - generic [ref=e1479]:
+                - generic [ref=e1481] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1486] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1487]
+              - button "Deployment Actions" [ref=e1489] [cursor=pointer]:
+                - img [ref=e1493]
+          - generic [ref=e1496]:
+            - link [ref=e1497] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/AkYWfAJZbPKPymKN6JU74gqfrCN6
+            - generic [ref=e1499]:
+              - link "AkYWfAJZb" [ref=e1502] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/AkYWfAJZbPKPymKN6JU74gqfrCN6
+                - paragraph [ref=e1503]: AkYWfAJZb
+              - generic [ref=e1505]:
+                - text: Production
+                - img [ref=e1507]
+            - generic [ref=e1510]:
+              - generic "This deployment is ready." [ref=e1512]:
+                - generic [ref=e1516]: Ready
+              - generic [ref=e1520]: 3s
+            - generic [ref=e1523]:
+              - generic [ref=e1524]:
+                - img [ref=e1525]
+                - link "main" [ref=e1527] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1528]:
+                - img [ref=e1529]
+                - 'link "a19b73a Drawing register: remove POI column, fix rev-chip wrapping" [ref=e1531] [cursor=pointer]':
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/a19b73a624210e3898130d0ab4af10c71f4aac47
+                  - generic [ref=e1532]: a19b73a
+                  - 'generic "Drawing register: remove POI column, fix rev-chip wrapping" [ref=e1533]'
+            - generic [ref=e1534]:
+              - generic [ref=e1536]:
+                - generic [ref=e1538] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1543] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1544]
+              - button "Deployment Actions" [ref=e1546] [cursor=pointer]:
+                - img [ref=e1550]
+          - generic [ref=e1553]:
+            - link [ref=e1554] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/4BXZBJ7eqh6BdoemhRq8dvJXK2tc
+            - generic [ref=e1556]:
+              - link "4BXZBJ7eq" [ref=e1559] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/4BXZBJ7eqh6BdoemhRq8dvJXK2tc
+                - paragraph [ref=e1560]: 4BXZBJ7eq
+              - generic [ref=e1562]:
+                - text: Production
+                - img [ref=e1564]
+            - generic [ref=e1567]:
+              - generic "This deployment is ready." [ref=e1569]:
+                - generic [ref=e1573]: Ready
+              - generic [ref=e1577]: 3s
+            - generic [ref=e1580]:
+              - generic [ref=e1581]:
+                - img [ref=e1582]
+                - link "main" [ref=e1584] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1585]:
+                - img [ref=e1586]
+                - link "448358a Include mobilisation advance in Total Paid summary stat" [ref=e1588] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/448358a7301db2aad4ff88534326939f141352eb
+                  - generic [ref=e1589]: 448358a
+                  - generic "Include mobilisation advance in Total Paid summary stat" [ref=e1590]
+            - generic [ref=e1591]:
+              - generic [ref=e1593]:
+                - generic [ref=e1595] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1600] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1601]
+              - button "Deployment Actions" [ref=e1603] [cursor=pointer]:
+                - img [ref=e1607]
+          - generic [ref=e1610]:
+            - link [ref=e1611] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/4qLi6qF4QfgRkhqNMeybpFtULBwb
+            - generic [ref=e1613]:
+              - link "4qLi6qF4Q" [ref=e1616] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/4qLi6qF4QfgRkhqNMeybpFtULBwb
+                - paragraph [ref=e1617]: 4qLi6qF4Q
+              - generic [ref=e1619]:
+                - text: Production
+                - img [ref=e1621]
+            - generic [ref=e1624]:
+              - generic "This deployment is ready." [ref=e1626]:
+                - generic [ref=e1630]: Ready
+              - generic [ref=e1634]: 3s
+            - generic [ref=e1637]:
+              - generic [ref=e1638]:
+                - img [ref=e1639]
+                - link "main" [ref=e1641] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1642]:
+                - img [ref=e1643]
+                - link "375ed5b Add hover tooltips to Finance Overview bar chart" [ref=e1645] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/375ed5b84777978cf2528657b6b3846abead031c
+                  - generic [ref=e1646]: 375ed5b
+                  - generic "Add hover tooltips to Finance Overview bar chart" [ref=e1647]
+            - generic [ref=e1648]:
+              - generic [ref=e1650]:
+                - generic [ref=e1652] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1657] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1658]
+              - button "Deployment Actions" [ref=e1660] [cursor=pointer]:
+                - img [ref=e1664]
+          - generic [ref=e1667]:
+            - link [ref=e1668] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/A85kqKgGYjFC7ViTA86fCVqs19rv
+            - generic [ref=e1670]:
+              - link "A85kqKgGY" [ref=e1673] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/A85kqKgGYjFC7ViTA86fCVqs19rv
+                - paragraph [ref=e1674]: A85kqKgGY
+              - generic [ref=e1676]:
+                - text: Production
+                - img [ref=e1678]
+            - generic [ref=e1681]:
+              - generic "This deployment is ready." [ref=e1683]:
+                - generic [ref=e1687]: Ready
+              - generic [ref=e1691]: 3s
+            - generic [ref=e1694]:
+              - generic [ref=e1695]:
+                - img [ref=e1696]
+                - link "main" [ref=e1698] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1699]:
+                - img [ref=e1700]
+                - link "4994c2b Add partial payment support to IPC certificate ledger" [ref=e1702] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/4994c2bc243eb57bcfaf1974e134aa5c74235a7b
+                  - generic [ref=e1703]: 4994c2b
+                  - generic "Add partial payment support to IPC certificate ledger" [ref=e1704]
+            - generic [ref=e1705]:
+              - generic [ref=e1707]:
+                - generic [ref=e1709] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1714] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1715]
+              - button "Deployment Actions" [ref=e1717] [cursor=pointer]:
+                - img [ref=e1721]
+          - generic [ref=e1724]:
+            - link [ref=e1725] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/EG2EjJD59CEsz8nJdY853TQAtgp4
+            - generic [ref=e1727]:
+              - link "EG2EjJD59" [ref=e1730] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/EG2EjJD59CEsz8nJdY853TQAtgp4
+                - paragraph [ref=e1731]: EG2EjJD59
+              - generic [ref=e1733]:
+                - text: Production
+                - img [ref=e1735]
+            - generic [ref=e1738]:
+              - generic "This deployment is ready." [ref=e1740]:
+                - generic [ref=e1744]: Ready
+              - generic [ref=e1748]: 4s
+            - generic [ref=e1751]:
+              - generic [ref=e1752]:
+                - img [ref=e1753]
+                - link "main" [ref=e1755] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1756]:
+                - img [ref=e1757]
+                - 'link "92cc4ac Fix bar chart claimed bar: fall back to certified_date when no submitted_date" [ref=e1759] [cursor=pointer]':
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/92cc4acfeeb1d0d375f6b08e8373a1cecd7e4911
+                  - generic [ref=e1760]: 92cc4ac
+                  - 'generic "Fix bar chart claimed bar: fall back to certified_date when no submitted_date" [ref=e1761]'
+            - generic [ref=e1762]:
+              - generic [ref=e1764]:
+                - generic [ref=e1766] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1771] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1772]
+              - button "Deployment Actions" [ref=e1774] [cursor=pointer]:
+                - img [ref=e1778]
+          - generic [ref=e1781]:
+            - link [ref=e1782] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/EbhfQrJVaGsQfQck2Jf9TRa2SUbt
+            - generic [ref=e1784]:
+              - link "EbhfQrJVa" [ref=e1787] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/EbhfQrJVaGsQfQck2Jf9TRa2SUbt
+                - paragraph [ref=e1788]: EbhfQrJVa
+              - generic [ref=e1790]:
+                - text: Production
+                - img [ref=e1792]
+            - generic [ref=e1795]:
+              - generic "This deployment is ready." [ref=e1797]:
+                - generic [ref=e1801]: Ready
+              - generic [ref=e1805]: 3s
+            - generic [ref=e1808]:
+              - generic [ref=e1809]:
+                - img [ref=e1810]
+                - link "main" [ref=e1812] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1813]:
+                - img [ref=e1814]
+                - 'link "1c619a2 Fix Finance Overview totals: Net Payable row sums all Certified+Paid certs" [ref=e1816] [cursor=pointer]':
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/1c619a2c303a09739939fb92410bda771991af6f
+                  - generic [ref=e1817]: 1c619a2
+                  - 'generic "Fix Finance Overview totals: Net Payable row sums all Certified+Paid certs" [ref=e1818]'
+            - generic [ref=e1819]:
+              - generic [ref=e1821]:
+                - generic [ref=e1823] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1828] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1829]
+              - button "Deployment Actions" [ref=e1831] [cursor=pointer]:
+                - img [ref=e1835]
+          - generic [ref=e1838]:
+            - link [ref=e1839] [cursor=pointer]:
+              - /url: /mhingora90s-projects/golf-grove-dms/H6yX6uMf6kHseKBENXvcRGraD4LJ
+            - generic [ref=e1841]:
+              - link "H6yX6uMf6" [ref=e1844] [cursor=pointer]:
+                - /url: /mhingora90s-projects/golf-grove-dms/H6yX6uMf6kHseKBENXvcRGraD4LJ
+                - paragraph [ref=e1845]: H6yX6uMf6
+              - generic [ref=e1847]:
+                - text: Production
+                - img [ref=e1849]
+            - generic [ref=e1852]:
+              - generic "This deployment is ready." [ref=e1854]:
+                - generic [ref=e1858]: Ready
+              - generic [ref=e1862]: 3s
+            - generic [ref=e1865]:
+              - generic [ref=e1866]:
+                - img [ref=e1867]
+                - link "main" [ref=e1869] [cursor=pointer]:
+                  - /url: https://github.com/mhingora90/golf-grove-dms/tree/main
+              - generic [ref=e1870]:
+                - img [ref=e1871]
+                - 'link "372b304 Fix net payable: exclude mobilisation_advance lump sum from per-IPC deduction" [ref=e1873] [cursor=pointer]':
+                  - /url: https://github.com/mhingora90/golf-grove-dms/commit/372b3048a9f480f47a8788f3f4c3c8fbc24c0181
+                  - generic [ref=e1874]: 372b304
+                  - 'generic "Fix net payable: exclude mobilisation_advance lump sum from per-IPC deduction" [ref=e1875]'
+            - generic [ref=e1876]:
+              - generic [ref=e1878]:
+                - generic [ref=e1880] [cursor=pointer]: May 9 by mhingora90
+                - img "github/mhingora90" [ref=e1885] [cursor=pointer]:
+                  - img "github/mhingora90" [ref=e1886]
+              - button "Deployment Actions" [ref=e1888] [cursor=pointer]:
+                - img [ref=e1892]
+        - button "Load More" [ref=e1894] [cursor=pointer]:
+          - generic [ref=e1895]: Load More
+        - generic [ref=e1896]:
+          - paragraph [ref=e1897]:
+            - text: Deployment Retention is enabled for this project — some deployments will be deleted after a set time period.
+            - link "Learn more" [ref=e1898] [cursor=pointer]:
+              - /url: /docs/security/deployment-retention
+              - text: Learn more
+              - img [ref=e1899]
+          - button "View Recently Deleted" [ref=e1901] [cursor=pointer]:
+            - generic [ref=e1902]: View Recently Deleted
+  - alert [ref=e1904]
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - img
+  - dialog [ref=e1927]:
+    - generic [ref=e1929]:
+      - banner [ref=e1930]:
+        - heading "Redeploy" [level=3] [ref=e1931]
+      - generic [ref=e1932]:
+        - paragraph [ref=e1933]: Create a new deployment with the same source code as your current one but with the latest Project Settings.
+        - generic [ref=e1935]:
+          - generic [ref=e1936]: Choose Environment
+          - generic [ref=e1938]:
+            - generic:
+              - img
+            - combobox "Environments" [ref=e1939] [cursor=pointer]:
+              - option "Production" [selected]
+              - option "Preview"
+              - option "Your project has no custom environments" [disabled]
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Production
+                - img
+        - radiogroup [ref=e1940]:
+          - generic [ref=e1942] [cursor=pointer]:
+            - 'radio "golf-grove-2l6677v9h-mhingora90s-projects.vercel.app Current main Add CRM module: kanban board, lead management, Meta webhook endpoint 17 minutes ago" [checked] [ref=e1944]'
+            - generic [ref=e1947]:
+              - generic [ref=e1948]: golf-grove-2l6677v9h-mhingora90s-projects.vercel.app
+              - generic [ref=e1950]: Current
+              - generic [ref=e1951]:
+                - img [ref=e1952]
+                - text: main
+              - generic [ref=e1954]:
+                - img [ref=e1955]
+                - generic [ref=e1957]: "Add CRM module: kanban board, lead management, Meta webhook endpoint"
+              - generic [ref=e1958]:
+                - img [ref=e1959]
+                - text: 17 minutes ago
+        - generic [ref=e1961]:
+          - paragraph [ref=e1962]: "Assigned domains:"
+          - generic [ref=e1964]:
+            - img [ref=e1966]
+            - link "golf-grove-dms.vercel.app" [ref=e1968] [cursor=pointer]:
+              - /url: https://golf-grove-dms.vercel.app
+        - generic [ref=e1969]:
+          - generic [ref=e1970] [cursor=pointer]:
+            - generic [ref=e1971]:
+              - checkbox "Use existing Build Cache." [ref=e1972]
+              - img [ref=e1974]
+            - generic [ref=e1975]: Use existing Build Cache.
+          - link "Learn about Build Cache" [ref=e1976] [cursor=pointer]:
+            - /url: /docs/deployments/troubleshoot-a-build#understanding-build-cache
+            - text: Learn about Build Cache
+            - img [ref=e1977]
+    - contentinfo [ref=e1979]:
+      - button "Cancel" [ref=e1980] [cursor=pointer]:
+        - generic [ref=e1981]: Cancel
+      - button "Redeploy" [ref=e1982] [cursor=pointer]:
+        - generic [ref=e1983]: Redeploy
