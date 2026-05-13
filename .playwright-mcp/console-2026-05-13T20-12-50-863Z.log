@@ -68,3 +68,6 @@
 [  895880ms] [ERROR] Failed to load resource: the server responded with a status of 422 () @ https://zapier.com/api/gulliver/steptesting/v2/zaps/364093556/steps/364093557/output/test/run?account_id=14718194&origin=main:0
 [  895908ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
 [  895909ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
+[ 1086290ms] [ERROR] Failed to load resource: the server responded with a status of 422 () @ https://zapier.com/api/gulliver/steptesting/v2/zaps/364093556/steps/364093557/output/test/run?account_id=14718194&origin=main:0
+[ 1086324ms] [INFO]  [TestZapStep:Gate] Component rendered {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B, isAlreadyComplete: false, isInLatestAssistantMessage: true, latestMessageRole: assistant} @ https://edge.fullstory.com/s/fs.js:3
+[ 1086325ms] [INFO]  [TestZapStep:Gate] Taking ACTIVE path {stepId: 364093557, toolCallId: toolu_bdrk_01R2p2dZcxpdgbohgQtPig5B} @ https://edge.fullstory.com/s/fs.js:3
