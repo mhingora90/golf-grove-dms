@@ -258,6 +258,21 @@ textarea.form-control{resize:vertical;min-height:70px}
 .boq-grand-total td{background:var(--bg4);font-weight:700;color:var(--charcoal);font-size:12px;border-top:1.5px solid var(--border2)}
 .ipc-list-row{cursor:pointer;transition:.1s}
 .ipc-list-row:hover{background:var(--bg3)}
+/* CRM */
+.crm-col{min-width:240px;flex:1;background:var(--bg3);border-radius:8px;overflow:hidden}
+.crm-col-head{padding:10px 12px;display:flex;justify-content:space-between;align-items:center;background:var(--bg2);border-bottom:1px solid var(--border)}
+.crm-col-label{font-size:12px;font-weight:600;color:var(--charcoal)}
+.crm-col-count{font-size:11px;background:var(--bg4);color:var(--text2);padding:1px 8px;border-radius:10px}
+.crm-col-body{padding:8px;display:flex;flex-direction:column;gap:8px;min-height:80px}
+.crm-card{background:#fff;border:0.5px solid var(--border);border-radius:6px;padding:10px 12px;cursor:pointer;transition:.1s}
+.crm-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.08);transform:translateY(-1px)}
+.crm-card-name{font-size:12px;font-weight:600;color:var(--charcoal);margin-bottom:4px}
+.crm-card-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px}
+.crm-card-label{color:var(--text3)}
+.crm-card-footer{display:flex;justify-content:space-between;margin-top:6px;padding-top:6px;border-top:0.5px solid var(--border)}
+.crm-src-badge{font-size:10px;background:var(--bg4);color:var(--text2);padding:1px 6px;border-radius:3px}
+.crm-ago{font-size:10px;color:var(--text3)}
+.crm-note{font-size:12px;color:var(--text2);padding:4px 0;border-bottom:0.5px solid var(--border)}
 /* ARFI */
 .arfi-ar{background:#FCEBEB;color:#A32D2D;border:0.5px solid #F7C1C1;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block}
 .arfi-fi{background:#F1EFE8;color:#5F5E5A;border:0.5px solid #D3D1C7;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block}
@@ -473,6 +488,11 @@ textarea.form-control{resize:vertical;min-height:70px}
     </div>
     <div id="n-sales-wrap" style="display:none">
       <div class="sb-section">Sales</div>
+      <div class="nav-item" id="n-crm" onclick="nav('crm',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M11 3l1.5-1.5M13 5h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        CRM
+        <span class="nav-badge" id="nb-crm">0</span>
+      </div>
       <div class="nav-item" id="n-usetup" onclick="nav('usetup',this)">
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 4v8M4 8h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         Unit Setup
@@ -635,22 +655,24 @@ async function loadApp(user) {
   const roleClass = `role-${profile?.role||'contractor'}`;
   document.getElementById('role-badge-top').className=`role-badge ${roleClass}`;
   document.getElementById('role-badge-top').textContent=profile?.role||'user';
+  if(profile?.role==='developer' || profile?.role==='sales'){
+    document.getElementById('n-sales-wrap').style.display='';
+  }
   if(profile?.role==='developer'){
     document.getElementById('n-users-wrap').style.display='';
-    document.getElementById('n-sales-wrap').style.display='';
   }
   // Set topbar date
   const dateEl = document.getElementById('topbar-date');
   if(dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   // Restore page from URL hash, or default to dash
   const hash = location.hash.replace('#','');
-  const defaultPage = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq','finance','usetup','ureg','srev'].includes(hash) ? hash : 'dash';
+  const defaultPage = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq','finance','usetup','ureg','srev','crm'].includes(hash) ? hash : 'dash';
   const navEl = document.getElementById('n-'+defaultPage);
   nav(defaultPage, navEl);
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM'};
 
 function canCreateOnPage(page) {
   if(page==='draw') return can('upload');
@@ -719,6 +741,7 @@ async function render() {
   else if(currentPage==='usetup') await renderUnitSetup();
   else if(currentPage==='ureg') await renderUnitRegister();
   else if(currentPage==='srev') await renderSalesRevenue();
+  else if(currentPage==='crm') await renderCRM();
   await updateBadges();
 }
 
@@ -7179,6 +7202,161 @@ async function renderSalesRevenue() {
         typeRows +
       '</table>' +
     '</div></div>';
+}
+
+// ─── CRM ──────────────────────────────────────────────────────────
+const CRM_STAGES = [
+  {key:'new_lead',             label:'New Lead',          color:'var(--amber)'},
+  {key:'contacted_responded',  label:'Contacted',         color:'var(--blue)'},
+  {key:'contacted_no_response',label:'No Response',       color:'var(--text3)'},
+  {key:'site_visit',           label:'Site Visit',        color:'var(--green)'},
+  {key:'follow_up',            label:'Follow-Up',         color:'var(--sand)'},
+  {key:'closed_won',           label:'Closed Won',        color:'var(--green)'},
+  {key:'closed_lost',          label:'Closed Lost',       color:'var(--red)'},
+];
+
+async function renderCRM() {
+  const {data:leads, error} = await sb.from('crm_leads').select('*').order('created_at',{ascending:false});
+  if(error) { document.getElementById('content').innerHTML = `<div class="empty-state">Error loading leads: ${esc(error.message)}</div>`; return; }
+  const nb = document.getElementById('nb-crm');
+  if(nb) nb.textContent = leads?.length || 0;
+
+  const stageCols = CRM_STAGES.map(s => ({...s, items:(leads||[]).filter(l=>l.stage===s.key)}));
+
+  document.getElementById('content').innerHTML =
+    '<div class="frow" style="margin-bottom:16px">' +
+      '<div class="form-group" style="margin:0"><label class="form-label-dark">Search Leads</label><input type="text" class="form-control" placeholder="Name, email, phone..." id="crm-search" oninput="filterCRM()"/></div>' +
+      '<div style="align-self:flex-end"><button class="btn btn-primary" onclick="openAddLead()">+ Add Lead</button></div>' +
+    '</div>' +
+    '<div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:16px" id="crm-board">' +
+      stageCols.map(col =>
+        '<div class="crm-col" data-stage="'+esc(col.key)+'">' +
+          '<div class="crm-col-head" style="border-top:3px solid '+esc(col.color)+'">' +
+            '<span class="crm-col-label">'+esc(col.label)+'</span>' +
+            '<span class="crm-col-count">'+col.items.length+'</span>' +
+          '</div>' +
+          '<div class="crm-col-body">' +
+            col.items.map(lead => crmCard(lead)).join('') +
+          '</div>' +
+        '</div>'
+      ).join('') +
+    '</div>';
+}
+
+function crmCard(lead) {
+  const ago = timeAgo(lead.created_at);
+  const src = lead.source==='meta_ads'?'Meta':esc(lead.source||'');
+  return `<div class="crm-card" onclick="viewLead('${lead.id}')">
+    <div class="crm-card-name">${esc(lead.name)}</div>
+    <div class="crm-card-row"><span class="crm-card-label">Email</span><span>${esc(lead.email||'—')}</span></div>
+    <div class="crm-card-row"><span class="crm-card-label">Phone</span><span>${esc(lead.phone||'—')}</span></div>
+    <div class="crm-card-footer">
+      <span class="crm-src-badge">${src}</span>
+      <span class="crm-ago">${ago}</span>
+    </div>
+  </div>`;
+}
+
+function filterCRM() {
+  const q = (document.getElementById('crm-search')?.value||'').toLowerCase();
+  document.querySelectorAll('.crm-card').forEach(card => {
+    card.style.display = card.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+async function viewLead(id) {
+  const {data:lead,error} = await sb.from('crm_leads').select('*').eq('id',id).maybeSingle();
+  if(error||!lead) { toast('Lead not found','error'); return; }
+  const stageOpts = CRM_STAGES.map(s=>`<option value="${esc(s.key)}"${lead.stage===s.key?'selected':''}>${esc(s.label)}</option>`).join('');
+  const notes = (lead.notes||'').split('\n').filter(Boolean).map(n=>`<div class="crm-note">${esc(n)}</div>`).join('')||'<div style="color:var(--text3);font-size:12px">No notes yet</div>';
+  openModal('Lead — '+esc(lead.name), `
+    <div class="detail-grid">
+      <div class="detail-item"><div class="detail-label">Name</div><div class="detail-value">${esc(lead.name)}</div></div>
+      <div class="detail-item"><div class="detail-label">Email</div><div class="detail-value">${esc(lead.email||'—')}</div></div>
+      <div class="detail-item"><div class="detail-label">Phone</div><div class="detail-value">${esc(lead.phone||'—')}</div></div>
+      <div class="detail-item"><div class="detail-label">Source</div><div class="detail-value">${esc(lead.source||'—')}</div></div>
+      <div class="detail-item"><div class="detail-label">Meta Lead ID</div><div class="detail-value mono">${esc(lead.meta_lead_id||'—')}</div></div>
+      <div class="detail-item"><div class="detail-label">Created</div><div class="detail-value">${new Date(lead.created_at).toLocaleString('en-GB')}</div></div>
+      <div class="detail-item"><div class="detail-label">Last Contacted</div><div class="detail-value">${lead.last_contacted_at?new Date(lead.last_contacted_at).toLocaleString('en-GB'):'Never'}</div></div>
+    </div>
+    <div class="frow" style="margin-top:14px">
+      <div class="form-group"><label class="form-label-dark">Stage</label>
+        <select class="form-control" id="lead-stage" onchange="updateLeadStage('${lead.id}')">${stageOpts}</select>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Assigned To</label>
+        <input type="text" class="form-control" id="lead-assigned" value="${esc(lead.assigned_to||'')}" placeholder="Team member..." onchange="updateLeadAssigned('${lead.id}')"/>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:6px">Notes</div>
+      <div id="lead-notes" style="max-height:150px;overflow-y:auto;margin-bottom:8px">${notes}</div>
+      <div class="frow"><input type="text" class="form-control" id="lead-note-input" placeholder="Add a note..." onkeydown="if(event.key==='Enter')addLeadNote('${lead.id}')"/><button class="btn btn-primary" onclick="addLeadNote('${lead.id}')">Add</button></div>
+    </div>`,
+    `<button class="btn" onclick="closeModal()">Close</button>`);
+}
+
+async function updateLeadStage(id) {
+  const stage = document.getElementById('lead-stage').value;
+  const {error} = await sb.from('crm_leads').update({stage,updated_at:new Date().toISOString()}).eq('id',id);
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  toast('Lead moved to '+CRM_STAGES.find(s=>s.key===stage)?.label,'success'); closeModal(); renderCRM();
+}
+
+async function updateLeadAssigned(id) {
+  const assigned = document.getElementById('lead-assigned').value.trim();
+  const {error} = await sb.from('crm_leads').update({assigned_to:assigned,updated_at:new Date().toISOString()}).eq('id',id);
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  toast('Assigned to '+assigned,'success');
+}
+
+async function addLeadNote(id) {
+  const input = document.getElementById('lead-note-input');
+  const txt = input?.value?.trim();
+  if(!txt) return;
+  const {data:lead} = await sb.from('crm_leads').select('notes').eq('id',id).maybeSingle();
+  const notes = (lead?.notes||'')+(lead?.notes?'\n':'')+txt;
+  const {error} = await sb.from('crm_leads').update({notes,updated_at:new Date().toISOString()}).eq('id',id);
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  input.value=''; viewLead(id);
+}
+
+function openAddLead() {
+  openModal('Add Lead', `
+    <div class="form-group"><label class="form-label-dark">Full Name *</label><input type="text" class="form-control" id="lead-name" required/></div>
+    <div class="frow">
+      <div class="form-group"><label class="form-label-dark">Email</label><input type="email" class="form-control" id="lead-email"/></div>
+      <div class="form-group"><label class="form-label-dark">Phone</label><input type="tel" class="form-control" id="lead-phone"/></div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Source</label>
+      <select class="form-control" id="lead-source">
+        <option value="meta_ads">Meta Ads</option><option value="website">Website</option><option value="referral">Referral</option><option value="walk_in">Walk-In</option><option value="other">Other</option>
+      </select>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doAddLead()">Add Lead</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doAddLead() {
+  const name = document.getElementById('lead-name').value.trim();
+  const email = document.getElementById('lead-email').value.trim();
+  const phone = document.getElementById('lead-phone').value.trim();
+  const source = document.getElementById('lead-source').value;
+  if(!name) { toast('Name is required','error'); return; }
+  const {error} = await sb.from('crm_leads').insert({name,email:email||null,phone:phone||null,source});
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  toast('Lead added','success'); closeModal(); renderCRM();
+}
+
+function timeAgo(dateStr) {
+  const diff = Date.now()-new Date(dateStr).getTime();
+  const mins = Math.floor(diff/60000);
+  if(mins<1) return 'Just now';
+  if(mins<60) return mins+'m ago';
+  const hrs = Math.floor(mins/60);
+  if(hrs<24) return hrs+'h ago';
+  const days = Math.floor(hrs/24);
+  if(days<7) return days+'d ago';
+  return new Date(dateStr).toLocaleDateString('en-GB');
 }
 </script>
 </body>

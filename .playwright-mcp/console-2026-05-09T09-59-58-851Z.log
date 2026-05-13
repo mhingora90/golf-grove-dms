@@ -2,3 +2,145 @@
 [     746ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/:0
 [    3498ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Celements%3Atitle%2Cdue_date&status=eq.Pending&due_date=lt.2026-05-09&limit=20:0
 [    3514ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubject%3Atitle%2Cdue_date&status=eq.Open&due_date=lt.2026-05-09&limit=20:0
+[39206146ms] [ERROR] Failed to load resource: net::ERR_NETWORK_CHANGED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[39206146ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168455
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168532
+    at new Promise (<anonymous>)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168385
+    at ps._refreshAccessToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168538)
+    at ps._callRefreshToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:171410) @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[122202935ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubject%3Atitle%2Cdue_date&status=eq.Open&due_date=lt.2026-05-10&limit=20:0
+[122202936ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Celements%3Atitle%2Cdue_date&status=eq.Pending&due_date=lt.2026-05-10&limit=20:0
+[165657005ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[165657005ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168455
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168532
+    at new Promise (<anonymous>)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168385
+    at ps._refreshAccessToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168538)
+    at ps._callRefreshToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:171410) @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[165657428ms] [ERROR] Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[165657428ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at async https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168449 @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[182948942ms] [ERROR] Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[182948943ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168455
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168532
+    at new Promise (<anonymous>)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168385
+    at ps._refreshAccessToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168538)
+    at ps._callRefreshToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:171410) @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[182949265ms] [ERROR] Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[182949265ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at async https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168449 @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[354787732ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_TIMED_OUT @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[354787733ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168455
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168532
+    at new Promise (<anonymous>)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168385
+    at ps._refreshAccessToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168538)
+    at ps._callRefreshToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:171410) @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[354791753ms] [ERROR] Failed to load resource: net::ERR_QUIC_PROTOCOL_ERROR @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[354791753ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168455
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168532
+    at new Promise (<anonymous>)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168385
+    at ps._refreshAccessToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168538)
+    at ps._callRefreshToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:171410) @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[354829852ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_TIMED_OUT @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[354829852ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at async https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168449 @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[354888527ms] [ERROR] Failed to load resource: net::ERR_NETWORK_CHANGED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[354888527ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168455
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168532
+    at new Promise (<anonymous>)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168385
+    at ps._refreshAccessToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168538)
+    at ps._callRefreshToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:171410) @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[354889901ms] [ERROR] Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[354889901ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168455
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168532
+    at new Promise (<anonymous>)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168385
+    at ps._refreshAccessToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168538)
+    at ps._callRefreshToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:171410) @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[354890123ms] [ERROR] Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[354890123ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at async https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168449 @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[354890534ms] [ERROR] Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[354890534ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at async https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168449 @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[354891347ms] [ERROR] Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[354891347ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at async https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168449 @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[354892954ms] [ERROR] Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[354892954ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at async https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168449 @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6
+[354896172ms] [ERROR] Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[354896172ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:103683
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108644
+    at Tr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:108812)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168699)
+    at async https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:7:168449 @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2:6

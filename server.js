@@ -22,6 +22,73 @@ const mimeTypes = {
 };
 
 http.createServer((req, res) => {
+  // Meta Conversions API webhook endpoint
+  if (req.url === '/api/meta-lead' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const data = JSON.parse(body);
+        const leadId = data.lead_id || data.leadgen_id || '';
+        const formId = data.form_id || data.adgroup_id || '';
+        const fields = {};
+        (data.field_data || []).forEach(f => { fields[f.name] = (f.values || []).join(', '); });
+        
+        const lead = {
+          name: fields.full_name || fields.email || 'Unknown',
+          email: fields.email || null,
+          phone: fields.phone_number || fields.phone || null,
+          source: 'meta_ads',
+          meta_lead_id: leadId,
+          meta_form_id: formId,
+        };
+
+        const supabaseUrl = process.env.SUPABASE_URL || 'https://kdxvhrwnnehicgdryowu.supabase.co';
+        const supabaseKey = process.env.SUPABASE_KEY || '';
+        
+        if (!supabaseKey) {
+          console.log('[Meta Lead] No SUPABASE_KEY set. Logging lead:', JSON.stringify(lead));
+          res.writeHead(200, {'Content-Type':'application/json'});
+          res.end(JSON.stringify({status:'logged_no_key', lead}));
+          return;
+        }
+
+        const headers = {'apikey': supabaseKey, 'Authorization':'Bearer '+supabaseKey, 'Content-Type':'application/json', 'Prefer':'return=representation'};
+
+        // Check for existing lead by meta_lead_id or email
+        const orFilter = `meta_lead_id.eq.${leadId}` + (lead.email ? `,email.eq.${lead.email}` : '');
+        const checkUrl = `${supabaseUrl}/rest/v1/crm_leads?select=id&or=(${orFilter})&limit=1`;
+        const checkRes = await fetch(checkUrl, {headers});
+        const existing = await checkRes.json();
+
+        if (existing && existing.length > 0) {
+          console.log(`[Meta Lead] Duplicate lead ${leadId}`);
+          res.writeHead(200, {'Content-Type':'application/json'});
+          res.end(JSON.stringify({status:'duplicate', id:existing[0].id}));
+        } else {
+          const insertRes = await fetch(`${supabaseUrl}/rest/v1/crm_leads`, {
+            method:'POST', headers, body:JSON.stringify(lead),
+          });
+          const newLead = await insertRes.json();
+          if (!insertRes.ok) {
+            console.error('[Meta Lead] Error:', JSON.stringify(newLead));
+            res.writeHead(500, {'Content-Type':'application/json'});
+            res.end(JSON.stringify({error: newLead}));
+          } else {
+            console.log(`[Meta Lead] New lead: ${lead.name} (${leadId})`);
+            res.writeHead(200, {'Content-Type':'application/json'});
+            res.end(JSON.stringify({status:'created', id:newLead[0]?.id}));
+          }
+        }
+      } catch(e) {
+        console.error('[Meta Lead] Error:', e.message);
+        res.writeHead(500, {'Content-Type':'application/json'});
+        res.end(JSON.stringify({error:e.message}));
+      }
+    });
+    return;
+  }
+
   let filePath = '.' + req.url;
   if (filePath === './') filePath = './index.html';
   
