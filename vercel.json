@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/meta-lead.js": {
+      "runtime": "@vercel/edge"
+    }
+  },
   "routes": [
     { "src": "/api/meta-lead", "dest": "/api/meta-lead.js" },
     { "src": "/(.*)", "dest": "/index.html" }
