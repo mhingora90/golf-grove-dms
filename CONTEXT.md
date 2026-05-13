@@ -146,6 +146,60 @@ Checked via `can(action)` — returns boolean based on `currentProfile.role`.
 
 ---
 
+## CRM Module
+
+**Purpose:** Lead management from Meta Ads Instant Forms. Sales team tracks leads from capture through broker qualification to deal closure.
+
+**Table:** `crm_leads` in Supabase public schema.
+
+**Columns:**
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid | PK |
+| name | text | Nullable (Facebook may not send full name) |
+| email | text | Nullable |
+| phone | text | Nullable |
+| source | text | Default 'meta_ads' |
+| stage | text | Default 'new_lead' |
+| assigned_to | text | Team member email |
+| meta_lead_id | text | Facebook lead ID for dedup |
+| meta_form_id | text | Facebook form ID |
+| first_name | text | From Facebook form |
+| company_name | text | Brokerage company name |
+| broker_type | text | e.g. "Real Estate Broker / Agent" |
+| budget_range | text | e.g. "AED 1.8M – AED 2.1M" |
+| property_types | text | e.g. "2 Bedroom" |
+| availability | text | e.g. "Immediately" |
+| notes | text | Manual notes added in app |
+| last_contacted_at | timestamptz | |
+| created_at | timestamptz | |
+| updated_at | timestamptz | |
+
+**Lead stages (CRM_STAGES constant):**
+- `new_lead` → `contacted_responded` → `contacted_no_response` → `site_visit` → `follow_up` → `closed_won` / `closed_lost`
+
+**UI (page `#crm`):**
+- Kanban board with 7 columns (one per stage)
+- Each card shows: name, email, phone, source badge, time ago
+- Search bar filters across all cards
+- "+ Add Lead" button for manual entry
+- Click card → detail modal with all fields, stage dropdown, assign to, notes
+
+**Permissions:** CRM nav visible to `sales` and `developer` roles. RLS gated by `has_crm_access()` function (sales/developer only).
+
+**Webhook integration (in progress):**
+- Goal: Meta Instant Form → Supabase Edge Function → `crm_leads` table
+- Vercel API route (`/api/meta-lead.js`) blocked by static hosting catch-all
+- Zapier requires Pro plan (paywalled)
+- **Next:** Deploy Supabase Edge Function at `https://kdxvhrwnnehicgdryowu.supabase.co/functions/v1/meta-lead`
+
+**Migrations:**
+- `20260429000006_add_crm_leads.sql` — Table + RLS
+- `20260429000007_add_crm_custom_fields.sql` — Broker custom fields
+- `20260429000008_fix_crm_name_nullable.sql` — Drop NOT NULL on name
+
+---
+
 ## Navigation Pages
 
 | Page ID | Title | Module |
@@ -165,6 +219,7 @@ Checked via `can(action)` — returns boolean based on `currentProfile.role`.
 | `subs` | Subcontractors | Admin |
 | `users` | User Management | Admin (developer only) |
 | `boq` | BOQ Setup | Admin |
+| `crm` | CRM | Sales |
 
 ---
 
