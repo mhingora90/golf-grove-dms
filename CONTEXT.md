@@ -187,16 +187,23 @@ Checked via `can(action)` — returns boolean based on `currentProfile.role`.
 
 **Permissions:** CRM nav visible to `sales` and `developer` roles. RLS gated by `has_crm_access()` function (sales/developer only).
 
-**Webhook integration (in progress):**
-- Goal: Meta Instant Form → Supabase Edge Function → `crm_leads` table
-- Vercel API route (`/api/meta-lead.js`) blocked by static hosting catch-all
-- Zapier requires Pro plan (paywalled)
-- **Next:** Deploy Supabase Edge Function at `https://kdxvhrwnnehicgdryowu.supabase.co/functions/v1/meta-lead`
+**Google Sheet sync (live):**
+- Sheet: "Automatic Meta Leads" — spreadsheet `1MilS5L6fbmbm4w1xStoVvitX5vgvyrG0RWczSHRxNqo`
+- Apps Script project: `1_k0ADnbsdTFeUjfgKZ5pFg1MTSnUzLMhMs6OtYMKiuSvqImrQyqi0S-e`
+- Trigger: `syncLeadsToCRM` on-change (auto-fires when new rows added by SyncWith)
+- RLS: `crm_leads_anon_insert` — anon INSERT when `source = 'meta_ads'`
+- Dedup: UNIQUE on `meta_lead_id`, plain POST (no `?on_conflict=`), 409 treated as success
+
+**SyncWith column mapping (headers are misleading — actual data locations):**
+- `adset_name` → `name` | `adset_id` → `company_name` (PENDING in script) | `campaign_id` → `email` | `campaign_name` → `phone`
+
+**CRM UI features:** Delete lead button (with confirm), company name shown on kanban card when populated.
 
 **Migrations:**
 - `20260429000006_add_crm_leads.sql` — Table + RLS
-- `20260429000007_add_crm_custom_fields.sql` — Broker custom fields
+- `20260429000007_add_crm_custom_fields.sql` — Broker custom fields + company_name
 - `20260429000008_fix_crm_name_nullable.sql` — Drop NOT NULL on name
+- `20260514000001_crm_leads_unique_meta_id.sql` — UNIQUE on meta_lead_id
 
 ---
 
@@ -219,7 +226,10 @@ Checked via `can(action)` — returns boolean based on `currentProfile.role`.
 | `subs` | Subcontractors | Admin |
 | `users` | User Management | Admin (developer only) |
 | `boq` | BOQ Setup | Admin |
-| `crm` | CRM | Sales |
+| `usetup` | Unit Setup | Sales (developer only) |
+| `ureg` | Unit Register | Sales (developer only) |
+| `srev` | Sales Revenue | Sales (developer only) |
+| `crm` | CRM | Sales (sales + developer) |
 
 ---
 
@@ -483,7 +493,7 @@ UPDATE profiles SET role = 'developer' WHERE email = 'mohammed@regent-developmen
 
 ---
 
-## Current State (April 29, 2026)
+## Current State (May 15, 2026)
 
 ### Completed This Session
 - **BOQ PDF → Excel conversion** — Parsed 115-page PDF, generated `boq_import.xlsx` with 276 items across 18 bills (AED 38M total)
@@ -494,15 +504,14 @@ UPDATE profiles SET role = 'developer' WHERE email = 'mohammed@regent-developmen
 - **Test suite** — Part A: 48/48 permission matrix tests pass (pure Node.js)
 
 ### Still Needed
-- **Run RLS migration** for `boq_items_update` policy — run in Supabase Dashboard SQL Editor:
-```sql
-drop policy if exists "boq_bills_update" on boq_bills;
-drop policy if exists "boq_items_update" on boq_items;
-create policy "boq_bills_update" on boq_bills for update to authenticated using (get_user_role() in ('developer','consultant'));
-create policy "boq_items_update" on boq_items for update to authenticated using (get_user_role() in ('developer','consultant'));
-```
-- **Part B Playwright UI tests** — need fresh MCP browser
-- **Part C Supabase API tests** — need auth session (anon key blocked by RLS)
+- **Apps Script `company_name` mapping** — open Apps Script editor, add after `idxPhone` line:
+  ```javascript
+  const idxCompany = headers.findIndex(h => h === 'adset_id');
+  ```
+  And in payload object add:
+  ```javascript
+  company_name: idxCompany >= 0 ? (String(row[idxCompany]||'').trim()||null) : null,
+  ```
 
 ### Files Created/Modified
 - `index.html` — Added BOQ edit mode, deleteBOQItem, addBOQItem, toggleBOQEdit, recalcBOQRow
