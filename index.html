@@ -259,18 +259,21 @@ textarea.form-control{resize:vertical;min-height:70px}
 .ipc-list-row{cursor:pointer;transition:.1s}
 .ipc-list-row:hover{background:var(--bg3)}
 /* CRM */
-.crm-col{min-width:240px;flex:1;background:var(--bg3);border-radius:8px;overflow:hidden}
-.crm-col-head{padding:10px 12px;display:flex;justify-content:space-between;align-items:center;background:var(--bg2);border-bottom:1px solid var(--border)}
-.crm-col-label{font-size:12px;font-weight:600;color:var(--charcoal)}
-.crm-col-count{font-size:11px;background:var(--bg4);color:var(--text2);padding:1px 8px;border-radius:10px}
-.crm-col-body{padding:8px;display:flex;flex-direction:column;gap:8px;min-height:80px}
-.crm-card{background:#fff;border:0.5px solid var(--border);border-radius:6px;padding:10px 12px;cursor:pointer;transition:.1s}
-.crm-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.08);transform:translateY(-1px)}
-.crm-card-name{font-size:12px;font-weight:600;color:var(--charcoal);margin-bottom:4px}
-.crm-card-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px}
-.crm-card-label{color:var(--text3)}
-.crm-card-footer{display:flex;justify-content:space-between;margin-top:6px;padding-top:6px;border-top:0.5px solid var(--border)}
-.crm-src-badge{font-size:10px;background:var(--bg4);color:var(--text2);padding:1px 6px;border-radius:3px}
+.crm-col{min-width:220px;flex:1;background:var(--bg3);border-radius:8px;overflow:hidden}
+.crm-col-head{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;background:var(--bg2);border-bottom:1px solid var(--border)}
+.crm-col-label{font-size:11px;font-weight:700;color:var(--charcoal);text-transform:uppercase;letter-spacing:.04em}
+.crm-col-count{font-size:11px;font-weight:600;background:var(--bg4);color:var(--text2);padding:2px 8px;border-radius:10px;min-width:22px;text-align:center}
+.crm-col-body{padding:8px;display:flex;flex-direction:column;gap:6px;min-height:80px}
+.crm-col-empty{color:var(--text3);font-size:11px;text-align:center;padding:18px 8px;font-style:italic}
+.crm-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:7px;padding:11px 13px;cursor:pointer;transition:box-shadow .15s,transform .15s,border-color .15s}
+.crm-card:hover{box-shadow:0 3px 10px rgba(44,42,36,.1);transform:translateY(-1px);border-color:var(--border2)}
+.crm-card-name{font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crm-card-company{font-size:11px;font-weight:500;color:var(--sand);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crm-card-row{display:flex;gap:6px;font-size:11px;margin-bottom:2px;align-items:baseline;min-width:0}
+.crm-card-label{color:var(--text3);flex-shrink:0}
+.crm-card-val{color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.crm-card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:7px;border-top:0.5px solid var(--border)}
+.crm-src-badge{font-size:10px;background:var(--amber-bg);color:var(--amber);padding:2px 7px;border-radius:4px;font-weight:500}
 .crm-ago{font-size:10px;color:var(--text3)}
 .crm-note{font-size:12px;color:var(--text2);padding:4px 0;border-bottom:0.5px solid var(--border)}
 /* ARFI */
@@ -7224,11 +7227,11 @@ async function renderCRM() {
   const stageCols = CRM_STAGES.map(s => ({...s, items:(leads||[]).filter(l=>l.stage===s.key)}));
 
   document.getElementById('content').innerHTML =
-    '<div class="frow" style="margin-bottom:16px">' +
-      '<div class="form-group" style="margin:0"><label class="form-label-dark">Search Leads</label><input type="text" class="form-control" placeholder="Name, email, phone..." id="crm-search" oninput="filterCRM()"/></div>' +
-      '<div style="align-self:flex-end"><button class="btn btn-primary" onclick="openAddLead()">+ Add Lead</button></div>' +
+    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">' +
+      '<input type="text" class="form-control" style="flex:1;max-width:380px" placeholder="Search name, email, phone..." id="crm-search" oninput="filterCRM()"/>' +
+      '<button class="btn btn-primary" onclick="openAddLead()">+ Add Lead</button>' +
     '</div>' +
-    '<div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:16px" id="crm-board">' +
+    '<div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:16px" id="crm-board">' +
       stageCols.map(col =>
         '<div class="crm-col" data-stage="'+esc(col.key)+'">' +
           '<div class="crm-col-head" style="border-top:3px solid '+esc(col.color)+'">' +
@@ -7236,7 +7239,9 @@ async function renderCRM() {
             '<span class="crm-col-count">'+col.items.length+'</span>' +
           '</div>' +
           '<div class="crm-col-body">' +
-            col.items.map(lead => crmCard(lead)).join('') +
+            (col.items.length===0
+              ? '<div class="crm-col-empty">No leads</div>'
+              : col.items.map(lead => crmCard(lead)).join('')) +
           '</div>' +
         '</div>'
       ).join('') +
@@ -7247,10 +7252,10 @@ function crmCard(lead) {
   const ago = timeAgo(lead.created_at);
   const src = lead.source==='meta_ads'?'Meta':esc(lead.source||'');
   return `<div class="crm-card" onclick="viewLead('${lead.id}')">
-    <div class="crm-card-name">${esc(lead.name)}</div>
-    <div class="crm-card-row"><span class="crm-card-label">Email</span><span>${esc(lead.email||'—')}</span></div>
-    <div class="crm-card-row"><span class="crm-card-label">Phone</span><span>${esc(lead.phone||'—')}</span></div>
-    ${lead.company_name?`<div class="crm-card-row"><span class="crm-card-label">Company</span><span>${esc(lead.company_name)}</span></div>`:''}
+    <div class="crm-card-name">${esc(lead.name||'—')}</div>
+    ${lead.company_name?`<div class="crm-card-company">${esc(lead.company_name)}</div>`:''}
+    <div class="crm-card-row"><span class="crm-card-label">Email</span><span class="crm-card-val">${esc(lead.email||'—')}</span></div>
+    <div class="crm-card-row"><span class="crm-card-label">Phone</span><span class="crm-card-val">${esc(lead.phone||'—')}</span></div>
     <div class="crm-card-footer">
       <span class="crm-src-badge">${src}</span>
       <span class="crm-ago">${ago}</span>
