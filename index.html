@@ -7250,6 +7250,7 @@ function crmCard(lead) {
     <div class="crm-card-name">${esc(lead.name)}</div>
     <div class="crm-card-row"><span class="crm-card-label">Email</span><span>${esc(lead.email||'—')}</span></div>
     <div class="crm-card-row"><span class="crm-card-label">Phone</span><span>${esc(lead.phone||'—')}</span></div>
+    ${lead.company_name?`<div class="crm-card-row"><span class="crm-card-label">Company</span><span>${esc(lead.company_name)}</span></div>`:''}
     <div class="crm-card-footer">
       <span class="crm-src-badge">${src}</span>
       <span class="crm-ago">${ago}</span>
@@ -7298,7 +7299,7 @@ async function viewLead(id) {
       <div id="lead-notes" style="max-height:150px;overflow-y:auto;margin-bottom:8px">${notes}</div>
       <div class="frow"><input type="text" class="form-control" id="lead-note-input" placeholder="Add a note..." onkeydown="if(event.key==='Enter')addLeadNote('${lead.id}')"/><button class="btn btn-primary" onclick="addLeadNote('${lead.id}')">Add</button></div>
     </div>`,
-    `<button class="btn" onclick="closeModal()">Close</button>`);
+    `<button class="btn btn-danger" onclick="deleteLead('${lead.id}')">Delete</button><button class="btn" onclick="closeModal()">Close</button>`);
 }
 
 async function updateLeadStage(id) {
@@ -7324,6 +7325,13 @@ async function addLeadNote(id) {
   const {error} = await sb.from('crm_leads').update({notes,updated_at:new Date().toISOString()}).eq('id',id);
   if(error) { toast('Error: '+error.message,'error'); return; }
   input.value=''; viewLead(id);
+}
+
+async function deleteLead(id) {
+  if(!confirm('Delete this lead? This cannot be undone.')) return;
+  const {error} = await sb.from('crm_leads').delete().eq('id',id);
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  toast('Lead deleted','success'); closeModal(); renderCRM();
 }
 
 function openAddLead() {
