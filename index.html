@@ -7278,6 +7278,129 @@ async function renderCRM() {
   }
 }
 
+function crmHTML(leads, count, stageMap, totalAll, totalPages) {
+  const from = crmPage * CRM_PER_PAGE + 1;
+  const to = Math.min((crmPage + 1) * CRM_PER_PAGE, count);
+  const allOnPage = leads.length > 0 && leads.every(l => crmSelected.has(l.id));
+
+  const toolbar = `
+    <div class="crm-toolbar">
+      <input id="crm-search" class="reg-search" placeholder="Search name, email, phone\u2026"
+        value="${esc(crmSearch)}" oninput="crmOnSearch(this.value)" style="min-width:200px">
+      <select class="filter-sel" id="crm-stage-sel" onchange="crmSetFilter('stage',this.value)">
+        <option value="">Stage: All</option>
+        ${CRM_STAGES.map(s => `<option value="${esc(s.key)}"${crmStage === s.key ? " selected" : ""}>${esc(s.label)}</option>`).join("")}
+      </select>
+      <select class="filter-sel" id="crm-source-sel" onchange="crmSetFilter('source',this.value)">
+        <option value="">Source: All</option>
+        ${["meta_ads","website","referral","walk_in","other"].map(v =>
+          `<option value="${v}"${crmSource === v ? " selected" : ""}>${v.replace("_"," ")}</option>`).join("")}
+      </select>
+      <select class="filter-sel" id="crm-assigned-sel" onchange="crmSetFilter('assigned',this.value)">
+        <option value="">Assigned: All</option>
+      </select>
+      <input type="date" class="filter-sel" id="crm-date-from" value="${esc(crmDateFrom)}"
+        onchange="crmSetFilter('dateFrom',this.value)" title="Created from">
+      <input type="date" class="filter-sel" id="crm-date-to" value="${esc(crmDateTo)}"
+        onchange="crmSetFilter('dateTo',this.value)" title="Created to">
+      <button class="btn btn-primary" onclick="openAddLead()" style="margin-left:auto">+ Add Lead</button>
+    </div>`;
+
+  const pills = `
+    <div class="crm-stage-pills">
+      <button class="crm-pill${!crmStage ? " active" : ""}" onclick="crmSetFilter('stage','')">
+        All <span class="pill-ct">${totalAll}</span>
+      </button>
+      ${CRM_STAGES.map(s => `
+        <button class="crm-pill${crmStage === s.key ? " active" : ""}" onclick="crmSetFilter('stage','${esc(s.key)}')">
+          ${esc(s.label)} <span class="pill-ct">${stageMap[s.key] || 0}</span>
+        </button>`).join("")}
+    </div>`;
+
+  const bulkBar = crmSelected.size > 0 ? `
+    <div class="crm-bulk-bar">
+      <span class="bulk-count">${crmSelected.size} lead${crmSelected.size > 1 ? "s" : ""} selected</span>
+      <button class="btn" onclick="crmBulkMoveStage()">Move stage\u2026</button>
+      <button class="btn" onclick="crmBulkAssign()">Assign to\u2026</button>
+      <button class="btn btn-danger" onclick="crmBulkDelete()">Delete</button>
+      <span style="margin-left:auto;cursor:pointer;color:var(--text3)" onclick="crmClearSelection()">\u2715 Clear</span>
+    </div>` : "";
+
+  const thead = `<tr>
+    <th class="no-sort" style="width:32px">
+      <input type="checkbox" ${allOnPage ? "checked" : ""} onchange="crmToggleAll(this.checked)">
+    </th>
+    ${crmTh("name","Name")}
+    ${crmTh("company_name","Company")}
+    <th class="no-sort">Email</th>
+    <th class="no-sort">Phone</th>
+    ${crmTh("stage","Stage")}
+    ${crmTh("assigned_to","Assigned")}
+    ${crmTh("created_at","Age")}
+    <th class="no-sort"></th>
+  </tr>`;
+
+  const rows = leads.length
+    ? leads.map(l => crmRow(l)).join("")
+    : `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text3)">No leads found</td></tr>`;
+
+  const pageButtons = totalPages <= 1 ? "" : Array.from({ length: totalPages }, (_, i) =>
+    `<button class="crm-page-btn${i === crmPage ? " active" : ""}" onclick="crmSetPage(${i})">${i + 1}</button>`
+  ).join("");
+
+  const footer = `
+    <div class="crm-footer">
+      <span>Showing <strong>${count > 0 ? from : 0}\u2013${to}</strong> of <strong>${count}</strong> leads</span>
+      <div class="crm-page-btns">
+        <button class="crm-page-btn" onclick="crmSetPage(${crmPage - 1})" ${crmPage === 0 ? "disabled" : ""}>\u2190</button>
+        ${pageButtons}
+        <button class="crm-page-btn" onclick="crmSetPage(${crmPage + 1})" ${crmPage >= totalPages - 1 ? "disabled" : ""}>\u2192</button>
+      </div>
+      <span>25 per page</span>
+    </div>`;
+
+  return toolbar + pills + bulkBar +
+    `<table class="crm-table">${thead}<tbody>${rows}</tbody></table>` +
+    footer;
+}
+
+function crmTh(col, label) {
+  const active = crmSortCol === col;
+  const arrow = active ? (crmSortAsc ? " \u2191" : " \u2193") : "";
+  return `<th class="${active ? "crm-sort-active" : ""}" onclick="crmSetSort('${col}')">${esc(label)}${arrow}</th>`;
+}
+
+function crmRow(lead) {
+  const checked = crmSelected.has(lead.id);
+  const stageClass = {
+    new_lead: "badge-warning",
+    contacted_responded: "badge-info",
+    contacted_no_response: "badge-neutral",
+    site_visit: "badge-success",
+    follow_up: "badge-warning",
+    closed_won: "badge-success",
+    closed_lost: "badge-danger"
+  }[lead.stage] || "badge-neutral";
+  const stageLabel = CRM_STAGES.find(s => s.key === lead.stage)?.label || esc(lead.stage || "--");
+  const company = lead.company_name ? esc(lead.company_name) : `<span class="crm-muted">\u2014</span>`;
+  const assigned = lead.assigned_to ? esc(lead.assigned_to) : `<span class="crm-muted">\u2014</span>`;
+  return `
+    <tr class="${checked ? "crm-checked" : ""}" data-id="${lead.id}">
+      <td onclick="crmToggleRow(${lead.id},event)" style="width:32px">
+        <input type="checkbox" ${checked ? "checked" : ""}>
+      </td>
+      <td onclick="viewLead(${lead.id})" style="font-weight:600">${esc(lead.name || "--")}</td>
+      <td onclick="viewLead(${lead.id})">${company}</td>
+      <td onclick="viewLead(${lead.id})" class="crm-muted">${esc(lead.email || "--")}</td>
+      <td onclick="viewLead(${lead.id})" class="crm-muted">${esc(lead.phone || "--")}</td>
+      <td onclick="viewLead(${lead.id})"><span class="badge ${stageClass}">${stageLabel}</span></td>
+      <td onclick="viewLead(${lead.id})" class="crm-muted">${assigned}</td>
+      <td onclick="viewLead(${lead.id})" class="crm-muted">${timeAgo(lead.created_at)}</td>
+      <td class="crm-action" onclick="viewLead(${lead.id})">View \u2192</td>
+    </tr>`;
+}
+
+
 function crmCard(lead) {
   const ago = timeAgo(lead.created_at);
   const src = lead.source==='meta_ads'?'Meta':esc(lead.source||'');
