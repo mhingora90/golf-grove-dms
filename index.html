@@ -1259,6 +1259,7 @@ async function renderMS() {
       <span id="ms-sel-count" class="bulk-bar-count">0 selected</span>
       <button class="btn btn-sm" onclick="bulkExportCSV('method_statements','*','method_statements.csv')">Export Selected</button>
       ${can('approve')?`<button class="btn btn-sm btn-success" onclick="doBatchMSApprove()">Approve Selected</button>`:''}
+      ${currentProfile?.role==='developer'?`<button class="btn btn-sm btn-danger" onclick="bulkDelete('method_statements',selectedMS,'ms','bulk-bar-ms','ms-sel-count')">Delete Selected</button>`:''}
       <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedMS,'ms','bulk-bar-ms','ms-sel-count')">Clear</button>
     </div>
   </div>`;
@@ -1738,6 +1739,26 @@ function updateBulkBar(set, barId, countId, prefix) {
     sa.checked = n>0&&n>=visible.length;
   }
 }
+async function bulkDelete(table, set, prefix, barId, countId) {
+  const ids = [...set];
+  if (!ids.length) return;
+  if (!confirm(`Delete ${ids.length} record(s)? This cannot be undone.`)) return;
+  const { error } = await sb.from(table).delete().in('id', ids);
+  if (error) { toast('Delete failed: ' + error.message, 'error'); return; }
+  toast('Deleted ' + ids.length + ' record(s)', 'success');
+  clearSelection(set, prefix, barId, countId);
+  switch(currentPage) {
+    case 'ms': await renderMS(); break;
+    case 'sub': await renderSubmittals(); break;
+    case 'ir': await renderInspections(); break;
+    case 'ncr': await renderNCRs(); break;
+    case 'rfi': await renderRFIs(); break;
+    case 'trans': await renderTransmittals(); break;
+    case 'corr': await renderCorrespondence(); break;
+    case 'punch': await renderPunchList(); break;
+    default: break;
+  }
+}
 function clearDrawSelection() {
   selectedDrawings.clear();
   document.querySelectorAll('.draw-row input.row-cb').forEach(cb=>cb.checked=false);
@@ -2137,6 +2158,7 @@ async function renderSubmittals() {
       <span id="sub-sel-count" class="bulk-bar-count">0 selected</span>
       ${can('approve')?`<button class="btn btn-sm btn-success" onclick="batchSubAction('review')">Mark Reviewed</button>`:''}
       <button class="btn btn-sm" onclick="batchSubAction('transmit')">Transmit Selected</button>
+      ${currentProfile?.role==='developer'?`<button class="btn btn-sm btn-danger" onclick="bulkDelete('submittals',selectedSubmittals,'sub','bulk-bar-sub','sub-sel-count')">Delete Selected</button>`:''}
       <button class="btn btn-sm" style="margin-left:auto" onclick="clearSubSelection()">Clear</button>
     </div>
   </div>`;
@@ -2213,6 +2235,7 @@ async function renderInspections() {
     <div class="bulk-bar-inner">
       <span id="ir-sel-count" class="bulk-bar-count">0 selected</span>
       <button class="btn btn-sm" onclick="bulkExportCSV('inspections','*','inspections.csv')">Export Selected</button>
+      ${currentProfile?.role==='developer'?`<button class="btn btn-sm btn-danger" onclick="bulkDelete('inspections',selectedIRs,'ir','bulk-bar-ir','ir-sel-count')">Delete Selected</button>`:''}
       <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedIRs,'ir','bulk-bar-ir','ir-sel-count')">Clear</button>
     </div>
   </div>`;
@@ -2293,6 +2316,7 @@ async function renderNCRs() {
     <div class="bulk-bar-inner">
       <span id="ncr-sel-count" class="bulk-bar-count">0 selected</span>
       <button class="btn btn-sm" onclick="bulkExportCSV('ncrs','*','ncrs.csv')">Export Selected</button>
+      ${currentProfile?.role==='developer'?`<button class="btn btn-sm btn-danger" onclick="bulkDelete('ncrs',selectedNCRs,'ncr','bulk-bar-ncr','ncr-sel-count')">Delete Selected</button>`:''}
       <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedNCRs,'ncr','bulk-bar-ncr','ncr-sel-count')">Clear</button>
     </div>
   </div>`;
@@ -4083,6 +4107,7 @@ async function renderRFIs() {
     <div class="bulk-bar-inner">
       <span id="rfi-sel-count" class="bulk-bar-count">0 selected</span>
       <button class="btn btn-sm" onclick="bulkExportCSV('rfis','*','rfis.csv')">Export Selected</button>
+      ${currentProfile?.role==='developer'?`<button class="btn btn-sm btn-danger" onclick="bulkDelete('rfis',selectedRFIs,'rfi','bulk-bar-rfi','rfi-sel-count')">Delete Selected</button>`:''}
       <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedRFIs,'rfi','bulk-bar-rfi','rfi-sel-count')">Clear</button>
     </div>
   </div>`;
@@ -4202,6 +4227,7 @@ async function renderTransmittals() {
     <div class="bulk-bar-inner">
       <span id="trans-sel-count" class="bulk-bar-count">0 selected</span>
       <button class="btn btn-sm" onclick="bulkExportCSV('transmittals','*','transmittals.csv')">Export Selected</button>
+      ${currentProfile?.role==='developer'?`<button class="btn btn-sm btn-danger" onclick="bulkDelete('transmittals',selectedTransmittals,'trans','bulk-bar-trans','trans-sel-count')">Delete Selected</button>`:''}
       <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedTransmittals,'trans','bulk-bar-trans','trans-sel-count')">Clear</button>
     </div>
   </div>`;
@@ -4315,6 +4341,7 @@ async function renderCorrespondence() {
     <div class="bulk-bar-inner">
       <span id="corr-sel-count" class="bulk-bar-count">0 selected</span>
       <button class="btn btn-sm" onclick="bulkExportCSV('correspondence','*','correspondence.csv')">Export Selected</button>
+      ${currentProfile?.role==='developer'?`<button class="btn btn-sm btn-danger" onclick="bulkDelete('correspondence',selectedCorrespondence,'corr','bulk-bar-corr','corr-sel-count')">Delete Selected</button>`:''}
       <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedCorrespondence,'corr','bulk-bar-corr','corr-sel-count')">Clear</button>
     </div>
   </div>`;
@@ -4498,6 +4525,7 @@ async function renderPunchList() {
       <span id="punch-sel-count" class="bulk-bar-count">0 selected</span>
       <button class="btn btn-sm" onclick="bulkExportCSV('punch_list','*','punch_list.csv')">Export Selected</button>
       ${can('approve')?`<button class="btn btn-sm btn-success" onclick="doBatchPunchClose()">Bulk Close</button>`:''}
+      ${currentProfile?.role==='developer'?`<button class="btn btn-sm btn-danger" onclick="bulkDelete('punch_list',selectedPunch,'punch','bulk-bar-punch','punch-sel-count')">Delete Selected</button>`:''}
       <button class="btn btn-sm" style="margin-left:auto" onclick="clearSelection(selectedPunch,'punch','bulk-bar-punch','punch-sel-count')">Clear</button>
     </div>
   </div>`;
