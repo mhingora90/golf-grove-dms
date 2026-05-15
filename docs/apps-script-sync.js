@@ -24,18 +24,23 @@ function buildPayload(headers, row) {
   const idxPhone     = idx('campaign_name');
   const idxBudget    = idx('created_time');
   const idxPropType  = idx('ad_id');
-  const idxLeadId    = idx('id') >= 0 ? idx('id') : idx('lead_id');
+  const idxLeadId    = idx('form_name'); // e.g. "l:999128779718002" — strip "l:" prefix
 
   const str = (i) => i >= 0 ? (String(row[i] || '').trim() || null) : null;
+  const rawId = str(idxLeadId) || '';
+  const metaLeadId = rawId.startsWith('l:') ? rawId.slice(2) : (rawId || null);
+
+  const phone = str(idxPhone);
+  const phoneCleaned = phone ? phone.replace(/^p:/, '') : null;
 
   return {
     name:         str(idxName),
     company_name: str(idxCompany),
     email:        str(idxEmail),
-    phone:        str(idxPhone),
+    phone:        phoneCleaned,
     created_time: str(idxBudget),
     ad_id:        str(idxPropType),
-    meta_lead_id: str(idxLeadId),
+    meta_lead_id: metaLeadId,
     source:       'meta_ads',
   };
 }
