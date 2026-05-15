@@ -7301,6 +7301,12 @@ async function renderCRM() {
   const totalPages = Math.ceil((count || 0) / CRM_PER_PAGE);
   document.getElementById("content").innerHTML = crmHTML(leads || [], count || 0, stageMap, totalAll, totalPages);
 
+  // Refocus search after re-render if it was active
+  if (crmSearch) {
+    const s = document.getElementById("crm-search");
+    if (s) { s.focus(); s.setSelectionRange(s.value.length, s.value.length); }
+  }
+
   // Populate assigned dropdown with live distinct values
   const { data: assigneeRows } = await sb.from("crm_leads").select("assigned_to").not("assigned_to", "is", null);
   const unique = [...new Set((assigneeRows || []).map(r => r.assigned_to).filter(Boolean))].sort();
