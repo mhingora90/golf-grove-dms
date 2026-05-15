@@ -6799,7 +6799,10 @@ function _renderUregTable() {
   const typeF   = document.getElementById('urf-type')?.value   || 'all';
   const statusF = document.getElementById('urf-status')?.value || 'all';
   const floorF  = document.getElementById('urf-floor')?.value  || 'all';
-  const search  = (document.getElementById('urf-search')?.value||'').toLowerCase().trim();
+  const searchEl = document.getElementById('urf-search');
+  const savedRaw  = searchEl?.value || '';
+  const savedCursor = searchEl?.selectionStart ?? savedRaw.length;
+  const search  = savedRaw.toLowerCase().trim();
 
   const floors = [...new Set(units.map(u=>u.floor))].sort((a,b)=>a-b);
 
@@ -6849,12 +6852,6 @@ function _renderUregTable() {
       '<input id="urf-search" class="form-control" style="width:180px;padding:5px 8px;font-size:12px;margin-left:6px" placeholder="Search unit / buyer\u2026" oninput="_renderUregTable()" />' +
     '</div>';
 
-  // Preserve filter state across re-renders
-  const savedType   = typeF;
-  const savedStatus = statusF;
-  const savedFloor  = floorF;
-  const savedSearch = search;
-
   document.getElementById('content').innerHTML =
     filterBar +
     '<div class="card"><div class="tw"><table>' +
@@ -6862,13 +6859,16 @@ function _renderUregTable() {
       rowsHTML +
     '</table></div></div>';
 
-  // Restore filter values after innerHTML wipe
+  // Restore filter values + focus after innerHTML wipe
   const t = document.getElementById('urf-type');
   if(t) {
-    t.value = savedType;
-    document.getElementById('urf-status').value = savedStatus;
-    document.getElementById('urf-floor').value  = savedFloor;
-    document.getElementById('urf-search').value = savedSearch;
+    t.value = typeF;
+    document.getElementById('urf-status').value = statusF;
+    document.getElementById('urf-floor').value  = floorF;
+    const s = document.getElementById('urf-search');
+    s.value = savedRaw;
+    s.focus();
+    s.setSelectionRange(savedCursor, savedCursor);
   }
 }
 
