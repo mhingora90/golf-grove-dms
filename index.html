@@ -7239,38 +7239,42 @@ const CRM_PER_PAGE = 25;
 let crmSearchTimer = null;
 
 async function renderCRM() {
-  const {data:leads, error} = await sb.from('crm_leads').select('*').order('created_at',{ascending:false});
-  if(error) { document.getElementById('content').innerHTML = `<div class="empty-state">Error loading leads: ${esc(error.message)}</div>`; return; }
-  const nb = document.getElementById('nb-crm');
-  if(nb) nb.textContent = leads?.length || 0;
+  let q = sb.from("crm_leads").select("*", { count: "exact" });
+  if (crmSearch)   q = q.or(`name.ilike.%${crmSearch}%,email.ilike.%${crmSearch}%,phone.ilike.%${crmSearch}%`);
+  if (crmStage)    q = q.eq("stage", crmStage);
+  if (crmSource)   q = q.eq("source", crmSource);
+  if (crmAssigned) q = q.eq("assigned_to", crmAssigned);
+  if (crmDateFrom) q = q.gte("created_at", crmDateFrom);
+  if (crmDateTo)   q = q.lte("created_at", crmDateTo + "T23:59:59");
+  q = q.order(crmSortCol, { ascending: crmSortAsc });
+  q = q.range(crmPage * CRM_PER_PAGE, crmPage * CRM_PER_PAGE + CRM_PER_PAGE - 1);
+  const { data: leads, count, error } = await q;
+  if (error) {
+    document.getElementById("content").innerHTML = `<div class="empty-state">Error: ${esc(error.message)}</div>`;
+    return;
+  }
 
-  const stageCols = CRM_STAGES.map(s => ({...s, items:(leads||[]).filter(l=>l.stage===s.key)}));
+  // Nav badge: total unfiltered count
+  const { count: total } = await sb.from("crm_leads").select("*", { count: "exact", head: true });
+  const nb = document.getElementById("nb-crm");
+  if (nb) nb.textContent = total || 0;
 
-  document.getElementById('content').innerHTML =
-    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">' +
-      '<input type="text" class="form-control" style="flex:1;max-width:380px" placeholder="Search name, email, phone..." id="crm-search" oninput="filterCRM()"/>' +
-      '<button class="btn btn-primary" onclick="openAddLead()">+ Add Lead</button>' +
-    '</div>' +
-    '<div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:16px" id="crm-board">' +
-      stageCols.map(col =>
-        '<div class="crm-col" data-stage="'+esc(col.key)+'">' +
-          '<div class="crm-col-head" style="border-top:3px solid '+esc(col.color)+'">' +
-            '<span class="crm-col-label">'+esc(col.label)+'</span>' +
-            '<span class="crm-col-count">'+col.items.length+'</span>' +
-          '</div>' +
-          '<div class="crm-col-body">' +
-            (col.items.length===0
-              ? '<div class="crm-col-empty">No leads</div>'
-              : col.items.map(lead => crmCard(lead)).join('')) +
-          '</div>' +
-        '</div>'
-      ).join('') +
-    '</div>';
-  // Animate columns and cards in with stagger
-  if(window.Motion) {
-    const {animate, stagger} = window.Motion;
-    animate('.crm-col', {opacity:[0,1], y:[12,0]}, {duration:.25, delay:stagger(.06)});
-    animate('.crm-card', {opacity:[0,1], y:[8,0]}, {duration:.2, delay:stagger(.04, {start:.1})});
+  // Stage pill counts: all leads (no filters)
+  const { data: stageRows } = await sb.from("crm_leads").select("stage");
+  const stageMap = {};
+  (stageRows || []).forEach(r => { stageMap[r.stage] = (stageMap[r.stage] || 0) + 1; });
+  const totalAll = (stageRows || []).length;
+
+  const totalPages = Math.ceil((count || 0) / CRM_PER_PAGE);
+  document.getElementById("content").innerHTML = crmHTML(leads || [], count || 0, stageMap, totalAll, totalPages);
+
+  // Populate assigned dropdown with live distinct values
+  const { data: assigneeRows } = await sb.from("crm_leads").select("assigned_to").not("assigned_to", "is", null);
+  const unique = [...new Set((assigneeRows || []).map(r => r.assigned_to).filter(Boolean))].sort();
+  const sel = document.getElementById("crm-assigned-sel");
+  if (sel) {
+    sel.innerHTML = `<option value="">Assigned: All</option>` +
+      unique.map(a => `<option value="${esc(a)}"${crmAssigned === a ? " selected" : ""}>${esc(a)}</option>`).join("");
   }
 }
 
