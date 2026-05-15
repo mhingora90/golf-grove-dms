@@ -7525,27 +7525,7 @@ async function crmBulkDelete() {
   renderCRM();
 }
 
-function crmCard(lead) {
-  const ago = timeAgo(lead.created_at);
-  const src = lead.source==='meta_ads'?'Meta':esc(lead.source||'');
-  return `<div class="crm-card" onclick="viewLead('${lead.id}')">
-    <div class="crm-card-name">${esc(lead.name||'—')}</div>
-    ${lead.company_name?`<div class="crm-card-company">${esc(lead.company_name)}</div>`:''}
-    <div class="crm-card-row"><span class="crm-card-label">Email</span><span class="crm-card-val">${esc(lead.email||'—')}</span></div>
-    <div class="crm-card-row"><span class="crm-card-label">Phone</span><span class="crm-card-val">${esc(lead.phone||'—')}</span></div>
-    <div class="crm-card-footer">
-      <span class="crm-src-badge">${src}</span>
-      <span class="crm-ago">${ago}</span>
-    </div>
-  </div>`;
-}
 
-function filterCRM() {
-  const q = (document.getElementById('crm-search')?.value||'').toLowerCase();
-  document.querySelectorAll('.crm-card').forEach(card => {
-    card.style.display = card.textContent.toLowerCase().includes(q) ? '' : 'none';
-  });
-}
 
 async function viewLead(id) {
   const {data:lead,error} = await sb.from('crm_leads').select('*').eq('id',id).maybeSingle();
