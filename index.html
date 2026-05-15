@@ -7444,6 +7444,87 @@ function crmSetPage(p) {
   renderCRM();
 }
 
+function crmToggleRow(id, event) {
+  event.stopPropagation();
+  if (crmSelected.has(id)) {
+    crmSelected.delete(id);
+  } else {
+    crmSelected.add(id);
+  }
+  renderCRM();
+}
+
+function crmToggleAll(checked) {
+  const rows = document.querySelectorAll(".crm-table tbody tr[data-id]");
+  rows.forEach(tr => {
+    const id = Number(tr.dataset.id);
+    if (checked) { crmSelected.add(id); } else { crmSelected.delete(id); }
+  });
+  renderCRM();
+}
+
+function crmClearSelection() {
+  crmSelected.clear();
+  renderCRM();
+}
+
+function crmBulkMoveStage() {
+  const opts = CRM_STAGES.map(s => `<option value="${esc(s.key)}">${esc(s.label)}</option>`).join("");
+  openModal(`<div class="modal-header"><h2>Move ${crmSelected.size} leads to stage</h2></div>
+    <div class="modal-body">
+      <select id="bulk-stage-sel" class="filter-sel" style="width:100%">${opts}</select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="crmBulkMoveStageConfirm()">Move</button>
+    </div>`);
+}
+
+async function crmBulkMoveStageConfirm() {
+  const stage = document.getElementById("bulk-stage-sel")?.value;
+  if (!stage) return;
+  const ids = [...crmSelected];
+  const { error } = await sb.from("crm_leads").update({ stage }).in("id", ids);
+  if (error) { toast("Error: " + error.message, "error"); return; }
+  toast(`${ids.length} leads moved`, "success");
+  closeModal();
+  crmSelected.clear();
+  renderCRM();
+}
+
+function crmBulkAssign() {
+  openModal(`<div class="modal-header"><h2>Assign ${crmSelected.size} leads</h2></div>
+    <div class="modal-body">
+      <input id="bulk-assign-input" class="reg-search" placeholder="Assignee name…" style="width:100%">
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="crmBulkAssignConfirm()">Assign</button>
+    </div>`);
+}
+
+async function crmBulkAssignConfirm() {
+  const assigned_to = document.getElementById("bulk-assign-input")?.value.trim();
+  if (!assigned_to) return;
+  const ids = [...crmSelected];
+  const { error } = await sb.from("crm_leads").update({ assigned_to }).in("id", ids);
+  if (error) { toast("Error: " + error.message, "error"); return; }
+  toast(`${ids.length} leads assigned to ${assigned_to}`, "success");
+  closeModal();
+  crmSelected.clear();
+  renderCRM();
+}
+
+async function crmBulkDelete() {
+  const ids = [...crmSelected];
+  if (!confirm(`Delete ${ids.length} lead${ids.length > 1 ? "s" : ""}? This cannot be undone.`)) return;
+  const { error } = await sb.from("crm_leads").delete().in("id", ids);
+  if (error) { toast("Error: " + error.message, "error"); return; }
+  toast(`${ids.length} leads deleted`, "success");
+  crmSelected.clear();
+  renderCRM();
+}
+
 function crmCard(lead) {
   const ago = timeAgo(lead.created_at);
   const src = lead.source==='meta_ads'?'Meta':esc(lead.source||'');
