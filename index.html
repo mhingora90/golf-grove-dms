@@ -260,31 +260,63 @@ textarea.form-control{resize:vertical;min-height:70px}
 .ipc-list-row{cursor:pointer;transition:.1s}
 .ipc-list-row:hover{background:var(--bg3)}
 /* CRM */
-.crm-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-bottom:0.5px solid var(--border)}
-.crm-stage-pills{display:flex;gap:0;border-bottom:0.5px solid var(--border);overflow-x:auto}
-.crm-pill{flex:0 0 auto;padding:6px 14px;background:none;border:none;border-bottom:2px solid transparent;font:600 11px var(--font);color:var(--text2);cursor:pointer;white-space:nowrap;transition:color .15s}
-.crm-pill:hover{color:var(--charcoal)}
+.crm-toolbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:10px 16px;border-bottom:0.5px solid var(--border);background:var(--bg2)}
+.crm-toolbar-sep{width:0.5px;height:20px;background:var(--border2);margin:0 4px;flex-shrink:0}
+.crm-stage-pills{display:flex;gap:0;border-bottom:0.5px solid var(--border);overflow-x:auto;background:var(--bg2)}
+.crm-pill{flex:0 0 auto;padding:7px 16px;background:none;border:none;border-bottom:2px solid transparent;font:600 11px var(--font);color:var(--text2);cursor:pointer;white-space:nowrap;transition:color .15s,background .15s,border-color .15s}
+.crm-pill:hover{color:var(--charcoal);background:var(--bg3)}
 .crm-pill.active{color:var(--amber);border-bottom-color:var(--amber)}
-.crm-pill .pill-ct{display:inline-block;margin-left:4px;background:var(--bg4);color:var(--text3);border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700}
+.crm-pill .pill-ct{display:inline-block;margin-left:5px;background:var(--bg4);color:var(--text3);border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;transition:background .15s,color .15s}
 .crm-pill.active .pill-ct{background:var(--amber-bg);color:var(--amber)}
-.crm-bulk-bar{display:flex;align-items:center;gap:8px;padding:7px 16px;background:var(--amber-bg);border-bottom:0.5px solid #FAC775;font-size:12px}
+.crm-pill[data-stage="contacted_responded"].active{color:var(--blue);border-bottom-color:var(--blue)}
+.crm-pill[data-stage="contacted_responded"].active .pill-ct{background:var(--blue-bg);color:var(--blue)}
+.crm-pill[data-stage="contacted_no_response"].active{color:var(--text2);border-bottom-color:var(--text2)}
+.crm-pill[data-stage="contacted_no_response"].active .pill-ct{background:var(--bg4);color:var(--text2)}
+.crm-pill[data-stage="site_visit"].active{color:var(--green);border-bottom-color:var(--green)}
+.crm-pill[data-stage="site_visit"].active .pill-ct{background:var(--green-bg);color:var(--green)}
+.crm-pill[data-stage="follow_up"].active{color:var(--sand);border-bottom-color:var(--sand)}
+.crm-pill[data-stage="follow_up"].active .pill-ct{background:var(--sand-bg);color:var(--sand)}
+.crm-pill[data-stage="closed_won"].active{color:var(--green);border-bottom-color:var(--green)}
+.crm-pill[data-stage="closed_won"].active .pill-ct{background:var(--green-bg);color:var(--green)}
+.crm-pill[data-stage="closed_lost"].active{color:var(--red);border-bottom-color:var(--red)}
+.crm-pill[data-stage="closed_lost"].active .pill-ct{background:var(--red-bg);color:var(--red)}
+.crm-bulk-bar{display:flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(254,243,232,.96);backdrop-filter:blur(8px);border-bottom:0.5px solid #FAC775;font-size:12px;box-shadow:0 2px 8px rgba(196,134,58,.1)}
 .crm-bulk-bar .bulk-count{font-weight:700;color:var(--charcoal)}
 .crm-table{width:100%;border-collapse:collapse}
-.crm-table th{padding:8px 10px;background:var(--bg3);font:700 10px var(--font);color:var(--text3);text-transform:uppercase;letter-spacing:.04em;text-align:left;white-space:nowrap;border-bottom:0.5px solid var(--border);cursor:pointer;user-select:none}
+.crm-table th{padding:8px 10px;background:var(--bg3);font:700 10px var(--font);color:var(--text3);text-transform:uppercase;letter-spacing:.04em;text-align:left;white-space:nowrap;border-bottom:0.5px solid var(--border);cursor:pointer;user-select:none;transition:color .15s}
+.crm-table th:hover{color:var(--text2)}
 .crm-table th.crm-sort-active{color:var(--amber)}
 .crm-table th.no-sort{cursor:default}
-.crm-table td{padding:9px 10px;font-size:13px;color:var(--text1);border-bottom:0.5px solid var(--border2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.crm-table th.no-sort:hover{color:var(--text3)}
+.crm-table td{padding:9px 10px;font-size:13px;color:var(--text);border-bottom:0.5px solid var(--border2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;transition:background .1s}
 .crm-table tr:hover td{background:var(--bg3);cursor:pointer}
 .crm-table tr.crm-checked td{background:var(--amber-bg)}
 .crm-table td.crm-muted{color:var(--text3);font-size:12px}
-.crm-table td.crm-action{text-align:right;color:var(--text3);font-size:12px;font-weight:600}
-.crm-table td.crm-action:hover{color:var(--amber)}
+.crm-table td.crm-action{text-align:right;color:var(--text3);font-size:12px;font-weight:600;transition:color .15s}
+.crm-table tr:hover td.crm-action{color:var(--amber)}
+.crm-table tbody tr[data-stage="new_lead"] td:first-child{border-left:3px solid var(--amber)}
+.crm-table tbody tr[data-stage="contacted_responded"] td:first-child{border-left:3px solid var(--blue)}
+.crm-table tbody tr[data-stage="contacted_no_response"] td:first-child{border-left:3px solid var(--text3)}
+.crm-table tbody tr[data-stage="site_visit"] td:first-child{border-left:3px solid var(--green)}
+.crm-table tbody tr[data-stage="follow_up"] td:first-child{border-left:3px solid var(--sand)}
+.crm-table tbody tr[data-stage="closed_won"] td:first-child{border-left:3px solid var(--green-light)}
+.crm-table tbody tr[data-stage="closed_lost"] td:first-child{border-left:3px solid var(--red)}
 .crm-footer{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--bg3);border-top:0.5px solid var(--border);font-size:12px;color:var(--text2)}
 .crm-page-btns{display:flex;gap:4px}
-.crm-page-btn{padding:3px 9px;border:0.5px solid var(--border);border-radius:var(--radius);background:var(--bg2);font:600 11px var(--font);color:var(--text2);cursor:pointer}
-.crm-page-btn:hover{background:var(--bg3)}
+.crm-page-btn{padding:3px 9px;border:0.5px solid var(--border);border-radius:var(--radius);background:var(--bg2);font:600 11px var(--font);color:var(--text2);cursor:pointer;transition:background .15s,color .15s}
+.crm-page-btn:hover{background:var(--bg3);color:var(--charcoal)}
 .crm-page-btn.active{background:var(--charcoal);color:#fff;border-color:var(--charcoal)}
 .crm-page-btn:disabled{opacity:.4;cursor:default}
+.crm-summary .module-stat{transition:transform .15s,box-shadow .15s;border-left:3px solid var(--border2)}
+.crm-summary .module-stat[onclick]:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(44,42,36,.09)}
+.crm-summary .module-stat.cs-total{border-left-color:var(--charcoal)}
+.crm-summary .module-stat.cs-new{border-left-color:var(--amber)}
+.crm-summary .module-stat.cs-contacted{border-left-color:var(--blue)}
+.crm-summary .module-stat.cs-visit{border-left-color:var(--green)}
+.crm-summary .module-stat.cs-followup{border-left-color:var(--sand)}
+.crm-summary .module-stat.cs-won{border-left-color:var(--green-light)}
+.crm-summary .module-stat.cs-lost{border-left-color:var(--red)}
+.crm-summary .module-stat.cs-active{border-left-color:var(--blue-light)}
 /* ARFI */
 .arfi-ar{background:#FCEBEB;color:#A32D2D;border:0.5px solid #F7C1C1;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block}
 .arfi-fi{background:#F1EFE8;color:#5F5E5A;border:0.5px solid #D3D1C7;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block}
@@ -7287,6 +7319,7 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
     <div class="crm-toolbar">
       <input id="crm-search" class="reg-search" placeholder="Search name, email, phone\u2026"
         value="${esc(crmSearch)}" oninput="crmOnSearch(this.value)" style="min-width:200px">
+      <span class="crm-toolbar-sep"></span>
       <select class="filter-sel" id="crm-stage-sel" onchange="crmSetFilter('stage',this.value)">
         <option value="">Stage: All</option>
         ${CRM_STAGES.map(s => `<option value="${esc(s.key)}"${crmStage === s.key ? " selected" : ""}>${esc(s.label)}</option>`).join("")}
@@ -7299,6 +7332,7 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
       <select class="filter-sel" id="crm-assigned-sel" onchange="crmSetFilter('assigned',this.value)">
         <option value="">Assigned: All</option>
       </select>
+      <span class="crm-toolbar-sep"></span>
       <input type="date" class="filter-sel" id="crm-date-from" value="${esc(crmDateFrom)}"
         onchange="crmSetFilter('dateFrom',this.value)" title="Created from">
       <input type="date" class="filter-sel" id="crm-date-to" value="${esc(crmDateTo)}"
@@ -7312,7 +7346,7 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
         All <span class="pill-ct">${totalAll}</span>
       </button>
       ${CRM_STAGES.map(s => `
-        <button class="crm-pill${crmStage === s.key ? " active" : ""}" onclick="crmSetFilter('stage','${esc(s.key)}')">
+        <button class="crm-pill${crmStage === s.key ? " active" : ""}" data-stage="${esc(s.key)}" onclick="crmSetFilter('stage','${esc(s.key)}')">
           ${esc(s.label)} <span class="pill-ct">${stageMap[s.key] || 0}</span>
         </button>`).join("")}
     </div>`;
@@ -7363,40 +7397,40 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
   const lostCount = stageMap["closed_lost"] || 0;
   const activeCount = totalAll - wonCount - lostCount;
   const summaryBar = `
-    <div class="module-bar" style="padding:14px 16px 0;margin-bottom:0">
-      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','')">
+    <div class="crm-summary"><div class="module-bar" style="padding:14px 16px 0;margin-bottom:0">
+      <div class="module-stat cs-total" style="cursor:pointer" onclick="crmSetFilter('stage','')">
         <div class="module-stat-val">${totalAll}</div>
         <div class="module-stat-label">Total Leads</div>
       </div>
-      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','new_lead')">
+      <div class="module-stat cs-new" style="cursor:pointer" onclick="crmSetFilter('stage','new_lead')">
         <div class="module-stat-val ${(stageMap['new_lead']||0)>0?'warn':''}">${stageMap["new_lead"]||0}</div>
         <div class="module-stat-label">New</div>
       </div>
-      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','contacted_responded')">
+      <div class="module-stat cs-contacted" style="cursor:pointer" onclick="crmSetFilter('stage','contacted_responded')">
         <div class="module-stat-val">${stageMap["contacted_responded"]||0}</div>
         <div class="module-stat-label">Contacted</div>
       </div>
-      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','site_visit')">
+      <div class="module-stat cs-visit" style="cursor:pointer" onclick="crmSetFilter('stage','site_visit')">
         <div class="module-stat-val">${stageMap["site_visit"]||0}</div>
         <div class="module-stat-label">Site Visit</div>
       </div>
-      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','follow_up')">
+      <div class="module-stat cs-followup" style="cursor:pointer" onclick="crmSetFilter('stage','follow_up')">
         <div class="module-stat-val ${(stageMap['follow_up']||0)>0?'warn':''}">${stageMap["follow_up"]||0}</div>
         <div class="module-stat-label">Follow-Up</div>
       </div>
-      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','closed_won')">
+      <div class="module-stat cs-won" style="cursor:pointer" onclick="crmSetFilter('stage','closed_won')">
         <div class="module-stat-val" style="color:var(--green)">${wonCount}</div>
         <div class="module-stat-label">Closed Won</div>
       </div>
-      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','closed_lost')">
+      <div class="module-stat cs-lost" style="cursor:pointer" onclick="crmSetFilter('stage','closed_lost')">
         <div class="module-stat-val ${lostCount>0?'danger':''}">${lostCount}</div>
         <div class="module-stat-label">Closed Lost</div>
       </div>
-      <div class="module-stat">
+      <div class="module-stat cs-active">
         <div class="module-stat-val">${activeCount}</div>
         <div class="module-stat-label">Active Pipeline</div>
       </div>
-    </div>`;
+    </div></div>`;
 
   return summaryBar + toolbar + pills + bulkBar +
     `<table class="crm-table">${thead}<tbody>${rows}</tbody></table>` +
@@ -7424,7 +7458,7 @@ function crmRow(lead) {
   const company = lead.company_name ? esc(lead.company_name) : `<span class="crm-muted">\u2014</span>`;
   const assigned = lead.assigned_to ? esc(lead.assigned_to) : `<span class="crm-muted">\u2014</span>`;
   return `
-    <tr class="${checked ? "crm-checked" : ""}" data-id="${lead.id}">
+    <tr class="${checked ? "crm-checked" : ""}" data-id="${lead.id}" data-stage="${lead.stage || ''}">
       <td onclick="crmToggleRow('${lead.id}',event)" style="width:32px">
         <input type="checkbox" ${checked ? "checked" : ""}>
       </td>
