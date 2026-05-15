@@ -7240,7 +7240,7 @@ let crmSearchTimer = null;
 
 async function renderCRM() {
   let q = sb.from("crm_leads").select("*", { count: "exact" });
-  if (crmSearch)   q = q.or(`name.ilike.%${crmSearch}%,email.ilike.%${crmSearch}%,phone.ilike.%${crmSearch}%`);
+  if (crmSearch) { const s = crmSearch.replace(/,/g, ""); q = q.or(`name.ilike.%${s}%,email.ilike.%${s}%,phone.ilike.%${s}%`); }
   if (crmStage)    q = q.eq("stage", crmStage);
   if (crmSource)   q = q.eq("source", crmSource);
   if (crmAssigned) q = q.eq("assigned_to", crmAssigned);
@@ -7509,7 +7509,7 @@ async function crmBulkAssignConfirm() {
   const ids = [...crmSelected];
   const { error } = await sb.from("crm_leads").update({ assigned_to }).in("id", ids);
   if (error) { toast("Error: " + error.message, "error"); return; }
-  toast(`${ids.length} leads assigned to ${assigned_to}`, "success");
+  toast(`${ids.length} leads assigned to ${esc(assigned_to)}`, "success");
   closeModal();
   crmSelected.clear();
   renderCRM();
