@@ -7,16 +7,19 @@
 -- payment_certificates UPDATE — replace single permissive policy with role-split policies
 drop policy if exists "payment_certs_update" on payment_certificates;
 
+drop policy if exists "payment_certs_update_developer" on payment_certificates;
 create policy "payment_certs_update_developer" on payment_certificates
   for update to authenticated
   using    (get_user_role() = 'developer')
   with check (get_user_role() = 'developer');
 
+drop policy if exists "payment_certs_update_contractor" on payment_certificates;
 create policy "payment_certs_update_contractor" on payment_certificates
   for update to authenticated
   using    (get_user_role() = 'contractor' and status in ('Draft','Submitted'))
   with check (get_user_role() = 'contractor' and status in ('Draft','Submitted'));
 
+drop policy if exists "payment_certs_update_consultant" on payment_certificates;
 create policy "payment_certs_update_consultant" on payment_certificates
   for update to authenticated
   using    (get_user_role() = 'consultant' and status in ('Submitted','Under Review','Certified'))
@@ -25,11 +28,13 @@ create policy "payment_certs_update_consultant" on payment_certificates
 -- payment_certificate_items UPDATE — status-gated via join to parent cert
 drop policy if exists "payment_cert_items_update" on payment_certificate_items;
 
+drop policy if exists "payment_cert_items_update_developer" on payment_certificate_items;
 create policy "payment_cert_items_update_developer" on payment_certificate_items
   for update to authenticated
   using    (get_user_role() = 'developer')
   with check (get_user_role() = 'developer');
 
+drop policy if exists "payment_cert_items_update_contractor" on payment_certificate_items;
 create policy "payment_cert_items_update_contractor" on payment_certificate_items
   for update to authenticated
   using (
@@ -49,6 +54,7 @@ create policy "payment_cert_items_update_contractor" on payment_certificate_item
     )
   );
 
+drop policy if exists "payment_cert_items_update_consultant" on payment_certificate_items;
 create policy "payment_cert_items_update_consultant" on payment_certificate_items
   for update to authenticated
   using (
