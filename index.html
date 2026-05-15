@@ -7369,6 +7369,7 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
     ${crmTh("company_name","Company")}
     <th class="no-sort">Email</th>
     <th class="no-sort">Phone</th>
+    <th class="no-sort">Budget</th>
     ${crmTh("stage","Stage")}
     ${crmTh("assigned_to","Assigned")}
     ${crmTh("created_at","Age")}
@@ -7377,7 +7378,7 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
 
   const rows = leads.length
     ? leads.map(l => crmRow(l)).join("")
-    : `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text3)">No leads found</td></tr>`;
+    : `<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text3)">No leads found</td></tr>`;
 
   const pageButtons = totalPages <= 1 ? "" : Array.from({ length: totalPages }, (_, i) =>
     `<button class="crm-page-btn${i === crmPage ? " active" : ""}" onclick="crmSetPage(${i})">${i + 1}</button>`
@@ -7467,6 +7468,7 @@ function crmRow(lead) {
       <td onclick="viewLead('${lead.id}')">${company}</td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(lead.email || "--")}</td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(lead.phone || "--")}</td>
+      <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(lead.created_time || "--")}</td>
       <td onclick="viewLead('${lead.id}')"><span class="badge ${stageClass}">${stageLabel}</span></td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${assigned}</td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${timeAgo(lead.created_at)}</td>
@@ -7614,7 +7616,7 @@ async function viewLead(id) {
       <div class="detail-item"><div class="detail-label">Phone</div><div class="detail-value">${esc(lead.phone||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Company</div><div class="detail-value">${esc(lead.company_name||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Broker Type</div><div class="detail-value">${esc(lead.broker_type||'—')}</div></div>
-      <div class="detail-item"><div class="detail-label">Budget Range</div><div class="detail-value">${esc(lead.budget_range||'—')}</div></div>
+      <div class="detail-item"><div class="detail-label">Budget</div><div class="detail-value">${esc(lead.created_time||lead.budget_range||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Property Types</div><div class="detail-value">${esc(lead.property_types||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Availability</div><div class="detail-value">${esc(lead.availability||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Source</div><div class="detail-value">${esc(lead.source||'—')}</div></div>
