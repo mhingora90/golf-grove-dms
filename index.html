@@ -7359,7 +7359,46 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
       <span>25 per page</span>
     </div>`;
 
-  return toolbar + pills + bulkBar +
+  const wonCount  = stageMap["closed_won"]  || 0;
+  const lostCount = stageMap["closed_lost"] || 0;
+  const activeCount = totalAll - wonCount - lostCount;
+  const summaryBar = `
+    <div class="module-bar" style="padding:14px 16px 0;margin-bottom:0">
+      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','')">
+        <div class="module-stat-val">${totalAll}</div>
+        <div class="module-stat-label">Total Leads</div>
+      </div>
+      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','new_lead')">
+        <div class="module-stat-val ${(stageMap['new_lead']||0)>0?'warn':''}">${stageMap["new_lead"]||0}</div>
+        <div class="module-stat-label">New</div>
+      </div>
+      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','contacted_responded')">
+        <div class="module-stat-val">${stageMap["contacted_responded"]||0}</div>
+        <div class="module-stat-label">Contacted</div>
+      </div>
+      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','site_visit')">
+        <div class="module-stat-val">${stageMap["site_visit"]||0}</div>
+        <div class="module-stat-label">Site Visit</div>
+      </div>
+      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','follow_up')">
+        <div class="module-stat-val ${(stageMap['follow_up']||0)>0?'warn':''}">${stageMap["follow_up"]||0}</div>
+        <div class="module-stat-label">Follow-Up</div>
+      </div>
+      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','closed_won')">
+        <div class="module-stat-val" style="color:var(--green)">${wonCount}</div>
+        <div class="module-stat-label">Closed Won</div>
+      </div>
+      <div class="module-stat" style="cursor:pointer" onclick="crmSetFilter('stage','closed_lost')">
+        <div class="module-stat-val ${lostCount>0?'danger':''}">${lostCount}</div>
+        <div class="module-stat-label">Closed Lost</div>
+      </div>
+      <div class="module-stat">
+        <div class="module-stat-val">${activeCount}</div>
+        <div class="module-stat-label">Active Pipeline</div>
+      </div>
+    </div>`;
+
+  return summaryBar + toolbar + pills + bulkBar +
     `<table class="crm-table">${thead}<tbody>${rows}</tbody></table>` +
     footer;
 }
