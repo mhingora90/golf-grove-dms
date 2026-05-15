@@ -260,10 +260,11 @@ textarea.form-control{resize:vertical;min-height:70px}
 .ipc-list-row{cursor:pointer;transition:.1s}
 .ipc-list-row:hover{background:var(--bg3)}
 /* CRM */
-.crm-toolbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:10px 16px;border-bottom:0.5px solid var(--border);background:var(--bg2)}
-.crm-toolbar-sep{width:0.5px;height:20px;background:var(--border2);margin:0 4px;flex-shrink:0}
+.crm-summary-wrap{border-bottom:0.5px solid var(--border);background:var(--bg2)}
+.crm-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-bottom:0.5px solid var(--border);background:var(--bg2)}
+.crm-toolbar-sep{width:0.5px;height:22px;background:var(--border2);margin:0 6px;flex-shrink:0}
 .crm-stage-pills{display:flex;gap:0;border-bottom:0.5px solid var(--border);overflow-x:auto;background:var(--bg2)}
-.crm-pill{flex:0 0 auto;padding:7px 16px;background:none;border:none;border-bottom:2px solid transparent;font:600 11px var(--font);color:var(--text2);cursor:pointer;white-space:nowrap;transition:color .15s,background .15s,border-color .15s}
+.crm-pill{flex:0 0 auto;padding:9px 18px;background:none;border:none;border-bottom:2px solid transparent;font:600 11px var(--font);color:var(--text2);cursor:pointer;white-space:nowrap;transition:color .15s,background .15s,border-color .15s}
 .crm-pill:hover{color:var(--charcoal);background:var(--bg3)}
 .crm-pill.active{color:var(--amber);border-bottom-color:var(--amber)}
 .crm-pill .pill-ct{display:inline-block;margin-left:5px;background:var(--bg4);color:var(--text3);border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;transition:background .15s,color .15s}
@@ -307,7 +308,7 @@ textarea.form-control{resize:vertical;min-height:70px}
 .crm-page-btn:hover{background:var(--bg3);color:var(--charcoal)}
 .crm-page-btn.active{background:var(--charcoal);color:#fff;border-color:var(--charcoal)}
 .crm-page-btn:disabled{opacity:.4;cursor:default}
-.crm-summary .module-stat{transition:transform .15s,box-shadow .15s;border-left:3px solid var(--border2)}
+.crm-summary .module-stat{transition:transform .15s,box-shadow .15s;border-left:3px solid var(--border2);padding:12px 18px;gap:4px}
 .crm-summary .module-stat[onclick]:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(44,42,36,.09)}
 .crm-summary .module-stat.cs-total{border-left-color:var(--charcoal)}
 .crm-summary .module-stat.cs-new{border-left-color:var(--amber)}
@@ -7397,7 +7398,7 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
   const lostCount = stageMap["closed_lost"] || 0;
   const activeCount = totalAll - wonCount - lostCount;
   const summaryBar = `
-    <div class="crm-summary"><div class="module-bar" style="padding:14px 16px 0;margin-bottom:0">
+    <div class="crm-summary crm-summary-wrap"><div class="module-bar" style="padding:16px 16px 16px;margin-bottom:0;gap:12px">
       <div class="module-stat cs-total" style="cursor:pointer" onclick="crmSetFilter('stage','')">
         <div class="module-stat-val">${totalAll}</div>
         <div class="module-stat-label">Total Leads</div>
