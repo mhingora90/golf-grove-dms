@@ -753,7 +753,7 @@ async function render() {
   else if(currentPage==='usetup') await renderUnitSetup();
   else if(currentPage==='ureg') await renderUnitRegister();
   else if(currentPage==='srev') await renderSalesRevenue();
-  else if(currentPage==='crm') await renderCRM();
+  else if(currentPage==='crm') { resetCRM(); await renderCRM(); }
   await updateBadges();
 }
 
@@ -7400,6 +7400,49 @@ function crmRow(lead) {
     </tr>`;
 }
 
+
+function resetCRM() {
+  crmSearch = ""; crmStage = ""; crmSource = ""; crmAssigned = "";
+  crmDateFrom = ""; crmDateTo = "";
+  crmSortCol = "created_at"; crmSortAsc = false;
+  crmPage = 0; crmSelected.clear();
+}
+
+function crmOnSearch(val) {
+  clearTimeout(crmSearchTimer);
+  crmSearchTimer = setTimeout(() => {
+    crmSearch = val.trim();
+    crmPage = 0; crmSelected.clear();
+    renderCRM();
+  }, 350);
+}
+
+function crmSetFilter(field, val) {
+  if (field === "stage")    crmStage    = val;
+  if (field === "source")   crmSource   = val;
+  if (field === "assigned") crmAssigned = val;
+  if (field === "dateFrom") crmDateFrom = val;
+  if (field === "dateTo")   crmDateTo   = val;
+  crmPage = 0; crmSelected.clear();
+  renderCRM();
+}
+
+function crmSetSort(col) {
+  if (crmSortCol === col) {
+    crmSortAsc = !crmSortAsc;
+  } else {
+    crmSortCol = col;
+    crmSortAsc = col !== "created_at";
+  }
+  crmPage = 0; crmSelected.clear();
+  renderCRM();
+}
+
+function crmSetPage(p) {
+  crmPage = p;
+  crmSelected.clear();
+  renderCRM();
+}
 
 function crmCard(lead) {
   const ago = timeAgo(lead.created_at);
