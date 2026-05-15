@@ -1,0 +1,67 @@
+<h2>Filter Bar Design</h2>
+<p class="subtitle">All filtering is server-side (fast at 100s of leads). Which set of filters does your team need?</p>
+
+<style>
+.filter-mock { display:flex; gap:8px; align-items:center; flex-wrap:wrap; background:#f5f2ed; border:1px solid #e2ddd6; border-radius:7px; padding:10px 14px; margin-top:10px; font-size:12px; }
+.fchip { background:#fff; border:1px solid #d1cdc5; border-radius:5px; padding:4px 10px; color:#2c2a24; font-size:11px; font-weight:500; }
+.fchip-active { background:#fef3c7; border-color:#f59e0b; color:#92400e; }
+.fsep { color:#d1cdc5; }
+</style>
+
+<div class="options">
+
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Essential — Stage + Search</h3>
+      <p>Search box + stage filter tabs (All / New / Contacted / …). Simple, fast, covers 90% of daily use.</p>
+      <div class="filter-mock">
+        <input class="fchip" style="width:180px" placeholder="🔍 Search name, phone…" readonly>
+        <span class="fsep">|</span>
+        <span class="fchip fchip-active">All (142)</span>
+        <span class="fchip">New (38)</span>
+        <span class="fchip">Contacted (24)</span>
+        <span class="fchip">No Response (31)</span>
+        <span class="fchip">Site Visit (12)</span>
+        <span class="fchip">Follow-Up (19)</span>
+        <span class="fchip">Won (9)</span>
+        <span class="fchip">Lost (9)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Standard — Stage + Source + Assigned</h3>
+      <p>Search + stage dropdown + source dropdown + assigned-to dropdown. Lets sales managers filter by team member. Most useful for teams.</p>
+      <div class="filter-mock">
+        <input class="fchip" style="width:160px" placeholder="🔍 Search…" readonly>
+        <span class="fchip fchip-active">Stage: All ▾</span>
+        <span class="fchip">Source: All ▾</span>
+        <span class="fchip">Assigned: All ▾</span>
+        <span class="fsep">|</span>
+        <span class="fchip">+ Add Lead</span>
+      </div>
+      <p style="margin-top:6px;font-size:11px;color:#6b7280">Stage options: All / New / Contacted / No Response / Site Visit / Follow-Up / Won / Lost<br>Source options: All / Meta Ads / Website / Referral / Walk-In / Other</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Full — Stage + Source + Assigned + Date range</h3>
+      <p>Everything in B plus a date range picker (created_at). Good for reporting — "show all Meta leads this month".</p>
+      <div class="filter-mock">
+        <input class="fchip" style="width:140px" placeholder="🔍 Search…" readonly>
+        <span class="fchip fchip-active">Stage: All ▾</span>
+        <span class="fchip">Source: All ▾</span>
+        <span class="fchip">Assigned: All ▾</span>
+        <span class="fchip">May 1 → May 15 📅</span>
+        <span class="fsep">|</span>
+        <span class="fchip">+ Add Lead</span>
+      </div>
+    </div>
+  </div>
+
+</div>

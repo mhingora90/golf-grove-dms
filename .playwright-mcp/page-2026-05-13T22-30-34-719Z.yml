@@ -1,0 +1,90 @@
+- generic [ref=e12]:
+  - generic [ref=e14]:
+    - generic [ref=e17]:
+      - img [ref=e20]
+      - generic [ref=e24]: Explore the things you love.
+    - generic [ref=e34]:
+      - generic [ref=e41]: Log into Facebook
+      - generic [ref=e46]:
+        - textbox "Email or mobile number" [ref=e51]
+        - textbox "Password" [ref=e56]
+        - button "Log In" [ref=e60] [cursor=pointer]:
+          - generic [ref=e64]: Log in
+        - link "Forgot password?" [ref=e67] [cursor=pointer]:
+          - /url: https://www.facebook.com/recover/initiate/?privacy_mutation_token=eyJ0eXBlIjo1LCJjcmVhdGlvbl90aW1lIjoxNzc4NzExNDMzfQ%3D%3D&ars=facebook_login&next=%2Fbusiness%2Floginpage%2Ffbauth%2F%3Ff3_request_id%3Dkkfamcgoecnebcjoobanmdfpbilnekgonfgcjled%26next%3Dhttps%253A%252F%252Fdevelopers.facebook.com%252Fapps%252F
+          - generic [ref=e70]: Forgot password?
+        - link "Create new account" [ref=e73] [cursor=pointer]:
+          - /url: /reg/?entry_point=login&next=%2Fbusiness%2Floginpage%2Ffbauth%2F%3Ff3_request_id%3Dkkfamcgoecnebcjoobanmdfpbilnekgonfgcjled%26next%3Dhttps%253A%252F%252Fdevelopers.facebook.com%252Fapps%252F
+          - generic [ref=e76]: Create new account
+        - img "Meta logo" [ref=e78]
+  - separator [ref=e86]
+  - main [ref=e92]:
+    - separator [ref=e94]
+    - generic [ref=e99]:
+      - generic [ref=e101]:
+        - generic [ref=e103]: English (US)
+        - link "العربية" [ref=e106] [cursor=pointer]:
+          - /url: "#"
+        - link "Français (France)" [ref=e109] [cursor=pointer]:
+          - /url: "#"
+        - link "Bahasa Indonesia" [ref=e112] [cursor=pointer]:
+          - /url: "#"
+        - link "Русский" [ref=e115] [cursor=pointer]:
+          - /url: "#"
+        - link "Español" [ref=e118] [cursor=pointer]:
+          - /url: "#"
+        - link "Português (Brasil)" [ref=e121] [cursor=pointer]:
+          - /url: "#"
+        - link "More languages…" [ref=e124] [cursor=pointer]:
+          - /url: "#"
+      - generic [ref=e127]:
+        - link "Sign Up" [ref=e130] [cursor=pointer]:
+          - /url: https://www.facebook.com/reg/
+        - link "Log In" [ref=e133] [cursor=pointer]:
+          - /url: https://www.facebook.com/login/
+        - link "Messenger" [ref=e136] [cursor=pointer]:
+          - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fmessenger.com%2F&h=AUDGMBVjrfIhwHSroa_TgfMJnRfcBAT_ntsPQU8OlfzaR71o_LiVr2_H-lYvxPgns2UighwjEh1A-IgZmThAIjKCoASQXvNUHNjGVy8DLf5A68w1A4pGBVAvUXI-P_A2zTRaRPZ4p4piizDqi87OZrxpDIqasuZDFo8qUw
+        - link "Facebook Lite" [ref=e139] [cursor=pointer]:
+          - /url: https://www.facebook.com/lite/
+        - link "Video" [ref=e142] [cursor=pointer]:
+          - /url: https://www.facebook.com/watch/
+        - link "Meta Pay" [ref=e145] [cursor=pointer]:
+          - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fabout.meta.com%2Ftechnologies%2Fmeta-pay&h=AUDGMBVjrfIhwHSroa_TgfMJnRfcBAT_ntsPQU8OlfzaR71o_LiVr2_H-lYvxPgns2UighwjEh1A-IgZmThAIjKCoASQXvNUHNjGVy8DLf5A68w1A4pGBVAvUXI-P_A2zTRaRPZ4p4piizDqi87OZrxpDIqasuZDFo8qUw
+        - link "Meta Store" [ref=e148] [cursor=pointer]:
+          - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.meta.com%2F&h=AUDGMBVjrfIhwHSroa_TgfMJnRfcBAT_ntsPQU8OlfzaR71o_LiVr2_H-lYvxPgns2UighwjEh1A-IgZmThAIjKCoASQXvNUHNjGVy8DLf5A68w1A4pGBVAvUXI-P_A2zTRaRPZ4p4piizDqi87OZrxpDIqasuZDFo8qUw
+        - link "Meta Quest" [ref=e151] [cursor=pointer]:
+          - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.meta.com%2Fquest%2F&h=AUDGMBVjrfIhwHSroa_TgfMJnRfcBAT_ntsPQU8OlfzaR71o_LiVr2_H-lYvxPgns2UighwjEh1A-IgZmThAIjKCoASQXvNUHNjGVy8DLf5A68w1A4pGBVAvUXI-P_A2zTRaRPZ4p4piizDqi87OZrxpDIqasuZDFo8qUw
+        - link "Ray-Ban Meta" [ref=e154] [cursor=pointer]:
+          - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.meta.com%2Fsmart-glasses%2F&h=AUDGMBVjrfIhwHSroa_TgfMJnRfcBAT_ntsPQU8OlfzaR71o_LiVr2_H-lYvxPgns2UighwjEh1A-IgZmThAIjKCoASQXvNUHNjGVy8DLf5A68w1A4pGBVAvUXI-P_A2zTRaRPZ4p4piizDqi87OZrxpDIqasuZDFo8qUw
+        - link "Meta AI" [ref=e157] [cursor=pointer]:
+          - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.meta.ai%2F&h=AUDGMBVjrfIhwHSroa_TgfMJnRfcBAT_ntsPQU8OlfzaR71o_LiVr2_H-lYvxPgns2UighwjEh1A-IgZmThAIjKCoASQXvNUHNjGVy8DLf5A68w1A4pGBVAvUXI-P_A2zTRaRPZ4p4piizDqi87OZrxpDIqasuZDFo8qUw
+        - link "Instagram" [ref=e160] [cursor=pointer]:
+          - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.instagram.com%2F&h=AUDGMBVjrfIhwHSroa_TgfMJnRfcBAT_ntsPQU8OlfzaR71o_LiVr2_H-lYvxPgns2UighwjEh1A-IgZmThAIjKCoASQXvNUHNjGVy8DLf5A68w1A4pGBVAvUXI-P_A2zTRaRPZ4p4piizDqi87OZrxpDIqasuZDFo8qUw
+        - link "Threads" [ref=e163] [cursor=pointer]:
+          - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.threads.com%2F&h=AUDGMBVjrfIhwHSroa_TgfMJnRfcBAT_ntsPQU8OlfzaR71o_LiVr2_H-lYvxPgns2UighwjEh1A-IgZmThAIjKCoASQXvNUHNjGVy8DLf5A68w1A4pGBVAvUXI-P_A2zTRaRPZ4p4piizDqi87OZrxpDIqasuZDFo8qUw
+        - link "Privacy Policy" [ref=e166] [cursor=pointer]:
+          - /url: https://www.facebook.com/privacy/policy/?entry_point=facebook_page_footer
+        - link "Privacy Center" [ref=e169] [cursor=pointer]:
+          - /url: https://www.facebook.com/privacy/center/?entry_point=facebook_page_footer
+        - link "About" [ref=e172] [cursor=pointer]:
+          - /url: https://www.facebook.com/about/
+        - link "Create ad" [ref=e175] [cursor=pointer]:
+          - /url: https://www.facebook.com/ad_campaign/landing.php?placement=pflo&campaign_id=402047449186&nav_source=unknown&extra_1=auto
+        - link "Create Page" [ref=e178] [cursor=pointer]:
+          - /url: https://www.facebook.com/pages/create/?ref_type=site_footer
+        - link "Developers" [ref=e181] [cursor=pointer]:
+          - /url: https://developers.facebook.com/?ref=pf
+        - link "Careers" [ref=e184] [cursor=pointer]:
+          - /url: https://www.facebook.com/careers/?ref=pf
+        - link "Cookies" [ref=e187] [cursor=pointer]:
+          - /url: https://www.facebook.com/policies/cookies/
+        - link "Ad choices" [ref=e190] [cursor=pointer]:
+          - /url: https://www.facebook.com/help/568137493302217
+          - text: Ad choices
+        - link "Terms" [ref=e195] [cursor=pointer]:
+          - /url: https://www.facebook.com/policies?ref=pf
+        - link "Help" [ref=e198] [cursor=pointer]:
+          - /url: https://www.facebook.com/help/?ref=pf
+        - link "Contact Uploading & Non-Users" [ref=e201] [cursor=pointer]:
+          - /url: https://www.facebook.com/help/637205020878504
+      - generic [ref=e204]: Meta © 2026

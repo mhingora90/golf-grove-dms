@@ -1,0 +1,363 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - generic [ref=e22]: Active Project
+        - generic [ref=e23]: Golf Grove – Residential Building (B+G+P+7+Roof)
+      - generic [ref=e24]:
+        - generic [ref=e25]: MH
+        - generic [ref=e26]:
+          - generic [ref=e27]: Mohammed Hingora
+          - generic [ref=e28]: developer
+      - generic [ref=e29]: Main
+      - generic [ref=e30] [cursor=pointer]:
+        - img [ref=e31]
+        - text: Dashboard
+      - generic [ref=e36]: Document Control
+      - generic [ref=e37] [cursor=pointer]:
+        - img [ref=e38]
+        - text: Drawing Register
+      - generic [ref=e40] [cursor=pointer]:
+        - img [ref=e41]
+        - text: Submittals (DSUB)
+        - generic [ref=e44]: "1"
+      - generic [ref=e45] [cursor=pointer]:
+        - img [ref=e46]
+        - text: Submittal Register
+      - generic [ref=e48]: Site
+      - generic [ref=e49] [cursor=pointer]:
+        - img [ref=e50]
+        - text: Inspection Requests
+        - generic [ref=e53]: "2"
+      - generic [ref=e54] [cursor=pointer]:
+        - img [ref=e55]
+        - text: NCRs
+        - generic [ref=e58]: "2"
+      - generic [ref=e59] [cursor=pointer]:
+        - img [ref=e60]
+        - text: RFIs
+        - generic [ref=e64]: "1"
+      - generic [ref=e65] [cursor=pointer]:
+        - img [ref=e66]
+        - text: Transmittals
+      - generic [ref=e68] [cursor=pointer]:
+        - img [ref=e69]
+        - text: Method Statements
+      - generic [ref=e72] [cursor=pointer]:
+        - img [ref=e73]
+        - text: Correspondence
+      - generic [ref=e76] [cursor=pointer]:
+        - img [ref=e77]
+        - text: Punch List
+        - generic [ref=e80]: "0"
+      - generic [ref=e81]: Finance
+      - generic [ref=e82] [cursor=pointer]:
+        - img [ref=e83]
+        - text: Finance Overview
+      - generic [ref=e86] [cursor=pointer]:
+        - img [ref=e87]
+        - text: Payment Certificates
+      - generic [ref=e90] [cursor=pointer]:
+        - img [ref=e91]
+        - text: BOQ Setup
+      - generic [ref=e94]:
+        - generic [ref=e95]: Sales
+        - generic [ref=e96] [cursor=pointer]:
+          - img [ref=e97]
+          - text: CRM
+          - generic [ref=e101]: "9"
+        - generic [ref=e102] [cursor=pointer]:
+          - img [ref=e103]
+          - text: Unit Setup
+        - generic [ref=e106] [cursor=pointer]:
+          - img [ref=e107]
+          - text: Unit Register
+        - generic [ref=e110] [cursor=pointer]:
+          - img [ref=e111]
+          - text: Sales Revenue
+      - generic [ref=e114]: Admin
+      - generic [ref=e115] [cursor=pointer]:
+        - img [ref=e116]
+        - text: Subcontractors
+      - generic [ref=e122] [cursor=pointer]:
+        - img [ref=e123]
+        - text: User Management
+      - button "Sign Out" [ref=e127] [cursor=pointer]
+    - generic [ref=e128]:
+      - generic [ref=e129]:
+        - generic [ref=e130]:
+          - generic [ref=e131]: CRM
+          - generic [ref=e132]: Friday, 15 May 2026
+        - generic [ref=e134]: developer
+      - generic [ref=e135]:
+        - generic [ref=e291]:
+          - textbox "Search name, email, phone…" [ref=e292]
+          - combobox [ref=e293] [cursor=pointer]:
+            - 'option "Stage: All" [selected]'
+            - option "New Lead"
+            - option "Contacted"
+            - option "No Response"
+            - option "Site Visit"
+            - option "Follow-Up"
+            - option "Closed Won"
+            - option "Closed Lost"
+          - combobox [ref=e294] [cursor=pointer]:
+            - 'option "Source: All" [selected]'
+            - option "meta ads"
+            - option "website"
+            - option "referral"
+            - option "walk in"
+            - option "other"
+          - combobox [ref=e295] [cursor=pointer]:
+            - 'option "Assigned: All" [selected]'
+          - textbox "Created from" [ref=e296] [cursor=pointer]
+          - textbox "Created to" [ref=e297] [cursor=pointer]
+          - button "+ Add Lead" [ref=e298] [cursor=pointer]
+        - generic [ref=e299]:
+          - button "All 9" [ref=e300] [cursor=pointer]:
+            - text: All
+            - generic [ref=e301]: "9"
+          - button "New Lead 9" [ref=e302] [cursor=pointer]:
+            - text: New Lead
+            - generic [ref=e303]: "9"
+          - button "Contacted 0" [ref=e304] [cursor=pointer]:
+            - text: Contacted
+            - generic [ref=e305]: "0"
+          - button "No Response 0" [ref=e306] [cursor=pointer]:
+            - text: No Response
+            - generic [ref=e307]: "0"
+          - button "Site Visit 0" [ref=e308] [cursor=pointer]:
+            - text: Site Visit
+            - generic [ref=e309]: "0"
+          - button "Follow-Up 0" [ref=e310] [cursor=pointer]:
+            - text: Follow-Up
+            - generic [ref=e311]: "0"
+          - button "Closed Won 0" [ref=e312] [cursor=pointer]:
+            - text: Closed Won
+            - generic [ref=e313]: "0"
+          - button "Closed Lost 0" [ref=e314] [cursor=pointer]:
+            - text: Closed Lost
+            - generic [ref=e315]: "0"
+        - generic [ref=e316]:
+          - generic [ref=e317]: 1 lead selected
+          - button "Move stage…" [ref=e318] [cursor=pointer]
+          - button "Assign to…" [ref=e319] [cursor=pointer]
+          - button "Delete" [ref=e320] [cursor=pointer]
+          - generic [ref=e321] [cursor=pointer]: ✕ Clear
+        - table [ref=e322]:
+          - rowgroup [ref=e323]:
+            - row "Name Company Email Phone Stage Assigned Age ↓" [ref=e324]:
+              - columnheader [ref=e325]:
+                - checkbox [ref=e326]
+              - columnheader "Name" [ref=e327] [cursor=pointer]
+              - columnheader "Company" [ref=e328] [cursor=pointer]
+              - columnheader "Email" [ref=e329]
+              - columnheader "Phone" [ref=e330]
+              - columnheader "Stage" [ref=e331] [cursor=pointer]
+              - columnheader "Assigned" [ref=e332] [cursor=pointer]
+              - columnheader "Age ↓" [ref=e333] [cursor=pointer]
+              - columnheader [ref=e334]
+          - rowgroup [ref=e335]:
+            - row "Shahzad Truss shahzadkhan669988@gmail.com +971556243877 New Lead — 12h ago View →" [ref=e336]:
+              - cell [ref=e337]:
+                - checkbox [checked] [ref=e338]
+              - cell "Shahzad" [ref=e339]
+              - cell "Truss" [ref=e340]
+              - cell "shahzadkhan669988@gmail.com" [ref=e341]
+              - cell "+971556243877" [ref=e342]
+              - cell "New Lead" [ref=e343]:
+                - generic [ref=e344]: New Lead
+              - cell "—" [ref=e345]
+              - cell "12h ago" [ref=e346]
+              - cell "View →" [ref=e347]
+            - row "Mostafa — abdalhak43@gmail.com +971555303080 New Lead — 19h ago View →" [ref=e348]:
+              - cell [ref=e349]:
+                - checkbox [ref=e350]
+              - cell "Mostafa" [ref=e351]
+              - cell "—" [ref=e352]
+              - cell "abdalhak43@gmail.com" [ref=e353]
+              - cell "+971555303080" [ref=e354]
+              - cell "New Lead" [ref=e355]:
+                - generic [ref=e356]: New Lead
+              - cell "—" [ref=e357]
+              - cell "19h ago" [ref=e358]
+              - cell "View →" [ref=e359]
+            - row "Emad — emadst@yahoo.com +971564704829 New Lead — 1d ago View →" [ref=e360]:
+              - cell [ref=e361]:
+                - checkbox [ref=e362]
+              - cell "Emad" [ref=e363]
+              - cell "—" [ref=e364]
+              - cell "emadst@yahoo.com" [ref=e365]
+              - cell "+971564704829" [ref=e366]
+              - cell "New Lead" [ref=e367]:
+                - generic [ref=e368]: New Lead
+              - cell "—" [ref=e369]
+              - cell "1d ago" [ref=e370]
+              - cell "View →" [ref=e371]
+            - row "Ehtisham — ehtishammgl@gmail.com +971569116674 New Lead — 1d ago View →" [ref=e372]:
+              - cell [ref=e373]:
+                - checkbox [ref=e374]
+              - cell "Ehtisham" [ref=e375]
+              - cell "—" [ref=e376]
+              - cell "ehtishammgl@gmail.com" [ref=e377]
+              - cell "+971569116674" [ref=e378]
+              - cell "New Lead" [ref=e379]:
+                - generic [ref=e380]: New Lead
+              - cell "—" [ref=e381]
+              - cell "1d ago" [ref=e382]
+              - cell "View →" [ref=e383]
+            - row "MD Kaiser Mahmud — igre.kaiser@gmail.com +971581005220 New Lead — 1d ago View →" [ref=e384]:
+              - cell [ref=e385]:
+                - checkbox [ref=e386]
+              - cell "MD Kaiser Mahmud" [ref=e387]
+              - cell "—" [ref=e388]
+              - cell "igre.kaiser@gmail.com" [ref=e389]
+              - cell "+971581005220" [ref=e390]
+              - cell "New Lead" [ref=e391]:
+                - generic [ref=e392]: New Lead
+              - cell "—" [ref=e393]
+              - cell "1d ago" [ref=e394]
+              - cell "View →" [ref=e395]
+            - row "Reyansh — praful.rawat@gmail.com +971558950540 New Lead — 1d ago View →" [ref=e396]:
+              - cell [ref=e397]:
+                - checkbox [ref=e398]
+              - cell "Reyansh" [ref=e399]
+              - cell "—" [ref=e400]
+              - cell "praful.rawat@gmail.com" [ref=e401]
+              - cell "+971558950540" [ref=e402]
+              - cell "New Lead" [ref=e403]:
+                - generic [ref=e404]: New Lead
+              - cell "—" [ref=e405]
+              - cell "1d ago" [ref=e406]
+              - cell "View →" [ref=e407]
+            - row "Ebrahim Yousef — Info@valiryaproperty.com +971583060948 New Lead — 1d ago View →" [ref=e408]:
+              - cell [ref=e409]:
+                - checkbox [ref=e410]
+              - cell "Ebrahim Yousef" [ref=e411]
+              - cell "—" [ref=e412]
+              - cell "Info@valiryaproperty.com" [ref=e413]
+              - cell "+971583060948" [ref=e414]
+              - cell "New Lead" [ref=e415]:
+                - generic [ref=e416]: New Lead
+              - cell "—" [ref=e417]
+              - cell "1d ago" [ref=e418]
+              - cell "View →" [ref=e419]
+            - row "Mohamed Sufyan — skintl888@gmail.com +971508378611 New Lead — 1d ago View →" [ref=e420]:
+              - cell [ref=e421]:
+                - checkbox [ref=e422]
+              - cell "Mohamed Sufyan" [ref=e423]
+              - cell "—" [ref=e424]
+              - cell "skintl888@gmail.com" [ref=e425]
+              - cell "+971508378611" [ref=e426]
+              - cell "New Lead" [ref=e427]:
+                - generic [ref=e428]: New Lead
+              - cell "—" [ref=e429]
+              - cell "1d ago" [ref=e430]
+              - cell "View →" [ref=e431]
+            - row "Sky — theonlineworkonly@gmail.com +971564676763 New Lead — 2d ago View →" [ref=e432]:
+              - cell [ref=e433]:
+                - checkbox [ref=e434]
+              - cell "Sky" [ref=e435]
+              - cell "—" [ref=e436]
+              - cell "theonlineworkonly@gmail.com" [ref=e437]
+              - cell "+971564676763" [ref=e438]
+              - cell "New Lead" [ref=e439]:
+                - generic [ref=e440]: New Lead
+              - cell "—" [ref=e441]
+              - cell "2d ago" [ref=e442]
+              - cell "View →" [ref=e443]
+        - generic [ref=e444]:
+          - generic [ref=e445]:
+            - text: Showing
+            - strong [ref=e446]: 1–9
+            - text: of
+            - strong [ref=e447]: "9"
+            - text: leads
+          - generic [ref=e448]:
+            - button "←" [disabled] [ref=e449]
+            - button "→" [disabled] [ref=e450]
+          - generic [ref=e451]: 25 per page
+  - generic [ref=e453]:
+    - generic [ref=e454]:
+      - generic [ref=e455]: Lead — Mostafa
+      - button "×" [ref=e456] [cursor=pointer]
+    - generic [ref=e457]:
+      - generic [ref=e458]:
+        - generic [ref=e459]:
+          - generic [ref=e460]: Name
+          - generic [ref=e461]: Mostafa
+        - generic [ref=e462]:
+          - generic [ref=e463]: First Name
+          - generic [ref=e464]: —
+        - generic [ref=e465]:
+          - generic [ref=e466]: Email
+          - generic [ref=e467]: abdalhak43@gmail.com
+        - generic [ref=e468]:
+          - generic [ref=e469]: Phone
+          - generic [ref=e470]: "+971555303080"
+        - generic [ref=e471]:
+          - generic [ref=e472]: Company
+          - generic [ref=e473]: —
+        - generic [ref=e474]:
+          - generic [ref=e475]: Broker Type
+          - generic [ref=e476]: —
+        - generic [ref=e477]:
+          - generic [ref=e478]: Budget Range
+          - generic [ref=e479]: —
+        - generic [ref=e480]:
+          - generic [ref=e481]: Property Types
+          - generic [ref=e482]: —
+        - generic [ref=e483]:
+          - generic [ref=e484]: Availability
+          - generic [ref=e485]: —
+        - generic [ref=e486]:
+          - generic [ref=e487]: Source
+          - generic [ref=e488]: meta_ads
+        - generic [ref=e489]:
+          - generic [ref=e490]: Meta Lead ID
+          - generic [ref=e491]: l:2170699820380425
+        - generic [ref=e492]:
+          - generic [ref=e493]: Created
+          - generic [ref=e494]: 14/05/2026, 19:10:18
+        - generic [ref=e495]:
+          - generic [ref=e496]: Last Contacted
+          - generic [ref=e497]: Never
+      - generic [ref=e498]:
+        - generic [ref=e499]:
+          - generic [ref=e500]: Stage
+          - combobox [ref=e501]:
+            - option "New Lead" [selected]
+            - option "Contacted"
+            - option "No Response"
+            - option "Site Visit"
+            - option "Follow-Up"
+            - option "Closed Won"
+            - option "Closed Lost"
+        - generic [ref=e502]:
+          - generic [ref=e503]: Assigned To
+          - textbox "Team member..." [ref=e504]
+      - generic [ref=e505]:
+        - generic [ref=e506]: Notes
+        - generic [ref=e507]:
+          - generic [ref=e508]: "broker_type: Static Image 2"
+          - generic [ref=e509]: "property_types_you_can_sell?_: Broad | Test | 25 +"
+          - generic [ref=e510]: "what's_your_company_/_brokerage_name?: Lead Generation | 13th May | CBO"
+          - generic [ref=e511]: "first_name: f:1552506906032143"
+          - generic [ref=e512]: "email: Lead Generation | Intent form | Real Estate Brokers | 7th Feb |"
+          - generic [ref=e513]: "phone_number: false"
+          - generic [ref=e514]: "comments: fb"
+          - generic [ref=e515]: "lead_status: CREATED"
+          - generic [ref=e516]: "id: brokerage_owner"
+          - generic [ref=e517]: "created_time: aed_1.8m_–_aed_2.1m"
+          - generic [ref=e518]: "ad_id: sky_loft"
+          - generic [ref=e519]: "ad_name: within_1–3_months"
+          - generic [ref=e520]: "adset_id: best deal"
+          - generic [ref=e521]: "adset_name: Mostafa"
+          - generic [ref=e522]: "campaign_id: abdalhak43@gmail.com"
+          - generic [ref=e523]: "campaign_name: p:+971555303080"
+        - generic [ref=e524]:
+          - textbox "Add a note..." [ref=e525]
+          - button "Add" [ref=e526] [cursor=pointer]
+    - generic [ref=e527]:
+      - button "Delete" [ref=e528] [cursor=pointer]
+      - button "Close" [ref=e529] [cursor=pointer]

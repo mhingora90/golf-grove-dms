@@ -1,0 +1,182 @@
+<h2>CRM Redesign — Full Layout Preview</h2>
+<p class="subtitle">Complete design for review. Not a choice — tell me what to change.</p>
+
+<style>
+* { box-sizing: border-box; }
+.crm-mock { font-family: system-ui, sans-serif; font-size: 12px; border: 1px solid #e2ddd6; border-radius: 10px; overflow: hidden; background: #faf8f5; }
+.crm-toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 12px 16px; background: #f5f2ed; border-bottom: 1px solid #e2ddd6; }
+.f-search { flex: 1; min-width: 160px; max-width: 220px; padding: 5px 10px; border: 1px solid #d1cdc5; border-radius: 5px; font-size: 11px; background: #fff; }
+.f-select { padding: 5px 10px; border: 1px solid #d1cdc5; border-radius: 5px; font-size: 11px; background: #fff; color: #2c2a24; }
+.f-select.active { border-color: #f59e0b; background: #fef3c7; color: #92400e; }
+.f-date { padding: 5px 10px; border: 1px solid #d1cdc5; border-radius: 5px; font-size: 11px; background: #fff; color: #6b7280; }
+.btn-add { padding: 5px 14px; background: #2c2a24; color: #fff; border: none; border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer; margin-left: auto; }
+.crm-stats { display: flex; gap: 0; border-bottom: 1px solid #e2ddd6; }
+.stat-pill { flex: 1; padding: 7px 10px; text-align: center; border-right: 1px solid #e2ddd6; cursor: pointer; transition: background .1s; }
+.stat-pill:last-child { border-right: none; }
+.stat-pill:hover { background: #f0ece5; }
+.stat-pill.sel { background: #fef9ec; border-bottom: 2px solid #f59e0b; }
+.stat-num { font-size: 15px; font-weight: 700; color: #2c2a24; line-height: 1; }
+.stat-lbl { font-size: 9px; color: #9ca3af; text-transform: uppercase; letter-spacing: .04em; margin-top: 2px; }
+.crm-bulk-bar { display: flex; align-items: center; gap: 8px; padding: 7px 16px; background: #fef3c7; border-bottom: 1px solid #fde68a; font-size: 11px; }
+.bulk-badge { background: #f59e0b; color: #fff; border-radius: 4px; padding: 1px 7px; font-weight: 700; }
+.bulk-btn { padding: 3px 10px; border: 1px solid #d1cdc5; border-radius: 4px; background: #fff; font-size: 11px; cursor: pointer; }
+.crm-table-head { display: grid; grid-template-columns: 28px 1.8fr 1.4fr 1.8fr 1.2fr 1fr 1fr .6fr 60px; padding: 7px 16px; background: #f0ece5; border-bottom: 1px solid #e2ddd6; gap: 8px; align-items: center; }
+.th { font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: .04em; cursor: pointer; white-space: nowrap; }
+.th.sort { color: #f59e0b; }
+.crm-row { display: grid; grid-template-columns: 28px 1.8fr 1.4fr 1.8fr 1.2fr 1fr 1fr .6fr 60px; padding: 9px 16px; border-bottom: 0.5px solid #eee; gap: 8px; align-items: center; background: #fff; cursor: pointer; transition: background .1s; }
+.crm-row:hover { background: #fafaf8; }
+.crm-row.checked { background: #fefce8; }
+.crm-row:last-child { border-bottom: none; }
+.cb { width: 14px; height: 14px; border: 1.5px solid #d1cdc5; border-radius: 3px; }
+.cb.on { border-color: #f59e0b; background: #f59e0b; }
+.text-bold { font-weight: 600; color: #2c2a24; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.text-sm { font-size: 11px; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.text-muted { font-size: 11px; color: #9ca3af; }
+.badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
+.badge-amber { background: #fef3c7; color: #92400e; }
+.badge-blue { background: #dbeafe; color: #1e40af; }
+.badge-green { background: #dcfce7; color: #166534; }
+.badge-gray { background: #f3f4f6; color: #374151; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+.row-action { font-size: 10px; color: #9ca3af; text-align: right; }
+.crm-footer { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: #f5f2ed; border-top: 1px solid #e2ddd6; font-size: 11px; color: #6b7280; }
+.page-btns { display: flex; gap: 4px; }
+.page-btn { padding: 3px 9px; border: 1px solid #d1cdc5; border-radius: 4px; background: #fff; font-size: 11px; cursor: pointer; }
+.page-btn.active { background: #2c2a24; color: #fff; border-color: #2c2a24; }
+</style>
+
+<div class="mockup">
+  <div class="mockup-header">CRM — Pipeline List View</div>
+  <div class="mockup-body" style="padding:0">
+    <div class="crm-mock">
+
+      <!-- Toolbar -->
+      <div class="crm-toolbar">
+        <input class="f-search" placeholder="🔍 Search name, email, phone…" readonly>
+        <select class="f-select active" disabled><option>Stage: New Lead</option></select>
+        <select class="f-select" disabled><option>Source: All</option></select>
+        <select class="f-select" disabled><option>Assigned: All</option></select>
+        <span class="f-date">May 1 → May 15 📅</span>
+        <button class="btn-add">+ Add Lead</button>
+      </div>
+
+      <!-- Stage summary pills -->
+      <div class="crm-stats">
+        <div class="stat-pill"><div class="stat-num">142</div><div class="stat-lbl">All</div></div>
+        <div class="stat-pill sel"><div class="stat-num" style="color:#b45309">38</div><div class="stat-lbl">New</div></div>
+        <div class="stat-pill"><div class="stat-num" style="color:#1e40af">24</div><div class="stat-lbl">Contacted</div></div>
+        <div class="stat-pill"><div class="stat-num" style="color:#6b7280">31</div><div class="stat-lbl">No Response</div></div>
+        <div class="stat-pill"><div class="stat-num" style="color:#166534">12</div><div class="stat-lbl">Site Visit</div></div>
+        <div class="stat-pill"><div class="stat-num" style="color:#b45309">19</div><div class="stat-lbl">Follow-Up</div></div>
+        <div class="stat-pill"><div class="stat-num" style="color:#166534">9</div><div class="stat-lbl">Won</div></div>
+        <div class="stat-pill"><div class="stat-num" style="color:#991b1b">9</div><div class="stat-lbl">Lost</div></div>
+      </div>
+
+      <!-- Bulk action bar (shown when rows checked) -->
+      <div class="crm-bulk-bar">
+        <span><span class="bulk-badge">3</span> leads selected</span>
+        <button class="bulk-btn">Move stage…</button>
+        <button class="bulk-btn">Assign to…</button>
+        <button class="bulk-btn" style="color:#991b1b">Delete</button>
+        <span style="margin-left:auto;cursor:pointer;color:#9ca3af">✕ Clear</span>
+      </div>
+
+      <!-- Table header -->
+      <div class="crm-table-head">
+        <div class="cb on"></div>
+        <div class="th sort">Name ↑</div>
+        <div class="th">Company</div>
+        <div class="th">Email</div>
+        <div class="th">Phone</div>
+        <div class="th">Stage</div>
+        <div class="th">Assigned</div>
+        <div class="th">Age</div>
+        <div class="th"></div>
+      </div>
+
+      <!-- Rows -->
+      <div class="crm-row checked">
+        <div class="cb on"></div>
+        <div class="text-bold">Ahmed Al Rashid</div>
+        <div class="text-sm">Emirates Realty</div>
+        <div class="text-sm">ahmed@er.ae</div>
+        <div class="text-sm">+971 50 123 4567</div>
+        <div><span class="badge badge-amber">New Lead</span></div>
+        <div class="text-sm">Hamad</div>
+        <div class="text-muted">2d</div>
+        <div class="row-action">View →</div>
+      </div>
+      <div class="crm-row checked">
+        <div class="cb on"></div>
+        <div class="text-bold">Khalid Bin Zayed</div>
+        <div class="text-sm">Gulf Properties</div>
+        <div class="text-sm">khalid@gulfprop.ae</div>
+        <div class="text-sm">+971 52 456 7890</div>
+        <div><span class="badge badge-amber">New Lead</span></div>
+        <div class="text-muted">—</div>
+        <div class="text-muted">1d</div>
+        <div class="row-action">View →</div>
+      </div>
+      <div class="crm-row">
+        <div class="cb"></div>
+        <div class="text-bold">Sara Mohammed</div>
+        <div class="text-sm">—</div>
+        <div class="text-sm">sara@gmail.com</div>
+        <div class="text-sm">+971 55 987 6543</div>
+        <div><span class="badge badge-blue">Contacted</span></div>
+        <div class="text-muted">—</div>
+        <div class="text-muted">5d</div>
+        <div class="row-action">View →</div>
+      </div>
+      <div class="crm-row checked">
+        <div class="cb on"></div>
+        <div class="text-bold">Fatima Al Zaabi</div>
+        <div class="text-sm">Prime Brokers LLC</div>
+        <div class="text-sm">fatima@primebr.ae</div>
+        <div class="text-sm">+971 54 321 9876</div>
+        <div><span class="badge badge-amber">New Lead</span></div>
+        <div class="text-sm">Tariq</div>
+        <div class="text-muted">3h</div>
+        <div class="row-action">View →</div>
+      </div>
+      <div class="crm-row">
+        <div class="cb"></div>
+        <div class="text-bold">Omar Hassan</div>
+        <div class="text-sm">—</div>
+        <div class="text-sm">o.hassan@mail.com</div>
+        <div class="text-sm">+971 56 111 2233</div>
+        <div><span class="badge badge-green">Site Visit</span></div>
+        <div class="text-sm">Hamad</div>
+        <div class="text-muted">1w</div>
+        <div class="row-action">View →</div>
+      </div>
+
+      <!-- Footer / Pagination -->
+      <div class="crm-footer">
+        <span>Showing <strong>1–25</strong> of <strong>38</strong> leads</span>
+        <div class="page-btns">
+          <button class="page-btn" disabled>←</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">→</button>
+        </div>
+        <span>25 per page</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px">
+  <h3>What's included</h3>
+  <ul>
+    <li><strong>Toolbar:</strong> search + 4 server-side filters + Add Lead button</li>
+    <li><strong>Stage pills:</strong> clickable quick-filter showing count per stage</li>
+    <li><strong>Bulk bar:</strong> appears when ≥1 row checked — move stage, assign, delete</li>
+    <li><strong>Sortable columns:</strong> click any header to sort server-side</li>
+    <li><strong>Pagination:</strong> 25 per page, server-side (fast at any scale)</li>
+    <li><strong>Row click / "View →":</strong> opens existing lead modal unchanged</li>
+    <li><strong>Checkbox header:</strong> select-all on current page</li>
+  </ul>
+  <p style="font-size:12px;color:#6b7280">Kanban code removed. Animations removed (no stagger on 100+ rows). Modal, notes, addLead, deleteLead all reused as-is.</p>
+</div>

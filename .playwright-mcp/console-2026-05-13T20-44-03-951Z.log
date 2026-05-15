@@ -4441,3 +4441,10 @@
 [ 4124349ms] [INFO]  [TestZapStep:Gate] Taking EARLY RETURN path (inactive) {stepId: 364093557, toolCallId: toolu_bdrk_01HAE1cAbi1RkVsSbaX7gKVq, isInLatestAssistantMessage: false, isAlreadyComplete: true, reason: NOT in latest assistant message} @ https://edge.fullstory.com/s/fs.js:3
 [ 4124367ms] [INFO]  Skipping Zap save because nothing has changed @ https://edge.fullstory.com/s/fs.js:3
 [ 4125625ms] [ERROR] Failed to load resource: the server responded with a status of 426 () @ https://zapier.com/api/gulliver/storage/v1/zaps/364093556/draft/publish-version?account_id=14718194:0
+[ 6335114ms] [WARNING]  Ably presence channel error e: Connection closed
+    at e.fromValues (https://zapier.com/editor/_next/static/chunks/45cbd34e.43cf2204ded5b27e.js:1:4641)
+    at Object.closed (https://zapier.com/editor/_next/static/chunks/45cbd34e.43cf2204ded5b27e.js:1:95149)
+    at nD.close (https://zapier.com/editor/_next/static/chunks/45cbd34e.43cf2204ded5b27e.js:1:95924)
+    at e.closeImpl (https://zapier.com/editor/_next/static/chunks/45cbd34e.43cf2204ded5b27e.js:1:124299)
+    at e.requestState (https://zapier.com/editor/_next/static/chunks/45cbd34e.43cf2204ded5b27e.js:1:120532)
+    at https://zapier.com/editor/_next/static/chunks/45cbd34e.43cf2204ded5b27e.js:1:104603 @ https://edge.fullstory.com/s/fs.js:3

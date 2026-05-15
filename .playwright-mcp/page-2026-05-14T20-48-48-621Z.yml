@@ -1,0 +1,222 @@
+- generic [ref=e22]:
+  - generic [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e25]: Active Project
+      - generic [ref=e26]: Golf Grove – Residential Building (B+G+P+7+Roof)
+    - generic [ref=e27]:
+      - generic [ref=e28]: MH
+      - generic [ref=e29]:
+        - generic [ref=e30]: Mohammed Hingora
+        - generic [ref=e31]: developer
+    - generic [ref=e32]: Main
+    - generic [ref=e33] [cursor=pointer]:
+      - img [ref=e34]
+      - text: Dashboard
+    - generic [ref=e39]: Document Control
+    - generic [ref=e40] [cursor=pointer]:
+      - img [ref=e41]
+      - text: Drawing Register
+    - generic [ref=e43] [cursor=pointer]:
+      - img [ref=e44]
+      - text: Submittals (DSUB)
+      - generic [ref=e47]: "1"
+    - generic [ref=e48] [cursor=pointer]:
+      - img [ref=e49]
+      - text: Submittal Register
+    - generic [ref=e51]: Site
+    - generic [ref=e52] [cursor=pointer]:
+      - img [ref=e53]
+      - text: Inspection Requests
+      - generic [ref=e56]: "2"
+    - generic [ref=e57] [cursor=pointer]:
+      - img [ref=e58]
+      - text: NCRs
+      - generic [ref=e61]: "2"
+    - generic [ref=e62] [cursor=pointer]:
+      - img [ref=e63]
+      - text: RFIs
+      - generic [ref=e67]: "1"
+    - generic [ref=e68] [cursor=pointer]:
+      - img [ref=e69]
+      - text: Transmittals
+    - generic [ref=e71] [cursor=pointer]:
+      - img [ref=e72]
+      - text: Method Statements
+    - generic [ref=e75] [cursor=pointer]:
+      - img [ref=e76]
+      - text: Correspondence
+    - generic [ref=e79] [cursor=pointer]:
+      - img [ref=e80]
+      - text: Punch List
+      - generic [ref=e83]: "0"
+    - generic [ref=e84]: Finance
+    - generic [ref=e85] [cursor=pointer]:
+      - img [ref=e86]
+      - text: Finance Overview
+    - generic [ref=e89] [cursor=pointer]:
+      - img [ref=e90]
+      - text: Payment Certificates
+    - generic [ref=e93] [cursor=pointer]:
+      - img [ref=e94]
+      - text: BOQ Setup
+    - generic [ref=e97]:
+      - generic [ref=e98]: Sales
+      - generic [ref=e99] [cursor=pointer]:
+        - img [ref=e100]
+        - text: CRM
+        - generic [ref=e104]: "9"
+      - generic [ref=e105] [cursor=pointer]:
+        - img [ref=e106]
+        - text: Unit Setup
+      - generic [ref=e109] [cursor=pointer]:
+        - img [ref=e110]
+        - text: Unit Register
+      - generic [ref=e113] [cursor=pointer]:
+        - img [ref=e114]
+        - text: Sales Revenue
+    - generic [ref=e117]: Admin
+    - generic [ref=e118] [cursor=pointer]:
+      - img [ref=e119]
+      - text: Subcontractors
+    - generic [ref=e125] [cursor=pointer]:
+      - img [ref=e126]
+      - text: User Management
+    - button "Sign Out" [ref=e130] [cursor=pointer]
+  - generic [ref=e131]:
+    - generic [ref=e132]:
+      - generic [ref=e133]:
+        - generic [ref=e134]: CRM
+        - generic [ref=e135]: Friday, 15 May 2026
+      - generic [ref=e137]: developer
+    - generic [ref=e138]:
+      - generic [ref=e335]:
+        - generic [ref=e336]:
+          - generic [ref=e337]: Search Leads
+          - textbox "Name, email, phone..." [ref=e338]
+        - button "+ Add Lead" [ref=e340] [cursor=pointer]
+      - generic [ref=e341]:
+        - generic [ref=e342]:
+          - generic [ref=e343]:
+            - generic [ref=e344]: New Lead
+            - generic [ref=e345]: "8"
+          - generic [ref=e346]:
+            - generic [ref=e347] [cursor=pointer]:
+              - generic [ref=e348]: Mostafa
+              - generic [ref=e349]:
+                - generic [ref=e350]: Email
+                - generic [ref=e351]: abdalhak43@gmail.com
+              - generic [ref=e352]:
+                - generic [ref=e353]: Phone
+                - generic [ref=e354]: "+971555303080"
+              - generic [ref=e355]:
+                - generic [ref=e356]: Meta
+                - generic [ref=e357]: 5h ago
+            - generic [ref=e358] [cursor=pointer]:
+              - generic [ref=e359]: Emad
+              - generic [ref=e360]:
+                - generic [ref=e361]: Email
+                - generic [ref=e362]: emadst@yahoo.com
+              - generic [ref=e363]:
+                - generic [ref=e364]: Phone
+                - generic [ref=e365]: "+971564704829"
+              - generic [ref=e366]:
+                - generic [ref=e367]: Meta
+                - generic [ref=e368]: 16h ago
+            - generic [ref=e369] [cursor=pointer]:
+              - generic [ref=e370]: Ehtisham
+              - generic [ref=e371]:
+                - generic [ref=e372]: Email
+                - generic [ref=e373]: ehtishammgl@gmail.com
+              - generic [ref=e374]:
+                - generic [ref=e375]: Phone
+                - generic [ref=e376]: "+971569116674"
+              - generic [ref=e377]:
+                - generic [ref=e378]: Meta
+                - generic [ref=e379]: 23h ago
+            - generic [ref=e380] [cursor=pointer]:
+              - generic [ref=e381]: MD Kaiser Mahmud
+              - generic [ref=e382]:
+                - generic [ref=e383]: Email
+                - generic [ref=e384]: igre.kaiser@gmail.com
+              - generic [ref=e385]:
+                - generic [ref=e386]: Phone
+                - generic [ref=e387]: "+971581005220"
+              - generic [ref=e388]:
+                - generic [ref=e389]: Meta
+                - generic [ref=e390]: 1d ago
+            - generic [ref=e391] [cursor=pointer]:
+              - generic [ref=e392]: Reyansh
+              - generic [ref=e393]:
+                - generic [ref=e394]: Email
+                - generic [ref=e395]: praful.rawat@gmail.com
+              - generic [ref=e396]:
+                - generic [ref=e397]: Phone
+                - generic [ref=e398]: "+971558950540"
+              - generic [ref=e399]:
+                - generic [ref=e400]: Meta
+                - generic [ref=e401]: 1d ago
+            - generic [ref=e402] [cursor=pointer]:
+              - generic [ref=e403]: Ebrahim Yousef
+              - generic [ref=e404]:
+                - generic [ref=e405]: Email
+                - generic [ref=e406]: Info@valiryaproperty.com
+              - generic [ref=e407]:
+                - generic [ref=e408]: Phone
+                - generic [ref=e409]: "+971583060948"
+              - generic [ref=e410]:
+                - generic [ref=e411]: Meta
+                - generic [ref=e412]: 1d ago
+            - generic [ref=e413] [cursor=pointer]:
+              - generic [ref=e414]: Mohamed Sufyan
+              - generic [ref=e415]:
+                - generic [ref=e416]: Email
+                - generic [ref=e417]: skintl888@gmail.com
+              - generic [ref=e418]:
+                - generic [ref=e419]: Phone
+                - generic [ref=e420]: "+971508378611"
+              - generic [ref=e421]:
+                - generic [ref=e422]: Meta
+                - generic [ref=e423]: 1d ago
+            - generic [ref=e424] [cursor=pointer]:
+              - generic [ref=e425]: Sky
+              - generic [ref=e426]:
+                - generic [ref=e427]: Email
+                - generic [ref=e428]: theonlineworkonly@gmail.com
+              - generic [ref=e429]:
+                - generic [ref=e430]: Phone
+                - generic [ref=e431]: "+971564676763"
+              - generic [ref=e432]:
+                - generic [ref=e433]: Meta
+                - generic [ref=e434]: 1d ago
+        - generic [ref=e435]:
+          - generic [ref=e436]:
+            - generic [ref=e437]: Contacted
+            - generic [ref=e438]: "1"
+          - generic [ref=e440] [cursor=pointer]:
+            - generic [ref=e441]:
+              - generic [ref=e442]: Email
+              - generic [ref=e443]: praful.rawat@gmail.com
+            - generic [ref=e444]:
+              - generic [ref=e445]: Phone
+              - generic [ref=e446]: "+971558950540"
+            - generic [ref=e447]:
+              - generic [ref=e448]: Company
+              - generic [ref=e449]: Broadway Signature properties
+            - generic [ref=e450]:
+              - generic [ref=e451]: Meta
+              - generic [ref=e452]: 22h ago
+        - generic [ref=e454]:
+          - generic [ref=e455]: No Response
+          - generic [ref=e456]: "0"
+        - generic [ref=e459]:
+          - generic [ref=e460]: Site Visit
+          - generic [ref=e461]: "0"
+        - generic [ref=e464]:
+          - generic [ref=e465]: Follow-Up
+          - generic [ref=e466]: "0"
+        - generic [ref=e469]:
+          - generic [ref=e470]: Closed Won
+          - generic [ref=e471]: "0"
+        - generic [ref=e474]:
+          - generic [ref=e475]: Closed Lost
+          - generic [ref=e476]: "0"

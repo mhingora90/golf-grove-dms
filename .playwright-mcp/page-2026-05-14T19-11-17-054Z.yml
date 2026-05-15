@@ -1,0 +1,152 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link [ref=e2167] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - generic [ref=e16]:
+            - button [ref=e2168] [cursor=pointer]: Untitled project
+            - generic [ref=e1460]: cloud_done
+          - generic [ref=e27]:
+            - button [ref=e2169] [cursor=pointer]:
+              - generic [ref=e35]:
+                - text: Deploy
+                - generic [ref=e36]: 
+            - button [ref=e2170] [cursor=pointer]:
+              - generic [ref=e41]: help_outline
+        - generic [ref=e43]:
+          - button [ref=e2171] [cursor=pointer]:
+            - img [ref=e48]
+          - button [ref=e2172] [cursor=pointer]:
+            - img [ref=e55]
+    - generic [ref=e57]:
+      - navigation [ref=e2173]:
+        - link [ref=e2174] [cursor=pointer]:
+          - generic [ref=e62]: info_outline
+          - generic [ref=e63]: Overview
+        - link [ref=e2175] [cursor=pointer]:
+          - generic [ref=e66]: code
+          - generic [ref=e67]: Editor
+        - link [ref=e2176] [cursor=pointer]:
+          - generic [ref=e70]: history
+          - generic [ref=e71]: Project History
+        - link [ref=e2177] [cursor=pointer]:
+          - generic [ref=e74]: alarm
+          - generic [ref=e75]: Triggers
+        - link [ref=e2178] [cursor=pointer]:
+          - generic [ref=e78]: playlist_play
+          - generic [ref=e79]: Executions
+        - link [ref=e2179] [cursor=pointer]:
+          - generic [ref=e82]: settings
+          - generic [ref=e83]: Project Settings
+      - generic [ref=e84]:
+        - heading [level=1] [ref=e2180]: Editor
+        - generic [ref=e86]:
+          - generic [ref=e88]:
+            - generic [ref=e89]:
+              - heading [level=2] [ref=e2181]: Files
+              - generic [ref=e92]:
+                - button [disabled] [ref=e2182]:
+                  - generic [ref=e97]: sort_by_alpha
+                - button [ref=e2183] [cursor=pointer]:
+                  - generic [ref=e102]: add
+            - listbox [ref=e2184]:
+              - option [ref=e2185] [cursor=pointer]:
+                - generic [ref=e2186]: Code.gs
+                - button [ref=e2187]:
+                  - button [ref=e2188]:
+                    - generic [ref=e111]: 
+            - generic [ref=e112]:
+              - heading [level=2] [ref=e2189]: Libraries
+              - button [ref=e2190] [cursor=pointer]:
+                - generic [ref=e119]: add
+            - generic [ref=e120]:
+              - heading [level=2] [ref=e2191]: Services
+              - button [ref=e2192] [cursor=pointer]:
+                - generic [ref=e127]: add
+          - generic [ref=e134]:
+            - region [ref=e135]:
+              - generic [ref=e136]:
+                - generic [ref=e137]:
+                  - button [ref=e2193]:
+                    - generic [ref=e287]: undo
+                  - generic [ref=e143]:
+                    - button [disabled]:
+                      - generic: redo
+                - generic [ref=e147]:
+                  - button [disabled]:
+                    - img
+                - generic [ref=e1461]:
+                  - generic [ref=e1464]:
+                    - button [disabled]:
+                      - generic: play_arrow
+                      - generic: Run
+                  - generic [ref=e1472]:
+                    - button [disabled]:
+                      - img
+                      - generic: Debug
+                  - listbox [disabled] [ref=e2194]:
+                    - option [disabled] [selected] [ref=e2195]: syncLeadsToCRM
+                  - button [ref=e2196]:
+                    - generic [ref=e1530]: stop
+                    - generic [ref=e1531]: Stop
+                - button [ref=e2197]:
+                  - generic [ref=e163]: Execution log
+            - generic [ref=e165]:
+              - main [ref=e169]:
+                - generic [ref=e170]: .
+                - generic [ref=e172]:
+                  - iframe [ref=e173]:
+                    
+                  - code [ref=e175]:
+                    - generic [ref=e176]:
+                      - generic [ref=e179]:
+                        - generic [ref=e1625]:
+                          - generic [ref=e1626] [cursor=pointer]: 
+                          - generic [ref=e1627]: "94"
+                        - generic [ref=e1630]:
+                          - generic [ref=e1631] [cursor=pointer]: 
+                          - generic [ref=e1632]: "95"
+                        - generic [ref=e1635]:
+                          - generic [ref=e1636] [cursor=pointer]: 
+                          - generic [ref=e1637]: "96"
+                        - generic [ref=e1640]:
+                          - generic [ref=e1641] [cursor=pointer]: 
+                          - generic [ref=e1642]: "97"
+                        - generic [ref=e1646]: "98"
+                        - generic [ref=e1650]: "99"
+                      - generic [ref=e196]:
+                        - generic [ref=e2131]: "function setupTrigger() {"
+                        - generic [ref=e2137]: const ss = SpreadsheetApp.getActiveSpreadsheet();
+                        - generic [ref=e2143]: ScriptApp.getProjectTriggers().forEach(t => ScriptApp.deleteTrigger(t));
+                        - generic [ref=e2149]: ScriptApp.newTrigger('syncLeadsToCRM').forSpreadsheet(ss).onChange().create();
+                        - generic [ref=e2155]: SpreadsheetApp.getUi().alert('Auto-sync active. New leads sync automatically.');
+                      - textbox [ref=e2199]: "}"
+              - generic [ref=e1536]:
+                - complementary [ref=e1538]:
+                  - generic [ref=e1540]: Execution log
+                - button [ref=e2232] [cursor=pointer]:
+                  - generic [ref=e207]: close
+                - tooltip [ref=e208]: Close execution logs
+    - dialog "Authorization required" [ref=e2234]:
+      - heading "Authorization required" [level=2] [ref=e2235]:
+        - generic [ref=e2236]: Authorization required
+      - generic [ref=e2237]:
+        - generic [ref=e2238]: This app might not work as expected without providing all requested
+        - generic [ref=e2239]: permissions.
+      - generic [ref=e2240]:
+        - button "Cancel" [active] [ref=e2242] [cursor=pointer]:
+          - generic [ref=e2244]: Cancel
+        - button "Review permissions" [ref=e2246] [cursor=pointer]:
+          - generic [ref=e2248]: Review permissions
+  - generic: Saving project...
+  - generic [ref=e229]:
+    - alert
+    - alert
+    - complementary
+    - complementary

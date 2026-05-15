@@ -1,0 +1,154 @@
+<h2>Clicking a Lead Row</h2>
+<p class="subtitle">What happens when you tap/click a lead? Three interaction patterns.</p>
+
+<style>
+.mock-shell { border:1px solid #e2ddd6; border-radius:8px; overflow:hidden; font-family:system-ui,sans-serif; font-size:12px; background:#fff; margin-top:10px; }
+.mock-row { display:grid; grid-template-columns:1.8fr 1.4fr 1.8fr 1.2fr 1fr 1fr .6fr; padding:9px 12px; border-bottom:0.5px solid #eee; align-items:center; gap:4px; }
+.mock-row.active { background:#fefce8; border-left:3px solid #f59e0b; }
+.badge { display:inline-block; font-size:10px; font-weight:600; padding:2px 7px; border-radius:4px; }
+.badge-amber { background:#fef3c7; color:#92400e; }
+.badge-blue { background:#dbeafe; color:#1e40af; }
+.text-bold { font-weight:600; color:#2c2a24; }
+.text-muted { color:#9ca3af; font-size:11px; }
+.modal-overlay { background:rgba(0,0,0,.08); border-radius:0 0 8px 8px; padding:12px; }
+.slide-panel { background:#f5f2ed; border-left:1px solid #e2ddd6; padding:12px; font-size:11px; width:210px; }
+.detail-grid-mini { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px; }
+.detail-mini { background:#fff; border-radius:5px; padding:6px 8px; }
+.detail-mini .lbl { font-size:9px; color:#9ca3af; text-transform:uppercase; letter-spacing:.04em; }
+.detail-mini .val { font-size:11px; color:#2c2a24; font-weight:500; margin-top:2px; }
+</style>
+
+<div class="options">
+
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Modal (same as today)</h3>
+      <p>Click row → full-screen modal with all fields, notes, stage selector. Already built. Familiar.</p>
+      <div class="mock-shell">
+        <div class="mock-row active">
+          <span class="text-bold">Ahmed Al Rashid</span>
+          <span>Emirates Realty</span>
+          <span class="text-muted">ahmed@er.ae</span>
+          <span>+971 50 123…</span>
+          <span><span class="badge badge-amber">New Lead</span></span>
+          <span>Hamad</span>
+          <span class="text-muted">2d</span>
+        </div>
+        <div class="modal-overlay">
+          <div style="background:#fff;border-radius:6px;border:1px solid #e2ddd6;padding:12px">
+            <div style="font-weight:700;margin-bottom:8px">Lead — Ahmed Al Rashid</div>
+            <div class="detail-grid-mini">
+              <div class="detail-mini"><div class="lbl">Email</div><div class="val">ahmed@er.ae</div></div>
+              <div class="detail-mini"><div class="lbl">Phone</div><div class="val">+971 50 123…</div></div>
+              <div class="detail-mini"><div class="lbl">Stage</div><div class="val">New Lead ▾</div></div>
+              <div class="detail-mini"><div class="lbl">Assigned</div><div class="val">Hamad</div></div>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:#9ca3af">Notes · Budget · Property Types · …</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Slide-out panel (right side)</h3>
+      <p>Click row → detail panel slides in from right, list stays visible. No context lost — see list + details simultaneously. Modern CRM pattern (HubSpot-style).</p>
+      <div class="mock-shell" style="display:flex">
+        <div style="flex:1">
+          <div class="mock-row" style="background:#f9f7f4">
+            <span style="font-size:10px;font-weight:700;color:#9ca3af">NAME</span>
+            <span style="font-size:10px;font-weight:700;color:#9ca3af">COMPANY</span>
+            <span style="font-size:10px;font-weight:700;color:#9ca3af">EMAIL</span>
+            <span style="font-size:10px;font-weight:700;color:#9ca3af">PHONE</span>
+            <span style="font-size:10px;font-weight:700;color:#9ca3af">STAGE</span>
+            <span style="font-size:10px;font-weight:700;color:#9ca3af">ASSIGNED</span>
+            <span style="font-size:10px;font-weight:700;color:#9ca3af">AGE</span>
+          </div>
+          <div class="mock-row active">
+            <span class="text-bold">Ahmed Al Rashid</span>
+            <span>Emirates Realty</span>
+            <span class="text-muted">ahmed@er.ae</span>
+            <span>+971 50…</span>
+            <span><span class="badge badge-amber">New</span></span>
+            <span>Hamad</span>
+            <span class="text-muted">2d</span>
+          </div>
+          <div class="mock-row">
+            <span class="text-bold">Sara Mohammed</span>
+            <span>—</span>
+            <span class="text-muted">sara@…</span>
+            <span>+971 55…</span>
+            <span><span class="badge badge-blue">Contacted</span></span>
+            <span class="text-muted">—</span>
+            <span class="text-muted">5d</span>
+          </div>
+        </div>
+        <div class="slide-panel">
+          <div style="font-weight:700;font-size:12px;margin-bottom:4px">Ahmed Al Rashid</div>
+          <div style="font-size:10px;color:#b45309;margin-bottom:8px">Emirates Realty</div>
+          <div class="detail-grid-mini">
+            <div class="detail-mini"><div class="lbl">Stage</div><div class="val">New Lead ▾</div></div>
+            <div class="detail-mini"><div class="lbl">Assigned</div><div class="val">Hamad</div></div>
+            <div class="detail-mini"><div class="lbl">Phone</div><div class="val">+971 50…</div></div>
+            <div class="detail-mini"><div class="lbl">Source</div><div class="val">Meta</div></div>
+          </div>
+          <div style="margin-top:8px;font-size:10px;color:#9ca3af">Notes ↓</div>
+          <div style="margin-top:4px;background:#fff;border-radius:4px;padding:6px;font-size:10px;color:#6b7280;border:1px solid #e2ddd6">No notes yet…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Inline expand (row expands in place)</h3>
+      <p>Click row → it expands vertically showing extra fields + notes + actions. No modal, no panel. Page stays still.</p>
+      <div class="mock-shell">
+        <div class="mock-row" style="background:#f9f7f4">
+          <span style="font-size:10px;font-weight:700;color:#9ca3af">NAME</span>
+          <span style="font-size:10px;font-weight:700;color:#9ca3af">COMPANY</span>
+          <span style="font-size:10px;font-weight:700;color:#9ca3af">EMAIL</span>
+          <span style="font-size:10px;font-weight:700;color:#9ca3af">PHONE</span>
+          <span style="font-size:10px;font-weight:700;color:#9ca3af">STAGE</span>
+          <span style="font-size:10px;font-weight:700;color:#9ca3af">ASSIGNED</span>
+          <span style="font-size:10px;font-weight:700;color:#9ca3af">AGE</span>
+        </div>
+        <div class="mock-row active" style="border-bottom:none">
+          <span class="text-bold">Ahmed Al Rashid ▾</span>
+          <span>Emirates Realty</span>
+          <span class="text-muted">ahmed@er.ae</span>
+          <span>+971 50 123…</span>
+          <span><span class="badge badge-amber">New Lead</span></span>
+          <span>Hamad</span>
+          <span class="text-muted">2d</span>
+        </div>
+        <div style="background:#fefce8;border-bottom:0.5px solid #fde68a;padding:10px 14px;display:flex;gap:12px">
+          <div class="detail-grid-mini" style="flex:1">
+            <div class="detail-mini"><div class="lbl">Budget</div><div class="val">AED 1.2M–2M</div></div>
+            <div class="detail-mini"><div class="lbl">Broker Type</div><div class="val">Individual</div></div>
+            <div class="detail-mini"><div class="lbl">Stage</div><div class="val">New Lead ▾</div></div>
+            <div class="detail-mini"><div class="lbl">Last Contact</div><div class="val">Never</div></div>
+          </div>
+          <div style="flex:1;font-size:11px">
+            <div style="color:#9ca3af;font-size:10px;margin-bottom:4px">NOTES</div>
+            <div style="background:#fff;border:1px solid #e2ddd6;border-radius:4px;padding:6px;color:#6b7280">No notes yet</div>
+          </div>
+        </div>
+        <div class="mock-row">
+          <span class="text-bold">Sara Mohammed</span>
+          <span>—</span>
+          <span class="text-muted">sara@gmail.com</span>
+          <span>+971 55…</span>
+          <span><span class="badge badge-blue">Contacted</span></span>
+          <span class="text-muted">—</span>
+          <span class="text-muted">5d</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

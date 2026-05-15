@@ -1,0 +1,111 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - progressbar [ref=e5]
+      - generic [ref=e13]:
+        - generic [ref=e14]:
+          - generic [ref=e16]:
+            - img [ref=e18]
+            - generic [ref=e23]: Sign in with Google
+          - generic [ref=e24]:
+            - heading "Untitled project wants access to your Google Account" [level=1] [ref=e25]:
+              - generic [ref=e27]: Untitled project wants access to your Google Account
+            - generic [ref=e34]: mhingora@gmail.com
+        - generic [ref=e37]:
+          - generic [ref=e40]:
+            - generic [ref=e41]:
+              - heading [level=2] [ref=e43]:
+                - img [ref=e45]
+              - generic [ref=e48]:
+                - generic [ref=e49]:
+                  - text: This app hasn’t been verified by Google. Because this app is requesting some access to your Google Account, you should continue only if you know and trust this app developer.
+                  - link "Learn more" [ref=e50] [cursor=pointer]:
+                    - /url: https://support.google.com/cloud/answer/7454865
+                - generic [ref=e51]:
+                  - text: You can let the app developer (
+                  - link "media@mystic-advertising.com" [ref=e52] [cursor=pointer]:
+                    - /url: mailto:media@mystic-advertising.com
+                  - text: ) know that they need to submit a request to have this app verified by Google. Otherwise, some of this app’s access to your data may be lost.
+            - generic [ref=e53]:
+              - heading "Select what Untitled project can access" [level=2] [ref=e55]:
+                - generic [ref=e56]:
+                  - text: Select what
+                  - button "Untitled project" [ref=e57] [cursor=pointer]
+                  - text: can access
+              - generic [ref=e61]:
+                - generic [ref=e63]:
+                  - generic [ref=e66] [cursor=pointer]:
+                    - checkbox "Select all" [ref=e67]
+                    - generic:
+                      - img
+                  - generic [ref=e70] [cursor=pointer]: Select all
+                - generic [ref=e72] [cursor=pointer]:
+                  - img [ref=e74]
+                  - generic [ref=e77]:
+                    - text: See, edit, create, and delete all your Google Sheets spreadsheets.
+                    - link "Learn more" [ref=e78]:
+                      - /url: ""
+                  - generic [ref=e81]:
+                    - checkbox "See, edit, create, and delete all your Google Sheets spreadsheets. Learn more" [ref=e82]
+                    - generic:
+                      - img
+                - generic [ref=e84] [cursor=pointer]:
+                  - img [ref=e86]
+                  - generic [ref=e89]:
+                    - text: Connect to an external service.
+                    - link "Learn more" [ref=e90]:
+                      - /url: ""
+                  - generic [ref=e93]:
+                    - checkbox "Connect to an external service. Learn more" [ref=e94]
+                    - generic:
+                      - img
+                - generic [ref=e96] [cursor=pointer]:
+                  - img [ref=e98]
+                  - generic [ref=e101]:
+                    - text: Allow this application to run when you are not present.
+                    - link "Learn more" [ref=e102]:
+                      - /url: ""
+                  - generic [ref=e105]:
+                    - checkbox "Allow this application to run when you are not present. Learn more" [ref=e106]
+                    - generic:
+                      - img
+          - generic [ref=e109]:
+            - heading "Make sure you trust Untitled project" [level=2] [ref=e111]:
+              - generic [ref=e112]: Make sure you trust Untitled project
+            - generic [ref=e115]:
+              - generic [ref=e116]:
+                - heading [level=2] [ref=e118]:
+                  - img [ref=e120]
+                - link "Learn why you're not seeing links to Untitled project's Privacy Policy or Terms of Service" [ref=e125] [cursor=pointer]:
+                  - /url: https://support.google.com/accounts?p=oauth_notos
+              - generic [ref=e126]: Review Untitled project's Privacy Policy and Terms of Service to understand how Untitled project will process and protect your data.
+              - generic [ref=e127]:
+                - text: To make changes at any time, go to your
+                - link "Google Account" [ref=e128] [cursor=pointer]:
+                  - /url: https://myaccount.google.com/connections
+                - text: .
+              - generic [ref=e129]:
+                - text: Learn how Google helps you
+                - link "share data safely" [ref=e130] [cursor=pointer]:
+                  - /url: https://support.google.com/accounts/answer/14012355
+                - text: .
+        - generic [ref=e133]:
+          - button "Cancel" [ref=e137]: Cancel
+          - button "Continue" [ref=e143]: Continue
+    - contentinfo [ref=e147]:
+      - combobox "‪English (United States)‬" [ref=e151] [cursor=pointer]:
+        - generic:
+          - generic: ‪English (United States)‬
+        - generic:
+          - img
+      - list [ref=e153]:
+        - listitem [ref=e154]:
+          - link "Help" [ref=e155] [cursor=pointer]:
+            - /url: https://support.google.com/accounts?hl=en&p=account_iph
+        - listitem [ref=e156]:
+          - link "Privacy" [ref=e157] [cursor=pointer]:
+            - /url: https://accounts.google.com/TOS?loc=AE&hl=en&privacy=true
+        - listitem [ref=e158]:
+          - link "Terms" [ref=e159] [cursor=pointer]:
+            - /url: https://accounts.google.com/TOS?loc=AE&hl=en
+  - generic [ref=e161]: Untitled project wants access to your Google Account

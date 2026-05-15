@@ -1,0 +1,545 @@
+- generic [ref=e5]:
+  - banner:
+    - generic [ref=e6]:
+      - generic:
+        - generic:
+          - button [disabled]:
+            - img
+      - link "Facebook" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - img [ref=e8]
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - generic:
+          - generic:
+            - generic:
+              - button:
+                - img
+      - generic [ref=e19]:
+        - generic:
+          - img
+        - combobox "Search Facebook" [ref=e20]
+    - navigation "Facebook" [ref=e24]:
+      - list [ref=e25]:
+        - listitem [ref=e26]:
+          - link "Home" [ref=e30] [cursor=pointer]:
+            - /url: /
+            - img [ref=e32]
+        - listitem [ref=e34]:
+          - link "Reels" [ref=e37] [cursor=pointer]:
+            - /url: /reel/?s=tab
+            - img [ref=e39]
+        - listitem [ref=e42]:
+          - link "Marketplace" [ref=e45] [cursor=pointer]:
+            - /url: /marketplace/?ref=app_tab
+            - img [ref=e47]
+        - listitem [ref=e49]:
+          - link "Groups" [ref=e52] [cursor=pointer]:
+            - /url: /groups/
+            - img [ref=e54]
+        - listitem [ref=e56]:
+          - link "Gaming" [ref=e59] [cursor=pointer]:
+            - /url: /gaming/play/?store_visit_source=gaming_tab
+            - img [ref=e61]
+    - navigation "Account Controls and Settings" [ref=e65]:
+      - button "Facebook menu" [ref=e69] [cursor=pointer]:
+        - img [ref=e70]
+      - generic [ref=e75]:
+        - button "Messenger" [ref=e76] [cursor=pointer]:
+          - img [ref=e77]
+        - button [ref=e79] [cursor=pointer]:
+          - generic [ref=e82]:
+            - generic [ref=e83]: 14 Unread Chats
+            - generic [ref=e84]: "14"
+      - generic [ref=e88]:
+        - button "Notifications" [ref=e89] [cursor=pointer]:
+          - img [ref=e90]
+        - button [ref=e92] [cursor=pointer]:
+          - generic [ref=e93]:
+            - generic [ref=e94]: Number of unread notifications
+            - generic [ref=e95]: "7"
+      - button "Your profile" [ref=e98] [cursor=pointer]:
+        - generic [ref=e99]:
+          - img "Your profile" [ref=e100]
+          - img [ref=e107]
+  - generic [ref=e115]:
+    - navigation "Shortcuts" [ref=e116]:
+      - generic [ref=e119]:
+        - heading "Facebook Menu" [level=2] [ref=e120]
+        - generic [ref=e122]:
+          - generic [ref=e123]:
+            - generic [ref=e124]:
+              - list [ref=e125]:
+                - listitem [ref=e126]:
+                  - link "Salim Hingora" [ref=e130] [cursor=pointer]:
+                    - /url: https://www.facebook.com/profile.php?id=100008162562080
+                    - generic [ref=e132]:
+                      - img [ref=e135]
+                      - generic [ref=e144]: Salim Hingora
+                - listitem [ref=e145]:
+                  - link "Meta AI" [ref=e149] [cursor=pointer]:
+                    - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.meta.ai%2F%3Futm_source%3Dfacebook_bookmarks%26fbclid%3DIwZXh0bgNhZW0CMTAAYnJpZBExZW5sR1JtZlZpZ3RhN3hFaXNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR6nt51fpQ0MCNcChZPAosCOwmBrO7iMJAacefOeCt-Y3DnoRw5FD5xQYG0IHg_aem_NdSO8vIsNc6vX2xxpDb8Qg&h=AUBEe-7KHiU76Gm9KbaKON6R95qYLcljpI67LvYdQyMies8QdBsOQn26f894uiiGGv71Xd3pc1jCBVg4P7sA5VWjx16Jrd-SDOX4KVGTpKW0rtrjJPdTyqfP5y1or5Q0rE8HloJ9NhNEtvguidE5rQ
+                    - generic [ref=e159]: Meta AI
+                - listitem [ref=e160]:
+                  - link "Friends" [ref=e164] [cursor=pointer]:
+                    - /url: https://www.facebook.com/friends/
+                    - generic [ref=e174]: Friends
+                - listitem [ref=e175]:
+                  - link "Memories" [ref=e179] [cursor=pointer]:
+                    - /url: https://www.facebook.com/onthisday/?source=bookmark
+                    - generic [ref=e189]: Memories
+                - listitem [ref=e190]:
+                  - link "Saved" [ref=e194] [cursor=pointer]:
+                    - /url: https://www.facebook.com/saved/?cref=28
+                    - generic [ref=e204]: Saved
+                - listitem [ref=e205]:
+                  - link "Groups" [ref=e209] [cursor=pointer]:
+                    - /url: https://www.facebook.com/groups/?ref=bookmarks
+                    - generic [ref=e219]: Groups
+                - listitem [ref=e220]:
+                  - link "Reels" [ref=e224] [cursor=pointer]:
+                    - /url: https://www.facebook.com/reel/?s=tab
+                    - generic [ref=e234]: Reels
+                - listitem [ref=e235]:
+                  - link "Marketplace" [ref=e239] [cursor=pointer]:
+                    - /url: https://www.facebook.com/marketplace/?ref=bookmark
+                    - generic [ref=e249]: Marketplace
+              - button "See more explore items" [ref=e253] [cursor=pointer]:
+                - generic [ref=e255]:
+                  - img [ref=e258]
+                  - generic [ref=e265]: See more
+              - separator [ref=e266]
+            - generic [ref=e267]:
+              - heading "Your shortcuts" [level=3] [ref=e277]:
+                - generic [ref=e279]: Your shortcuts
+              - list [ref=e280]:
+                - listitem [ref=e281]:
+                  - link "8 Ball Pool" [ref=e285] [cursor=pointer]:
+                    - /url: https://apps.facebook.com/livepool/?ref=bookmarks&fb_source=web_shortcut&count=0
+                    - generic [ref=e287]:
+                      - img [ref=e290]
+                      - generic [ref=e299]: 8 Ball Pool
+                - listitem [ref=e300]:
+                  - link "Candy Crush Saga" [ref=e304] [cursor=pointer]:
+                    - /url: https://apps.facebook.com/candycrush/?ref=bookmarks&fb_source=web_shortcut&count=0
+                    - generic [ref=e306]:
+                      - img [ref=e309]
+                      - generic [ref=e318]: Candy Crush Saga
+                - listitem [ref=e319]:
+                  - link "Candy Crush Soda Saga" [ref=e323] [cursor=pointer]:
+                    - /url: https://apps.facebook.com/candycrushsoda/?ref=bookmarks&fb_source=web_shortcut&count=0
+                    - generic [ref=e325]:
+                      - img [ref=e328]
+                      - generic [ref=e337]: Candy Crush Soda Saga
+          - contentinfo "Facebook" [ref=e339]:
+            - list [ref=e341]:
+              - listitem [ref=e342]:
+                - link "Privacy" [ref=e343] [cursor=pointer]:
+                  - /url: /privacy/policy/?entry_point=comet_dropdown
+                - generic [ref=e344]: ·
+              - listitem [ref=e346]:
+                - link "Terms" [ref=e347] [cursor=pointer]:
+                  - /url: /policies?ref=pf
+                - generic [ref=e348]: ·
+              - listitem [ref=e350]:
+                - link "Advertising" [ref=e351] [cursor=pointer]:
+                  - /url: /business/
+                - generic [ref=e352]: ·
+              - listitem [ref=e354]:
+                - link "Ad Choices" [ref=e355] [cursor=pointer]:
+                  - /url: /help/568137493302217
+                  - text: Ad Choices
+                  - img [ref=e357]
+                - generic [ref=e360]: ·
+              - listitem [ref=e362]:
+                - link "Cookies" [ref=e363] [cursor=pointer]:
+                  - /url: /policies/cookies/
+                - generic [ref=e364]: ·
+              - listitem [ref=e366]:
+                - button "More footer links" [ref=e367] [cursor=pointer]: More
+    - heading "Home" [level=1] [ref=e369]
+    - main [ref=e370]:
+      - generic [ref=e375]:
+        - generic [ref=e380]:
+          - generic [ref=e381]:
+            - img [ref=e383]
+            - button "Close" [ref=e389] [cursor=pointer]:
+              - img [ref=e390]
+          - generic [ref=e393]:
+            - heading "Remember Password" [level=3] [ref=e395]:
+              - generic [ref=e396]: Remember Password
+            - generic [ref=e398]: Next time you log in on this browser, just click your profile picture instead of typing a password.
+          - generic [ref=e400]:
+            - button "OK" [ref=e402] [cursor=pointer]:
+              - generic [ref=e405]: OK
+            - button "Not Now" [ref=e407] [cursor=pointer]:
+              - generic [ref=e410]: Not Now
+        - region "Create a post" [ref=e414]:
+          - generic [ref=e415]:
+            - heading "Create a post" [level=3] [ref=e416]
+            - link "Salim Hingora's Timeline" [ref=e417] [cursor=pointer]:
+              - /url: https://www.facebook.com/profile.php?id=100008162562080
+              - img [ref=e420]
+            - button "What's on your mind, Salim?" [ref=e424] [cursor=pointer]:
+              - generic [ref=e426]: What's on your mind, Salim?
+            - generic [ref=e427]:
+              - button "Live video" [ref=e429] [cursor=pointer]
+              - button "Photo/video" [ref=e433] [cursor=pointer]
+              - button "Feeling/activity" [ref=e437] [cursor=pointer]
+        - region "Stories" [ref=e445]:
+          - heading "Stories" [level=3] [ref=e446]
+          - generic [ref=e447]:
+            - generic:
+              - button [disabled]:
+                - img
+            - grid "stories tray" [ref=e449]:
+              - row "Create story Faiz Hanif Kadawalla's story Kamran Ghani's story Imtiaz Abdul Rehman's story Manasee Jani's story Abdul Rehman Shaikh's story Loading..." [ref=e450]:
+                - generic [ref=e452]:
+                  - gridcell "Create story" [ref=e453]:
+                    - link "Create story" [ref=e455] [cursor=pointer]:
+                      - /url: /stories/create/
+                      - generic [ref=e461]:
+                        - img [ref=e464]
+                        - generic:
+                          - generic:
+                            - generic: Create story
+                  - gridcell "Faiz Hanif Kadawalla's story" [ref=e469]:
+                    - link "Faiz Hanif Kadawalla's story" [ref=e473] [cursor=pointer]:
+                      - /url: /stories/1381818595209163/UzpfSVNDOjE0NTU5MjQzMTU3ODM4MjQ=/?bucket_count=9&source=story_tray
+                      - generic [ref=e478]:
+                        - generic [ref=e479]:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "Faiz Hanif Kadawalla"
+                        - generic [ref=e483]:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - generic: Faiz Hanif Kadawalla
+                  - gridcell "Kamran Ghani's story" [ref=e484]:
+                    - link "Kamran Ghani's story" [ref=e488] [cursor=pointer]:
+                      - /url: /stories/10155640101442260/UzpfSVNDOjE0OTYzMDY1NDIxNjIxNDQ=/?bucket_count=9&source=story_tray
+                      - generic [ref=e494]:
+                        - generic [ref=e495]:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "Kamran Ghani"
+                        - generic [ref=e499]:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - generic: Kamran Ghani
+                  - gridcell "Imtiaz Abdul Rehman's story" [ref=e500]:
+                    - link "Imtiaz Abdul Rehman's story" [ref=e504] [cursor=pointer]:
+                      - /url: /stories/1502640973144442/UzpfSVNDOjIwOTM4ODc4MzgwMTAyOTQ=/?bucket_count=9&source=story_tray
+                      - generic [ref=e509]:
+                        - generic [ref=e510]:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "Imtiaz Abdul Rehman"
+                        - generic [ref=e514]:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - generic: Imtiaz Abdul Rehman
+                  - gridcell "Manasee Jani's story" [ref=e515]:
+                    - link "Manasee Jani's story" [ref=e519] [cursor=pointer]:
+                      - /url: /stories/1278588102245755/UzpfSVNDOjk3MTc3NzE2NTU2ODM1Mg==/?bucket_count=9&source=story_tray
+                      - generic [ref=e524]:
+                        - generic [ref=e525]:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "Manasee Jani"
+                        - generic [ref=e529]:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - generic: Manasee Jani
+                  - gridcell "Abdul Rehman Shaikh's story" [ref=e530]:
+                    - link "Abdul Rehman Shaikh's story" [ref=e534] [cursor=pointer]:
+                      - /url: /stories/1840680862672356/UzpfSVNDOjE2ODQxNTI1NDI5MTIwNzk=/?bucket_count=9&source=story_tray
+                      - generic [ref=e539]:
+                        - generic [ref=e540]:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "Abdul Rehman Shaikh"
+                        - generic [ref=e544]:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - generic: Abdul Rehman Shaikh
+                  - gridcell "Loading..." [ref=e545]:
+                    - status "Loading..." [ref=e547]
+            - button "Next items" [ref=e557] [cursor=pointer]:
+              - img [ref=e558]
+        - generic [ref=e561]:
+          - heading "Feed posts" [level=3] [ref=e562]
+          - generic [ref=e563]:
+            - generic [ref=e578]:
+              - blockquote [ref=e580]:
+                - generic [ref=e581]: Facebook
+              - blockquote [ref=e583]:
+                - generic [ref=e584]: Facebook
+              - blockquote [ref=e586]:
+                - generic [ref=e587]: Facebook
+              - blockquote [ref=e589]:
+                - generic [ref=e590]: Facebook
+              - blockquote [ref=e592]:
+                - generic [ref=e593]: Facebook
+              - blockquote [ref=e595]:
+                - generic [ref=e596]: Facebook
+              - blockquote [ref=e598]:
+                - generic [ref=e599]: Facebook
+              - blockquote [ref=e601]:
+                - generic [ref=e602]: Facebook
+              - blockquote [ref=e604]:
+                - generic [ref=e605]: Facebook
+              - blockquote [ref=e607]:
+                - generic [ref=e608]: Facebook
+              - blockquote [ref=e610]:
+                - generic [ref=e611]: Facebook
+              - generic [ref=e614]:
+                - generic:
+                  - blockquote [ref=e616]:
+                    - generic [ref=e617]: Facebook
+                  - blockquote [ref=e619]:
+                    - generic [ref=e620]: Facebook
+                  - blockquote [ref=e622]:
+                    - generic [ref=e623]: Facebook
+                  - blockquote [ref=e625]:
+                    - generic [ref=e626]: Facebook
+                  - blockquote [ref=e628]:
+                    - generic [ref=e629]: Facebook
+                  - blockquote [ref=e631]:
+                    - generic [ref=e632]: Facebook
+                  - blockquote [ref=e634]:
+                    - generic [ref=e635]: Facebook
+                  - blockquote [ref=e637]:
+                    - generic [ref=e638]: Facebook
+                  - blockquote [ref=e640]:
+                    - generic [ref=e641]: Facebook
+                  - blockquote [ref=e643]:
+                    - generic [ref=e644]: Facebook
+                  - blockquote [ref=e646]:
+                    - generic [ref=e647]: Facebook
+                  - blockquote [ref=e649]:
+                    - generic [ref=e650]: Facebook
+                  - blockquote [ref=e652]:
+                    - generic [ref=e653]: Facebook
+                  - blockquote [ref=e655]:
+                    - generic [ref=e656]: Facebook
+                  - blockquote [ref=e658]:
+                    - generic [ref=e659]: Facebook
+                  - blockquote [ref=e661]:
+                    - generic [ref=e662]: Facebook
+                  - blockquote [ref=e664]:
+                    - generic [ref=e665]: Facebook
+                  - blockquote [ref=e667]:
+                    - generic [ref=e668]: Facebook
+                  - blockquote [ref=e670]:
+                    - generic [ref=e671]: Facebook
+                  - blockquote [ref=e673]:
+                    - generic [ref=e674]: Facebook
+                  - blockquote [ref=e676]:
+                    - generic [ref=e677]: Facebook
+                  - blockquote [ref=e679]:
+                    - generic [ref=e680]: Facebook
+                - generic [ref=e682]:
+                  - link "Mohammed Shamim Radiowala" [ref=e686] [cursor=pointer]:
+                    - /url: https://www.facebook.com/shamimradiowala.official?__cft__[0]=AZa1jljGK43Tsgc8iX3RsfI7jKHgo3vEbE0DGQXomlq6zWXrVryb8wc9cgAIzSON0ts_2LBUwK8-qsQbIuGYA28HnHs0Qhi9233v5mifRo3fipgdyDfcoW7r3x_X1hSaBCbKBrMPiS90cxvq2QC47_kTT6ABpS4ndWq2WjdkKIAiuIOuO_1_9HDLYQJmZ2eMvlg85t9bmiDR_0iQziFq439k&__tn__=%3C%3C%2CP-R
+                    - img "Mohammed Shamim Radiowala" [ref=e688]
+                  - generic [ref=e693]:
+                    - heading "Mohammed Shamim Radiowala Verified account" [level=4] [ref=e697]:
+                      - generic [ref=e698]:
+                        - link "Mohammed Shamim Radiowala" [ref=e702] [cursor=pointer]:
+                          - /url: https://www.facebook.com/shamimradiowala.official?__cft__[0]=AZa1jljGK43Tsgc8iX3RsfI7jKHgo3vEbE0DGQXomlq6zWXrVryb8wc9cgAIzSON0ts_2LBUwK8-qsQbIuGYA28HnHs0Qhi9233v5mifRo3fipgdyDfcoW7r3x_X1hSaBCbKBrMPiS90cxvq2QC47_kTT6ABpS4ndWq2WjdkKIAiuIOuO_1_9HDLYQJmZ2eMvlg85t9bmiDR_0iQziFq439k&__tn__=-UC%2CP-R
+                          - generic [ref=e703]: Mohammed Shamim Radiowala
+                        - img "Verified account" [ref=e707]
+                    - generic [ref=e712]:
+                      - 'link "o e p o r s n t d S 1 m : 1 2 0 3 M i i 1 l 9 2 1 h m l 8 i u f 4 h u i t a a l l a 7 y 8 1 6 P 3 M 1 f h 1 h 1" [ref=e715] [cursor=pointer]':
+                        - /url: "?__cft__[0]=AZa1jljGK43Tsgc8iX3RsfI7jKHgo3vEbE0DGQXomlq6zWXrVryb8wc9cgAIzSON0ts_2LBUwK8-qsQbIuGYA28HnHs0Qhi9233v5mifRo3fipgdyDfcoW7r3x_X1hSaBCbKBrMPiS90cxvq2QC47_kTT6ABpS4ndWq2WjdkKIAiuIOuO_1_9HDLYQJmZ2eMvlg85t9bmiDR_0iQziFq439k&__tn__=%2CO%2CP-R#?caj"
+                        - generic [ref=e718]:
+                          - generic [ref=e719]: o
+                          - generic [ref=e720]: e
+                          - generic [ref=e721]: p
+                          - generic [ref=e722]: o
+                          - generic [ref=e723]: r
+                          - generic [ref=e724]: s
+                          - generic [ref=e725]: "n"
+                          - generic [ref=e726]: t
+                          - generic [ref=e727]: d
+                          - generic [ref=e728]: S
+                          - generic [ref=e729]: "1"
+                          - generic [ref=e730]: m
+                          - generic [ref=e731]: ":"
+                          - generic [ref=e732]: "1"
+                          - generic [ref=e733]: "2"
+                          - generic [ref=e734]: "0"
+                          - generic [ref=e735]: "3"
+                          - generic [ref=e736]: M
+                          - generic [ref=e737]: i
+                          - generic [ref=e739]: i
+                          - generic [ref=e740]: "1"
+                          - generic [ref=e741]: l
+                          - generic [ref=e742]: "9"
+                          - generic [ref=e743]: "2"
+                          - generic [ref=e744]: "1"
+                          - generic [ref=e745]: h
+                          - generic [ref=e746]: m
+                          - generic [ref=e747]: l
+                          - generic [ref=e748]: "8"
+                          - generic [ref=e749]: i
+                          - generic [ref=e750]: u
+                          - generic [ref=e751]: f
+                          - generic [ref=e752]: "4"
+                          - generic [ref=e753]: h
+                          - generic [ref=e754]: u
+                          - generic [ref=e755]: i
+                          - generic [ref=e756]: t
+                          - generic [ref=e757]: a
+                          - generic [ref=e758]: a
+                          - generic [ref=e759]: l
+                          - generic [ref=e760]: l
+                          - generic [ref=e761]: a
+                          - generic [ref=e762]: "7"
+                          - generic [ref=e763]: "y"
+                          - generic [ref=e764]: "8"
+                          - generic [ref=e765]: "1"
+                          - generic [ref=e766]: "6"
+                          - generic [ref=e768]: P
+                          - generic [ref=e769]: "3"
+                          - generic [ref=e770]: M
+                          - generic [ref=e771]: "1"
+                          - generic [ref=e773]: f
+                          - generic [ref=e774]: h
+                          - generic [ref=e775]: "1"
+                          - generic [ref=e776]: h
+                          - generic [ref=e778]: "1"
+                      - generic [ref=e780]: ·
+                      - img "Shared with Public" [ref=e785]
+                  - button "Actions for this post by Mohammed Shamim Radiowala" [ref=e793] [cursor=pointer]:
+                    - img [ref=e794]
+                  - link "Hide post by Mohammed Shamim Radiowala" [ref=e798] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=e799]
+                - generic [ref=e801]:
+                  - generic [ref=e810]: Many many happy Returns of the day to my brother & true friends Jamil Merchant May ALLAH S.W.T Bless him with good health wealth ,happiness & Success ! Ameen
+                  - generic [ref=e815]:
+                    - link "No photo description available." [ref=e817] [cursor=pointer]:
+                      - /url: https://www.facebook.com/photo/?fbid=35527166546926823&set=pcb.35527167403593404&__cft__[0]=AZa1jljGK43Tsgc8iX3RsfI7jKHgo3vEbE0DGQXomlq6zWXrVryb8wc9cgAIzSON0ts_2LBUwK8-qsQbIuGYA28HnHs0Qhi9233v5mifRo3fipgdyDfcoW7r3x_X1hSaBCbKBrMPiS90cxvq2QC47_kTT6ABpS4ndWq2WjdkKIAiuIOuO_1_9HDLYQJmZ2eMvlg85t9bmiDR_0iQziFq439k&__tn__=*b0H-R
+                    - link "May be an image of one or more people and beard" [ref=e822] [cursor=pointer]:
+                      - /url: https://www.facebook.com/photo/?fbid=35527179750258836&set=pcb.35527167403593404&__cft__[0]=AZa1jljGK43Tsgc8iX3RsfI7jKHgo3vEbE0DGQXomlq6zWXrVryb8wc9cgAIzSON0ts_2LBUwK8-qsQbIuGYA28HnHs0Qhi9233v5mifRo3fipgdyDfcoW7r3x_X1hSaBCbKBrMPiS90cxvq2QC47_kTT6ABpS4ndWq2WjdkKIAiuIOuO_1_9HDLYQJmZ2eMvlg85t9bmiDR_0iQziFq439k&__tn__=*b1H-R
+                - generic [ref=e830]:
+                  - generic [ref=e832]:
+                    - generic [ref=e833]:
+                      - toolbar "See who reacted to this" [ref=e834]:
+                        - generic [ref=e835]:
+                          - 'button "Like: 75 people" [ref=e839] [cursor=pointer]'
+                          - 'button "Love: 8 people" [ref=e843] [cursor=pointer]'
+                      - 'button "All reactions: Imran Reshamwala and 82 others" [ref=e846] [cursor=pointer]':
+                        - generic [ref=e847]: "All reactions:"
+                        - generic [ref=e849]: "83"
+                        - generic [ref=e852]: Imran Reshamwala and 82 others
+                    - button "13 comments" [ref=e857] [cursor=pointer]:
+                      - generic [ref=e858]: 13 comments
+                  - generic [ref=e860]:
+                    - generic [ref=e861]:
+                      - button "Like Mohammed Shamim Radiowala's post" [ref=e862] [cursor=pointer]:
+                        - generic [ref=e868]: Like
+                      - button "React to Mohammed Shamim Radiowala's post" [ref=e869] [cursor=pointer]:
+                        - img [ref=e870]
+                    - button "Comment on Mohammed Shamim Radiowala's post" [ref=e873] [cursor=pointer]:
+                      - generic [ref=e878]: Comment
+                    - button "Send this to friends or post it on your profile." [ref=e880] [cursor=pointer]:
+                      - generic [ref=e885]: Share
+              - blockquote [ref=e887]:
+                - generic [ref=e888]: Facebook
+              - blockquote [ref=e890]:
+                - generic [ref=e891]: Facebook
+              - blockquote [ref=e893]:
+                - generic [ref=e894]: Facebook
+              - blockquote [ref=e896]:
+                - generic [ref=e897]: Facebook
+              - blockquote [ref=e899]:
+                - generic [ref=e900]: Facebook
+              - blockquote [ref=e902]:
+                - generic [ref=e903]: Facebook
+              - blockquote [ref=e905]:
+                - generic [ref=e906]: Facebook
+              - blockquote [ref=e908]:
+                - generic [ref=e909]: Facebook
+              - blockquote [ref=e911]:
+                - generic [ref=e912]: Facebook
+              - blockquote [ref=e914]:
+                - generic [ref=e915]: Facebook
+              - blockquote [ref=e917]:
+                - generic [ref=e918]: Facebook
+            - generic [ref=e920]:
+              - article [ref=e921]:
+                - status "Loading..." [ref=e922]
+              - article [ref=e934]:
+                - status "Loading..." [ref=e935]
+    - complementary [ref=e947]:
+      - generic [ref=e953]:
+        - generic [ref=e956]:
+          - heading "Sponsored" [level=3] [ref=e965]:
+            - generic [ref=e967]: Sponsored
+          - generic [ref=e968]:
+            - generic [ref=e973]:
+              - link "Many winning moments this May bigticket.ae" [ref=e974] [cursor=pointer]:
+                - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.bigticket.ae%2F%3Futm_source%3Dfacebook%26utm_medium%3Dpaidsocial%26utm_campaign%3DM11APLAN00073923_Digitas_Paid-Social_FB-IG_UAE_Conversion_Big-Ticket-20Million_Prospecting_AdvantagePlus_English_May26%26utm_content%3D01May_FB-IG_UAE_Conversion_Big-Ticket-20Million_AdvantagePlus_English-01May_FB-IG_UAE_Conversion_Big-Ticket-20Million_AdvantagePlus_English_Image1%26utm_term%3Dfb%26utm_id%3D120248929219230670%26fbclid%3DIwZXh0bgNhZW0BMABhZGlkAas1xSuDPP5icmlkETFlbmxHUm1mVmlndGE3eEVpc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHjKIvkdXmgVQfHrD4blfKW4WuIxLZXopz4Z5zuCkQLEYu38uy6zpKdjAMS4G_aem_0T_q9oEr9yYBS2uP7gtOjQ&h=AUBEe-7KHiU76Gm9KbaKON6R95qYLcljpI67LvYdQyMies8QdBsOQn26f894uiiGGv71Xd3pc1jCBVg4P7sA5VWjx16Jrd-SDOX4KVGTpKW0rtrjJPdTyqfP5y1or5Q0rE8HloJ9NhNEtvguidE5rQ&__tn__=*I&c[0]=AUB-KIhhAttI0calf3M70utzPqmEfirOSLbDfvpUcWoGU9Ah4ILReDDX0A5vFa9ychgIM527QceDzBGKdXsarViqSBrqLAT3fTRXo4yHEZ2DluFD6xTXLfGVmW83Oeyf-Kin-x5J-0hkpqfM_tUGaGzcJxU7E7VUr6I-Kw9STh6mE5K0ELsT_pBuawKS5w4EEEGOC_MfXnZWo_ic9wQTVDA
+                - generic [ref=e979]:
+                  - img [ref=e981]
+                  - generic [ref=e983]:
+                    - generic [ref=e986]: Many winning moments this May
+                    - generic [ref=e990]: bigticket.ae
+              - button "Open menu for Big Ticket Abu Dhabi sponsored content" [ref=e993] [cursor=pointer]:
+                - img [ref=e994]
+            - generic [ref=e1001]:
+              - link "💎 FLAT 30% OFF Dubaiofferstoday.com" [ref=e1002] [cursor=pointer]:
+                - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fdubaiofferstoday.com%2Fcollections%2Fclearance-sale%3Futm_medium%3Dpaid%26utm_id%3D120236491219740254%26utm_content%3D120236491219750254%26utm_term%3D120236491219730254%26utm_campaign%3D120236491219740254%26fbclid%3DIwZXh0bgNhZW0BMABhZGlkAasqdCMFkG5icmlkETFlbmxHUm1mVmlndGE3eEVpc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHjKIvkdXmgVQfHrD4blfKW4WuIxLZXopz4Z5zuCkQLEYu38uy6zpKdjAMS4G_aem_r19wzRlXwiVvaTYfHhjpzA&h=AUBEe-7KHiU76Gm9KbaKON6R95qYLcljpI67LvYdQyMies8QdBsOQn26f894uiiGGv71Xd3pc1jCBVg4P7sA5VWjx16Jrd-SDOX4KVGTpKW0rtrjJPdTyqfP5y1or5Q0rE8HloJ9NhNEtvguidE5rQ&__tn__=*I&c[0]=AUAZVhCNaYmcUyOaRGpGm1shtvkZ2mjKIY2Y_ObROyoKGrIfULj45hZu6Fl9o_rSMTB3pPWJ1rsmD4zQzShjxnvYlSokKjVtAkRp7mSGDh3dn4G724Dm1Uxi2RlzjClKmOa_TbhFCrLV4aR5GCLELADlEG7fN_ncEGQOGuJP30i_ib1LQkBNn-pidTh4v-0KY7kLzOn4PD_mjAWGoxwT19g
+                - generic [ref=e1007]:
+                  - img [ref=e1009]
+                  - generic [ref=e1011]:
+                    - generic [ref=e1014]: 💎 FLAT 30% OFF
+                    - generic [ref=e1018]: Dubaiofferstoday.com
+              - button "Open menu for Deal Offers Today sponsored content" [ref=e1021] [cursor=pointer]:
+                - img [ref=e1022]
+        - generic [ref=e1026]:
+          - generic [ref=e1033]:
+            - heading "Friend requests" [level=3] [ref=e1035]:
+              - generic [ref=e1037]: Friend requests
+            - link "See all" [ref=e1042] [cursor=pointer]:
+              - /url: /friends/
+              - generic [ref=e1043]: See all
+          - generic [ref=e1048]:
+            - link "Queeny Charissa" [ref=e1050] [cursor=pointer]:
+              - /url: /friends/requests/?profile_id=100045433480151&__tn__=%3C
+              - img [ref=e1052]
+            - generic [ref=e1057]:
+              - generic [ref=e1062]:
+                - link "Queeny Charissa" [ref=e1066] [cursor=pointer]:
+                  - /url: /friends/requests/?profile_id=100045433480151
+                - generic [ref=e1071]:
+                  - generic "3 weeks ago" [ref=e1074]: 3w
+                  - generic [ref=e1077]: New friend request notification
+              - generic [ref=e1080]:
+                - button "Confirm" [ref=e1082] [cursor=pointer]:
+                  - generic [ref=e1085]: Confirm
+                - button "Delete" [ref=e1087] [cursor=pointer]:
+                  - generic [ref=e1090]: Delete

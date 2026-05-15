@@ -1,0 +1,106 @@
+- generic [active] [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Google Apps Script" [ref=e10] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - button "Rename" [ref=e18] [cursor=pointer]: Untitled project
+          - generic [ref=e21]:
+            - button "Deploy" [ref=e26] [cursor=pointer]:
+              - generic [ref=e29]:
+                - text: Deploy
+                - generic [ref=e30]: 
+            - button "Support" [ref=e32] [cursor=pointer]:
+              - generic [ref=e35]: help_outline
+        - generic [ref=e37]:
+          - button "Google apps" [ref=e41] [cursor=pointer]:
+            - img [ref=e42]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e47] [cursor=pointer]':
+            - img [ref=e49]
+    - generic [ref=e51]:
+      - navigation "Apps Script project pages" [ref=e53]:
+        - link "Overview" [ref=e54] [cursor=pointer]:
+          - generic [ref=e56]: info_outline
+          - generic [ref=e57]: Overview
+        - link "Editor" [ref=e58] [cursor=pointer]:
+          - generic [ref=e60]: code
+          - generic [ref=e61]: Editor
+        - link "Project History" [ref=e62] [cursor=pointer]:
+          - generic [ref=e64]: history
+          - generic [ref=e65]: Project History
+        - link "Triggers" [ref=e66] [cursor=pointer]:
+          - generic [ref=e68]: alarm
+          - generic [ref=e69]: Triggers
+        - link "Executions" [ref=e70] [cursor=pointer]:
+          - generic [ref=e72]: playlist_play
+          - generic [ref=e73]: Executions
+        - link "Project Settings" [ref=e74] [cursor=pointer]:
+          - generic [ref=e76]: settings
+          - generic [ref=e77]: Project Settings
+      - generic [ref=e79]:
+        - generic [ref=e80]:
+          - heading "Triggers" [level=1] [ref=e82]
+          - generic [ref=e84]: Showing 1 trigger
+        - button "Add Trigger" [ref=e85] [cursor=pointer]:
+          - generic [ref=e86]: add
+          - generic [ref=e87]: Add Trigger
+        - generic "Triggers table. Use arrow keys to navigate the table or tab to add and modify table filters." [ref=e88]:
+          - list [ref=e90]:
+            - listitem [ref=e91]:
+              - generic [ref=e92]:
+                - generic [ref=e93]: 
+                - text: Add a filter
+              - generic [ref=e95]:
+                - textbox [disabled] [ref=e96]
+                - combobox "Add a trigger filter" [ref=e97]
+          - generic [ref=e98]:
+            - grid [ref=e100]:
+              - rowgroup [ref=e101]:
+                - row "Owned by Last run Deployment Event Function Error rate" [ref=e102]:
+                  - columnheader "Owned by" [ref=e103] [cursor=pointer]:
+                    - generic [ref=e105]: Owned by
+                  - columnheader "Last run" [ref=e106] [cursor=pointer]:
+                    - generic [ref=e108]: Last run
+                  - columnheader "Deployment" [ref=e109] [cursor=pointer]:
+                    - generic [ref=e111]: Deployment
+                  - columnheader "Event" [ref=e112] [cursor=pointer]:
+                    - generic [ref=e114]: Event
+                  - columnheader "Function" [ref=e115] [cursor=pointer]:
+                    - generic [ref=e117]: Function
+                  - columnheader "Error rate" [ref=e118] [cursor=pointer]:
+                    - generic [ref=e120]: Error rate
+              - rowgroup [ref=e121]:
+                - row "Me - Head From spreadsheet - On change syncLeadsToCRM - Edit Trigger More Options" [ref=e122]:
+                  - gridcell "Me" [ref=e123]
+                  - gridcell "-" [ref=e124]
+                  - gridcell "Head" [ref=e125]
+                  - gridcell "From spreadsheet - On change" [ref=e126]
+                  - gridcell "syncLeadsToCRM" [ref=e127]
+                  - gridcell "- Edit Trigger More Options" [ref=e128]:
+                    - generic [ref=e130]:
+                      - generic [ref=e131]: "-"
+                      - generic [ref=e132]:
+                        - button "Edit Trigger" [ref=e133] [cursor=pointer]:
+                          - generic [ref=e136]: 
+                        - button "More Options" [ref=e139] [cursor=pointer]:
+                          - generic [ref=e142]: 
+            - navigation "Pagination" [ref=e143]:
+              - generic [ref=e144]:
+                - generic [ref=e145]: "Rows per page:"
+                - listbox "Number of rows per page" [ref=e146] [cursor=pointer]:
+                  - option "25" [selected] [ref=e147]
+                  - option "50"
+                  - option "100"
+              - generic [ref=e149]:
+                - button "Go to first page" [disabled] [ref=e150]:
+                  - generic [ref=e153]: 
+                - status [ref=e154]: Page 1 of 1
+                - button "Go to previous page" [disabled] [ref=e155]:
+                  - generic [ref=e158]: 
+                - button "Go to next page" [disabled] [ref=e159]:
+                  - generic [ref=e162]: 

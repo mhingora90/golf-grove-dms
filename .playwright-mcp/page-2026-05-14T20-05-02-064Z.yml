@@ -1,0 +1,146 @@
+- application [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - iframe [ref=e3]:
+    
+  - banner "Menu bar" [ref=e4]:
+    - generic [ref=e7]:
+      - link "Sheets home" [ref=e9] [cursor=pointer]:
+        - /url: https://docs.google.com/spreadsheets/u/0/?authuser=0&usp=sheets_web
+      - generic [ref=e16]:
+        - generic "Regent Developments - Paid Media Plan" [ref=e18]:
+          - generic [ref=e19]:
+            - generic: Regent Developments - Paid Media Plan
+            - textbox "Rename" [ref=e21]: Regent Developments - Paid Media Plan
+          - generic [ref=e22]:
+            - checkbox "Star" [ref=e24] [cursor=pointer]
+            - button "Add shortcut to Drive" [ref=e28] [cursor=pointer]
+            - 'button "Document status: Saved to Drive." [ref=e32]'
+        - generic [ref=e39]:
+          - button [ref=e41] [cursor=pointer]
+          - button "Show all comments" [ref=e45] [cursor=pointer]
+          - button "Join a call here or present this tab to the call" [ref=e49] [cursor=pointer]
+          - generic [ref=e54]:
+            - button "Share. Anyone with the link. Anyone who has the link can access. No sign-in required." [ref=e55] [cursor=pointer]: Share
+            - button "Quick sharing actions" [ref=e57] [cursor=pointer]
+          - generic [ref=e66]:
+            - button "Upgrade" [ref=e68] [cursor=pointer]:
+              - generic [ref=e70]: Upgrade
+            - tooltip [ref=e71]: Upgrade for premium features
+          - generic [ref=e74]:
+            - generic:
+              - button "Try Gemini" [ref=e77] [cursor=pointer]:
+                - img [ref=e80]
+              - tooltip [ref=e83]: Try Gemini
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com), Storage usage alert" [ref=e86] [cursor=pointer]':
+            - img [ref=e87]
+            - img [ref=e89]
+    - generic [ref=e92]:
+      - menubar [ref=e94]:
+        - menuitem "File" [ref=e95] [cursor=pointer]
+        - menuitem "Edit" [ref=e96] [cursor=pointer]
+        - menuitem "View" [ref=e97] [cursor=pointer]
+        - menuitem "Insert" [ref=e98] [cursor=pointer]
+        - menuitem "Format" [ref=e99] [cursor=pointer]
+        - menuitem "Data" [ref=e100] [cursor=pointer]
+        - menuitem "Tools" [ref=e101] [cursor=pointer]
+        - menuitem "Extensions" [ref=e102] [cursor=pointer]
+        - menuitem "Help" [ref=e103] [cursor=pointer]
+      - generic [ref=e104]:
+        - generic [ref=e105]:
+          - toolbar "Search the menus (Alt+/)" [ref=e106]:
+            - combobox "Menus" [ref=e108]
+          - toolbar "Main" [ref=e109]:
+            - button "Undo (Ctrl+Z)" [ref=e110] [cursor=pointer]
+            - button "Redo (Ctrl+Y)" [ref=e115] [cursor=pointer]
+            - button "Print (Ctrl+P)" [ref=e120] [cursor=pointer]
+            - button "Paint format" [ref=e125] [cursor=pointer]
+            - combobox "Zoom" [ref=e130] [cursor=pointer]:
+              - option "Zoom list. 100% selected." [selected] [ref=e133]:
+                - textbox "Zoom" [ref=e134]: 100%
+            - separator [disabled] [ref=e138]
+            - button "Format as currency" [ref=e139] [cursor=pointer]:
+              - generic [ref=e141]: $
+            - button "Format as percent" [ref=e142] [cursor=pointer]:
+              - generic [ref=e144]: "%"
+            - button "Decrease decimal places" [ref=e145] [cursor=pointer]
+            - button "Increase decimal places" [ref=e150] [cursor=pointer]
+            - button "More formats" [ref=e155] [cursor=pointer]:
+              - generic [ref=e158]: "123"
+            - separator [disabled] [ref=e159]
+            - listbox "Font" [ref=e160] [cursor=pointer]:
+              - option "Font list. Calibri selected." [selected] [ref=e163]: Calibri
+            - separator [disabled] [ref=e167]
+            - button "Decrease font size (Ctrl+Shift+comma)" [ref=e168] [cursor=pointer]
+            - combobox "Font size" [ref=e173] [cursor=pointer]:
+              - option "Font size list. 11 selected." [selected] [ref=e176]:
+                - textbox "Font size" [ref=e177]: "11"
+            - button "Increase font size (Ctrl+Shift+period)" [ref=e178] [cursor=pointer]
+            - separator [disabled] [ref=e183]
+            - button "Bold (Ctrl+B)" [pressed] [ref=e184] [cursor=pointer]
+            - button "Italic (Ctrl+I)" [ref=e189] [cursor=pointer]
+            - button "Strikethrough (Alt+Shift+5)" [ref=e194] [cursor=pointer]
+            - button "Text color" [ref=e199] [cursor=pointer]
+            - separator [disabled] [ref=e206]
+            - button "Fill color" [ref=e207] [cursor=pointer]
+            - button "Borders" [ref=e214] [cursor=pointer]
+            - button "Merge cells" [disabled] [ref=e220]
+            - button "Select merge type" [disabled] [ref=e225]
+            - separator [disabled] [ref=e231]
+            - button "Horizontal align" [ref=e232] [cursor=pointer]
+            - button "Vertical align" [ref=e241] [cursor=pointer]
+            - button "Text wrapping" [ref=e250] [cursor=pointer]
+            - button "Text rotation" [ref=e259] [cursor=pointer]
+            - separator [disabled] [ref=e268]
+            - button "Insert link (Ctrl+K)" [ref=e269] [cursor=pointer]
+            - button "Insert comment (Ctrl+Alt+M)" [ref=e274] [cursor=pointer]
+            - button "Insert chart" [ref=e279] [cursor=pointer]
+            - button "Create a filter" [ref=e284] [cursor=pointer]
+            - button "Filter views" [ref=e289] [cursor=pointer]
+            - button "Functions" [ref=e298] [cursor=pointer]
+        - toolbar "Mode and view" [ref=e304]:
+          - button "Hide the menus (Ctrl+Shift+F)" [ref=e305] [cursor=pointer]
+    - generic:
+      - generic:
+        - button "Show side panel":
+          - img [ref=e311] [cursor=pointer]
+    - generic [ref=e316]:
+      - generic "Name box (Ctrl + J)" [ref=e317]:
+        - textbox [ref=e318]: A1
+        - button "Name box menu button. Select one of the menu items to navigate to its corresponding named range." [ref=e320] [cursor=pointer]
+      - textbox [ref=e336]
+  - navigation "Sheet tab bar" [ref=e372]:
+    - toolbar [ref=e373]:
+      - button "Add Sheet" [ref=e374] [cursor=pointer]
+      - button "All Sheets" [ref=e379] [cursor=pointer]
+    - toolbar [ref=e388]:
+      - button "April 2026 Media PLan" [ref=e389] [cursor=pointer]:
+        - generic [ref=e393]: April 2026 Media PLan
+      - button "March 2026" [ref=e397] [cursor=pointer]:
+        - generic [ref=e401]: March 2026
+      - button "Feb 2026" [ref=e405] [cursor=pointer]:
+        - generic [ref=e409]: Feb 2026
+      - button "Statistics Report" [ref=e413] [cursor=pointer]:
+        - generic [ref=e417]: Statistics Report
+      - button "Automatic Meta Leads" [ref=e421]:
+        - generic [ref=e425]: Automatic Meta Leads
+      - button "Keywords Research" [ref=e429] [cursor=pointer]:
+        - generic [ref=e433]: Keywords Research
+      - button "Ad Copies" [ref=e437] [cursor=pointer]:
+        - generic [ref=e441]: Ad Copies
+      - button "241 Waterside Scope" [ref=e445] [cursor=pointer]:
+        - generic [ref=e449]: 241 Waterside Scope
+      - button "old leads" [ref=e453] [cursor=pointer]:
+        - generic [ref=e457]: old leads
+    - toolbar [ref=e461]:
+      - button "Scroll left" [disabled] [ref=e462]
+      - button "Scroll right" [ref=e467] [cursor=pointer]
+  - generic [ref=e472]:
+    - textbox [active]
+  - link "Turn on screen reader support" [ref=e473] [cursor=pointer]:
+    - /url: "#"
+  - textbox [ref=e474]
+  - region [ref=e475]: To enable screen reader support, press Ctrl+Alt+Z To learn about keyboard shortcuts, press Ctrl+slash
+  - tooltip "Font" [ref=e476]:
+    - generic [ref=e477]: Font
+  - region

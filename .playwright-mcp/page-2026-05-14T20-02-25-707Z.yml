@@ -1,0 +1,208 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Google Apps Script" [ref=e726] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - generic [ref=e16]:
+            - button "Rename" [ref=e727] [cursor=pointer]: Untitled project
+            - generic [ref=e4241]:
+              - generic [ref=e4242]: sync
+              - text: Unsaved changes
+          - generic [ref=e26]:
+            - button "Deploy" [ref=e731] [cursor=pointer]:
+              - generic [ref=e34]:
+                - text: Deploy
+                - generic [ref=e35]: 
+            - button "Support" [ref=e732] [cursor=pointer]:
+              - generic [ref=e40]: help_outline
+        - generic [ref=e42]:
+          - button "Google apps" [ref=e733] [cursor=pointer]:
+            - img [ref=e47]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e734] [cursor=pointer]':
+            - img [ref=e54]
+    - generic [ref=e56]:
+      - navigation "Apps Script project pages" [ref=e735]:
+        - link "Overview" [ref=e736] [cursor=pointer]:
+          - generic [ref=e61]: info_outline
+          - generic [ref=e62]: Overview
+        - link "Editor" [ref=e737] [cursor=pointer]:
+          - generic [ref=e65]: code
+          - generic [ref=e66]: Editor
+        - link "Project History" [ref=e738] [cursor=pointer]:
+          - generic [ref=e69]: history
+          - generic [ref=e70]: Project History
+        - link "Triggers" [ref=e739] [cursor=pointer]:
+          - generic [ref=e73]: alarm
+          - generic [ref=e74]: Triggers
+        - link "Executions" [ref=e740] [cursor=pointer]:
+          - generic [ref=e77]: playlist_play
+          - generic [ref=e78]: Executions
+        - link "Project Settings" [ref=e741] [cursor=pointer]:
+          - generic [ref=e81]: settings
+          - generic [ref=e82]: Project Settings
+      - generic [ref=e83]:
+        - heading "Editor" [level=1] [ref=e742]
+        - generic [ref=e85]:
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - heading "Files" [level=2] [ref=e743]
+              - generic [ref=e91]:
+                - button "Sort files alphabetically" [disabled] [ref=e744]:
+                  - generic [ref=e96]: sort_by_alpha
+                - button "Add a file" [ref=e745] [cursor=pointer]:
+                  - generic [ref=e101]: add
+            - listbox "Project files" [ref=e746]:
+              - option "Code.gs" [ref=e747] [cursor=pointer]:
+                - img [ref=e4243]
+                - generic "Code.gs" [ref=e748]
+                - button "File operations menu for Code.gs." [ref=e749]:
+                  - button "File operations menu for Code.gs." [ref=e750]:
+                    - generic [ref=e110]: 
+            - generic [ref=e111]:
+              - heading "Libraries" [level=2] [ref=e751]
+              - button "Add a library" [ref=e752] [cursor=pointer]:
+                - generic [ref=e118]: add
+            - generic:
+              - listbox "Library Dependencies"
+            - generic [ref=e119]:
+              - heading "Services" [level=2] [ref=e753]
+              - button "Add a service" [ref=e754] [cursor=pointer]:
+                - generic [ref=e126]: add
+            - generic:
+              - listbox "Service Dependencies"
+          - generic [ref=e133]:
+            - region [ref=e134]:
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - button "Undo code edit" [ref=e3356]:
+                    - generic [ref=e3359]: undo
+                  - generic [ref=e142]:
+                    - button "Redo code edit" [disabled]:
+                      - generic: redo
+                - button "Save project to Drive" [ref=e3360]:
+                  - img [ref=e3363]
+                - generic [ref=e147]:
+                  - button "Run the selected function" [ref=e755]:
+                    - generic [ref=e154]: play_arrow
+                    - generic [ref=e155]: Run
+                  - button "Debug the selected function" [ref=e756]:
+                    - img [ref=e162]
+                    - generic [ref=e165]: Debug
+                  - listbox "Select function to run" [ref=e757] [cursor=pointer]:
+                    - option "syncLeadsToCRM" [selected] [ref=e758]
+                - button "Open the execution log panel" [ref=e3366]:
+                  - generic [ref=e177]: Execution log
+            - generic [ref=e179]:
+              - main [ref=e183]:
+                - generic [ref=e184]: .
+                - generic [ref=e186]:
+                  - iframe [ref=e187]:
+                    
+                  - code [ref=e189]:
+                    - generic [ref=e190]:
+                      - generic [ref=e193]:
+                        - generic [ref=e1153]:
+                          - generic [ref=e1154] [cursor=pointer]: 
+                          - generic [ref=e1155]: "62"
+                        - generic [ref=e1157]:
+                          - generic [ref=e1158] [cursor=pointer]: 
+                          - generic [ref=e1159]: "63"
+                        - generic [ref=e1161]:
+                          - generic [ref=e1162] [cursor=pointer]: 
+                          - generic [ref=e1163]: "64"
+                        - generic [ref=e3367]:
+                          - generic [ref=e3368] [cursor=pointer]: 
+                          - generic [ref=e3369]: "65"
+                        - generic [ref=e2848]:
+                          - generic [ref=e2849] [cursor=pointer]: 
+                          - generic [ref=e2850]: "58"
+                        - generic [ref=e2853]: "59"
+                        - generic [ref=e2854]:
+                          - generic [ref=e2855] [cursor=pointer]: 
+                          - generic [ref=e2856]: "60"
+                        - generic [ref=e2858]:
+                          - generic [ref=e2859] [cursor=pointer]: 
+                          - generic [ref=e2860]: "61"
+                        - generic [ref=e3373]:
+                          - generic [ref=e3374] [cursor=pointer]: 
+                          - generic [ref=e3375]: "66"
+                        - generic [ref=e3377]:
+                          - generic [ref=e3378] [cursor=pointer]: 
+                          - generic [ref=e3379]: "67"
+                        - generic [ref=e3381]:
+                          - generic [ref=e3382] [cursor=pointer]: 
+                          - generic [ref=e3383]: "68"
+                        - generic [ref=e3385]:
+                          - generic [ref=e3386] [cursor=pointer]: 
+                          - generic [ref=e3387]: "69"
+                        - generic [ref=e3389]:
+                          - generic [ref=e3390] [cursor=pointer]: 
+                          - generic [ref=e3391]: "70"
+                        - generic [ref=e3394]:
+                          - generic [ref=e3395] [cursor=pointer]: 
+                          - generic [ref=e3396]: "71"
+                        - generic [ref=e3399]:
+                          - generic [ref=e3400] [cursor=pointer]: 
+                          - generic [ref=e3401]: "72"
+                        - generic [ref=e3404]: "73"
+                      - generic [ref=e255]:
+                        - img [ref=e4325]
+                        - generic [ref=e579]:
+                          - generic [ref=e2474]: "{"
+                          - generic [ref=e2478]: "method: 'POST',"
+                          - generic [ref=e2482]: "contentType: 'application/json',"
+                          - generic [ref=e3334]: "updated_at: new Date().toISOString()"
+                          - generic [ref=e3338]: "};"
+                          - generic [ref=e3343]: const res = UrlFetchApp.fetch(
+                          - generic [ref=e4115]: SUPABASE_URL + '/rest/v1/crm_leads',
+                          - generic [ref=e4117]: "headers: {"
+                          - generic [ref=e4121]: "'apikey': SUPABASE_KEY,"
+                          - generic [ref=e4125]: "'Authorization': 'Bearer ' + SUPABASE_KEY,"
+                          - generic [ref=e4329]: "'Prefer': 'return=minimal'"
+                          - generic [ref=e4133]: "},"
+                          - generic [ref=e4137]: "payload: JSON.stringify"
+                          - generic [ref=e4139]: (payload),
+                          - generic [ref=e4143]: "muteHttpExceptions:"
+                          - generic [ref=e4145]: "true"
+                          - generic [ref=e4149]: "}"
+                      - textbox "Editor content;Press Alt+F1 for Accessibility Options." [ref=e789]: "null, phone: phone || null, source: 'meta_ads', stage: 'new_lead', notes: notes || null, created_at: createdAt, updated_at: new Date().toISOString() }; const res = UrlFetchApp.fetch( SUPABASE_URL + '/rest/v1/crm_leads', { method: 'POST', contentType: 'application/json', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Prefer': 'return=minimal'"
+                      - generic:
+                        - dialog "Find / Replace" [ref=e2831]:
+                          - button "Toggle Replace" [expanded] [ref=e2832] [cursor=pointer]: 
+                          - generic [ref=e1107]:
+                            - generic [ref=e1108]:
+                              - textbox "Find" [ref=e2833]: resolution=ignore-duplicates
+                              - generic [ref=e1112]:
+                                - checkbox "Match Case (Alt+C)" [ref=e2834] [cursor=pointer]: 
+                                - checkbox "Match Whole Word (Alt+W)" [ref=e2835] [cursor=pointer]: 
+                                - checkbox "Use Regular Expression (Alt+R)" [ref=e2836] [cursor=pointer]: 
+                            - generic [ref=e1116]:
+                              - generic [ref=e1117]: No results
+                              - button "Previous Match (Shift+Enter)" [disabled] [ref=e2837]: 
+                              - button "Next Match (Enter)" [disabled] [ref=e2838]: 
+                              - checkbox "Find in Selection (Alt+L)" [ref=e2839] [cursor=pointer]: 
+                          - button "Close (Escape)" [ref=e2840] [cursor=pointer]: 
+                          - generic [ref=e2819]:
+                            - generic [ref=e2820]:
+                              - textbox "Replace" [ref=e2841]: return=minimal
+                              - checkbox "Preserve Case (Alt+P)" [ref=e2842] [cursor=pointer]: 
+                            - generic [ref=e2826]:
+                              - button "Replace (Enter)" [ref=e2843] [cursor=pointer]: 
+                              - button "Replace All (Ctrl+Alt+Enter)" [active] [ref=e2844] [cursor=pointer]: 
+                        - text:   
+              - generic:
+                - generic:
+                  - button "Close execution logs pane" [ref=e790] [cursor=pointer]:
+                    - generic [ref=e641]: close
+                  - tooltip [ref=e642]: Close execution logs
+  - generic [ref=e643]:
+    - alert [ref=e1123]: No results found for 'resolution=ignore-duplicates'
+    - alert
+    - complementary
+    - complementary

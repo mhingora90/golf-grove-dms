@@ -1,0 +1,127 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Google Apps Script" [ref=e230] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - generic [ref=e16]:
+            - button "Rename" [ref=e231] [cursor=pointer]: Untitled project
+            - generic [ref=e24]: cloud_done
+          - generic [ref=e27]:
+            - button "Deploy" [ref=e232] [cursor=pointer]:
+              - generic [ref=e35]:
+                - text: Deploy
+                - generic [ref=e36]: 
+            - button "Support" [ref=e233] [cursor=pointer]:
+              - generic [ref=e41]: help_outline
+        - generic [ref=e43]:
+          - button "Google apps" [ref=e234] [cursor=pointer]:
+            - img [ref=e48]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e235] [cursor=pointer]':
+            - img [ref=e55]
+    - generic [ref=e57]:
+      - navigation "Apps Script project pages" [ref=e59]:
+        - link "Overview" [ref=e60] [cursor=pointer]:
+          - generic [ref=e62]: info_outline
+          - generic [ref=e63]: Overview
+        - link "Editor" [ref=e64] [cursor=pointer]:
+          - generic [ref=e66]: code
+          - generic [ref=e67]: Editor
+        - link "Project History" [ref=e68] [cursor=pointer]:
+          - generic [ref=e70]: history
+          - generic [ref=e71]: Project History
+        - link "Triggers" [ref=e72] [cursor=pointer]:
+          - generic [ref=e74]: alarm
+          - generic [ref=e75]: Triggers
+        - link "Executions" [ref=e76] [cursor=pointer]:
+          - generic [ref=e78]: playlist_play
+          - generic [ref=e79]: Executions
+        - link "Project Settings" [ref=e80] [cursor=pointer]:
+          - generic [ref=e82]: settings
+          - generic [ref=e83]: Project Settings
+      - generic [ref=e84]:
+        - heading "Editor" [level=1] [ref=e85]
+        - generic [ref=e86]:
+          - generic [ref=e88]:
+            - generic [ref=e89]:
+              - heading "Files" [level=2] [ref=e90]
+              - generic [ref=e92]:
+                - button "Sort files alphabetically" [disabled] [ref=e94]:
+                  - generic [ref=e97]: sort_by_alpha
+                - button "Add a file" [ref=e99] [cursor=pointer]:
+                  - generic [ref=e102]: add
+            - listbox "Project files" [ref=e104]:
+              - option "Code.gs" [ref=e105] [cursor=pointer]:
+                - generic "Code.gs" [ref=e106]
+                - button "File operations menu for Code.gs." [ref=e107]:
+                  - button "File operations menu for Code.gs." [ref=e108]:
+                    - generic [ref=e111]: 
+            - generic [ref=e112]:
+              - heading "Libraries" [level=2] [ref=e113]
+              - button "Add a library" [ref=e116] [cursor=pointer]:
+                - generic [ref=e119]: add
+            - generic:
+              - listbox "Library Dependencies"
+            - generic [ref=e120]:
+              - heading "Services" [level=2] [ref=e121]
+              - button "Add a service" [ref=e124] [cursor=pointer]:
+                - generic [ref=e127]: add
+            - generic:
+              - listbox "Service Dependencies"
+          - generic [ref=e134]:
+            - region [ref=e135]:
+              - generic [ref=e136]:
+                - generic [ref=e137]:
+                  - generic [ref=e140]:
+                    - button "Undo code edit" [disabled]:
+                      - generic: undo
+                  - generic [ref=e143]:
+                    - button "Redo code edit" [disabled]:
+                      - generic: redo
+                - generic [ref=e147]:
+                  - button "Save project to Drive" [disabled]:
+                    - img
+                - generic [ref=e148]:
+                  - generic [ref=e151]:
+                    - button "Run the selected function" [disabled]:
+                      - generic: play_arrow
+                      - generic: Run
+                  - generic [ref=e154]:
+                    - button "Debug the selected function" [disabled]:
+                      - img
+                      - generic: Debug
+                  - generic [ref=e155]: No functions
+                - button "Open the execution log panel" [ref=e160]:
+                  - generic [ref=e163]: Execution log
+            - generic [ref=e165]:
+              - main [ref=e169]:
+                - generic [ref=e170]: .
+                - generic [ref=e172]:
+                  - iframe [ref=e173]:
+                    
+                  - code [ref=e175]:
+                    - generic [ref=e176]:
+                      - generic [ref=e179]:
+                        - generic [ref=e243]: "1"
+                        - generic [ref=e245]: "2"
+                        - generic [ref=e186]: "3"
+                        - generic [ref=e188]: "4"
+                      - generic [ref=e196]:
+                        - generic [ref=e198]: "function myFunction() {"
+                        - generic [ref=e202]: "}"
+                      - textbox "Editor content;Press Alt+F1 for Accessibility Options." [active] [ref=e205]: "function myFunction() { }"
+              - generic:
+                - generic:
+                  - button "Close execution logs pane" [ref=e206] [cursor=pointer]:
+                    - generic [ref=e207]: close
+                  - tooltip [ref=e208]: Close execution logs
+  - generic [ref=e229]:
+    - alert
+    - alert
+    - complementary
+    - complementary

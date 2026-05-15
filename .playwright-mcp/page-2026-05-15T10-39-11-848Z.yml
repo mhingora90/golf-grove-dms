@@ -1,0 +1,91 @@
+- generic [ref=e19]:
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e22]: Active Project
+      - generic [ref=e23]: Golf Grove – Residential Building (B+G+P+7+Roof)
+    - generic [ref=e24]:
+      - generic [ref=e25]: MH
+      - generic [ref=e26]:
+        - generic [ref=e27]: Mohammed Hingora
+        - generic [ref=e28]: developer
+    - generic [ref=e29]: Main
+    - generic [ref=e30] [cursor=pointer]:
+      - img [ref=e31]
+      - text: Dashboard
+    - generic [ref=e36]: Document Control
+    - generic [ref=e37] [cursor=pointer]:
+      - img [ref=e38]
+      - text: Drawing Register
+    - generic [ref=e40] [cursor=pointer]:
+      - img [ref=e41]
+      - text: Submittals (DSUB)
+      - generic [ref=e44]: "1"
+    - generic [ref=e45] [cursor=pointer]:
+      - img [ref=e46]
+      - text: Submittal Register
+    - generic [ref=e48]: Site
+    - generic [ref=e49] [cursor=pointer]:
+      - img [ref=e50]
+      - text: Inspection Requests
+      - generic [ref=e53]: "2"
+    - generic [ref=e54] [cursor=pointer]:
+      - img [ref=e55]
+      - text: NCRs
+      - generic [ref=e58]: "2"
+    - generic [ref=e59] [cursor=pointer]:
+      - img [ref=e60]
+      - text: RFIs
+      - generic [ref=e64]: "1"
+    - generic [ref=e65] [cursor=pointer]:
+      - img [ref=e66]
+      - text: Transmittals
+    - generic [ref=e68] [cursor=pointer]:
+      - img [ref=e69]
+      - text: Method Statements
+    - generic [ref=e72] [cursor=pointer]:
+      - img [ref=e73]
+      - text: Correspondence
+    - generic [ref=e76] [cursor=pointer]:
+      - img [ref=e77]
+      - text: Punch List
+      - generic [ref=e80]: "0"
+    - generic [ref=e81]: Finance
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: Finance Overview
+    - generic [ref=e86] [cursor=pointer]:
+      - img [ref=e87]
+      - text: Payment Certificates
+    - generic [ref=e90] [cursor=pointer]:
+      - img [ref=e91]
+      - text: BOQ Setup
+    - generic [ref=e94]:
+      - generic [ref=e95]: Sales
+      - generic [ref=e96] [cursor=pointer]:
+        - img [ref=e97]
+        - text: CRM
+        - generic [ref=e101]: "0"
+      - generic [ref=e102] [cursor=pointer]:
+        - img [ref=e103]
+        - text: Unit Setup
+      - generic [ref=e106] [cursor=pointer]:
+        - img [ref=e107]
+        - text: Unit Register
+      - generic [ref=e110] [cursor=pointer]:
+        - img [ref=e111]
+        - text: Sales Revenue
+    - generic [ref=e114]: Admin
+    - generic [ref=e115] [cursor=pointer]:
+      - img [ref=e116]
+      - text: Subcontractors
+    - generic [ref=e122] [cursor=pointer]:
+      - img [ref=e123]
+      - text: User Management
+    - button "Sign Out" [ref=e127] [cursor=pointer]
+  - generic [ref=e128]:
+    - generic [ref=e129]:
+      - generic [ref=e130]:
+        - generic [ref=e131]: CRM
+        - generic [ref=e132]: Friday, 15 May 2026
+      - generic [ref=e134]: developer
+    - generic [ref=e332]: Loading...

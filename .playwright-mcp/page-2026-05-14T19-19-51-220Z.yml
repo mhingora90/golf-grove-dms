@@ -1,0 +1,214 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Google Apps Script" [ref=e726] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - generic [ref=e16]:
+            - button "Rename" [ref=e727] [cursor=pointer]: Untitled project
+            - generic [ref=e730]: cloud_done
+          - generic [ref=e26]:
+            - button "Deploy" [ref=e731] [cursor=pointer]:
+              - generic [ref=e34]:
+                - text: Deploy
+                - generic [ref=e35]: 
+            - button "Support" [ref=e732] [cursor=pointer]:
+              - generic [ref=e40]: help_outline
+        - generic [ref=e42]:
+          - button "Google apps" [ref=e733] [cursor=pointer]:
+            - img [ref=e47]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e734] [cursor=pointer]':
+            - img [ref=e54]
+    - generic [ref=e56]:
+      - navigation "Apps Script project pages" [ref=e735]:
+        - link "Overview" [ref=e736] [cursor=pointer]:
+          - generic [ref=e61]: info_outline
+          - generic [ref=e62]: Overview
+        - link "Editor" [ref=e737] [cursor=pointer]:
+          - generic [ref=e65]: code
+          - generic [ref=e66]: Editor
+        - link "Project History" [ref=e738] [cursor=pointer]:
+          - generic [ref=e69]: history
+          - generic [ref=e70]: Project History
+        - link "Triggers" [ref=e739] [cursor=pointer]:
+          - generic [ref=e73]: alarm
+          - generic [ref=e74]: Triggers
+        - link "Executions" [ref=e740] [cursor=pointer]:
+          - generic [ref=e77]: playlist_play
+          - generic [ref=e78]: Executions
+        - link "Project Settings" [ref=e741] [cursor=pointer]:
+          - generic [ref=e81]: settings
+          - generic [ref=e82]: Project Settings
+      - generic [ref=e83]:
+        - heading "Editor" [level=1] [ref=e742]
+        - generic [ref=e85]:
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - heading "Files" [level=2] [ref=e743]
+              - generic [ref=e91]:
+                - button "Sort files alphabetically" [disabled] [ref=e744]:
+                  - generic [ref=e96]: sort_by_alpha
+                - button "Add a file" [ref=e745] [cursor=pointer]:
+                  - generic [ref=e101]: add
+            - listbox "Project files" [ref=e746]:
+              - option "Code.gs" [ref=e747] [cursor=pointer]:
+                - generic "Code.gs" [ref=e748]
+                - button "File operations menu for Code.gs." [ref=e749]:
+                  - button "File operations menu for Code.gs." [ref=e750]:
+                    - generic [ref=e110]: 
+            - generic [ref=e111]:
+              - heading "Libraries" [level=2] [ref=e751]
+              - button "Add a library" [ref=e752] [cursor=pointer]:
+                - generic [ref=e118]: add
+            - generic:
+              - listbox "Library Dependencies"
+            - generic [ref=e119]:
+              - heading "Services" [level=2] [ref=e753]
+              - button "Add a service" [ref=e754] [cursor=pointer]:
+                - generic [ref=e126]: add
+            - generic:
+              - listbox "Service Dependencies"
+          - generic [ref=e133]:
+            - region [ref=e134]:
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - generic [ref=e139]:
+                    - button "Undo code edit" [disabled]:
+                      - generic: undo
+                  - generic [ref=e142]:
+                    - button "Redo code edit" [disabled]:
+                      - generic: redo
+                - generic [ref=e146]:
+                  - button "Save project to Drive" [disabled]:
+                    - img
+                - generic [ref=e147]:
+                  - button "Run the selected function" [ref=e755]:
+                    - generic [ref=e154]: play_arrow
+                    - generic [ref=e155]: Run
+                  - button "Debug the selected function" [ref=e756]:
+                    - img [ref=e162]
+                    - generic [ref=e165]: Debug
+                  - listbox "Select function to run" [ref=e757] [cursor=pointer]:
+                    - option "syncLeadsToCRM" [selected] [ref=e758]
+                - button "Open the execution log panel" [ref=e759]:
+                  - generic [ref=e177]: Execution log
+            - generic [ref=e179]:
+              - main [ref=e183]:
+                - generic [ref=e184]: .
+                - generic [ref=e186]:
+                  - iframe [ref=e187]:
+                    
+                  - code [ref=e189]:
+                    - generic [ref=e190]:
+                      - generic [ref=e193]:
+                        - generic [ref=e814]: "1"
+                        - generic [ref=e198]: "2"
+                        - generic [ref=e202]: "3"
+                        - generic [ref=e204]: "4"
+                        - generic [ref=e644]:
+                          - generic [ref=e645] [cursor=pointer]: 
+                          - generic [ref=e646]: "5"
+                        - generic [ref=e647]:
+                          - generic [ref=e648] [cursor=pointer]: 
+                          - generic [ref=e649]: "6"
+                        - generic [ref=e650]:
+                          - generic [ref=e651] [cursor=pointer]: 
+                          - generic [ref=e652]: "7"
+                        - generic [ref=e653]:
+                          - generic [ref=e654] [cursor=pointer]: 
+                          - generic [ref=e655]: "8"
+                        - generic [ref=e214]: "9"
+                        - generic [ref=e656]:
+                          - generic [ref=e657] [cursor=pointer]: 
+                          - generic [ref=e658]: "10"
+                        - generic [ref=e659]:
+                          - generic [ref=e660] [cursor=pointer]: 
+                          - generic [ref=e661]: "11"
+                        - generic [ref=e662]:
+                          - generic [ref=e663] [cursor=pointer]: 
+                          - generic [ref=e664]: "12"
+                        - generic [ref=e815]:
+                          - generic [ref=e817] [cursor=pointer]: 
+                          - generic [ref=e818]: "13"
+                        - generic [ref=e668]:
+                          - generic [ref=e669] [cursor=pointer]: 
+                          - generic [ref=e670]: "14"
+                        - generic [ref=e671]:
+                          - generic [ref=e672] [cursor=pointer]: 
+                          - generic [ref=e673]: "15"
+                        - generic [ref=e228]: "16"
+                        - generic [ref=e674]:
+                          - generic [ref=e675] [cursor=pointer]: 
+                          - generic [ref=e676]: "17"
+                        - generic [ref=e232]: "18"
+                        - generic [ref=e677]:
+                          - generic [ref=e678] [cursor=pointer]: 
+                          - generic [ref=e679]: "19"
+                        - generic [ref=e680]:
+                          - generic [ref=e681] [cursor=pointer]: 
+                          - generic [ref=e682]: "20"
+                        - generic [ref=e683]:
+                          - generic [ref=e684] [cursor=pointer]: 
+                          - generic [ref=e685]: "21"
+                        - generic [ref=e240]: "22"
+                        - generic [ref=e686]:
+                          - generic [ref=e687] [cursor=pointer]: 
+                          - generic [ref=e688]: "23"
+                        - generic [ref=e689]:
+                          - generic [ref=e690] [cursor=pointer]: 
+                          - generic [ref=e691]: "24"
+                        - generic [ref=e246]: "25"
+                        - generic [ref=e692]:
+                          - generic [ref=e693] [cursor=pointer]: 
+                          - generic [ref=e694]: "26"
+                        - generic [ref=e695]:
+                          - generic [ref=e696] [cursor=pointer]: 
+                          - generic [ref=e697]: "27"
+                        - generic [ref=e698]:
+                          - generic [ref=e699] [cursor=pointer]: 
+                          - generic [ref=e700]: "28"
+                        - generic [ref=e701]:
+                          - generic [ref=e702] [cursor=pointer]: 
+                          - generic [ref=e703]: "29"
+                      - generic [ref=e579]:
+                        - generic [ref=e761]: const SUPABASE_URL = 'https://kdxvhrwnnehicgdryowu.supabase.co';
+                        - generic [ref=e763]: const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+                        - generic [ref=e765]: eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkeHZocndubmVoaWNnZHJ5b3d1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTg2NjMsImV4cCI6MjA5MTIzNDY2M30.
+                        - generic [ref=e767]: uMlyBkTeth6nVl8ofBu9g_AYlnDLkgDyVTsxxaHI_ic';
+                        - generic [ref=e769]: const SHEET_NAME = 'Automatic Meta Leads';
+                        - generic [ref=e771]: "function syncLeadsToCRM() {"
+                        - generic [ref=e773]: const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+                        - generic [ref=e775]: const data = sheet.getDataRange().getValues();
+                        - generic [ref=e777]: const headers = data[0].map(h => String(h).trim().toLowerCase());
+                        - generic [ref=e779]: // Find column indices by header pattern
+                        - generic [ref=e781]: const idxLeadId = headers.findIndex(h => h.includes('form_name') || h.includes('lead_id'));
+                        - generic [ref=e783]: const idxCreated = headers.findIndex(h => h.includes('is_organic') || h.includes('created'));
+                        - generic [ref=e785]: const idxName = headers.findIndex(h => h.includes('first_name') || h === 'adset_name');
+                        - generic [ref=e787]: const idxEmail = headers.findIndex(h => h.includes('email') || h === 'campaign_id');
+                        - generic [ref=e792]: const idxPhone = headers.findIndex(h => h.includes('phone') || h === 'campaign_name');
+                        - generic [ref=e794]: let synced = 0, skipped = 0, errors = 0;
+                        - generic [ref=e796]: "for (let i = 1; i < data.length; i++) {"
+                        - generic [ref=e798]: const row = data[i];
+                        - generic [ref=e800]: if (!row[0]) continue;
+                        - generic [ref=e802]: "const leadId = String(row[idxLeadId >= 0 ? idxLeadId : 0]);"
+                        - generic [ref=e804]: if (!leadId || leadId === 'undefined') continue;
+                        - generic [ref=e806]: // Skip test leads
+                        - generic [ref=e808]: "if (leadId.includes('test') || String(row[idxName >= 0 ? idxName : 18]).includes('test lead')) {"
+                        - generic [ref=e810]: skipped++;
+                        - generic [ref=e812]: continue;
+                      - textbox "Editor content;Press Alt+F1 for Accessibility Options." [active] [ref=e789]: // Find column indices by header pattern const idxLeadId = headers.findIndex(h => h.includes('form_name') || h.includes('lead_id')); const idxCreated = headers.findIndex(h => h.includes('is_organic') || h.includes('created')); const idxName = headers.findIndex(h => h.includes('first_name') || h === 'adset_name'); const idxEmail = headers.findIndex(h => h.includes('email') || h === 'campaign_id'); const idxPhone = headers.findIndex(h => h.includes('phone') || h === 'campaign_name'); let synced = 0, skipped = 0, errors = 0;
+              - generic:
+                - generic:
+                  - button "Close execution logs pane" [ref=e790] [cursor=pointer]:
+                    - generic [ref=e641]: close
+                  - tooltip [ref=e642]: Close execution logs
+  - generic [ref=e643]:
+    - alert
+    - alert
+    - complementary
+    - complementary

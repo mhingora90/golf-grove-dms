@@ -1,0 +1,40 @@
+<h2>CRM Layout for 100s of Leads</h2>
+<p class="subtitle">Current kanban loads all leads at once — no pagination, no filtering, no sort. Which approach scales best for your team?</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Smart Kanban (enhanced current)</h3>
+      <p>Keep the kanban but add: per-column pagination (show 20, load more), server-side search, filter bar (source / assigned-to / date), sort within columns. Familiar workflow, no relearning.</p>
+      <div class="pros-cons" style="margin-top:10px">
+        <div class="pros"><h4>Pros</h4><ul><li>No workflow change</li><li>Drag-to-move stage still possible</li><li>Animations stay</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>7 columns still scroll awkwardly on laptops</li><li>Hard to compare leads across stages</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>List + Kanban Toggle</h3>
+      <p>Two views — a paginated sortable <strong>table/list view</strong> (default for power users, bulk actions) and the existing <strong>kanban</strong> for visual pipeline overview. Toggle between them with a button. Server-side pagination + filters in both.</p>
+      <div class="pros-cons" style="margin-top:10px">
+        <div class="pros"><h4>Pros</h4><ul><li>Table = scan 50 leads at once</li><li>Kanban = stage overview</li><li>Best of both worlds</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>More UI to build</li><li>Two UIs to maintain</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Pipeline List (replace kanban)</h3>
+      <p>Single paginated list view. Stage shown as a colored badge column. Filter/sort/search server-side. Compact rows — see 30+ leads at a glance. Stage change via inline dropdown. Kanban removed.</p>
+      <div class="pros-cons" style="margin-top:10px">
+        <div class="pros"><h4>Pros</h4><ul><li>Simplest to build</li><li>Scales to any number of leads</li><li>Easy bulk-stage updates</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Loses pipeline visual feel</li><li>No drag-and-drop</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>

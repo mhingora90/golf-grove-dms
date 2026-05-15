@@ -1,0 +1,151 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link [ref=e1495] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - generic [ref=e16]:
+            - button [ref=e1496] [cursor=pointer]: Untitled project
+            - generic [ref=e1460]: cloud_done
+          - generic [ref=e27]:
+            - button [ref=e1497] [cursor=pointer]:
+              - generic [ref=e35]:
+                - text: Deploy
+                - generic [ref=e36]: 
+            - button [ref=e1498] [cursor=pointer]:
+              - generic [ref=e41]: help_outline
+        - generic [ref=e43]:
+          - button [ref=e1499] [cursor=pointer]:
+            - img [ref=e48]
+          - button [ref=e1500] [cursor=pointer]:
+            - img [ref=e55]
+    - generic [ref=e57]:
+      - navigation [ref=e1501]:
+        - link [ref=e1502] [cursor=pointer]:
+          - generic [ref=e62]: info_outline
+          - generic [ref=e63]: Overview
+        - link [ref=e1503] [cursor=pointer]:
+          - generic [ref=e66]: code
+          - generic [ref=e67]: Editor
+        - link [ref=e1504] [cursor=pointer]:
+          - generic [ref=e70]: history
+          - generic [ref=e71]: Project History
+        - link [ref=e1505] [cursor=pointer]:
+          - generic [ref=e74]: alarm
+          - generic [ref=e75]: Triggers
+        - link [ref=e1506] [cursor=pointer]:
+          - generic [ref=e78]: playlist_play
+          - generic [ref=e79]: Executions
+        - link [ref=e1507] [cursor=pointer]:
+          - generic [ref=e82]: settings
+          - generic [ref=e83]: Project Settings
+      - generic [ref=e84]:
+        - heading [level=1] [ref=e1508]: Editor
+        - generic [ref=e86]:
+          - generic [ref=e88]:
+            - generic [ref=e89]:
+              - heading [level=2] [ref=e1509]: Files
+              - generic [ref=e92]:
+                - button [disabled] [ref=e1510]:
+                  - generic [ref=e97]: sort_by_alpha
+                - button [ref=e1511] [cursor=pointer]:
+                  - generic [ref=e102]: add
+            - listbox [ref=e1512]:
+              - option [ref=e1513] [cursor=pointer]:
+                - generic [ref=e1514]: Code.gs
+                - button [ref=e1515]:
+                  - button [ref=e1516]:
+                    - generic [ref=e111]: 
+            - generic [ref=e112]:
+              - heading [level=2] [ref=e1517]: Libraries
+              - button [ref=e1518] [cursor=pointer]:
+                - generic [ref=e119]: add
+            - generic [ref=e120]:
+              - heading [level=2] [ref=e1519]: Services
+              - button [ref=e1520] [cursor=pointer]:
+                - generic [ref=e127]: add
+          - generic [ref=e134]:
+            - region [ref=e135]:
+              - generic [ref=e136]:
+                - generic [ref=e137]:
+                  - button [ref=e1521]:
+                    - generic [ref=e287]: undo
+                  - generic [ref=e143]:
+                    - button [disabled]:
+                      - generic: redo
+                - generic [ref=e147]:
+                  - button [disabled]:
+                    - img
+                - generic [ref=e1461]:
+                  - generic [ref=e1464]:
+                    - button [disabled]:
+                      - generic: play_arrow
+                      - generic: Run
+                  - generic [ref=e1472]:
+                    - button [disabled]:
+                      - img
+                      - generic: Debug
+                  - listbox [disabled] [ref=e1522]:
+                    - option [disabled] [selected] [ref=e1523]: syncLeadsToCRM
+                  - button [ref=e1527]:
+                    - generic [ref=e1530]: stop
+                    - generic [ref=e1531]: Stop
+                - button [ref=e1532]:
+                  - generic [ref=e163]: Execution log
+            - generic [ref=e165]:
+              - main [ref=e169]:
+                - generic [ref=e170]: .
+                - generic [ref=e172]:
+                  - iframe [ref=e173]:
+                    
+                  - code [ref=e175]:
+                    - generic [ref=e176]:
+                      - generic [ref=e179]:
+                        - generic [ref=e1366]:
+                          - generic [ref=e1367] [cursor=pointer]: 
+                          - generic [ref=e1368]: "88"
+                        - generic [ref=e1369]:
+                          - generic [ref=e1370] [cursor=pointer]: 
+                          - generic [ref=e1371]: "89"
+                        - generic [ref=e1372]:
+                          - generic [ref=e1373] [cursor=pointer]: 
+                          - generic [ref=e1374]: "90"
+                        - generic [ref=e309]: "91"
+                        - generic [ref=e313]: "92"
+                        - generic [ref=e317]: "93"
+                      - generic [ref=e196]:
+                        - generic [ref=e1395]: "function onOpen() {"
+                        - generic [ref=e1401]: SpreadsheetApp.getUi()
+                        - generic [ref=e1407]: .createMenu('Golf Grove CRM')
+                        - generic [ref=e1413]: .addItem('Sync Leads Now', 'syncLeadsToCRM')
+                        - generic [ref=e1419]: .addToUi();
+                        - generic [ref=e1325]: "}"
+                      - textbox [ref=e1533]: "}"
+              - generic [ref=e1536]:
+                - complementary [ref=e1538]:
+                  - generic [ref=e1540]: Execution log
+                - button [ref=e1574] [cursor=pointer]:
+                  - generic [ref=e207]: close
+                - tooltip [ref=e208]: Close execution logs
+    - dialog "Authorization required" [ref=e1576]:
+      - heading "Authorization required" [level=2] [ref=e1577]:
+        - generic [ref=e1578]: Authorization required
+      - generic [ref=e1579]:
+        - generic [ref=e1580]: This app might not work as expected without providing all requested
+        - generic [ref=e1581]: permissions.
+      - generic [ref=e1582]:
+        - button "Cancel" [active] [ref=e1584] [cursor=pointer]:
+          - generic [ref=e1586]: Cancel
+        - button "Review permissions" [ref=e1588] [cursor=pointer]:
+          - generic [ref=e1590]: Review permissions
+  - generic: Saving project...
+  - generic [ref=e229]:
+    - alert
+    - alert
+    - complementary
+    - complementary

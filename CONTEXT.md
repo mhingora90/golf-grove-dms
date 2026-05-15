@@ -69,6 +69,7 @@ UPDATE profiles SET role = 'developer' WHERE email = 'mohammed@regent-developmen
 **Toasts:** top-right, icon prefix (✓ ✕  ⚠), dismiss (×), variable durations:
   - `success` = 3s, `error` = 6s, `info` = persistent until dismissed, `warning` = 4s
 **Buttons:** `.btn-primary` = charcoal background, `.btn-success` = outline green, `.btn-danger` = outline red
+**Animations:** Motion One via CDN (`https://cdn.jsdelivr.net/npm/motion/dist/motion.js`), global `window.Motion`. Used for CRM kanban stagger + all modal entrances. Use `window.Motion.animate()` / `window.Motion.stagger()` for new animations.
 
 ---
 
@@ -195,9 +196,10 @@ Checked via `can(action)` — returns boolean based on `currentProfile.role`.
 - Dedup: UNIQUE on `meta_lead_id`, plain POST (no `?on_conflict=`), 409 treated as success
 
 **SyncWith column mapping (headers are misleading — actual data locations):**
-- `adset_name` → `name` | `adset_id` → `company_name` (PENDING in script) | `campaign_id` → `email` | `campaign_name` → `phone`
+- `adset_name` → `name` | `adset_id` → `company_name` | `campaign_id` → `email` | `campaign_name` → `phone`
+- Apps Script uses `idxCompany = headers.findIndex(h => h === 'adset_id')` — mapped 2026-05-15
 
-**CRM UI features:** Delete lead button (with confirm), company name shown on kanban card when populated.
+**CRM UI features:** Delete lead button (with confirm), company name shown as amber-colored line on kanban card. Toolbar is flex row (search + Add Lead button). Empty columns show "No leads" italic text. Cards truncate long email/phone values.
 
 **Migrations:**
 - `20260429000006_add_crm_leads.sql` — Table + RLS

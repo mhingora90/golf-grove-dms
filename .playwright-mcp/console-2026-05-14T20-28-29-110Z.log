@@ -1,0 +1,24 @@
+[     269ms] [ERROR] Loading the font 'https://k2mkucxia43oc7fa.public.blob.vercel-storage.com/front/fonts/space-mono/space-mono-v11-latin-regular.woff2' violates the following Content Security Policy directive: "font-src 'self' *.vercel.com *.gstatic.com vercel.live". The action has been blocked. @ https://vercel.com/mhingora90s-projects:619
+[     905ms] [LOG] %c
+▲
+
+ _____ _              _                    _   _             __
+|_   _| |__   ___    / \   __ _  ___ _ __ | |_(_) ___       / /
+  | | | '_ \ / _ \  / _ \ / _` |/ _ \ '_ \| __| |/ __|     / /
+  | | | | | |  __/ / ___ \ (_| |  __/ | | | |_| | (__     /_/
+  |_| |_| |_|\___|/_/   \_\__, |\___|_| |_|\__|_|\___|    (_)
+                           |___/
+ ___        __               _                   _                 _
+|_ _|_ __  / _|_ __ __ _ ___| |_ _ __ _   _  ___| |_ _   _ _ __ ___
+ | || '_ \| |_| '__/ _` / __| __| '__| | | |/ __| __| | | | '__/ _ \
+ | || | | |  _| | | (_| \__ \ |_| |  | |_| | (__| |_| |_| | | |  __/
+|___|_| |_|_| |_|  \__,_|___/\__|_|   \__,_|\___|\__|\__,_|_|  \___|
+  
+
+Hello!
+
+- Open Source https://vercel.com/oss
+- Careers https://vercel.com/careers
+- Status https://vercel-status.com
+
+ font-family: "Geist Mono", monospace; white-space: pre; line-height: 1; @ https://vercel.com/_next/static/chunks/1sklb0_6pfvt1.js?dpl=dpl_CjYqsTCqrBkGq1usDXVn4rukkrAw:78

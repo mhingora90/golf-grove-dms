@@ -1,0 +1,169 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Google Apps Script" [ref=e10] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - generic [ref=e16]:
+            - button "Rename" [ref=e18] [cursor=pointer]: Untitled project
+            - generic [ref=e2508]:
+              - generic [ref=e2509]: sync
+              - text: Unsaved changes
+          - generic [ref=e26]:
+            - button "Deploy" [ref=e31] [cursor=pointer]:
+              - generic [ref=e34]:
+                - text: Deploy
+                - generic [ref=e35]: 
+            - button "Support" [ref=e37] [cursor=pointer]:
+              - generic [ref=e40]: help_outline
+        - generic [ref=e42]:
+          - button "Google apps" [ref=e46] [cursor=pointer]:
+            - img [ref=e47]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e52] [cursor=pointer]':
+            - img [ref=e54]
+    - generic [ref=e56]:
+      - navigation "Apps Script project pages" [ref=e58]:
+        - link "Overview" [ref=e59] [cursor=pointer]:
+          - generic [ref=e61]: info_outline
+          - generic [ref=e62]: Overview
+        - link "Editor" [ref=e63] [cursor=pointer]:
+          - generic [ref=e65]: code
+          - generic [ref=e66]: Editor
+        - link "Project History" [ref=e67] [cursor=pointer]:
+          - generic [ref=e69]: history
+          - generic [ref=e70]: Project History
+        - link "Triggers" [ref=e71] [cursor=pointer]:
+          - generic [ref=e73]: alarm
+          - generic [ref=e74]: Triggers
+        - link "Executions" [ref=e75] [cursor=pointer]:
+          - generic [ref=e77]: playlist_play
+          - generic [ref=e78]: Executions
+        - link "Project Settings" [ref=e79] [cursor=pointer]:
+          - generic [ref=e81]: settings
+          - generic [ref=e82]: Project Settings
+      - generic [ref=e83]:
+        - heading "Editor" [level=1] [ref=e84]
+        - generic [ref=e85]:
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - heading "Files" [level=2] [ref=e89]
+              - generic [ref=e91]:
+                - button "Sort files alphabetically" [disabled] [ref=e93]:
+                  - generic [ref=e96]: sort_by_alpha
+                - button "Add a file" [ref=e98] [cursor=pointer]:
+                  - generic [ref=e101]: add
+            - listbox "Project files" [ref=e103]:
+              - option "Code.gs" [ref=e104] [cursor=pointer]:
+                - img [ref=e2351]
+                - generic "Code.gs" [ref=e105]
+                - button "File operations menu for Code.gs." [ref=e106]:
+                  - button "File operations menu for Code.gs." [ref=e107]:
+                    - generic [ref=e110]: 
+            - generic [ref=e111]:
+              - heading "Libraries" [level=2] [ref=e112]
+              - button "Add a library" [ref=e115] [cursor=pointer]:
+                - generic [ref=e118]: add
+            - generic:
+              - listbox "Library Dependencies"
+            - generic [ref=e119]:
+              - heading "Services" [level=2] [ref=e120]
+              - button "Add a service" [ref=e123] [cursor=pointer]:
+                - generic [ref=e126]: add
+            - generic:
+              - listbox "Service Dependencies"
+          - generic [ref=e133]:
+            - region [ref=e134]:
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - button "Undo code edit" [ref=e1059]:
+                    - generic [ref=e1062]: undo
+                  - generic [ref=e142]:
+                    - button "Redo code edit" [disabled]:
+                      - generic: redo
+                - button "Save project to Drive" [ref=e1063]:
+                  - img [ref=e1066]
+                - generic [ref=e147]:
+                  - button "Run the selected function" [ref=e151]:
+                    - generic [ref=e154]: play_arrow
+                    - generic [ref=e155]: Run
+                  - button "Debug the selected function" [ref=e159]:
+                    - img [ref=e162]
+                    - generic [ref=e165]: Debug
+                  - listbox "Select function to run" [ref=e168] [cursor=pointer]:
+                    - option "syncLeadsToCRM" [selected] [ref=e2494]
+                - button "Open the execution log panel" [ref=e174]:
+                  - generic [ref=e177]: Execution log
+            - generic [ref=e179]:
+              - main [ref=e183]:
+                - generic [ref=e184]: .
+                - generic [ref=e186]:
+                  - iframe [ref=e187]:
+                    
+                  - code [ref=e189]:
+                    - generic [ref=e190]:
+                      - generic [ref=e193]:
+                        - generic [ref=e1070]:
+                          - generic [ref=e1071] [cursor=pointer]: 
+                          - generic [ref=e1072]: "95"
+                        - generic [ref=e1075]:
+                          - generic [ref=e1076] [cursor=pointer]: 
+                          - generic [ref=e1077]: "96"
+                        - generic [ref=e1080]:
+                          - generic [ref=e1081] [cursor=pointer]: 
+                          - generic [ref=e1082]: "97"
+                        - generic [ref=e1086]: "98"
+                        - generic [ref=e1090]: "99"
+                        - generic [ref=e1093]: "100"
+                        - generic [ref=e2354]:
+                          - generic [ref=e2355] [cursor=pointer]: 
+                          - generic [ref=e2356]: "101"
+                        - generic [ref=e2357]:
+                          - generic [ref=e2358] [cursor=pointer]: 
+                          - generic [ref=e2359]: "102"
+                        - generic [ref=e2360]:
+                          - generic [ref=e2361] [cursor=pointer]: 
+                          - generic [ref=e2362]: "103"
+                        - generic [ref=e2363]:
+                          - generic [ref=e2364] [cursor=pointer]: 
+                          - generic [ref=e2365]: "104"
+                        - generic [ref=e2366]:
+                          - generic [ref=e2367] [cursor=pointer]: 
+                          - generic [ref=e2368]: "105"
+                        - generic [ref=e2369]:
+                          - generic [ref=e2370] [cursor=pointer]: 
+                          - generic [ref=e2371]: "106"
+                        - generic [ref=e1114]: "107"
+                        - generic [ref=e1117]: "108"
+                      - generic [ref=e579]:
+                        - generic [ref=e2282]: "function setupTrigger() {"
+                        - generic [ref=e2288]: const ss = SpreadsheetApp.getActiveSpreadsheet();
+                        - generic [ref=e2294]: ScriptApp.getProjectTriggers().forEach(t => ScriptApp.deleteTrigger(t));
+                        - generic [ref=e2300]: ScriptApp.newTrigger('syncLeadsToCRM').forSpreadsheet(ss).onChange().create();
+                        - generic [ref=e2306]: SpreadsheetApp.getUi().alert('Auto-sync active. New leads sync automatically.');
+                        - generic [ref=e2458]: "function logHeaders() {"
+                        - generic [ref=e2462]: const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+                        - generic [ref=e2466]: const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+                        - generic [ref=e2470]: const row2 = sheet.getRange(2, 1, 1, sheet.getLastColumn()).getValues()[0];
+                        - generic [ref=e2474]: "headers.forEach((h, i) => {"
+                        - generic [ref=e2478]: "Logger.log(i + ': [' + h + '] => ' + String(row2[i]).substring(0, 60));"
+                        - generic [ref=e2342]: "});"
+                        - generic [ref=e2346]: "}"
+                      - textbox "Editor content;Press Alt+F1 for Accessibility Options." [active] [ref=e637]: "payload: JSON.stringify(payload), muteHttpExceptions: true } ); const code = res.getResponseCode(); if (code === 200 || code === 201 || code === 409) { synced++; } else { errors++; Logger.log('Row ' + (i+1) + ' [' + code + ']: ' + res.getContentText()); } } SpreadsheetApp.getUi().alert('Sync done: ' + synced + ' synced, ' + skipped + ' skipped (test), ' + errors + ' errors.'); } function onOpen() { SpreadsheetApp.getUi() .createMenu('Golf Grove CRM') .addItem('Sync Leads Now', 'syncLeadsToCRM') .addToUi(); } function setupTrigger() { const ss = SpreadsheetApp.getActiveSpreadsheet(); ScriptApp.getProjectTriggers().forEach(t => ScriptApp.deleteTrigger(t)); ScriptApp.newTrigger('syncLeadsToCRM').forSpreadsheet(ss).onChange().create(); SpreadsheetApp.getUi().alert('Auto-sync active. New leads sync automatically.');"
+              - generic:
+                - generic:
+                  - button "Close execution logs pane" [ref=e638] [cursor=pointer]:
+                    - generic [ref=e639]: close
+                  - tooltip [ref=e640]: Close execution logs
+  - generic: "Syntax error: SyntaxError: Unexpected end of input line: 108 file: Code.gs"
+  - generic [ref=e641]:
+    - alert
+    - alert
+    - complementary
+    - complementary
+  - generic [ref=e2492]: Saving project...
+  - generic [ref=e2493]: "Syntax error: SyntaxError: Unexpected end of input line: 108 file: Code.gs"

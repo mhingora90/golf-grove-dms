@@ -1,0 +1,224 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Google Apps Script" [ref=e726] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - generic [ref=e16]:
+            - button "Rename" [ref=e727] [cursor=pointer]: Untitled project
+            - generic [ref=e730]: cloud_done
+          - generic [ref=e26]:
+            - button "Deploy" [ref=e731] [cursor=pointer]:
+              - generic [ref=e34]:
+                - text: Deploy
+                - generic [ref=e35]: 
+            - button "Support" [ref=e732] [cursor=pointer]:
+              - generic [ref=e40]: help_outline
+        - generic [ref=e42]:
+          - button "Google apps" [ref=e733] [cursor=pointer]:
+            - img [ref=e47]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e734] [cursor=pointer]':
+            - img [ref=e54]
+    - generic [ref=e56]:
+      - navigation "Apps Script project pages" [ref=e735]:
+        - link "Overview" [ref=e736] [cursor=pointer]:
+          - generic [ref=e61]: info_outline
+          - generic [ref=e62]: Overview
+        - link "Editor" [ref=e737] [cursor=pointer]:
+          - generic [ref=e65]: code
+          - generic [ref=e66]: Editor
+        - link "Project History" [ref=e738] [cursor=pointer]:
+          - generic [ref=e69]: history
+          - generic [ref=e70]: Project History
+        - link "Triggers" [ref=e739] [cursor=pointer]:
+          - generic [ref=e73]: alarm
+          - generic [ref=e74]: Triggers
+        - link "Executions" [ref=e740] [cursor=pointer]:
+          - generic [ref=e77]: playlist_play
+          - generic [ref=e78]: Executions
+        - link "Project Settings" [ref=e741] [cursor=pointer]:
+          - generic [ref=e81]: settings
+          - generic [ref=e82]: Project Settings
+      - generic [ref=e83]:
+        - heading "Editor" [level=1] [ref=e742]
+        - generic [ref=e85]:
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - heading "Files" [level=2] [ref=e743]
+              - generic [ref=e91]:
+                - button "Sort files alphabetically" [disabled] [ref=e744]:
+                  - generic [ref=e96]: sort_by_alpha
+                - button "Add a file" [ref=e745] [cursor=pointer]:
+                  - generic [ref=e101]: add
+            - listbox "Project files" [ref=e746]:
+              - option "Code.gs" [ref=e747] [cursor=pointer]:
+                - generic "Code.gs" [ref=e748]
+                - button "File operations menu for Code.gs." [ref=e749]:
+                  - button "File operations menu for Code.gs." [ref=e750]:
+                    - generic [ref=e110]: 
+            - generic [ref=e111]:
+              - heading "Libraries" [level=2] [ref=e751]
+              - button "Add a library" [ref=e752] [cursor=pointer]:
+                - generic [ref=e118]: add
+            - generic:
+              - listbox "Library Dependencies"
+            - generic [ref=e119]:
+              - heading "Services" [level=2] [ref=e753]
+              - button "Add a service" [ref=e754] [cursor=pointer]:
+                - generic [ref=e126]: add
+            - generic:
+              - listbox "Service Dependencies"
+          - generic [ref=e133]:
+            - region [ref=e134]:
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - generic [ref=e139]:
+                    - button "Undo code edit" [disabled]:
+                      - generic: undo
+                  - generic [ref=e142]:
+                    - button "Redo code edit" [disabled]:
+                      - generic: redo
+                - generic [ref=e146]:
+                  - button "Save project to Drive" [disabled]:
+                    - img
+                - generic [ref=e147]:
+                  - button "Run the selected function" [ref=e755]:
+                    - generic [ref=e154]: play_arrow
+                    - generic [ref=e155]: Run
+                  - button "Debug the selected function" [ref=e756]:
+                    - img [ref=e162]
+                    - generic [ref=e165]: Debug
+                  - listbox "Select function to run" [ref=e757] [cursor=pointer]:
+                    - option "syncLeadsToCRM" [selected] [ref=e758]
+                - button "Close the execution log panel" [ref=e2547]:
+                  - generic [ref=e177]: Execution log
+            - generic [ref=e179]:
+              - main [ref=e183]:
+                - generic [ref=e184]: .
+                - generic [ref=e186]:
+                  - iframe [ref=e187]:
+                    
+                  - code [ref=e189]:
+                    - generic [ref=e190]:
+                      - generic [ref=e193]:
+                        - generic [ref=e1153]:
+                          - generic [ref=e1154] [cursor=pointer]: 
+                          - generic [ref=e1155]: "62"
+                        - generic [ref=e1157]:
+                          - generic [ref=e1158] [cursor=pointer]: 
+                          - generic [ref=e1159]: "63"
+                        - generic [ref=e1161]:
+                          - generic [ref=e1162] [cursor=pointer]: 
+                          - generic [ref=e1163]: "64"
+                        - generic [ref=e2731]:
+                          - generic [ref=e2733] [cursor=pointer]: 
+                          - generic [ref=e2734]: "65"
+                        - generic [ref=e1169]:
+                          - generic [ref=e1170] [cursor=pointer]: 
+                          - generic [ref=e1171]: "66"
+                        - generic [ref=e1173]:
+                          - generic [ref=e1174] [cursor=pointer]: 
+                          - generic [ref=e1175]: "67"
+                        - generic [ref=e2611]:
+                          - generic [ref=e2612] [cursor=pointer]: 
+                          - generic [ref=e2613]: "68"
+                      - generic [ref=e579]:
+                        - generic [ref=e2474]: "{"
+                        - generic [ref=e2478]: "method: 'POST',"
+                        - generic [ref=e2482]: "contentType: 'application/json',"
+                        - generic [ref=e2486]: "headers: {"
+                        - generic [ref=e2490]: "'apikey': SUPABASE_KEY,"
+                        - generic [ref=e2494]: "'Authorization': 'Bearer ' + SUPABASE_KEY,"
+                        - generic [ref=e2700]: "'Prefer': 'resolution=ignore-duplicates'"
+                      - textbox "Editor content;Press Alt+F1 for Accessibility Options." [active] [ref=e789]: "contentType: 'application/json', null, phone: phone || null, source: 'meta_ads', stage: 'new_lead', notes: notes || null, created_at: createdAt, updated_at: new Date().toISOString() }; const res = UrlFetchApp.fetch( SUPABASE_URL + '/rest/v1/crm_leads?on_conflict=meta_lead_id', { method: 'POST', contentType: 'application/json',"
+                      - generic:
+                        - dialog [ref=e2530]:
+                          - text: 
+                          - generic [ref=e1107]:
+                            - generic [ref=e1108]:
+                              - textbox [disabled] [ref=e2531]:
+                                - /placeholder: Find
+                                - text: ignore-duplicates
+                              - generic [ref=e1112]:
+                                - checkbox [disabled] [ref=e2532] [cursor=pointer]: 
+                                - checkbox [disabled] [ref=e2533] [cursor=pointer]: 
+                                - checkbox [disabled] [ref=e2534] [cursor=pointer]: 
+                            - generic [ref=e1116]:
+                              - generic [ref=e1117]: 1 of 1
+                              - button [disabled] [ref=e2535]: 
+                              - button [disabled] [ref=e2536]: 
+                              - checkbox [disabled] [ref=e2537] [cursor=pointer]: 
+                          - button [disabled] [ref=e2538]: 
+                          - text:   
+                        - text:   
+              - generic [ref=e2550]:
+                - complementary [ref=e2552]:
+                  - generic [ref=e2554]: Execution log
+                  - list "Logs" [ref=e2559]:
+                    - listitem "Log 1. 11:20:19 PM. Notice. Execution started." [ref=e2560]:
+                      - generic [ref=e2561]: 11:20:19 PM
+                      - generic [ref=e2562]: Notice
+                      - generic [ref=e2563]: Execution started
+                    - 'listitem "Log 2. 11:20:21 PM. Info. Row 2 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}." [ref=e2595]':
+                      - generic [ref=e2596]: 11:20:21 PM
+                      - generic [ref=e2597]: Info
+                      - generic [ref=e2598]: "Row 2 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}"
+                    - 'listitem "Log 3. 11:20:22 PM. Info. Row 3 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}." [ref=e2599]':
+                      - generic [ref=e2600]: 11:20:22 PM
+                      - generic [ref=e2601]: Info
+                      - generic [ref=e2602]: "Row 3 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}"
+                    - 'listitem "Log 4. 11:20:22 PM. Info. Row 4 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}." [ref=e2603]':
+                      - generic [ref=e2604]: 11:20:22 PM
+                      - generic [ref=e2605]: Info
+                      - generic [ref=e2606]: "Row 4 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}"
+                    - 'listitem "Log 5. 11:20:22 PM. Info. Row 5 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}." [ref=e2607]':
+                      - generic [ref=e2608]: 11:20:22 PM
+                      - generic [ref=e2609]: Info
+                      - generic [ref=e2610]: "Row 5 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}"
+                    - 'listitem "Log 6. 11:20:23 PM. Info. Row 6 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}." [ref=e2701]':
+                      - generic [ref=e2702]: 11:20:23 PM
+                      - generic [ref=e2703]: Info
+                      - generic [ref=e2704]: "Row 6 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}"
+                    - 'listitem "Log 7. 11:20:23 PM. Info. Row 7 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}." [ref=e2705]':
+                      - generic [ref=e2706]: 11:20:23 PM
+                      - generic [ref=e2707]: Info
+                      - generic [ref=e2708]: "Row 7 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}"
+                    - 'listitem "Log 8. 11:20:24 PM. Info. Row 8 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}." [ref=e2709]':
+                      - generic [ref=e2710]: 11:20:24 PM
+                      - generic [ref=e2711]: Info
+                      - generic [ref=e2712]: "Row 8 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}"
+                    - 'listitem "Log 9. 11:20:24 PM. Info. Row 9 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}." [ref=e2713]':
+                      - generic [ref=e2714]: 11:20:24 PM
+                      - generic [ref=e2715]: Info
+                      - generic [ref=e2716]: "Row 9 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}"
+                    - 'listitem "Log 10. 11:20:24 PM. Info. Row 10 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}." [ref=e2717]':
+                      - generic [ref=e2718]: 11:20:24 PM
+                      - generic [ref=e2719]: Info
+                      - generic [ref=e2720]: "Row 10 [401]: {\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"new row violates row-level security policy for table \\\"crm_leads\\\"\"}"
+                    - 'listitem "Log 11. 11:20:25 PM. Error. Exception: Cannot call SpreadsheetApp.getUi() from this context.. 1 stack frames." [ref=e2721]':
+                      - generic [ref=e2722]: 11:20:25 PM
+                      - generic [ref=e2723]: Error
+                      - generic [ref=e2724]:
+                        - 'generic "Exception: Cannot call SpreadsheetApp.getUi() from this context.." [ref=e2725]': "Exception: Cannot call SpreadsheetApp.getUi() from this context."
+                        - list [ref=e2726]:
+                          - listitem [ref=e2727]:
+                            - generic [ref=e2728]: syncLeadsToCRM
+                            - generic [ref=e2729]:
+                              - text: "@"
+                              - button "Stack frame 1. syncLeadsToCRM in Code.gs line 84." [ref=e2730] [cursor=pointer]: Code.gs:84
+                - generic:
+                  - button "Close execution logs pane" [ref=e790] [cursor=pointer]:
+                    - generic [ref=e641]: close
+                  - tooltip [ref=e642]: Close execution logs
+  - generic [ref=e643]:
+    - alert [ref=e1123]: "'Prefer': 'resolution=ignore-duplicates', 1 of 1 found for 'ignore-duplicates', at 68:277"
+    - alert
+    - complementary
+    - complementary
+  - generic:
+    - generic: Run the selected function
