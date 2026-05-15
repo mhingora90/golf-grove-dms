@@ -6,6 +6,7 @@
 <title>Golf Grove DMS – Regent Developments</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion/dist/motion.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -3837,6 +3838,9 @@ function openModal(title, body, footer, wide) {
   document.getElementById('modal').classList.toggle('wide', !!wide);
   document.getElementById('modal-bg').classList.add('open');
   document.getElementById('modal-body').scrollTop = 0;
+  if(window.Motion) {
+    window.Motion.animate('#modal', {opacity:[0,1], y:[-10,0], scale:[.97,1]}, {duration:.2, easing:'ease-out'});
+  }
 }
 let _modalDirty = false;
 function setModalDirty(){ _modalDirty = true; }
@@ -7246,6 +7250,12 @@ async function renderCRM() {
         '</div>'
       ).join('') +
     '</div>';
+  // Animate columns and cards in with stagger
+  if(window.Motion) {
+    const {animate, stagger} = window.Motion;
+    animate('.crm-col', {opacity:[0,1], y:[12,0]}, {duration:.25, delay:stagger(.06)});
+    animate('.crm-card', {opacity:[0,1], y:[8,0]}, {duration:.2, delay:stagger(.04, {start:.1})});
+  }
 }
 
 function crmCard(lead) {
