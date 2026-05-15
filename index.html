@@ -7230,6 +7230,14 @@ const CRM_STAGES = [
   {key:'closed_lost',          label:'Closed Lost',       color:'var(--red)'},
 ];
 
+let crmSearch = "", crmStage = "", crmSource = "", crmAssigned = "";
+let crmDateFrom = "", crmDateTo = "";
+let crmSortCol = "created_at", crmSortAsc = false;
+let crmPage = 0;
+let crmSelected = new Set();
+const CRM_PER_PAGE = 25;
+let crmSearchTimer = null;
+
 async function renderCRM() {
   const {data:leads, error} = await sb.from('crm_leads').select('*').order('created_at',{ascending:false});
   if(error) { document.getElementById('content').innerHTML = `<div class="empty-state">Error loading leads: ${esc(error.message)}</div>`; return; }
