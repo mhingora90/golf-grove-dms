@@ -677,6 +677,26 @@ let currentProfile = null;
 let currentProject = null;  // { id, name } — null means project grid is shown
 let userProjects    = [];    // [{ id, name }, …] — populated after login
 
+function setCurrentProject(project) {
+  currentProject = project;
+  document.getElementById('project-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display     = 'flex';
+  document.getElementById('psw-name').textContent         = project.name;
+  document.getElementById('psw-wrap').style.display       = '';
+  document.getElementById('tb-proj-div').style.display    = '';
+
+  const hash = location.hash.replace('#', '');
+  const validPages = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq','finance','usetup','ureg','srev','crm'];
+  const defaultPage = validPages.includes(hash) ? hash : 'dash';
+  nav(defaultPage, document.getElementById('n-' + defaultPage));
+}
+
+function returnToProjects() {
+  currentProject = null;
+  closeProjectDropdown();
+  renderProjectGrid();
+}
+
 // ─── PROJECT GRID ─────────────────────────────────────────────────
 async function renderProjectGrid() {
   document.getElementById('auth-screen').style.display    = 'none';
@@ -875,11 +895,15 @@ async function loadApp(user) {
   // Set topbar date
   const dateEl = document.getElementById('topbar-date');
   if(dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  // Restore page from URL hash, or default to dash
-  const hash = location.hash.replace('#','');
-  const defaultPage = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq','finance','usetup','ureg','srev','crm'].includes(hash) ? hash : 'dash';
-  const navEl = document.getElementById('n-'+defaultPage);
-  nav(defaultPage, navEl);
+  // Load projects then route
+  const { data: projectRows } = await sb.from('projects').select('id, name').order('created_at');
+  userProjects = (projectRows || []).map(p => ({ id: p.id, name: p.name }));
+
+  if (userProjects.length === 1) {
+    setCurrentProject(userProjects[0]); // single project — skip grid
+  } else {
+    renderProjectGrid();
+  }
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
