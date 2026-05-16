@@ -7384,9 +7384,10 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
       </select>
       <span class="crm-toolbar-sep"></span>
       <label style="font-size:10px;color:var(--text3);font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:4px">From <input type="date" class="crm-date-input" id="crm-date-from" value="${esc(crmDateFrom)}"
-        onchange="crmSetFilter('dateFrom',this.value)" aria-label="Created from date"></label>
+        onchange="crmSetFilter('dateFrom',this.value)" oninput="crmSetFilter('dateFrom',this.value)" style="min-width:120px" aria-label="Created from date"></label>
       <label style="font-size:10px;color:var(--text3);font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:4px">To <input type="date" class="crm-date-input" id="crm-date-to" value="${esc(crmDateTo)}"
-        onchange="crmSetFilter('dateTo',this.value)" aria-label="Created to date"></label>
+        onchange="crmSetFilter('dateTo',this.value)" oninput="crmSetFilter('dateTo',this.value)" style="min-width:120px" aria-label="Created to date"></label>
+      ${(crmDateFrom || crmDateTo) ? '<button class="btn" onclick="crmClearDates()" style="padding:3px 8px;font-size:11px;line-height:1" title="Clear date filter">\u00d7 Dates</button>' : ''}
       <button class="btn btn-primary" onclick="openAddLead()" style="margin-left:auto">+ Add Lead</button>
     </div>`;
 
@@ -7401,14 +7402,14 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
         </button>`).join("")}
     </div>`;
 
-  const bulkBar = crmSelected.size > 0 ? `
-    <div class="crm-bulk-bar">
-      <span class="bulk-count">${crmSelected.size} lead${crmSelected.size > 1 ? "s" : ""} selected</span>
+  const bulkBar = `
+    <div id="crm-bulk-bar" class="crm-bulk-bar" style="${crmSelected.size > 0 ? '' : 'display:none'}">
+      <span id="crm-bulk-count" class="bulk-count">${crmSelected.size} lead${crmSelected.size > 1 ? "s" : ""} selected</span>
       <button class="btn" onclick="crmBulkMoveStage()">Move stage\u2026</button>
       <button class="btn" onclick="crmBulkAssign()">Assign to\u2026</button>
       <button class="btn btn-danger" onclick="crmBulkDelete()">Delete</button>
       <span style="margin-left:auto;cursor:pointer;color:var(--text3)" onclick="crmClearSelection()">\u2715 Clear</span>
-    </div>` : "";
+    </div>`;
 
   const thead = `<tr>
     <th class="no-sort" style="width:32px">
@@ -7535,6 +7536,12 @@ function resetCRM() {
   crmPage = 0; crmSelected.clear();
 }
 
+function crmClearDates() {
+  crmDateFrom = ""; crmDateTo = "";
+  crmPage = 0; crmSelected.clear();
+  renderCRM();
+}
+
 function crmOnSearch(val) {
   clearTimeout(crmSearchTimer);
   crmSearchTimer = setTimeout(() => {
@@ -7571,6 +7578,20 @@ function crmSetPage(p) {
   renderCRM();
 }
 
+function crmUpdateBulkBar() {
+  const bar = document.getElementById("crm-bulk-bar");
+  const ct  = document.getElementById("crm-bulk-count");
+  if (!bar) return;
+  const n = crmSelected.size;
+  bar.style.display = n > 0 ? "" : "none";
+  if (ct) ct.textContent = n + " lead" + (n > 1 ? "s" : "") + " selected";
+  const hdr = document.querySelector(".crm-table thead input[type=checkbox]");
+  if (hdr) {
+    const rows = document.querySelectorAll(".crm-table tbody tr[data-id]");
+    hdr.checked = rows.length > 0 && [...rows].every(tr => crmSelected.has(tr.dataset.id));
+  }
+}
+
 function crmToggleRow(id, event) {
   event.stopPropagation();
   if (crmSelected.has(id)) {
@@ -7578,7 +7599,13 @@ function crmToggleRow(id, event) {
   } else {
     crmSelected.add(id);
   }
-  renderCRM();
+  const tr = document.querySelector(`.crm-table tbody tr[data-id="${id}"]`);
+  if (tr) {
+    tr.classList.toggle("crm-checked", crmSelected.has(id));
+    const cb = tr.querySelector("input[type=checkbox]");
+    if (cb) cb.checked = crmSelected.has(id);
+  }
+  crmUpdateBulkBar();
 }
 
 function crmToggleAll(checked) {
@@ -7586,13 +7613,21 @@ function crmToggleAll(checked) {
   rows.forEach(tr => {
     const id = tr.dataset.id;
     if (checked) { crmSelected.add(id); } else { crmSelected.delete(id); }
+    tr.classList.toggle("crm-checked", checked);
+    const cb = tr.querySelector("input[type=checkbox]");
+    if (cb) cb.checked = checked;
   });
-  renderCRM();
+  crmUpdateBulkBar();
 }
 
 function crmClearSelection() {
   crmSelected.clear();
-  renderCRM();
+  document.querySelectorAll(".crm-table tbody tr[data-id]").forEach(tr => {
+    tr.classList.remove("crm-checked");
+    const cb = tr.querySelector("input[type=checkbox]");
+    if (cb) cb.checked = false;
+  });
+  crmUpdateBulkBar();
 }
 
 function crmBulkMoveStage() {
