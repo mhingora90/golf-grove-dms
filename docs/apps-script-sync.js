@@ -97,8 +97,11 @@ function backfillAllLeads() {
     if (payload.company_name) update.company_name = payload.company_name;
     if (Object.keys(update).length === 0) { skipped++; continue; }
 
+    // Match both stripped ('4210...') and prefixed ('l:4210...') forms
+    const idRaw = payload.meta_lead_id;
+    const idAlt = idRaw.startsWith('l:') ? idRaw.slice(2) : 'l:' + idRaw;
     const res = UrlFetchApp.fetch(
-      SUPABASE_URL + '/rest/v1/crm_leads?meta_lead_id=eq.' + encodeURIComponent(payload.meta_lead_id),
+      SUPABASE_URL + '/rest/v1/crm_leads?or=(meta_lead_id.eq.' + encodeURIComponent(idRaw) + ',meta_lead_id.eq.' + encodeURIComponent(idAlt) + ')',
       {
         method: 'patch',
         contentType: 'application/json',
