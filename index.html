@@ -697,6 +697,78 @@ function returnToProjects() {
   renderProjectGrid();
 }
 
+function buildProjectDropdown() {
+  const dd = document.getElementById('psw-dd');
+  dd.textContent = '';
+
+  userProjects.forEach(p => {
+    const isActive = p.id === currentProject?.id;
+    const item = document.createElement('div');
+    item.className = 'psw-item' + (isActive ? ' active' : '');
+    item.onclick = () => switchProject({ id: p.id, name: p.name });
+
+    const dot = document.createElement('div');
+    dot.className = 'psw-idot ' + (isActive ? 'on' : 'off');
+
+    const label = document.createElement('span');
+    label.textContent = p.name;
+
+    item.appendChild(dot);
+    item.appendChild(label);
+
+    if (isActive) {
+      const check = document.createElement('span');
+      check.className = 'psw-check';
+      check.textContent = '\u2713';
+      item.appendChild(check);
+    }
+    dd.appendChild(item);
+  });
+
+  const divider1 = document.createElement('div');
+  divider1.className = 'psw-div';
+  dd.appendChild(divider1);
+
+  const allLink = document.createElement('div');
+  allLink.className = 'psw-all';
+  allLink.textContent = '\u2190 All Projects';
+  allLink.onclick = returnToProjects;
+  dd.appendChild(allLink);
+
+  if (currentProfile?.role === 'developer') {
+    const divider2 = document.createElement('div');
+    divider2.className = 'psw-div';
+    dd.appendChild(divider2);
+
+    const newLink = document.createElement('div');
+    newLink.className = 'psw-new';
+    newLink.textContent = '+ New Project';
+    newLink.onclick = () => { closeProjectDropdown(); openNewProject(); };
+    dd.appendChild(newLink);
+  }
+}
+
+function toggleProjectDropdown() {
+  const dd = document.getElementById('psw-dd');
+  if (dd.classList.contains('open')) {
+    dd.classList.remove('open');
+  } else {
+    buildProjectDropdown();
+    dd.classList.add('open');
+  }
+}
+
+function closeProjectDropdown() {
+  document.getElementById('psw-dd')?.classList.remove('open');
+}
+
+function switchProject(project) {
+  currentProject = project;
+  document.getElementById('psw-name').textContent = project.name;
+  closeProjectDropdown();
+  render();
+}
+
 // ─── PROJECT GRID ─────────────────────────────────────────────────
 async function renderProjectGrid() {
   document.getElementById('auth-screen').style.display    = 'none';
@@ -6439,6 +6511,10 @@ async function doRecordPayment() {
   toast(newStatus==='Paid'?'Payment recorded — certificate fully paid':'Partial payment recorded','success');
   closeModal(); render();
 }
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.psw-wrap')) closeProjectDropdown();
+});
 
 // ─── INIT ─────────────────────────────────────────────────────────
 (async()=>{
