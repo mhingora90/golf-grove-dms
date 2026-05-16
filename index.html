@@ -737,6 +737,11 @@ async function doManageUsers(projectId) {
   const toAdd    = [...nowChecked].filter(id => !wasAssigned.has(id));
   const toRemove = [...wasAssigned].filter(id => !nowChecked.has(id));
 
+  if (toRemove.includes(currentUser.id)) {
+    toast('Cannot remove yourself from the project', 'warning');
+    return;
+  }
+
   const ops = [];
   if (toAdd.length)    ops.push(sb.from('project_users').insert(toAdd.map(uid => ({ project_id: projectId, user_id: uid }))));
   if (toRemove.length) ops.push(sb.from('project_users').delete().eq('project_id', projectId).in('user_id', toRemove));
