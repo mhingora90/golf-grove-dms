@@ -1315,7 +1315,7 @@ async function renderDash() {
          oSubCnt,oIRCnt,oRFIOvdCnt,oNCROvdCnt] = counts;
 
   // IPC summary — latest certified net amount
-  const {data:ipcData} = await sb.from('payment_certificates').select('id,status,retention_pct,advance_recovery_pct,vat_pct,previously_paid,amount_paid').in('status',['Certified','Paid']);
+  const {data:ipcData} = await sb.from('payment_certificates').select('id,status,retention_pct,advance_recovery_pct,vat_pct,previously_paid,amount_paid').eq('project_id',currentProject.id).in('status',['Certified','Paid']);
   let ipcTotalCertified = 0;
   for(const pc of ipcData||[]) {
     const {data:pit} = await sb.from('payment_certificate_items').select('consultant_amount').eq('cert_id',pc.id);
@@ -6633,11 +6633,19 @@ document.addEventListener('click', function(e) {
 async function renderFinance() {
   document.getElementById('content').innerHTML = `<div class="loading"><div class="spinner"></div>Loading financial data…</div>`;
 
-  const [{data:boqItems},{data:certs},{data:allItems}] = await Promise.all([
-    sb.from('boq_items').select('total'),
-    sb.from('payment_certificates').select('*').order('cert_no'),
-    sb.from('payment_certificate_items').select('cert_id,contractor_amount,consultant_amount'),
+  const [billsRes, certsRes] = await Promise.all([
+    sb.from('boq_bills').select('id').eq('project_id', currentProject.id),
+    sb.from('payment_certificates').select('*').eq('project_id', currentProject.id).order('cert_no'),
   ]);
+  const _billIds = (billsRes.data||[]).map(b=>b.id);
+  const _certIds = (certsRes.data||[]).map(c=>c.id);
+  const [boqItemsRes, allItemsRes] = await Promise.all([
+    _billIds.length ? sb.from('boq_items').select('total').in('bill_id', _billIds) : Promise.resolve({data:[]}),
+    _certIds.length ? sb.from('payment_certificate_items').select('cert_id,contractor_amount,consultant_amount').in('cert_id', _certIds) : Promise.resolve({data:[]}),
+  ]);
+  const boqItems = boqItemsRes.data;
+  const certs = certsRes.data;
+  const allItems = allItemsRes.data;
 
   const contractSum = (boqItems||[]).reduce((s,i)=>s+(+i.total||0),0);
   const doneCerts   = (certs||[]).filter(c=>c.status==='Certified'||c.status==='Paid');
@@ -6861,11 +6869,12 @@ async function renderFinance() {
   </div>`;
 
   // ── Contractor vs Consultant variance per bill ──────────────────
-  const {data:bills} = await sb.from('boq_bills').select('id,bill_no,title').order('sort_order').order('created_at');
+  const {data:bills} = await sb.from('boq_bills').select('id,bill_no,title').eq('project_id',currentProject.id).order('sort_order').order('created_at');
   const sortedBills = (bills||[]).sort((a,b)=>(+a.bill_no||0)-(+b.bill_no||0)||a.bill_no.localeCompare(b.bill_no));
 
   // Build per-bill sums across all certs
-  const {data:allBoqItems} = await sb.from('boq_items').select('id,bill_id,total');
+  const _varBillIds = (bills||[]).map(b=>b.id);
+  const {data:allBoqItems} = _varBillIds.length ? await sb.from('boq_items').select('id,bill_id,total').in('bill_id',_varBillIds) : {data:[]};
   const boqItemBill = {}; for(const i of allBoqItems||[]) boqItemBill[i.id]=i.bill_id;
 
   const billClaimed={}, billCertified={};
