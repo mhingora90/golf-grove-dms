@@ -677,6 +677,108 @@ let currentProfile = null;
 let currentProject = null;  // { id, name } — null means project grid is shown
 let userProjects    = [];    // [{ id, name }, …] — populated after login
 
+// ─── PROJECT GRID ─────────────────────────────────────────────────
+async function renderProjectGrid() {
+  document.getElementById('auth-screen').style.display    = 'none';
+  document.getElementById('app-screen').style.display     = 'none';
+  document.getElementById('project-screen').style.display = 'flex';
+  document.getElementById('psw-wrap').style.display       = 'none';
+  document.getElementById('tb-proj-div').style.display    = 'none';
+
+  const isDev = currentProfile?.role === 'developer';
+  if (isDev) document.getElementById('proj-new-btn').style.display = '';
+
+  const grid = document.getElementById('proj-grid');
+  grid.textContent = '';
+  const loadDiv = document.createElement('div');
+  loadDiv.className = 'loading';
+  loadDiv.textContent = 'Loading projects...';
+  grid.appendChild(loadDiv);
+
+  const { data: projects, error } = await sb.from('projects').select('*').order('created_at');
+  if (error) {
+    grid.textContent = '';
+    const errP = document.createElement('p');
+    errP.style.cssText = 'color:var(--red);padding:24px';
+    errP.textContent = 'Failed to load projects.';
+    grid.appendChild(errP);
+    return;
+  }
+  userProjects = projects.map(p => ({ id: p.id, name: p.name }));
+
+  const { data: puRows } = await sb.from('project_users').select('project_id, user_id');
+  const countByProject = {};
+  (puRows || []).forEach(r => {
+    countByProject[r.project_id] = (countByProject[r.project_id] || 0) + 1;
+  });
+
+  grid.textContent = '';
+
+  projects.forEach(p => {
+    const n = countByProject[p.id] || 0;
+    const card = document.createElement('div');
+    card.className = 'pc';
+    card.onclick = () => setCurrentProject({ id: p.id, name: p.name });
+
+    const top = document.createElement('div');
+    top.className = 'pc-top';
+
+    const icon = document.createElement('div');
+    icon.className = 'pc-icon';
+    icon.textContent = '\u{1F3D7}';
+
+    const name = document.createElement('div');
+    name.className = 'pc-name';
+    name.textContent = p.name;
+
+    const status = document.createElement('div');
+    status.className = 'pc-status';
+    status.textContent = 'Active';
+
+    top.appendChild(icon);
+    top.appendChild(name);
+    top.appendChild(status);
+
+    const bot = document.createElement('div');
+    bot.className = 'pc-bot';
+
+    const ustack = document.createElement('div');
+    ustack.className = 'pc-ustack';
+    const chip = document.createElement('div');
+    chip.className = 'pc-uchip';
+    chip.textContent = String(n);
+    ustack.appendChild(chip);
+    bot.appendChild(ustack);
+
+    if (isDev) {
+      const mgr = document.createElement('span');
+      mgr.className = 'pc-mgr';
+      mgr.textContent = 'Manage users';
+      mgr.onclick = e => { e.stopPropagation(); openManageUsers(p.id, p.name); };
+      bot.appendChild(mgr);
+    }
+
+    card.appendChild(top);
+    card.appendChild(bot);
+    grid.appendChild(card);
+  });
+
+  if (isDev) {
+    const newCard = document.createElement('div');
+    newCard.className = 'pc-new';
+    newCard.onclick = openNewProject;
+    const ni = document.createElement('div');
+    ni.className = 'pc-new-icon';
+    ni.textContent = '+';
+    const nl = document.createElement('div');
+    nl.className = 'pc-new-label';
+    nl.textContent = 'New Project';
+    newCard.appendChild(ni);
+    newCard.appendChild(nl);
+    grid.appendChild(newCard);
+  }
+}
+
 // ─── AUTH ────────────────────────────────────────────────────────
 function switchTab(tab) {
   document.getElementById('login-form').style.display = tab==='login'?'':'none';
