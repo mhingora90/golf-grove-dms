@@ -410,6 +410,8 @@ textarea.form-control{resize:vertical;min-height:70px}
 .pc-uchip:first-child{margin-left:0}
 .pc-mgr{margin-left:auto;font-size:10px;color:var(--text2);padding:2px 8px;border:0.5px solid var(--border2);border-radius:20px;cursor:pointer;transition:color .15s,border-color .15s}
 .pc-mgr:hover{color:var(--sand);border-color:var(--sand)}
+.pc-del{margin-left:6px;font-size:10px;color:var(--text3);padding:2px 8px;border:0.5px solid var(--border2);border-radius:20px;cursor:pointer;transition:color .15s,border-color .15s}
+.pc-del:hover{color:var(--red);border-color:var(--red)}
 .pc-new{background:var(--bg2);border:0.5px dashed var(--border2);border-radius:var(--radius-lg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:28px 16px;cursor:pointer;min-height:110px;transition:border-color .18s,background .18s}
 .pc-new:hover{border-color:var(--sand);background:var(--bg3)}
 .pc-new-icon{font-size:22px;color:var(--text3)}
@@ -757,6 +759,15 @@ async function doManageUsers(projectId) {
   renderProjectGrid();
 }
 
+async function deleteProject(projectId, projectName) {
+  if (!confirm(`Delete project "${projectName}"?\n\nAll data in this project (drawings, RFIs, NCRs, etc.) will be permanently deleted.`)) return;
+  const { error } = await sb.from('projects').delete().eq('id', projectId);
+  if (error) { toast('Delete failed: ' + error.message, 'error'); return; }
+  userProjects = userProjects.filter(p => p.id !== projectId);
+  toast(`Project "${projectName}" deleted`, 'success');
+  renderProjectGrid();
+}
+
 function setCurrentProject(project) {
   currentProject = project;
   document.getElementById('project-screen').style.display = 'none';
@@ -928,6 +939,12 @@ async function renderProjectGrid() {
       mgr.textContent = 'Manage users';
       mgr.onclick = e => { e.stopPropagation(); openManageUsers(p.id, p.name); };
       bot.appendChild(mgr);
+
+      const del = document.createElement('span');
+      del.className = 'pc-del';
+      del.textContent = 'Delete';
+      del.onclick = e => { e.stopPropagation(); deleteProject(p.id, p.name); };
+      bot.appendChild(del);
     }
 
     card.appendChild(top);
