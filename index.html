@@ -18,7 +18,7 @@
   --text:#2C2A24;--text2:#7A6E5F;--text3:#B4A88C;
   --blue:#185FA5;--blue-bg:#E6F1FB;--blue-light:#378ADD;
   --green:#3B6D11;--green-bg:#EAF3DE;--green-light:#639922;
-  --amber:#C4863A;--amber-bg:#FEF3E8;--amber-light:#EF9F27;
+  --amber:#A3601A;--amber-bg:#FEF3E8;--amber-light:#EF9F27;
   --red:#A32D2D;--red-bg:#FCEBEB;--red-light:#E24B4A;
   --sand:#8B7355;--sand-bg:#F5EFE6;--sand-light:#C4A882;
   --charcoal:#2C2A24;
@@ -78,7 +78,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13
 .topbar-right{display:flex;gap:8px;align-items:center}
 .btn{font-size:12px;padding:6px 12px;border-radius:var(--radius);border:0.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:.12s;white-space:nowrap;font-family:inherit}
 .btn:hover{background:var(--bg3);color:var(--charcoal)}
-.btn-primary{background:var(--charcoal);color:#F7F5F0;border-color:var(--charcoal)}
+.btn-primary{background:var(--charcoal);color:#F7F5F0;border-color:var(--charcoal);min-height:32px}
 .btn-primary:hover{background:#444240;border-color:#444240}
 .btn-success{color:var(--green-light);border-color:var(--green)}
 .btn-danger{color:var(--red-light);border-color:var(--red)}
@@ -118,7 +118,7 @@ tr:hover td{background:var(--bg3);cursor:pointer;color:var(--charcoal)}
 
 /* FILTER BAR */
 .fbar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
-.filter-sel{height:28px;padding:0 24px 0 8px;background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--radius);color:var(--charcoal);font-size:11px;font-family:var(--font);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23B4A88C' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center}
+.filter-sel{height:32px;padding:0 24px 0 8px;background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--radius);color:var(--charcoal);font-size:11px;font-family:var(--font);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23B4A88C' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center}
 .filter-sel:focus,.filter-sel:hover{border-color:var(--sand);background-color:var(--bg3)}
 .reg-search{height:24px;padding:0 10px;background:var(--bg3);border:0.5px solid var(--border);border-radius:16px;color:var(--charcoal);font-size:11px;font-family:inherit;outline:none;min-width:180px;transition:.15s}
 .reg-search::placeholder{color:var(--text3)}
@@ -132,7 +132,7 @@ tr:hover td{background:var(--bg3);cursor:pointer;color:var(--charcoal)}
 .modal.wide{width:860px}
 .modal-header{padding:16px 20px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center}
 .modal-title{font-size:14px;font-weight:500;color:var(--charcoal)}
-.modal-close{background:none;border:none;font-size:18px;color:var(--text3);cursor:pointer;line-height:1;padding:2px 6px;border-radius:4px}
+.modal-close{background:none;border:none;font-size:18px;color:var(--text3);cursor:pointer;line-height:1;padding:8px 10px;min-width:36px;min-height:36px;border-radius:4px;display:flex;align-items:center;justify-content:center}
 .modal-close:hover{background:var(--bg3);color:var(--text)}
 .modal-body{padding:20px;display:flex;flex-direction:column;gap:14px;max-height:78vh;overflow-y:auto;scroll-behavior:smooth}
 .modal-footer{padding:14px 20px;border-top:0.5px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
@@ -266,7 +266,7 @@ textarea.form-control{resize:vertical;min-height:70px}
 .crm-stage-pills{display:flex;gap:0;border-bottom:0.5px solid var(--border);overflow-x:auto;background:var(--bg2)}
 .crm-pill{flex:0 0 auto;padding:9px 18px;background:none;border:none;border-bottom:2px solid transparent;font:600 11px var(--font);color:var(--text2);cursor:pointer;white-space:nowrap;transition:color .15s,background .15s,border-color .15s}
 .crm-pill:hover{color:var(--charcoal);background:var(--bg3)}
-.crm-pill.active{color:var(--amber);border-bottom-color:var(--amber)}
+.crm-pill.active{color:var(--amber);border-bottom-color:var(--amber);background:var(--amber-bg)}
 .crm-pill .pill-ct{display:inline-block;margin-left:5px;background:var(--bg4);color:var(--text3);border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;transition:background .15s,color .15s}
 .crm-pill.active .pill-ct{background:var(--amber-bg);color:var(--amber)}
 .crm-pill[data-stage="contacted_responded"].active{color:var(--blue);border-bottom-color:var(--blue)}
@@ -290,11 +290,11 @@ textarea.form-control{resize:vertical;min-height:70px}
 .crm-table th.no-sort{cursor:default}
 .crm-table th.no-sort:hover{color:var(--text3)}
 .crm-table td{padding:9px 10px;font-size:13px;color:var(--text);border-bottom:0.5px solid var(--border2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;transition:background .1s}
-.crm-table tr:hover td{background:var(--bg3);cursor:pointer}
+.crm-table tr{cursor:pointer}.crm-table tr:hover td{background:var(--bg3)}
 .crm-table tr.crm-checked td{background:var(--amber-bg)}
 .crm-table td.crm-muted{color:var(--text3);font-size:12px}
-.crm-table td.crm-action{text-align:right;color:var(--text3);font-size:12px;font-weight:600;transition:color .15s}
-.crm-table tr:hover td.crm-action{color:var(--amber)}
+.crm-table td.crm-action{text-align:right;color:var(--amber);font-size:12px;font-weight:600;cursor:pointer;transition:color .15s}
+.crm-table tr:hover td.crm-action{color:var(--charcoal)}
 .crm-table tbody tr[data-stage="new_lead"] td:first-child{border-left:3px solid var(--amber)}
 .crm-table tbody tr[data-stage="contacted_responded"] td:first-child{border-left:3px solid var(--blue)}
 .crm-table tbody tr[data-stage="contacted_no_response"] td:first-child{border-left:3px solid var(--text3)}
@@ -304,7 +304,7 @@ textarea.form-control{resize:vertical;min-height:70px}
 .crm-table tbody tr[data-stage="closed_lost"] td:first-child{border-left:3px solid var(--red)}
 .crm-footer{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--bg3);border-top:0.5px solid var(--border);font-size:12px;color:var(--text2)}
 .crm-page-btns{display:flex;gap:4px}
-.crm-page-btn{padding:3px 9px;border:0.5px solid var(--border);border-radius:var(--radius);background:var(--bg2);font:600 11px var(--font);color:var(--text2);cursor:pointer;transition:background .15s,color .15s}
+.crm-page-btn{padding:5px 11px;min-height:28px;border:0.5px solid var(--border);border-radius:var(--radius);background:var(--bg2);font:600 11px var(--font);color:var(--text2);cursor:pointer;transition:background .15s,color .15s}
 .crm-page-btn:hover{background:var(--bg3);color:var(--charcoal)}
 .crm-page-btn.active{background:var(--charcoal);color:#fff;border-color:var(--charcoal)}
 .crm-page-btn:disabled{opacity:.4;cursor:default}
@@ -583,10 +583,10 @@ textarea.form-control{resize:vertical;min-height:70px}
 
 <!-- MODAL -->
 <div class="modal-bg" id="modal-bg" onclick="closeBg(event)">
-  <div class="modal" id="modal">
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-header">
       <div class="modal-title" id="modal-title"></div>
-      <button class="modal-close" onclick="closeModal()">×</button>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
     <div class="modal-footer" id="modal-footer"></div>
@@ -7213,10 +7213,24 @@ async function renderSalesRevenue() {
       '<td style="padding:6px 10px;text-align:center">' + ta.length + '</td>' +
       '<td style="padding:6px 10px;text-align:center;color:var(--green);font-weight:500">' + ts.length + '</td>' +
       '<td style="padding:6px 10px;text-align:right">' + avgS.toFixed(0) + ' sqft</td>' +
-      '<td style="padding:6px 10px;text-align:right">' + (ts.length ? fmtAED(avgP) : '\u2014') + '</td>' +
+      '<td style="padding:6px 10px;text-align:right">' + (ts.length ? fmtAED(Math.round(avgP)) : '\u2014') + '</td>' +
       '<td style="padding:6px 10px;text-align:right;font-weight:600">' + (totR > 0 ? fmtAED(totR) : '\u2014') + '</td>' +
       '</tr>';
   }).join('');
+
+  // Totals row for Revenue by Unit Type table
+  const totalAllUnits   = all.length;
+  const totalAllSold    = soldUnits.length;
+  const totalAvgSqft    = all.length ? Math.round(all.reduce((s,u)=>s+(+u.area_sqft||0),0)/all.length) : 0;
+  const totalRevenue    = [...soldUnits,...reservedUnits].reduce((s,u)=>s+(+u.unit_sales.sold_price||0),0);
+  const totalsRow = '<tr style="border-top:1.5px solid var(--border);background:var(--bg3)">' +
+    '<td style="padding:6px 10px;font-weight:700">Total</td>' +
+    '<td style="padding:6px 10px;text-align:center;font-weight:700">' + totalAllUnits + '</td>' +
+    '<td style="padding:6px 10px;text-align:center;font-weight:700;color:var(--green)">' + totalAllSold + '</td>' +
+    '<td style="padding:6px 10px;text-align:right;font-weight:700">' + totalAvgSqft + ' sqft</td>' +
+    '<td style="padding:6px 10px;text-align:right">—</td>' +
+    '<td style="padding:6px 10px;text-align:right;font-weight:700">' + (totalRevenue > 0 ? fmtAED(totalRevenue) : '—') + '</td>' +
+    '</tr>';
 
   // Helper: stat card
   const sc = (val,label,sub,valColor) =>
@@ -7240,42 +7254,42 @@ async function renderSalesRevenue() {
       sc(soldUnits.length,'Sold', soldPct + '% of total','var(--green)') +
       sc(reservedUnits.length,'Reserved','SPA in progress','var(--amber)') +
       sc(availUnits.length,'Available', availPct + '% remaining','var(--blue)') +
-      sc((totalSqftSold/1000).toFixed(1)+'K sqft','Sqft Sold','of ' + (totalSqft/1000).toFixed(1) + 'K total') +
+      sc((totalSqftSold/1000).toFixed(1)+'K','Sqft Sold','of ' + (totalSqft/1000).toFixed(1) + 'K sqft total') +
     '</div>' +
     // Revenue strip
     '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">' +
       rc(fmtCompact(totalGDV),'Total GDV (Listed)','Gross Development Value','var(--green-bg)','#C0DD97','var(--green)') +
       rc(fmtCompact(totalContracted),'Total Contracted Revenue', contracted.length + ' units (sold + reserved)','var(--green-bg)','#C0DD97','var(--green)') +
-      rc(fmtCompact(remainingGDV),'Remaining GDV', availUnits.length + ' available units','var(--bg2)','var(--border)','var(--charcoal)') +
+      rc(fmtCompact(remainingGDV),'Remaining GDV (Unsold)', availUnits.length + ' available units','var(--bg3)','var(--border2)','var(--text2)') +
     '</div>' +
     // Monthly revenue table
     '<div class="card" style="margin-bottom:16px"><div style="padding:14px 18px">' +
       '<div style="font-size:11px;font-weight:600;color:var(--charcoal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Expected Revenue by Month (Payment Plan)</div>' +
       (sortedMonths.length || onHandover > 0
         ? '<table style="width:100%;font-size:11px;border-collapse:collapse"><tr style="background:var(--bg3)"><th style="padding:5px 10px;text-align:left">Month</th><th style="padding:5px 10px;text-align:right">Expected (AED)</th><th style="padding:5px 10px;text-align:right">Cumulative (AED)</th></tr>' + monthRowsHTML + handoverRow + '</table>'
-        : '<div class="empty-state" style="padding:16px 0">No payment milestones with due dates yet.</div>') +
+        : '<div style="padding:8px 0;font-size:11px;color:var(--text3)">No payment milestones with due dates set yet.</div>') +
     '</div></div>' +
     // Commission + Discount
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">' +
       '<div class="card"><div style="padding:14px 18px">' +
         '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em">Commission Summary</div>' +
         '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px"><span style="color:var(--text2)">Total Commission Payable</span><span style="font-weight:600;color:var(--blue)">' + fmtAED(totalComm) + '</span></div>' +
-        '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px"><span style="color:var(--text2)">Avg Commission Rate</span><span>' + avgComm.toFixed(2) + '%</span></div>' +
-        '<div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text2)">Units with broker</span><span>' + withBroker + ' of ' + contracted.length + ' contracted</span></div>' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px"><span style="color:var(--text2)">Avg Commission Rate</span><span style="font-weight:600">' + avgComm.toFixed(2) + '%</span></div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text2)">Units with broker</span><span style="color:var(--text2)">' + withBroker + ' of ' + contracted.length + ' contracted</span></div>' +
       '</div></div>' +
       '<div class="card"><div style="padding:14px 18px">' +
         '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em">Discount Summary</div>' +
         '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px"><span style="color:var(--text2)">Total Discount Given</span><span style="font-weight:600;color:var(--amber)">' + fmtAED(totalDisc) + '</span></div>' +
-        '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px"><span style="color:var(--text2)">Avg Discount Rate</span><span>' + avgDisc.toFixed(2) + '%</span></div>' +
-        '<div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text2)">Units with discount</span><span>' + withDisc + ' of ' + contracted.length + ' contracted</span></div>' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px"><span style="color:var(--text2)">Avg Discount Rate</span><span style="font-weight:600">' + avgDisc.toFixed(2) + '%</span></div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text2)">Units with discount</span><span style="color:var(--text2)">' + withDisc + ' of ' + contracted.length + ' contracted</span></div>' +
       '</div></div>' +
     '</div>' +
     // By unit type
     '<div class="card"><div style="padding:14px 18px">' +
       '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em">Revenue by Unit Type</div>' +
       '<table style="width:100%;font-size:11px;border-collapse:collapse">' +
-        '<tr style="background:var(--bg3)"><th style="padding:6px 10px;text-align:left">Type</th><th style="padding:6px 10px;text-align:center">Total</th><th style="padding:6px 10px;text-align:center">Sold</th><th style="padding:6px 10px;text-align:right">Avg Sqft</th><th style="padding:6px 10px;text-align:right">Avg Sold Price</th><th style="padding:6px 10px;text-align:right">Total Revenue</th></tr>' +
-        typeRows +
+        '<thead><tr style="background:var(--bg3)"><th style="padding:6px 10px;text-align:left">Type</th><th style="padding:6px 10px;text-align:center">Total</th><th style="padding:6px 10px;text-align:center">Sold</th><th style="padding:6px 10px;text-align:right">Avg Sqft</th><th style="padding:6px 10px;text-align:right">Avg Sold Price</th><th style="padding:6px 10px;text-align:right">Total Revenue</th></tr></thead>' +
+        '<tbody>' + typeRows + totalsRow + '</tbody>' +
       '</table>' +
     '</div></div>';
 }
@@ -7361,17 +7375,17 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
       </select>
       <select class="filter-sel" id="crm-source-sel" onchange="crmSetFilter('source',this.value)">
         <option value="">Source: All</option>
-        ${["meta_ads","website","referral","walk_in","other"].map(v =>
-          `<option value="${v}"${crmSource === v ? " selected" : ""}>${v.replace("_"," ")}</option>`).join("")}
+        ${{"meta_ads":"Meta Ads","website":"Website","referral":"Referral","walk_in":"Walk-In","other":"Other"} && Object.entries({"meta_ads":"Meta Ads","website":"Website","referral":"Referral","walk_in":"Walk-In","other":"Other"}).map(([v,l]) =>
+          `<option value="${v}"${crmSource === v ? " selected" : ""}>${l}</option>`).join("")}
       </select>
       <select class="filter-sel" id="crm-assigned-sel" onchange="crmSetFilter('assigned',this.value)">
         <option value="">Assigned: All</option>
       </select>
       <span class="crm-toolbar-sep"></span>
-      <input type="date" class="filter-sel" id="crm-date-from" value="${esc(crmDateFrom)}"
-        onchange="crmSetFilter('dateFrom',this.value)" title="Created from">
-      <input type="date" class="filter-sel" id="crm-date-to" value="${esc(crmDateTo)}"
-        onchange="crmSetFilter('dateTo',this.value)" title="Created to">
+      <label style="font-size:10px;color:var(--text3);font-weight:600;white-space:nowrap">From <input type="date" class="filter-sel" id="crm-date-from" value="${esc(crmDateFrom)}"
+        onchange="crmSetFilter('dateFrom',this.value)" aria-label="Created from date" style="margin-left:4px"></label>
+      <label style="font-size:10px;color:var(--text3);font-weight:600;white-space:nowrap">To <input type="date" class="filter-sel" id="crm-date-to" value="${esc(crmDateTo)}"
+        onchange="crmSetFilter('dateTo',this.value)" aria-label="Created to date" style="margin-left:4px"></label>
       <button class="btn btn-primary" onclick="openAddLead()" style="margin-left:auto">+ Add Lead</button>
     </div>`;
 
@@ -7423,9 +7437,9 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
     <div class="crm-footer">
       <span>Showing <strong>${count > 0 ? from : 0}\u2013${to}</strong> of <strong>${count}</strong> leads</span>
       <div class="crm-page-btns">
-        <button class="crm-page-btn" onclick="crmSetPage(${crmPage - 1})" ${crmPage === 0 ? "disabled" : ""}>\u2190</button>
+        <button class="crm-page-btn" onclick="crmSetPage(${crmPage - 1})" ${crmPage === 0 ? "disabled" : ""} aria-label="Previous page">\u2190</button>
         ${pageButtons}
-        <button class="crm-page-btn" onclick="crmSetPage(${crmPage + 1})" ${crmPage >= totalPages - 1 ? "disabled" : ""}>\u2192</button>
+        <button class="crm-page-btn" onclick="crmSetPage(${crmPage + 1})" ${crmPage >= totalPages - 1 ? "disabled" : ""} aria-label="Next page">\u2192</button>
       </div>
       <span>25 per page</span>
     </div>`;
@@ -7499,9 +7513,9 @@ function crmRow(lead) {
       <td onclick="crmToggleRow('${lead.id}',event)" style="width:32px">
         <input type="checkbox" ${checked ? "checked" : ""}>
       </td>
-      <td onclick="viewLead('${lead.id}')" style="font-weight:600">${esc(lead.name || "--")}</td>
+      <td onclick="viewLead('${lead.id}')" style="font-weight:600">${esc(lead.name || "—")}</td>
       <td onclick="viewLead('${lead.id}')">${company}</td>
-      <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(lead.email || "--")}</td>
+      <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(lead.email || "—")}</td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc((lead.phone || '').replace(/^p:/,'') || '--')}</td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(fmtLeadField(lead.created_time))}</td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(fmtLeadField(lead.ad_id || lead.property_types))}</td>
@@ -7655,7 +7669,7 @@ async function viewLead(id) {
       <div class="detail-item"><div class="detail-label">Budget</div><div class="detail-value">${esc(fmtLeadField(lead.created_time||lead.budget_range))}</div></div>
       <div class="detail-item"><div class="detail-label">Property Type</div><div class="detail-value">${esc(fmtLeadField(lead.ad_id||lead.property_types))}</div></div>
       <div class="detail-item"><div class="detail-label">Availability</div><div class="detail-value">${esc(lead.availability||'—')}</div></div>
-      <div class="detail-item"><div class="detail-label">Source</div><div class="detail-value">${esc(lead.source||'—')}</div></div>
+      <div class="detail-item"><div class="detail-label">Source</div><div class="detail-value">${esc(({'meta_ads':'Meta Ads','website':'Website','referral':'Referral','walk_in':'Walk-In','other':'Other'})[lead.source]||lead.source||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Meta Lead ID</div><div class="detail-value mono">${esc(lead.meta_lead_id||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Created</div><div class="detail-value">${new Date(lead.created_at).toLocaleString('en-GB')}</div></div>
       <div class="detail-item"><div class="detail-label">Last Contacted</div><div class="detail-value">${lead.last_contacted_at?new Date(lead.last_contacted_at).toLocaleString('en-GB'):'Never'}</div></div>
@@ -7710,12 +7724,12 @@ async function deleteLead(id) {
 
 function openAddLead() {
   openModal('Add Lead', `
-    <div class="form-group"><label class="form-label-dark">Full Name *</label><input type="text" class="form-control" id="lead-name" required/></div>
+    <div class="form-group"><label class="form-label-dark" for="lead-name">Full Name *</label><input type="text" class="form-control" id="lead-name" aria-required="true" required/></div>
     <div class="frow">
-      <div class="form-group"><label class="form-label-dark">Email</label><input type="email" class="form-control" id="lead-email"/></div>
-      <div class="form-group"><label class="form-label-dark">Phone</label><input type="tel" class="form-control" id="lead-phone"/></div>
+      <div class="form-group"><label class="form-label-dark" for="lead-email">Email</label><input type="email" class="form-control" id="lead-email"/></div>
+      <div class="form-group"><label class="form-label-dark" for="lead-phone">Phone</label><input type="tel" class="form-control" id="lead-phone"/></div>
     </div>
-    <div class="form-group"><label class="form-label-dark">Source</label>
+    <div class="form-group"><label class="form-label-dark" for="lead-source">Source</label>
       <select class="form-control" id="lead-source">
         <option value="meta_ads">Meta Ads</option><option value="website">Website</option><option value="referral">Referral</option><option value="walk_in">Walk-In</option><option value="other">Other</option>
       </select>
@@ -7730,13 +7744,14 @@ async function doAddLead() {
   const phone = document.getElementById('lead-phone').value.trim();
   const source = document.getElementById('lead-source').value;
   if(!name) { toast('Name is required','error'); return; }
+  if(!email && !phone) { toast('Add at least an email or phone so the lead can be contacted','warning'); }
   const {error} = await sb.from('crm_leads').insert({name,email:email||null,phone:phone||null,source});
   if(error) { toast('Error: '+error.message,'error'); return; }
   toast('Lead added','success'); closeModal(); renderCRM();
 }
 
 function fmtLeadField(v) {
-  if (!v) return '--';
+  if (!v) return '—';
   return v.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).replace(/Aed /g, 'AED ');
 }
 
