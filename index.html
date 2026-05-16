@@ -1484,9 +1484,9 @@ async function renderDash() {
   // Async: load compliance score widget
   (async () => {
     const [allDraws, publishedDraws, metaDraws] = await Promise.all([
-      sb.from('drawings').select('*',{head:true,count:'exact'}),
-      sb.from('drawings').select('*',{head:true,count:'exact'}).in('cde_state',['Published','Archived']),
-      sb.from('drawings').select('*',{head:true,count:'exact'}).not('originator','is',null).not('zone','is',null).not('level','is',null),
+      sb.from('drawings').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id),
+      sb.from('drawings').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).in('cde_state',['Published','Archived']),
+      sb.from('drawings').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).not('originator','is',null).not('zone','is',null).not('level','is',null),
     ]);
     const total = allDraws.count||0;
     const published = publishedDraws.count||0;
@@ -1521,8 +1521,8 @@ async function renderDash() {
     const disciplines = ['Architecture','Structure','MEP','Civil','General','Interior Design'];
     const counts = await Promise.all(disciplines.map(d =>
       Promise.all([
-        sb.from('drawings').select('*',{count:'exact',head:true}).eq('discipline',d),
-        sb.from('drawings').select('*',{count:'exact',head:true}).eq('discipline',d).eq('status','Approved')
+        sb.from('drawings').select('*',{count:'exact',head:true}).eq('project_id',currentProject.id).eq('discipline',d),
+        sb.from('drawings').select('*',{count:'exact',head:true}).eq('project_id',currentProject.id).eq('discipline',d).eq('status','Approved')
       ])
     ));
     const barsEl = document.getElementById('disc-bars');
@@ -2165,7 +2165,7 @@ async function doBatchDrawAction(action) {
       'Shared':    ['consultant','developer'],
       'Published': ['developer'],
     };
-    const {data:draws} = await sb.from('drawings').select('id,cde_state').in('id', ids);
+    const {data:draws} = await sb.from('drawings').select('id,cde_state').eq('project_id',currentProject.id).in('id', ids);
     const updates = (draws||[]).map(d=>{
       const idx = cdeOrder.indexOf(d.cde_state||'WIP');
       const next = idx>=0&&idx<cdeOrder.length-1?cdeOrder[idx+1]:d.cde_state;
@@ -3116,7 +3116,7 @@ async function voidDrawing(id, drawingNo) {
 }
 
 async function linkDrawings(id, drawingNo) {
-  const {data:all} = await sb.from('drawings').select('id,drawing_no,title,discipline').order('drawing_no').neq('id',id);
+  const {data:all} = await sb.from('drawings').select('id,drawing_no,title,discipline').eq('project_id',currentProject.id).order('drawing_no').neq('id',id);
   const {data:current} = await sb.from('drawings').select('related_drawings').eq('id',id).single();
   const linked = current?.related_drawings||[];
   openModal('Link Related Drawings – '+drawingNo, `
@@ -3143,7 +3143,7 @@ async function saveLinkDrawings(id) {
 
 function exportDrawingRegister() {
   // Export as formatted CSV then trigger download
-  sb.from('drawings').select('*').order('drawing_no',{ascending:true}).then(({data})=>{
+  sb.from('drawings').select('*').eq('project_id',currentProject.id).order('drawing_no',{ascending:true}).then(({data})=>{
     const rows = data||[];
     const headers = ['Drawing No.','Title','Discipline','Revision','POI Code','CDE State','Review Status','Originator','Zone','Level','Type','Uploaded By','Date'];
     const csvRows = [headers.join(',')];
@@ -3477,7 +3477,7 @@ async function openNew() {
       `<button class="btn btn-primary" onclick="doNewDraw()">Upload Drawing</button><button class="btn" onclick="closeModal()">Cancel</button>`);
 
   } else if(currentPage==='sub' && can('submit')) {
-    const {data:draws} = await sb.from('drawings').select('drawing_no,title').order('drawing_no');
+    const {data:draws} = await sb.from('drawings').select('drawing_no,title').eq('project_id',currentProject.id).order('drawing_no');
     openModal('New Document Submittal (DSUB)', `
       <div class="frow">
         <div class="form-group"><label class="form-label-dark">Reference No.</label><input type="text" class="form-control" id="ns-id" placeholder="MBC-POE-DT-P454-25-0XX" /></div>
@@ -5061,7 +5061,7 @@ async function doResubmitDetail(parentId, revNo) {
 
 // ─── NEW ITEM FORMS – RFI & TRANSMITTAL ───────────────────────────
 async function openNewRFI() {
-  const {data:draws} = await sb.from('drawings').select('drawing_no,title').order('drawing_no');
+  const {data:draws} = await sb.from('drawings').select('drawing_no,title').eq('project_id',currentProject.id).order('drawing_no');
   openModal('New RFI',`
     <div class="frow">
       <div class="form-group"><label class="form-label-dark">RFI Ref No.</label><input type="text" class="form-control" id="nr-id" placeholder="RFI-001" /></div>
@@ -5107,7 +5107,7 @@ async function doNewRFI() {
 }
 
 async function openNewTransmittal() {
-  const {data:draws} = await sb.from('drawings').select('drawing_no,title,revision').order('drawing_no');
+  const {data:draws} = await sb.from('drawings').select('drawing_no,title,revision').eq('project_id',currentProject.id).order('drawing_no');
   openModal('New Transmittal',`
     <div class="frow">
       <div class="form-group"><label class="form-label-dark">Transmittal Ref</label><input type="text" class="form-control" id="nt-ref" placeholder="TRN-001" /></div>
@@ -7672,12 +7672,12 @@ async function renderCRM() {
   }
 
   // Nav badge: total unfiltered count
-  const { count: total } = await sb.from("crm_leads").select("*", { count: "exact", head: true });
+  const { count: total } = await sb.from("crm_leads").select("*", { count: "exact", head: true }).eq("project_id", currentProject.id);
   const nb = document.getElementById("nb-crm");
   if (nb) nb.textContent = total || 0;
 
   // Stage pill counts: all leads (no filters)
-  const { data: stageRows } = await sb.from("crm_leads").select("stage");
+  const { data: stageRows } = await sb.from("crm_leads").select("stage").eq("project_id", currentProject.id);
   const stageMap = {};
   (stageRows || []).forEach(r => { stageMap[r.stage] = (stageMap[r.stage] || 0) + 1; });
   const totalAll = (stageRows || []).length;
@@ -7692,7 +7692,7 @@ async function renderCRM() {
   }
 
   // Populate assigned dropdown with live distinct values
-  const { data: assigneeRows } = await sb.from("crm_leads").select("assigned_to").not("assigned_to", "is", null);
+  const { data: assigneeRows } = await sb.from("crm_leads").select("assigned_to").eq("project_id", currentProject.id).not("assigned_to", "is", null);
   const unique = [...new Set((assigneeRows || []).map(r => r.assigned_to).filter(Boolean))].sort();
   const sel = document.getElementById("crm-assigned-sel");
   if (sel) {
