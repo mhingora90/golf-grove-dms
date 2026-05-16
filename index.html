@@ -1129,10 +1129,10 @@ async function render() {
 
 async function updateBadges() {
   const [{count:cs},{count:ci},{count:cn},{count:cr}] = await Promise.all([
-    sb.from('submittals').select('*',{count:'exact',head:true}).eq('status','Pending Review'),
-    sb.from('inspections').select('*',{count:'exact',head:true}).eq('status','Pending'),
-    sb.from('ncrs').select('*',{count:'exact',head:true}).eq('status','Open'),
-    sb.from('rfis').select('*',{count:'exact',head:true}).eq('status','Open'),
+    sb.from('submittals').select('*',{count:'exact',head:true}).eq('project_id',currentProject.id).eq('status','Pending Review'),
+    sb.from('inspections').select('*',{count:'exact',head:true}).eq('project_id',currentProject.id).eq('status','Pending'),
+    sb.from('ncrs').select('*',{count:'exact',head:true}).eq('project_id',currentProject.id).eq('status','Open'),
+    sb.from('rfis').select('*',{count:'exact',head:true}).eq('project_id',currentProject.id).eq('status','Open'),
   ]);
   function setBadge(id, n) {
     const el = document.getElementById(id);
@@ -1266,26 +1266,26 @@ async function renderDash() {
 
   // Counts only — head:true means Supabase returns count with zero payload
   const counts = await Promise.all([
-    sb.from('drawings').select('*',{head:true,count:'exact'}),
-    sb.from('submittals').select('*',{head:true,count:'exact'}),
-    sb.from('inspections').select('*',{head:true,count:'exact'}),
-    sb.from('ncrs').select('*',{head:true,count:'exact'}),
-    sb.from('subcontractors').select('*',{head:true,count:'exact'}),
-    sb.from('rfis').select('*',{head:true,count:'exact'}),
+    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id),
+    sb.from('submittals').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id),
+    sb.from('inspections').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id),
+    sb.from('ncrs').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id),
+    sb.from('subcontractors').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id),
+    sb.from('rfis').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id),
     // Status-filtered counts
-    sb.from('submittals').select('*',{head:true,count:'exact'}).eq('status','Pending Review'),
-    sb.from('inspections').select('*',{head:true,count:'exact'}).eq('status','Pending'),
-    sb.from('ncrs').select('*',{head:true,count:'exact'}).eq('status','Open'),
-    sb.from('rfis').select('*',{head:true,count:'exact'}).eq('status','Open'),
-    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('status','Approved'),
-    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('status','Issued for Construction'),
-    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('status','Under Review'),
-    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('status','Revise & Resubmit'),
+    sb.from('submittals').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).eq('status','Pending Review'),
+    sb.from('inspections').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).eq('status','Pending'),
+    sb.from('ncrs').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).eq('status','Open'),
+    sb.from('rfis').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).eq('status','Open'),
+    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).eq('status','Approved'),
+    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).eq('status','Issued for Construction'),
+    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).eq('status','Under Review'),
+    sb.from('drawings').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).eq('status','Revise & Resubmit'),
     // Overdue counts
-    sb.from('submittals').select('*',{head:true,count:'exact'}).lt('due_date',today).eq('status','Pending Review'),
-    sb.from('inspections').select('*',{head:true,count:'exact'}).lt('due_date',today).eq('status','Pending'),
-    sb.from('rfis').select('*',{head:true,count:'exact'}).lt('due_date',today).eq('status','Open'),
-    sb.from('ncrs').select('*',{head:true,count:'exact'}).lt('raised_date',thirtyAgo).neq('status','Closed'),
+    sb.from('submittals').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).lt('due_date',today).eq('status','Pending Review'),
+    sb.from('inspections').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).lt('due_date',today).eq('status','Pending'),
+    sb.from('rfis').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).lt('due_date',today).eq('status','Open'),
+    sb.from('ncrs').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).lt('raised_date',thirtyAgo).neq('status','Closed'),
   ]);
   const [drawCnt,subCnt,irCnt,ncrCnt,scCnt,rfiCnt,
          pSubCnt,pIRCnt,oNCRCnt,oRFICnt,
@@ -1308,14 +1308,14 @@ async function renderDash() {
 
   // Display rows — limited fields, limited count
   const rows = await Promise.all([
-    sb.from('submittals').select('id,ref_no,title,status').eq('status','Pending Review').limit(5),
-    sb.from('inspections').select('id,ref_no,elements,inspection_date').eq('status','Pending').limit(5),
-    sb.from('ncrs').select('id,ref_no,title,severity').eq('status','Open').limit(5),
-    sb.from('drawings').select('id,drawing_no,title,revision,status').order('created_at',{ascending:false}).limit(4),
+    sb.from('submittals').select('id,ref_no,title,status').eq('project_id',currentProject.id).eq('status','Pending Review').limit(5),
+    sb.from('inspections').select('id,ref_no,elements,inspection_date').eq('project_id',currentProject.id).eq('status','Pending').limit(5),
+    sb.from('ncrs').select('id,ref_no,title,severity').eq('project_id',currentProject.id).eq('status','Open').limit(5),
+    sb.from('drawings').select('id,drawing_no,title,revision,status').eq('project_id',currentProject.id).order('created_at',{ascending:false}).limit(4),
     // Overdue rows for banner
-    sb.from('submittals').select('ref_no,title,due_date').eq('status','Pending Review').lt('due_date',today).limit(20),
-    sb.from('inspections').select('ref_no,elements:title,due_date').eq('status','Pending').lt('due_date',today).limit(20),
-    sb.from('rfis').select('ref_no,subject:title,due_date').eq('status','Open').lt('due_date',today).limit(20),
+    sb.from('submittals').select('ref_no,title,due_date').eq('project_id',currentProject.id).eq('status','Pending Review').lt('due_date',today).limit(20),
+    sb.from('inspections').select('ref_no,elements:title,due_date').eq('project_id',currentProject.id).eq('status','Pending').lt('due_date',today).limit(20),
+    sb.from('rfis').select('ref_no,subject:title,due_date').eq('project_id',currentProject.id).eq('status','Open').lt('due_date',today).limit(20),
   ]);
   const [pendSubs,pendIRs,openNCRs,recentDraws,
          oSubRows,oIRRows,oRFIRows] = rows;
@@ -1547,7 +1547,7 @@ async function renderDash() {
 // ─── METHOD STATEMENTS ───────────────────────────────────────────────
 async function renderMS() {
   selectedMS = new Set();
-  const {data} = await sb.from('method_statements').select('*').order('created_at',{ascending:false});
+  const {data} = await sb.from('method_statements').select('*').eq('project_id',currentProject.id).order('created_at',{ascending:false});
   const rows = data||[];
   const pending = rows.filter(r=>r.status==='Pending Review').length;
   const underReview = rows.filter(r=>r.status==='Under Review').length;
@@ -1749,7 +1749,7 @@ async function doNewMS() {
   const title = document.getElementById('ms-title')?.value?.trim();
   if(!title){toast('Please enter a title','error');return;}
   const refNo = 'MS-MBC-'+(Date.now()%10000).toString().padStart(3,'0');
-  const {data:newMS,error} = await sb.from('method_statements').insert({
+  const {data:newMS,error} = await sb.from('method_statements').insert({project_id:currentProject.id,
     ref_no:document.getElementById('ms-ref')?.value||refNo, title,
     activity:document.getElementById('ms-activity')?.value,
     discipline:document.getElementById('ms-disc')?.value,
@@ -2221,7 +2221,7 @@ async function doBatchSubAction(action) {
 // ─── DRAWINGS ─────────────────────────────────────────────────────
 async function renderDrawings() {
   selectedDrawings = new Set();
-  const {data} = await sb.from('drawings').select('*').order('drawing_no',{ascending:true});
+  const {data} = await sb.from('drawings').select('*').eq('project_id',currentProject.id).order('drawing_no',{ascending:true});
   const rows = data||[];
   const total = rows.length;
   const published = rows.filter(r=>r.cde_state==='Published').length;
@@ -2438,7 +2438,7 @@ function filtIPC(billId) {
 // ─── SUBMITTALS ───────────────────────────────────────────────────
 async function renderSubmittals() {
   selectedSubmittals = new Set();
-  const {data} = await sb.from('submittals').select('*').order('created_at',{ascending:false});
+  const {data} = await sb.from('submittals').select('*').eq('project_id',currentProject.id).order('created_at',{ascending:false});
   const rows = data||[];
   const today = new Date().toISOString().split('T')[0];
   const open = rows.filter(r=>r.status==='Pending Review').length;
@@ -2507,7 +2507,7 @@ async function renderSubmittals() {
 
 // ─── INSPECTIONS ──────────────────────────────────────────────────
 async function renderInspections() {
-  const {data} = await sb.from('inspections').select('*, subcontractors(name)').order('created_at',{ascending:false});
+  const {data} = await sb.from('inspections').select('*, subcontractors(name)').eq('project_id',currentProject.id).order('created_at',{ascending:false});
   const rows = data||[];
   const today = new Date(); const todayStr = today.toISOString().split('T')[0];
   const pending = rows.filter(r=>r.status==='Pending').length;
@@ -2583,7 +2583,7 @@ async function renderInspections() {
 
 // ─── NCRs ─────────────────────────────────────────────────────────
 async function renderNCRs() {
-  const {data} = await sb.from('ncrs').select('*').order('created_at',{ascending:false});
+  const {data} = await sb.from('ncrs').select('*').eq('project_id',currentProject.id).order('created_at',{ascending:false});
   const rows = data||[];
   const today = new Date(); const todayStr = today.toISOString().split('T')[0];
   const open = rows.filter(r=>r.status==='Open').length;
@@ -2664,7 +2664,7 @@ async function renderNCRs() {
 
 // ─── SUBCONTRACTORS ───────────────────────────────────────────────
 async function renderSubcontractors() {
-  const {data} = await sb.from('subcontractors').select('*').order('created_at',{ascending:false});
+  const {data} = await sb.from('subcontractors').select('*').eq('project_id',currentProject.id).order('created_at',{ascending:false});
   const rows = data||[];
   document.getElementById('content').innerHTML = `
   <div class="card"><div class="tw"><table>
@@ -3677,7 +3677,7 @@ async function doNewDraw() {
     if(upErr){toast('Storage upload failed — '+upErr.message,'error');return;}
     filePath = storagePath;
   }
-  const {data:inserted,error} = await sb.from('drawings').insert({
+  const {data:inserted,error} = await sb.from('drawings').insert({project_id:currentProject.id,
     id:drawingId,
     drawing_no:id,title,discipline:document.getElementById('nd-disc').value,
     revision:document.getElementById('nd-rev').value,
@@ -3722,7 +3722,7 @@ async function doNewSub() {
   const ref = document.getElementById('ns-id').value;
   const title = document.getElementById('ns-title').value;
   if(!ref||!title){toast('Reference number and title are required','error');return;}
-  const {data:newSub,error} = await sb.from('submittals').insert({
+  const {data:newSub,error} = await sb.from('submittals').insert({project_id:currentProject.id,
     ref_no:ref,title,
     from_party:document.getElementById('ns-from').value,
     to_party:document.getElementById('ns-to').value,
@@ -3748,7 +3748,7 @@ async function doNewIR() {
   if(!ref||!elem){toast('Ref number and elements are required','error');return;}
   const scId = document.getElementById('ni-sc').value||null;
   const {data:sc} = scId?await sb.from('subcontractors').select('rep').eq('id',scId).single():{data:null};
-  const {data:newIR,error} = await sb.from('inspections').insert({
+  const {data:newIR,error} = await sb.from('inspections').insert({project_id:currentProject.id,
     ref_no:ref,revision:document.getElementById('ni-rev').value,
     plot:PROJECT.plot,location:document.getElementById('ni-loc').value,
     city:PROJECT.city,subcontractor_id:scId||null,
@@ -3774,7 +3774,7 @@ async function doNewNCR() {
   const title = document.getElementById('nn-title').value;
   if(!title){toast('Title is required','error');return;}
   console.log('[NCR] insert attempted, title:', title);
-  const {data:newNCR,error} = await sb.from('ncrs').insert({
+  const {data:newNCR,error} = await sb.from('ncrs').insert({project_id:currentProject.id,
     ref_no:'NCR-'+(Date.now()%10000).toString().padStart(3,'0'),
     title,location:document.getElementById('nn-loc').value,
     raised_by:currentProfile?.full_name||'Unknown',
@@ -3799,7 +3799,7 @@ async function doNewNCR() {
 async function doNewSubcontractor() {
   const name = document.getElementById('nsc-name').value;
   if(!name){toast('Company name is required','error');return;}
-  const {error} = await sb.from('subcontractors').insert({
+  const {error} = await sb.from('subcontractors').insert({project_id:currentProject.id,
     name,rep:document.getElementById('nsc-rep').value,
     discipline:document.getElementById('nsc-disc').value,
     trade:document.getElementById('nsc-trade').value
@@ -3927,7 +3927,7 @@ async function doReInspect(parentId) {
   const {data:parent} = await sb.from('inspections').select('*').eq('id',parentId).single();
   const ref = document.getElementById('ri-ref')?.value;
   if(!ref){toast('Ref number required','error');return;}
-  const {error} = await sb.from('inspections').insert({
+  const {error} = await sb.from('inspections').insert({project_id:currentProject.id,
     ...parent, id:undefined, created_at:undefined,
     ref_no:ref,
     parent_ir_id:parentId,
@@ -3979,7 +3979,7 @@ async function resubmitSub(parentId) {
 async function doResubmitList(parentId, nextRev) {
   const {data:parent} = await sb.from('submittals').select('*').eq('id',parentId).single();
   const changes = document.getElementById('rs-changes')?.value||'';
-  const {data:newSub,error} = await sb.from('submittals').insert({
+  const {data:newSub,error} = await sb.from('submittals').insert({project_id:currentProject.id,
     ref_no:parent.ref_no+'-R'+nextRev,
     title:parent.title,
     from_party:parent.from_party,
@@ -4059,7 +4059,7 @@ async function saveChecklist(irId, items) {
 
 // ─── SUBMITTAL REGISTER ───────────────────────────────────────────
 async function renderSubmittalRegister() {
-  const {data} = await sb.from('submittal_register').select('*').order('spec_ref',{ascending:true});
+  const {data} = await sb.from('submittal_register').select('*').eq('project_id',currentProject.id).order('spec_ref',{ascending:true});
   const rows = data||[];
   const {data:subs} = await sb.from('submittals').select('ref_no,title,status,outcome');
   const subsAll = subs||[];
@@ -4153,7 +4153,7 @@ function addRegisterItem() {
 async function doAddRegisterItem() {
   const title = document.getElementById('sri-title')?.value;
   if(!title){toast('Description is required','error');return;}
-  const {error} = await sb.from('submittal_register').insert({
+  const {error} = await sb.from('submittal_register').insert({project_id:currentProject.id,
     item_no: document.getElementById('sri-no')?.value||null,
     spec_ref: document.getElementById('sri-spec')?.value||null,
     title,
@@ -4220,7 +4220,7 @@ async function doImportRegister() {
   if(!registerImportData.length){toast('No data to import','error');return;}
   let ok=0,fail=0;
   for(const r of registerImportData) {
-    const {error} = await sb.from('submittal_register').insert({
+    const {error} = await sb.from('submittal_register').insert({project_id:currentProject.id,
       item_no:r.item_no||null, spec_ref:r.spec_ref||null,
       title:r.title||r.description, discipline:r.discipline||null,
       required_by:r.required_by||null, notes:r.notes||null,
@@ -4389,7 +4389,7 @@ async function postComment(recordType, recordId) {
 async function renderRFIs() {
   selectedRFIs = new Set();
   const today = new Date().toISOString().split('T')[0];
-  const {data} = await sb.from('rfis').select('*').order('created_at',{ascending:false});
+  const {data} = await sb.from('rfis').select('*').eq('project_id',currentProject.id).order('created_at',{ascending:false});
   const rows = data||[];
   const rfiOverdueFilter = navFilter==='overdue'; navFilter=null;
   const open = rows.filter(r=>r.status==='Open').length;
@@ -4520,7 +4520,7 @@ async function closeRFI(id) {
 // ─── TRANSMITTAL LOG ──────────────────────────────────────────────
 async function renderTransmittals() {
   selectedTransmittals = new Set();
-  const {data} = await sb.from('transmittals').select('*').order('created_at',{ascending:false});
+  const {data} = await sb.from('transmittals').select('*').eq('project_id',currentProject.id).order('created_at',{ascending:false});
   const rows = data||[];
   const total = rows.length;
   const acknowledged = rows.filter(r=>r.acknowledged_at).length;
@@ -4631,7 +4631,7 @@ async function acknowledgeTransmittal(id) {
 // ─── CORRESPONDENCE REGISTER ──────────────────────────────────────
 async function renderCorrespondence() {
   selectedCorrespondence = new Set();
-  const {data} = await sb.from('correspondence').select('*').order('created_at',{ascending:false});
+  const {data} = await sb.from('correspondence').select('*').eq('project_id',currentProject.id).order('created_at',{ascending:false});
   const rows = data||[];
   const today = new Date().toISOString().split('T')[0];
   const open = rows.filter(r=>r.status==='Open').length;
@@ -4789,7 +4789,7 @@ async function doNewCorrespondence() {
   const ref = document.getElementById('nc-ref')?.value;
   const subject = document.getElementById('nc-subject')?.value;
   if(!ref||!subject){toast('Ref and subject are required','error');return;}
-  const {data:newCorr,error} = await sb.from('correspondence').insert({
+  const {data:newCorr,error} = await sb.from('correspondence').insert({project_id:currentProject.id,
     ref_no:ref, type:document.getElementById('nc-type')?.value,
     subject, from_party:document.getElementById('nc-from')?.value,
     to_party:document.getElementById('nc-to')?.value,
@@ -4810,7 +4810,7 @@ async function doNewCorrespondence() {
 // ─── PUNCH LIST ───────────────────────────────────────────────────
 async function renderPunchList() {
   selectedPunch = new Set();
-  const {data} = await sb.from('punch_list').select('*').order('created_at',{ascending:false});
+  const {data} = await sb.from('punch_list').select('*').eq('project_id',currentProject.id).order('created_at',{ascending:false});
   const rows = data||[];
   const open = rows.filter(r=>r.status==='Open').length;
   const inProgress = rows.filter(r=>r.status==='In Progress').length;
@@ -4986,7 +4986,7 @@ async function openNewPunchItem() {
 async function doNewPunchItem() {
   const desc = document.getElementById('np-desc')?.value;
   if(!desc){toast('Description is required','error');return;}
-  const {data:newPunch,error} = await sb.from('punch_list').insert({
+  const {data:newPunch,error} = await sb.from('punch_list').insert({project_id:currentProject.id,
     description:desc,
     location:document.getElementById('np-loc')?.value||null,
     element:document.getElementById('np-elem')?.value||null,
@@ -5030,7 +5030,7 @@ async function createResubmission(parentId) {
 async function doResubmitDetail(parentId, revNo) {
   const {data:parent} = await sb.from('submittals').select('*').eq('id',parentId).single();
   const changes = document.getElementById('rs-changes')?.value||'';
-  const {error} = await sb.from('submittals').insert({
+  const {error} = await sb.from('submittals').insert({project_id:currentProject.id,
     ref_no: document.getElementById('rs-ref')?.value,
     revision_no: parseInt(revNo),
     title: parent.title,
@@ -5091,7 +5091,7 @@ async function doNewRFI() {
   const ref = document.getElementById('nr-id')?.value;
   const subj = document.getElementById('nr-subj')?.value;
   if(!ref||!subj){toast('Ref number and subject are required','error');return;}
-  const {data:newRFI,error} = await sb.from('rfis').insert({
+  const {data:newRFI,error} = await sb.from('rfis').insert({project_id:currentProject.id,
     ref_no:ref, subject:subj,
     drawing_ref:document.getElementById('nr-draw')?.value||null,
     raised_by:currentProfile?.full_name||currentUser?.email,
@@ -5160,7 +5160,7 @@ async function doNewTransmittal(drawCount) {
     const cb = document.getElementById('tdoc-'+i);
     if(cb?.checked) docs.push({no:cb.dataset.no,title:cb.dataset.title,rev:cb.dataset.rev,copies:1});
   }
-  const {data:newTrans,error} = await sb.from('transmittals').insert({
+  const {data:newTrans,error} = await sb.from('transmittals').insert({project_id:currentProject.id,
     ref_no:ref,
     from_party:document.getElementById('nt-from')?.value,
     to_party:document.getElementById('nt-to')?.value,
@@ -5489,7 +5489,7 @@ async function submitDrawingReview(drawingId) {
     const {data:drawing} = await sb.from('drawings').select('drawing_no,title,revision').eq('id',drawingId).single();
     if(drawing) {
       const trnRef = 'TRN-AUTO-'+Date.now().toString().slice(-6);
-      await sb.from('transmittals').insert({
+      await sb.from('transmittals').insert({project_id:currentProject.id,
         ref_no: trnRef,
         from_party: 'POE (Consultant)',
         to_party: 'MBC (Main Contractor)',
@@ -5745,7 +5745,7 @@ function fmtCompact(n) {
 
 async function renderBOQ() {
   const [{data:bills,error:billsErr},{data:items,error:itemsErr}] = await Promise.all([
-    sb.from('boq_bills').select('*').order('sort_order').order('created_at'),
+    sb.from('boq_bills').select('*').eq('project_id',currentProject.id).order('sort_order').order('created_at'),
     sb.from('boq_items').select('*').order('sort_order').order('created_at')
   ]);
   if(billsErr||itemsErr) {
@@ -6080,7 +6080,7 @@ async function doAddBill() {
   if(!billNo || !title) { toast('Bill No. and Title are required','error'); return; }
   const {data:existing} = await sb.from('boq_bills').select('sort_order').order('sort_order',{ascending:false}).limit(1);
   const sortOrder = ((existing?.[0]?.sort_order)??-1) + 1;
-  const {error} = await sb.from('boq_bills').insert({bill_no:billNo, title, sort_order:sortOrder});
+  const {error} = await sb.from('boq_bills').insert({project_id:currentProject.id,bill_no:billNo, title, sort_order:sortOrder});
   if(error) { toast('Error adding bill: '+error.message,'error'); return; }
   await savePendingBOQEdits();
   toast(`Bill ${billNo} added`,'success'); closeModal(); render();
@@ -6089,7 +6089,7 @@ async function doAddBill() {
 // ─── PAYMENT CERTIFICATES ─────────────────────────────────────────
 async function renderIPC() {
   const [{data:certsRaw},{data:allItems}] = await Promise.all([
-    sb.from('payment_certificates').select('*').order('cert_no'),
+    sb.from('payment_certificates').select('*').eq('project_id',currentProject.id).order('cert_no'),
     sb.from('payment_certificate_items').select('cert_id,contractor_amount,consultant_amount'),
   ]);
   const certs = certsRaw||[];
@@ -6189,7 +6189,7 @@ async function doNewIPC(refNo, certNo, prevPaid) {
   const mobAmt = +(document.getElementById('ipc-new-mob')?.value ?? 0);
   const vatPct = +(document.getElementById('ipc-new-vat')?.value ?? 5);
 
-  const {data:cert, error:certErr} = await sb.from('payment_certificates').insert({
+  const {data:cert, error:certErr} = await sb.from('payment_certificates').insert({project_id:currentProject.id,
     cert_no:certNo, ref_no:refNo, status:'Draft', previously_paid:prevPaid,
     retention_pct:retPct, advance_recovery_pct:advPct, mobilisation_advance:mobAmt, vat_pct:vatPct
   }).select('id').single();
@@ -6948,7 +6948,7 @@ async function renderFinance() {
 // ─── UNIT SETUP ──────────────────────────────────────────────────────────────
 
 async function renderUnitSetup() {
-  const {data:units, error} = await sb.from('units').select('*').order('floor').order('unit_no');
+  const {data:units, error} = await sb.from('units').select('*').eq('project_id',currentProject.id).order('floor').order('unit_no');
   if(error) {
     document.getElementById('content').innerHTML =
       '<div class="empty-state" style="padding:48px;text-align:center;color:var(--red)">Failed to load units: ' + esc(error.message) + '</div>';
@@ -7017,7 +7017,7 @@ async function saveNewUnit() {
   const area_sqft    = parseFloat(document.getElementById('uf-sqft')?.value);
   const listed_price = parseFloat(document.getElementById('uf-price')?.value);
   if(!unit_no || !floor || !area_sqft || !listed_price) { toast('Fill in all fields','error'); return; }
-  const {error} = await sb.from('units').insert({unit_no, floor, unit_type, area_sqft, listed_price});
+  const {error} = await sb.from('units').insert({project_id:currentProject.id,unit_no, floor, unit_type, area_sqft, listed_price});
   if(error) { toast('Error: ' + error.message,'error'); return; }
   toast('Unit added','success');
   closeModal();
@@ -7656,6 +7656,7 @@ let crmSearchTimer = null;
 
 async function renderCRM() {
   let q = sb.from("crm_leads").select("*", { count: "exact" });
+  q = q.eq("project_id", currentProject.id);
   if (crmSearch) { const s = crmSearch.replace(/,/g, ""); q = q.or(`name.ilike.%${s}%,email.ilike.%${s}%,phone.ilike.%${s}%`); }
   if (crmStage)    q = q.eq("stage", crmStage);
   if (crmSource)   q = q.eq("source", crmSource);
@@ -8121,7 +8122,7 @@ async function doAddLead() {
   const source = document.getElementById('lead-source').value;
   if(!name) { toast('Name is required','error'); return; }
   if(!email && !phone) { toast('Add at least an email or phone so the lead can be contacted','warning'); }
-  const {error} = await sb.from('crm_leads').insert({name,email:email||null,phone:phone||null,source});
+  const {error} = await sb.from('crm_leads').insert({project_id:currentProject.id,name,email:email||null,phone:phone||null,source});
   if(error) { toast('Error: '+error.message,'error'); return; }
   toast('Lead added','success'); closeModal(); renderCRM();
 }
