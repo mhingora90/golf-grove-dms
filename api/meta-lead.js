@@ -32,6 +32,7 @@ export default async function handler(request) {
     if (data.availability) fields.availability = data.availability;
 
     const lead = {
+      project_id: '00000000-0000-0000-0000-000000000002', // 241 Waterside
       name: fields.full_name || fields.first_name || fields.email || 'Unknown',
       email: fields.email || null,
       phone: fields.phone_number || fields.phone || null,
