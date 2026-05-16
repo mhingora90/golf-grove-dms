@@ -677,6 +677,81 @@ let currentProfile = null;
 let currentProject = null;  // { id, name } — null means project grid is shown
 let userProjects    = [];    // [{ id, name }, …] — populated after login
 
+function openNewProject() {
+  const body = `<label style="font-size:11px;font-weight:600;color:var(--text2);display:block;margin-bottom:6px">Project name</label><input id="new-proj-name" class="reg-search" placeholder="e.g. Palm Grove Tower" style="width:100%">`;
+  const footer = `<button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="doNewProject()">Create</button>`;
+  openModal('New Project', body, footer);
+  setTimeout(() => document.getElementById('new-proj-name')?.focus(), 50);
+}
+
+async function doNewProject() {
+  const nameEl = document.getElementById('new-proj-name');
+  const name = nameEl?.value.trim();
+  if (!name) { toast('Enter a project name', 'warning'); return; }
+
+  const { data: proj, error } = await sb.from('projects')
+    .insert({ name, created_by: currentUser.id })
+    .select('id, name')
+    .single();
+  if (error) { toast('Error: ' + error.message, 'error'); return; }
+
+  await sb.from('project_users').insert({ project_id: proj.id, user_id: currentUser.id });
+  userProjects.push({ id: proj.id, name: proj.name });
+  closeModal();
+  toast('Project created', 'success');
+  renderProjectGrid();
+}
+
+async function openManageUsers(projectId, projectName) {
+  const [{ data: allProfiles }, { data: assigned }] = await Promise.all([
+    sb.from('profiles').select('id, full_name, role, email').order('full_name'),
+    sb.from('project_users').select('user_id').eq('project_id', projectId),
+  ]);
+
+  const assignedIds = new Set((assigned || []).map(r => r.user_id));
+
+  let rows = '';
+  (allProfiles || []).forEach(p => {
+    const checked = assignedIds.has(p.id) ? 'checked' : '';
+    const displayName = (p.full_name || p.email || p.id).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const roleText = (p.role || '').replace(/</g,'&lt;');
+    rows += `<label style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:0.5px solid var(--border);cursor:pointer;font-size:13px"><input type="checkbox" data-uid="${p.id}" ${checked} style="accent-color:var(--sand)"><span style="flex:1">${displayName}</span><span style="font-size:10px;color:var(--text3)">${roleText}</span></label>`;
+  });
+
+  if (!allProfiles?.length) {
+    rows = `<p style="color:var(--text2)">No profiles found.</p>`;
+  }
+
+  const body = `<div id="manage-users-list" style="max-height:60vh;overflow-y:auto">${rows}</div>`;
+  const footer = `<button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="doManageUsers('${projectId}')">Save</button>`;
+  openModal('Users \u2014 ' + projectName, body, footer);
+}
+
+async function doManageUsers(projectId) {
+  const checkboxes = document.querySelectorAll('#modal-body input[type=checkbox][data-uid]');
+  const nowChecked  = new Set([...checkboxes].filter(c => c.checked).map(c => c.dataset.uid));
+
+  const { data: existing } = await sb.from('project_users').select('user_id').eq('project_id', projectId);
+  const wasAssigned = new Set((existing || []).map(r => r.user_id));
+
+  const toAdd    = [...nowChecked].filter(id => !wasAssigned.has(id));
+  const toRemove = [...wasAssigned].filter(id => !nowChecked.has(id));
+
+  const ops = [];
+  if (toAdd.length)    ops.push(sb.from('project_users').insert(toAdd.map(uid => ({ project_id: projectId, user_id: uid }))));
+  if (toRemove.length) ops.push(sb.from('project_users').delete().eq('project_id', projectId).in('user_id', toRemove));
+
+  if (ops.length) {
+    const results = await Promise.all(ops);
+    const err = results.find(r => r.error);
+    if (err) { toast('Error: ' + err.error.message, 'error'); return; }
+  }
+
+  closeModal();
+  toast('Users updated', 'success');
+  renderProjectGrid();
+}
+
 function setCurrentProject(project) {
   currentProject = project;
   document.getElementById('project-screen').style.display = 'none';
