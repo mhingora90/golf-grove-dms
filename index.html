@@ -202,17 +202,27 @@ textarea.form-control{resize:vertical;min-height:70px}
 .act-done-btn{margin-left:auto}
 .act-done-btn:hover,.act-reply-btn:hover{background:var(--bg2);color:var(--charcoal)}
 .act-item.act-threaded{margin-left:20px;border-left-width:2px;opacity:.95}
+.act-quick-btn{padding:4px 10px;border-radius:6px;border:0.5px solid var(--border2);background:var(--bg3);font-size:11px;font-family:inherit;cursor:pointer;color:var(--text2);transition:.15s;white-space:nowrap}
+.act-quick-btn:hover{background:var(--bg2);color:var(--charcoal);border-color:var(--sand-light)}
 .act-reply-banner{display:none;padding:6px 10px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:6px;font-size:11px;color:var(--text2);margin-bottom:6px;align-items:center;gap:8px}
 .act-reply-banner.open{display:flex}
 .act-section-hdr{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;padding:6px 0 2px;border-top:0.5px solid var(--border);margin-top:2px}
 .act-section-hdr:first-child{border-top:none;margin-top:0;padding-top:2px}
-.act-filter-bar{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
-.act-filter-btn{padding:3px 11px;border-radius:12px;font-size:11px;border:0.5px solid var(--border2);background:none;cursor:pointer;color:var(--text2);font-family:inherit;transition:.15s}
-.act-filter-btn.active{background:var(--charcoal);color:#fff;border-color:var(--charcoal)}
+.act-filter-bar{display:flex;background:var(--bg3);border-radius:8px;padding:3px;gap:2px;margin-bottom:10px}
+.act-filter-btn{padding:4px 12px;border-radius:6px;font-size:11px;border:none;background:none;cursor:pointer;color:var(--text3);font-family:inherit;transition:.15s;font-weight:500;white-space:nowrap}
+.act-filter-btn:hover{color:var(--charcoal)}
+.act-filter-btn.active{background:var(--bg2);color:var(--charcoal);font-weight:600;box-shadow:0 1px 3px rgba(44,42,36,.1)}
 .act-input-row{display:grid;grid-template-columns:140px 180px 1fr auto;gap:8px;align-items:end}
 .act-dt-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-.rating-sel{padding:3px 8px;border-radius:12px;border:0.5px solid var(--border2);font-size:12px;font-family:inherit;background:var(--bg3);cursor:pointer;color:var(--charcoal)}
-.rating-hot{color:#ef4444}.rating-warm{color:#f59e0b}.rating-cold{color:#3b82f6}
+.lead-controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.rating-group{display:flex;border:0.5px solid var(--border2);border-radius:6px;overflow:hidden}
+.rating-btn{flex:1;background:none;border:none;border-right:0.5px solid var(--border2);font-size:11px;font-family:inherit;cursor:pointer;color:var(--text3);padding:7px 4px;transition:.15s;white-space:nowrap;line-height:1}
+.rating-btn:last-child{border-right:none}
+.rating-btn:hover{background:var(--bg3);color:var(--charcoal)}
+.rating-btn.active[data-val=hot]{background:#fef2f2;color:#ef4444;font-weight:600}
+.rating-btn.active[data-val=warm]{background:#fffbeb;color:#d97706;font-weight:600}
+.rating-btn.active[data-val=cold]{background:#eff6ff;color:#3b82f6;font-weight:600}
+.rating-hot{color:#ef4444}.rating-warm{color:#d97706}.rating-cold{color:#3b82f6}
 .detail-section{border-top:0.5px solid var(--border);padding-top:14px}
 
 /* UPLOAD ZONE */
@@ -8157,6 +8167,21 @@ function cancelActReply() {
   document.getElementById('act-reply-banner')?.classList.remove('open');
 }
 
+function quickSchedule(method) {
+  const sel = document.getElementById('act-method');
+  if(sel) sel.value = 'task';
+  onActMethodChange();
+  const body = document.getElementById('act-body');
+  if(body) { body.placeholder = `Notes for scheduled ${ACT_METHODS[method]?.label||method}…`; body.focus(); }
+  const dt = document.getElementById('act-contacted-at');
+  if(dt) dt.value = _tomorrowLocal();
+  // Pre-fill body hint
+  const hint = `Follow-up ${ACT_METHODS[method]?.label||method}`;
+  if(body && !body.value) body.value = hint;
+  // Select all so user can just type over it
+  body?.select();
+}
+
 function _renderActItem(a, leadId, now, isThreaded=false) {
   const m = ACT_METHODS[a.method]||ACT_METHODS.note;
   const isTask = a.method==='task';
@@ -8210,8 +8235,10 @@ async function viewLead(id) {
   if(error||!lead) { toast('Lead not found','error'); return; }
 
   const stageOpts = CRM_STAGES.map(s=>`<option value="${esc(s.key)}"${lead.stage===s.key?'selected':''}>${esc(s.label)}</option>`).join('');
-  const ratingOpts = `<option value="">— No rating</option>`+Object.entries(RATING_META).map(([k,v])=>`<option value="${k}"${lead.rating===k?'selected':''}>${v.label}</option>`).join('');
   const ratingBadge = lead.rating ? `<span class="${RATING_META[lead.rating].cls}" style="margin-left:6px;font-size:12px">${RATING_META[lead.rating].label}</span>` : '';
+  const ratingBtns = Object.entries(RATING_META).map(([k,v])=>
+    `<button class="rating-btn${lead.rating===k?' active':''}" data-val="${k}" onclick="setLeadRating('${lead.id}','${k}')">${v.label}</button>`
+  ).join('');
 
   const feedHtml = _buildFeedHtml(acts, id);
 
@@ -8235,29 +8262,32 @@ async function viewLead(id) {
       <div class="detail-item"><div class="detail-label">Meta Lead ID</div><div class="detail-value mono">${esc(lead.meta_lead_id||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Created</div><div class="detail-value">${new Date(lead.created_at).toLocaleString('en-GB')}</div></div>
     </div>
-    <div class="frow" style="margin-top:14px;align-items:flex-end">
-      <div class="form-group"><label class="form-label-dark">Stage</label>
+    <div class="lead-controls-grid">
+      <div class="form-group" style="margin-bottom:0"><label class="form-label-dark">Stage</label>
         <select class="form-control" id="lead-stage" onchange="updateLeadStage('${lead.id}')">${stageOpts}</select>
       </div>
-      <div class="form-group"><label class="form-label-dark">Rating</label>
-        <select class="rating-sel" id="lead-rating" onchange="updateLeadRating('${lead.id}')">${ratingOpts}</select>
+      <div class="form-group" style="margin-bottom:0"><label class="form-label-dark">Assigned To</label>
+        <input type="text" class="form-control" id="lead-assigned" value="${esc(lead.assigned_to||'')}" placeholder="Team member…" onchange="updateLeadAssigned('${lead.id}')"/>
       </div>
-      <div class="form-group"><label class="form-label-dark">Assigned To</label>
-        <input type="text" class="form-control" id="lead-assigned" value="${esc(lead.assigned_to||'')}" placeholder="Team member..." onchange="updateLeadAssigned('${lead.id}')"/>
+      <div class="form-group" style="margin-bottom:0;grid-column:1/-1"><label class="form-label-dark">Rating</label>
+        <div class="rating-group">${ratingBtns}</div>
       </div>
     </div>
     <div style="margin-top:16px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <span style="font-size:11px;font-weight:600;color:var(--charcoal);text-transform:uppercase;letter-spacing:.05em">Activity</span>
-        <div class="act-filter-bar" style="margin-bottom:0">
-          <button class="act-filter-btn active" data-filter="all" onclick="filterActFeed('all')">All</button>
-          <button class="act-filter-btn" data-filter="tasks" onclick="filterActFeed('tasks')">Tasks</button>
-          <button class="act-filter-btn" data-filter="calls" onclick="filterActFeed('calls')">Calls</button>
-          <button class="act-filter-btn" data-filter="emails" onclick="filterActFeed('emails')">Emails</button>
-          <button class="act-filter-btn" data-filter="other" onclick="filterActFeed('other')">Other</button>
-        </div>
+      <div style="font-size:11px;font-weight:600;color:var(--charcoal);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Activity</div>
+      <div class="act-filter-bar">
+        <button class="act-filter-btn active" data-filter="all" onclick="filterActFeed('all')">All</button>
+        <button class="act-filter-btn" data-filter="tasks" onclick="filterActFeed('tasks')">Tasks</button>
+        <button class="act-filter-btn" data-filter="calls" onclick="filterActFeed('calls')">Calls</button>
+        <button class="act-filter-btn" data-filter="emails" onclick="filterActFeed('emails')">Emails</button>
+        <button class="act-filter-btn" data-filter="other" onclick="filterActFeed('other')">Other</button>
       </div>
       <div class="act-feed" id="act-feed">${feedHtml}</div>
+      <div style="display:flex;gap:6px;margin-bottom:8px">
+        <button class="act-quick-btn" onclick="quickSchedule('call')">📞 Schedule Call</button>
+        <button class="act-quick-btn" onclick="quickSchedule('whatsapp')">💬 Schedule WhatsApp</button>
+        <button class="act-quick-btn" onclick="quickSchedule('meeting')">🤝 Schedule Meeting</button>
+      </div>
       <div class="act-reply-banner" id="act-reply-banner">
         <span style="flex-shrink:0">↩ Replying to:</span>
         <span id="act-reply-preview" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-style:italic"></span>
@@ -8282,11 +8312,12 @@ async function updateLeadStage(id) {
   toast('Lead moved to '+CRM_STAGES.find(s=>s.key===stage)?.label,'success'); closeModal(); renderCRM();
 }
 
-async function updateLeadRating(id) {
-  const rating = document.getElementById('lead-rating')?.value||null;
-  const {error} = await sb.from('crm_leads').update({rating:rating||null,updated_at:new Date().toISOString()}).eq('id',id);
+async function setLeadRating(id, value) {
+  const already = document.querySelector(`.rating-btn.active[data-val="${value}"]`);
+  const newRating = already ? null : value;
+  const {error} = await sb.from('crm_leads').update({rating:newRating,updated_at:new Date().toISOString()}).eq('id',id);
   if(error) { toast('Error: '+error.message,'error'); return; }
-  toast('Rating updated','success');
+  document.querySelectorAll('.rating-btn').forEach(b=>b.classList.toggle('active', !already && b.dataset.val===value));
 }
 
 async function updateLeadAssigned(id) {
