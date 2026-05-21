@@ -6918,20 +6918,30 @@ document.addEventListener('click', function(e) {
 async function renderFinance() {
   document.getElementById('content').innerHTML = `<div class="loading"><div class="spinner"></div>Loading financial data…</div>`;
 
-  const [billsRes, certsRes] = await Promise.all([
-    sb.from('boq_bills').select('id').eq('project_id', currentProject.id),
+  const [contractsRes, billsRes, certsRes] = await Promise.all([
+    sb.from('contracts').select('*').eq('project_id', currentProject.id).order('sort_order').order('created_at'),
+    sb.from('boq_bills').select('id,contract_id').eq('project_id', currentProject.id),
     sb.from('payment_certificates').select('*').eq('project_id', currentProject.id).order('cert_no'),
   ]);
+  const contracts = contractsRes.data||[];
   const _billIds = (billsRes.data||[]).map(b=>b.id);
   const _certIds = (certsRes.data||[]).map(c=>c.id);
   const [boqItemsRes, allItemsRes] = await Promise.all([
-    _billIds.length ? sb.from('boq_items').select('total').in('bill_id', _billIds) : Promise.resolve({data:[]}),
+    _billIds.length ? sb.from('boq_items').select('bill_id,total').in('bill_id', _billIds) : Promise.resolve({data:[]}),
     _certIds.length ? sb.from('payment_certificate_items').select('cert_id,contractor_amount,consultant_amount').in('cert_id', _certIds) : Promise.resolve({data:[]}),
   ]);
   const boqItems = boqItemsRes.data;
   const certs = certsRes.data;
   const allItems = allItemsRes.data;
 
+  // Bill → contract lookup
+  const billContractMap = {}; for(const b of billsRes.data||[]) billContractMap[b.id]=b.contract_id;
+  // BOQ total per contract (from items)
+  const boqTotalByContract = {};
+  for(const i of boqItems||[]) {
+    const cid = billContractMap[i.bill_id]||'__none__';
+    boqTotalByContract[cid] = (boqTotalByContract[cid]||0) + (+i.total||0);
+  }
   const contractSum = (boqItems||[]).reduce((s,i)=>s+(+i.total||0),0);
   const doneCerts   = (certs||[]).filter(c=>c.status==='Certified'||c.status==='Paid');
   const paidCerts   = (certs||[]).filter(c=>c.status==='Paid');
@@ -6973,12 +6983,39 @@ async function renderFinance() {
   const certifiedOnly = (certs||[]).filter(c=>c.status==='Certified');
   const outstanding = certifiedOnly.reduce((s,c)=>s+balanceOfCert(c),0);
 
+  // ── Per-contract stats helper ───────────────────────────────────
+  function contractStats(cid) {
+    const cs = cid
+      ? (certs||[]).filter(c=>c.contract_id===cid)
+      : (certs||[]);
+    const done = cs.filter(c=>c.status==='Certified'||c.status==='Paid');
+    const certOnly = cs.filter(c=>c.status==='Certified');
+    let cert=0,ret=0,adv=0,netP=0,paid=0;
+    for(const c of done) {
+      const gross = certAmt[c.id]?.certified||0;
+      cert += gross;
+      ret  += gross*(+c.retention_pct||0)/100;
+      adv  += gross*(+c.advance_recovery_pct||0)/100;
+      netP += netOfCert(c);
+      paid += +c.amount_paid||0;
+    }
+    const mob = cs.reduce((s,c)=>Math.max(s,+c.mobilisation_advance||0),0);
+    const outstanding = certOnly.reduce((s,c)=>s+balanceOfCert(c),0);
+    return {cert,ret,adv,netP,paid,mob,outstanding};
+  }
+
   // ── Summary strip ───────────────────────────────────────────────
+  // Use sum of contracts.contract_value if contracts exist, else BOQ items total
+  const totalContractValue = contracts.length
+    ? contracts.reduce((s,c)=>s+(+c.contract_value||0),0)
+    : contractSum;
+  const pctCompleteTotal = totalContractValue>0 ? (totalCertified/totalContractValue*100) : pctComplete;
+
   const summaryHTML = `
   <div class="module-bar" style="flex-wrap:wrap;gap:10px;margin-bottom:20px">
     <div class="module-stat" style="flex:1;min-width:140px">
-      <div class="module-stat-val" style="color:var(--sand)" title="${fmtAED(contractSum)}">${fmtCompact(contractSum)}</div>
-      <div class="module-stat-label">Contract Sum</div>
+      <div class="module-stat-val" style="color:var(--sand)" title="${fmtAED(totalContractValue)}">${fmtCompact(totalContractValue)}</div>
+      <div class="module-stat-label">${contracts.length?'Total Contract Value':'Contract Sum (BOQ)'}</div>
     </div>
     <div class="module-stat" style="flex:1;min-width:140px">
       <div class="module-stat-val" title="${fmtAED(totalCertified)}">${fmtCompact(totalCertified)}</div>
@@ -6997,22 +7034,65 @@ async function renderFinance() {
       <div class="module-stat-label">Retention Held</div>
     </div>
     <div class="module-stat" style="flex:1;min-width:140px">
-      <div class="module-stat-val">${pctComplete.toFixed(1)}%</div>
+      <div class="module-stat-val">${pctCompleteTotal.toFixed(1)}%</div>
       <div class="module-stat-label">% Certified vs Contract</div>
     </div>
   </div>
   <div class="card" style="padding:14px 18px;margin-bottom:20px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <span style="font-size:11px;font-weight:500;color:var(--charcoal)">Contract Progress</span>
-      <span style="font-size:11px;color:var(--text2)">${fmtAED(totalCertified)} of ${fmtAED(contractSum)}</span>
+      <span style="font-size:11px;font-weight:500;color:var(--charcoal)">Overall Project Progress</span>
+      <span style="font-size:11px;color:var(--text2)">${fmtAED(totalCertified)} of ${fmtAED(totalContractValue)}</span>
     </div>
     <div style="height:10px;background:var(--bg3);border-radius:5px;overflow:hidden">
-      <div style="height:100%;width:${Math.min(pctComplete,100).toFixed(1)}%;background:var(--green);border-radius:5px;transition:width .4s"></div>
+      <div style="height:100%;width:${Math.min(pctCompleteTotal,100).toFixed(1)}%;background:var(--green);border-radius:5px;transition:width .4s"></div>
     </div>
     <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--text3)">
-      <span>0</span><span>${fmtAED(contractSum)} Contract Sum</span>
+      <span>0</span><span>${fmtAED(totalContractValue)}</span>
     </div>
   </div>`;
+
+  // ── Per-contract breakdown (only when contracts exist) ──────────
+  const contractBreakdownHTML = contracts.length < 1 ? '' : (()=>{
+    const TYPE_LABEL = {main:'Main Contract',enabling_works:'Enabling Works',specialist:'Specialist',other:'Other'};
+    const cards = contracts.map(c=>{
+      const s = contractStats(c.id);
+      const awarded = +c.contract_value||0;
+      const boqTotal = boqTotalByContract[c.id]||0;
+      const pct = awarded>0 ? Math.min(s.cert/awarded*100,100) : 0;
+      const certCount = (certs||[]).filter(x=>x.contract_id===c.id).length;
+      return `
+      <div class="card" style="padding:16px 18px;flex:1;min-width:260px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--charcoal)">${esc(c.name)}</div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px">${c.contractor?esc(c.contractor):'—'}</div>
+          </div>
+          <div style="font-size:10px;color:var(--text3);background:var(--bg3);padding:3px 8px;border-radius:4px;white-space:nowrap">${TYPE_LABEL[c.contract_type]||c.contract_type||'Contract'}</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;margin-bottom:12px">
+          <div><div style="font-size:10px;color:var(--text3)">Awarded Value</div><div style="font-size:12px;font-weight:600;color:var(--sand)">${awarded?fmtAED(awarded):'—'}</div></div>
+          <div><div style="font-size:10px;color:var(--text3)">BOQ Total</div><div style="font-size:12px;color:var(--charcoal)">${boqTotal?fmtAED(boqTotal):'—'}</div></div>
+          <div><div style="font-size:10px;color:var(--text3)">Gross Certified</div><div style="font-size:12px;font-weight:600;color:var(--charcoal)">${s.cert?fmtAED(s.cert):'—'}</div></div>
+          <div><div style="font-size:10px;color:var(--text3)">Amount Paid</div><div style="font-size:12px;color:var(--green)">${(s.paid+s.mob)?fmtAED(s.paid+s.mob):'—'}</div></div>
+          <div><div style="font-size:10px;color:var(--text3)">Retention Held</div><div style="font-size:12px;color:var(--charcoal)">${s.ret?fmtAED(s.ret):'—'}</div></div>
+          <div><div style="font-size:10px;color:var(--text3)">Outstanding</div><div style="font-size:12px;${s.outstanding>0?'color:var(--amber,#C4863A);font-weight:600':'color:var(--text3)'}">${s.outstanding>0?fmtAED(s.outstanding):'—'}</div></div>
+        </div>
+        ${awarded>0?`
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:4px">
+          <span>${pct.toFixed(1)}% certified</span><span>${certCount} IPC${certCount!==1?'s':''}</span>
+        </div>
+        <div style="height:6px;background:var(--bg3);border-radius:3px;overflow:hidden">
+          <div style="height:100%;width:${pct.toFixed(1)}%;background:var(--green);border-radius:3px"></div>
+        </div>`:''}
+        ${s.mob>0?`<div style="margin-top:10px;padding-top:10px;border-top:0.5px solid var(--border);font-size:10px;color:var(--text3)">Mob. Advance: <b style="color:var(--charcoal)">${fmtAED(s.mob)}</b> · Recovered: <b style="color:var(--green)">${fmtAED(s.adv)}</b> (${s.mob>0?(s.adv/s.mob*100).toFixed(0):0}%)</div>`:''}
+        ${c.award_date?`<div style="margin-top:6px;font-size:10px;color:var(--text3)">Awarded ${new Date(c.award_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}</div>`:''}
+      </div>`;
+    }).join('');
+    return `<div style="margin-bottom:20px">
+      <div style="font-size:12px;font-weight:500;color:var(--charcoal);margin-bottom:10px">Contract Breakdown</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">${cards}</div>
+    </div>`;
+  })();
 
   // ── Monthly bar chart ───────────────────────────────────────────
   const monthMap = {}; // 'YYYY-MM' → {claimed, certified, paid}
@@ -7258,7 +7338,7 @@ async function renderFinance() {
     </table></div>
   </div>` : `<div class="empty-state" style="padding:48px;text-align:center;color:var(--text3);font-size:12px">No certified or paid certificates yet.</div>`;
 
-  document.getElementById('content').innerHTML = summaryHTML + barChartHTML + sCurveHTML + retAdvHTML + varianceHTML + ipcTableHTML;
+  document.getElementById('content').innerHTML = summaryHTML + contractBreakdownHTML + barChartHTML + sCurveHTML + retAdvHTML + varianceHTML + ipcTableHTML;
 }
 
 // ─── UNIT SETUP ──────────────────────────────────────────────────────────────
