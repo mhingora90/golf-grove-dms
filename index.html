@@ -5807,7 +5807,8 @@ function fmtCompact(n) {
 }
 
 async function renderBOQ() {
-  const [{data:bills,error:billsErr},{data:items,error:itemsErr}] = await Promise.all([
+  const [{data:contractsRaw},{data:bills,error:billsErr},{data:items,error:itemsErr}] = await Promise.all([
+    sb.from('contracts').select('*').eq('project_id',currentProject.id).order('sort_order').order('created_at'),
     sb.from('boq_bills').select('*').eq('project_id',currentProject.id).order('sort_order').order('created_at'),
     sb.from('boq_items').select('*').order('sort_order').order('created_at')
   ]);
@@ -5815,10 +5816,43 @@ async function renderBOQ() {
     document.getElementById('content').innerHTML = `<div class="empty-state" style="padding:48px;text-align:center;color:var(--red)">Failed to load BOQ: ${(billsErr||itemsErr).message}</div>`;
     return;
   }
-  const billList = (bills||[]).sort((a,b)=>(+a.bill_no||0)-(+b.bill_no||0)||a.bill_no.localeCompare(b.bill_no));
-  const itemList = items||[];
+  const contractList = contractsRaw||[];
+  const allBills = bills||[];
+  const allItems = items||[];
+
+  // Auto-select first contract if needed
+  if(!window._selectedContractId || !contractList.find(c=>c.id===window._selectedContractId)) {
+    window._selectedContractId = contractList[0]?.id || null;
+  }
+
+  const selectedContract = contractList.find(c=>c.id===window._selectedContractId) || null;
+
+  // Per-contract totals for tabs
+  const contractTotals = {};
+  contractList.forEach(c => {
+    const cBillIds = new Set(allBills.filter(b=>b.contract_id===c.id).map(b=>b.id));
+    contractTotals[c.id] = allItems.filter(i=>cBillIds.has(i.bill_id)).reduce((s,i)=>s+(+i.total||0),0);
+  });
+
+  // Bills + items for selected contract
+  const billList = allBills
+    .filter(b => window._selectedContractId ? b.contract_id===window._selectedContractId : !b.contract_id)
+    .sort((a,b)=>(+a.bill_no||0)-(+b.bill_no||0)||a.bill_no.localeCompare(b.bill_no));
+  const billIds = new Set(billList.map(b=>b.id));
+  const itemList = allItems.filter(i=>billIds.has(i.bill_id));
   const grandTotal = itemList.reduce((s,i)=>s+(+i.total||0),0);
   const editMode = window._boqEditMode || false;
+
+  const CONTRACT_TYPE_LABELS = {main:'Main Contract',enabling_works:'Enabling Works',specialist:'Specialist',other:'Other'};
+
+  // Contract tabs
+  const contractTabsHTML = `<div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap">
+    ${contractList.map(c=>`
+      <button onclick="selectBOQContract('${c.id}')" style="padding:5px 14px;border-radius:6px;border:0.5px solid ${c.id===window._selectedContractId?'var(--sand)':'var(--border2)'};background:${c.id===window._selectedContractId?'var(--sand)':'var(--bg3)'};color:${c.id===window._selectedContractId?'#fff':'var(--charcoal)'};font-size:12px;font-family:inherit;cursor:pointer;font-weight:${c.id===window._selectedContractId?'600':'400'}">
+        ${esc(c.name)}<span style="font-size:10px;opacity:.75;margin-left:5px">${fmtAED(contractTotals[c.id]||0)}</span>
+      </button>`).join('')}
+    ${can('manageRegister')?`<button onclick="openAddContract()" style="padding:5px 12px;border-radius:6px;border:0.5px dashed var(--border2);background:none;font-size:12px;font-family:inherit;cursor:pointer;color:var(--text2)">+ Contract</button>`:''}
+  </div>`;
 
   const billBreakdown = billList.map(b => {
     const bt = itemList.filter(i=>i.bill_id===b.id).reduce((s,i)=>s+(+i.total||0),0);
@@ -5844,7 +5878,7 @@ async function renderBOQ() {
           <td style="text-align:right;width:70px">${(+it.qty).toLocaleString()}</td>
           <td style="width:60px;color:var(--text2)">${esc(it.unit)}</td>
           <td style="text-align:right;width:90px">${fmtAED(it.rate)}</td>
-          <td style="text-align:right;width:110px;font-weight:500">${fmtAED(it.total)}</td>
+          <td style="text-align:right;width:110px;font-weight:500">${it.total>0?fmtAED(it.total):'<span style="color:var(--text3);font-size:10px">Rate only</span>'}</td>
         </tr>`;
       }
       return `<tr data-id="${it.id}" data-bill-id="${b.id}">
@@ -5861,14 +5895,21 @@ async function renderBOQ() {
     return `
     <tr class="boq-bill-header" data-bill-id="${b.id}"><td colspan="${editMode?6:5}" style="padding:8px 14px">${esc(b.bill_no)}. ${esc(b.title)}</td><td style="text-align:right;padding:8px 14px">${fmtAED(billTotal)}</td></tr>
     ${itemsHTML}${addBtn}`;
-  }).join('') : `<tr><td colspan="6" class="empty-state">No BOQ loaded yet. Use Import Excel to load the Bill of Quantities.</td></tr>`;
+  }).join('') : `<tr><td colspan="6" class="empty-state">${contractList.length?'No bills in this contract yet. Use Import Excel or Add Bill.':'No contracts yet. Click + Contract to create one.'}</td></tr>`;
 
   document.getElementById('content').innerHTML = `
+  ${contractTabsHTML}
+  ${selectedContract ? `<div style="font-size:11px;color:var(--text2);margin-bottom:12px;padding:8px 12px;background:var(--bg3);border-radius:6px;display:flex;gap:16px;flex-wrap:wrap">
+    <span><strong>Contractor:</strong> ${esc(selectedContract.contractor||'—')}</span>
+    <span><strong>Type:</strong> ${CONTRACT_TYPE_LABELS[selectedContract.contract_type]||selectedContract.contract_type}</span>
+    ${selectedContract.award_date?`<span><strong>Awarded:</strong> ${new Date(selectedContract.award_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}</span>`:''}
+    <span><strong>Contract Value:</strong> ${fmtAED(selectedContract.contract_value)}</span>
+  </div>` : ''}
   <div class="fbar" style="margin-bottom:14px">
-    ${can('manageRegister') ? '<button class="btn btn-primary" onclick="openImportBOQ()">Import Excel</button>' : ''}
+    ${can('manageRegister') && window._selectedContractId ? '<button class="btn btn-primary" onclick="openImportBOQ()">Import Excel</button>' : ''}
     ${can('manageRegister') && billList.length ? `<button class="btn ${editMode?'btn-success':''}" onclick="toggleBOQEdit()" style="margin-left:6px">${editMode?'Save Changes':'Edit'}</button>` : ''}
     ${editMode ? '<button class="btn" onclick="openAddBill()" style="margin-left:6px">+ Add Bill</button>' : ''}
-    ${can('manageRegister') && billList.length ? '<button class="btn btn-danger" onclick="replaceBOQ()" style="margin-left:6px">Replace BOQ</button>' : ''}
+    ${can('manageRegister') && billList.length ? '<button class="btn btn-danger" onclick="replaceBOQ()" style="margin-left:6px">Replace Contract BOQ</button>' : ''}
     ${editMode ? '<button class="btn" onclick="cancelBOQEdit()" style="margin-left:6px">Cancel</button>' : ''}
   </div>
   ${billList.length ? `
@@ -5906,6 +5947,53 @@ async function renderBOQ() {
     ${billsHTML}
     ${billList.length ? `<tr class="boq-grand-total"><td colspan="${editMode?6:5}" style="padding:10px 14px">CONTRACT SUM</td><td style="text-align:right;padding:10px 14px">${fmtAED(grandTotal)}</td></tr>` : ''}
   </table></div></div>`;
+}
+
+function selectBOQContract(id) {
+  window._selectedContractId = id;
+  window._boqEditMode = false;
+  render();
+}
+
+function openAddContract() {
+  openModal('New Contract', `
+    <div class="form-group"><label class="form-label-dark">Contract Name</label>
+      <input type="text" class="form-control" id="nc-name" placeholder="e.g. Main Contract" /></div>
+    <div class="form-group"><label class="form-label-dark">Contractor</label>
+      <input type="text" class="form-control" id="nc-contractor" placeholder="e.g. XYZ Contracting LLC" /></div>
+    <div class="frow">
+      <div class="form-group" style="flex:1"><label class="form-label-dark">Contract Type</label>
+        <select class="form-control" id="nc-type">
+          <option value="main">Main Contract</option>
+          <option value="enabling_works">Enabling Works</option>
+          <option value="specialist">Specialist</option>
+          <option value="other">Other</option>
+        </select></div>
+      <div class="form-group" style="width:160px"><label class="form-label-dark">Award Date</label>
+        <input type="date" class="form-control" id="nc-date" /></div>
+    </div>
+    <div class="form-group"><label class="form-label-dark">Contract Value (AED)</label>
+      <input type="number" class="form-control" id="nc-value" placeholder="0" /></div>`,
+    `<button class="btn btn-primary" onclick="doAddContract()">Create Contract</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doAddContract() {
+  const name = document.getElementById('nc-name')?.value.trim();
+  if(!name) { toast('Contract name required','error'); return; }
+  const {data,error} = await sb.from('contracts').insert({
+    project_id: currentProject.id,
+    name,
+    contractor: document.getElementById('nc-contractor')?.value.trim()||null,
+    contract_type: document.getElementById('nc-type')?.value||'main',
+    award_date: document.getElementById('nc-date')?.value||null,
+    contract_value: +document.getElementById('nc-value')?.value||0,
+    sort_order: 99
+  }).select('id').single();
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  window._selectedContractId = data.id;
+  toast(`Contract "${name}" created`,'success');
+  closeModal(); render();
 }
 
 function recalcBOQRow(input) {
@@ -6074,7 +6162,12 @@ async function doImportBOQ() {
   data.forEach(r => {
     const billNo = String(r[0]||'').trim();
     const billTitle = String(r[1]||'').trim();
-    if(billNo && !billMap[billNo]) billMap[billNo] = {bill_no:billNo, title:billTitle, sort_order:Object.keys(billMap).length};
+    if(billNo && !billMap[billNo]) billMap[billNo] = {
+      bill_no:billNo, title:billTitle,
+      project_id: currentProject.id,
+      contract_id: window._selectedContractId||null,
+      sort_order:Object.keys(billMap).length
+    };
   });
 
   const {data:insertedBills, error:billErr} = await sb.from('boq_bills').insert(Object.values(billMap)).select('id,bill_no');
@@ -6111,13 +6204,17 @@ async function doImportBOQ() {
 }
 
 async function replaceBOQ() {
-  const {count} = await sb.from('payment_certificates').select('*',{head:true,count:'exact'});
-  if(count > 0) { toast('Cannot replace BOQ — payment certificates already exist against this BOQ','error'); return; }
-  const ok = await confirmModal('This will permanently delete all BOQ bills and items. This cannot be undone. Continue?');
+  if(!window._selectedContractId) { toast('Select a contract first','error'); return; }
+  const {count} = await sb.from('payment_certificates').select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id);
+  if(count > 0) { toast('Cannot replace BOQ — payment certificates exist against this project BOQ','error'); return; }
+  const ok = await confirmModal('This will permanently delete all bills and items for this contract. This cannot be undone. Continue?');
   if(!ok) return;
-  await sb.from('boq_items').delete().neq('id','00000000-0000-0000-0000-000000000000');
-  await sb.from('boq_bills').delete().neq('id','00000000-0000-0000-0000-000000000000');
-  toast('BOQ cleared — ready for re-import','success');
+  const {data:cBills} = await sb.from('boq_bills').select('id').eq('contract_id',window._selectedContractId);
+  if(cBills?.length) {
+    await sb.from('boq_items').delete().in('bill_id', cBills.map(b=>b.id));
+    await sb.from('boq_bills').delete().eq('contract_id',window._selectedContractId);
+  }
+  toast('Contract BOQ cleared — ready for re-import','success');
   openImportBOQ();
 }
 
@@ -6143,7 +6240,7 @@ async function doAddBill() {
   if(!billNo || !title) { toast('Bill No. and Title are required','error'); return; }
   const {data:existing} = await sb.from('boq_bills').select('sort_order').order('sort_order',{ascending:false}).limit(1);
   const sortOrder = ((existing?.[0]?.sort_order)??-1) + 1;
-  const {error} = await sb.from('boq_bills').insert({project_id:currentProject.id,bill_no:billNo, title, sort_order:sortOrder});
+  const {error} = await sb.from('boq_bills').insert({project_id:currentProject.id, contract_id:window._selectedContractId||null, bill_no:billNo, title, sort_order:sortOrder});
   if(error) { toast('Error adding bill: '+error.message,'error'); return; }
   await savePendingBOQEdits();
   toast(`Bill ${billNo} added`,'success'); closeModal(); render();
