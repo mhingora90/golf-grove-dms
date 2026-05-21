@@ -6299,19 +6299,23 @@ async function renderIPC() {
 
 async function openNewIPC() {
   const {count:openCount} = await sb.from('payment_certificates')
-    .select('*',{head:true,count:'exact'}).in('status',['Draft','Submitted']);
+    .select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).in('status',['Draft','Submitted']);
   if(openCount > 0) { toast('An application is already in progress. Complete or retract it first.','warning'); return; }
 
-  const {count:boqCount} = await sb.from('boq_items').select('*',{head:true,count:'exact'});
+  const {data:projBills} = await sb.from('boq_bills').select('id').eq('project_id',currentProject.id);
+  const projBillIds = (projBills||[]).map(b=>b.id);
+  const {count:boqCount} = projBillIds.length
+    ? await sb.from('boq_items').select('*',{head:true,count:'exact'}).in('bill_id',projBillIds)
+    : {count:0};
   if(!boqCount) { toast('No BOQ loaded. Go to BOQ Setup and import your Bill of Quantities first.','warning'); return; }
 
-  const {data:last} = await sb.from('payment_certificates').select('cert_no').order('cert_no',{ascending:false}).limit(1);
+  const {data:last} = await sb.from('payment_certificates').select('cert_no').eq('project_id',currentProject.id).order('cert_no',{ascending:false}).limit(1);
   const nextNo = ((last?.[0]?.cert_no)||0) + 1;
   const refNo = 'IPC-' + String(nextNo).padStart(3,'0');
 
-  // Calculate previously_paid from all prior certified/paid certs
+  // Calculate previously_paid from all prior certified/paid certs for this project
   const {data:priorCerts} = await sb.from('payment_certificates')
-    .select('id,retention_pct,advance_recovery_pct,vat_pct').in('status',['Certified','Paid']);
+    .select('id,retention_pct,advance_recovery_pct,vat_pct').eq('project_id',currentProject.id).in('status',['Certified','Paid']);
   let prevPaid = 0;
   for(const pc of priorCerts||[]) {
     const {data:pit} = await sb.from('payment_certificate_items').select('consultant_amount').eq('cert_id',pc.id);
@@ -6322,8 +6326,8 @@ async function openNewIPC() {
     prevPaid += nbv + nbv * (+pc.vat_pct||5) / 100;
   }
 
-  // Get defaults from last IPC or use contract defaults
-  const {data:lastIPC} = await sb.from('payment_certificates').select('retention_pct,advance_recovery_pct,mobilisation_advance,vat_pct').order('created_at',{ascending:false}).limit(1);
+  // Get defaults from last IPC for this project
+  const {data:lastIPC} = await sb.from('payment_certificates').select('retention_pct,advance_recovery_pct,mobilisation_advance,vat_pct').eq('project_id',currentProject.id).order('created_at',{ascending:false}).limit(1);
   const defRet = lastIPC?.[0]?.retention_pct ?? 10;
   const defAdv = lastIPC?.[0]?.advance_recovery_pct ?? 10;
   const defMob = lastIPC?.[0]?.mobilisation_advance ?? 0;
@@ -6359,7 +6363,11 @@ async function doNewIPC(refNo, certNo, prevPaid) {
   }).select('id').single();
   if(certErr) { toast('Error creating IPC: '+certErr.message,'error'); return; }
 
-  const {data:boqItems} = await sb.from('boq_items').select('id');
+  const {data:projBillsForCert} = await sb.from('boq_bills').select('id').eq('project_id',currentProject.id);
+  const projBillIdsForCert = (projBillsForCert||[]).map(b=>b.id);
+  const {data:boqItems} = projBillIdsForCert.length
+    ? await sb.from('boq_items').select('id').in('bill_id',projBillIdsForCert)
+    : {data:[]};
   const certItems = (boqItems||[]).map(i=>({cert_id:cert.id, boq_item_id:i.id, contractor_pct:0, contractor_amount:0}));
   if(certItems.length) {
     const {error:iErr} = await sb.from('payment_certificate_items').insert(certItems);
@@ -6372,7 +6380,7 @@ async function viewIPC(id) {
   const [{data:cert},{data:pitems},{data:bills},{data:boqItems}] = await Promise.all([
     sb.from('payment_certificates').select('*').eq('id',id).single(),
     sb.from('payment_certificate_items').select('*').eq('cert_id',id),
-    sb.from('boq_bills').select('*').order('sort_order').order('created_at'),
+    sb.from('boq_bills').select('*').eq('project_id',currentProject.id).order('sort_order').order('created_at'),
     sb.from('boq_items').select('*').order('sort_order').order('created_at')
   ]);
   if(!cert) { toast('Certificate not found','error'); return; }
