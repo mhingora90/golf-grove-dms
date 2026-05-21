@@ -6271,11 +6271,13 @@ async function renderIPC() {
     amtMap[it.cert_id].certified += +it.consultant_amount||0;
   }
 
-  // Contract tab state
-  if(contracts.length && !window._selectedIPCContractId) {
-    window._selectedIPCContractId = contracts[0].id;
+  // Contract tab state — reset if stored ID not in current project's contracts
+  if(contracts.length) {
+    if(!window._selectedIPCContractId || !contracts.find(c=>c.id===window._selectedIPCContractId))
+      window._selectedIPCContractId = contracts[0].id;
+  } else {
+    window._selectedIPCContractId = null;
   }
-  if(!contracts.length) window._selectedIPCContractId = null;
 
   const certs = contracts.length
     ? allCerts.filter(c=>c.contract_id === window._selectedIPCContractId)
