@@ -4319,6 +4319,7 @@ function closeModal(){
   if(_modalDirty && !confirm('You have unsaved changes. Close anyway?')) return;
   _modalDirty = false;
   document.getElementById('modal-bg').classList.remove('open');
+  const cb = window._onModalClose; window._onModalClose = null; if(cb) cb();
   // FIX 2: Clear all staged file state on modal close to prevent files from a
   // previous modal session being silently attached to a different record.
   // uploadStagedFiles() deletes its key on success; we clear any remaining keys
@@ -6653,6 +6654,7 @@ async function viewIPC(id) {
     ${cert.notes?`<div class="detail-item" style="grid-column:span 2"><div class="detail-label">Notes</div><div class="detail-value">${esc(cert.notes)}</div></div>`:''}
   </div>`;
 
+  window._onModalClose = () => { if(currentPage==='ipc') renderIPC(); };
   openModal(`${esc(cert.ref_no)} — Payment Application`, `
     ${headerHTML}
     <div class="detail-section">
