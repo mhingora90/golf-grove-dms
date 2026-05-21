@@ -6298,6 +6298,94 @@ async function renderIPC() {
 }
 
 async function openNewIPC() {
+  // Load contracts for this project
+  const {data:contracts} = await sb.from('contracts').select('*').eq('project_id',currentProject.id).order('sort_order').order('created_at');
+
+  if(contracts?.length) {
+    // Project has contracts — require selecting one
+    if(contracts.length === 1) {
+      await _openNewIPCForContract(contracts[0]);
+    } else {
+      openModal('New Payment Application', `
+        <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Which contract is this application for?</p>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${contracts.map(c=>`
+            <button class="btn" style="text-align:left;padding:12px 16px;border:0.5px solid var(--border2)" onclick="closeModal();_openNewIPCForContract(${JSON.stringify(c).replace(/"/g,'&quot;')})">
+              <div style="font-weight:600;font-size:13px">${esc(c.name)}</div>
+              <div style="font-size:11px;color:var(--text2);margin-top:2px">${esc(c.contractor||'No contractor')} · ${fmtAED(c.contract_value||0)}</div>
+            </button>`).join('')}
+        </div>`,
+        `<button class="btn" onclick="closeModal()">Cancel</button>`);
+    }
+  } else {
+    // No contracts defined — legacy project-level flow
+    await _openNewIPCLegacy();
+  }
+}
+
+async function _openNewIPCForContract(contract) {
+  const cid = contract.id;
+  const certQ = sb.from('payment_certificates').eq('project_id',currentProject.id).eq('contract_id',cid);
+
+  const {count:openCount} = await sb.from('payment_certificates')
+    .select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).eq('contract_id',cid).in('status',['Draft','Submitted']);
+  if(openCount > 0) { toast('An application for this contract is already in progress.','warning'); return; }
+
+  const {data:cBills} = await sb.from('boq_bills').select('id').eq('contract_id',cid);
+  const cBillIds = (cBills||[]).map(b=>b.id);
+  const {count:boqCount} = cBillIds.length
+    ? await sb.from('boq_items').select('*',{head:true,count:'exact'}).in('bill_id',cBillIds)
+    : {count:0};
+  if(!boqCount) { toast('No BOQ loaded for this contract. Add bills in BOQ Setup first.','warning'); return; }
+
+  const {data:lastCert} = await sb.from('payment_certificates').select('cert_no')
+    .eq('project_id',currentProject.id).eq('contract_id',cid).order('cert_no',{ascending:false}).limit(1);
+  const nextNo = ((lastCert?.[0]?.cert_no)||0) + 1;
+  const refNo = 'IPC-' + String(nextNo).padStart(3,'0');
+  const isFirst = nextNo === 1;
+
+  // prevPaid from prior certified/paid certs for this contract
+  const {data:priorCerts} = await sb.from('payment_certificates')
+    .select('id,retention_pct,advance_recovery_pct,vat_pct')
+    .eq('project_id',currentProject.id).eq('contract_id',cid).in('status',['Certified','Paid']);
+  let prevPaid = 0;
+  for(const pc of priorCerts||[]) {
+    const {data:pit} = await sb.from('payment_certificate_items').select('consultant_amount').eq('cert_id',pc.id);
+    const gross = (pit||[]).reduce((s,i)=>s+(+i.consultant_amount||0),0);
+    const nbv = gross - gross*(+pc.retention_pct||10)/100 - gross*(+pc.advance_recovery_pct||10)/100;
+    prevPaid += nbv + nbv*(+pc.vat_pct||5)/100;
+  }
+
+  if(isFirst) {
+    openModal(`New Application — ${esc(contract.name)}`, `
+      <div class="detail-grid" style="margin-bottom:14px">
+        <div class="detail-item"><div class="detail-label">Contract</div><div class="detail-value">${esc(contract.name)}</div></div>
+        <div class="detail-item"><div class="detail-label">Reference</div><div class="detail-value mono" style="color:var(--sand);font-weight:600">${esc(refNo)}</div></div>
+      </div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Retention (%)</label><input type="number" min="0" max="100" step="0.5" class="form-control" id="ipc-new-ret" value="10" /></div>
+        <div class="form-group"><label class="form-label-dark">Advance Recovery (%)</label><input type="number" min="0" max="100" step="0.5" class="form-control" id="ipc-new-adv" value="10" /></div>
+      </div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Mobilisation Advance (AED)</label><input type="number" min="0" class="form-control" id="ipc-new-mob" value="0" /></div>
+        <div class="form-group"><label class="form-label-dark">VAT (%)</label><input type="number" min="0" max="30" step="0.5" class="form-control" id="ipc-new-vat" value="5" /></div>
+      </div>
+      <p style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.6">Set once for this contract — carried forward automatically to all subsequent applications.</p>`,
+      `<button class="btn btn-primary" onclick="doNewIPC('${esc(refNo)}',${nextNo},${prevPaid},'${cid}')">Create Application</button>
+       <button class="btn" onclick="closeModal()">Cancel</button>`);
+  } else {
+    // Inherit settings from last IPC for this contract — no form shown
+    const {data:prev} = await sb.from('payment_certificates')
+      .select('retention_pct,advance_recovery_pct,mobilisation_advance,vat_pct')
+      .eq('project_id',currentProject.id).eq('contract_id',cid).order('created_at',{ascending:false}).limit(1);
+    await doNewIPC(refNo, nextNo, prevPaid, cid,
+      prev?.[0]?.retention_pct??10, prev?.[0]?.advance_recovery_pct??10,
+      prev?.[0]?.mobilisation_advance??0, prev?.[0]?.vat_pct??5);
+  }
+}
+
+async function _openNewIPCLegacy() {
+  // Legacy flow for projects with no contracts defined
   const {count:openCount} = await sb.from('payment_certificates')
     .select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).in('status',['Draft','Submitted']);
   if(openCount > 0) { toast('An application is already in progress. Complete or retract it first.','warning'); return; }
@@ -6312,61 +6400,66 @@ async function openNewIPC() {
   const {data:last} = await sb.from('payment_certificates').select('cert_no').eq('project_id',currentProject.id).order('cert_no',{ascending:false}).limit(1);
   const nextNo = ((last?.[0]?.cert_no)||0) + 1;
   const refNo = 'IPC-' + String(nextNo).padStart(3,'0');
+  const isFirst = nextNo === 1;
 
-  // Calculate previously_paid from all prior certified/paid certs for this project
   const {data:priorCerts} = await sb.from('payment_certificates')
     .select('id,retention_pct,advance_recovery_pct,vat_pct').eq('project_id',currentProject.id).in('status',['Certified','Paid']);
   let prevPaid = 0;
   for(const pc of priorCerts||[]) {
     const {data:pit} = await sb.from('payment_certificate_items').select('consultant_amount').eq('cert_id',pc.id);
     const gross = (pit||[]).reduce((s,i)=>s+(+i.consultant_amount||0),0);
-    const ret = gross * (+pc.retention_pct||10) / 100;
-    const advRecovery = gross * (+pc.advance_recovery_pct||10) / 100;
-    const nbv = gross - ret - advRecovery;
-    prevPaid += nbv + nbv * (+pc.vat_pct||5) / 100;
+    const nbv = gross - gross*(+pc.retention_pct||10)/100 - gross*(+pc.advance_recovery_pct||10)/100;
+    prevPaid += nbv + nbv*(+pc.vat_pct||5)/100;
   }
 
-  // Get defaults from last IPC for this project
-  const {data:lastIPC} = await sb.from('payment_certificates').select('retention_pct,advance_recovery_pct,mobilisation_advance,vat_pct').eq('project_id',currentProject.id).order('created_at',{ascending:false}).limit(1);
-  const defRet = lastIPC?.[0]?.retention_pct ?? 10;
-  const defAdv = lastIPC?.[0]?.advance_recovery_pct ?? 10;
-  const defMob = lastIPC?.[0]?.mobilisation_advance ?? 0;
-  const defVat = lastIPC?.[0]?.vat_pct ?? 5;
-
-  openModal('New Payment Application', `
-    <div class="detail-grid">
-      <div class="detail-item"><div class="detail-label">Reference</div><div class="detail-value mono" style="color:var(--sand);font-weight:600">${esc(refNo)}</div></div>
-      <div class="detail-item"><div class="detail-label">Previously Paid (cumulative)</div><div class="detail-value">${fmtAED(prevPaid)}</div></div>
-    </div>
-    <div class="frow" style="margin-top:12px">
-      <div class="form-group"><label class="form-label-dark">Retention (%)</label><input type="number" min="0" max="100" step="0.5" class="form-control" id="ipc-new-ret" value="${defRet}" /></div>
-      <div class="form-group"><label class="form-label-dark">Advance Recovery (%)</label><input type="number" min="0" max="100" step="0.5" class="form-control" id="ipc-new-adv" value="${defAdv}" /></div>
-    </div>
-    <div class="frow">
-      <div class="form-group"><label class="form-label-dark">Mobilisation Advance (AED)</label><input type="number" min="0" class="form-control" id="ipc-new-mob" value="${defMob}" /></div>
-      <div class="form-group"><label class="form-label-dark">VAT (%)</label><input type="number" min="0" max="30" step="0.5" class="form-control" id="ipc-new-vat" value="${defVat}" /></div>
-    </div>
-    <p style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.6">These contract-level settings apply to all applications. Enter your percentage claims against each BOQ item before submitting to the consultant.</p>`,
-    `<button class="btn btn-primary" onclick="doNewIPC('${esc(refNo)}',${nextNo},${prevPaid})">Create Application</button>
-     <button class="btn" onclick="closeModal()">Cancel</button>`);
+  if(isFirst) {
+    openModal('New Payment Application', `
+      <div class="detail-grid" style="margin-bottom:14px">
+        <div class="detail-item"><div class="detail-label">Reference</div><div class="detail-value mono" style="color:var(--sand);font-weight:600">${esc(refNo)}</div></div>
+        <div class="detail-item"><div class="detail-label">Previously Paid</div><div class="detail-value">${fmtAED(prevPaid)}</div></div>
+      </div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Retention (%)</label><input type="number" min="0" max="100" step="0.5" class="form-control" id="ipc-new-ret" value="10" /></div>
+        <div class="form-group"><label class="form-label-dark">Advance Recovery (%)</label><input type="number" min="0" max="100" step="0.5" class="form-control" id="ipc-new-adv" value="10" /></div>
+      </div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Mobilisation Advance (AED)</label><input type="number" min="0" class="form-control" id="ipc-new-mob" value="0" /></div>
+        <div class="form-group"><label class="form-label-dark">VAT (%)</label><input type="number" min="0" max="30" step="0.5" class="form-control" id="ipc-new-vat" value="5" /></div>
+      </div>
+      <p style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.6">Set once — carried forward automatically to all subsequent applications.</p>`,
+      `<button class="btn btn-primary" onclick="doNewIPC('${esc(refNo)}',${nextNo},${prevPaid},null)">Create Application</button>
+       <button class="btn" onclick="closeModal()">Cancel</button>`);
+  } else {
+    const {data:prev} = await sb.from('payment_certificates')
+      .select('retention_pct,advance_recovery_pct,mobilisation_advance,vat_pct')
+      .eq('project_id',currentProject.id).order('created_at',{ascending:false}).limit(1);
+    await doNewIPC(refNo, nextNo, prevPaid, null,
+      prev?.[0]?.retention_pct??10, prev?.[0]?.advance_recovery_pct??10,
+      prev?.[0]?.mobilisation_advance??0, prev?.[0]?.vat_pct??5);
+  }
 }
 
-async function doNewIPC(refNo, certNo, prevPaid) {
-  const retPct = +(document.getElementById('ipc-new-ret')?.value ?? 10);
-  const advPct = +(document.getElementById('ipc-new-adv')?.value ?? 10);
-  const mobAmt = +(document.getElementById('ipc-new-mob')?.value ?? 0);
-  const vatPct = +(document.getElementById('ipc-new-vat')?.value ?? 5);
+async function doNewIPC(refNo, certNo, prevPaid, contractId, retPct, advPct, mobAmt, vatPct) {
+  retPct = retPct ?? +(document.getElementById('ipc-new-ret')?.value ?? 10);
+  advPct = advPct ?? +(document.getElementById('ipc-new-adv')?.value ?? 10);
+  mobAmt = mobAmt ?? +(document.getElementById('ipc-new-mob')?.value ?? 0);
+  vatPct = vatPct ?? +(document.getElementById('ipc-new-vat')?.value ?? 5);
 
-  const {data:cert, error:certErr} = await sb.from('payment_certificates').insert({project_id:currentProject.id,
+  const {data:cert, error:certErr} = await sb.from('payment_certificates').insert({
+    project_id:currentProject.id, contract_id:contractId||null,
     cert_no:certNo, ref_no:refNo, status:'Draft', previously_paid:prevPaid,
     retention_pct:retPct, advance_recovery_pct:advPct, mobilisation_advance:mobAmt, vat_pct:vatPct
   }).select('id').single();
   if(certErr) { toast('Error creating IPC: '+certErr.message,'error'); return; }
 
-  const {data:projBillsForCert} = await sb.from('boq_bills').select('id').eq('project_id',currentProject.id);
-  const projBillIdsForCert = (projBillsForCert||[]).map(b=>b.id);
-  const {data:boqItems} = projBillIdsForCert.length
-    ? await sb.from('boq_items').select('id').in('bill_id',projBillIdsForCert)
+  // BOQ items: scoped to contract if set, else all project bills
+  const billQ = contractId
+    ? sb.from('boq_bills').select('id').eq('contract_id',contractId)
+    : sb.from('boq_bills').select('id').eq('project_id',currentProject.id);
+  const {data:billsForCert} = await billQ;
+  const billIdsForCert = (billsForCert||[]).map(b=>b.id);
+  const {data:boqItems} = billIdsForCert.length
+    ? await sb.from('boq_items').select('id').in('bill_id',billIdsForCert)
     : {data:[]};
   const certItems = (boqItems||[]).map(i=>({cert_id:cert.id, boq_item_id:i.id, contractor_pct:0, contractor_amount:0}));
   if(certItems.length) {
