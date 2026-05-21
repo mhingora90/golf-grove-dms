@@ -182,6 +182,18 @@ textarea.form-control{resize:vertical;min-height:70px}
 .detail-item{display:flex;flex-direction:column;gap:2px}
 .detail-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
 .detail-value{font-size:12px;color:var(--charcoal)}
+.act-feed{max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.act-item{padding:9px 12px;border-radius:6px;background:var(--bg3);border-left:3px solid var(--act-color,#9ca3af)}
+.act-item[data-method=call]{--act-color:#22c55e}
+.act-item[data-method=whatsapp]{--act-color:#25D366}
+.act-item[data-method=email]{--act-color:#3b82f6}
+.act-item[data-method=meeting]{--act-color:#8b5cf6}
+.act-item[data-method=site_visit]{--act-color:#f59e0b}
+.act-item[data-method=note]{--act-color:#9ca3af}
+.act-meta{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);margin-bottom:3px;flex-wrap:wrap}
+.act-badge{font-weight:700;color:var(--act-color,#9ca3af);text-transform:uppercase;letter-spacing:.05em;font-size:10px}
+.act-body{font-size:12px;color:var(--charcoal);line-height:1.5}
+.act-input-row{display:grid;grid-template-columns:140px 180px 1fr auto;gap:8px;align-items:end}
 .detail-section{border-top:0.5px solid var(--border);padding-top:14px}
 
 /* UPLOAD ZONE */
@@ -8061,11 +8073,37 @@ async function crmBulkDelete() {
 
 
 
+const ACT_METHODS = {
+  call:       {icon:'📞', label:'Call'},
+  whatsapp:   {icon:'💬', label:'WhatsApp'},
+  email:      {icon:'✉️', label:'Email'},
+  meeting:    {icon:'🤝', label:'Meeting'},
+  site_visit: {icon:'🏠', label:'Site Visit'},
+  note:       {icon:'📝', label:'Note'},
+};
+
 async function viewLead(id) {
-  const {data:lead,error} = await sb.from('crm_leads').select('*').eq('id',id).maybeSingle();
+  const [{data:lead,error}, {data:acts}] = await Promise.all([
+    sb.from('crm_leads').select('*').eq('id',id).maybeSingle(),
+    sb.from('crm_lead_activities').select('*').eq('lead_id',id).order('contacted_at',{ascending:true})
+  ]);
   if(error||!lead) { toast('Lead not found','error'); return; }
   const stageOpts = CRM_STAGES.map(s=>`<option value="${esc(s.key)}"${lead.stage===s.key?'selected':''}>${esc(s.label)}</option>`).join('');
-  const notes = (lead.notes||'').split('\n').filter(Boolean).map(n=>`<div class="crm-note">${esc(n)}</div>`).join('')||'<div style="color:var(--text3);font-size:12px">No notes yet</div>';
+
+  const actsHtml = (acts||[]).length
+    ? (acts||[]).map(a => {
+        const m = ACT_METHODS[a.method]||ACT_METHODS.note;
+        const when = new Date(a.contacted_at).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+        return `<div class="act-item" data-method="${esc(a.method)}">
+          <div class="act-meta"><span>${m.icon}</span><span class="act-badge">${m.label}</span><span>·</span><span>${esc(a.author_name)}</span><span>·</span><span>${when}</span></div>
+          <div class="act-body">${esc(a.body)}</div>
+        </div>`;
+      }).join('')
+    : '<div style="color:var(--text3);font-size:12px;padding:4px 0">No activity yet</div>';
+
+  const nowLocal = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
+  const methodOpts = Object.entries(ACT_METHODS).map(([k,v])=>`<option value="${k}"${k==='note'?' selected':''}>${v.icon} ${v.label}</option>`).join('');
+
   openModal('Lead — '+esc(lead.name), `
     <div class="detail-grid">
       <div class="detail-item"><div class="detail-label">Name</div><div class="detail-value">${esc(lead.name)}</div></div>
@@ -8074,13 +8112,12 @@ async function viewLead(id) {
       <div class="detail-item"><div class="detail-label">Phone</div><div class="detail-value">${esc(lead.phone||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Company</div><div class="detail-value">${esc(lead.company_name||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Broker Type</div><div class="detail-value">${esc(lead.broker_type||'—')}</div></div>
-      <div class="detail-item"><div class="detail-label">Budget</div><div class="detail-value">${esc(fmtLeadField(lead.created_time||lead.budget_range))}</div></div>
-      <div class="detail-item"><div class="detail-label">Property Type</div><div class="detail-value">${esc(fmtLeadField(lead.ad_id||lead.property_types))}</div></div>
+      <div class="detail-item"><div class="detail-label">Budget</div><div class="detail-value">${esc(fmtLeadField(lead.budget_range||lead.created_time))}</div></div>
+      <div class="detail-item"><div class="detail-label">Property Type</div><div class="detail-value">${esc(fmtLeadField(lead.property_types||lead.ad_id))}</div></div>
       <div class="detail-item"><div class="detail-label">Availability</div><div class="detail-value">${esc(lead.availability||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Source</div><div class="detail-value">${esc(({'meta_ads':'Meta Ads','website':'Website','referral':'Referral','walk_in':'Walk-In','other':'Other'})[lead.source]||lead.source||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Meta Lead ID</div><div class="detail-value mono">${esc(lead.meta_lead_id||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Created</div><div class="detail-value">${new Date(lead.created_at).toLocaleString('en-GB')}</div></div>
-      <div class="detail-item"><div class="detail-label">Last Contacted</div><div class="detail-value">${lead.last_contacted_at?new Date(lead.last_contacted_at).toLocaleString('en-GB'):'Never'}</div></div>
     </div>
     <div class="frow" style="margin-top:14px">
       <div class="form-group"><label class="form-label-dark">Stage</label>
@@ -8090,12 +8127,19 @@ async function viewLead(id) {
         <input type="text" class="form-control" id="lead-assigned" value="${esc(lead.assigned_to||'')}" placeholder="Team member..." onchange="updateLeadAssigned('${lead.id}')"/>
       </div>
     </div>
-    <div style="margin-top:14px">
-      <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:6px">Notes</div>
-      <div id="lead-notes" style="max-height:150px;overflow-y:auto;margin-bottom:8px">${notes}</div>
-      <div class="frow"><input type="text" class="form-control" id="lead-note-input" placeholder="Add a note..." onkeydown="if(event.key==='Enter')addLeadNote('${lead.id}')"/><button class="btn btn-primary" onclick="addLeadNote('${lead.id}')">Add</button></div>
+    <div style="margin-top:16px">
+      <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Activity</div>
+      <div class="act-feed" id="act-feed">${actsHtml}</div>
+      <div class="act-input-row">
+        <select class="form-control" id="act-method">${methodOpts}</select>
+        <input type="datetime-local" class="form-control" id="act-contacted-at" value="${nowLocal}"/>
+        <input type="text" class="form-control" id="act-body" placeholder="Add activity note…" onkeydown="if(event.key==='Enter')addLeadActivity('${lead.id}')"/>
+        <button class="btn btn-primary" onclick="addLeadActivity('${lead.id}')">Add</button>
+      </div>
     </div>`,
-    `<button class="btn btn-danger" onclick="deleteLead('${lead.id}')">Delete</button><button class="btn" onclick="closeModal()">Close</button>`);
+    `<button class="btn btn-danger" onclick="deleteLead('${lead.id}')">Delete</button><button class="btn" onclick="closeModal()">Close</button>`,
+    true);
+  setTimeout(()=>{ const f=document.getElementById('act-feed'); if(f) f.scrollTop=f.scrollHeight; },60);
 }
 
 async function updateLeadStage(id) {
@@ -8112,15 +8156,23 @@ async function updateLeadAssigned(id) {
   toast('Assigned to '+assigned,'success');
 }
 
-async function addLeadNote(id) {
-  const input = document.getElementById('lead-note-input');
-  const txt = input?.value?.trim();
-  if(!txt) return;
-  const {data:lead} = await sb.from('crm_leads').select('notes').eq('id',id).maybeSingle();
-  const notes = (lead?.notes||'')+(lead?.notes?'\n':'')+txt;
-  const {error} = await sb.from('crm_leads').update({notes,updated_at:new Date().toISOString()}).eq('id',id);
+async function addLeadActivity(id) {
+  const body = document.getElementById('act-body')?.value?.trim();
+  const method = document.getElementById('act-method')?.value||'note';
+  const contactedAt = document.getElementById('act-contacted-at')?.value;
+  if(!body) return;
+  const authorName = currentProfile?.full_name || currentUser?.email || 'Unknown';
+  const {error} = await sb.from('crm_lead_activities').insert({
+    lead_id: id,
+    author_id: currentUser?.id,
+    author_name: authorName,
+    method,
+    contacted_at: contactedAt ? new Date(contactedAt).toISOString() : new Date().toISOString(),
+    body
+  });
   if(error) { toast('Error: '+error.message,'error'); return; }
-  input.value=''; viewLead(id);
+  await sb.from('crm_leads').update({last_contacted_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('id',id);
+  viewLead(id);
 }
 
 async function deleteLead(id) {
