@@ -8175,9 +8175,9 @@ function quickSchedule(method) {
   if(body) { body.placeholder = `Notes for scheduled ${ACT_METHODS[method]?.label||method}…`; body.focus(); }
   const dt = document.getElementById('act-contacted-at');
   if(dt) dt.value = _tomorrowLocal();
-  // Pre-fill body hint
+  // Pre-fill body hint; overwrite if empty or still a quick-schedule placeholder
   const hint = `Follow-up ${ACT_METHODS[method]?.label||method}`;
-  if(body && !body.value) body.value = hint;
+  if(body && (!body.value || body.value.startsWith('Follow-up '))) body.value = hint;
   // Select all so user can just type over it
   body?.select();
 }
