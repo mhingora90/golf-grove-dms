@@ -6367,7 +6367,6 @@ async function openNewIPC() {
 
 async function _openNewIPCForContract(contract) {
   const cid = contract.id;
-  const certQ = sb.from('payment_certificates').eq('project_id',currentProject.id).eq('contract_id',cid);
 
   const {count:openCount} = await sb.from('payment_certificates')
     .select('*',{head:true,count:'exact'}).eq('project_id',currentProject.id).eq('contract_id',cid).in('status',['Draft','Submitted']);
