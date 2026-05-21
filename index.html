@@ -182,7 +182,7 @@ textarea.form-control{resize:vertical;min-height:70px}
 .detail-item{display:flex;flex-direction:column;gap:2px}
 .detail-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
 .detail-value{font-size:12px;color:var(--charcoal)}
-.act-feed{max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.act-feed{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
 .act-item{padding:9px 12px;border-radius:6px;background:var(--bg3);border-left:3px solid var(--act-color,#9ca3af)}
 .act-item[data-method=call]{--act-color:#22c55e}
 .act-item[data-method=whatsapp]{--act-color:#25D366}
@@ -190,10 +190,25 @@ textarea.form-control{resize:vertical;min-height:70px}
 .act-item[data-method=meeting]{--act-color:#8b5cf6}
 .act-item[data-method=site_visit]{--act-color:#f59e0b}
 .act-item[data-method=note]{--act-color:#9ca3af}
+.act-item[data-method=task]{--act-color:#f59e0b}
+.act-item.act-overdue{--act-color:#ef4444;background:#fef2f2}
+.act-item.act-completed{opacity:.55}
+.act-item.act-completed .act-body{text-decoration:line-through;color:var(--text3)}
 .act-meta{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);margin-bottom:3px;flex-wrap:wrap}
 .act-badge{font-weight:700;color:var(--act-color,#9ca3af);text-transform:uppercase;letter-spacing:.05em;font-size:10px}
+.act-overdue-tag{background:#ef4444;color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
 .act-body{font-size:12px;color:var(--charcoal);line-height:1.5}
+.act-done-btn{background:none;border:0.5px solid var(--border2);border-radius:4px;font-size:11px;color:var(--text2);cursor:pointer;padding:2px 8px;margin-left:auto;flex-shrink:0;font-family:inherit}
+.act-done-btn:hover{background:var(--bg2);color:var(--charcoal)}
+.act-section-hdr{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;padding:6px 0 2px;border-top:0.5px solid var(--border);margin-top:2px}
+.act-section-hdr:first-child{border-top:none;margin-top:0;padding-top:2px}
+.act-filter-bar{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
+.act-filter-btn{padding:3px 11px;border-radius:12px;font-size:11px;border:0.5px solid var(--border2);background:none;cursor:pointer;color:var(--text2);font-family:inherit;transition:.15s}
+.act-filter-btn.active{background:var(--charcoal);color:#fff;border-color:var(--charcoal)}
 .act-input-row{display:grid;grid-template-columns:140px 180px 1fr auto;gap:8px;align-items:end}
+.act-dt-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.rating-sel{padding:3px 8px;border-radius:12px;border:0.5px solid var(--border2);font-size:12px;font-family:inherit;background:var(--bg3);cursor:pointer;color:var(--charcoal)}
+.rating-hot{color:#ef4444}.rating-warm{color:#f59e0b}.rating-cold{color:#3b82f6}
 .detail-section{border-top:0.5px solid var(--border);padding-top:14px}
 
 /* UPLOAD ZONE */
@@ -7894,12 +7909,13 @@ function crmRow(lead) {
   const stageLabel = CRM_STAGES.find(s => s.key === lead.stage)?.label || esc(lead.stage || "--");
   const company = lead.company_name ? esc(lead.company_name) : `<span class="crm-muted">\u2014</span>`;
   const assigned = lead.assigned_to ? esc(lead.assigned_to) : `<span class="crm-muted">\u2014</span>`;
+  const ratingDot = lead.rating ? {'hot':'🔴','warm':'🟡','cold':'🔵'}[lead.rating]||'' : '';
   return `
     <tr class="${checked ? "crm-checked" : ""}" data-id="${lead.id}" data-stage="${lead.stage || ''}">
       <td onclick="crmToggleRow('${lead.id}',event)" style="width:32px">
         <input type="checkbox" ${checked ? "checked" : ""}>
       </td>
-      <td onclick="viewLead('${lead.id}')" style="font-weight:600">${esc(lead.name || "—")}</td>
+      <td onclick="viewLead('${lead.id}')" style="font-weight:600">${ratingDot?`<span title="${lead.rating}" style="margin-right:4px">${ratingDot}</span>`:''}${esc(lead.name || "—")}</td>
       <td onclick="viewLead('${lead.id}')">${company}</td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(lead.email || "—")}</td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc((lead.phone || '').replace(/^p:/,'') || '--')}</td>
@@ -8080,7 +8096,73 @@ const ACT_METHODS = {
   meeting:    {icon:'🤝', label:'Meeting'},
   site_visit: {icon:'🏠', label:'Site Visit'},
   note:       {icon:'📝', label:'Note'},
+  task:       {icon:'✅', label:'Task'},
 };
+
+const RATING_META = {
+  hot:  {label:'🔴 Hot',  cls:'rating-hot'},
+  warm: {label:'🟡 Warm', cls:'rating-warm'},
+  cold: {label:'🔵 Cold', cls:'rating-cold'},
+};
+
+function _nowLocal() { return new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16); }
+function _tomorrowLocal() { return new Date(Date.now()+86400000-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16); }
+
+function onActMethodChange() {
+  const method = document.getElementById('act-method')?.value;
+  const lbl = document.getElementById('act-dt-label');
+  const dt = document.getElementById('act-contacted-at');
+  if(!lbl||!dt) return;
+  if(method==='task') { lbl.textContent='Due by'; dt.value=_tomorrowLocal(); }
+  else { lbl.textContent='Contact time'; dt.value=_nowLocal(); }
+}
+
+function filterActFeed(type) {
+  document.querySelectorAll('.act-filter-btn').forEach(b=>b.classList.toggle('active',b.dataset.filter===type));
+  let anyTask=false, anyPast=false;
+  document.querySelectorAll('#act-feed .act-item').forEach(item=>{
+    const m = item.dataset.method;
+    let show = type==='all'
+      || (type==='calls' && m==='call')
+      || (type==='emails' && m==='email')
+      || (type==='tasks' && m==='task')
+      || (type==='other' && ['whatsapp','meeting','site_visit','note'].includes(m));
+    item.style.display = show ? '' : 'none';
+    if(show && m==='task') anyTask=true;
+    if(show && m!=='task') anyPast=true;
+  });
+  const th = document.getElementById('act-hdr-tasks');
+  const ph = document.getElementById('act-hdr-past');
+  if(th) th.style.display = anyTask ? '' : 'none';
+  if(ph) ph.style.display = anyPast ? '' : 'none';
+}
+
+function _renderActItem(a, leadId, now) {
+  const m = ACT_METHODS[a.method]||ACT_METHODS.note;
+  const isTask = a.method==='task';
+  const overdue = isTask && !a.completed && a.due_at && new Date(a.due_at)<now;
+  const cls = [
+    'act-item',
+    overdue ? 'act-overdue' : '',
+    a.completed ? 'act-completed' : '',
+  ].filter(Boolean).join(' ');
+  const dateStr = isTask && a.due_at
+    ? new Date(a.due_at).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})
+    : new Date(a.contacted_at).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const overdueTag = overdue ? `<span class="act-overdue-tag">Overdue</span>` : '';
+  const doneBtn = isTask && !a.completed
+    ? `<button class="act-done-btn" onclick="completeTask('${a.id}','${leadId}')">✓ Done</button>`
+    : '';
+  return `<div class="${cls}" data-method="${esc(a.method)}">
+    <div class="act-meta">
+      <span>${m.icon}</span><span class="act-badge">${m.label}</span>
+      <span>·</span><span>${esc(a.author_name)}</span>
+      <span>·</span><span>${isTask?'Due: ':''}<b>${dateStr}</b></span>
+      ${overdueTag}${doneBtn}
+    </div>
+    <div class="act-body">${esc(a.body)}</div>
+  </div>`;
+}
 
 async function viewLead(id) {
   const [{data:lead,error}, {data:acts}] = await Promise.all([
@@ -8088,23 +8170,33 @@ async function viewLead(id) {
     sb.from('crm_lead_activities').select('*').eq('lead_id',id).order('contacted_at',{ascending:true})
   ]);
   if(error||!lead) { toast('Lead not found','error'); return; }
+
   const stageOpts = CRM_STAGES.map(s=>`<option value="${esc(s.key)}"${lead.stage===s.key?'selected':''}>${esc(s.label)}</option>`).join('');
+  const ratingOpts = `<option value="">— No rating</option>`+Object.entries(RATING_META).map(([k,v])=>`<option value="${k}"${lead.rating===k?'selected':''}>${v.label}</option>`).join('');
+  const ratingBadge = lead.rating ? `<span class="${RATING_META[lead.rating].cls}" style="margin-left:6px;font-size:12px">${RATING_META[lead.rating].label}</span>` : '';
 
-  const actsHtml = (acts||[]).length
-    ? (acts||[]).map(a => {
-        const m = ACT_METHODS[a.method]||ACT_METHODS.note;
-        const when = new Date(a.contacted_at).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-        return `<div class="act-item" data-method="${esc(a.method)}">
-          <div class="act-meta"><span>${m.icon}</span><span class="act-badge">${m.label}</span><span>·</span><span>${esc(a.author_name)}</span><span>·</span><span>${when}</span></div>
-          <div class="act-body">${esc(a.body)}</div>
-        </div>`;
-      }).join('')
-    : '<div style="color:var(--text3);font-size:12px;padding:4px 0">No activity yet</div>';
+  const now = new Date();
+  const allActs = acts||[];
+  const tasks = allActs.filter(a=>a.method==='task'&&!a.completed).sort((a,b)=>new Date(a.due_at||0)-new Date(b.due_at||0));
+  const past  = allActs.filter(a=>a.method!=='task'||a.completed).sort((a,b)=>new Date(a.contacted_at)-new Date(b.contacted_at));
 
-  const nowLocal = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
+  let feedHtml = '';
+  if(tasks.length) {
+    feedHtml += `<div class="act-section-hdr" id="act-hdr-tasks">📋 Tasks</div>`;
+    feedHtml += tasks.map(a=>_renderActItem(a,id,now)).join('');
+  }
+  if(past.length) {
+    feedHtml += `<div class="act-section-hdr" id="act-hdr-past">Past Activity</div>`;
+    feedHtml += past.map(a=>_renderActItem(a,id,now)).join('');
+  }
+  if(!feedHtml) feedHtml = '<div style="color:var(--text3);font-size:12px;padding:4px 0">No activity yet</div>';
+
   const methodOpts = Object.entries(ACT_METHODS).map(([k,v])=>`<option value="${k}"${k==='note'?' selected':''}>${v.icon} ${v.label}</option>`).join('');
+  const convertBtn = lead.stage!=='closed_won'
+    ? `<button class="btn btn-primary" onclick="openConvertLead('${lead.id}')">Convert Lead</button>`
+    : `<span style="font-size:12px;color:#22c55e;font-weight:600">✓ Converted</span>`;
 
-  openModal('Lead — '+esc(lead.name), `
+  openModal('Lead — '+esc(lead.name)+ratingBadge, `
     <div class="detail-grid">
       <div class="detail-item"><div class="detail-label">Name</div><div class="detail-value">${esc(lead.name)}</div></div>
       <div class="detail-item"><div class="detail-label">First Name</div><div class="detail-value">${esc(lead.first_name||'—')}</div></div>
@@ -8119,25 +8211,37 @@ async function viewLead(id) {
       <div class="detail-item"><div class="detail-label">Meta Lead ID</div><div class="detail-value mono">${esc(lead.meta_lead_id||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Created</div><div class="detail-value">${new Date(lead.created_at).toLocaleString('en-GB')}</div></div>
     </div>
-    <div class="frow" style="margin-top:14px">
+    <div class="frow" style="margin-top:14px;align-items:flex-end">
       <div class="form-group"><label class="form-label-dark">Stage</label>
         <select class="form-control" id="lead-stage" onchange="updateLeadStage('${lead.id}')">${stageOpts}</select>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Rating</label>
+        <select class="rating-sel" id="lead-rating" onchange="updateLeadRating('${lead.id}')">${ratingOpts}</select>
       </div>
       <div class="form-group"><label class="form-label-dark">Assigned To</label>
         <input type="text" class="form-control" id="lead-assigned" value="${esc(lead.assigned_to||'')}" placeholder="Team member..." onchange="updateLeadAssigned('${lead.id}')"/>
       </div>
     </div>
     <div style="margin-top:16px">
-      <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Activity</div>
-      <div class="act-feed" id="act-feed">${actsHtml}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:11px;font-weight:600;color:var(--charcoal);text-transform:uppercase;letter-spacing:.05em">Activity</span>
+        <div class="act-filter-bar" style="margin-bottom:0">
+          <button class="act-filter-btn active" data-filter="all" onclick="filterActFeed('all')">All</button>
+          <button class="act-filter-btn" data-filter="tasks" onclick="filterActFeed('tasks')">Tasks</button>
+          <button class="act-filter-btn" data-filter="calls" onclick="filterActFeed('calls')">Calls</button>
+          <button class="act-filter-btn" data-filter="emails" onclick="filterActFeed('emails')">Emails</button>
+          <button class="act-filter-btn" data-filter="other" onclick="filterActFeed('other')">Other</button>
+        </div>
+      </div>
+      <div class="act-feed" id="act-feed">${feedHtml}</div>
       <div class="act-input-row">
-        <select class="form-control" id="act-method">${methodOpts}</select>
-        <input type="datetime-local" class="form-control" id="act-contacted-at" value="${nowLocal}"/>
+        <select class="form-control" id="act-method" onchange="onActMethodChange()">${methodOpts}</select>
+        <div><div class="act-dt-label" id="act-dt-label">Contact time</div><input type="datetime-local" class="form-control" id="act-contacted-at" value="${_nowLocal()}"/></div>
         <input type="text" class="form-control" id="act-body" placeholder="Add activity note…" onkeydown="if(event.key==='Enter')addLeadActivity('${lead.id}')"/>
         <button class="btn btn-primary" onclick="addLeadActivity('${lead.id}')">Add</button>
       </div>
     </div>`,
-    `<button class="btn btn-danger" onclick="deleteLead('${lead.id}')">Delete</button><button class="btn" onclick="closeModal()">Close</button>`,
+    `${convertBtn}<button class="btn btn-danger" onclick="deleteLead('${lead.id}')">Delete</button><button class="btn" onclick="closeModal()">Close</button>`,
     true);
   setTimeout(()=>{ const f=document.getElementById('act-feed'); if(f) f.scrollTop=f.scrollHeight; },60);
 }
@@ -8147,6 +8251,13 @@ async function updateLeadStage(id) {
   const {error} = await sb.from('crm_leads').update({stage,updated_at:new Date().toISOString()}).eq('id',id);
   if(error) { toast('Error: '+error.message,'error'); return; }
   toast('Lead moved to '+CRM_STAGES.find(s=>s.key===stage)?.label,'success'); closeModal(); renderCRM();
+}
+
+async function updateLeadRating(id) {
+  const rating = document.getElementById('lead-rating')?.value||null;
+  const {error} = await sb.from('crm_leads').update({rating:rating||null,updated_at:new Date().toISOString()}).eq('id',id);
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  toast('Rating updated','success');
 }
 
 async function updateLeadAssigned(id) {
@@ -8159,20 +8270,57 @@ async function updateLeadAssigned(id) {
 async function addLeadActivity(id) {
   const body = document.getElementById('act-body')?.value?.trim();
   const method = document.getElementById('act-method')?.value||'note';
-  const contactedAt = document.getElementById('act-contacted-at')?.value;
+  const dateVal = document.getElementById('act-contacted-at')?.value;
   if(!body) return;
+  const isTask = method==='task';
   const authorName = currentProfile?.full_name || currentUser?.email || 'Unknown';
   const {error} = await sb.from('crm_lead_activities').insert({
     lead_id: id,
     author_id: currentUser?.id,
     author_name: authorName,
     method,
-    contacted_at: contactedAt ? new Date(contactedAt).toISOString() : new Date().toISOString(),
-    body
+    contacted_at: isTask ? new Date().toISOString() : (dateVal ? new Date(dateVal).toISOString() : new Date().toISOString()),
+    due_at: isTask && dateVal ? new Date(dateVal).toISOString() : null,
+    body,
+    completed: false,
   });
   if(error) { toast('Error: '+error.message,'error'); return; }
-  await sb.from('crm_leads').update({last_contacted_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('id',id);
+  if(!isTask) await sb.from('crm_leads').update({last_contacted_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('id',id);
   viewLead(id);
+}
+
+async function completeTask(actId, leadId) {
+  const {error} = await sb.from('crm_lead_activities').update({completed:true}).eq('id',actId);
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  toast('Task done','success');
+  viewLead(leadId);
+}
+
+async function openConvertLead(leadId) {
+  const {data:units} = await sb.from('units').select('id,unit_no,unit_type,floor,listed_price')
+    .eq('project_id',currentProject.id).order('floor').order('unit_no');
+  const {data:sales} = await sb.from('unit_sales').select('unit_id').maybeSingle().throwOnError().catch(()=>({data:null}));
+  const soldIds = new Set(Array.isArray(sales) ? sales.map(s=>s.unit_id) : []);
+  const available = (units||[]).filter(u=>!soldIds.has(u.id));
+  if(!available.length) { toast('No available units in this project','warning'); return; }
+  openModal('Convert Lead', `
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Link lead to a unit. Stage will be set to <strong>Closed Won</strong>.</p>
+    <div class="form-group"><label class="form-label-dark">Select Unit</label>
+      <select class="form-control" id="convert-unit-id">
+        <option value="">Select unit…</option>
+        ${available.map(u=>`<option value="${u.id}">Unit ${esc(u.unit_no)} · ${esc(u.unit_type)} · Floor ${u.floor} · AED ${fmtAED(u.listed_price)}</option>`).join('')}
+      </select>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doConvertLead('${leadId}')">Convert & Close Won</button><button class="btn" onclick="viewLead('${leadId}')">Back</button>`);
+}
+
+async function doConvertLead(leadId) {
+  const unitId = document.getElementById('convert-unit-id')?.value;
+  if(!unitId) { toast('Select a unit','error'); return; }
+  const {error} = await sb.from('crm_leads').update({stage:'closed_won',converted_unit_id:unitId,updated_at:new Date().toISOString()}).eq('id',leadId);
+  if(error) { toast('Error: '+error.message,'error'); return; }
+  toast('Lead converted — Closed Won','success');
+  closeModal(); renderCRM();
 }
 
 async function deleteLead(id) {
