@@ -898,6 +898,8 @@ function closeProjectDropdown() {
 
 function switchProject(project) {
   currentProject = project;
+  window._selectedContractId = null;
+  window._selectedIPCContractId = null;
   document.getElementById('psw-name').textContent = project.name;
   const sbName = document.getElementById('sb-proj-name');
   if(sbName) sbName.textContent = project.name;
@@ -6252,25 +6254,58 @@ async function doAddBill() {
 
 // ─── PAYMENT CERTIFICATES ─────────────────────────────────────────
 async function renderIPC() {
-  const [{data:certsRaw},{data:allItems}] = await Promise.all([
+  const [contractsRes, certsAllRes, allItemsRes] = await Promise.all([
+    sb.from('contracts').select('*').eq('project_id',currentProject.id).order('sort_order').order('created_at'),
     sb.from('payment_certificates').select('*').eq('project_id',currentProject.id).order('cert_no'),
     sb.from('payment_certificate_items').select('cert_id,contractor_amount,consultant_amount'),
   ]);
-  const certs = certsRaw||[];
+  const contracts = contractsRes.data||[];
+  const allCerts  = certsAllRes.data||[];
 
   // Pre-aggregate amounts per cert
   const amtMap = {};
-  for(const it of allItems||[]) {
+  for(const it of allItemsRes.data||[]) {
     if(!amtMap[it.cert_id]) amtMap[it.cert_id]={claimed:0,certified:0};
     amtMap[it.cert_id].claimed   += +it.contractor_amount||0;
     amtMap[it.cert_id].certified += +it.consultant_amount||0;
   }
+
+  // Contract tab state
+  if(contracts.length && !window._selectedIPCContractId) {
+    window._selectedIPCContractId = contracts[0].id;
+  }
+  if(!contracts.length) window._selectedIPCContractId = null;
+
+  const certs = contracts.length
+    ? allCerts.filter(c=>c.contract_id === window._selectedIPCContractId)
+    : allCerts;
 
   const draft      = certs.filter(c=>c.status==='Draft').length;
   const submitted  = certs.filter(c=>c.status==='Submitted').length;
   const underReview= certs.filter(c=>c.status==='Under Review').length;
   const certified  = certs.filter(c=>c.status==='Certified').length;
   const paid       = certs.filter(c=>c.status==='Paid').length;
+
+  const activeContract = contracts.find(c=>c.id===window._selectedIPCContractId);
+
+  const tabsHtml = contracts.length > 1 ? `
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
+      ${contracts.map(c=>{
+        const count = allCerts.filter(cert=>cert.contract_id===c.id).length;
+        const active = c.id===window._selectedIPCContractId;
+        return `<button class="btn${active?' btn-primary':''}" style="font-size:12px;padding:5px 14px" onclick="selectIPCContract('${c.id}')">
+          ${esc(c.name)}<span style="margin-left:6px;opacity:0.6">${count}</span>
+        </button>`;
+      }).join('')}
+    </div>` : '';
+
+  const contractBanner = activeContract ? `
+    <div style="font-size:11px;color:var(--text2);margin-bottom:12px;padding:8px 12px;background:var(--card2);border-radius:6px;display:flex;gap:18px">
+      <span><b>${esc(activeContract.name)}</b></span>
+      ${activeContract.contractor?`<span>${esc(activeContract.contractor)}</span>`:''}
+      ${activeContract.contract_value?`<span>${fmtAED(activeContract.contract_value)}</span>`:''}
+      ${activeContract.award_date?`<span>Awarded ${new Date(activeContract.award_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}</span>`:''}
+    </div>` : '';
 
   document.getElementById('content').innerHTML = `
   <div class="module-bar">
@@ -6281,7 +6316,9 @@ async function renderIPC() {
     <div class="module-stat"><div class="module-stat-val">${certified}</div><div class="module-stat-label">Certified</div></div>
     <div class="module-stat"><div class="module-stat-val">${paid}</div><div class="module-stat-label">Paid</div></div>
   </div>
-  <div class="card"><div class="tw"><table>
+  <div class="card">
+    ${tabsHtml}${contractBanner}
+    <div class="tw"><table>
     <tr><th>Ref No.</th><th>Submission Date</th><th>Submitted By</th><th style="text-align:right">Contractor Claimed</th><th style="text-align:right">Consultant Certified</th><th>Status</th><th>Actions</th></tr>
     ${certs.length ? certs.map(c=>{
       const a = amtMap[c.id]||{claimed:0,certified:0};
@@ -6295,6 +6332,11 @@ async function renderIPC() {
       <td><button class="btn btn-sm" onclick="event.stopPropagation();viewIPC('${c.id}')">View</button></td>
     </tr>`;}).join('') : '<tr><td colspan="7" class="empty-state">No payment certificates yet. Click + New to create the first IPC.</td></tr>'}
   </table></div></div>`;
+}
+
+function selectIPCContract(id) {
+  window._selectedIPCContractId = id;
+  renderIPC();
 }
 
 async function openNewIPC() {
