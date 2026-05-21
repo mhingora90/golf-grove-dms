@@ -7551,6 +7551,7 @@ async function renderUnitRegister() {
   const {data:units, error} = await sb
     .from('units')
     .select('*, unit_sales(*, payment_milestones(*))')
+    .eq('project_id', currentProject.id)
     .order('floor')
     .order('unit_no');
   if(error) {
@@ -7875,7 +7876,8 @@ async function markUnitAvailable(saleId, unitNo) {
 async function renderSalesRevenue() {
   const {data:units, error} = await sb
     .from('units')
-    .select('*, unit_sales(*, payment_milestones(*))');
+    .select('*, unit_sales(*, payment_milestones(*))')
+    .eq('project_id', currentProject.id);
   if(error) {
     document.getElementById('content').innerHTML =
       '<div class="empty-state" style="padding:48px;text-align:center;color:var(--red)">Failed to load: ' + esc(error.message) + '</div>';
@@ -8689,7 +8691,10 @@ async function completeTask(actId, leadId) {
 async function openConvertLead(leadId) {
   const {data:units} = await sb.from('units').select('id,unit_no,unit_type,floor,listed_price')
     .eq('project_id',currentProject.id).order('floor').order('unit_no');
-  const {data:sales} = await sb.from('unit_sales').select('unit_id').eq('project_id', currentProject.id);
+  const unitIds = (units||[]).map(u=>u.id);
+  const {data:sales} = unitIds.length
+    ? await sb.from('unit_sales').select('unit_id').in('unit_id', unitIds)
+    : {data:[]};
   const soldIds = new Set((sales||[]).map(s=>s.unit_id));
   const available = (units||[]).filter(u=>!soldIds.has(u.id));
   if(!available.length) { toast('No available units in this project','warning'); return; }
