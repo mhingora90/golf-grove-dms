@@ -198,8 +198,12 @@ textarea.form-control{resize:vertical;min-height:70px}
 .act-badge{font-weight:700;color:var(--act-color,#9ca3af);text-transform:uppercase;letter-spacing:.05em;font-size:10px}
 .act-overdue-tag{background:#ef4444;color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
 .act-body{font-size:12px;color:var(--charcoal);line-height:1.5}
-.act-done-btn{background:none;border:0.5px solid var(--border2);border-radius:4px;font-size:11px;color:var(--text2);cursor:pointer;padding:2px 8px;margin-left:auto;flex-shrink:0;font-family:inherit}
-.act-done-btn:hover{background:var(--bg2);color:var(--charcoal)}
+.act-done-btn,.act-reply-btn{background:none;border:0.5px solid var(--border2);border-radius:4px;font-size:11px;color:var(--text2);cursor:pointer;padding:2px 8px;flex-shrink:0;font-family:inherit}
+.act-done-btn{margin-left:auto}
+.act-done-btn:hover,.act-reply-btn:hover{background:var(--bg2);color:var(--charcoal)}
+.act-item.act-threaded{margin-left:20px;border-left-width:2px;opacity:.95}
+.act-reply-banner{display:none;padding:6px 10px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:6px;font-size:11px;color:var(--text2);margin-bottom:6px;align-items:center;gap:8px}
+.act-reply-banner.open{display:flex}
 .act-section-hdr{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;padding:6px 0 2px;border-top:0.5px solid var(--border);margin-top:2px}
 .act-section-hdr:first-child{border-top:none;margin-top:0;padding-top:2px}
 .act-filter-bar{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
@@ -8137,31 +8141,65 @@ function filterActFeed(type) {
   if(ph) ph.style.display = anyPast ? '' : 'none';
 }
 
-function _renderActItem(a, leadId, now) {
+let _crmReplyTo = null;
+
+function startActReply(actId, bodyText) {
+  _crmReplyTo = actId;
+  const banner = document.getElementById('act-reply-banner');
+  const preview = document.getElementById('act-reply-preview');
+  if(banner) banner.classList.add('open');
+  if(preview) preview.textContent = bodyText.length>70 ? bodyText.slice(0,70)+'…' : bodyText;
+  document.getElementById('act-body')?.focus();
+}
+
+function cancelActReply() {
+  _crmReplyTo = null;
+  document.getElementById('act-reply-banner')?.classList.remove('open');
+}
+
+function _renderActItem(a, leadId, now, isThreaded=false) {
   const m = ACT_METHODS[a.method]||ACT_METHODS.note;
   const isTask = a.method==='task';
   const overdue = isTask && !a.completed && a.due_at && new Date(a.due_at)<now;
-  const cls = [
-    'act-item',
-    overdue ? 'act-overdue' : '',
-    a.completed ? 'act-completed' : '',
-  ].filter(Boolean).join(' ');
+  const cls = ['act-item', overdue?'act-overdue':'', a.completed?'act-completed':'', isThreaded?'act-threaded':''].filter(Boolean).join(' ');
   const dateStr = isTask && a.due_at
     ? new Date(a.due_at).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})
     : new Date(a.contacted_at).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
   const overdueTag = overdue ? `<span class="act-overdue-tag">Overdue</span>` : '';
   const doneBtn = isTask && !a.completed
-    ? `<button class="act-done-btn" onclick="completeTask('${a.id}','${leadId}')">✓ Done</button>`
-    : '';
+    ? `<button class="act-done-btn" onclick="completeTask('${a.id}','${leadId}')">✓ Done</button>` : '';
+  const replyBtn = !isThreaded
+    ? `<button class="act-reply-btn" style="margin-left:6px" onclick="startActReply('${a.id}',this.closest('.act-item').querySelector('.act-body').textContent)">↩ Reply</button>` : '';
   return `<div class="${cls}" data-method="${esc(a.method)}">
     <div class="act-meta">
       <span>${m.icon}</span><span class="act-badge">${m.label}</span>
       <span>·</span><span>${esc(a.author_name)}</span>
       <span>·</span><span>${isTask?'Due: ':''}<b>${dateStr}</b></span>
-      ${overdueTag}${doneBtn}
+      ${overdueTag}${doneBtn}${replyBtn}
     </div>
     <div class="act-body">${esc(a.body)}</div>
   </div>`;
+}
+
+function _buildFeedHtml(acts, leadId) {
+  const now = new Date();
+  const replyMap = {};
+  const topLevel = [];
+  (acts||[]).forEach(a => {
+    if(a.parent_id) { (replyMap[a.parent_id]=replyMap[a.parent_id]||[]).push(a); }
+    else topLevel.push(a);
+  });
+  const renderWithReplies = (a, threaded=false) =>
+    _renderActItem(a, leadId, now, threaded) +
+    (replyMap[a.id]||[]).sort((x,y)=>new Date(x.contacted_at)-new Date(y.contacted_at))
+      .map(r=>_renderActItem(r, leadId, now, true)).join('');
+
+  const tasks = topLevel.filter(a=>a.method==='task'&&!a.completed).sort((a,b)=>new Date(a.due_at||0)-new Date(b.due_at||0));
+  const past  = topLevel.filter(a=>a.method!=='task'||a.completed).sort((a,b)=>new Date(a.contacted_at)-new Date(b.contacted_at));
+  let html = '';
+  if(tasks.length) { html += `<div class="act-section-hdr" id="act-hdr-tasks">📋 Tasks</div>`+tasks.map(a=>renderWithReplies(a)).join(''); }
+  if(past.length)  { html += `<div class="act-section-hdr" id="act-hdr-past">Past Activity</div>`+past.map(a=>renderWithReplies(a)).join(''); }
+  return html || '<div style="color:var(--text3);font-size:12px;padding:4px 0">No activity yet</div>';
 }
 
 async function viewLead(id) {
@@ -8175,21 +8213,7 @@ async function viewLead(id) {
   const ratingOpts = `<option value="">— No rating</option>`+Object.entries(RATING_META).map(([k,v])=>`<option value="${k}"${lead.rating===k?'selected':''}>${v.label}</option>`).join('');
   const ratingBadge = lead.rating ? `<span class="${RATING_META[lead.rating].cls}" style="margin-left:6px;font-size:12px">${RATING_META[lead.rating].label}</span>` : '';
 
-  const now = new Date();
-  const allActs = acts||[];
-  const tasks = allActs.filter(a=>a.method==='task'&&!a.completed).sort((a,b)=>new Date(a.due_at||0)-new Date(b.due_at||0));
-  const past  = allActs.filter(a=>a.method!=='task'||a.completed).sort((a,b)=>new Date(a.contacted_at)-new Date(b.contacted_at));
-
-  let feedHtml = '';
-  if(tasks.length) {
-    feedHtml += `<div class="act-section-hdr" id="act-hdr-tasks">📋 Tasks</div>`;
-    feedHtml += tasks.map(a=>_renderActItem(a,id,now)).join('');
-  }
-  if(past.length) {
-    feedHtml += `<div class="act-section-hdr" id="act-hdr-past">Past Activity</div>`;
-    feedHtml += past.map(a=>_renderActItem(a,id,now)).join('');
-  }
-  if(!feedHtml) feedHtml = '<div style="color:var(--text3);font-size:12px;padding:4px 0">No activity yet</div>';
+  const feedHtml = _buildFeedHtml(acts, id);
 
   const methodOpts = Object.entries(ACT_METHODS).map(([k,v])=>`<option value="${k}"${k==='note'?' selected':''}>${v.icon} ${v.label}</option>`).join('');
   const convertBtn = lead.stage!=='closed_won'
@@ -8234,6 +8258,11 @@ async function viewLead(id) {
         </div>
       </div>
       <div class="act-feed" id="act-feed">${feedHtml}</div>
+      <div class="act-reply-banner" id="act-reply-banner">
+        <span style="flex-shrink:0">↩ Replying to:</span>
+        <span id="act-reply-preview" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-style:italic"></span>
+        <button onclick="cancelActReply()" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;line-height:1;padding:0 2px">×</button>
+      </div>
       <div class="act-input-row">
         <select class="form-control" id="act-method" onchange="onActMethodChange()">${methodOpts}</select>
         <div><div class="act-dt-label" id="act-dt-label">Contact time</div><input type="datetime-local" class="form-control" id="act-contacted-at" value="${_nowLocal()}"/></div>
@@ -8274,6 +8303,8 @@ async function addLeadActivity(id) {
   if(!body) return;
   const isTask = method==='task';
   const authorName = currentProfile?.full_name || currentUser?.email || 'Unknown';
+  const parentId = _crmReplyTo||null;
+  _crmReplyTo = null;
   const {error} = await sb.from('crm_lead_activities').insert({
     lead_id: id,
     author_id: currentUser?.id,
@@ -8283,8 +8314,9 @@ async function addLeadActivity(id) {
     due_at: isTask && dateVal ? new Date(dateVal).toISOString() : null,
     body,
     completed: false,
+    parent_id: parentId,
   });
-  if(error) { toast('Error: '+error.message,'error'); return; }
+  if(error) { _crmReplyTo=parentId; toast('Error: '+error.message,'error'); return; }
   if(!isTask) await sb.from('crm_leads').update({last_contacted_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('id',id);
   viewLead(id);
 }
