@@ -8362,8 +8362,8 @@ async function completeTask(actId, leadId) {
 async function openConvertLead(leadId) {
   const {data:units} = await sb.from('units').select('id,unit_no,unit_type,floor,listed_price')
     .eq('project_id',currentProject.id).order('floor').order('unit_no');
-  const {data:sales} = await sb.from('unit_sales').select('unit_id').maybeSingle().throwOnError().catch(()=>({data:null}));
-  const soldIds = new Set(Array.isArray(sales) ? sales.map(s=>s.unit_id) : []);
+  const {data:sales} = await sb.from('unit_sales').select('unit_id').eq('project_id', currentProject.id);
+  const soldIds = new Set((sales||[]).map(s=>s.unit_id));
   const available = (units||[]).filter(u=>!soldIds.has(u.id));
   if(!available.length) { toast('No available units in this project','warning'); return; }
   openModal('Convert Lead', `
