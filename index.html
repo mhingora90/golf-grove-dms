@@ -8217,6 +8217,7 @@ let crmSortCol = "created_at", crmSortAsc = false;
 let crmPage = 0;
 let crmSelected = new Set();
 const CRM_PER_PAGE = 25;
+let _crmProjectMembers = [];
 let crmSearchTimer = null;
 
 // ─── CRM HOME DASHBOARD ───────────────────────────────────────────
@@ -8238,11 +8239,12 @@ async function renderCRMHome() {
     { data: recentActs },
   ] = await Promise.all([
     sb.from('crm_lead_activities')
-      .select('id,lead_id,method,body,due_at,completed,contacted_at,crm_leads!inner(id,name,stage,project_id)')
+      .select('id,lead_id,method,body,due_at,completed,contacted_at,assigned_to,assigned_to_name,crm_leads!inner(id,name,stage,project_id)')
       .eq('crm_leads.project_id', pid)
       .eq('method', 'task')
       .eq('completed', false)
       .not('due_at', 'is', null)
+      .or(`assigned_to.eq.${currentUser.id},and(assigned_to.is.null,author_id.eq.${currentUser.id})`)
       .order('due_at', { ascending: true }),
     sb.from('crm_leads')
       .select('id,name,stage,last_contacted_at,created_at,assigned_to')
@@ -8316,7 +8318,7 @@ async function renderCRMHome() {
     return icons[m]||'📋';
   };
   const openLeadBtn = (leadId) =>
-    `<button class="ch-open-btn" onclick="nav('crm',document.getElementById('n-crm'));setTimeout(()=>openLeadDetail('${esc(leadId)}'),400)">Open</button>`;
+    `<button class="ch-open-btn" onclick="nav('crm',document.getElementById('n-crm'));setTimeout(()=>viewLead('${esc(leadId)}'),400)">Open</button>`;
 
   // ── Week day columns ──
   const weekDays = [];
@@ -8930,9 +8932,15 @@ function onActMethodChange() {
   const method = document.getElementById('act-method')?.value;
   const lbl = document.getElementById('act-dt-label');
   const dt = document.getElementById('act-contacted-at');
+  const assigneeRow = document.getElementById('act-assignee-row');
   if(!lbl||!dt) return;
-  if(method==='task') { lbl.textContent='Due by'; dt.value=_tomorrowLocal(); }
-  else { lbl.textContent='Contact time'; dt.value=_nowLocal(); }
+  if(method==='task') {
+    lbl.textContent='Due by'; dt.value=_tomorrowLocal();
+    if(assigneeRow) assigneeRow.style.display='';
+  } else {
+    lbl.textContent='Contact time'; dt.value=_nowLocal();
+    if(assigneeRow) assigneeRow.style.display='none';
+  }
 }
 
 function filterActFeed(type) {
@@ -9032,11 +9040,17 @@ function _buildFeedHtml(acts, leadId) {
 }
 
 async function viewLead(id) {
-  const [{data:lead,error}, {data:acts}] = await Promise.all([
+  const [{data:lead,error}, {data:acts}, {data:puRows}] = await Promise.all([
     sb.from('crm_leads').select('*').eq('id',id).maybeSingle(),
-    sb.from('crm_lead_activities').select('*').eq('lead_id',id).order('contacted_at',{ascending:true})
+    sb.from('crm_lead_activities').select('*').eq('lead_id',id).order('contacted_at',{ascending:true}),
+    sb.from('project_users').select('user_id').eq('project_id',currentProject.id),
   ]);
   if(error||!lead) { toast('Lead not found','error'); return; }
+  const puIds = (puRows||[]).map(r=>r.user_id).filter(Boolean);
+  const {data:memberProfiles} = puIds.length
+    ? await sb.from('profiles').select('id,full_name').in('id',puIds)
+    : {data:[]};
+  _crmProjectMembers = memberProfiles||[];
 
   const stageOpts = CRM_STAGES.map(s=>`<option value="${esc(s.key)}"${lead.stage===s.key?'selected':''}>${esc(s.label)}</option>`).join('');
   const ratingBadge = lead.rating ? `<span class="${RATING_META[lead.rating].cls}" style="margin-left:6px;font-size:12px">${RATING_META[lead.rating].label}</span>` : '';
@@ -9071,7 +9085,10 @@ async function viewLead(id) {
         <select class="form-control" id="lead-stage" onchange="updateLeadStage('${lead.id}')">${stageOpts}</select>
       </div>
       <div class="form-group" style="margin-bottom:0"><label class="form-label-dark">Assigned To</label>
-        <input type="text" class="form-control" id="lead-assigned" value="${esc(lead.assigned_to||'')}" placeholder="Team member…" onchange="updateLeadAssigned('${lead.id}')"/>
+        <select class="form-control" id="lead-assigned" onchange="updateLeadAssigned('${lead.id}')">
+          <option value="">— Unassigned —</option>
+          ${_crmProjectMembers.map(p=>`<option value="${esc(p.full_name||p.id)}"${lead.assigned_to===(p.full_name||p.id)?'selected':''}>${esc(p.full_name||p.id)}</option>`).join('')}
+        </select>
       </div>
       <div class="form-group" style="margin-bottom:0;grid-column:1/-1"><label class="form-label-dark">Rating</label>
         <div class="rating-group">${ratingBtns}</div>
@@ -9102,6 +9119,12 @@ async function viewLead(id) {
         <div><div class="act-dt-label" id="act-dt-label">Contact time</div><input type="datetime-local" class="form-control" id="act-contacted-at" value="${_nowLocal()}"/></div>
         <input type="text" class="form-control" id="act-body" placeholder="Add activity note…" onkeydown="if(event.key==='Enter')addLeadActivity('${lead.id}')"/>
         <button class="btn btn-primary" onclick="addLeadActivity('${lead.id}')">Add</button>
+      </div>
+      <div id="act-assignee-row" style="display:none;margin-top:6px">
+        <select class="form-control" id="act-assignee" style="font-size:12px">
+          <option value="">Assign task to: ${esc(currentProfile?.full_name||'me')} (default)</option>
+          ${_crmProjectMembers.map(p=>`<option value="${esc(p.id)}" data-name="${esc(p.full_name||p.id)}">${esc(p.full_name||p.id)}</option>`).join('')}
+        </select>
       </div>
     </div>`,
     `${convertBtn}<button class="btn btn-danger" onclick="deleteLead('${lead.id}')">Delete</button><button class="btn" onclick="closeModal()">Close</button>`,
@@ -9140,6 +9163,17 @@ async function addLeadActivity(id) {
   const authorName = currentProfile?.full_name || currentUser?.email || 'Unknown';
   const parentId = _crmReplyTo||null;
   _crmReplyTo = null;
+  let assignedToId = null, assignedToName = null;
+  if(isTask) {
+    const assigneeSel = document.getElementById('act-assignee');
+    if(assigneeSel?.value) {
+      assignedToId = assigneeSel.value;
+      assignedToName = assigneeSel.options[assigneeSel.selectedIndex]?.dataset?.name || null;
+    } else {
+      assignedToId = currentUser?.id;
+      assignedToName = authorName;
+    }
+  }
   const {error} = await sb.from('crm_lead_activities').insert({
     lead_id: id,
     author_id: currentUser?.id,
@@ -9150,6 +9184,8 @@ async function addLeadActivity(id) {
     body,
     completed: false,
     parent_id: parentId,
+    assigned_to: assignedToId,
+    assigned_to_name: assignedToName,
   });
   if(error) { _crmReplyTo=parentId; toast('Error: '+error.message,'error'); return; }
   if(!isTask) await sb.from('crm_leads').update({last_contacted_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('id',id);
