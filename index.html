@@ -8287,6 +8287,10 @@ async function renderCRMHome() {
     return new Date(ra) - new Date(rb);
   });
 
+  // My assigned leads
+  const myName = currentProfile?.full_name;
+  const myLeads = myName ? leads.filter(l => l.assigned_to === myName) : [];
+
   // Pipeline counts from all-stages (including closed)
   const { data: allStageRows } = await sb.from('crm_leads').select('stage').eq('project_id', pid);
   const stageMap = {};
@@ -8389,6 +8393,19 @@ async function renderCRMHome() {
       <div class="ch-pipe-ct">${ct}</div>
     </div>`;
   }).join('');
+
+  // ── My assigned leads rows ──
+  const myLeadRows = myLeads.slice(0,10).map(l => {
+    const hasTask = leadsWithTask.has(l.id);
+    return `<div class="ch-notask-row">
+      <div style="flex:1;font-weight:500;color:var(--charcoal)">${esc(l.name||'Unknown')}</div>
+      ${stageBadge(l.stage)}
+      ${hasTask?'':'<span style="font-size:10px;color:var(--amber);font-weight:500">no task</span>'}
+      ${openLeadBtn(l.id)}
+    </div>`;
+  }).join('');
+  const myLeadsMore = myLeads.length > 10
+    ? `<div class="ch-more-link" onclick="nav('crm',document.getElementById('n-crm'))">+${myLeads.length-10} more →</div>` : '';
 
   // ── No task set rows ──
   const noTaskRows = noTaskLeads.slice(0,8).map(l =>
@@ -8495,6 +8512,18 @@ async function renderCRMHome() {
 
       <!-- RIGHT SIDEBAR -->
       <div class="crm-home-right">
+
+        <!-- MY LEADS -->
+        <div class="ch-card">
+          <div class="ch-card-head">
+            <span class="ch-card-title">My Leads</span>
+            ${myLeads.length>0?`<span class="ch-badge" style="background:var(--blue);color:#fff">${myLeads.length}</span>`:''}
+          </div>
+          ${myLeads.length===0
+            ? `<div class="ch-empty">No leads assigned to ${esc(myName||'you')}</div>`
+            : myLeadRows + myLeadsMore
+          }
+        </div>
 
         <!-- PIPELINE -->
         <div class="ch-card">
