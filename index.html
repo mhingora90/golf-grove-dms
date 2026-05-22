@@ -1221,7 +1221,15 @@ function canCreateOnPage(page) {
   return false;
 }
 
+function toggleMobileNav() {
+  document.getElementById('app-screen').classList.toggle('nav-open');
+}
+function closeMobileNav() {
+  document.getElementById('app-screen').classList.remove('nav-open');
+}
+
 function nav(page, el, opts) {
+  closeMobileNav();
   currentPage = page;
   navFilter = opts?.filter || null;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
