@@ -646,6 +646,36 @@ textarea.form-control{resize:vertical;min-height:70px}
   .tw table { min-width: 520px; }
   th, td { white-space: nowrap; padding: 8px 10px; }
 
+  /* ── Full-screen modals ── */
+  .modal-bg {
+    align-items: flex-start !important;
+    padding: 0 !important;
+  }
+  .modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100dvh !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    overflow-y: auto !important;
+    display: flex;
+    flex-direction: column;
+  }
+  .modal-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+  .modal-body { flex: 1; overflow-y: auto; }
+  .modal-footer {
+    position: sticky;
+    bottom: 0;
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+
 }
 </style>
 </head>
