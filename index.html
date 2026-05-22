@@ -1165,6 +1165,7 @@ function can(action) {
   const role = currentProfile?.role;
   const perms = {
     developer:    {approve:true, upload:true, raise:true, submit:true, manageUsers:true, manageSubs:true, submitMS:false, manageRegister:true, delete_drawing:true},
+    admin:        {approve:false,upload:false,raise:false,submit:false,manageUsers:true, manageSubs:false,submitMS:false,manageRegister:false},
     consultant:   {approve:true, upload:true, raise:true, submit:true, manageUsers:false,manageSubs:false,submitMS:false,manageRegister:true},
     contractor:   {approve:false,upload:true, raise:false,submit:true, manageUsers:false,manageSubs:true, submitMS:true, manageRegister:false},
     subcontractor:{approve:false,upload:false,raise:false,submit:true, manageUsers:false,manageSubs:false,submitMS:true, manageRegister:false},
@@ -2859,7 +2860,7 @@ async function denyUser(uid, name) {
   if(!ok) return;
   await sb.from('profiles').delete().eq('id', uid);
   toast(`${esc(name)||'User'} removed`,'success');
-  render();
+  closeModal(); render();
 }
 
 async function editUserRole(uid, currentRole, name) {
@@ -4423,7 +4424,7 @@ function confirmModal(msg) {
     openModal('Confirm Action', `<div style="font-size:14px;color:var(--text);line-height:1.5;padding:8px 0">${msg}</div>`,
       `<button class="btn btn-primary" id="confirm-yes">Confirm</button><button class="btn btn-danger" onclick="window._confirmResolve(false)">Cancel</button>`);
     window._confirmResolve = (v)=>{ closeModal(); resolve(v); };
-    document.getElementById('confirm-yes').onclick = ()=> resolve(true);
+    document.getElementById('confirm-yes').onclick = ()=>{ closeModal(); resolve(true); };
   });
 }
 
