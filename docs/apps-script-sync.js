@@ -130,3 +130,70 @@ function backfillAllLeads() {
 
   Logger.log('Backfill done — updated: ' + updated + ', skipped: ' + skipped + ', errors: ' + errors);
 }
+
+// Upsert ALL rows from sheet into crm_leads.
+// Uses data[1] as header row (SyncWith export: data[0] is a data row, data[1] is headers).
+// on_conflict=meta_lead_id → insert new, update existing.
+function upsertAllLeads() {
+  const ss = SpreadsheetApp.openById('1MilS5L6fbmbm4w1xStoVvitX5vgvyrG0RWczSHRxNqo');
+  const sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) { Logger.log('Sheet not found: ' + SHEET_NAME); return; }
+  const data = sheet.getDataRange().getValues();
+  if (data.length < 3) return;
+
+  const headers = data[1].map(h => String(h).trim().toLowerCase());
+  const idx = (h) => headers.findIndex(header => header === h);
+
+  const idxName     = idx('adset_name');    // person name
+  const idxCompany  = idx('adset_id');      // company/brokerage
+  const idxEmail    = idx('campaign_id');   // email
+  const idxPhone    = idx('campaign_name'); // phone with p: prefix
+  const idxBudget   = idx('created_time');  // budget range
+  const idxPropType = idx('ad_id');         // property type
+
+  let inserted = 0, errors = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    if (i === 1) continue; // skip header row
+    const row = data[i];
+    const str = (j) => j >= 0 ? (String(row[j] || '').trim() || null) : null;
+    const rawId = str(0) || '';
+    const metaLeadId = rawId.startsWith('l:') ? rawId.slice(2) : (rawId || null);
+    if (!metaLeadId) continue;
+
+    const payload = {
+      project_id:   '00000000-0000-0000-0000-000000000002',
+      meta_lead_id: metaLeadId,
+      name:         str(idxName),
+      company_name: str(idxCompany),
+      email:        str(idxEmail),
+      phone:        str(idxPhone)?.replace(/^p:/, '') || null,
+      created_time: str(idxBudget),
+      ad_id:        str(idxPropType),
+      source:       'meta_ads',
+    };
+
+    const res = UrlFetchApp.fetch(SUPABASE_URL + '/rest/v1/crm_leads?on_conflict=meta_lead_id', {
+      method: 'post',
+      contentType: 'application/json',
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: 'Bearer ' + SUPABASE_KEY,
+        Prefer: 'resolution=merge-duplicates,return=minimal',
+      },
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true,
+    });
+
+    const code = res.getResponseCode();
+    if (code === 201 || code === 200 || code === 204) {
+      inserted++;
+    } else {
+      errors++;
+      Logger.log('Row ' + i + ' error: ' + code + ' ' + res.getContentText());
+    }
+    Utilities.sleep(30);
+  }
+
+  Logger.log('Upsert done — processed: ' + inserted + ', errors: ' + errors);
+}
