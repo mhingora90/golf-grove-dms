@@ -2750,6 +2750,8 @@ async function renderSubcontractors() {
 }
 
 // ─── USER MANAGEMENT ──────────────────────────────────────────────
+const ROLE_ADMIN_EMAIL = 'mohammed@regent-developments.com';
+
 async function renderUsers() {
   if(!can('manageUsers')){
     const el = document.getElementById('content');
@@ -2763,27 +2765,73 @@ async function renderUsers() {
     el.appendChild(card);
     return;
   }
+  const isAdmin = currentUser?.email === ROLE_ADMIN_EMAIL;
   const {data} = await sb.from('profiles').select('*').order('created_at',{ascending:false});
   const rows = data||[];
-  document.getElementById('content').innerHTML = `
+  const pending = rows.filter(u => u.role === 'pending');
+  const active  = rows.filter(u => u.role !== 'pending');
+
+  const pendingSection = pending.length ? `
+  <div class="card" style="border-left:3px solid #f59e0b;margin-bottom:16px">
+    <div style="padding:14px 18px 10px;font-weight:600;font-size:13px;display:flex;align-items:center;gap:8px">
+      <span style="background:#f59e0b;color:#fff;border-radius:10px;padding:1px 8px;font-size:11px">${pending.length}</span>
+      Pending Approvals
+    </div>
+    <div class="tw"><table>
+      <tr><th>Name</th><th>Email</th><th>Company</th><th>Requested Role</th><th>Registered</th>${isAdmin?'<th>Actions</th>':''}</tr>
+      ${pending.map(u=>`<tr>
+        <td style="font-weight:500">${esc(u.full_name||'—')}</td>
+        <td style="color:var(--text2);font-size:11px">${esc(u.email||'—')}</td>
+        <td style="color:var(--text2)">${esc(u.company||'—')}</td>
+        <td><span class="role-badge role-${esc(u.requested_role||'contractor')}">${esc(u.requested_role||'—')}</span></td>
+        <td style="color:var(--text2);font-size:11px">${new Date(u.created_at).toLocaleDateString('en-GB')}</td>
+        ${isAdmin?`<td style="display:flex;gap:6px;padding:6px 0">
+          <button class="btn btn-sm btn-primary" onclick="approveUser('${u.id}','${esc(u.requested_role||'contractor')}','${esc(u.full_name||'')}')">Approve</button>
+          <button class="btn btn-sm" style="color:#ef4444" onclick="denyUser('${u.id}','${esc(u.full_name||u.email||'')}')">Deny</button>
+        </td>`:''}
+      </tr>`).join('')}
+    </table></div>
+  </div>` : '';
+
+  const activeSection = `
   <div class="card"><div class="tw"><table>
-    <tr><th>Name</th><th>Email</th><th>Role</th><th>Company</th><th>Actions</th></tr>
-    ${rows.length?rows.map(u=>`<tr>
-      <td style="font-weight:500">${u.full_name||'—'}</td>
-      <td style="color:var(--text2);font-size:11px">${u.email||'—'}</td>
+    <tr><th>Name</th><th>Email</th><th>Role</th><th>Company</th>${isAdmin?'<th>Actions</th>':''}</tr>
+    ${active.length?active.map(u=>`<tr>
+      <td style="font-weight:500">${esc(u.full_name||'—')}</td>
+      <td style="color:var(--text2);font-size:11px">${esc(u.email||'—')}</td>
       <td><span class="role-badge role-${u.role||'contractor'}">${u.role||'—'}</span></td>
-      <td style="color:var(--text2)">${u.company||'—'}</td>
-      <td><button class="btn btn-sm" onclick="editUserRole('${u.id}','${u.role}','${u.full_name}')">Change Role</button></td>
-    </tr>`).join(''):'<tr><td colspan="5" class="empty-state">No users yet.</td></tr>'}
+      <td style="color:var(--text2)">${esc(u.company||'—')}</td>
+      ${isAdmin?`<td><button class="btn btn-sm" onclick="editUserRole('${u.id}','${u.role}','${esc(u.full_name||'')}')">Change Role</button></td>`:''}
+    </tr>`).join(''):'<tr><td colspan="5" class="empty-state">No active users.</td></tr>'}
   </table></div></div>`;
+
+  document.getElementById('content').innerHTML = pendingSection + activeSection;
+}
+
+async function approveUser(uid, requestedRole, name) {
+  if(currentUser?.email !== ROLE_ADMIN_EMAIL){ toast('Not authorised','error'); return; }
+  const {error} = await sb.from('profiles').update({role: requestedRole}).eq('id', uid);
+  if(error){ toast('Error: '+error.message,'error'); return; }
+  toast(`${esc(name)||'User'} approved as ${requestedRole}`,'success');
+  render();
+}
+
+async function denyUser(uid, name) {
+  if(currentUser?.email !== ROLE_ADMIN_EMAIL){ toast('Not authorised','error'); return; }
+  const ok = await confirmModal(`Deny and remove <strong>${esc(name)}</strong>? Their account will be deleted.`);
+  if(!ok) return;
+  await sb.from('profiles').delete().eq('id', uid);
+  toast(`${esc(name)||'User'} removed`,'success');
+  render();
 }
 
 async function editUserRole(uid, currentRole, name) {
-  openModal(`Change Role – ${name}`, `
+  if(currentUser?.email !== ROLE_ADMIN_EMAIL){ toast('Not authorised','error'); return; }
+  openModal(`Change Role – ${esc(name)}`, `
     <div class="form-group">
       <label class="form-label-dark">Role</label>
       <select class="form-control" id="new-role">
-        ${['developer','consultant','contractor','subcontractor'].map(r=>`<option value="${r}" ${r===currentRole?'selected':''}>${r}</option>`).join('')}
+        ${['developer','sales','consultant','contractor','subcontractor'].map(r=>`<option value="${r}" ${r===currentRole?'selected':''}>${r}</option>`).join('')}
       </select>
     </div>`,
     `<button class="btn btn-primary" onclick="doChangeRole('${uid}')">Update Role</button>
@@ -2791,8 +2839,10 @@ async function editUserRole(uid, currentRole, name) {
 }
 
 async function doChangeRole(uid) {
+  if(currentUser?.email !== ROLE_ADMIN_EMAIL){ toast('Not authorised','error'); return; }
   const role = document.getElementById('new-role').value;
-  await sb.from('profiles').update({role}).eq('id',uid);
+  const {error} = await sb.from('profiles').update({role}).eq('id',uid);
+  if(error){ toast('Error: '+error.message,'error'); return; }
   toast('Role updated','success'); closeModal(); render();
 }
 
