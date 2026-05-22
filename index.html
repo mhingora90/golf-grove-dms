@@ -432,6 +432,7 @@ textarea.form-control{resize:vertical;min-height:70px}
 .role-consultant{background:var(--blue-bg);color:var(--blue);border-color:#B5D4F4}
 .role-contractor{background:var(--amber-bg);color:var(--amber);border-color:#FAC775}
 .role-subcontractor{background:var(--green-bg);color:var(--green);border-color:#C0DD97}
+.role-admin{background:#F3E8FF;color:#7C3AED;border-color:#C4B5FD}
 /* ── PROJECT SCREEN ──────────────────────────── */
 #project-screen{display:none;min-height:100vh;background:var(--bg);flex-direction:column}
 .ps-header{padding:28px 32px 0;display:flex;align-items:flex-end;justify-content:space-between}
@@ -529,6 +530,7 @@ textarea.form-control{resize:vertical;min-height:70px}
           <option value="subcontractor">Subcontractor</option>
           <option value="consultant">Consultant</option>
           <option value="developer">Developer / Client</option>
+          <option value="admin">Sales Admin</option>
         </select>
       </div>
       <button class="btn-auth" onclick="doSignup()" id="signup-btn">Create Account</button>
@@ -1103,7 +1105,7 @@ async function loadApp(user) {
   const roleClass = `role-${profile?.role||'contractor'}`;
   document.getElementById('role-badge-top').className=`role-badge ${roleClass}`;
   document.getElementById('role-badge-top').textContent=profile?.role||'user';
-  if(profile?.role==='developer' || profile?.role==='sales'){
+  if(profile?.role==='developer' || profile?.role==='sales' || profile?.role==='admin'){
     document.getElementById('n-sales-wrap').style.display='';
   }
   if(profile?.role==='developer'){
@@ -2816,7 +2818,7 @@ async function approveUser(uid, requestedRole, name) {
     <div class="form-group">
       <label class="form-label-dark">Role</label>
       <select class="form-control" id="approve-role">
-        ${['developer','sales','consultant','contractor','subcontractor'].map(r=>`<option value="${r}" ${r===requestedRole?'selected':''}>${r}</option>`).join('')}
+        ${['developer','sales','admin','consultant','contractor','subcontractor'].map(r=>`<option value="${r}" ${r===requestedRole?'selected':''}>${r}</option>`).join('')}
       </select>
     </div>
     <div class="form-group" style="margin-top:14px">
@@ -2866,7 +2868,7 @@ async function editUserRole(uid, currentRole, name) {
     <div class="form-group">
       <label class="form-label-dark">Role</label>
       <select class="form-control" id="new-role">
-        ${['developer','sales','consultant','contractor','subcontractor'].map(r=>`<option value="${r}" ${r===currentRole?'selected':''}>${r}</option>`).join('')}
+        ${['developer','sales','admin','consultant','contractor','subcontractor'].map(r=>`<option value="${r}" ${r===currentRole?'selected':''}>${r}</option>`).join('')}
       </select>
     </div>`,
     `<button class="btn btn-primary" onclick="doChangeRole('${uid}')">Update Role</button>
