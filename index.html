@@ -360,6 +360,67 @@ textarea.form-control{resize:vertical;min-height:70px}
 .crm-summary .module-stat.cs-won{border-left-color:var(--green-light)}
 .crm-summary .module-stat.cs-lost{border-left-color:var(--red)}
 .crm-summary .module-stat.cs-active{border-left-color:var(--blue-light)}
+/* CRM HOME DASHBOARD */
+.crm-home{padding:18px;display:flex;flex-direction:column;gap:14px;max-width:1200px}
+.crm-home-kpi{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.crm-home-kpi .kpi-tile{background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;cursor:default}
+.crm-home-kpi .kpi-tile.kpi-warn{background:#fffbf0;border-color:#f59e0b}
+.crm-home-kpi .kpi-tile.kpi-green{background:#f0fdf4;border-color:#86d67f}
+.kpi-val{font-size:26px;font-weight:600;color:var(--charcoal)}
+.kpi-val.warn{color:#b45309}.kpi-val.green{color:var(--green)}.kpi-val.blue{color:var(--blue)}
+.kpi-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;font-weight:500}
+.crm-home-body{display:grid;grid-template-columns:1fr 300px;gap:14px}
+.crm-home-left{display:flex;flex-direction:column;gap:12px}
+.crm-home-right{display:flex;flex-direction:column;gap:12px}
+.ch-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;overflow:hidden}
+.ch-card-head{padding:8px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid var(--border);background:var(--bg3)}
+.ch-card-head.warn-head{background:#fffbf0;border-color:#fde68a}
+.ch-card-title{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}
+.ch-card-title.warn{color:#92400e}
+.ch-badge{font-size:10px;font-weight:600;padding:1px 8px;border-radius:10px;background:#fde68a;color:#92400e}
+.ch-table{width:100%;border-collapse:collapse}
+.ch-table td{padding:8px 14px;border-bottom:0.5px solid var(--border);font-size:12px;vertical-align:middle}
+.ch-table tr:last-child td{border-bottom:none}
+.ch-table tr.overdue-row{background:#fffdf5}
+.ch-table tr.overdue-row td:first-child{border-left:3px solid #f59e0b}
+.ch-overdue-age{font-size:10px;color:var(--red);font-weight:500}
+.ch-task-row{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:0.5px solid var(--border);font-size:12px}
+.ch-task-row:last-child{border-bottom:none}
+.ch-task-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;background:var(--bg3)}
+.ch-task-body{flex:1;min-width:0}
+.ch-task-lead{font-weight:500;color:var(--charcoal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch-task-desc{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch-week-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:12px 14px}
+.ch-day{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:6px;background:var(--bg3)}
+.ch-day.today{background:#e8f0fe;border:0.5px solid var(--blue)}
+.ch-day-lbl{font-size:10px;color:var(--text3);font-weight:500;text-transform:uppercase}
+.ch-day-ct{font-size:18px;font-weight:600;color:var(--charcoal)}
+.ch-day-ct.has-tasks{color:var(--blue)}
+.ch-day-ct.overdue-day{color:var(--red)}
+.ch-cold-row{display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:0.5px solid var(--border);font-size:12px}
+.ch-cold-row:last-child{border-bottom:none}
+.ch-cold-days{font-size:10px;color:var(--red);font-weight:500;flex-shrink:0}
+.ch-pipe-row{display:flex;align-items:center;gap:8px;padding:6px 14px;font-size:11px}
+.ch-pipe-label{width:90px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+.ch-pipe-bar-wrap{flex:1;background:var(--bg3);border-radius:3px;height:8px;overflow:hidden}
+.ch-pipe-bar-fill{height:8px;border-radius:3px;transition:width .4s}
+.ch-pipe-ct{font-size:11px;font-weight:600;color:var(--charcoal);width:22px;text-align:right;flex-shrink:0}
+.ch-notask-row{display:flex;align-items:center;gap:8px;padding:7px 14px;border-bottom:0.5px solid var(--border);font-size:12px}
+.ch-notask-row:last-child{border-bottom:none}
+.ch-activity-row{display:flex;align-items:flex-start;gap:10px;padding:8px 14px;border-bottom:0.5px solid var(--border);font-size:11px}
+.ch-activity-row:last-child{border-bottom:none}
+.ch-act-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;background:var(--bg3)}
+.ch-act-body{flex:1;min-width:0}
+.ch-act-lead{font-weight:500;color:var(--charcoal)}
+.ch-act-desc{color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch-act-time{font-size:10px;color:var(--text3);flex-shrink:0;margin-top:2px}
+.ch-open-btn{font-size:10px;background:var(--blue);color:#fff;border:none;border-radius:4px;padding:3px 9px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.ch-open-btn:hover{opacity:.85}
+.ch-add-task-btn{font-size:10px;background:transparent;color:var(--blue);border:0.5px solid var(--blue);border-radius:4px;padding:2px 8px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.ch-add-task-btn:hover{background:var(--blue);color:#fff}
+.ch-empty{padding:16px 14px;font-size:12px;color:var(--text3);text-align:center}
+.ch-more-link{padding:8px 14px;font-size:11px;color:var(--blue);cursor:pointer;text-align:center;border-top:0.5px solid var(--border)}
+.ch-more-link:hover{text-decoration:underline}
 /* ARFI */
 .arfi-ar{background:#FCEBEB;color:#A32D2D;border:0.5px solid #F7C1C1;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block}
 .arfi-fi{background:#F1EFE8;color:#5F5E5A;border:0.5px solid #D3D1C7;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block}
@@ -620,9 +681,13 @@ textarea.form-control{resize:vertical;min-height:70px}
     </div>
     <div id="n-sales-wrap" style="display:none">
       <div class="sb-section">Sales</div>
+      <div class="nav-item" id="n-crm-home" onclick="nav('crm-home',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
+        CRM Home
+      </div>
       <div class="nav-item" id="n-crm" onclick="nav('crm',this)">
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M11 3l1.5-1.5M13 5h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-        CRM
+        Leads
         <span class="nav-badge" id="nb-crm">0</span>
       </div>
       <div class="nav-item" id="n-usetup" onclick="nav('usetup',this)">
@@ -822,8 +887,8 @@ function setCurrentProject(project) {
   if(sbName) sbName.textContent = project.name;
 
   const hash = location.hash.replace('#', '');
-  const validPages = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq','finance','usetup','ureg','srev','crm'];
-  const roleDefault = currentProfile?.role === 'admin' ? 'crm' : 'dash';
+  const validPages = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq','finance','usetup','ureg','srev','crm','crm-home'];
+  const roleDefault = (currentProfile?.role === 'admin' || currentProfile?.role === 'sales') ? 'crm-home' : 'dash';
   const defaultPage = validPages.includes(hash) ? hash : roleDefault;
   nav(defaultPage, document.getElementById('n-' + defaultPage));
 }
@@ -1135,7 +1200,7 @@ async function loadApp(user) {
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM — Leads','crm-home':'CRM Home'};
 
 function canCreateOnPage(page) {
   if(page==='draw') return can('upload');
@@ -1206,6 +1271,7 @@ async function render() {
   else if(currentPage==='ureg') await renderUnitRegister();
   else if(currentPage==='srev') await renderSalesRevenue();
   else if(currentPage==='crm') { resetCRM(); await renderCRM(); }
+  else if(currentPage==='crm-home') await renderCRMHome();
   await updateBadges();
 }
 
@@ -8152,6 +8218,317 @@ let crmPage = 0;
 let crmSelected = new Set();
 const CRM_PER_PAGE = 25;
 let crmSearchTimer = null;
+
+// ─── CRM HOME DASHBOARD ───────────────────────────────────────────
+async function renderCRMHome() {
+  const pid = currentProject.id;
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0,10);
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+
+  // Monday of current week
+  const dow = now.getDay(); // 0=Sun
+  const diffToMon = (dow === 0) ? -6 : 1 - dow;
+  const weekStart = new Date(now); weekStart.setDate(now.getDate() + diffToMon); weekStart.setHours(0,0,0,0);
+  const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 4); weekEnd.setHours(23,59,59,999);
+
+  const [
+    { data: openTasks },
+    { data: allLeads },
+    { data: recentActs },
+  ] = await Promise.all([
+    sb.from('crm_lead_activities')
+      .select('id,lead_id,method,body,due_at,completed,contacted_at,crm_leads!inner(id,name,stage,project_id)')
+      .eq('crm_leads.project_id', pid)
+      .eq('method', 'task')
+      .eq('completed', false)
+      .not('due_at', 'is', null)
+      .order('due_at', { ascending: true }),
+    sb.from('crm_leads')
+      .select('id,name,stage,last_contacted_at,created_at,assigned_to')
+      .eq('project_id', pid)
+      .not('stage', 'in', '(closed_won,closed_lost)'),
+    sb.from('crm_lead_activities')
+      .select('id,lead_id,method,body,contacted_at,author_name,crm_leads!inner(id,name,project_id)')
+      .eq('crm_leads.project_id', pid)
+      .order('contacted_at', { ascending: false })
+      .limit(10),
+  ]);
+
+  const tasks = openTasks || [];
+  const leads = allLeads || [];
+  const acts = recentActs || [];
+
+  // Partition tasks
+  const overdue = tasks.filter(t => t.due_at < now.toISOString());
+  const dueToday = tasks.filter(t => t.due_at >= todayStr && t.due_at < todayStr + 'T23:59:59.999Z');
+  // This week (Mon–Fri)
+  const weekTasks = tasks.filter(t => t.due_at >= weekStart.toISOString() && t.due_at <= weekEnd.toISOString());
+
+  // Won this month (need closed_won leads — query separately)
+  const { count: wonCount } = await sb.from('crm_leads').select('*',{count:'exact',head:true})
+    .eq('project_id', pid).eq('stage','closed_won').gte('updated_at', monthStart);
+
+  // Leads with no open task: leads whose id doesn't appear in openTasks
+  const leadsWithTask = new Set(tasks.map(t => t.lead_id));
+  const noTaskLeads = leads.filter(l => !leadsWithTask.has(l.id));
+
+  // Going cold: last_contacted_at > 7 days ago (or null + created > 7d)
+  const sevenDaysAgo = new Date(now); sevenDaysAgo.setDate(now.getDate() - 7);
+  const goingCold = leads.filter(l => {
+    const ref = l.last_contacted_at || l.created_at;
+    return ref && new Date(ref) < sevenDaysAgo;
+  }).sort((a,b) => {
+    const ra = a.last_contacted_at || a.created_at;
+    const rb = b.last_contacted_at || b.created_at;
+    return new Date(ra) - new Date(rb);
+  });
+
+  // Pipeline counts from all-stages (including closed)
+  const { data: allStageRows } = await sb.from('crm_leads').select('stage').eq('project_id', pid);
+  const stageMap = {};
+  (allStageRows||[]).forEach(r => { stageMap[r.stage] = (stageMap[r.stage]||0)+1; });
+  const maxStageCount = Math.max(1, ...Object.values(stageMap));
+
+  // ── Helpers ──
+  const dayName = (iso) => {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-GB',{weekday:'short'});
+  };
+  const timeAgo = (iso) => {
+    if (!iso) return '';
+    const diff = Math.floor((now - new Date(iso)) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff/60)+'m ago';
+    if (diff < 86400) return Math.floor(diff/3600)+'h ago';
+    return Math.floor(diff/86400)+'d ago';
+  };
+  const daysSince = (iso) => {
+    if (!iso) return '?';
+    return Math.floor((now - new Date(iso)) / 86400000);
+  };
+  const stageBadge = (stage) => {
+    const s = CRM_STAGES.find(x=>x.key===stage);
+    return s ? `<span class="stage-badge" style="background:${s.color}22;color:${s.color};border:0.5px solid ${s.color}55;font-size:10px;padding:1px 7px;border-radius:4px;white-space:nowrap">${esc(s.label)}</span>` : '';
+  };
+  const methodIcon = (m) => {
+    const icons = {call:'📞',whatsapp:'💬',email:'📧',meeting:'🤝',site_visit:'📍',note:'📝',task:'✅'};
+    return icons[m]||'📋';
+  };
+  const openLeadBtn = (leadId) =>
+    `<button class="ch-open-btn" onclick="nav('crm',document.getElementById('n-crm'));setTimeout(()=>openLeadDetail('${esc(leadId)}'),400)">Open</button>`;
+
+  // ── Week day columns ──
+  const weekDays = [];
+  for(let i=0;i<5;i++){
+    const d = new Date(weekStart); d.setDate(weekStart.getDate()+i);
+    const ds = d.toISOString().slice(0,10);
+    const isToday = ds === todayStr;
+    const ct = weekTasks.filter(t=>t.due_at.startsWith(ds)).length;
+    const isPast = d < now && !isToday;
+    weekDays.push(`
+      <div class="ch-day${isToday?' today':''}">
+        <div class="ch-day-lbl">${d.toLocaleDateString('en-GB',{weekday:'short'})}</div>
+        <div class="ch-day-ct${ct>0?(isPast?' overdue-day':' has-tasks'):''}">${ct}</div>
+        <div style="font-size:9px;color:var(--text3)">${d.getDate()}/${d.getMonth()+1}</div>
+      </div>`);
+  }
+
+  // ── Overdue rows ──
+  const overdueRows = overdue.slice(0,8).map(t => {
+    const lead = t.crm_leads;
+    const name = lead?.name || 'Unknown';
+    const stage = lead?.stage || '';
+    const daysOver = Math.floor((now - new Date(t.due_at)) / 86400000);
+    return `<tr class="overdue-row">
+      <td style="font-weight:500;color:var(--charcoal)">${esc(name)}</td>
+      <td style="color:var(--text2)">${esc(t.body||'Task')}</td>
+      <td>${stageBadge(stage)}</td>
+      <td><span class="ch-overdue-age">${daysOver}d overdue</span></td>
+      <td>${openLeadBtn(t.lead_id)}</td>
+    </tr>`;
+  }).join('');
+
+  // ── Due today rows ──
+  const todayRows = dueToday.slice(0,8).map(t => {
+    const lead = t.crm_leads;
+    const name = lead?.name || 'Unknown';
+    const time = t.due_at ? new Date(t.due_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '';
+    return `<div class="ch-task-row">
+      <div class="ch-task-icon">${methodIcon('task')}</div>
+      <div class="ch-task-body">
+        <div class="ch-task-lead">${esc(name)}</div>
+        <div class="ch-task-desc">${esc(t.body||'Task')}${time?' · '+time:''}</div>
+      </div>
+      ${openLeadBtn(t.lead_id)}
+    </div>`;
+  }).join('');
+
+  // ── Going cold rows ──
+  const coldRows = goingCold.slice(0,6).map(l => {
+    const ref = l.last_contacted_at || l.created_at;
+    const days = daysSince(ref);
+    return `<div class="ch-cold-row">
+      <div style="flex:1;font-weight:500;color:var(--charcoal)">${esc(l.name||'Unknown')}</div>
+      ${stageBadge(l.stage)}
+      <span class="ch-cold-days">${days}d no contact</span>
+      ${openLeadBtn(l.id)}
+    </div>`;
+  }).join('');
+
+  // ── Pipeline rows ──
+  const pipeRows = CRM_STAGES.map(s => {
+    const ct = stageMap[s.key]||0;
+    const pct = Math.round((ct/maxStageCount)*100);
+    return `<div class="ch-pipe-row">
+      <div class="ch-pipe-label" title="${esc(s.label)}">${esc(s.label)}</div>
+      <div class="ch-pipe-bar-wrap"><div class="ch-pipe-bar-fill" style="width:${pct}%;background:${s.color}"></div></div>
+      <div class="ch-pipe-ct">${ct}</div>
+    </div>`;
+  }).join('');
+
+  // ── No task set rows ──
+  const noTaskRows = noTaskLeads.slice(0,8).map(l =>
+    `<div class="ch-notask-row">
+      <div style="flex:1;font-weight:500;color:var(--charcoal)">${esc(l.name||'Unknown')}</div>
+      ${stageBadge(l.stage)}
+      ${openLeadBtn(l.id)}
+    </div>`
+  ).join('');
+  const noTaskMore = noTaskLeads.length > 8
+    ? `<div class="ch-more-link" onclick="nav('crm',document.getElementById('n-crm'))">+${noTaskLeads.length-8} more — View Leads →</div>` : '';
+
+  // ── Recent activity rows ──
+  const actRows = acts.slice(0,8).map(a => {
+    const lead = a.crm_leads;
+    return `<div class="ch-activity-row">
+      <div class="ch-act-icon">${methodIcon(a.method)}</div>
+      <div class="ch-act-body">
+        <div class="ch-act-lead">${esc(lead?.name||'Unknown')}</div>
+        <div class="ch-act-desc">${esc(a.body||a.method||'')}</div>
+      </div>
+      <div class="ch-act-time">${timeAgo(a.contacted_at)}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+  <div class="crm-home">
+    <!-- KPI ROW -->
+    <div class="crm-home-kpi">
+      <div class="kpi-tile kpi-warn">
+        <div class="kpi-val warn">${overdue.length}</div>
+        <div class="kpi-lbl">Overdue Tasks</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-val">${dueToday.length}</div>
+        <div class="kpi-lbl">Due Today</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-val blue">${leads.length}</div>
+        <div class="kpi-lbl">Active Leads</div>
+      </div>
+      <div class="kpi-tile kpi-green">
+        <div class="kpi-val green">${wonCount||0}</div>
+        <div class="kpi-lbl">Won This Month</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-val">${noTaskLeads.length}</div>
+        <div class="kpi-lbl">No Task Set</div>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="crm-home-body">
+
+      <!-- LEFT -->
+      <div class="crm-home-left">
+
+        <!-- OVERDUE -->
+        <div class="ch-card">
+          <div class="ch-card-head warn-head">
+            <span class="ch-card-title warn">⚠ Overdue Tasks</span>
+            ${overdue.length>0?`<span class="ch-badge">${overdue.length}</span>`:''}
+          </div>
+          ${overdue.length===0
+            ? '<div class="ch-empty">No overdue tasks</div>'
+            : `<table class="ch-table"><tbody>${overdueRows}</tbody></table>
+               ${overdue.length>8?`<div class="ch-more-link">+${overdue.length-8} more</div>`:''}`
+          }
+        </div>
+
+        <!-- DUE TODAY -->
+        <div class="ch-card">
+          <div class="ch-card-head">
+            <span class="ch-card-title">Due Today</span>
+            ${dueToday.length>0?`<span class="ch-badge" style="background:var(--bg3);color:var(--text2)">${dueToday.length}</span>`:''}
+          </div>
+          ${dueToday.length===0
+            ? '<div class="ch-empty">Nothing due today</div>'
+            : todayRows
+          }
+        </div>
+
+        <!-- THIS WEEK -->
+        <div class="ch-card">
+          <div class="ch-card-head">
+            <span class="ch-card-title">This Week</span>
+          </div>
+          <div class="ch-week-bar">${weekDays.join('')}</div>
+        </div>
+
+        <!-- GOING COLD -->
+        <div class="ch-card">
+          <div class="ch-card-head">
+            <span class="ch-card-title">Going Cold</span>
+            <span style="font-size:10px;color:var(--text3)">No contact in 7+ days</span>
+          </div>
+          ${goingCold.length===0
+            ? '<div class="ch-empty">All leads contacted recently</div>'
+            : coldRows + (goingCold.length>6?`<div class="ch-more-link">+${goingCold.length-6} more</div>`:'')
+          }
+        </div>
+
+      </div>
+
+      <!-- RIGHT SIDEBAR -->
+      <div class="crm-home-right">
+
+        <!-- PIPELINE -->
+        <div class="ch-card">
+          <div class="ch-card-head">
+            <span class="ch-card-title">Pipeline</span>
+            <button class="ch-add-task-btn" onclick="nav('crm',document.getElementById('n-crm'))">View All →</button>
+          </div>
+          ${pipeRows}
+        </div>
+
+        <!-- NO TASK SET -->
+        <div class="ch-card">
+          <div class="ch-card-head">
+            <span class="ch-card-title">No Task Set</span>
+            ${noTaskLeads.length>0?`<span class="ch-badge" style="background:var(--bg3);color:var(--text2)">${noTaskLeads.length}</span>`:''}
+          </div>
+          ${noTaskLeads.length===0
+            ? '<div class="ch-empty">All active leads have tasks</div>'
+            : noTaskRows + noTaskMore
+          }
+        </div>
+
+        <!-- RECENT ACTIVITY -->
+        <div class="ch-card">
+          <div class="ch-card-head">
+            <span class="ch-card-title">Recent Activity</span>
+          </div>
+          ${acts.length===0
+            ? '<div class="ch-empty">No recent activity</div>'
+            : actRows
+          }
+        </div>
+
+      </div>
+    </div>
+  </div>`;
+}
 
 async function renderCRM() {
   let q = sb.from("crm_leads").select("*", { count: "exact" });
