@@ -823,7 +823,8 @@ function setCurrentProject(project) {
 
   const hash = location.hash.replace('#', '');
   const validPages = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq','finance','usetup','ureg','srev','crm'];
-  const defaultPage = validPages.includes(hash) ? hash : 'dash';
+  const roleDefault = currentProfile?.role === 'admin' ? 'crm' : 'dash';
+  const defaultPage = validPages.includes(hash) ? hash : roleDefault;
   nav(defaultPage, document.getElementById('n-' + defaultPage));
 }
 
@@ -1111,6 +1112,14 @@ async function loadApp(user) {
   if(profile?.role==='developer'){
     document.getElementById('n-users-wrap').style.display='';
   }
+  if(profile?.role==='admin'){
+    ['n-dash','n-draw','n-sub','n-sreg','n-ir','n-ncr','n-rfi','n-trans','n-ms','n-corr','n-punch','n-finance','n-ipc','n-boq','n-subs'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.style.display='none';
+    });
+    document.querySelectorAll('.sb-section').forEach(el=>{
+      if(el.textContent.trim()!=='Sales') el.style.display='none';
+    });
+  }
   // Set topbar date
   const dateEl = document.getElementById('topbar-date');
   if(dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
@@ -1165,7 +1174,7 @@ function can(action) {
   const role = currentProfile?.role;
   const perms = {
     developer:    {approve:true, upload:true, raise:true, submit:true, manageUsers:true, manageSubs:true, submitMS:false, manageRegister:true, delete_drawing:true},
-    admin:        {approve:false,upload:false,raise:false,submit:false,manageUsers:true, manageSubs:false,submitMS:false,manageRegister:false},
+    admin:        {approve:false,upload:false,raise:false,submit:false,manageUsers:false,manageSubs:false,submitMS:false,manageRegister:false},
     consultant:   {approve:true, upload:true, raise:true, submit:true, manageUsers:false,manageSubs:false,submitMS:false,manageRegister:true},
     contractor:   {approve:false,upload:true, raise:false,submit:true, manageUsers:false,manageSubs:true, submitMS:true, manageRegister:false},
     subcontractor:{approve:false,upload:false,raise:false,submit:true, manageUsers:false,manageSubs:false,submitMS:true, manageRegister:false},
