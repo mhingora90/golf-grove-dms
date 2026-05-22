@@ -150,6 +150,7 @@ function upsertAllLeads() {
   const idxPhone    = idx('campaign_name'); // phone with p: prefix
   const idxBudget   = idx('created_time');  // budget range
   const idxPropType = idx('ad_id');         // property type
+  const idxDate     = idx('is_organic');    // col 1 — actual Meta submission timestamp (ISO)
 
   let inserted = 0, errors = 0;
 
@@ -170,6 +171,7 @@ function upsertAllLeads() {
       phone:        str(idxPhone)?.replace(/^p:/, '') || null,
       created_time: str(idxBudget),
       ad_id:        str(idxPropType),
+      created_at:   str(idxDate),   // actual lead submission date from Meta
       source:       'meta_ads',
     };
 
