@@ -8224,7 +8224,8 @@ let crmSearchTimer = null;
 async function renderCRMHome() {
   const pid = currentProject.id;
   const now = new Date();
-  const todayStr = now.toISOString().slice(0,10);
+  const todayStr = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  const localDateStr = (dt) => { const d=new Date(dt); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
   // Monday of current week
@@ -8263,7 +8264,7 @@ async function renderCRMHome() {
 
   // Partition tasks
   const overdue = tasks.filter(t => t.due_at < now.toISOString());
-  const dueToday = tasks.filter(t => t.due_at >= todayStr && t.due_at < todayStr + 'T23:59:59.999Z');
+  const dueToday = tasks.filter(t => localDateStr(t.due_at) === todayStr);
   // This week (Mon–Fri)
   const weekTasks = tasks.filter(t => t.due_at >= weekStart.toISOString() && t.due_at <= weekEnd.toISOString());
 
@@ -8324,9 +8325,9 @@ async function renderCRMHome() {
   const weekDays = [];
   for(let i=0;i<5;i++){
     const d = new Date(weekStart); d.setDate(weekStart.getDate()+i);
-    const ds = d.toISOString().slice(0,10);
+    const ds = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
     const isToday = ds === todayStr;
-    const ct = weekTasks.filter(t=>t.due_at.startsWith(ds)).length;
+    const ct = weekTasks.filter(t=>localDateStr(t.due_at)===ds).length;
     const isPast = d < now && !isToday;
     weekDays.push(`
       <div class="ch-day${isToday?' today':''}">
