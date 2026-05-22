@@ -602,6 +602,7 @@ textarea.form-control{resize:vertical;min-height:70px}
 
 <!-- MAIN APP -->
 <div id="app-screen" class="app" style="display:none">
+  <div class="nav-backdrop" onclick="closeMobileNav()"></div>
   <div class="sidebar">
     <div class="sb-header">
       <div class="sb-proj-label">Active Project</div>
@@ -720,6 +721,7 @@ textarea.form-control{resize:vertical;min-height:70px}
   </div>
   <div class="main">
     <div class="topbar">
+      <button class="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">&#9776;</button>
       <div>
         <div class="topbar-title" id="page-title">Dashboard</div>
         <div id="topbar-date" style="font-size:11px;color:var(--text3);margin-top:1px"></div>
