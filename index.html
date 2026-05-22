@@ -717,6 +717,15 @@ textarea.form-control{resize:vertical;min-height:70px}
     grid-template-columns: 1fr !important;
   }
 
+  /* ── Dashboard 4-col detail row → 2-col ── */
+  .dash-detail-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* ── Dashboard bottom 2-col tables section → 1-col ── */
+  .dash-bottom-grid { grid-template-columns: 1fr !important; }
+
+  /* ── Form grids in modals → 1-col ── */
+  .frow3, .modal .frow { grid-template-columns: 1fr !important; }
+
 }
 </style>
 </head>
@@ -1690,7 +1699,7 @@ async function renderDash() {
     <div class="stat" style="cursor:pointer" onclick="nav('ipc',document.getElementById('n-ipc'))"><div class="stat-label">Payment Certs</div><div class="stat-value">${ipcCount}</div><div class="stat-sub" style="color:var(--green)">${ipcTotalCertified>0?fmtAED(ipcTotalCertified)+' certified':ipcPaid+' paid'}</div></div>
   </div>
   <div id="compliance-widget" style="margin-bottom:12px"></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+  <div class="dash-detail-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:16px">
     <div class="card" style="margin:0">
       <div style="padding:12px 14px 8px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center">
         <span style="font-size:12px;font-weight:500;color:var(--charcoal)">Drawing approval</span>
@@ -1798,7 +1807,7 @@ async function renderDash() {
       </div>
     </div>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+  <div class="dash-bottom-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
     <div>
       <div class="section-header" style="margin-bottom:8px"><div class="section-title" style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Pending submittals</div></div>
       <div class="card"><div class="tw"><table><tr><th>Ref</th><th>Title</th><th>Status</th></tr>
