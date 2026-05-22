@@ -676,6 +676,47 @@ textarea.form-control{resize:vertical;min-height:70px}
     flex-shrink: 0;
   }
 
+  /* ── Touch targets — 44px minimum ── */
+  button, .btn, .nav-item, [role="button"] {
+    min-height: 44px;
+  }
+  .sidebar .nav-item {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  /* Table action buttons */
+  td button, td .btn { min-height: 36px; padding: 6px 12px; }
+
+  /* ── iOS input zoom prevention (font-size < 16px triggers zoom) ── */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* ── Form row stacking (label + input side-by-side → vertical) ── */
+  .form-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  .form-row label {
+    margin-bottom: 4px;
+    margin-right: 0 !important;
+    width: 100% !important;
+  }
+  .form-row input,
+  .form-row select,
+  .form-row textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* ── Modal form grids (2-col form grids inside modals → 1 col) ── */
+  .modal .form-grid,
+  .modal [style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+
 }
 </style>
 </head>
