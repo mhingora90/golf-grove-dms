@@ -1045,11 +1045,9 @@ async function doSignup() {
   const btn = document.getElementById('signup-btn');
   if(!name||!email||!pass){showAuthMsg('signup','Please fill in all fields','error');return;}
   btn.disabled=true; btn.textContent='Creating account...';
-  const {data,error} = await sb.auth.signUp({email,password:pass,options:{data:{full_name:name,role:'pending',company}}});
+  const {data,error} = await sb.auth.signUp({email,password:pass,options:{data:{full_name:name,role:'pending',company,requested_role:role}}});
   if(error){showAuthMsg('signup',error.message,'error');btn.disabled=false;btn.textContent='Create Account';return;}
-  if(data.user){
-    await sb.from('profiles').upsert({id:data.user.id,full_name:name,email,role:'pending',company,requested_role:role},{onConflict:'id'});
-  }
+  // Profile row is created automatically by the handle_new_user DB trigger.
   btn.disabled=false; btn.textContent='Create Account';
   showAuthMsg('signup','Request submitted — a project admin will approve your access shortly.','success');
   switchTab('login');
@@ -1081,8 +1079,11 @@ async function loadApp(user) {
     }
   }
   if(!profile) {
+    // Trigger should have created the row; attempt a fallback insert as safety net.
+    // Never inherit meta.role ('pending') — always default to 'contractor' here.
     const meta = user.user_metadata||{};
-    await sb.from('profiles').upsert({id:user.id,email:user.email,full_name:meta.full_name||user.email,role:meta.role||'contractor',company:meta.company||''});
+    const {error:upsertErr} = await sb.from('profiles').upsert({id:user.id,email:user.email,full_name:meta.full_name||user.email,role:'contractor',company:meta.company||''},{onConflict:'id'});
+    if(upsertErr) console.error('Profile fallback upsert error:', upsertErr.message);
     const {data:created} = await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
     profile = created||null;
   }
