@@ -609,7 +609,7 @@ textarea.form-control{resize:vertical;min-height:70px}
   .content-area,
   #page-body,
   .content,
-  #content { padding: 12px !important; }
+  #content { padding: 12px !important; overflow-x: hidden; }
 
   /* ── Project selector padding ── */
   .ps-header { padding: 16px 12px 0 !important; }
@@ -722,6 +722,7 @@ textarea.form-control{resize:vertical;min-height:70px}
 
   /* ── Dashboard bottom 2-col tables section → 1-col ── */
   .dash-bottom-grid { grid-template-columns: 1fr !important; }
+  .dash-bottom-grid > * { min-width: 0; }
 
   /* ── Form grids in modals → 1-col ── */
   .frow3, .modal .frow { grid-template-columns: 1fr !important; }
