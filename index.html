@@ -2810,10 +2810,45 @@ async function renderUsers() {
 
 async function approveUser(uid, requestedRole, name) {
   if(currentUser?.email !== ROLE_ADMIN_EMAIL){ toast('Not authorised','error'); return; }
-  const {error} = await sb.from('profiles').update({role: requestedRole}).eq('id', uid);
-  if(error){ toast('Error: '+error.message,'error'); return; }
-  toast(`${esc(name)||'User'} approved as ${requestedRole}`,'success');
-  render();
+  const {data: projects} = await sb.from('projects').select('id,name').order('name');
+  const allProjects = projects || [];
+  openModal(`Approve – ${esc(name)}`, `
+    <div class="form-group">
+      <label class="form-label-dark">Role</label>
+      <select class="form-control" id="approve-role">
+        ${['developer','sales','consultant','contractor','subcontractor'].map(r=>`<option value="${r}" ${r===requestedRole?'selected':''}>${r}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-group" style="margin-top:14px">
+      <label class="form-label-dark">Assign to Projects</label>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px;max-height:200px;overflow-y:auto">
+        ${allProjects.length
+          ? allProjects.map(p=>`<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+              <input type="checkbox" data-pid="${p.id}" style="cursor:pointer"> ${esc(p.name)}
+            </label>`).join('')
+          : '<span style="color:var(--text3);font-size:12px">No projects found.</span>'}
+      </div>
+    </div>`,
+    `<button class="btn btn-primary" onclick="doApproveUser('${uid}','${esc(name)}')">Approve &amp; Assign</button>
+     <button class="btn" onclick="closeModal()">Cancel</button>`);
+}
+
+async function doApproveUser(uid, name) {
+  if(currentUser?.email !== ROLE_ADMIN_EMAIL){ toast('Not authorised','error'); return; }
+  const role = document.getElementById('approve-role').value;
+  const checked = [...document.querySelectorAll('#modal-body input[type=checkbox][data-pid]:checked')];
+  const projectIds = checked.map(c => c.dataset.pid);
+
+  const {error} = await sb.from('profiles').update({role}).eq('id', uid);
+  if(error){ toast('Role update failed: '+error.message,'error'); return; }
+
+  if(projectIds.length) {
+    const {error: e2} = await sb.from('project_users').insert(projectIds.map(pid=>({project_id:pid, user_id:uid})));
+    if(e2){ toast('Project assign failed: '+e2.message,'error'); return; }
+  }
+
+  toast(`${esc(name)||'User'} approved as ${role}${projectIds.length?' and assigned to '+projectIds.length+' project(s)':''}`, 'success');
+  closeModal(); render();
 }
 
 async function denyUser(uid, name) {
