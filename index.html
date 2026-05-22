@@ -613,7 +613,6 @@ textarea.form-control{resize:vertical;min-height:70px}
 
   /* ── Project selector padding ── */
   .ps-header { padding: 16px 12px 0 !important; }
-  .ps-grid { padding: 12px !important; }
 
   /* ── Dashboard stats grid: 6 → 2 columns ── */
   .stats { grid-template-columns: repeat(2, 1fr) !important; }
@@ -631,10 +630,10 @@ textarea.form-control{resize:vertical;min-height:70px}
   }
 
   /* ── Project selector grid ── */
-  .ps-grid { grid-template-columns: 1fr !important; }
+  .ps-grid { padding: 12px !important; grid-template-columns: 1fr !important; }
 
   /* ── Section headings ── */
-  .page-title, h2.page-title { font-size: 18px; }
+  #page-title, .page-title, h2.page-title { font-size: 18px; }
   .section-title, h3.section-title { font-size: 15px; }
 
 }
