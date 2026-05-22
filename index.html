@@ -537,6 +537,63 @@ textarea.form-control{resize:vertical;min-height:70px}
 .psw-all{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:var(--radius);font-size:11px;cursor:pointer;color:var(--text2)}
 .psw-new{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:var(--radius);font-size:11px;cursor:pointer;color:var(--sand);font-weight:600}
 .tb-proj-div{width:0.5px;height:18px;background:var(--border2);flex-shrink:0}
+
+/* ─── Mobile responsive layer ─── */
+.hamburger-btn { display: none; }
+.nav-backdrop  { display: none; }
+
+@media (max-width: 768px) {
+
+  /* ── Hamburger button ── */
+  .hamburger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--text);
+    flex-shrink: 0;
+    padding: 0;
+    margin-right: 4px;
+  }
+
+  /* ── Backdrop ── */
+  .nav-open .nav-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 199;
+  }
+
+  /* ── Sidebar becomes overlay drawer ── */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 200;
+    transform: translateX(-220px);
+    transition: transform 0.25s ease;
+    overflow-y: auto;
+  }
+  .nav-open .sidebar {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.25);
+  }
+
+  /* ── Main content fills full width ── */
+  .main-content, main, #main-content, .content, #content {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+}
 </style>
 </head>
 <body>
