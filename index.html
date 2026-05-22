@@ -636,6 +636,15 @@ textarea.form-control{resize:vertical;min-height:70px}
   #page-title, .page-title, h2.page-title { font-size: 18px; }
   .section-title, h3.section-title { font-size: 15px; }
 
+  /* ── Table scroll ── */
+  .tw {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .tw table { min-width: 520px; }
+  th, td { white-space: nowrap; padding: 8px 10px; }
+
 }
 </style>
 </head>
@@ -1884,7 +1893,7 @@ async function viewMS(id) {
       <div style="padding:6px;text-align:right;font-size:9px">Modern Building Contracting L.L.C<br>Tel.: 04-2344445</div>
     </div>
     <div style="text-align:center;font-weight:700;font-size:12px;text-decoration:underline;padding:5px;border:.7px solid #888;margin-bottom:0;color:#000">METHOD STATEMENT REVIEW</div>
-    <table style="width:100%;border-collapse:collapse;color:#000">
+    <div class="tw"><table style="width:100%;border-collapse:collapse;color:#000">
       <tr>
         <td style="border:.7px solid #888;padding:4px 7px;font-weight:700;width:25%">MS Ref No.:</td>
         <td style="border:.7px solid #888;padding:4px 7px;color:#8B0000;font-weight:700">${m.ref_no}</td>
@@ -1923,7 +1932,7 @@ async function viewMS(id) {
         <td style="border:.7px solid #888;padding:4px 7px;font-weight:700">Review Outcome:</td>
         <td colspan="3" style="border:.7px solid #888;padding:4px 7px;font-weight:700;color:${m.status==='Approved'?'#1a5e1a':m.status==='Rejected'?'#8B0000':'#555'}">${m.status}</td>
       </tr>
-    </table>
+    </table></div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-top:10px">
       <div style="border:.7px solid #888;padding:8px;text-align:center;font-size:10px"><b>Submitted By (Contractor)</b><br><br><br>Signature: ___________<br>Name: ${m.submitted_by||'___________'}<br>Date: ${m.submitted_date||'___________'}</div>
       <div style="border:.7px solid #888;padding:8px;text-align:center;font-size:10px"><b>Reviewed By (Consultant)</b><br><br><br>Signature: ___________<br>Name: ${m.reviewed_by||'___________'}<br>Date: ${m.review_date||'___________'}</div>
@@ -2046,7 +2055,7 @@ function openBulkImport() {
       </div>
       <div id="bulk-preview" style="display:none">
         <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px" id="bulk-preview-label"></div>
-        <div style="overflow-x:auto;border:.5px solid var(--border);border-radius:var(--radius)">
+        <div class="tw" style="overflow-x:auto;border:.5px solid var(--border);border-radius:var(--radius)">
           <table style="width:100%;border-collapse:collapse;font-size:11px" id="bulk-preview-table"></table>
         </div>
         <div id="bulk-errors" style="margin-top:8px;font-size:11px;color:var(--color-text-danger)"></div>
@@ -3133,7 +3142,7 @@ async function viewDraw(id) {
   const revTableHTML = revRows.length ? `
     <div class="detail-section">
       <div class="detail-label" style="margin-bottom:10px">Full Revision History & Audit Trail</div>
-      <div style="overflow-x:auto">
+      <div class="tw" style="overflow-x:auto">
         <table style="width:100%;border-collapse:collapse;font-size:11px">
           <tr style="background:var(--bg3)">
             <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap">Revision</th>
@@ -3239,7 +3248,7 @@ async function viewSub(id) {
       <div style="padding:8px;border-right:1px solid #ccc;text-align:center;font-size:18px;font-style:italic;color:#00008B">regent<br><span style="font-size:9px;font-weight:400;color:#000">DEVELOPMENTS</span></div>
       <div style="padding:6px;text-align:right;font-size:9px">${PROJECT.contractor}<br>Tel.: 04-2344445</div>
     </div>
-    <table><tr><td colspan="4" style="text-align:center;font-weight:700;font-size:12px;text-decoration:underline;color:#00008B">DOCUMENT SUBMITTAL APPROVAL REQUEST (DSUB)</td></tr>
+    <div class="tw"><table><tr><td colspan="4" style="text-align:center;font-weight:700;font-size:12px;text-decoration:underline;color:#00008B">DOCUMENT SUBMITTAL APPROVAL REQUEST (DSUB)</td></tr>
     <tr><td style="font-weight:700;width:22%">Reference No.:</td><td style="color:#8B0000;font-weight:700" colspan="2">${s.ref_no}</td><td style="text-align:right"><b>Date:</b> <span style="color:#8B0000;font-weight:700">${s.submit_date||''}</span></td></tr>
     <tr><td style="font-weight:700">Project Description:</td><td colspan="3">${PROJECT.name}</td></tr>
     <tr><td style="font-weight:700">Client's Name:</td><td colspan="3" style="font-weight:700">${PROJECT.client}</td></tr>
@@ -3268,7 +3277,7 @@ async function viewSub(id) {
         <td colspan="2" style="padding:8px">${cb(s.outcome==='4')} (4) - Review not Required. Work may proceed</td></tr>
     <tr><td colspan="2" style="padding:8px;color:#00008B;font-size:12px">${s.reviewed_by?`Eng : ${s.reviewed_by}`:''}</td>
         <td colspan="2" style="padding:8px;text-align:right;font-weight:700">Resident Engineer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</td></tr>
-    </table><div style="margin-top:8px;font-size:9px;color:#888">POE/SUP-DSAR-004 Rev 002 | Issue date: 01/10/2018</div></div>`;
+    </table></div><div style="margin-top:8px;font-size:9px;color:#888">POE/SUP-DSAR-004 Rev 002 | Issue date: 01/10/2018</div></div>`;
   const dsubWrapped = `<div id='dsub-print-${id}'>${parentInfo}${dsub}</div>`;
   openModal(`DSUB – ${s.ref_no}`, dsubWrapped+attachmentSectionHTML('submittal',id,atts)+commentThreadHTML('submittal',id,comments),
     `${can('approve')&&s.status==='Pending Review'?`<button class="btn btn-success" onclick="reviewSub('${id}')">Review & Respond</button>`:''}
@@ -3298,7 +3307,7 @@ async function viewIR(id) {
       <div style="padding:6px;font-size:10px;font-weight:700">Enabling Contractor<br><span style="font-weight:400;font-size:9px">${scName}</span></div>
     </div>
     <div style="text-align:center;font-size:15px;font-weight:700;margin:8px 0">WORK INSPECTION REQUEST</div>
-    <table>
+    <div class="tw"><table>
       <tr><td style="font-weight:700;font-size:10px;width:32%">Project: ${PROJECT.name}</td><td style="font-size:10px">Ref. No: <b>${i.ref_no}</b></td><td style="font-size:10px">Rev. No: <b>${i.revision||'00'}</b></td></tr>
       <tr><td style="font-size:10px">Plot No.: <b>${i.plot||PROJECT.plot}</b></td><td style="font-size:10px">Location: <b>${i.location||'—'}</b></td><td style="font-size:10px">City: <b>${i.city||PROJECT.city}</b></td></tr>
       <tr><td colspan="3" style="font-size:10px"><b>Enabling Contractor: ${scName}</b></td></tr>
@@ -3327,7 +3336,7 @@ async function viewIR(id) {
       <tr><td style="font-size:10px">Signature: ___________</td><td style="font-size:10px">Signature: ___________</td><td style="font-size:10px">Signature: ___________</td></tr>
       <tr><td style="font-size:10px">Name: ${i.inspected_by||'___________'}</td><td style="font-size:10px">Name: ___________</td><td style="font-size:10px">Name: ___________</td></tr>
       <tr><td style="font-size:10px">Date: ___________</td><td style="font-size:10px">Date: ${i.response_date||'___________'}</td><td style="font-size:10px">Date: ___________</td></tr>
-    </table>
+    </table></div>
     <div style="text-align:center;font-size:9px;margin-top:6px;color:#777">This form is to be handed 24 hours prior the inspection requested time</div>
   </div>`;
   // Checklist section
@@ -3377,7 +3386,7 @@ async function viewNCR(id) {
       <div style="padding:6px;text-align:right;font-size:9px">Modern Building Contracting L.L.C<br>Tel.: 04-2344445</div>
     </div>
     <div style="text-align:center;font-weight:700;font-size:12px;text-decoration:underline;padding:5px;border:.7px solid #888;margin-bottom:0;color:#000">NON-CONFORMANCE REPORT (NCR)</div>
-    <table style="width:100%;border-collapse:collapse;color:#000">
+    <div class="tw"><table style="width:100%;border-collapse:collapse;color:#000">
       <tr>
         <td style="border:.7px solid #888;padding:4px 7px;font-weight:700;width:25%">NCR Ref No.:</td>
         <td style="border:.7px solid #888;padding:4px 7px;color:#8B0000;font-weight:700">${n.ref_no}</td>
@@ -3413,7 +3422,7 @@ async function viewNCR(id) {
           Date Closed: ${n.closed_date||'___________'}
         </td>
       </tr>
-    </table>
+    </table></div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-top:10px">
       <div style="border:.7px solid #888;padding:8px;text-align:center;font-size:10px"><b>Raised By (Consultant)</b><br><br><br>Signature: ___________<br>Name: ${n.raised_by||'___________'}<br>Date: ${n.raised_date||'___________'}</div>
       <div style="border:.7px solid #888;padding:8px;text-align:center;font-size:10px"><b>Acknowledged By (Contractor)</b><br><br><br>Signature: ___________<br>Name: ___________<br>Date: ___________</div>
@@ -4928,17 +4937,17 @@ async function viewTransmittal(id) {
       <div style="padding:6px;text-align:right;font-size:9px">Modern Building Contracting L.L.C</div>
     </div>
     <div style="text-align:center;font-weight:700;font-size:13px;text-decoration:underline;color:#00008B;margin-bottom:8px">DOCUMENT TRANSMITTAL</div>
-    <table style="width:100%;border-collapse:collapse;margin-bottom:8px">
+    <div class="tw"><table style="width:100%;border-collapse:collapse;margin-bottom:8px">
       <tr><td style="border:.7px solid #888;padding:4px 6px;font-weight:700;width:25%">Transmittal Ref:</td><td style="border:.7px solid #888;padding:4px 6px;color:#8B0000;font-weight:700" colspan="3">${t.ref_no}</td></tr>
       <tr><td style="border:.7px solid #888;padding:4px 6px;font-weight:700">Project:</td><td style="border:.7px solid #888;padding:4px 6px" colspan="3">Golf Grove – Residential Building (B+G+P+7+Roof)</td></tr>
       <tr><td style="border:.7px solid #888;padding:4px 6px;font-weight:700">From:</td><td style="border:.7px solid #888;padding:4px 6px">${t.from_party||'—'}</td><td style="border:.7px solid #888;padding:4px 6px;font-weight:700">To:</td><td style="border:.7px solid #888;padding:4px 6px">${t.to_party||'—'}</td></tr>
       <tr><td style="border:.7px solid #888;padding:4px 6px;font-weight:700">Date:</td><td style="border:.7px solid #888;padding:4px 6px">${t.transmit_date||'—'}</td><td style="border:.7px solid #888;padding:4px 6px;font-weight:700">Method:</td><td style="border:.7px solid #888;padding:4px 6px">${t.method||'Email'}</td></tr>
       <tr><td style="border:.7px solid #888;padding:4px 6px;font-weight:700">Purpose:</td><td style="border:.7px solid #888;padding:4px 6px" colspan="3">${t.purpose||'—'}</td></tr>
-    </table>
-    <table style="width:100%;border-collapse:collapse">
+    </table></div>
+    <div class="tw"><table style="width:100%;border-collapse:collapse">
       <tr style="background:#f5f5f5"><th style="border:.7px solid #888;padding:5px 7px;text-align:left">#</th><th style="border:.7px solid #888;padding:5px 7px;text-align:left">Document No.</th><th style="border:.7px solid #888;padding:5px 7px;text-align:left">Title</th><th style="border:.7px solid #888;padding:5px 7px;text-align:left">Revision</th><th style="border:.7px solid #888;padding:5px 7px;text-align:left">Copies</th></tr>
       ${docs.length?docs.map((d,i)=>`<tr><td style="border:.7px solid #888;padding:4px 7px">${i+1}</td><td style="border:.7px solid #888;padding:4px 7px">${d.no||'—'}</td><td style="border:.7px solid #888;padding:4px 7px">${d.title||'—'}</td><td style="border:.7px solid #888;padding:4px 7px">${d.rev||'—'}</td><td style="border:.7px solid #888;padding:4px 7px">${d.copies||1}</td></tr>`).join(''):'<tr><td colspan="5" style="padding:8px;text-align:center;color:#999;border:.7px solid #888">No documents listed</td></tr>'}
-    </table>
+    </table></div>
     ${t.notes?`<div style="margin-top:8px;padding:6px;border:.7px solid #888;font-size:10px"><strong>Notes:</strong> ${t.notes}</div>`:''}
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-top:12px">
       <div style="border:.7px solid #888;padding:8px;text-align:center;font-size:10px"><strong>Prepared By</strong><br><br>Signature: ___________<br>Name: ___________<br>Date: ___________</div>
@@ -6421,7 +6430,7 @@ function previewBOQ(input) {
       const previewEl = document.getElementById('boq-preview');
       previewEl.innerHTML = `
         <p style="font-size:11px;color:var(--text3);margin-top:8px">Preview (first 10 rows of ${data.length} total):</p>
-        <div style="max-height:220px;overflow-y:auto;margin-top:6px"><table>
+        <div class="tw" style="max-height:220px;overflow-y:auto;margin-top:6px"><table>
           <tr><th>Bill No</th><th>Bill Title</th><th>Item No</th><th>Description</th><th>Qty</th><th>Unit</th><th>Rate</th></tr>
           ${previewRows}
         </table></div>`;
@@ -6936,7 +6945,7 @@ async function viewIPC(id) {
     <div class="detail-section">
       <div class="section-header"><span class="section-title">Bill of Quantities — Progress Claims</span></div>
       ${ipcChipsHTML}
-      <div style="overflow-x:auto;max-height:380px;overflow-y:auto;border:0.5px solid var(--border);border-radius:var(--radius)">
+      <div class="tw" style="overflow-x:auto;max-height:380px;overflow-y:auto;border:0.5px solid var(--border);border-radius:var(--radius)">
         <table style="font-size:11px">
           <tr><th>Item No.</th><th>Description</th><th style="text-align:right">Qty</th><th>Unit</th><th style="text-align:right">BOQ Total</th><th style="text-align:right">Contr. %</th><th style="text-align:right">Contr. Amt</th><th style="text-align:right">Consult. %</th><th style="text-align:right">Consult. Amt</th></tr>
           ${billRows}
@@ -7989,10 +7998,10 @@ function openUnitModal(unitId) {
         'Payment Plan Milestones' +
         '<span style="font-size:10px;font-weight:400;color:var(--text2)">' + fmtAED(sale.sold_price||0) + ' contracted</span>' +
       '</div>' +
-      '<table style="width:100%;font-size:11px;border-collapse:collapse">' +
+      '<div class="tw"><table style="width:100%;font-size:11px;border-collapse:collapse">' +
         '<tr style="background:var(--bg3)"><th style="padding:5px 8px;text-align:left">Milestone</th><th style="padding:5px 8px;text-align:right">Amount</th><th style="padding:5px 8px;text-align:right">%</th><th style="padding:5px 8px;text-align:left">Due Date</th></tr>' +
         msRows +
-      '</table></div>';
+      '</table></div></div>';
   }
 
   const availNote = !sale
@@ -8065,10 +8074,10 @@ function openSaleForm(unitId, saleId) {
       '<div class="form-group" style="margin:0"><label class="form-label">Oqood Date</label><input id="sf-oqooddate" type="date" class="form-input" value="' + esc(sale?.oqood_date||'') + '" /></div>' +
     '</div>' +
     '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Payment Plan Milestones</div>' +
-    '<table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:14px">' +
+    '<div class="tw"><table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:14px">' +
       '<tr style="background:var(--bg3)"><th style="padding:4px 6px;text-align:left">Milestone</th><th style="padding:4px 6px;text-align:right">Amount (AED)</th><th style="padding:4px 6px;text-align:right">%</th><th style="padding:4px 6px">Due Date</th></tr>' +
       msRows +
-    '</table>';
+    '</table></div>';
 
   openModal(
     (isEdit ? 'Edit Sale \u2014 Unit ' : 'Add Sale \u2014 Unit ') + esc(u.unit_no),
@@ -8282,7 +8291,7 @@ async function renderSalesRevenue() {
     '<div class="card" style="margin-bottom:16px"><div style="padding:14px 18px">' +
       '<div style="font-size:11px;font-weight:600;color:var(--charcoal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Expected Revenue by Month (Payment Plan)</div>' +
       (sortedMonths.length || onHandover > 0
-        ? '<table style="width:100%;font-size:11px;border-collapse:collapse"><tr style="background:var(--bg3)"><th style="padding:5px 10px;text-align:left">Month</th><th style="padding:5px 10px;text-align:right">Expected (AED)</th><th style="padding:5px 10px;text-align:right">Cumulative (AED)</th></tr>' + monthRowsHTML + handoverRow + '</table>'
+        ? '<div class="tw"><table style="width:100%;font-size:11px;border-collapse:collapse"><tr style="background:var(--bg3)"><th style="padding:5px 10px;text-align:left">Month</th><th style="padding:5px 10px;text-align:right">Expected (AED)</th><th style="padding:5px 10px;text-align:right">Cumulative (AED)</th></tr>' + monthRowsHTML + handoverRow + '</table></div>'
         : '<div style="padding:8px 0;font-size:11px;color:var(--text3)">No payment milestones with due dates set yet.</div>') +
     '</div></div>' +
     // Commission + Discount
@@ -8303,10 +8312,10 @@ async function renderSalesRevenue() {
     // By unit type
     '<div class="card"><div style="padding:14px 18px">' +
       '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em">Revenue by Unit Type</div>' +
-      '<table style="width:100%;font-size:11px;border-collapse:collapse">' +
+      '<div class="tw"><table style="width:100%;font-size:11px;border-collapse:collapse">' +
         '<thead><tr style="background:var(--bg3)"><th style="padding:6px 10px;text-align:left">Type</th><th style="padding:6px 10px;text-align:center">Total</th><th style="padding:6px 10px;text-align:center">Sold</th><th style="padding:6px 10px;text-align:right">Avg Sqft</th><th style="padding:6px 10px;text-align:right">Avg Sold Price</th><th style="padding:6px 10px;text-align:right">Total Revenue</th></tr></thead>' +
         '<tbody>' + typeRows + totalsRow + '</tbody>' +
-      '</table>' +
+      '</table></div>' +
     '</div></div>';
 }
 
@@ -8581,7 +8590,7 @@ async function renderCRMHome() {
           </div>
           ${overdue.length===0
             ? '<div class="ch-empty">No overdue tasks</div>'
-            : `<table class="ch-table"><tbody>${overdueRows}</tbody></table>
+            : `<div class="tw"><table class="ch-table"><tbody>${overdueRows}</tbody></table></div>
                ${overdue.length>8?`<div class="ch-more-link">+${overdue.length-8} more</div>`:''}`
           }
         </div>
@@ -8845,7 +8854,7 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
     </div></div>`;
 
   return summaryBar + toolbar + pills + bulkBar +
-    `<table class="crm-table">${thead}<tbody>${rows}</tbody></table>` +
+    `<div class="tw"><table class="crm-table">${thead}<tbody>${rows}</tbody></table></div>` +
     footer;
 }
 
