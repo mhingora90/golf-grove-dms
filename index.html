@@ -8289,7 +8289,7 @@ async function renderSalesRevenue() {
   const bhks          = all.filter(u=>u.unit_type==='1BHK');
 
   const totalGDV        = all.reduce((s,u)=>s+(+u.listed_price||0),0);
-  const totalContracted = contracted.reduce((s,u)=>s+(+u.unit_sales.sold_price||0),0);
+  const totalContracted = contracted.reduce((s,u)=>s+(+u.unit_sales?.sold_price||0),0);
   const remainingGDV    = availUnits.reduce((s,u)=>s+(+u.listed_price||0),0);
   const totalSqftSold   = soldUnits.reduce((s,u)=>s+(+u.area_sqft||0),0);
   const totalSqft       = all.reduce((s,u)=>s+(+u.area_sqft||0),0);
@@ -8297,23 +8297,23 @@ async function renderSalesRevenue() {
   const availPct        = all.length ? (availUnits.length/all.length*100).toFixed(1) : '0.0';
 
   // Commission
-  const totalComm = contracted.reduce((s,u)=>s+((+u.unit_sales.sold_price||0)*(+u.unit_sales.commission_pct||0)/100),0);
-  const commRates = contracted.filter(u=>+u.unit_sales.commission_pct>0).map(u=>+u.unit_sales.commission_pct);
+  const totalComm = contracted.reduce((s,u)=>s+((+u.unit_sales?.sold_price||0)*(+u.unit_sales?.commission_pct||0)/100),0);
+  const commRates = contracted.filter(u=>+u.unit_sales?.commission_pct>0).map(u=>+u.unit_sales?.commission_pct);
   const avgComm   = commRates.length ? commRates.reduce((s,v)=>s+v,0)/commRates.length : 0;
-  const withBroker= contracted.filter(u=>u.unit_sales.broker_name).length;
+  const withBroker= contracted.filter(u=>u.unit_sales?.broker_name).length;
 
   // Discount
-  const totalDisc = contracted.reduce((s,u)=>s+(+u.unit_sales.discount_amount||0),0);
-  const discPcts  = contracted.filter(u=>+u.unit_sales.discount_amount>0)
-    .map(u=>((+u.unit_sales.discount_amount)/(+u.listed_price||1))*100);
+  const totalDisc = contracted.reduce((s,u)=>s+(+u.unit_sales?.discount_amount||0),0);
+  const discPcts  = contracted.filter(u=>+u.unit_sales?.discount_amount>0)
+    .map(u=>((+u.unit_sales?.discount_amount)/(+u.listed_price||1))*100);
   const avgDisc   = discPcts.length ? discPcts.reduce((s,v)=>s+v,0)/discPcts.length : 0;
-  const withDisc  = contracted.filter(u=>+u.unit_sales.discount_amount>0).length;
+  const withDisc  = contracted.filter(u=>+u.unit_sales?.discount_amount>0).length;
 
   // Monthly expected revenue
   const monthMap = {};
   let onHandover = 0;
   for(const u of contracted) {
-    for(const m of (u.unit_sales.payment_milestones||[])) {
+    for(const m of (u.unit_sales?.payment_milestones||[])) {
       if(!m.due_date) { onHandover += (+m.amount||0); continue; }
       const key = m.due_date.substring(0,7);
       monthMap[key] = (monthMap[key]||0) + (+m.amount||0);
@@ -8345,8 +8345,8 @@ async function renderSalesRevenue() {
     const ts   = ta.filter(u=>u.unit_sales?.status==='sold');
     const tc   = ta.filter(u=>u.unit_sales);
     const avgS = ta.length ? ta.reduce((s,u)=>s+(+u.area_sqft||0),0)/ta.length : 0;
-    const avgP = ts.length ? ts.reduce((s,u)=>s+(+u.unit_sales.sold_price||0),0)/ts.length : 0;
-    const totR = tc.reduce((s,u)=>s+(+u.unit_sales.sold_price||0),0);
+    const avgP = ts.length ? ts.reduce((s,u)=>s+(+u.unit_sales?.sold_price||0),0)/ts.length : 0;
+    const totR = tc.reduce((s,u)=>s+(+u.unit_sales?.sold_price||0),0);
     return '<tr style="border-bottom:0.5px solid var(--border)">' +
       '<td style="padding:6px 10px;font-weight:500">' + type + '</td>' +
       '<td style="padding:6px 10px;text-align:center">' + ta.length + '</td>' +
@@ -8361,7 +8361,7 @@ async function renderSalesRevenue() {
   const totalAllUnits   = all.length;
   const totalAllSold    = soldUnits.length;
   const totalAvgSqft    = all.length ? Math.round(all.reduce((s,u)=>s+(+u.area_sqft||0),0)/all.length) : 0;
-  const totalRevenue    = [...soldUnits,...reservedUnits].reduce((s,u)=>s+(+u.unit_sales.sold_price||0),0);
+  const totalRevenue    = [...soldUnits,...reservedUnits].reduce((s,u)=>s+(+u.unit_sales?.sold_price||0),0);
   const totalsRow = '<tr style="border-top:1.5px solid var(--border);background:var(--bg3)">' +
     '<td style="padding:6px 10px;font-weight:700">Total</td>' +
     '<td style="padding:6px 10px;text-align:center;font-weight:700">' + totalAllUnits + '</td>' +
