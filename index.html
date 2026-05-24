@@ -7871,8 +7871,9 @@ async function handleUnitCSV(event) {
   const required = ['unit_no','floor','unit_type','area_sqft','listed_price'];
   const missing = required.filter(r=>!headers.includes(r));
   if(missing.length) { toast('CSV missing columns: ' + missing.join(', '),'error'); return; }
+  const hasStatus = headers.includes('status');
 
-  const rows = [];
+  const rows = [], soldUnitNos = [], blockedUnitNos = [];
   for(let i=1; i<lines.length; i++) {
     const vals = lines[i].split(',').map(v=>v.trim());
     const obj = {};
@@ -7881,22 +7882,34 @@ async function handleUnitCSV(event) {
       toast('Row ' + (i+1) + ' incomplete \u2014 skipped','warning');
       continue;
     }
-    if(!['Studio','1BHK'].includes(obj.unit_type)) {
-      toast('Row ' + (i+1) + ': unit_type must be Studio or 1BHK \u2014 skipped','warning');
-      continue;
-    }
+    const statusRaw = (obj.status||'').toLowerCase().trim();
+    const blocked = statusRaw.includes('blocked');
+    if(statusRaw === 'sold') soldUnitNos.push(obj.unit_no);
+    if(blocked) blockedUnitNos.push(obj.unit_no);
     rows.push({
       unit_no: obj.unit_no,
       floor: parseInt(obj.floor),
       unit_type: obj.unit_type,
       area_sqft: parseFloat(obj.area_sqft),
       listed_price: parseFloat(obj.listed_price),
+      project_id: currentProject.id,
+      blocked,
     });
   }
   if(!rows.length) { toast('No valid rows to import','error'); return; }
   const {error} = await sb.from('units').upsert(rows, {onConflict:'unit_no'});
   if(error) { toast('Import error: ' + error.message,'error'); return; }
-  toast('Imported ' + rows.length + ' units','success');
+
+  // Create skeleton unit_sales records for sold units
+  if(soldUnitNos.length) {
+    const {data:soldUnits} = await sb.from('units').select('id,unit_no').in('unit_no',soldUnitNos).eq('project_id',currentProject.id);
+    if(soldUnits?.length) {
+      const salesRows = soldUnits.map(u=>({unit_id:u.id, status:'sold'}));
+      await sb.from('unit_sales').upsert(salesRows, {onConflict:'unit_id'});
+    }
+  }
+
+  toast('Imported ' + rows.length + ' units' + (soldUnitNos.length ? ' (' + soldUnitNos.length + ' marked sold)' : ''),'success');
   event.target.value = '';
   render();
 }
@@ -7904,6 +7917,7 @@ async function handleUnitCSV(event) {
 // ─── UNIT REGISTER ───────────────────────────────────────────────────────────
 
 function _unitSaleStatus(u) {
+  if(u.blocked) return 'blocked';
   return u.unit_sales ? u.unit_sales.status : 'available';
 }
 
@@ -7912,6 +7926,7 @@ function _unitStatusBadge(status) {
     available: ['#E3F0FB','#1255A0','Available'],
     reserved:  ['#FEF3E8','#854F0B','Reserved'],
     sold:      ['#d4edbc','#2d6a0a','Sold'],
+    blocked:   ['#F0F0F0','#666666','Blocked'],
   };
   const [bg,color,label] = cfg[status]||cfg.available;
   return '<span style="background:' + bg + ';color:' + color + ';padding:1px 8px;border-radius:4px;font-size:10px;font-weight:500">' + label + '</span>';
