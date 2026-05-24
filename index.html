@@ -7873,7 +7873,7 @@ async function handleUnitCSV(event) {
   if(missing.length) { toast('CSV missing columns: ' + missing.join(', '),'error'); return; }
   const hasStatus = headers.includes('status');
 
-  const rows = [], soldUnitNos = [], blockedUnitNos = [];
+  const rows = [];
   for(let i=1; i<lines.length; i++) {
     const vals = lines[i].split(',').map(v=>v.trim());
     const obj = {};
@@ -7883,9 +7883,9 @@ async function handleUnitCSV(event) {
       continue;
     }
     const statusRaw = (obj.status||'').toLowerCase().trim();
-    const blocked = statusRaw.includes('blocked');
-    if(statusRaw === 'sold') soldUnitNos.push(obj.unit_no);
-    if(blocked) blockedUnitNos.push(obj.unit_no);
+    let sale_status = 'available';
+    if(statusRaw === 'sold') sale_status = 'sold';
+    else if(statusRaw.includes('blocked')) sale_status = 'blocked_by_developer';
     rows.push({
       unit_no: obj.unit_no,
       floor: parseInt(obj.floor),
@@ -7893,23 +7893,15 @@ async function handleUnitCSV(event) {
       area_sqft: parseFloat(obj.area_sqft),
       listed_price: parseFloat(obj.listed_price),
       project_id: currentProject.id,
-      blocked,
+      sale_status,
+      blocked: sale_status === 'blocked_by_developer',
     });
   }
   if(!rows.length) { toast('No valid rows to import','error'); return; }
   const {error} = await sb.from('units').upsert(rows, {onConflict:'unit_no'});
   if(error) { toast('Import error: ' + error.message,'error'); return; }
-
-  // Create skeleton unit_sales records for sold units
-  if(soldUnitNos.length) {
-    const {data:soldUnits} = await sb.from('units').select('id,unit_no').in('unit_no',soldUnitNos).eq('project_id',currentProject.id);
-    if(soldUnits?.length) {
-      const salesRows = soldUnits.map(u=>({unit_id:u.id, status:'sold'}));
-      await sb.from('unit_sales').upsert(salesRows, {onConflict:'unit_id'});
-    }
-  }
-
-  toast('Imported ' + rows.length + ' units' + (soldUnitNos.length ? ' (' + soldUnitNos.length + ' marked sold)' : ''),'success');
+  const soldCount = rows.filter(r=>r.sale_status==='sold').length;
+  toast('Imported ' + rows.length + ' units' + (soldCount ? ' (' + soldCount + ' sold)' : ''),'success');
   event.target.value = '';
   render();
 }
@@ -7917,16 +7909,17 @@ async function handleUnitCSV(event) {
 // ─── UNIT REGISTER ───────────────────────────────────────────────────────────
 
 function _unitSaleStatus(u) {
-  if(u.blocked) return 'blocked';
+  if(u.sale_status) return u.sale_status;
+  if(u.blocked) return 'blocked_by_developer';
   return u.unit_sales ? u.unit_sales.status : 'available';
 }
 
 function _unitStatusBadge(status) {
   const cfg = {
-    available: ['#E3F0FB','#1255A0','Available'],
-    reserved:  ['#FEF3E8','#854F0B','Reserved'],
-    sold:      ['#d4edbc','#2d6a0a','Sold'],
-    blocked:   ['#F0F0F0','#666666','Blocked'],
+    available:             ['#E3F0FB','#1255A0','Available'],
+    reserved:              ['#FEF3E8','#854F0B','Reserved'],
+    sold:                  ['#d4edbc','#2d6a0a','Sold'],
+    blocked_by_developer:  ['#F0F0F0','#666666','Blocked'],
   };
   const [bg,color,label] = cfg[status]||cfg.available;
   return '<span style="background:' + bg + ';color:' + color + ';padding:1px 8px;border-radius:4px;font-size:10px;font-weight:500">' + label + '</span>';
@@ -8288,9 +8281,9 @@ async function renderSalesRevenue() {
     return;
   }
   const all = units||[];
-  const soldUnits     = all.filter(u=>u.unit_sales?.status==='sold');
-  const reservedUnits = all.filter(u=>u.unit_sales?.status==='reserved');
-  const availUnits    = all.filter(u=>!u.unit_sales);
+  const soldUnits     = all.filter(u=>u.sale_status==='sold');
+  const reservedUnits = all.filter(u=>u.sale_status==='reserved' || u.unit_sales?.status==='reserved');
+  const availUnits    = all.filter(u=>u.sale_status==='available');
   const contracted    = [...soldUnits,...reservedUnits];
   const studios       = all.filter(u=>u.unit_type==='Studio');
   const bhks          = all.filter(u=>u.unit_type==='1BHK');
