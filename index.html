@@ -7898,7 +7898,7 @@ async function handleUnitCSV(event) {
     });
   }
   if(!rows.length) { toast('No valid rows to import','error'); return; }
-  const {error} = await sb.from('units').upsert(rows, {onConflict:'unit_no'});
+  const {error} = await sb.from('units').upsert(rows, {onConflict:'unit_no,project_id'});
   if(error) { toast('Import error: ' + error.message,'error'); return; }
   const soldCount = rows.filter(r=>r.sale_status==='sold').length;
   toast('Imported ' + rows.length + ' units' + (soldCount ? ' (' + soldCount + ' sold)' : ''),'success');
