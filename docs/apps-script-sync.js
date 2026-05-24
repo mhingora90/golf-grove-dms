@@ -48,34 +48,83 @@ function buildPayload(headers, row) {
   };
 }
 
-// Fires on sheet change — syncs new rows only (409 = already exists, treated as success)
-function syncLeadsToCRM() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-  const data  = sheet.getDataRange().getValues();
-  if (data.length < 2) return;
+// Runs hourly via time-based trigger.
+// Scans ALL rows, finds leads where created_at = today, inserts only new ones.
+// Uses ignore-duplicates — NEVER overwrites existing CRM data.
+function syncTodayLeads() {
+  const ss    = SpreadsheetApp.openById('1MilS5L6fbmbm4w1xStoVvitX5vgvyrG0RWczSHRxNqo');
+  const sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) { Logger.log('Sheet not found: ' + SHEET_NAME); return; }
 
-  const headers = data[0].map(h => String(h).trim().toLowerCase());
-  const lastRow = data[data.length - 1];
-  const payload = buildPayload(headers, lastRow);
+  const data = sheet.getDataRange().getValues();
+  if (data.length < 3) return;
 
-  if (!payload.meta_lead_id && !payload.email) return; // skip empty rows
+  // Row 0 = data row (SyncWith export), Row 1 = headers
+  const headers  = data[1].map(h => String(h).trim().toLowerCase());
+  const idx      = (h) => headers.findIndex(header => header === h);
+  const idxName  = idx('adset_name');
+  const idxCo    = idx('adset_id');
+  const idxEmail = idx('campaign_id');
+  const idxPhone = idx('campaign_name');
+  const idxBudget= idx('created_time');
+  const idxProp  = idx('ad_id');
+  const idxDate  = idx('is_organic'); // actual Meta submission timestamp
 
-  const res = UrlFetchApp.fetch(SUPABASE_URL + '/rest/v1/crm_leads', {
-    method: 'post',
-    contentType: 'application/json',
-    headers: {
-      apikey: SUPABASE_KEY,
-      Authorization: 'Bearer ' + SUPABASE_KEY,
-      Prefer: 'return=minimal',
-    },
-    payload: JSON.stringify(payload),
-    muteHttpExceptions: true,
-  });
+  const todayStr = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd');
 
-  const code = res.getResponseCode();
-  if (code !== 201 && code !== 409) {
-    Logger.log('Insert failed: ' + code + ' ' + res.getContentText());
+  let inserted = 0, skipped = 0, errors = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    if (i === 1) continue; // skip header row
+    const row   = data[i];
+    const str   = (j) => j >= 0 ? (String(row[j] || '').trim() || null) : null;
+    const rawId = str(0) || '';
+    const metaLeadId = rawId.startsWith('l:') ? rawId.slice(2) : (rawId || null);
+    if (!metaLeadId) continue;
+
+    // Only process leads submitted today
+    const leadDate = str(idxDate) || '';
+    if (!leadDate.startsWith(todayStr)) { skipped++; continue; }
+
+    const payload = {
+      project_id:   '00000000-0000-0000-0000-000000000002',
+      meta_lead_id: metaLeadId,
+      name:         str(idxName),
+      company_name: str(idxCo),
+      email:        str(idxEmail),
+      phone:        str(idxPhone)?.replace(/^p:/, '') || null,
+      created_time: str(idxBudget),
+      ad_id:        str(idxProp),
+      created_at:   str(idxDate),
+      source:       'meta_ads',
+    };
+
+    const res = UrlFetchApp.fetch(
+      SUPABASE_URL + '/rest/v1/crm_leads?on_conflict=meta_lead_id',
+      {
+        method: 'post',
+        contentType: 'application/json',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: 'Bearer ' + SUPABASE_KEY,
+          Prefer: 'resolution=ignore-duplicates,return=minimal',
+        },
+        payload: JSON.stringify(payload),
+        muteHttpExceptions: true,
+      }
+    );
+
+    const code = res.getResponseCode();
+    if (code === 201 || code === 200 || code === 204) {
+      inserted++;
+    } else {
+      errors++;
+      Logger.log('Row ' + i + ' error ' + code + ': ' + res.getContentText());
+    }
+    Utilities.sleep(30);
   }
+
+  Logger.log('Today sync done — inserted: ' + inserted + ', skipped (not today): ' + skipped + ', errors: ' + errors);
 }
 
 // Run manually once to backfill created_time + ad_id for ALL existing rows.
