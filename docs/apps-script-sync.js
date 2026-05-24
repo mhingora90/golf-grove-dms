@@ -9,12 +9,13 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const SHEET_NAME = 'Automatic Meta Leads';
 
 // Column mapping: sheet headers are misleading — actual data locations:
-// adset_name → name
-// adset_id   → company_name
-// campaign_id → email
-// campaign_name → phone
-// created_time → budget (stored as created_time)
+// adset_name   → name (person's first name)
+// adset_id     → company_name (brokerage)
+// campaign_id  → email
+// campaign_name → phone (has p: prefix, cleaned on insert)
+// created_time → budget range (stored as created_time)
 // ad_id        → property type (stored as ad_id)
+// is_organic   → Meta submission timestamp (date filter)
 // id (or lead_id) → meta_lead_id
 
 function buildPayload(headers, row) {
@@ -199,7 +200,7 @@ function upsertAllLeads() {
   const idxPhone    = idx('campaign_name'); // phone with p: prefix
   const idxBudget   = idx('created_time');  // budget range
   const idxPropType = idx('ad_id');         // property type
-  const idxDate     = idx('is_organic');    // col 1 — actual Meta submission timestamp (ISO)
+  const idxDate     = idx('is_organic');    // actual Meta submission timestamp (ISO)
 
   let inserted = 0, errors = 0;
 
