@@ -8285,8 +8285,8 @@ async function renderSalesRevenue() {
   const reservedUnits = all.filter(u=>u.sale_status==='reserved' || u.unit_sales?.status==='reserved');
   const availUnits    = all.filter(u=>u.sale_status==='available');
   const contracted    = [...soldUnits,...reservedUnits];
-  const studios       = all.filter(u=>u.unit_type==='Studio');
-  const bhks          = all.filter(u=>u.unit_type==='1BHK');
+  const typeCounts    = all.reduce((acc,u)=>{ acc[u.unit_type]=(acc[u.unit_type]||0)+1; return acc; },{});
+  const typeSubtitle  = Object.entries(typeCounts).sort((a,b)=>b[1]-a[1]).map(([t,n])=>n+' '+t).join(' \u00b7 ');
 
   const totalGDV        = all.reduce((s,u)=>s+(+u.listed_price||0),0);
   const totalContracted = contracted.reduce((s,u)=>s+(+u.unit_sales?.sold_price||0),0);
@@ -8339,11 +8339,12 @@ async function renderSalesRevenue() {
       '</tr>'
     : '';
 
-  // By type
-  const typeRows = ['Studio','1BHK'].map(type=>{
+  // By type — dynamic across all unit types in current project
+  const allTypes = [...new Set(all.map(u=>u.unit_type))].sort();
+  const typeRows = allTypes.map(type=>{
     const ta   = all.filter(u=>u.unit_type===type);
-    const ts   = ta.filter(u=>u.unit_sales?.status==='sold');
-    const tc   = ta.filter(u=>u.unit_sales);
+    const ts   = ta.filter(u=>u.sale_status==='sold');
+    const tc   = ta.filter(u=>u.sale_status==='sold'||u.sale_status==='reserved');
     const avgS = ta.length ? ta.reduce((s,u)=>s+(+u.area_sqft||0),0)/ta.length : 0;
     const avgP = ts.length ? ts.reduce((s,u)=>s+(+u.unit_sales?.sold_price||0),0)/ts.length : 0;
     const totR = tc.reduce((s,u)=>s+(+u.unit_sales?.sold_price||0),0);
@@ -8389,7 +8390,7 @@ async function renderSalesRevenue() {
   document.getElementById('content').innerHTML =
     // Stats strip
     '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px">' +
-      sc(all.length,'Total Units', studios.length + ' Studio \u00b7 ' + bhks.length + ' 1BHK') +
+      sc(all.length,'Total Units', typeSubtitle) +
       sc(soldUnits.length,'Sold', soldPct + '% of total','var(--green)') +
       sc(reservedUnits.length,'Reserved','SPA in progress','var(--amber)') +
       sc(availUnits.length,'Available', availPct + '% remaining','var(--blue)') +
