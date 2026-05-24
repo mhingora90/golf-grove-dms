@@ -8253,6 +8253,11 @@ async function saveSaleForm(unitId, saleId) {
     if(msErr) { toast('Milestone error: ' + msErr.message,'error'); return; }
   }
 
+  // Sync units.sale_status with the unit_sales status
+  const newSaleStatus = (status === 'sold') ? 'sold' : 'available';
+  const {error: unitErr} = await sb.from('units').update({sale_status: newSaleStatus}).eq('id', unitId);
+  if(unitErr) { toast('Unit status error: ' + unitErr.message,'error'); return; }
+
   toast('Sale saved','success');
   closeModal();
   render();
