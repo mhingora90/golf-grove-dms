@@ -8266,8 +8266,13 @@ async function saveSaleForm(unitId, saleId) {
 async function markUnitAvailable(saleId, unitNo) {
   const ok = await confirmModal('Remove sale record for Unit ' + unitNo + ' and mark it Available? Payment milestones will also be deleted.');
   if(!ok) return;
+  // Get unit_id before deleting
+  const {data:sale, error:fetchErr} = await sb.from('unit_sales').select('unit_id').eq('id',saleId).single();
+  if(fetchErr) { toast('Error: ' + fetchErr.message,'error'); return; }
   const {error} = await sb.from('unit_sales').delete().eq('id',saleId);
   if(error) { toast('Error: ' + error.message,'error'); return; }
+  // Reset units.sale_status
+  await sb.from('units').update({sale_status:'available'}).eq('id', sale.unit_id);
   toast('Unit ' + unitNo + ' is now available','success');
   closeModal();
   render();
