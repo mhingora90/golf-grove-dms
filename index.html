@@ -759,7 +759,7 @@ textarea.form-control{resize:vertical;min-height:70px}
 <div class="toast-container" id="toasts"></div>
 
 <!-- AUTH SCREEN -->
-<div id="auth-screen" class="auth-screen">
+<div id="auth-screen" class="auth-screen" style="display:none">
   <div class="auth-card">
     <div class="auth-logo">
       <div class="proj">Regent Developments</div>
@@ -7299,6 +7299,7 @@ document.addEventListener('click', function(e) {
 (async()=>{
   const {data:{session}} = await sb.auth.getSession();
   if(session?.user) await loadApp(session.user);
+  else document.getElementById('auth-screen').style.display = 'flex';
   // Handle browser back/forward navigation
   window.addEventListener('hashchange', ()=>{
     if(!currentProfile) return;
