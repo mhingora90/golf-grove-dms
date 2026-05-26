@@ -1095,6 +1095,7 @@ async function deleteProject(projectId, projectName) {
 
 function setCurrentProject(project) {
   currentProject = project;
+  localStorage.setItem('lastProjectId', project.id);
   document.getElementById('project-screen').style.display = 'none';
   document.getElementById('app-screen').style.display     = 'flex';
   document.getElementById('psw-name').textContent         = project.name;
@@ -1112,6 +1113,7 @@ function setCurrentProject(project) {
 
 function returnToProjects() {
   currentProject = null;
+  localStorage.removeItem('lastProjectId');
   closeProjectDropdown();
   renderProjectGrid();
 }
@@ -1410,9 +1412,12 @@ async function loadApp(user) {
   userProjects = (projectRows || []).map(p => ({ id: p.id, name: p.name }));
 
   if (userProjects.length === 1) {
-    setCurrentProject(userProjects[0]); // single project — skip grid
+    setCurrentProject(userProjects[0]);
   } else {
-    renderProjectGrid();
+    const savedId = localStorage.getItem('lastProjectId');
+    const saved = savedId && userProjects.find(p => p.id === savedId);
+    if (saved) setCurrentProject(saved);
+    else renderProjectGrid();
   }
 }
 
