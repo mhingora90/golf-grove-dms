@@ -66,7 +66,7 @@ export default async function handler(request) {
     };
 
     // Check for duplicate
-    const orFilter = `meta_lead_id.eq.${leadId}` + (lead.email ? `,email.eq.${lead.email}` : '');
+    const orFilter = `meta_lead_id.eq.${encodeURIComponent(leadId)}` + (lead.email ? `,email.eq.${encodeURIComponent(lead.email)}` : '');
     const checkUrl = `${SUPABASE_URL}/rest/v1/crm_leads?select=id&or=(${orFilter})&limit=1`;
     const checkRes = await fetch(checkUrl, { headers });
     const existing = await checkRes.json();

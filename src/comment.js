@@ -12,10 +12,10 @@ function commentThreadHTML(recordType, recordId, comments) {
       ${comments.length?comments.map(c=>`
         <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;border-left:3px solid ${roleColors[c.author_role]||'var(--border2)'}">
           <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-            <span style="font-size:11px;font-weight:500;color:${roleColors[c.author_role]||'var(--text2)'}">${c.author_name||'Unknown'} <span style="font-weight:400;color:var(--text3)">(${c.author_role||'user'})</span></span>
+            <span style="font-size:11px;font-weight:500;color:${roleColors[c.author_role]||'var(--text2)'}">${esc(c.author_name||'Unknown')} <span style="font-weight:400;color:var(--text3)">(${esc(c.author_role||'user')})</span></span>
             <span style="font-size:10px;color:var(--text3)">${c.created_at?new Date(c.created_at).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'—'}</span>
           </div>
-          <div style="font-size:12px;color:var(--text);line-height:1.5">${c.message}</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.5">${esc(c.message)}</div>
         </div>`).join(''):'<div style="font-size:11px;color:var(--text3);text-align:center;padding:12px">No comments yet.</div>'}
     </div>
     <div style="display:flex;gap:8px">
@@ -43,10 +43,10 @@ async function postComment(recordType, recordId) {
     list.innerHTML = comments.map(c=>`
       <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;border-left:3px solid ${roleColors[c.author_role]||'var(--border2)'}">
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-          <span style="font-size:11px;font-weight:500;color:${roleColors[c.author_role]||'var(--text2)'}">${c.author_name||'Unknown'} <span style="font-weight:400;color:var(--text3)">(${c.author_role||'user'})</span></span>
+          <span style="font-size:11px;font-weight:500;color:${roleColors[c.author_role]||'var(--text2)'}">${esc(c.author_name||'Unknown')} <span style="font-weight:400;color:var(--text3)">(${esc(c.author_role||'user')})</span></span>
           <span style="font-size:10px;color:var(--text3)">${c.created_at?new Date(c.created_at).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'—'}</span>
         </div>
-        <div style="font-size:12px;color:var(--text);line-height:1.5">${c.message}</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.5">${esc(c.message)}</div>
       </div>`).join('');
     list.scrollTop = list.scrollHeight;
   }

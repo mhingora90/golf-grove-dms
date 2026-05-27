@@ -107,8 +107,8 @@ function refreshAttList(recordType, recordId, atts) {
     <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg3);border-radius:6px;border:0.5px solid var(--border)">
       <span style="font-size:16px">${fileIcon(a.file_type)}</span>
       <div style="flex:1;min-width:0">
-        <div style="font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.file_name}</div>
-        <div style="font-size:10px;color:var(--text3)">${formatFileSize(a.file_size)} · ${a.uploaded_by_name||'—'} · ${a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</div>
+        <div style="font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(a.file_name)}</div>
+        <div style="font-size:10px;color:var(--text3)">${formatFileSize(a.file_size)} · ${esc(a.uploaded_by_name||'—')} · ${a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</div>
       </div>
       ${(a.file_name?.toLowerCase().endsWith('.pdf')||a.file_type?.includes('pdf'))?`<button class="btn btn-sm" onclick="viewAttachmentPDF('${a.id}','${a.file_path}','${a.file_name}')">View</button>`:''}
       <button class="btn btn-sm" onclick="downloadAttachment('${a.file_path}','${a.file_name}')">Download</button>
@@ -153,7 +153,7 @@ function renderStagedFiles(stagingId) {
     <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--bg3);border-radius:6px;border:0.5px solid var(--border)">
       <span style="font-size:13px">${fileIcon(f.type)}</span>
       <div style="flex:1;min-width:0">
-        <div style="font-size:11px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.name}</div>
+        <div style="font-size:11px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(f.name)}</div>
         <div style="font-size:10px;color:var(--color-text-tertiary)">${formatFileSize(f.size)}</div>
       </div>
       <button class="btn btn-sm" style="color:var(--color-text-danger);border-color:var(--color-border-danger);padding:2px 7px" onclick="removeStagedFile('${stagingId}',${i})">✕</button>
@@ -230,7 +230,7 @@ function stageMarkup(event, drawingId) {
   document.getElementById('markup-staged-'+drawingId).innerHTML = `
     <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg3);border-radius:6px;border:0.5px solid var(--border);margin-top:4px">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="10" height="13" rx="1" stroke="var(--color-text-info)" stroke-width="1.3"/></svg>
-      <div style="flex:1;font-size:11px;color:var(--color-text-primary)">${f.name}</div>
+      <div style="flex:1;font-size:11px;color:var(--color-text-primary)">${esc(f.name)}</div>
       <div style="font-size:10px;color:var(--color-text-tertiary)">${formatFileSize(f.size)}</div>
       <button class="btn btn-sm" style="color:var(--color-text-danger);font-size:10px;padding:2px 6px" onclick="delete markupFiles['${drawingId}'];document.getElementById('markup-staged-${drawingId}').innerHTML=''">✕</button>
     </div>`;

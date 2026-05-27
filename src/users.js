@@ -113,6 +113,7 @@ async function doApproveUser(uid, name) {
     if(e2){ toast('Project assign failed: '+e2.message,'error'); return; }
   }
 
+  await logAudit(uid, 'user', `approved as ${role}`);
   toast(`${esc(name)||'User'} approved as ${role}${projectIds.length?' and assigned to '+projectIds.length+' project(s)':''}`, 'success');
   closeModal(); render();
 }
@@ -121,6 +122,7 @@ async function denyUser(uid, name) {
   if(currentUser?.email !== ROLE_ADMIN_EMAIL){ toast('Not authorised','error'); return; }
   const ok = await confirmModal(`Deny and remove <strong>${esc(name)}</strong>? Their account will be deleted.`);
   if(!ok) return;
+  await logAudit(uid, 'user', `denied and removed`);
   await sb.from('profiles').delete().eq('id', uid);
   toast(`${esc(name)||'User'} removed`,'success');
   closeModal(); render();
@@ -144,6 +146,7 @@ async function doChangeRole(uid) {
   const role = document.getElementById('new-role').value;
   const {error} = await sb.from('profiles').update({role}).eq('id',uid);
   if(error){ toast('Error: '+error.message,'error'); return; }
+  await logAudit(uid, 'user', `role changed to ${role}`);
   toast('Role updated','success'); closeModal(); render();
 }
 
