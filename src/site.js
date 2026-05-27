@@ -1559,3 +1559,199 @@ async function doNewTransmittal(drawCount) {
   toast('Transmittal created','success'); closeModal(); render();
 }
 
+
+// ─── NEW ITEM FORMS ───────────────────────────────────────────────
+async function openNew() {
+  if(currentPage==='usetup') { openAddUnitForm(); return; }
+  const {data:scs} = await sb.from('subcontractors').select('*');
+  const scOpts = (scs||[]).map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+
+  if(currentPage==='draw' && can('upload')) {
+    openModal('Upload New Drawing', `
+      <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;margin-bottom:4px">
+        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">ISO 19650 Document Number</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+          <div class="form-group"><label class="form-label-dark" title="Required per ISO 19650-2 §5.3.2">Originator <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-orig" value="MBC" oninput="updateDocNum()" /></div>
+          <div class="form-group"><label class="form-label-dark" title="Volume or Zone reference">Zone <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-zone" placeholder="B1" oninput="updateDocNum()" /></div>
+          <div class="form-group"><label class="form-label-dark">Level <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-level" placeholder="L04" oninput="updateDocNum()" /></div>
+          <div class="form-group"><label class="form-label-dark">Type</label>
+            <select class="form-control" id="nd-type" onchange="updateDocNum()">
+              <option value="DR">DR – Drawing</option>
+              <option value="SP">SP – Specification</option>
+              <option value="CA">CA – Calculation</option>
+              <option value="MS">MS – Method Statement</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label-dark" title="Role code e.g. A=Architect, S=Structural">Role <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-role" placeholder="A" oninput="updateDocNum()" /></div>
+          <div class="form-group"><label class="form-label-dark" title="4-digit sequence number">Number <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-num" placeholder="0001" maxlength="4" oninput="updateDocNum()" /></div>
+          <div class="form-group"><label class="form-label-dark">Revision <span style="color:var(--red)">*</span></label><input type="text" class="form-control" id="nd-rev" value="Rev A" oninput="updateDocNum();checkRevScheme()" /></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:10px;color:var(--text3)">Generated No.:</div>
+          <div id="nd-preview" style="font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--sand);background:var(--bg2);padding:4px 10px;border-radius:6px;border:0.5px solid var(--border2)">GG-MBC-——-——-DR-——-——-RevA</div>
+          <button type="button" class="btn btn-sm" onclick="document.getElementById('nd-id').value=document.getElementById('nd-preview').textContent;validateDrawingNumberLive()" style="font-size:10px">Use this</button>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Drawing No. <span style="color:var(--text3);font-size:9px">(or use generated above)</span></label><input type="text" class="form-control" id="nd-id" placeholder="e.g. GG-MBC-B1-L04-DR-RevA" onblur="validateDrawingNumberLive()" /><div id="nd-id-err" class="form-err"></div></div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Title</label><input type="text" class="form-control" id="nd-title" placeholder="Drawing title" /><div id="nd-title-err" class="form-err"></div></div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Discipline</label>
+          <select class="form-control" id="nd-disc"><option>Architecture</option><option>Structure</option><option>MEP</option><option>Civil</option><option>General</option><option>Interior Design</option></select>
+        </div>
+        <div class="form-group"><label class="form-label-dark">Review Status</label>
+          <select class="form-control" id="nd-status" onchange="checkRevScheme()"><option>Under Review</option><option>Issued for Construction</option><option>Approved</option></select>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark" title="ISO 19650 Purpose of Issue code">Purpose of Issue (POI)</label>
+          <select class="form-control" id="nd-poi">
+            <option value="">— Select —</option>
+            <option value="S0">S0 – Work in Progress</option>
+            <option value="S1">S1 – Suitable for Coordination</option>
+            <option value="S2">S2 – Suitable for Information</option>
+            <option value="S3">S3 – Suitable for Review & Comment</option>
+            <option value="S4">S4 – Suitable for Construction</option>
+            <option value="S5">S5 – As Constructed</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label-dark">AR / FI Classification</label>
+          <select class="form-control" id="nd-arfi">
+            <option value="AR">AR – Action Required</option>
+            <option value="FI">FI – For Information Only</option>
+          </select>
+        </div>
+      </div>
+      <div id="nd-rev-warn" style="display:none;background:var(--amber-bg);border:0.5px solid #FAC775;border-radius:6px;padding:7px 12px;font-size:11px;color:var(--amber);margin-top:-4px"></div>
+      <div id="nd-num-warn" style="display:none;background:var(--amber-bg);border:0.5px solid #FAC775;border-radius:6px;padding:7px 12px;font-size:11px;color:var(--amber);margin-top:-4px"></div>
+      <div class="form-group"><label class="form-label-dark">Upload PDF File</label>
+        <div class="upload-zone" id="uz-new" onclick="document.getElementById('fu-new').click()" ondragover="event.preventDefault();this.classList.add('dragging')" ondragleave="this.classList.remove('dragging')" ondrop="handleDrop(event,'new')">
+          <div style="font-size:24px">📄</div>
+          <div class="upload-zone-text">Click to select or drag & drop PDF</div>
+          <div class="upload-zone-sub">PDF, DWG files accepted</div>
+        </div>
+        <input type="file" id="fu-new" accept=".pdf,.dwg" style="display:none" onchange="handleFileSelect(event,'new')" />
+        <div id="file-name-new" style="font-size:11px;color:var(--text2);margin-top:6px"></div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Additional Attachments (optional)</label>
+        <div class="upload-zone" style="padding:14px 16px;display:flex;align-items:center;gap:10px;text-align:left" onclick="document.getElementById('nd-extra-files').click()" ondragover="event.preventDefault();this.classList.add('dragging')" ondragleave="this.classList.remove('dragging')" ondrop="event.preventDefault();this.classList.remove('dragging');stageFiles(event.dataTransfer.files,'nd-staged')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;opacity:.6"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg><span style="font-size:12px;color:var(--text2)">Attach supporting documents — specs, calculations, references (max 50MB each)</span></div>
+        <input type="file" id="nd-extra-files" multiple style="display:none" onchange="stageFiles(this.files,'nd-staged')" />
+        <div id="nd-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
+      </div>`,
+      `<button class="btn btn-primary" onclick="doNewDraw()">Upload Drawing</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+
+  } else if(currentPage==='sub' && can('submit')) {
+    const {data:draws} = await sb.from('drawings').select('drawing_no,title').eq('project_id',currentProject.id).order('drawing_no');
+    openModal('New Document Submittal (DSUB)', `
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Reference No.</label><input type="text" class="form-control" id="ns-id" placeholder="MBC-POE-DT-P454-25-0XX" /></div>
+        <div class="form-group"><label class="form-label-dark">Date</label><input type="date" class="form-control" id="ns-date" value="${new Date().toISOString().split('T')[0]}" /></div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Document Title</label><input type="text" class="form-control" id="ns-title" placeholder="e.g. Structural Shop Drawings – Level 3" /></div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">From</label><select class="form-control" id="ns-from"><option value="MBC">MBC (Main Contractor)</option>${(scs||[]).map(s=>`<option value="${s.name}">${s.name}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label-dark">To</label><select class="form-control" id="ns-to"><option value="POE">POE (Consultant)</option><option value="Regent">Regent (Developer)</option></select></div>
+      </div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Response Due Date</label><input type="date" class="form-control" id="ns-due" /></div>
+        <div class="form-group"><label class="form-label-dark">Related Drawing (optional)</label>
+          <select class="form-control" id="ns-drawing">
+            <option value="">— None —</option>
+            ${(draws||[]).map(d=>`<option value="${d.drawing_no}">${d.drawing_no} – ${d.title}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="frow">
+      </div>
+      <div class="form-group"><label class="form-label-dark">Attachments</label>
+        <div class="checkbox-grid">
+          <label><input type="checkbox" id="ns-samp"> Samples</label>
+          <label><input type="checkbox" id="ns-broc"> Original Brochure</label>
+          <label><input type="checkbox" id="ns-draw"> Drawings</label>
+          <label><input type="checkbox" id="ns-sket"> Sketches</label>
+          <label><input type="checkbox" id="ns-spec"> Specification</label>
+          <label><input type="checkbox" id="ns-oth"> Others</label>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Discipline</label>
+        <div class="checkbox-grid">
+          <label><input type="checkbox" id="ns-civil"> Civil / Structural</label>
+          <label><input type="checkbox" id="ns-mech"> Mechanical</label>
+          <label><input type="checkbox" id="ns-elv"> ELV / IT</label>
+          <label><input type="checkbox" id="ns-dspec"> Specification</label>
+          <label><input type="checkbox" id="ns-arch"> Architectural</label>
+          <label><input type="checkbox" id="ns-elec"> Electrical</label>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Attachments (optional)</label>
+        <div class="upload-zone" style="padding:14px 16px;display:flex;align-items:center;gap:10px;text-align:left" onclick="document.getElementById('ns-files').click()" ondragover="event.preventDefault();this.classList.add('dragging')" ondragleave="this.classList.remove('dragging')" ondrop="event.preventDefault();this.classList.remove('dragging');stageFiles(event.dataTransfer.files,'ns-staged')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;opacity:.6"><path d="M8 2v8M5 5l3-3 3 3" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="var(--text2)" stroke-width="1.3" stroke-linecap="round"/></svg><span style="font-size:12px;color:var(--text2)">Click to attach or drag & drop files — PDF, DWG, Images, Word, Excel (max 50MB)</span></div>
+        <input type="file" id="ns-files" multiple style="display:none" onchange="stageFiles(this.files,'ns-staged')" />
+        <div id="ns-staged" style="display:flex;flex-direction:column;gap:4px;margin-top:6px"></div>
+      </div>`,
+      `<button class="btn btn-primary" onclick="doNewSub()">Create Submittal</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+
+  } else if(currentPage==='ir' && can('submit')) {
+    openNewIR();
+
+  } else if(currentPage==='ncr' && can('raise')) {
+    openNewNCR();
+
+  } else if(currentPage==='rfi') {
+    openNewRFI();
+  } else if(currentPage==='trans') {
+    openNewTransmittal();
+  } else if(currentPage==='ms' && can('submitMS')) {
+    openNewMS();
+  } else if(currentPage==='sreg' && can('manageRegister')) {
+    addRegisterItem();
+  } else if(currentPage==='corr' && can('approve')) {
+    openNewCorrespondence();
+  } else if(currentPage==='punch' && can('approve')) {
+    openNewPunchItem();
+  } else if(currentPage==='ipc' && (can('submit') || currentProfile?.role==='developer')) {
+    openNewIPC();
+  } else if(currentPage==='boq' && can('manageRegister')) {
+    openImportBOQ();
+  } else if(currentPage==='subs' && can('manageSubs')) {
+    openModal('Add Subcontractor', `
+      <div class="form-group"><label class="form-label-dark">Company Name</label><input type="text" class="form-control" id="nsc-name" placeholder="Full legal company name" /></div>
+      <div class="frow">
+        <div class="form-group"><label class="form-label-dark">Representative</label><input type="text" class="form-control" id="nsc-rep" placeholder="e.g. Eng. Ahmed Hassan" /></div>
+        <div class="form-group"><label class="form-label-dark">Discipline</label>
+          <select class="form-control" id="nsc-disc"><option>MEP</option><option>Civil</option><option>Structural</option><option>Electrical</option><option>Architectural</option><option>Firefighting</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label-dark">Trade / Scope</label><input type="text" class="form-control" id="nsc-trade" placeholder="e.g. Mechanical / Electrical / Plumbing" /></div>`,
+      `<button class="btn btn-primary" onclick="doNewSubcontractor()">Add Subcontractor</button><button class="btn" onclick="closeModal()">Cancel</button>`);
+  } else {
+    openModal('Access Restricted', `<div class="empty-state">Your current role does not have permission to create items on this page.</div>`,
+      `<button class="btn" onclick="closeModal()">Close</button>`);
+  }
+}
+
+function checkRevScheme() {
+  const status = document.getElementById('nd-status')?.value||'';
+  const rev = document.getElementById('nd-rev')?.value||'';
+  const result = enforceRevisionScheme(status, rev);
+  const el = document.getElementById('nd-rev-warn');
+  if(el){ el.style.display = result.warn?'':'none'; el.textContent = result.msg; }
+}
+
+
+async function doNewSubcontractor() {
+  const name = document.getElementById('nsc-name').value;
+  if(!name){toast('Company name is required','error');return;}
+  const {error} = await sb.from('subcontractors').insert({project_id:currentProject.id,
+    name,rep:document.getElementById('nsc-rep').value,
+    discipline:document.getElementById('nsc-disc').value,
+    trade:document.getElementById('nsc-trade').value
+  });
+  if(error){toast('Error: '+error.message,'error');return;}
+  toast('Subcontractor added','success'); closeModal(); render();
+}
+
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.psw-wrap')) closeProjectDropdown();
+});
