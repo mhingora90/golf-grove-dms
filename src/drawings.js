@@ -1011,6 +1011,7 @@ async function doReviewSub(id) {
   }).eq('id',id);
   await logAudit(id, 'submittal', 'Submittal Reviewed: Code ' + oc + ' \u2013 ' + statusMap[oc]);
   toast('Submittal reviewed','success'); closeModal(); render();
+}
 
 function uploadRev(id) {
   openModal(`Upload New Revision`, `

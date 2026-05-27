@@ -1386,6 +1386,7 @@ async function doNewPunchItem() {
     await logAudit(newPunch.id, 'punch_list', 'Punch Item Created');
   }
   toast('Punch list item added','success'); closeModal(); render();
+}
 
 // ─── RESUBMISSION ─────────────────────────────────────────────────
 async function createResubmission(parentId) {
