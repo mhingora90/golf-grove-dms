@@ -16,7 +16,7 @@ async function renderSubcontractors() {
 }
 
 // ─── USER MANAGEMENT ──────────────────────────────────────────────
-const ROLE_ADMIN_EMAIL = 'mohammed@regent-developments.com';
+function isAppAdmin() { return currentProfile?.is_app_admin === true; }
 
 async function renderUsers() {
   if(!can('manageUsers')){
@@ -31,7 +31,7 @@ async function renderUsers() {
     el.appendChild(card);
     return;
   }
-  const isAdmin = currentUser?.email === ROLE_ADMIN_EMAIL;
+  const isAdmin = isAppAdmin();
   const {data} = await sb.from('profiles').select('*').order('created_at',{ascending:false});
   const rows = data||[];
   const pending = rows.filter(u => u.role === 'pending');
@@ -75,7 +75,7 @@ async function renderUsers() {
 }
 
 async function approveUser(uid, requestedRole, name) {
-  if(currentUser?.email !== ROLE_ADMIN_EMAIL){ toast('Not authorised','error'); return; }
+  if(!isAppAdmin()){ toast('Not authorised','error'); return; }
   const {data: projects} = await sb.from('projects').select('id,name').order('name');
   const allProjects = projects || [];
   openModal(`Approve – ${esc(name)}`, `
@@ -100,7 +100,7 @@ async function approveUser(uid, requestedRole, name) {
 }
 
 async function doApproveUser(uid, name) {
-  if(currentUser?.email !== ROLE_ADMIN_EMAIL){ toast('Not authorised','error'); return; }
+  if(!isAppAdmin()){ toast('Not authorised','error'); return; }
   const role = document.getElementById('approve-role').value;
   const checked = [...document.querySelectorAll('#modal-body input[type=checkbox][data-pid]:checked')];
   const projectIds = checked.map(c => c.dataset.pid);
@@ -119,7 +119,7 @@ async function doApproveUser(uid, name) {
 }
 
 async function denyUser(uid, name) {
-  if(currentUser?.email !== ROLE_ADMIN_EMAIL){ toast('Not authorised','error'); return; }
+  if(!isAppAdmin()){ toast('Not authorised','error'); return; }
   const ok = await confirmModal(`Deny and remove <strong>${esc(name)}</strong>? Their account will be deleted.`);
   if(!ok) return;
   await logAudit(uid, 'user', `denied and removed`);
@@ -129,7 +129,7 @@ async function denyUser(uid, name) {
 }
 
 async function editUserRole(uid, currentRole, name) {
-  if(currentUser?.email !== ROLE_ADMIN_EMAIL){ toast('Not authorised','error'); return; }
+  if(!isAppAdmin()){ toast('Not authorised','error'); return; }
   openModal(`Change Role – ${esc(name)}`, `
     <div class="form-group">
       <label class="form-label-dark">Role</label>
@@ -142,7 +142,7 @@ async function editUserRole(uid, currentRole, name) {
 }
 
 async function doChangeRole(uid) {
-  if(currentUser?.email !== ROLE_ADMIN_EMAIL){ toast('Not authorised','error'); return; }
+  if(!isAppAdmin()){ toast('Not authorised','error'); return; }
   const role = document.getElementById('new-role').value;
   const {error} = await sb.from('profiles').update({role}).eq('id',uid);
   if(error){ toast('Error: '+error.message,'error'); return; }
