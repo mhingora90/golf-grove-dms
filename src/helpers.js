@@ -187,7 +187,7 @@ async function bulkDelete(table, set, prefix, barId, countId) {
     default: break;
   }
 }
-function clearDrawSelection() {
+function clearDrawSelection() {}
 
 // ─── MODAL HELPERS ────────────────────────────────────────────────
 function openModal(title, body, footer, wide) {
