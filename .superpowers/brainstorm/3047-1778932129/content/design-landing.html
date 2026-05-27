@@ -1,0 +1,187 @@
+<style>
+  :root {
+    --bg1:#1a1916;--bg2:#201f1c;--bg3:#272521;--bg4:#2e2c28;
+    --border:#3a3833;--border2:#46433e;
+    --charcoal:#f0ece4;--text2:#c8c3b8;--text3:#8a8579;
+    --amber:#C4863A;--amber-light:#FAC775;--amber-bg:rgba(196,134,58,.1);
+    --green:#27ae60;--green-bg:rgba(39,174,96,.1);
+    --font:'Plus Jakarta Sans',system-ui,sans-serif;
+    --radius:8px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg1);color:var(--charcoal);font-family:var(--font);padding:0;}
+
+  /* ── Topbar ── */
+  .topbar{
+    height:52px;display:flex;align-items:center;padding:0 20px;gap:12px;
+    background:var(--bg2);border-bottom:0.5px solid var(--border);
+  }
+  .topbar-logo{font-weight:800;font-size:15px;color:var(--amber-light);letter-spacing:-.02em;}
+  .topbar-spacer{flex:1;}
+  .avatar{width:28px;height:28px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;}
+
+  /* ── Page ── */
+  .page{padding:32px 28px;}
+  .page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;}
+  .page-title{font-size:22px;font-weight:800;letter-spacing:-.02em;}
+  .page-sub{font-size:12px;color:var(--text3);margin-top:3px;}
+
+  /* ── Project grid ── */
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+
+  .proj-card{
+    background:var(--bg2);border:0.5px solid var(--border);border-radius:12px;
+    overflow:hidden;cursor:pointer;
+    transition:border-color .18s,box-shadow .18s,transform .15s;
+  }
+  .proj-card:hover{border-color:var(--amber);box-shadow:0 4px 20px rgba(196,134,58,.12);transform:translateY(-2px);}
+
+  .proj-card-top{
+    padding:18px 16px 14px;
+    border-bottom:0.5px solid var(--border);
+  }
+  .proj-icon{
+    width:36px;height:36px;border-radius:8px;
+    background:var(--amber-bg);border:0.5px solid rgba(196,134,58,.3);
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;margin-bottom:10px;
+  }
+  .proj-name{font-size:14px;font-weight:700;color:var(--charcoal);}
+  .proj-status{font-size:11px;color:var(--green);font-weight:600;margin-top:2px;display:flex;align-items:center;gap:4px;}
+  .proj-status::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);}
+
+  .proj-card-bottom{
+    padding:10px 16px;display:flex;align-items:center;gap:8px;
+  }
+  .proj-users{display:flex;}
+  .proj-user-dot{
+    width:20px;height:20px;border-radius:50%;background:var(--bg4);border:1.5px solid var(--bg2);
+    font-size:8px;font-weight:700;color:var(--text3);display:flex;align-items:center;justify-content:center;
+    margin-left:-5px;
+  }
+  .proj-user-dot:first-child{margin-left:0;}
+  .proj-user-count{font-size:10px;color:var(--text3);margin-left:4px;}
+  .proj-manage{
+    margin-left:auto;font-size:10px;color:var(--text3);padding:3px 8px;
+    border:0.5px solid var(--border2);border-radius:20px;
+    transition:color .15s,border-color .15s;cursor:pointer;
+  }
+  .proj-manage:hover{color:var(--amber-light);border-color:var(--amber);}
+
+  /* ── New project card ── */
+  .proj-new{
+    background:var(--bg2);border:0.5px dashed var(--border2);border-radius:12px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:8px;padding:30px;cursor:pointer;min-height:120px;
+    transition:border-color .18s,background .18s;
+  }
+  .proj-new:hover{border-color:var(--amber);background:var(--amber-bg);}
+  .proj-new-icon{font-size:22px;color:var(--text3);}
+  .proj-new-label{font-size:12px;font-weight:600;color:var(--text3);}
+
+  /* ── Btn ── */
+  .btn{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:7px 14px;border-radius:var(--radius);border:0.5px solid var(--border2);
+    background:var(--bg3);color:var(--charcoal);font:600 12px var(--font);cursor:pointer;
+  }
+  .btn-primary{background:var(--amber);border-color:var(--amber);color:#fff;}
+
+  /* ── Annotation ── */
+  .annotation{
+    margin-top:20px;padding:12px 16px;background:var(--bg3);border:0.5px solid var(--border2);
+    border-radius:8px;font-size:11px;color:var(--text2);line-height:1.6;
+  }
+  .annotation strong{color:var(--amber-light);}
+  .ann-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+  .ann-item{background:var(--bg4);border-radius:6px;padding:10px 12px;font-size:11px;color:var(--text2);}
+  .ann-item strong{color:var(--charcoal);display:block;margin-bottom:3px;font-size:11px;}
+</style>
+
+<div style="background:var(--bg1);border:0.5px solid var(--border);border-radius:12px;overflow:hidden;">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <span class="topbar-logo">Golf Grove DMS</span>
+    <div class="topbar-spacer"></div>
+    <div class="avatar">MH</div>
+  </div>
+
+  <!-- Page -->
+  <div class="page">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Projects</div>
+        <div class="page-sub">Select a project to continue</div>
+      </div>
+      <!-- Only visible to developer role -->
+      <button class="btn btn-primary">+ New Project</button>
+    </div>
+
+    <div class="proj-grid">
+
+      <!-- Existing project (migrated) -->
+      <div class="proj-card">
+        <div class="proj-card-top">
+          <div class="proj-icon">🏗️</div>
+          <div class="proj-name">Golf Grove – DPC</div>
+          <div class="proj-status">Active</div>
+        </div>
+        <div class="proj-card-bottom">
+          <div class="proj-users">
+            <div class="proj-user-dot">MH</div>
+            <div class="proj-user-dot">AK</div>
+            <div class="proj-user-dot">+3</div>
+          </div>
+          <div class="proj-manage">Manage users</div>
+        </div>
+      </div>
+
+      <!-- Second project example -->
+      <div class="proj-card">
+        <div class="proj-card-top">
+          <div class="proj-icon">🏢</div>
+          <div class="proj-name">Palm Grove Tower</div>
+          <div class="proj-status">Active</div>
+        </div>
+        <div class="proj-card-bottom">
+          <div class="proj-users">
+            <div class="proj-user-dot">SA</div>
+            <div class="proj-user-dot">+1</div>
+          </div>
+          <div class="proj-manage">Manage users</div>
+        </div>
+      </div>
+
+      <!-- New project card (developer only) -->
+      <div class="proj-new">
+        <div class="proj-new-icon">＋</div>
+        <div class="proj-new-label">New Project</div>
+      </div>
+
+    </div>
+
+    <!-- Design notes -->
+    <div class="annotation">
+      <strong>Design notes</strong>
+      <div class="ann-grid">
+        <div class="ann-item">
+          <strong>Developer only</strong>
+          "+ New Project" button and "Manage users" pill hidden for all other roles
+        </div>
+        <div class="ann-item">
+          <strong>Access control</strong>
+          Users only see projects they've been assigned to. Developer sees all.
+        </div>
+        <div class="ann-item">
+          <strong>Migration</strong>
+          All existing data auto-assigned to "Golf Grove – DPC" project on deploy
+        </div>
+        <div class="ann-item">
+          <strong>Single project</strong>
+          If user has only 1 project, skip grid → go straight into it
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

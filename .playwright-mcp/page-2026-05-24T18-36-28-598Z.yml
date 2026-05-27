@@ -1,0 +1,112 @@
+- generic [active] [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Google Apps Script" [ref=e10] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - button "Rename" [ref=e18] [cursor=pointer]: Untitled project
+          - generic [ref=e26]:
+            - button "Deploy" [ref=e31] [cursor=pointer]:
+              - generic [ref=e34]:
+                - text: Deploy
+                - generic [ref=e35]: 
+            - button "Support" [ref=e373] [cursor=pointer]:
+              - generic [ref=e376]: help_outline
+        - generic [ref=e42]:
+          - button "Google apps" [ref=e46] [cursor=pointer]:
+            - img [ref=e47]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e52] [cursor=pointer]':
+            - img [ref=e54]
+    - generic [ref=e378]:
+      - navigation "Apps Script project pages" [ref=e380]:
+        - link "Overview" [ref=e381] [cursor=pointer]:
+          - generic [ref=e383]: info_outline
+          - generic [ref=e384]: Overview
+        - link "Editor" [ref=e385] [cursor=pointer]:
+          - generic [ref=e387]: code
+          - generic [ref=e388]: Editor
+        - link "Project History" [ref=e389] [cursor=pointer]:
+          - generic [ref=e391]: history
+          - generic [ref=e392]: Project History
+        - link "Triggers" [ref=e393] [cursor=pointer]:
+          - generic [ref=e395]: alarm
+          - generic [ref=e396]: Triggers
+        - link "Executions" [ref=e397] [cursor=pointer]:
+          - generic [ref=e399]: playlist_play
+          - generic [ref=e400]: Executions
+        - link "Project Settings" [ref=e401] [cursor=pointer]:
+          - generic [ref=e403]: settings
+          - generic [ref=e404]: Project Settings
+      - generic [ref=e406]:
+        - generic [ref=e407]:
+          - heading "Triggers" [level=1] [ref=e409]
+          - generic [ref=e411]: Showing 1 trigger
+        - button "Add Trigger" [ref=e412] [cursor=pointer]:
+          - generic [ref=e413]: add
+          - generic [ref=e414]: Add Trigger
+        - generic "Triggers table. Use arrow keys to navigate the table or tab to add and modify table filters." [ref=e415]:
+          - list [ref=e417]:
+            - listitem [ref=e418]:
+              - generic [ref=e419]:
+                - generic [ref=e420]: 
+                - text: Add a filter
+              - generic [ref=e422]:
+                - textbox [disabled] [ref=e423]
+                - combobox "Add a trigger filter" [ref=e424]
+          - generic [ref=e425]:
+            - grid [ref=e427]:
+              - rowgroup [ref=e428]:
+                - row "Owned by Last run Deployment Event Function Error rate" [ref=e429]:
+                  - columnheader "Owned by" [ref=e430] [cursor=pointer]:
+                    - generic [ref=e432]: Owned by
+                  - columnheader "Last run" [ref=e433] [cursor=pointer]:
+                    - generic [ref=e435]: Last run
+                  - columnheader "Deployment" [ref=e436] [cursor=pointer]:
+                    - generic [ref=e438]: Deployment
+                  - columnheader "Event" [ref=e439] [cursor=pointer]:
+                    - generic [ref=e441]: Event
+                  - columnheader "Function" [ref=e442] [cursor=pointer]:
+                    - generic [ref=e444]: Function
+                  - columnheader "Error rate" [ref=e445] [cursor=pointer]:
+                    - generic [ref=e447]: Error rate
+              - rowgroup [ref=e448]:
+                - row "Me May 24, 2026, 10:29:29 AM Head From spreadsheet - On change syncLeadsToCRM 0% Edit Trigger More Options" [ref=e449]:
+                  - gridcell "Me" [ref=e450]
+                  - gridcell "May 24, 2026, 10:29:29 AM" [ref=e451]
+                  - gridcell "Head" [ref=e452]
+                  - gridcell "From spreadsheet - On change" [ref=e453]
+                  - gridcell "syncLeadsToCRM" [ref=e454]
+                  - gridcell "0% Edit Trigger More Options" [ref=e455]:
+                    - generic [ref=e457]:
+                      - generic [ref=e458]: 0%
+                      - generic [ref=e459]:
+                        - button "Edit Trigger" [ref=e460] [cursor=pointer]:
+                          - generic [ref=e463]: 
+                        - button "More Options" [ref=e466] [cursor=pointer]:
+                          - generic [ref=e469]: 
+            - navigation "Pagination" [ref=e470]:
+              - generic [ref=e471]:
+                - generic [ref=e472]: "Rows per page:"
+                - listbox "Number of rows per page" [ref=e473] [cursor=pointer]:
+                  - option "25" [selected] [ref=e474]
+                  - option "50"
+                  - option "100"
+              - generic [ref=e476]:
+                - button "Go to first page" [disabled] [ref=e477]:
+                  - generic [ref=e480]: 
+                - status [ref=e481]: Page 1 of 1
+                - button "Go to previous page" [disabled] [ref=e482]:
+                  - generic [ref=e485]: 
+                - button "Go to next page" [disabled] [ref=e486]:
+                  - generic [ref=e489]: 
+  - generic [ref=e365]:
+    - alert
+    - alert
+    - complementary
+    - complementary
+  - generic [ref=e490]: Untitled project - Project Triggers - Apps Script

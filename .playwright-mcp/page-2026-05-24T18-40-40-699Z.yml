@@ -1,0 +1,94 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Google Apps Script" [ref=e721] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - button "Rename" [ref=e722] [cursor=pointer]: Untitled project
+          - generic [ref=e26]:
+            - button "Deploy" [ref=e723] [cursor=pointer]:
+              - generic [ref=e34]:
+                - text: Deploy
+                - generic [ref=e35]: 
+            - button "Support" [ref=e724] [cursor=pointer]:
+              - generic [ref=e376]: help_outline
+        - generic [ref=e42]:
+          - button "Google apps" [ref=e725] [cursor=pointer]:
+            - img [ref=e47]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e726] [cursor=pointer]':
+            - img [ref=e54]
+    - generic [ref=e378]:
+      - navigation "Apps Script project pages" [ref=e727]:
+        - link "Overview" [ref=e728] [cursor=pointer]:
+          - generic [ref=e383]: info_outline
+          - generic [ref=e384]: Overview
+        - link "Editor" [ref=e729] [cursor=pointer]:
+          - generic [ref=e387]: code
+          - generic [ref=e388]: Editor
+        - link "Project History" [ref=e730] [cursor=pointer]:
+          - generic [ref=e391]: history
+          - generic [ref=e392]: Project History
+        - link "Triggers" [ref=e731] [cursor=pointer]:
+          - generic [ref=e395]: alarm
+          - generic [ref=e396]: Triggers
+        - link "Executions" [ref=e732] [cursor=pointer]:
+          - generic [ref=e399]: playlist_play
+          - generic [ref=e400]: Executions
+        - link "Project Settings" [ref=e733] [cursor=pointer]:
+          - generic [ref=e403]: settings
+          - generic [ref=e404]: Project Settings
+      - generic [ref=e406]:
+        - generic [ref=e407]:
+          - heading "Triggers" [level=1] [ref=e734]
+          - generic [ref=e411]: Showing 0 triggers
+        - button "Add Trigger" [active] [ref=e735] [cursor=pointer]:
+          - generic [ref=e413]: add
+          - generic [ref=e414]: Add Trigger
+        - generic "Triggers table. Use arrow keys to navigate the table or tab to add and modify table filters." [ref=e736]:
+          - list [ref=e417]:
+            - listitem [ref=e418]:
+              - generic [ref=e419]:
+                - generic [ref=e420]: 
+                - text: Add a filter
+              - generic [ref=e422]:
+                - textbox [disabled] [ref=e423]
+                - combobox "Add a trigger filter" [ref=e737]
+          - generic [ref=e425]:
+            - grid [ref=e427]:
+              - rowgroup [ref=e428]:
+                - row "Owned by Last run Deployment Event Function Error rate" [ref=e738]:
+                  - columnheader "Owned by" [ref=e739] [cursor=pointer]:
+                    - generic [ref=e432]: Owned by
+                  - columnheader "Last run" [ref=e740] [cursor=pointer]:
+                    - generic [ref=e435]: Last run
+                  - columnheader "Deployment" [ref=e741] [cursor=pointer]:
+                    - generic [ref=e438]: Deployment
+                  - columnheader "Event" [ref=e742] [cursor=pointer]:
+                    - generic [ref=e441]: Event
+                  - columnheader "Function" [ref=e743] [cursor=pointer]:
+                    - generic [ref=e444]: Function
+                  - columnheader "Error rate" [ref=e744] [cursor=pointer]:
+                    - generic [ref=e447]: Error rate
+              - rowgroup [ref=e448]:
+                - row "No results Try adjusting your filter criteria or create a new trigger." [ref=e745]:
+                  - gridcell "No results Try adjusting your filter criteria or create a new trigger." [ref=e746]:
+                    - generic [ref=e598]:
+                      - img [ref=e599]
+                      - generic [ref=e613]: No results
+                      - generic [ref=e614]:
+                        - text: Try adjusting your filter criteria or
+                        - button "create a new trigger." [ref=e747]:
+                          - generic [ref=e617]: create a new trigger.
+            - generic [ref=e748]:
+              - generic [ref=e749]: Progress indicator
+              - progressbar [ref=e750]
+  - generic [ref=e365]:
+    - alert
+    - alert
+    - complementary
+    - complementary

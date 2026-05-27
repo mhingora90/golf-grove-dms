@@ -1,0 +1,129 @@
+- generic [ref=e49]:
+  - generic [ref=e50]:
+    - generic [ref=e51]:
+      - generic [ref=e52]: Active Project
+      - generic [ref=e53]: 241 Waterside
+    - generic [ref=e54]:
+      - generic [ref=e55]: MH
+      - generic [ref=e56]:
+        - generic [ref=e57]: Mohammed Hingora
+        - generic [ref=e58]: developer
+    - generic [ref=e59]: Main
+    - generic [ref=e60] [cursor=pointer]:
+      - img [ref=e61]
+      - text: Dashboard
+    - generic [ref=e66]: Document Control
+    - generic [ref=e67] [cursor=pointer]:
+      - img [ref=e68]
+      - text: Drawing Register
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: Submittals (DSUB)
+    - generic [ref=e74] [cursor=pointer]:
+      - img [ref=e75]
+      - text: Submittal Register
+    - generic [ref=e77]: Site
+    - generic [ref=e78] [cursor=pointer]:
+      - img [ref=e79]
+      - text: Inspection Requests
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: NCRs
+    - generic [ref=e86] [cursor=pointer]:
+      - img [ref=e87]
+      - text: RFIs
+    - generic [ref=e91] [cursor=pointer]:
+      - img [ref=e92]
+      - text: Transmittals
+    - generic [ref=e94] [cursor=pointer]:
+      - img [ref=e95]
+      - text: Method Statements
+    - generic [ref=e98] [cursor=pointer]:
+      - img [ref=e99]
+      - text: Correspondence
+    - generic [ref=e102] [cursor=pointer]:
+      - img [ref=e103]
+      - text: Punch List
+      - generic [ref=e106]: "0"
+    - generic [ref=e107]: Finance
+    - generic [ref=e108] [cursor=pointer]:
+      - img [ref=e109]
+      - text: Finance Overview
+    - generic [ref=e112] [cursor=pointer]:
+      - img [ref=e113]
+      - text: Payment Certificates
+    - generic [ref=e116] [cursor=pointer]:
+      - img [ref=e117]
+      - text: BOQ Setup
+    - generic [ref=e120]:
+      - generic [ref=e121]: Sales
+      - generic [ref=e122] [cursor=pointer]:
+        - img [ref=e123]
+        - text: CRM
+        - generic [ref=e127]: "0"
+      - generic [ref=e128] [cursor=pointer]:
+        - img [ref=e129]
+        - text: Unit Setup
+      - generic [ref=e132] [cursor=pointer]:
+        - img [ref=e133]
+        - text: Unit Register
+      - generic [ref=e136] [cursor=pointer]:
+        - img [ref=e137]
+        - text: Sales Revenue
+    - generic [ref=e140]: Admin
+    - generic [ref=e141] [cursor=pointer]:
+      - img [ref=e142]
+      - text: Subcontractors
+    - generic [ref=e148] [cursor=pointer]:
+      - img [ref=e149]
+      - text: User Management
+    - button "Sign Out" [ref=e153] [cursor=pointer]
+  - generic [ref=e154]:
+    - generic [ref=e155]:
+      - generic [ref=e156]:
+        - generic [ref=e157]: Payment Certificates
+        - generic [ref=e158]: Friday, 22 May 2026
+      - generic [ref=e160] [cursor=pointer]:
+        - generic [ref=e162]: 241 Waterside
+        - generic [ref=e163]: ▼
+      - generic [ref=e165]:
+        - generic [ref=e166]: developer
+        - button "+ New" [ref=e335] [cursor=pointer]
+    - generic [ref=e167]:
+      - generic [ref=e336]:
+        - generic [ref=e337]:
+          - generic [ref=e338]: "0"
+          - generic [ref=e339]: Total IPCs
+        - generic [ref=e340]:
+          - generic [ref=e341]: "0"
+          - generic [ref=e342]: Draft
+        - generic [ref=e343]:
+          - generic [ref=e344]: "0"
+          - generic [ref=e345]: Submitted
+        - generic [ref=e346]:
+          - generic [ref=e347]: "0"
+          - generic [ref=e348]: Under Review
+        - generic [ref=e349]:
+          - generic [ref=e350]: "0"
+          - generic [ref=e351]: Certified
+        - generic [ref=e352]:
+          - generic [ref=e353]: "0"
+          - generic [ref=e354]: Paid
+      - generic [ref=e355]:
+        - generic [ref=e356]:
+          - generic [ref=e357]: Enabling Works
+          - generic [ref=e358]: Aquapile Contracting LLC
+          - generic [ref=e359]: AED 2,350,000.00
+          - generic [ref=e360]: Awarded 27 Jan 2026
+        - table [ref=e362]:
+          - rowgroup [ref=e363]:
+            - row "Ref No. Submission Date Submitted By Contractor Claimed Consultant Certified Status Actions" [ref=e364]:
+              - columnheader "Ref No." [ref=e365]
+              - columnheader "Submission Date" [ref=e366]
+              - columnheader "Submitted By" [ref=e367]
+              - columnheader "Contractor Claimed" [ref=e368]
+              - columnheader "Consultant Certified" [ref=e369]
+              - columnheader "Status" [ref=e370]
+              - columnheader "Actions" [ref=e371]
+            - row "No payment certificates yet. Click + New to create the first IPC." [ref=e372]:
+              - cell "No payment certificates yet. Click + New to create the first IPC." [ref=e373]

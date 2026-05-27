@@ -1,0 +1,193 @@
+- generic [ref=e49]:
+  - generic [ref=e50]:
+    - generic [ref=e51]:
+      - generic [ref=e52]: Active Project
+      - generic [ref=e53]: Golf Grove – Residential Building (B+G+P+7+Roof)
+    - generic [ref=e54]:
+      - generic [ref=e55]: MH
+      - generic [ref=e56]:
+        - generic [ref=e57]: Mohammed Hingora
+        - generic [ref=e58]: developer
+    - generic [ref=e59]: Main
+    - generic [ref=e60] [cursor=pointer]:
+      - img [ref=e61]
+      - text: Dashboard
+    - generic [ref=e66]: Document Control
+    - generic [ref=e67] [cursor=pointer]:
+      - img [ref=e68]
+      - text: Drawing Register
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: Submittals (DSUB)
+    - generic [ref=e74] [cursor=pointer]:
+      - img [ref=e75]
+      - text: Submittal Register
+    - generic [ref=e77]: Site
+    - generic [ref=e78] [cursor=pointer]:
+      - img [ref=e79]
+      - text: Inspection Requests
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: NCRs
+    - generic [ref=e86] [cursor=pointer]:
+      - img [ref=e87]
+      - text: RFIs
+    - generic [ref=e91] [cursor=pointer]:
+      - img [ref=e92]
+      - text: Transmittals
+    - generic [ref=e94] [cursor=pointer]:
+      - img [ref=e95]
+      - text: Method Statements
+    - generic [ref=e98] [cursor=pointer]:
+      - img [ref=e99]
+      - text: Correspondence
+    - generic [ref=e102] [cursor=pointer]:
+      - img [ref=e103]
+      - text: Punch List
+      - generic [ref=e106]: "0"
+    - generic [ref=e107]: Finance
+    - generic [ref=e108] [cursor=pointer]:
+      - img [ref=e109]
+      - text: Finance Overview
+    - generic [ref=e112] [cursor=pointer]:
+      - img [ref=e113]
+      - text: Payment Certificates
+    - generic [ref=e116] [cursor=pointer]:
+      - img [ref=e117]
+      - text: BOQ Setup
+    - generic [ref=e120]:
+      - generic [ref=e121]: Sales
+      - generic [ref=e122] [cursor=pointer]:
+        - img [ref=e123]
+        - text: CRM
+        - generic [ref=e127]: "0"
+      - generic [ref=e128] [cursor=pointer]:
+        - img [ref=e129]
+        - text: Unit Setup
+      - generic [ref=e132] [cursor=pointer]:
+        - img [ref=e133]
+        - text: Unit Register
+      - generic [ref=e136] [cursor=pointer]:
+        - img [ref=e137]
+        - text: Sales Revenue
+    - generic [ref=e140]: Admin
+    - generic [ref=e141] [cursor=pointer]:
+      - img [ref=e142]
+      - text: Subcontractors
+    - generic [ref=e148] [cursor=pointer]:
+      - img [ref=e149]
+      - text: User Management
+    - button "Sign Out" [ref=e153] [cursor=pointer]
+  - generic [ref=e154]:
+    - generic [ref=e155]:
+      - generic [ref=e156]:
+        - generic [ref=e157]: Finance Overview
+        - generic [ref=e158]: Saturday, 16 May 2026
+      - generic [ref=e160] [cursor=pointer]:
+        - generic [ref=e162]: 241 Waterside
+        - generic [ref=e163]: ▼
+      - generic [ref=e166]: developer
+    - generic [ref=e167]:
+      - generic [ref=e335]:
+        - generic [ref=e336]:
+          - generic "AED 41,000,626.20" [ref=e337]: AED 41.00M
+          - generic [ref=e338]: Contract Sum
+        - generic [ref=e339]:
+          - generic "AED 728,816.00" [ref=e340]: AED 728.8K
+          - generic [ref=e341]: Total Certified (Gross)
+        - generic [ref=e342]:
+          - generic "AED 2,050,000.00" [ref=e343]: AED 2.05M
+          - generic [ref=e344]: Total Paid (Net + Mob. Advance)
+        - generic [ref=e345]:
+          - generic "AED 650,468.28" [ref=e346]: AED 650.5K
+          - generic [ref=e347]: Outstanding (Certified–Paid)
+        - generic [ref=e348]:
+          - generic "AED 72,881.60" [ref=e349]: AED 72.9K
+          - generic [ref=e350]: Retention Held
+        - generic [ref=e351]:
+          - generic [ref=e352]: 1.8%
+          - generic [ref=e353]: "% Certified vs Contract"
+      - generic [ref=e354]:
+        - generic [ref=e355]:
+          - generic [ref=e356]: Contract Progress
+          - generic [ref=e357]: AED 728,816.00 of AED 41,000,626.20
+        - generic [ref=e360]:
+          - generic [ref=e361]: "0"
+          - generic [ref=e362]: AED 41,000,626.20 Contract Sum
+      - generic [ref=e363]:
+        - generic [ref=e364]: Monthly Claimed / Certified / Paid
+        - generic [ref=e365]:
+          - generic [ref=e366]: Claimed
+          - generic [ref=e368]: Certified
+          - generic [ref=e370]: Paid
+        - img [ref=e372]:
+          - generic [ref=e373]: 729K
+          - generic [ref=e374]: 547K
+          - generic [ref=e375]: 364K
+          - generic [ref=e376]: 182K
+          - generic [ref=e377]: "0"
+          - generic [ref=e380]: May 26
+      - generic [ref=e381]:
+        - generic [ref=e382]: Cumulative Certified (S-Curve)
+        - generic [ref=e383]: Need at least 2 certified certificates to plot an S-curve.
+      - generic [ref=e384]:
+        - generic [ref=e385]:
+          - generic [ref=e386]: Retention
+          - generic [ref=e387]:
+            - generic [ref=e388]:
+              - generic [ref=e389]: Withheld to Date
+              - generic [ref=e390]: AED 72,881.60
+            - generic [ref=e391]:
+              - generic [ref=e392]: On Practical Completion (50%)
+              - generic [ref=e393]: AED 36,440.80
+            - generic [ref=e394]:
+              - generic [ref=e395]: On Defects Liability (50%)
+              - generic [ref=e396]: AED 36,440.80
+        - generic [ref=e397]:
+          - generic [ref=e398]: Mobilisation Advance
+          - generic [ref=e399]:
+            - generic [ref=e400]: Advance Issued
+            - generic [ref=e401]: AED 2,050,000.00
+          - generic [ref=e402]:
+            - generic [ref=e403]: Recovered to Date
+            - generic [ref=e404]: AED 36,440.80
+          - generic [ref=e407]:
+            - generic [ref=e408]: 1.8% recovered
+            - generic [ref=e409]: AED 2,013,559.20 outstanding
+      - generic [ref=e410]:
+        - generic [ref=e411]: Certificate Ledger
+        - table [ref=e413]:
+          - rowgroup [ref=e414]:
+            - row "Ref Certified Date Claimed Gross Certified Retention Adv. Recovery Net Certified Paid Balance Due Status" [ref=e415]:
+              - columnheader "Ref" [ref=e416]
+              - columnheader "Certified Date" [ref=e417]
+              - columnheader "Claimed" [ref=e418]
+              - columnheader "Gross Certified" [ref=e419]
+              - columnheader "Retention" [ref=e420]
+              - columnheader "Adv. Recovery" [ref=e421]
+              - columnheader "Net Certified" [ref=e422]
+              - columnheader "Paid" [ref=e423]
+              - columnheader "Balance Due" [ref=e424]
+              - columnheader "Status" [ref=e425]
+            - row "IPC-001 08 May 2026 AED 728,816.00 AED 728,816.00 (AED 72,881.60) (AED 36,440.80) AED 650,468.28 — AED 650,468.28 Certified" [ref=e426]:
+              - cell "IPC-001" [ref=e427]
+              - cell "08 May 2026" [ref=e428]
+              - cell "AED 728,816.00" [ref=e429]
+              - cell "AED 728,816.00" [ref=e430]
+              - cell "(AED 72,881.60)" [ref=e431]
+              - cell "(AED 36,440.80)" [ref=e432]
+              - cell "AED 650,468.28" [ref=e433]
+              - cell "—" [ref=e434]
+              - cell "AED 650,468.28" [ref=e435]
+              - cell "Certified" [ref=e436]:
+                - generic [ref=e437]: Certified
+            - row "Totals AED 728,816.00 AED 728,816.00 (AED 72,881.60) (AED 36,440.80) AED 650,468.28 AED 0.00 AED 650,468.28" [ref=e438]:
+              - cell "Totals" [ref=e439]
+              - cell "AED 728,816.00" [ref=e440]
+              - cell "AED 728,816.00" [ref=e441]
+              - cell "(AED 72,881.60)" [ref=e442]
+              - cell "(AED 36,440.80)" [ref=e443]
+              - cell "AED 650,468.28" [ref=e444]
+              - cell "AED 0.00" [ref=e445]
+              - cell "AED 650,468.28" [ref=e446]
+              - cell [ref=e447]

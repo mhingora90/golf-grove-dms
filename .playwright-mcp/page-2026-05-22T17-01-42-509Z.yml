@@ -1,0 +1,305 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: Active Project
+      - generic [ref=e6]: 241 Waterside
+    - generic [ref=e7]:
+      - generic [ref=e8]: MH
+      - generic [ref=e9]:
+        - generic [ref=e10]: Mohammed Hingora
+        - generic [ref=e11]: developer
+    - generic [ref=e12]: Main
+    - generic [ref=e13] [cursor=pointer]:
+      - img [ref=e14]
+      - text: Dashboard
+    - generic [ref=e19]: Document Control
+    - generic [ref=e20] [cursor=pointer]:
+      - img [ref=e21]
+      - text: Drawing Register
+    - generic [ref=e23] [cursor=pointer]:
+      - img [ref=e24]
+      - text: Submittals (DSUB)
+    - generic [ref=e28] [cursor=pointer]:
+      - img [ref=e29]
+      - text: Submittal Register
+    - generic [ref=e31]: Site
+    - generic [ref=e32] [cursor=pointer]:
+      - img [ref=e33]
+      - text: Inspection Requests
+    - generic [ref=e37] [cursor=pointer]:
+      - img [ref=e38]
+      - text: NCRs
+    - generic [ref=e42] [cursor=pointer]:
+      - img [ref=e43]
+      - text: RFIs
+    - generic [ref=e48] [cursor=pointer]:
+      - img [ref=e49]
+      - text: Transmittals
+    - generic [ref=e51] [cursor=pointer]:
+      - img [ref=e52]
+      - text: Method Statements
+    - generic [ref=e55] [cursor=pointer]:
+      - img [ref=e56]
+      - text: Correspondence
+    - generic [ref=e59] [cursor=pointer]:
+      - img [ref=e60]
+      - text: Punch List
+      - generic [ref=e63]: "0"
+    - generic [ref=e64]: Finance
+    - generic [ref=e65] [cursor=pointer]:
+      - img [ref=e66]
+      - text: Finance Overview
+    - generic [ref=e69] [cursor=pointer]:
+      - img [ref=e70]
+      - text: Payment Certificates
+    - generic [ref=e73] [cursor=pointer]:
+      - img [ref=e74]
+      - text: BOQ Setup
+    - generic [ref=e77]:
+      - generic [ref=e78]: Sales
+      - generic [ref=e79] [cursor=pointer]:
+        - img [ref=e80]
+        - text: CRM Home
+      - generic [ref=e85] [cursor=pointer]:
+        - img [ref=e86]
+        - text: Leads
+        - generic [ref=e90]: "0"
+      - generic [ref=e91] [cursor=pointer]:
+        - img [ref=e92]
+        - text: Unit Setup
+      - generic [ref=e95] [cursor=pointer]:
+        - img [ref=e96]
+        - text: Unit Register
+      - generic [ref=e99] [cursor=pointer]:
+        - img [ref=e100]
+        - text: Sales Revenue
+    - generic [ref=e103]: Admin
+    - generic [ref=e104] [cursor=pointer]:
+      - img [ref=e105]
+      - text: Subcontractors
+    - generic [ref=e111] [cursor=pointer]:
+      - img [ref=e112]
+      - text: User Management
+    - button "Sign Out" [ref=e116] [cursor=pointer]
+  - generic [ref=e117]:
+    - generic [ref=e118]:
+      - generic [ref=e119]:
+        - generic [ref=e120]: CRM Home
+        - generic [ref=e121]: Friday, 22 May 2026
+      - generic [ref=e159] [cursor=pointer]:
+        - generic [ref=e161]: 241 Waterside
+        - generic [ref=e162]: ▼
+      - generic [ref=e123]: developer
+    - generic [ref=e164]:
+      - generic [ref=e165]:
+        - generic [ref=e166]:
+          - generic [ref=e167]: "1"
+          - generic [ref=e168]: Overdue Tasks
+        - generic [ref=e169]:
+          - generic [ref=e170]: "1"
+          - generic [ref=e171]: Due Today
+        - generic [ref=e172]:
+          - generic [ref=e173]: "20"
+          - generic [ref=e174]: Active Leads
+        - generic [ref=e175]:
+          - generic [ref=e176]: "0"
+          - generic [ref=e177]: Won This Month
+        - generic [ref=e178]:
+          - generic [ref=e179]: "18"
+          - generic [ref=e180]: No Task Set
+      - generic [ref=e181]:
+        - generic [ref=e182]:
+          - generic [ref=e183]:
+            - generic [ref=e184]:
+              - generic [ref=e185]: ⚠ Overdue Tasks
+              - generic [ref=e186]: "1"
+            - table [ref=e187]:
+              - rowgroup [ref=e188]:
+                - row "Emon Due today test task Contacted 0d overdue Open" [ref=e189]:
+                  - cell "Emon" [ref=e190]
+                  - cell "Due today test task" [ref=e191]
+                  - cell "Contacted" [ref=e192]
+                  - cell "0d overdue" [ref=e193]
+                  - cell "Open" [ref=e194]:
+                    - button "Open" [ref=e195] [cursor=pointer]
+          - generic [ref=e196]:
+            - generic [ref=e197]:
+              - generic [ref=e198]: Due Today
+              - generic [ref=e199]: "1"
+            - generic [ref=e200]:
+              - generic [ref=e201]: ✅
+              - generic [ref=e202]:
+                - generic [ref=e203]: Emon
+                - generic [ref=e204]: Due today test task · 19:59
+              - button "Open" [ref=e205] [cursor=pointer]
+          - generic [ref=e206]:
+            - generic [ref=e208]: This Week
+            - generic [ref=e209]:
+              - generic [ref=e210]:
+                - generic [ref=e211]: Mon
+                - generic [ref=e212]: "0"
+                - generic [ref=e213]: 18/5
+              - generic [ref=e214]:
+                - generic [ref=e215]: Tue
+                - generic [ref=e216]: "0"
+                - generic [ref=e217]: 19/5
+              - generic [ref=e218]:
+                - generic [ref=e219]: Wed
+                - generic [ref=e220]: "0"
+                - generic [ref=e221]: 20/5
+              - generic [ref=e222]:
+                - generic [ref=e223]: Thu
+                - generic [ref=e224]: "0"
+                - generic [ref=e225]: 21/5
+              - generic [ref=e226]:
+                - generic [ref=e227]: Fri
+                - generic [ref=e228]: "1"
+                - generic [ref=e229]: 22/5
+          - generic [ref=e230]:
+            - generic [ref=e231]:
+              - generic [ref=e232]: Going Cold
+              - generic [ref=e233]: No contact in 7+ days
+            - generic [ref=e234]:
+              - generic [ref=e235]: Sky
+              - generic [ref=e236]: Contacted
+              - generic [ref=e237]: 9d no contact
+              - button "Open" [ref=e238] [cursor=pointer]
+            - generic [ref=e239]:
+              - generic [ref=e240]: Mohamed Sufyan
+              - generic [ref=e241]: Contacted
+              - generic [ref=e242]: 9d no contact
+              - button "Open" [ref=e243] [cursor=pointer]
+            - generic [ref=e244]:
+              - generic [ref=e245]: Ebrahim Yousef
+              - generic [ref=e246]: Contacted
+              - generic [ref=e247]: 9d no contact
+              - button "Open" [ref=e248] [cursor=pointer]
+            - generic [ref=e249]:
+              - generic [ref=e250]: Reyansh
+              - generic [ref=e251]: New Lead
+              - generic [ref=e252]: 9d no contact
+              - button "Open" [ref=e253] [cursor=pointer]
+            - generic [ref=e254]:
+              - generic [ref=e255]: MD Kaiser Mahmud
+              - generic [ref=e256]: No Response
+              - generic [ref=e257]: 8d no contact
+              - button "Open" [ref=e258] [cursor=pointer]
+            - generic [ref=e259]:
+              - generic [ref=e260]: Ehtisham
+              - generic [ref=e261]: Contacted
+              - generic [ref=e262]: 8d no contact
+              - button "Open" [ref=e263] [cursor=pointer]
+            - generic [ref=e264] [cursor=pointer]: +3 more
+        - generic [ref=e265]:
+          - generic [ref=e266]:
+            - generic [ref=e267]:
+              - generic [ref=e268]: Pipeline
+              - button "View All →" [ref=e269] [cursor=pointer]
+            - generic [ref=e270]:
+              - generic "New Lead" [ref=e271]
+              - generic [ref=e274]: "5"
+            - generic [ref=e275]:
+              - generic "Contacted" [ref=e276]
+              - generic [ref=e279]: "10"
+            - generic [ref=e280]:
+              - generic "No Response" [ref=e281]
+              - generic [ref=e284]: "1"
+            - generic [ref=e285]:
+              - generic "Site Visit" [ref=e286]
+              - generic [ref=e288]: "0"
+            - generic [ref=e289]:
+              - generic "Follow-Up" [ref=e290]
+              - generic [ref=e293]: "4"
+            - generic [ref=e294]:
+              - generic "Closed Won" [ref=e295]
+              - generic [ref=e297]: "0"
+            - generic [ref=e298]:
+              - generic "Closed Lost" [ref=e299]
+              - generic [ref=e301]: "0"
+          - generic [ref=e302]:
+            - generic [ref=e303]:
+              - generic [ref=e304]: No Task Set
+              - generic [ref=e305]: "18"
+            - generic [ref=e306]:
+              - generic [ref=e307]: MD Kaiser Mahmud
+              - generic [ref=e308]: No Response
+              - button "Open" [ref=e309] [cursor=pointer]
+            - generic [ref=e310]:
+              - generic [ref=e311]: Sky
+              - generic [ref=e312]: Contacted
+              - button "Open" [ref=e313] [cursor=pointer]
+            - generic [ref=e314]:
+              - generic [ref=e315]: علی ہارون
+              - generic [ref=e316]: Contacted
+              - button "Open" [ref=e317] [cursor=pointer]
+            - generic [ref=e318]:
+              - generic [ref=e319]: Shahzad
+              - generic [ref=e320]: Contacted
+              - button "Open" [ref=e321] [cursor=pointer]
+            - generic [ref=e322]:
+              - generic [ref=e323]: Mohamed Sufyan
+              - generic [ref=e324]: Contacted
+              - button "Open" [ref=e325] [cursor=pointer]
+            - generic [ref=e326]:
+              - generic [ref=e327]: Viquar
+              - generic [ref=e328]: Contacted
+              - button "Open" [ref=e329] [cursor=pointer]
+            - generic [ref=e330]:
+              - generic [ref=e331]: Ahmed
+              - generic [ref=e332]: New Lead
+              - button "Open" [ref=e333] [cursor=pointer]
+            - generic [ref=e334]:
+              - generic [ref=e335]: Shiraz
+              - generic [ref=e336]: New Lead
+              - button "Open" [ref=e337] [cursor=pointer]
+            - generic [ref=e338] [cursor=pointer]: +10 more — View Leads →
+          - generic [ref=e339]:
+            - generic [ref=e341]: Recent Activity
+            - generic [ref=e342]:
+              - generic [ref=e343]: ✅
+              - generic [ref=e344]:
+                - generic [ref=e345]: Emon
+                - generic [ref=e346]: Due today test task
+              - generic [ref=e347]: 3m ago
+            - generic [ref=e348]:
+              - generic [ref=e349]: ✅
+              - generic [ref=e350]:
+                - generic [ref=e351]: Mostafa
+                - generic [ref=e352]: Follow up call - test task
+              - generic [ref=e353]: 5m ago
+            - generic [ref=e354]:
+              - generic [ref=e355]: ✅
+              - generic [ref=e356]:
+                - generic [ref=e357]: Ahmed
+                - generic [ref=e358]: Follow-up Call
+              - generic [ref=e359]: 4h ago
+            - generic [ref=e360]:
+              - generic [ref=e361]: ✅
+              - generic [ref=e362]:
+                - generic [ref=e363]: Mohhamed Ibrahim
+                - generic [ref=e364]: Follow-up Call
+              - generic [ref=e365]: 4h ago
+            - generic [ref=e366]:
+              - generic [ref=e367]: ✅
+              - generic [ref=e368]:
+                - generic [ref=e369]: Jonaid Ali
+                - generic [ref=e370]: Follow-up Call
+              - generic [ref=e371]: 4h ago
+            - generic [ref=e372]:
+              - generic [ref=e373]: ✅
+              - generic [ref=e374]:
+                - generic [ref=e375]: Alaa
+                - generic [ref=e376]: Follow-up Call
+              - generic [ref=e377]: 4h ago
+            - generic [ref=e378]:
+              - generic [ref=e379]: 📝
+              - generic [ref=e380]:
+                - generic [ref=e381]: Jonaid Ali
+                - generic [ref=e382]: Registration Link was Shared
+              - generic [ref=e383]: 5h ago
+            - generic [ref=e384]:
+              - generic [ref=e385]: 📍
+              - generic [ref=e386]:
+                - generic [ref=e387]: Jonaid Ali
+                - generic [ref=e388]: Need to get in touch with him to set up a briefing at Sales Center
+              - generic [ref=e389]: 5h ago

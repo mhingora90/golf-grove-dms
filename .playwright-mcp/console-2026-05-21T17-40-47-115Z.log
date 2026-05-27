@@ -1,0 +1,14 @@
+[  184646ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[  184646ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[  203121ms] TypeError: sb.from(...).select(...).maybeSingle(...).throwOnError(...).catch is not a function
+    at openConvertLead (https://golf-grove-dms.vercel.app/:8302:104)
+[  205149ms] TypeError: sb.from(...).select(...).maybeSingle(...).throwOnError(...).catch is not a function
+    at openConvertLead (https://golf-grove-dms.vercel.app/:8302:104)
+[  212484ms] TypeError: sb.from(...).select(...).maybeSingle(...).throwOnError(...).catch is not a function
+    at openConvertLead (https://golf-grove-dms.vercel.app/:8302:104)
+[  212926ms] TypeError: sb.from(...).select(...).maybeSingle(...).throwOnError(...).catch is not a function
+    at openConvertLead (https://golf-grove-dms.vercel.app/:8302:104)
+[  441342ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[  441342ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[  566029ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[  566030ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0

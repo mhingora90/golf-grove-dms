@@ -1,0 +1,22 @@
+[   70511ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[   70512ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[  294871ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[  294871ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[  362465ms] TypeError: sb.from(...).select(...).maybeSingle(...).throwOnError(...).catch is not a function
+    at openConvertLead (https://golf-grove-dms.vercel.app/:8365:104)
+[  366797ms] TypeError: sb.from(...).select(...).maybeSingle(...).throwOnError(...).catch is not a function
+    at openConvertLead (https://golf-grove-dms.vercel.app/:8365:104)
+[  367054ms] TypeError: sb.from(...).select(...).maybeSingle(...).throwOnError(...).catch is not a function
+    at openConvertLead (https://golf-grove-dms.vercel.app/:8365:104)
+[  367250ms] TypeError: sb.from(...).select(...).maybeSingle(...).throwOnError(...).catch is not a function
+    at openConvertLead (https://golf-grove-dms.vercel.app/:8365:104)
+[  385989ms] TypeError: sb.from(...).select(...).maybeSingle(...).throwOnError(...).catch is not a function
+    at openConvertLead (https://golf-grove-dms.vercel.app/:8365:104)
+[  392447ms] TypeError: sb.from(...).select(...).maybeSingle(...).throwOnError(...).catch is not a function
+    at openConvertLead (https://golf-grove-dms.vercel.app/:8365:104)
+[  797083ms] TypeError: sb.from(...).select(...).maybeSingle(...).throwOnError(...).catch is not a function
+    at openConvertLead (https://golf-grove-dms.vercel.app/:8365:104)
+[  868906ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/unit_sales?select=unit_id&project_id=eq.00000000-0000-0000-0000-000000000002:0
+[ 1471854ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[ 1471854ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[ 1525203ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/unit_sales?select=unit_id&project_id=eq.00000000-0000-0000-0000-000000000002:0

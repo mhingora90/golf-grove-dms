@@ -1,0 +1,1205 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e49]:
+    - generic [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e52]: Active Project
+        - generic [ref=e53]: Golf Grove – DPC
+      - generic [ref=e54]:
+        - generic [ref=e55]: MH
+        - generic [ref=e56]:
+          - generic [ref=e57]: Mohammed Hingora
+          - generic [ref=e58]: developer
+      - generic [ref=e59]: Main
+      - generic [ref=e60] [cursor=pointer]:
+        - img [ref=e61]
+        - text: Dashboard
+      - generic [ref=e66]: Document Control
+      - generic [ref=e67] [cursor=pointer]:
+        - img [ref=e68]
+        - text: Drawing Register
+      - generic [ref=e70] [cursor=pointer]:
+        - img [ref=e71]
+        - text: Submittals (DSUB)
+        - generic [ref=e74]: "1"
+      - generic [ref=e75] [cursor=pointer]:
+        - img [ref=e76]
+        - text: Submittal Register
+      - generic [ref=e78]: Site
+      - generic [ref=e79] [cursor=pointer]:
+        - img [ref=e80]
+        - text: Inspection Requests
+      - generic [ref=e83] [cursor=pointer]:
+        - img [ref=e84]
+        - text: NCRs
+      - generic [ref=e87] [cursor=pointer]:
+        - img [ref=e88]
+        - text: RFIs
+      - generic [ref=e92] [cursor=pointer]:
+        - img [ref=e93]
+        - text: Transmittals
+      - generic [ref=e95] [cursor=pointer]:
+        - img [ref=e96]
+        - text: Method Statements
+      - generic [ref=e99] [cursor=pointer]:
+        - img [ref=e100]
+        - text: Correspondence
+      - generic [ref=e103] [cursor=pointer]:
+        - img [ref=e104]
+        - text: Punch List
+        - generic [ref=e107]: "0"
+      - generic [ref=e108]: Finance
+      - generic [ref=e109] [cursor=pointer]:
+        - img [ref=e110]
+        - text: Finance Overview
+      - generic [ref=e113] [cursor=pointer]:
+        - img [ref=e114]
+        - text: Payment Certificates
+      - generic [ref=e117] [cursor=pointer]:
+        - img [ref=e118]
+        - text: BOQ Setup
+      - generic [ref=e121]:
+        - generic [ref=e122]: Sales
+        - generic [ref=e123] [cursor=pointer]:
+          - img [ref=e124]
+          - text: CRM Home
+        - generic [ref=e129] [cursor=pointer]:
+          - img [ref=e130]
+          - text: Leads
+          - generic [ref=e134]: "0"
+        - generic [ref=e135] [cursor=pointer]:
+          - img [ref=e136]
+          - text: Unit Setup
+        - generic [ref=e139] [cursor=pointer]:
+          - img [ref=e140]
+          - text: Unit Register
+        - generic [ref=e143] [cursor=pointer]:
+          - img [ref=e144]
+          - text: Sales Revenue
+      - generic [ref=e147]: Admin
+      - generic [ref=e148] [cursor=pointer]:
+        - img [ref=e149]
+        - text: Subcontractors
+      - generic [ref=e155] [cursor=pointer]:
+        - img [ref=e156]
+        - text: User Management
+      - button "Sign Out" [ref=e160] [cursor=pointer]
+    - generic [ref=e161]:
+      - generic [ref=e162]:
+        - generic [ref=e163]:
+          - generic [ref=e164]: Unit Register
+          - generic [ref=e165]: Sunday, 24 May 2026
+        - generic [ref=e167] [cursor=pointer]:
+          - generic [ref=e169]: Golf Grove – DPC
+          - generic [ref=e170]: ▼
+        - generic [ref=e173]: developer
+      - generic [ref=e174]:
+        - generic [ref=e3574]:
+          - combobox [ref=e3575]:
+            - option "All Types" [selected]
+            - option "Studio"
+            - option "1BHK"
+          - combobox [ref=e3576]:
+            - option "All Statuses" [selected]
+            - option "Available"
+            - option "Reserved"
+            - option "Sold"
+          - combobox [ref=e3577]:
+            - option "All Floors" [selected]
+            - option "Floor 1"
+            - option "Floor 2"
+            - option "Floor 3"
+            - option "Floor 4"
+            - option "Floor 5"
+            - option "Floor 6"
+            - option "Floor 7"
+          - textbox "Search unit / buyer…" [ref=e3578]
+        - table [ref=e3581]:
+          - rowgroup [ref=e3582]:
+            - row "Unit Floor Type Sqft Listed Price Buyer SPA Oqood Status" [ref=e3583]:
+              - columnheader "Unit" [ref=e3584]
+              - columnheader "Floor" [ref=e3585]
+              - columnheader "Type" [ref=e3586]
+              - columnheader "Sqft" [ref=e3587]
+              - columnheader "Listed Price" [ref=e3588]
+              - columnheader "Buyer" [ref=e3589]
+              - columnheader "SPA" [ref=e3590]
+              - columnheader "Oqood" [ref=e3591]
+              - columnheader "Status" [ref=e3592]
+            - row "101 1 Studio 406.21 AED 586,000.00 Mubarak Bala Hassan Not Signed Not Registered Sold" [ref=e3593] [cursor=pointer]:
+              - cell "101" [ref=e3594]
+              - cell "1" [ref=e3595]
+              - cell "Studio" [ref=e3596]
+              - cell "406.21" [ref=e3597]
+              - cell "AED 586,000.00" [ref=e3598]
+              - cell "Mubarak Bala Hassan" [ref=e3599]
+              - cell "Not Signed" [ref=e3600]
+              - cell "Not Registered" [ref=e3601]
+              - cell "Sold" [ref=e3602]
+            - row "102 1 Studio 405.42 AED 586,000.00 Margareta Stahl Not Signed Not Registered Sold" [ref=e3603] [cursor=pointer]:
+              - cell "102" [ref=e3604]
+              - cell "1" [ref=e3605]
+              - cell "Studio" [ref=e3606]
+              - cell "405.42" [ref=e3607]
+              - cell "AED 586,000.00" [ref=e3608]
+              - cell "Margareta Stahl" [ref=e3609]
+              - cell "Not Signed" [ref=e3610]
+              - cell "Not Registered" [ref=e3611]
+              - cell "Sold" [ref=e3612]
+            - row "103 1 Studio 407.7 AED 588,000.00 Andre Alberto Van Balen Rubio Not Signed Not Registered Sold" [ref=e3613] [cursor=pointer]:
+              - cell "103" [ref=e3614]
+              - cell "1" [ref=e3615]
+              - cell "Studio" [ref=e3616]
+              - cell "407.7" [ref=e3617]
+              - cell "AED 588,000.00" [ref=e3618]
+              - cell "Andre Alberto Van Balen Rubio" [ref=e3619]
+              - cell "Not Signed" [ref=e3620]
+              - cell "Not Registered" [ref=e3621]
+              - cell "Sold" [ref=e3622]
+            - row "104 1 1 Bedroom 948.3 AED 1,040,000.00 Arnaud Claude Ruelle Not Signed Not Registered Sold" [ref=e3623] [cursor=pointer]:
+              - cell "104" [ref=e3624]
+              - cell "1" [ref=e3625]
+              - cell "1 Bedroom" [ref=e3626]
+              - cell "948.3" [ref=e3627]
+              - cell "AED 1,040,000.00" [ref=e3628]
+              - cell "Arnaud Claude Ruelle" [ref=e3629]
+              - cell "Not Signed" [ref=e3630]
+              - cell "Not Registered" [ref=e3631]
+              - cell "Sold" [ref=e3632]
+            - row "105 1 Studio 414.62 AED 589,000.00 Jan Kvapil Not Signed Not Registered Sold" [ref=e3633] [cursor=pointer]:
+              - cell "105" [ref=e3634]
+              - cell "1" [ref=e3635]
+              - cell "Studio" [ref=e3636]
+              - cell "414.62" [ref=e3637]
+              - cell "AED 589,000.00" [ref=e3638]
+              - cell "Jan Kvapil" [ref=e3639]
+              - cell "Not Signed" [ref=e3640]
+              - cell "Not Registered" [ref=e3641]
+              - cell "Sold" [ref=e3642]
+            - row "106 1 Studio 417.27 AED 591,000.00 Alina Ondubaeva Not Signed Not Registered Sold" [ref=e3643] [cursor=pointer]:
+              - cell "106" [ref=e3644]
+              - cell "1" [ref=e3645]
+              - cell "Studio" [ref=e3646]
+              - cell "417.27" [ref=e3647]
+              - cell "AED 591,000.00" [ref=e3648]
+              - cell "Alina Ondubaeva" [ref=e3649]
+              - cell "Not Signed" [ref=e3650]
+              - cell "Not Registered" [ref=e3651]
+              - cell "Sold" [ref=e3652]
+            - row "107 1 Studio 419.77 AED 593,000.00 Erika Soos Not Signed Not Registered Sold" [ref=e3653] [cursor=pointer]:
+              - cell "107" [ref=e3654]
+              - cell "1" [ref=e3655]
+              - cell "Studio" [ref=e3656]
+              - cell "419.77" [ref=e3657]
+              - cell "AED 593,000.00" [ref=e3658]
+              - cell "Erika Soos" [ref=e3659]
+              - cell "Not Signed" [ref=e3660]
+              - cell "Not Registered" [ref=e3661]
+              - cell "Sold" [ref=e3662]
+            - row "108 1 1 Bedroom 0 AED 1,119,000.00 — — — Available" [ref=e3663] [cursor=pointer]:
+              - cell "108" [ref=e3664]
+              - cell "1" [ref=e3665]
+              - cell "1 Bedroom" [ref=e3666]
+              - cell "0" [ref=e3667]
+              - cell "AED 1,119,000.00" [ref=e3668]
+              - cell "—" [ref=e3669]
+              - cell "—" [ref=e3670]
+              - cell "—" [ref=e3671]
+              - cell "Available" [ref=e3672]
+            - row "109 1 Studio 407.37 AED 607,000.00 Faris Awni Ismail Not Signed Not Registered Sold" [ref=e3673] [cursor=pointer]:
+              - cell "109" [ref=e3674]
+              - cell "1" [ref=e3675]
+              - cell "Studio" [ref=e3676]
+              - cell "407.37" [ref=e3677]
+              - cell "AED 607,000.00" [ref=e3678]
+              - cell "Faris Awni Ismail" [ref=e3679]
+              - cell "Not Signed" [ref=e3680]
+              - cell "Not Registered" [ref=e3681]
+              - cell "Sold" [ref=e3682]
+            - row "110 1 Studio 413.01 AED 614,000.00 Ali Mahmoud El Kouati Not Signed Not Registered Sold" [ref=e3683] [cursor=pointer]:
+              - cell "110" [ref=e3684]
+              - cell "1" [ref=e3685]
+              - cell "Studio" [ref=e3686]
+              - cell "413.01" [ref=e3687]
+              - cell "AED 614,000.00" [ref=e3688]
+              - cell "Ali Mahmoud El Kouati" [ref=e3689]
+              - cell "Not Signed" [ref=e3690]
+              - cell "Not Registered" [ref=e3691]
+              - cell "Sold" [ref=e3692]
+            - row "111 1 1 Bedroom 1,004.49 AED 1,152,000.00 Sami Karahan Not Signed Not Registered Sold" [ref=e3693] [cursor=pointer]:
+              - cell "111" [ref=e3694]
+              - cell "1" [ref=e3695]
+              - cell "1 Bedroom" [ref=e3696]
+              - cell "1,004.49" [ref=e3697]
+              - cell "AED 1,152,000.00" [ref=e3698]
+              - cell "Sami Karahan" [ref=e3699]
+              - cell "Not Signed" [ref=e3700]
+              - cell "Not Registered" [ref=e3701]
+              - cell "Sold" [ref=e3702]
+            - row "112 1 1 Bedroom 1,093.6 AED 1,220,000.00 Jean Marc Bonato Not Signed Not Registered Sold" [ref=e3703] [cursor=pointer]:
+              - cell "112" [ref=e3704]
+              - cell "1" [ref=e3705]
+              - cell "1 Bedroom" [ref=e3706]
+              - cell "1,093.6" [ref=e3707]
+              - cell "AED 1,220,000.00" [ref=e3708]
+              - cell "Jean Marc Bonato" [ref=e3709]
+              - cell "Not Signed" [ref=e3710]
+              - cell "Not Registered" [ref=e3711]
+              - cell "Sold" [ref=e3712]
+            - row "113 1 1 Bedroom 0 AED 1,297,000.00 — — — Available" [ref=e3713] [cursor=pointer]:
+              - cell "113" [ref=e3714]
+              - cell "1" [ref=e3715]
+              - cell "1 Bedroom" [ref=e3716]
+              - cell "0" [ref=e3717]
+              - cell "AED 1,297,000.00" [ref=e3718]
+              - cell "—" [ref=e3719]
+              - cell "—" [ref=e3720]
+              - cell "—" [ref=e3721]
+              - cell "Available" [ref=e3722]
+            - row "114 1 1 Bedroom 0 AED 1,328,000.00 — — — Available" [ref=e3723] [cursor=pointer]:
+              - cell "114" [ref=e3724]
+              - cell "1" [ref=e3725]
+              - cell "1 Bedroom" [ref=e3726]
+              - cell "0" [ref=e3727]
+              - cell "AED 1,328,000.00" [ref=e3728]
+              - cell "—" [ref=e3729]
+              - cell "—" [ref=e3730]
+              - cell "—" [ref=e3731]
+              - cell "Available" [ref=e3732]
+            - row "201 2 Studio 403.75 AED 584,000.00 Rosemary Puno Bautista Not Signed Not Registered Sold" [ref=e3733] [cursor=pointer]:
+              - cell "201" [ref=e3734]
+              - cell "2" [ref=e3735]
+              - cell "Studio" [ref=e3736]
+              - cell "403.75" [ref=e3737]
+              - cell "AED 584,000.00" [ref=e3738]
+              - cell "Rosemary Puno Bautista" [ref=e3739]
+              - cell "Not Signed" [ref=e3740]
+              - cell "Not Registered" [ref=e3741]
+              - cell "Sold" [ref=e3742]
+            - row "202 2 Studio 405.32 AED 586,000.00 Sawsane Bendriss Not Signed Not Registered Sold" [ref=e3743] [cursor=pointer]:
+              - cell "202" [ref=e3744]
+              - cell "2" [ref=e3745]
+              - cell "Studio" [ref=e3746]
+              - cell "405.32" [ref=e3747]
+              - cell "AED 586,000.00" [ref=e3748]
+              - cell "Sawsane Bendriss" [ref=e3749]
+              - cell "Not Signed" [ref=e3750]
+              - cell "Not Registered" [ref=e3751]
+              - cell "Sold" [ref=e3752]
+            - row "203 2 Studio 407.64 AED 588,000.00 Iliayana Georgieva Georgieva Not Signed Not Registered Sold" [ref=e3753] [cursor=pointer]:
+              - cell "203" [ref=e3754]
+              - cell "2" [ref=e3755]
+              - cell "Studio" [ref=e3756]
+              - cell "407.64" [ref=e3757]
+              - cell "AED 588,000.00" [ref=e3758]
+              - cell "Iliayana Georgieva Georgieva" [ref=e3759]
+              - cell "Not Signed" [ref=e3760]
+              - cell "Not Registered" [ref=e3761]
+              - cell "Sold" [ref=e3762]
+            - row "204 2 1 Bedroom 764.68 AED 902,000.00 Mohamed Aaquib Abdul Raheem Not Signed Not Registered Sold" [ref=e3763] [cursor=pointer]:
+              - cell "204" [ref=e3764]
+              - cell "2" [ref=e3765]
+              - cell "1 Bedroom" [ref=e3766]
+              - cell "764.68" [ref=e3767]
+              - cell "AED 902,000.00" [ref=e3768]
+              - cell "Mohamed Aaquib Abdul Raheem" [ref=e3769]
+              - cell "Not Signed" [ref=e3770]
+              - cell "Not Registered" [ref=e3771]
+              - cell "Sold" [ref=e3772]
+            - row "205 2 Studio 415.19 AED 675,000.00 Lucia Conde Blanco Not Signed Not Registered Sold" [ref=e3773] [cursor=pointer]:
+              - cell "205" [ref=e3774]
+              - cell "2" [ref=e3775]
+              - cell "Studio" [ref=e3776]
+              - cell "415.19" [ref=e3777]
+              - cell "AED 675,000.00" [ref=e3778]
+              - cell "Lucia Conde Blanco" [ref=e3779]
+              - cell "Not Signed" [ref=e3780]
+              - cell "Not Registered" [ref=e3781]
+              - cell "Sold" [ref=e3782]
+            - row "206 2 Studio 417.31 AED 620,000.00 Akram Humayun Muhammad Ghulam Not Signed Not Registered Sold" [ref=e3783] [cursor=pointer]:
+              - cell "206" [ref=e3784]
+              - cell "2" [ref=e3785]
+              - cell "Studio" [ref=e3786]
+              - cell "417.31" [ref=e3787]
+              - cell "AED 620,000.00" [ref=e3788]
+              - cell "Akram Humayun Muhammad Ghulam" [ref=e3789]
+              - cell "Not Signed" [ref=e3790]
+              - cell "Not Registered" [ref=e3791]
+              - cell "Sold" [ref=e3792]
+            - row "207 2 Studio 419.67 AED 625,000.00 Petr Stanek Not Signed Not Registered Sold" [ref=e3793] [cursor=pointer]:
+              - cell "207" [ref=e3794]
+              - cell "2" [ref=e3795]
+              - cell "Studio" [ref=e3796]
+              - cell "419.67" [ref=e3797]
+              - cell "AED 625,000.00" [ref=e3798]
+              - cell "Petr Stanek" [ref=e3799]
+              - cell "Not Signed" [ref=e3800]
+              - cell "Not Registered" [ref=e3801]
+              - cell "Sold" [ref=e3802]
+            - row "208 2 1 Bedroom 878.1 AED 1,030,000.00 Martine Michele Clement Not Signed Not Registered Sold" [ref=e3803] [cursor=pointer]:
+              - cell "208" [ref=e3804]
+              - cell "2" [ref=e3805]
+              - cell "1 Bedroom" [ref=e3806]
+              - cell "878.1" [ref=e3807]
+              - cell "AED 1,030,000.00" [ref=e3808]
+              - cell "Martine Michele Clement" [ref=e3809]
+              - cell "Not Signed" [ref=e3810]
+              - cell "Not Registered" [ref=e3811]
+              - cell "Sold" [ref=e3812]
+            - row "209 2 Studio 399.8 AED 661,500.00 Ihab Sayigh Not Signed Not Registered Sold" [ref=e3813] [cursor=pointer]:
+              - cell "209" [ref=e3814]
+              - cell "2" [ref=e3815]
+              - cell "Studio" [ref=e3816]
+              - cell "399.8" [ref=e3817]
+              - cell "AED 661,500.00" [ref=e3818]
+              - cell "Ihab Sayigh" [ref=e3819]
+              - cell "Not Signed" [ref=e3820]
+              - cell "Not Registered" [ref=e3821]
+              - cell "Sold" [ref=e3822]
+            - row "210 2 Studio 404.53 AED 608,000.00 Olga Rusu Not Signed Not Registered Sold" [ref=e3823] [cursor=pointer]:
+              - cell "210" [ref=e3824]
+              - cell "2" [ref=e3825]
+              - cell "Studio" [ref=e3826]
+              - cell "404.53" [ref=e3827]
+              - cell "AED 608,000.00" [ref=e3828]
+              - cell "Olga Rusu" [ref=e3829]
+              - cell "Not Signed" [ref=e3830]
+              - cell "Not Registered" [ref=e3831]
+              - cell "Sold" [ref=e3832]
+            - row "211 2 1 Bedroom 746.19 AED 978,000.00 Vaseem Haq Not Signed Not Registered Sold" [ref=e3833] [cursor=pointer]:
+              - cell "211" [ref=e3834]
+              - cell "2" [ref=e3835]
+              - cell "1 Bedroom" [ref=e3836]
+              - cell "746.19" [ref=e3837]
+              - cell "AED 978,000.00" [ref=e3838]
+              - cell "Vaseem Haq" [ref=e3839]
+              - cell "Not Signed" [ref=e3840]
+              - cell "Not Registered" [ref=e3841]
+              - cell "Sold" [ref=e3842]
+            - row "212 2 1 Bedroom 670.93 AED 906,000.00 Martin Wohanka Not Signed Not Registered Sold" [ref=e3843] [cursor=pointer]:
+              - cell "212" [ref=e3844]
+              - cell "2" [ref=e3845]
+              - cell "1 Bedroom" [ref=e3846]
+              - cell "670.93" [ref=e3847]
+              - cell "AED 906,000.00" [ref=e3848]
+              - cell "Martin Wohanka" [ref=e3849]
+              - cell "Not Signed" [ref=e3850]
+              - cell "Not Registered" [ref=e3851]
+              - cell "Sold" [ref=e3852]
+            - row "213 2 1 Bedroom 0 AED 968,000.00 — — — Available" [ref=e3853] [cursor=pointer]:
+              - cell "213" [ref=e3854]
+              - cell "2" [ref=e3855]
+              - cell "1 Bedroom" [ref=e3856]
+              - cell "0" [ref=e3857]
+              - cell "AED 968,000.00" [ref=e3858]
+              - cell "—" [ref=e3859]
+              - cell "—" [ref=e3860]
+              - cell "—" [ref=e3861]
+              - cell "Available" [ref=e3862]
+            - row "214 2 1 Bedroom 1,042.69 AED 1,239,000.00 Isabell Gopfert Not Signed Not Registered Sold" [ref=e3863] [cursor=pointer]:
+              - cell "214" [ref=e3864]
+              - cell "2" [ref=e3865]
+              - cell "1 Bedroom" [ref=e3866]
+              - cell "1,042.69" [ref=e3867]
+              - cell "AED 1,239,000.00" [ref=e3868]
+              - cell "Isabell Gopfert" [ref=e3869]
+              - cell "Not Signed" [ref=e3870]
+              - cell "Not Registered" [ref=e3871]
+              - cell "Sold" [ref=e3872]
+            - row "301 3 Studio 397.45 AED 614,000.00 Faisal Abdulsamad Abdulghani Ahmed Alqannati Not Signed Not Registered Sold" [ref=e3873] [cursor=pointer]:
+              - cell "301" [ref=e3874]
+              - cell "3" [ref=e3875]
+              - cell "Studio" [ref=e3876]
+              - cell "397.45" [ref=e3877]
+              - cell "AED 614,000.00" [ref=e3878]
+              - cell "Faisal Abdulsamad Abdulghani Ahmed Alqannati" [ref=e3879]
+              - cell "Not Signed" [ref=e3880]
+              - cell "Not Registered" [ref=e3881]
+              - cell "Sold" [ref=e3882]
+            - row "302 3 Studio 405.45 AED 590,000.00 Auwal Ahmed Jibril Not Signed Not Registered Sold" [ref=e3883] [cursor=pointer]:
+              - cell "302" [ref=e3884]
+              - cell "3" [ref=e3885]
+              - cell "Studio" [ref=e3886]
+              - cell "405.45" [ref=e3887]
+              - cell "AED 590,000.00" [ref=e3888]
+              - cell "Auwal Ahmed Jibril" [ref=e3889]
+              - cell "Not Signed" [ref=e3890]
+              - cell "Not Registered" [ref=e3891]
+              - cell "Sold" [ref=e3892]
+            - row "303 3 Studio 407.82 AED 675,000.00 Hanna Baranko Not Signed Not Registered Sold" [ref=e3893] [cursor=pointer]:
+              - cell "303" [ref=e3894]
+              - cell "3" [ref=e3895]
+              - cell "Studio" [ref=e3896]
+              - cell "407.82" [ref=e3897]
+              - cell "AED 675,000.00" [ref=e3898]
+              - cell "Hanna Baranko" [ref=e3899]
+              - cell "Not Signed" [ref=e3900]
+              - cell "Not Registered" [ref=e3901]
+              - cell "Sold" [ref=e3902]
+            - row "304 3 1 Bedroom 764.77 AED 910,000.00 Roberto Dramis Not Signed Not Registered Sold" [ref=e3903] [cursor=pointer]:
+              - cell "304" [ref=e3904]
+              - cell "3" [ref=e3905]
+              - cell "1 Bedroom" [ref=e3906]
+              - cell "764.77" [ref=e3907]
+              - cell "AED 910,000.00" [ref=e3908]
+              - cell "Roberto Dramis" [ref=e3909]
+              - cell "Not Signed" [ref=e3910]
+              - cell "Not Registered" [ref=e3911]
+              - cell "Sold" [ref=e3912]
+            - row "305 3 Studio 414.6 AED 592,000.00 Nicola Kay Mccoy Not Signed Not Registered Sold" [ref=e3913] [cursor=pointer]:
+              - cell "305" [ref=e3914]
+              - cell "3" [ref=e3915]
+              - cell "Studio" [ref=e3916]
+              - cell "414.6" [ref=e3917]
+              - cell "AED 592,000.00" [ref=e3918]
+              - cell "Nicola Kay Mccoy" [ref=e3919]
+              - cell "Not Signed" [ref=e3920]
+              - cell "Not Registered" [ref=e3921]
+              - cell "Sold" [ref=e3922]
+            - row "306 3 Studio 417.28 AED 595,000.00 Khawla Munem Hamoudi Hamoudi Not Signed Not Registered Sold" [ref=e3923] [cursor=pointer]:
+              - cell "306" [ref=e3924]
+              - cell "3" [ref=e3925]
+              - cell "Studio" [ref=e3926]
+              - cell "417.28" [ref=e3927]
+              - cell "AED 595,000.00" [ref=e3928]
+              - cell "Khawla Munem Hamoudi Hamoudi" [ref=e3929]
+              - cell "Not Signed" [ref=e3930]
+              - cell "Not Registered" [ref=e3931]
+              - cell "Sold" [ref=e3932]
+            - row "307 3 Studio 419.68 AED 597,000.00 David Lastovka Not Signed Not Registered Sold" [ref=e3933] [cursor=pointer]:
+              - cell "307" [ref=e3934]
+              - cell "3" [ref=e3935]
+              - cell "Studio" [ref=e3936]
+              - cell "419.68" [ref=e3937]
+              - cell "AED 597,000.00" [ref=e3938]
+              - cell "David Lastovka" [ref=e3939]
+              - cell "Not Signed" [ref=e3940]
+              - cell "Not Registered" [ref=e3941]
+              - cell "Sold" [ref=e3942]
+            - row "308 3 1 Bedroom 878.37 AED 1,039,000.00 Mustufa E Rangoonwala / Vipul Pande Not Signed Not Registered Sold" [ref=e3943] [cursor=pointer]:
+              - cell "308" [ref=e3944]
+              - cell "3" [ref=e3945]
+              - cell "1 Bedroom" [ref=e3946]
+              - cell "878.37" [ref=e3947]
+              - cell "AED 1,039,000.00" [ref=e3948]
+              - cell "Mustufa E Rangoonwala / Vipul Pande" [ref=e3949]
+              - cell "Not Signed" [ref=e3950]
+              - cell "Not Registered" [ref=e3951]
+              - cell "Sold" [ref=e3952]
+            - row "309 3 Studio 399.24 AED 683,000.00 Pedro Fernandez Sanchez Not Signed Not Registered Sold" [ref=e3953] [cursor=pointer]:
+              - cell "309" [ref=e3954]
+              - cell "3" [ref=e3955]
+              - cell "Studio" [ref=e3956]
+              - cell "399.24" [ref=e3957]
+              - cell "AED 683,000.00" [ref=e3958]
+              - cell "Pedro Fernandez Sanchez" [ref=e3959]
+              - cell "Not Signed" [ref=e3960]
+              - cell "Not Registered" [ref=e3961]
+              - cell "Sold" [ref=e3962]
+            - row "310 3 Studio 404.68 AED 692,000.00 Syed Fahd Hayat Not Signed Not Registered Sold" [ref=e3963] [cursor=pointer]:
+              - cell "310" [ref=e3964]
+              - cell "3" [ref=e3965]
+              - cell "Studio" [ref=e3966]
+              - cell "404.68" [ref=e3967]
+              - cell "AED 692,000.00" [ref=e3968]
+              - cell "Syed Fahd Hayat" [ref=e3969]
+              - cell "Not Signed" [ref=e3970]
+              - cell "Not Registered" [ref=e3971]
+              - cell "Sold" [ref=e3972]
+            - row "311 3 1 Bedroom 746.06 AED 985,000.00 Mustufa E Rangoonwala / Vipul Pande Not Signed Not Registered Sold" [ref=e3973] [cursor=pointer]:
+              - cell "311" [ref=e3974]
+              - cell "3" [ref=e3975]
+              - cell "1 Bedroom" [ref=e3976]
+              - cell "746.06" [ref=e3977]
+              - cell "AED 985,000.00" [ref=e3978]
+              - cell "Mustufa E Rangoonwala / Vipul Pande" [ref=e3979]
+              - cell "Not Signed" [ref=e3980]
+              - cell "Not Registered" [ref=e3981]
+              - cell "Sold" [ref=e3982]
+            - row "312 3 1 Bedroom 671.13 AED 913,000.00 Satish Kumar Prabhakar Not Signed Not Registered Sold" [ref=e3983] [cursor=pointer]:
+              - cell "312" [ref=e3984]
+              - cell "3" [ref=e3985]
+              - cell "1 Bedroom" [ref=e3986]
+              - cell "671.13" [ref=e3987]
+              - cell "AED 913,000.00" [ref=e3988]
+              - cell "Satish Kumar Prabhakar" [ref=e3989]
+              - cell "Not Signed" [ref=e3990]
+              - cell "Not Registered" [ref=e3991]
+              - cell "Sold" [ref=e3992]
+            - row "313 3 1 Bedroom 725.08 AED 986,000.00 Andre Mahmoud Maan El Darwich Not Signed Not Registered Sold" [ref=e3993] [cursor=pointer]:
+              - cell "313" [ref=e3994]
+              - cell "3" [ref=e3995]
+              - cell "1 Bedroom" [ref=e3996]
+              - cell "725.08" [ref=e3997]
+              - cell "AED 986,000.00" [ref=e3998]
+              - cell "Andre Mahmoud Maan El Darwich" [ref=e3999]
+              - cell "Not Signed" [ref=e4000]
+              - cell "Not Registered" [ref=e4001]
+              - cell "Sold" [ref=e4002]
+            - row "314 3 1 Bedroom 743.57 AED 1,011,000.00 Faiq Mehtab Not Signed Not Registered Sold" [ref=e4003] [cursor=pointer]:
+              - cell "314" [ref=e4004]
+              - cell "3" [ref=e4005]
+              - cell "1 Bedroom" [ref=e4006]
+              - cell "743.57" [ref=e4007]
+              - cell "AED 1,011,000.00" [ref=e4008]
+              - cell "Faiq Mehtab" [ref=e4009]
+              - cell "Not Signed" [ref=e4010]
+              - cell "Not Registered" [ref=e4011]
+              - cell "Sold" [ref=e4012]
+            - row "401 4 Studio 403.75 AED 619,000.00 Afeez Babawale Subair Not Signed Not Registered Sold" [ref=e4013] [cursor=pointer]:
+              - cell "401" [ref=e4014]
+              - cell "4" [ref=e4015]
+              - cell "Studio" [ref=e4016]
+              - cell "403.75" [ref=e4017]
+              - cell "AED 619,000.00" [ref=e4018]
+              - cell "Afeez Babawale Subair" [ref=e4019]
+              - cell "Not Signed" [ref=e4020]
+              - cell "Not Registered" [ref=e4021]
+              - cell "Sold" [ref=e4022]
+            - row "402 4 Studio 405.32 AED 593,000.00 Hima Sagar Tamatam Not Signed Not Registered Sold" [ref=e4023] [cursor=pointer]:
+              - cell "402" [ref=e4024]
+              - cell "4" [ref=e4025]
+              - cell "Studio" [ref=e4026]
+              - cell "405.32" [ref=e4027]
+              - cell "AED 593,000.00" [ref=e4028]
+              - cell "Hima Sagar Tamatam" [ref=e4029]
+              - cell "Not Signed" [ref=e4030]
+              - cell "Not Registered" [ref=e4031]
+              - cell "Sold" [ref=e4032]
+            - row "403 4 Studio 407.64 AED 596,000.00 Samuel Thymuriyil Abraham Not Signed Not Registered Sold" [ref=e4033] [cursor=pointer]:
+              - cell "403" [ref=e4034]
+              - cell "4" [ref=e4035]
+              - cell "Studio" [ref=e4036]
+              - cell "407.64" [ref=e4037]
+              - cell "AED 596,000.00" [ref=e4038]
+              - cell "Samuel Thymuriyil Abraham" [ref=e4039]
+              - cell "Not Signed" [ref=e4040]
+              - cell "Not Registered" [ref=e4041]
+              - cell "Sold" [ref=e4042]
+            - row "404 4 1 Bedroom 764.68 AED 910,000.00 Mustufa E Rangoonwala / Vipul Pande Not Signed Not Registered Sold" [ref=e4043] [cursor=pointer]:
+              - cell "404" [ref=e4044]
+              - cell "4" [ref=e4045]
+              - cell "1 Bedroom" [ref=e4046]
+              - cell "764.68" [ref=e4047]
+              - cell "AED 910,000.00" [ref=e4048]
+              - cell "Mustufa E Rangoonwala / Vipul Pande" [ref=e4049]
+              - cell "Not Signed" [ref=e4050]
+              - cell "Not Registered" [ref=e4051]
+              - cell "Sold" [ref=e4052]
+            - row "405 4 Studio 415.19 AED 596,000.00 Svetlana Gorbova Not Signed Not Registered Sold" [ref=e4053] [cursor=pointer]:
+              - cell "405" [ref=e4054]
+              - cell "4" [ref=e4055]
+              - cell "Studio" [ref=e4056]
+              - cell "415.19" [ref=e4057]
+              - cell "AED 596,000.00" [ref=e4058]
+              - cell "Svetlana Gorbova" [ref=e4059]
+              - cell "Not Signed" [ref=e4060]
+              - cell "Not Registered" [ref=e4061]
+              - cell "Sold" [ref=e4062]
+            - row "406 4 Studio 417.31 AED 599,000.00 Racha Daher Mohamad Not Signed Not Registered Sold" [ref=e4063] [cursor=pointer]:
+              - cell "406" [ref=e4064]
+              - cell "4" [ref=e4065]
+              - cell "Studio" [ref=e4066]
+              - cell "417.31" [ref=e4067]
+              - cell "AED 599,000.00" [ref=e4068]
+              - cell "Racha Daher Mohamad" [ref=e4069]
+              - cell "Not Signed" [ref=e4070]
+              - cell "Not Registered" [ref=e4071]
+              - cell "Sold" [ref=e4072]
+            - row "407 4 Studio 419.67 AED 610,000.00 Ravel Winston Evans Not Signed Not Registered Sold" [ref=e4073] [cursor=pointer]:
+              - cell "407" [ref=e4074]
+              - cell "4" [ref=e4075]
+              - cell "Studio" [ref=e4076]
+              - cell "419.67" [ref=e4077]
+              - cell "AED 610,000.00" [ref=e4078]
+              - cell "Ravel Winston Evans" [ref=e4079]
+              - cell "Not Signed" [ref=e4080]
+              - cell "Not Registered" [ref=e4081]
+              - cell "Sold" [ref=e4082]
+            - row "408 4 1 Bedroom 0 AED 1,047,000.00 — — — Available" [ref=e4083] [cursor=pointer]:
+              - cell "408" [ref=e4084]
+              - cell "4" [ref=e4085]
+              - cell "1 Bedroom" [ref=e4086]
+              - cell "0" [ref=e4087]
+              - cell "AED 1,047,000.00" [ref=e4088]
+              - cell "—" [ref=e4089]
+              - cell "—" [ref=e4090]
+              - cell "—" [ref=e4091]
+              - cell "Available" [ref=e4092]
+            - row "409 4 Studio 399.8 AED 684,000.00 Varun Mehrotra Not Signed Not Registered Sold" [ref=e4093] [cursor=pointer]:
+              - cell "409" [ref=e4094]
+              - cell "4" [ref=e4095]
+              - cell "Studio" [ref=e4096]
+              - cell "399.8" [ref=e4097]
+              - cell "AED 684,000.00" [ref=e4098]
+              - cell "Varun Mehrotra" [ref=e4099]
+              - cell "Not Signed" [ref=e4100]
+              - cell "Not Registered" [ref=e4101]
+              - cell "Sold" [ref=e4102]
+            - row "410 4 Studio 404.53 AED 692,000.00 Javier Pladevall Molina Not Signed Not Registered Sold" [ref=e4103] [cursor=pointer]:
+              - cell "410" [ref=e4104]
+              - cell "4" [ref=e4105]
+              - cell "Studio" [ref=e4106]
+              - cell "404.53" [ref=e4107]
+              - cell "AED 692,000.00" [ref=e4108]
+              - cell "Javier Pladevall Molina" [ref=e4109]
+              - cell "Not Signed" [ref=e4110]
+              - cell "Not Registered" [ref=e4111]
+              - cell "Sold" [ref=e4112]
+            - row "411 4 1 Bedroom 746.19 AED 992,000.00 Manpreet Kaur Not Signed Not Registered Sold" [ref=e4113] [cursor=pointer]:
+              - cell "411" [ref=e4114]
+              - cell "4" [ref=e4115]
+              - cell "1 Bedroom" [ref=e4116]
+              - cell "746.19" [ref=e4117]
+              - cell "AED 992,000.00" [ref=e4118]
+              - cell "Manpreet Kaur" [ref=e4119]
+              - cell "Not Signed" [ref=e4120]
+              - cell "Not Registered" [ref=e4121]
+              - cell "Sold" [ref=e4122]
+            - row "412 4 1 Bedroom 670.93 AED 919,000.00 Kuljit Kumar Bhangu Not Signed Not Registered Sold" [ref=e4123] [cursor=pointer]:
+              - cell "412" [ref=e4124]
+              - cell "4" [ref=e4125]
+              - cell "1 Bedroom" [ref=e4126]
+              - cell "670.93" [ref=e4127]
+              - cell "AED 919,000.00" [ref=e4128]
+              - cell "Kuljit Kumar Bhangu" [ref=e4129]
+              - cell "Not Signed" [ref=e4130]
+              - cell "Not Registered" [ref=e4131]
+              - cell "Sold" [ref=e4132]
+            - row "413 4 1 Bedroom 725.23 AED 994,000.00 Saer Issam Bannout Not Signed Not Registered Sold" [ref=e4133] [cursor=pointer]:
+              - cell "413" [ref=e4134]
+              - cell "4" [ref=e4135]
+              - cell "1 Bedroom" [ref=e4136]
+              - cell "725.23" [ref=e4137]
+              - cell "AED 994,000.00" [ref=e4138]
+              - cell "Saer Issam Bannout" [ref=e4139]
+              - cell "Not Signed" [ref=e4140]
+              - cell "Not Registered" [ref=e4141]
+              - cell "Sold" [ref=e4142]
+            - row "414 4 1 Bedroom 1,042.69 AED 1,258,000.00 Tanvirabanu Anish Vijapura Sirajbhai Abdulraheman Tambadia Not Signed Not Registered Sold" [ref=e4143] [cursor=pointer]:
+              - cell "414" [ref=e4144]
+              - cell "4" [ref=e4145]
+              - cell "1 Bedroom" [ref=e4146]
+              - cell "1,042.69" [ref=e4147]
+              - cell "AED 1,258,000.00" [ref=e4148]
+              - cell "Tanvirabanu Anish Vijapura Sirajbhai Abdulraheman Tambadia" [ref=e4149]
+              - cell "Not Signed" [ref=e4150]
+              - cell "Not Registered" [ref=e4151]
+              - cell "Sold" [ref=e4152]
+            - row "501 5 Studio 397.45 AED 618,000.00 Saleh Abdulla Ahmed Abdulla Alshehhi Not Signed Not Registered Sold" [ref=e4153] [cursor=pointer]:
+              - cell "501" [ref=e4154]
+              - cell "5" [ref=e4155]
+              - cell "Studio" [ref=e4156]
+              - cell "397.45" [ref=e4157]
+              - cell "AED 618,000.00" [ref=e4158]
+              - cell "Saleh Abdulla Ahmed Abdulla Alshehhi" [ref=e4159]
+              - cell "Not Signed" [ref=e4160]
+              - cell "Not Registered" [ref=e4161]
+              - cell "Sold" [ref=e4162]
+            - row "502 5 Studio 405.45 AED 593,000.00 Pierre Emile Augustin Grebaut Not Signed Not Registered Sold" [ref=e4163] [cursor=pointer]:
+              - cell "502" [ref=e4164]
+              - cell "5" [ref=e4165]
+              - cell "Studio" [ref=e4166]
+              - cell "405.45" [ref=e4167]
+              - cell "AED 593,000.00" [ref=e4168]
+              - cell "Pierre Emile Augustin Grebaut" [ref=e4169]
+              - cell "Not Signed" [ref=e4170]
+              - cell "Not Registered" [ref=e4171]
+              - cell "Sold" [ref=e4172]
+            - row "503 5 Studio 407.82 AED 597,000.00 Jeanette Vassilev - Dontschev Not Signed Not Registered Sold" [ref=e4173] [cursor=pointer]:
+              - cell "503" [ref=e4174]
+              - cell "5" [ref=e4175]
+              - cell "Studio" [ref=e4176]
+              - cell "407.82" [ref=e4177]
+              - cell "AED 597,000.00" [ref=e4178]
+              - cell "Jeanette Vassilev - Dontschev" [ref=e4179]
+              - cell "Not Signed" [ref=e4180]
+              - cell "Not Registered" [ref=e4181]
+              - cell "Sold" [ref=e4182]
+            - row "504 5 1 Bedroom 764.77 AED 910,000.00 Praneeth Vanteru Not Signed Not Registered Sold" [ref=e4183] [cursor=pointer]:
+              - cell "504" [ref=e4184]
+              - cell "5" [ref=e4185]
+              - cell "1 Bedroom" [ref=e4186]
+              - cell "764.77" [ref=e4187]
+              - cell "AED 910,000.00" [ref=e4188]
+              - cell "Praneeth Vanteru" [ref=e4189]
+              - cell "Not Signed" [ref=e4190]
+              - cell "Not Registered" [ref=e4191]
+              - cell "Sold" [ref=e4192]
+            - row "505 5 Studio 414.6 AED 596,000.00 Jose Gregorio Tineo Perales Not Signed Not Registered Sold" [ref=e4193] [cursor=pointer]:
+              - cell "505" [ref=e4194]
+              - cell "5" [ref=e4195]
+              - cell "Studio" [ref=e4196]
+              - cell "414.6" [ref=e4197]
+              - cell "AED 596,000.00" [ref=e4198]
+              - cell "Jose Gregorio Tineo Perales" [ref=e4199]
+              - cell "Not Signed" [ref=e4200]
+              - cell "Not Registered" [ref=e4201]
+              - cell "Sold" [ref=e4202]
+            - row "506 5 Studio 417.28 AED 599,000.00 Franciso Antonio Soldado Carrera Not Signed Not Registered Sold" [ref=e4203] [cursor=pointer]:
+              - cell "506" [ref=e4204]
+              - cell "5" [ref=e4205]
+              - cell "Studio" [ref=e4206]
+              - cell "417.28" [ref=e4207]
+              - cell "AED 599,000.00" [ref=e4208]
+              - cell "Franciso Antonio Soldado Carrera" [ref=e4209]
+              - cell "Not Signed" [ref=e4210]
+              - cell "Not Registered" [ref=e4211]
+              - cell "Sold" [ref=e4212]
+            - row "507 5 Studio 419.68 AED 601,000.00 Andreas Norbert Braack Not Signed Not Registered Sold" [ref=e4213] [cursor=pointer]:
+              - cell "507" [ref=e4214]
+              - cell "5" [ref=e4215]
+              - cell "Studio" [ref=e4216]
+              - cell "419.68" [ref=e4217]
+              - cell "AED 601,000.00" [ref=e4218]
+              - cell "Andreas Norbert Braack" [ref=e4219]
+              - cell "Not Signed" [ref=e4220]
+              - cell "Not Registered" [ref=e4221]
+              - cell "Sold" [ref=e4222]
+            - row "508 5 1 Bedroom 0 AED 1,047,000.00 — — — Available" [ref=e4223] [cursor=pointer]:
+              - cell "508" [ref=e4224]
+              - cell "5" [ref=e4225]
+              - cell "1 Bedroom" [ref=e4226]
+              - cell "0" [ref=e4227]
+              - cell "AED 1,047,000.00" [ref=e4228]
+              - cell "—" [ref=e4229]
+              - cell "—" [ref=e4230]
+              - cell "—" [ref=e4231]
+              - cell "Available" [ref=e4232]
+            - row "509 5 Studio 399.24 AED 687,000.00 Ayotunde Olusegun Omosebi Not Signed Not Registered Sold" [ref=e4233] [cursor=pointer]:
+              - cell "509" [ref=e4234]
+              - cell "5" [ref=e4235]
+              - cell "Studio" [ref=e4236]
+              - cell "399.24" [ref=e4237]
+              - cell "AED 687,000.00" [ref=e4238]
+              - cell "Ayotunde Olusegun Omosebi" [ref=e4239]
+              - cell "Not Signed" [ref=e4240]
+              - cell "Not Registered" [ref=e4241]
+              - cell "Sold" [ref=e4242]
+            - row "510 5 Studio 404.68 AED 696,000.00 David Barta Not Signed Not Registered Sold" [ref=e4243] [cursor=pointer]:
+              - cell "510" [ref=e4244]
+              - cell "5" [ref=e4245]
+              - cell "Studio" [ref=e4246]
+              - cell "404.68" [ref=e4247]
+              - cell "AED 696,000.00" [ref=e4248]
+              - cell "David Barta" [ref=e4249]
+              - cell "Not Signed" [ref=e4250]
+              - cell "Not Registered" [ref=e4251]
+              - cell "Sold" [ref=e4252]
+            - row "511 5 1 Bedroom 746.06 AED 992,000.00 Paresh Gupta Not Signed Not Registered Sold" [ref=e4253] [cursor=pointer]:
+              - cell "511" [ref=e4254]
+              - cell "5" [ref=e4255]
+              - cell "1 Bedroom" [ref=e4256]
+              - cell "746.06" [ref=e4257]
+              - cell "AED 992,000.00" [ref=e4258]
+              - cell "Paresh Gupta" [ref=e4259]
+              - cell "Not Signed" [ref=e4260]
+              - cell "Not Registered" [ref=e4261]
+              - cell "Sold" [ref=e4262]
+            - row "512 5 1 Bedroom 671.13 AED 919,000.00 Tyrone Kyle Michael Herbert Not Signed Not Registered Sold" [ref=e4263] [cursor=pointer]:
+              - cell "512" [ref=e4264]
+              - cell "5" [ref=e4265]
+              - cell "1 Bedroom" [ref=e4266]
+              - cell "671.13" [ref=e4267]
+              - cell "AED 919,000.00" [ref=e4268]
+              - cell "Tyrone Kyle Michael Herbert" [ref=e4269]
+              - cell "Not Signed" [ref=e4270]
+              - cell "Not Registered" [ref=e4271]
+              - cell "Sold" [ref=e4272]
+            - row "513 5 1 Bedroom 725.08 AED 993,000.00 Naajya Ahmed Not Signed Not Registered Sold" [ref=e4273] [cursor=pointer]:
+              - cell "513" [ref=e4274]
+              - cell "5" [ref=e4275]
+              - cell "1 Bedroom" [ref=e4276]
+              - cell "725.08" [ref=e4277]
+              - cell "AED 993,000.00" [ref=e4278]
+              - cell "Naajya Ahmed" [ref=e4279]
+              - cell "Not Signed" [ref=e4280]
+              - cell "Not Registered" [ref=e4281]
+              - cell "Sold" [ref=e4282]
+            - row "514 5 1 Bedroom 743.57 AED 1,019,000.00 Ali Yahaya Saleh Not Signed Not Registered Sold" [ref=e4283] [cursor=pointer]:
+              - cell "514" [ref=e4284]
+              - cell "5" [ref=e4285]
+              - cell "1 Bedroom" [ref=e4286]
+              - cell "743.57" [ref=e4287]
+              - cell "AED 1,019,000.00" [ref=e4288]
+              - cell "Ali Yahaya Saleh" [ref=e4289]
+              - cell "Not Signed" [ref=e4290]
+              - cell "Not Registered" [ref=e4291]
+              - cell "Sold" [ref=e4292]
+            - row "601 6 Studio 403.75 AED 623,000.00 Rashd Sulaiman Obaid Hamad Alzaabi Not Signed Not Registered Sold" [ref=e4293] [cursor=pointer]:
+              - cell "601" [ref=e4294]
+              - cell "6" [ref=e4295]
+              - cell "Studio" [ref=e4296]
+              - cell "403.75" [ref=e4297]
+              - cell "AED 623,000.00" [ref=e4298]
+              - cell "Rashd Sulaiman Obaid Hamad Alzaabi" [ref=e4299]
+              - cell "Not Signed" [ref=e4300]
+              - cell "Not Registered" [ref=e4301]
+              - cell "Sold" [ref=e4302]
+            - row "602 6 Studio 405.32 AED 598,000.00 Maher Nizar Majzoub Not Signed Not Registered Sold" [ref=e4303] [cursor=pointer]:
+              - cell "602" [ref=e4304]
+              - cell "6" [ref=e4305]
+              - cell "Studio" [ref=e4306]
+              - cell "405.32" [ref=e4307]
+              - cell "AED 598,000.00" [ref=e4308]
+              - cell "Maher Nizar Majzoub" [ref=e4309]
+              - cell "Not Signed" [ref=e4310]
+              - cell "Not Registered" [ref=e4311]
+              - cell "Sold" [ref=e4312]
+            - row "603 6 Studio 407.64 AED 601,000.00 Miguel Angel sanchez Jimenez Not Signed Not Registered Sold" [ref=e4313] [cursor=pointer]:
+              - cell "603" [ref=e4314]
+              - cell "6" [ref=e4315]
+              - cell "Studio" [ref=e4316]
+              - cell "407.64" [ref=e4317]
+              - cell "AED 601,000.00" [ref=e4318]
+              - cell "Miguel Angel sanchez Jimenez" [ref=e4319]
+              - cell "Not Signed" [ref=e4320]
+              - cell "Not Registered" [ref=e4321]
+              - cell "Sold" [ref=e4322]
+            - row "604 6 1 Bedroom 764.68 AED 998,000.00 Yasamin Baradaranzerehshooran Not Signed Not Registered Sold" [ref=e4323] [cursor=pointer]:
+              - cell "604" [ref=e4324]
+              - cell "6" [ref=e4325]
+              - cell "1 Bedroom" [ref=e4326]
+              - cell "764.68" [ref=e4327]
+              - cell "AED 998,000.00" [ref=e4328]
+              - cell "Yasamin Baradaranzerehshooran" [ref=e4329]
+              - cell "Not Signed" [ref=e4330]
+              - cell "Not Registered" [ref=e4331]
+              - cell "Sold" [ref=e4332]
+            - row "605 6 Studio 415.19 AED 601,000.00 Enrique Mario Soltanik Not Signed Not Registered Sold" [ref=e4333] [cursor=pointer]:
+              - cell "605" [ref=e4334]
+              - cell "6" [ref=e4335]
+              - cell "Studio" [ref=e4336]
+              - cell "415.19" [ref=e4337]
+              - cell "AED 601,000.00" [ref=e4338]
+              - cell "Enrique Mario Soltanik" [ref=e4339]
+              - cell "Not Signed" [ref=e4340]
+              - cell "Not Registered" [ref=e4341]
+              - cell "Sold" [ref=e4342]
+            - row "606 6 Studio 417.31 AED 603,000.00 Cenk Ilman Not Signed Not Registered Sold" [ref=e4343] [cursor=pointer]:
+              - cell "606" [ref=e4344]
+              - cell "6" [ref=e4345]
+              - cell "Studio" [ref=e4346]
+              - cell "417.31" [ref=e4347]
+              - cell "AED 603,000.00" [ref=e4348]
+              - cell "Cenk Ilman" [ref=e4349]
+              - cell "Not Signed" [ref=e4350]
+              - cell "Not Registered" [ref=e4351]
+              - cell "Sold" [ref=e4352]
+            - row "607 6 Studio 419.67 AED 604,000.00 Jan Nahlovsky Not Signed Not Registered Sold" [ref=e4353] [cursor=pointer]:
+              - cell "607" [ref=e4354]
+              - cell "6" [ref=e4355]
+              - cell "Studio" [ref=e4356]
+              - cell "419.67" [ref=e4357]
+              - cell "AED 604,000.00" [ref=e4358]
+              - cell "Jan Nahlovsky" [ref=e4359]
+              - cell "Not Signed" [ref=e4360]
+              - cell "Not Registered" [ref=e4361]
+              - cell "Sold" [ref=e4362]
+            - row "608 6 1 Bedroom 878.1 AED 1,047,000.00 Abdelmajid El Bouazzati Not Signed Not Registered Sold" [ref=e4363] [cursor=pointer]:
+              - cell "608" [ref=e4364]
+              - cell "6" [ref=e4365]
+              - cell "1 Bedroom" [ref=e4366]
+              - cell "878.1" [ref=e4367]
+              - cell "AED 1,047,000.00" [ref=e4368]
+              - cell "Abdelmajid El Bouazzati" [ref=e4369]
+              - cell "Not Signed" [ref=e4370]
+              - cell "Not Registered" [ref=e4371]
+              - cell "Sold" [ref=e4372]
+            - row "609 6 Studio 399.8 AED 689,000.00 Gabriele Dewald Not Signed Not Registered Sold" [ref=e4373] [cursor=pointer]:
+              - cell "609" [ref=e4374]
+              - cell "6" [ref=e4375]
+              - cell "Studio" [ref=e4376]
+              - cell "399.8" [ref=e4377]
+              - cell "AED 689,000.00" [ref=e4378]
+              - cell "Gabriele Dewald" [ref=e4379]
+              - cell "Not Signed" [ref=e4380]
+              - cell "Not Registered" [ref=e4381]
+              - cell "Sold" [ref=e4382]
+            - row "610 6 Studio 404.53 AED 695,000.00 Mario Junior Garcia Chambi Not Signed Not Registered Sold" [ref=e4383] [cursor=pointer]:
+              - cell "610" [ref=e4384]
+              - cell "6" [ref=e4385]
+              - cell "Studio" [ref=e4386]
+              - cell "404.53" [ref=e4387]
+              - cell "AED 695,000.00" [ref=e4388]
+              - cell "Mario Junior Garcia Chambi" [ref=e4389]
+              - cell "Not Signed" [ref=e4390]
+              - cell "Not Registered" [ref=e4391]
+              - cell "Sold" [ref=e4392]
+            - row "611 6 1 Bedroom 746.19 AED 999,000.00 Hasmukh Vitthalbhai Ramani Not Signed Not Registered Sold" [ref=e4393] [cursor=pointer]:
+              - cell "611" [ref=e4394]
+              - cell "6" [ref=e4395]
+              - cell "1 Bedroom" [ref=e4396]
+              - cell "746.19" [ref=e4397]
+              - cell "AED 999,000.00" [ref=e4398]
+              - cell "Hasmukh Vitthalbhai Ramani" [ref=e4399]
+              - cell "Not Signed" [ref=e4400]
+              - cell "Not Registered" [ref=e4401]
+              - cell "Sold" [ref=e4402]
+            - row "612 6 1 Bedroom 670.93 AED 926,000.00 William Malcolm Bailey Not Signed Not Registered Sold" [ref=e4403] [cursor=pointer]:
+              - cell "612" [ref=e4404]
+              - cell "6" [ref=e4405]
+              - cell "1 Bedroom" [ref=e4406]
+              - cell "670.93" [ref=e4407]
+              - cell "AED 926,000.00" [ref=e4408]
+              - cell "William Malcolm Bailey" [ref=e4409]
+              - cell "Not Signed" [ref=e4410]
+              - cell "Not Registered" [ref=e4411]
+              - cell "Sold" [ref=e4412]
+            - row "613 6 1 Bedroom 725.23 AED 1,001,000.00 Vinod Sancheti Not Signed Not Registered Sold" [ref=e4413] [cursor=pointer]:
+              - cell "613" [ref=e4414]
+              - cell "6" [ref=e4415]
+              - cell "1 Bedroom" [ref=e4416]
+              - cell "725.23" [ref=e4417]
+              - cell "AED 1,001,000.00" [ref=e4418]
+              - cell "Vinod Sancheti" [ref=e4419]
+              - cell "Not Signed" [ref=e4420]
+              - cell "Not Registered" [ref=e4421]
+              - cell "Sold" [ref=e4422]
+            - row "614 6 1 Bedroom 1,042.69 AED 1,266,000.00 Georgi Stefanov Obreshkov Not Signed Not Registered Sold" [ref=e4423] [cursor=pointer]:
+              - cell "614" [ref=e4424]
+              - cell "6" [ref=e4425]
+              - cell "1 Bedroom" [ref=e4426]
+              - cell "1,042.69" [ref=e4427]
+              - cell "AED 1,266,000.00" [ref=e4428]
+              - cell "Georgi Stefanov Obreshkov" [ref=e4429]
+              - cell "Not Signed" [ref=e4430]
+              - cell "Not Registered" [ref=e4431]
+              - cell "Sold" [ref=e4432]
+            - row "701 7 Studio 397.45 AED 622,000.00 Paulo Jorge Marques Pereira De Oliveira Not Signed Not Registered Sold" [ref=e4433] [cursor=pointer]:
+              - cell "701" [ref=e4434]
+              - cell "7" [ref=e4435]
+              - cell "Studio" [ref=e4436]
+              - cell "397.45" [ref=e4437]
+              - cell "AED 622,000.00" [ref=e4438]
+              - cell "Paulo Jorge Marques Pereira De Oliveira" [ref=e4439]
+              - cell "Not Signed" [ref=e4440]
+              - cell "Not Registered" [ref=e4441]
+              - cell "Sold" [ref=e4442]
+            - row "702 7 Studio 405.44 AED 598,000.00 Dawid Wojciech Przybysz Not Signed Not Registered Sold" [ref=e4443] [cursor=pointer]:
+              - cell "702" [ref=e4444]
+              - cell "7" [ref=e4445]
+              - cell "Studio" [ref=e4446]
+              - cell "405.44" [ref=e4447]
+              - cell "AED 598,000.00" [ref=e4448]
+              - cell "Dawid Wojciech Przybysz" [ref=e4449]
+              - cell "Not Signed" [ref=e4450]
+              - cell "Not Registered" [ref=e4451]
+              - cell "Sold" [ref=e4452]
+            - row "703 7 Studio 407.69 AED 601,000.00 Ashiq Abdul Raheem Not Signed Not Registered Sold" [ref=e4453] [cursor=pointer]:
+              - cell "703" [ref=e4454]
+              - cell "7" [ref=e4455]
+              - cell "Studio" [ref=e4456]
+              - cell "407.69" [ref=e4457]
+              - cell "AED 601,000.00" [ref=e4458]
+              - cell "Ashiq Abdul Raheem" [ref=e4459]
+              - cell "Not Signed" [ref=e4460]
+              - cell "Not Registered" [ref=e4461]
+              - cell "Sold" [ref=e4462]
+            - row "704 7 1 Bedroom 0 AED 999,000.00 — — — Available" [ref=e4463] [cursor=pointer]:
+              - cell "704" [ref=e4464]
+              - cell "7" [ref=e4465]
+              - cell "1 Bedroom" [ref=e4466]
+              - cell "0" [ref=e4467]
+              - cell "AED 999,000.00" [ref=e4468]
+              - cell "—" [ref=e4469]
+              - cell "—" [ref=e4470]
+              - cell "—" [ref=e4471]
+              - cell "Available" [ref=e4472]
+            - row "705 7 Studio 414.62 AED 600,000.00 Aneera Ali Not Signed Not Registered Sold" [ref=e4473] [cursor=pointer]:
+              - cell "705" [ref=e4474]
+              - cell "7" [ref=e4475]
+              - cell "Studio" [ref=e4476]
+              - cell "414.62" [ref=e4477]
+              - cell "AED 600,000.00" [ref=e4478]
+              - cell "Aneera Ali" [ref=e4479]
+              - cell "Not Signed" [ref=e4480]
+              - cell "Not Registered" [ref=e4481]
+              - cell "Sold" [ref=e4482]
+            - row "706 7 Studio 417.31 AED 602,000.00 Iliya Asenov Malinov Not Signed Not Registered Sold" [ref=e4483] [cursor=pointer]:
+              - cell "706" [ref=e4484]
+              - cell "7" [ref=e4485]
+              - cell "Studio" [ref=e4486]
+              - cell "417.31" [ref=e4487]
+              - cell "AED 602,000.00" [ref=e4488]
+              - cell "Iliya Asenov Malinov" [ref=e4489]
+              - cell "Not Signed" [ref=e4490]
+              - cell "Not Registered" [ref=e4491]
+              - cell "Sold" [ref=e4492]
+            - row "707 7 Studio 419.66 AED 660,000.00 Asyu Veselinov Atanasov Not Signed Not Registered Sold" [ref=e4493] [cursor=pointer]:
+              - cell "707" [ref=e4494]
+              - cell "7" [ref=e4495]
+              - cell "Studio" [ref=e4496]
+              - cell "419.66" [ref=e4497]
+              - cell "AED 660,000.00" [ref=e4498]
+              - cell "Asyu Veselinov Atanasov" [ref=e4499]
+              - cell "Not Signed" [ref=e4500]
+              - cell "Not Registered" [ref=e4501]
+              - cell "Sold" [ref=e4502]
+            - row "708 7 1 Bedroom 878.37 AED 1,056,000.00 Demjan Befus Not Signed Not Registered Sold" [ref=e4503] [cursor=pointer]:
+              - cell "708" [ref=e4504]
+              - cell "7" [ref=e4505]
+              - cell "1 Bedroom" [ref=e4506]
+              - cell "878.37" [ref=e4507]
+              - cell "AED 1,056,000.00" [ref=e4508]
+              - cell "Demjan Befus" [ref=e4509]
+              - cell "Not Signed" [ref=e4510]
+              - cell "Not Registered" [ref=e4511]
+              - cell "Sold" [ref=e4512]
+            - row "709 7 Studio 399.22 AED 692,000.00 Lucas Pfennig Not Signed Not Registered Sold" [ref=e4513] [cursor=pointer]:
+              - cell "709" [ref=e4514]
+              - cell "7" [ref=e4515]
+              - cell "Studio" [ref=e4516]
+              - cell "399.22" [ref=e4517]
+              - cell "AED 692,000.00" [ref=e4518]
+              - cell "Lucas Pfennig" [ref=e4519]
+              - cell "Not Signed" [ref=e4520]
+              - cell "Not Registered" [ref=e4521]
+              - cell "Sold" [ref=e4522]
+            - row "710 7 Studio 404.69 AED 700,000.00 Juan Luis Martin Sevillano Not Signed Not Registered Sold" [ref=e4523] [cursor=pointer]:
+              - cell "710" [ref=e4524]
+              - cell "7" [ref=e4525]
+              - cell "Studio" [ref=e4526]
+              - cell "404.69" [ref=e4527]
+              - cell "AED 700,000.00" [ref=e4528]
+              - cell "Juan Luis Martin Sevillano" [ref=e4529]
+              - cell "Not Signed" [ref=e4530]
+              - cell "Not Registered" [ref=e4531]
+              - cell "Sold" [ref=e4532]
+            - row "711 7 1 Bedroom 745.69 AED 999,000.00 Sunil Agarwal Not Signed Not Registered Sold" [ref=e4533] [cursor=pointer]:
+              - cell "711" [ref=e4534]
+              - cell "7" [ref=e4535]
+              - cell "1 Bedroom" [ref=e4536]
+              - cell "745.69" [ref=e4537]
+              - cell "AED 999,000.00" [ref=e4538]
+              - cell "Sunil Agarwal" [ref=e4539]
+              - cell "Not Signed" [ref=e4540]
+              - cell "Not Registered" [ref=e4541]
+              - cell "Sold" [ref=e4542]
+            - row "712 7 1 Bedroom 671.12 AED 926,000.00 Sara Dominidiato Not Signed Not Registered Sold" [ref=e4543] [cursor=pointer]:
+              - cell "712" [ref=e4544]
+              - cell "7" [ref=e4545]
+              - cell "1 Bedroom" [ref=e4546]
+              - cell "671.12" [ref=e4547]
+              - cell "AED 926,000.00" [ref=e4548]
+              - cell "Sara Dominidiato" [ref=e4549]
+              - cell "Not Signed" [ref=e4550]
+              - cell "Not Registered" [ref=e4551]
+              - cell "Sold" [ref=e4552]
+            - row "713 7 1 Bedroom 725.09 AED 1,001,000.00 Scott Shepherd Not Signed Not Registered Sold" [ref=e4553] [cursor=pointer]:
+              - cell "713" [ref=e4554]
+              - cell "7" [ref=e4555]
+              - cell "1 Bedroom" [ref=e4556]
+              - cell "725.09" [ref=e4557]
+              - cell "AED 1,001,000.00" [ref=e4558]
+              - cell "Scott Shepherd" [ref=e4559]
+              - cell "Not Signed" [ref=e4560]
+              - cell "Not Registered" [ref=e4561]
+              - cell "Sold" [ref=e4562]
+            - row "714 7 1 Bedroom 743.58 AED 1,026,000.00 Fahad Labaran Tanko Not Signed Not Registered Sold" [ref=e4563] [cursor=pointer]:
+              - cell "714" [ref=e4564]
+              - cell "7" [ref=e4565]
+              - cell "1 Bedroom" [ref=e4566]
+              - cell "743.58" [ref=e4567]
+              - cell "AED 1,026,000.00" [ref=e4568]
+              - cell "Fahad Labaran Tanko" [ref=e4569]
+              - cell "Not Signed" [ref=e4570]
+              - cell "Not Registered" [ref=e4571]
+              - cell "Sold" [ref=e4572]
+  - dialog "Add Sale — Unit 113" [ref=e4606]:
+    - generic [ref=e1372]:
+      - generic [ref=e1373]: Add Sale — Unit 113
+      - button "Close" [ref=e1374] [cursor=pointer]: ×
+    - generic [ref=e1375]:
+      - generic [ref=e4607]: Sale Details
+      - generic [ref=e4608]:
+        - generic [ref=e4609]:
+          - generic [ref=e4610]: Buyer Name
+          - textbox [ref=e4611]
+        - generic [ref=e4612]:
+          - generic [ref=e4613]: Sale Date
+          - textbox [ref=e4614]
+        - generic [ref=e4615]:
+          - generic [ref=e4616]: Sold Price (AED)
+          - spinbutton [ref=e4617]
+        - generic [ref=e4618]:
+          - generic [ref=e4619]: Discount (AED)
+          - spinbutton [ref=e4620]: "0"
+        - generic [ref=e4621]:
+          - generic [ref=e4622]: Commission %
+          - spinbutton [ref=e4623]: "9"
+        - generic [ref=e4625]:
+          - generic [ref=e4626]: Broker Name
+          - textbox [ref=e4627]
+        - generic [ref=e4628]:
+          - generic [ref=e4629]: Brokerage
+          - textbox [ref=e4630]
+      - generic [ref=e4631]:
+        - generic [ref=e4632]:
+          - generic [ref=e4633]: Unit Status
+          - combobox [ref=e4634]:
+            - option "Reserved" [selected]
+            - option "Sold"
+        - generic [ref=e4636]:
+          - generic [ref=e4637]: SPA Status
+          - combobox [ref=e4638]:
+            - option "Not Signed" [selected]
+            - option "Signed — Buyer"
+            - option "Fully Signed"
+        - generic [ref=e4639]:
+          - generic [ref=e4640]: SPA Date
+          - textbox [ref=e4641]
+        - generic [ref=e4642]:
+          - generic [ref=e4643]: Oqood Status
+          - combobox [ref=e4644]:
+            - option "Not Registered" [selected]
+            - option "Registered"
+        - generic [ref=e4645]:
+          - generic [ref=e4646]: Oqood Date
+          - textbox [ref=e4647]
+      - generic [ref=e4648]: Payment Plan Milestones
+      - table [ref=e4649]:
+        - rowgroup [ref=e4650]:
+          - row "Milestone Amount (AED) % Due Date" [ref=e4651]:
+            - columnheader "Milestone" [ref=e4652]
+            - columnheader "Amount (AED)" [ref=e4653]
+            - columnheader "%" [ref=e4654]
+            - columnheader "Due Date" [ref=e4655]
+          - row "Booking Deposit 10" [ref=e4656]:
+            - cell "Booking Deposit" [ref=e4657]:
+              - textbox [ref=e4658]: Booking Deposit
+            - cell [ref=e4659]:
+              - spinbutton [ref=e4660]
+            - cell "10" [ref=e4661]:
+              - spinbutton [ref=e4662]: "10"
+            - cell [ref=e4663]:
+              - textbox [ref=e4664]
+          - row "1st Instalment 30" [ref=e4665]:
+            - cell "1st Instalment" [ref=e4666]:
+              - textbox [ref=e4667]: 1st Instalment
+            - cell [ref=e4668]:
+              - spinbutton [ref=e4669]
+            - cell "30" [ref=e4670]:
+              - spinbutton [ref=e4671]: "30"
+            - cell [ref=e4672]:
+              - textbox [ref=e4673]
+          - row "2nd Instalment 30" [ref=e4674]:
+            - cell "2nd Instalment" [ref=e4675]:
+              - textbox [ref=e4676]: 2nd Instalment
+            - cell [ref=e4677]:
+              - spinbutton [ref=e4678]
+            - cell "30" [ref=e4679]:
+              - spinbutton [ref=e4680]: "30"
+            - cell [ref=e4681]:
+              - textbox [ref=e4682]
+          - row "Handover 30" [ref=e4683]:
+            - cell "Handover" [ref=e4684]:
+              - textbox [ref=e4685]: Handover
+            - cell [ref=e4686]:
+              - spinbutton [ref=e4687]
+            - cell "30" [ref=e4688]:
+              - spinbutton [ref=e4689]: "30"
+            - cell [ref=e4690]:
+              - textbox [ref=e4691]
+    - generic [ref=e1390]:
+      - button "Save" [ref=e4692] [cursor=pointer]
+      - button "Cancel" [ref=e4693] [cursor=pointer]

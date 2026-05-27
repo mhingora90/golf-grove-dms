@@ -1,0 +1,64 @@
+unit_no,floor,unit_type,area_sqft,listed_price,status
+101,1,3BHK,1582,3188000,Available
+102,1,3BHK,1583,3188000,Available
+103,1,2BHK - Normal,954,2189000,Available
+104,1,1BHK Sky Loft - Small,880,1889000,Sold
+105,1,1BHK Sky Loft - Large A,1283,2059000,Sold
+106,1,2BHK + Maid,1483,2900000,Available
+107,1,2BHK + Maid,1483,2900000,Available
+108,1,1BHK Sky Loft - Large B,1423,2141000,Sold
+109,1,1BHK Sky Loft - Small,881,1939000,Sold
+110,1,2BHK - Normal,954,2252000,Available
+201,2,2BHK + Maid,1467,2768000,Available
+202,2,2BHK + Maid,1468,2768000,Available
+203,2,2BHK - Normal,986,2210000,Available
+204,2,2BHK + Maid,1508,2930000,Sold
+205,2,2BHK + Maid,1508,2850000,Available
+206,2,2BHK - Normal,987,2383000,Available
+301,3,3BHK,1582,3228000,Sold
+302,3,3BHK,1583,3228000,Blocked by Developer
+303,3,2BHK - Normal,954,2250000,Sold
+304,3,1BHK Sky Loft - Small,880,1966000,Sold
+305,3,1BHK Sky Loft - Large A,1283,2099000,Available
+306,3,2BHK + Maid,1483,2999000,Available
+307,3,2BHK + Maid,1483,2999000,Available
+308,3,1BHK Sky Loft - Large B,1423,2181000,Sold
+309,3,1BHK Sky Loft - Small,881,2020000,Sold
+310,3,2BHK - Normal,954,2355000,Sold
+401,4,2BHK + Maid,1467,2860000,Available
+402,4,2BHK + Maid,1468,2860000,Available
+403,4,2BHK - Normal,986,2310000,Available
+404,4,2BHK + Maid,1508,3000000,Sold
+405,4,2BHK + Maid,1508,3000000,Sold
+406,4,2BHK - Normal,987,2483000,Sold
+501,5,3BHK,1582,3395000,Available
+502,5,3BHK,1583,3395000,Available
+503,5,2BHK - Normal,954,2330000,Available
+504,5,1BHK Sky Loft - Small,880,2150000,Sold
+505,5,1BHK Sky Loft - Large A,1283,2199000,Sold
+506,5,2BHK + Maid,1483,3250000,Available
+507,5,2BHK + Maid,1483,3250000,Available
+508,5,1BHK Sky Loft - Large B,1423,2304000,Sold
+509,5,1BHK Sky Loft - Small,881,2086000,Available
+510,5,2BHK - Normal,954,2449000,Sold
+601,6,2BHK + Maid,1467,2975000,Available
+602,6,2BHK + Maid,1468,2975000,Available
+603,6,2BHK - Normal,986,2375000,Available
+604,6,2BHK + Maid,1508,3275000,Available
+605,6,2BHK + Maid,1508,3275000,Available
+606,6,2BHK - Normal,987,2575000,Available
+701,7,3BHK,1582,3499000,Available
+702,7,3BHK,1583,3499000,Blocked by Developer
+703,7,2BHK - Normal,954,2449000,Available
+704,7,1BHK Sky Loft - Small,880,2139000,Available
+705,7,1BHK Sky Loft - Large A,1283,2342000,Available
+706,7,2BHK + Maid,1483,3475000,Available
+707,7,2BHK + Maid,1483,3475000,Available
+708,7,1BHK Sky Loft - Large B,1422,2378970,Sold
+709,7,1BHK Sky Loft - Small,881,2178000,Available
+710,7,2BHK - Normal,954,2380500,Sold
+801,8,2BHK + Maid,1467,3099000,Available
+802,8,2BHK + Maid,1468,3099000,Available
+803,8,2BHK - Normal,986,2525000,Available
+805,8,2BHK - Normal,987,2407500,Sold
+PH,8,4BHK Penthouse,3047,9613000,Available

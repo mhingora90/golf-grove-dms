@@ -1,0 +1,690 @@
+- generic [ref=e19]:
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e22]: Active Project
+      - generic [ref=e23]: 241 Waterside
+    - generic [ref=e24]:
+      - generic [ref=e25]: MH
+      - generic [ref=e26]:
+        - generic [ref=e27]: Mohammed Hingora
+        - generic [ref=e28]: developer
+    - generic [ref=e29]: Main
+    - generic [ref=e30] [cursor=pointer]:
+      - img [ref=e31]
+      - text: Dashboard
+    - generic [ref=e36]: Document Control
+    - generic [ref=e37] [cursor=pointer]:
+      - img [ref=e38]
+      - text: Drawing Register
+    - generic [ref=e40] [cursor=pointer]:
+      - img [ref=e41]
+      - text: Submittals (DSUB)
+    - generic [ref=e44] [cursor=pointer]:
+      - img [ref=e45]
+      - text: Submittal Register
+    - generic [ref=e47]: Site
+    - generic [ref=e48] [cursor=pointer]:
+      - img [ref=e49]
+      - text: Inspection Requests
+    - generic [ref=e52] [cursor=pointer]:
+      - img [ref=e53]
+      - text: NCRs
+    - generic [ref=e56] [cursor=pointer]:
+      - img [ref=e57]
+      - text: RFIs
+    - generic [ref=e61] [cursor=pointer]:
+      - img [ref=e62]
+      - text: Transmittals
+    - generic [ref=e64] [cursor=pointer]:
+      - img [ref=e65]
+      - text: Method Statements
+    - generic [ref=e68] [cursor=pointer]:
+      - img [ref=e69]
+      - text: Correspondence
+    - generic [ref=e72] [cursor=pointer]:
+      - img [ref=e73]
+      - text: Punch List
+      - generic [ref=e76]: "0"
+    - generic [ref=e77]: Finance
+    - generic [ref=e78] [cursor=pointer]:
+      - img [ref=e79]
+      - text: Finance Overview
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: Payment Certificates
+    - generic [ref=e86] [cursor=pointer]:
+      - img [ref=e87]
+      - text: BOQ Setup
+    - generic [ref=e90]:
+      - generic [ref=e91]: Sales
+      - generic [ref=e92] [cursor=pointer]:
+        - img [ref=e93]
+        - text: CRM Home
+      - generic [ref=e98] [cursor=pointer]:
+        - img [ref=e99]
+        - text: Leads
+        - generic [ref=e103]: "0"
+      - generic [ref=e104] [cursor=pointer]:
+        - img [ref=e105]
+        - text: Unit Setup
+      - generic [ref=e108] [cursor=pointer]:
+        - img [ref=e109]
+        - text: Unit Register
+      - generic [ref=e112] [cursor=pointer]:
+        - img [ref=e113]
+        - text: Sales Revenue
+    - generic [ref=e116]: Admin
+    - generic [ref=e117] [cursor=pointer]:
+      - img [ref=e118]
+      - text: Subcontractors
+    - generic [ref=e124] [cursor=pointer]:
+      - img [ref=e125]
+      - text: User Management
+    - button "Sign Out" [ref=e129] [cursor=pointer]
+  - generic [ref=e130]:
+    - generic [ref=e131]:
+      - generic [ref=e132]:
+        - generic [ref=e133]: Unit Setup
+        - generic [ref=e134]: Sunday, 24 May 2026
+      - generic [ref=e136] [cursor=pointer]:
+        - generic [ref=e138]: 241 Waterside
+        - generic [ref=e139]: ▼
+      - generic [ref=e141]:
+        - generic [ref=e142]: developer
+        - button "+ New" [ref=e311] [cursor=pointer]
+    - generic [ref=e143]:
+      - generic [ref=e1628]:
+        - button "Download CSV Template" [ref=e1629] [cursor=pointer]
+        - generic [ref=e1630] [cursor=pointer]: Import CSV
+      - generic [ref=e1631]:
+        - generic [ref=e1632]:
+          - generic [ref=e1633]: "63"
+          - generic [ref=e1634]: Total Units
+        - generic [ref=e1635]:
+          - generic [ref=e1636]: "0"
+          - generic [ref=e1637]: Studio
+        - generic [ref=e1638]:
+          - generic [ref=e1639]: "0"
+          - generic [ref=e1640]: 1BHK
+        - generic [ref=e1641]:
+          - generic [ref=e1642]: 81,750 sqft
+          - generic [ref=e1643]: Total Area
+        - generic [ref=e1644]:
+          - generic [ref=e1645]: AED 175.21M
+          - generic [ref=e1646]: Total Listed Value
+      - table [ref=e1649]:
+        - rowgroup [ref=e1650]:
+          - row "Unit No. Floor Type Area (sqft) Listed Price" [ref=e1651]:
+            - columnheader "Unit No." [ref=e1652]
+            - columnheader "Floor" [ref=e1653]
+            - columnheader "Type" [ref=e1654]
+            - columnheader "Area (sqft)" [ref=e1655]
+            - columnheader "Listed Price" [ref=e1656]
+            - columnheader [ref=e1657]
+          - row "101 1 3BHK 1,582 AED 3,188,000.00 Edit Delete" [ref=e1658]:
+            - cell "101" [ref=e1659]
+            - cell "1" [ref=e1660]
+            - cell "3BHK" [ref=e1661]
+            - cell "1,582" [ref=e1662]
+            - cell "AED 3,188,000.00" [ref=e1663]
+            - cell "Edit Delete" [ref=e1664]:
+              - button "Edit" [ref=e1665] [cursor=pointer]
+              - button "Delete" [ref=e1666] [cursor=pointer]
+          - row "102 1 3BHK 1,583 AED 3,188,000.00 Edit Delete" [ref=e1667]:
+            - cell "102" [ref=e1668]
+            - cell "1" [ref=e1669]
+            - cell "3BHK" [ref=e1670]
+            - cell "1,583" [ref=e1671]
+            - cell "AED 3,188,000.00" [ref=e1672]
+            - cell "Edit Delete" [ref=e1673]:
+              - button "Edit" [ref=e1674] [cursor=pointer]
+              - button "Delete" [ref=e1675] [cursor=pointer]
+          - row "103 1 2BHK - Normal 954 AED 2,189,000.00 Edit Delete" [ref=e1676]:
+            - cell "103" [ref=e1677]
+            - cell "1" [ref=e1678]
+            - cell "2BHK - Normal" [ref=e1679]
+            - cell "954" [ref=e1680]
+            - cell "AED 2,189,000.00" [ref=e1681]
+            - cell "Edit Delete" [ref=e1682]:
+              - button "Edit" [ref=e1683] [cursor=pointer]
+              - button "Delete" [ref=e1684] [cursor=pointer]
+          - row "104 1 1BHK Sky Loft - Small 880 AED 1,889,000.00 Edit Delete" [ref=e1685]:
+            - cell "104" [ref=e1686]
+            - cell "1" [ref=e1687]
+            - cell "1BHK Sky Loft - Small" [ref=e1688]
+            - cell "880" [ref=e1689]
+            - cell "AED 1,889,000.00" [ref=e1690]
+            - cell "Edit Delete" [ref=e1691]:
+              - button "Edit" [ref=e1692] [cursor=pointer]
+              - button "Delete" [ref=e1693] [cursor=pointer]
+          - row "105 1 1BHK Sky Loft - Large A 1,283 AED 2,059,000.00 Edit Delete" [ref=e1694]:
+            - cell "105" [ref=e1695]
+            - cell "1" [ref=e1696]
+            - cell "1BHK Sky Loft - Large A" [ref=e1697]
+            - cell "1,283" [ref=e1698]
+            - cell "AED 2,059,000.00" [ref=e1699]
+            - cell "Edit Delete" [ref=e1700]:
+              - button "Edit" [ref=e1701] [cursor=pointer]
+              - button "Delete" [ref=e1702] [cursor=pointer]
+          - row "106 1 2BHK + Maid 1,483 AED 2,900,000.00 Edit Delete" [ref=e1703]:
+            - cell "106" [ref=e1704]
+            - cell "1" [ref=e1705]
+            - cell "2BHK + Maid" [ref=e1706]
+            - cell "1,483" [ref=e1707]
+            - cell "AED 2,900,000.00" [ref=e1708]
+            - cell "Edit Delete" [ref=e1709]:
+              - button "Edit" [ref=e1710] [cursor=pointer]
+              - button "Delete" [ref=e1711] [cursor=pointer]
+          - row "107 1 2BHK + Maid 1,483 AED 2,900,000.00 Edit Delete" [ref=e1712]:
+            - cell "107" [ref=e1713]
+            - cell "1" [ref=e1714]
+            - cell "2BHK + Maid" [ref=e1715]
+            - cell "1,483" [ref=e1716]
+            - cell "AED 2,900,000.00" [ref=e1717]
+            - cell "Edit Delete" [ref=e1718]:
+              - button "Edit" [ref=e1719] [cursor=pointer]
+              - button "Delete" [ref=e1720] [cursor=pointer]
+          - row "108 1 1BHK Sky Loft - Large B 1,423 AED 2,141,000.00 Edit Delete" [ref=e1721]:
+            - cell "108" [ref=e1722]
+            - cell "1" [ref=e1723]
+            - cell "1BHK Sky Loft - Large B" [ref=e1724]
+            - cell "1,423" [ref=e1725]
+            - cell "AED 2,141,000.00" [ref=e1726]
+            - cell "Edit Delete" [ref=e1727]:
+              - button "Edit" [ref=e1728] [cursor=pointer]
+              - button "Delete" [ref=e1729] [cursor=pointer]
+          - row "109 1 1BHK Sky Loft - Small 881 AED 1,939,000.00 Edit Delete" [ref=e1730]:
+            - cell "109" [ref=e1731]
+            - cell "1" [ref=e1732]
+            - cell "1BHK Sky Loft - Small" [ref=e1733]
+            - cell "881" [ref=e1734]
+            - cell "AED 1,939,000.00" [ref=e1735]
+            - cell "Edit Delete" [ref=e1736]:
+              - button "Edit" [ref=e1737] [cursor=pointer]
+              - button "Delete" [ref=e1738] [cursor=pointer]
+          - row "110 1 2BHK - Normal 954 AED 2,252,000.00 Edit Delete" [ref=e1739]:
+            - cell "110" [ref=e1740]
+            - cell "1" [ref=e1741]
+            - cell "2BHK - Normal" [ref=e1742]
+            - cell "954" [ref=e1743]
+            - cell "AED 2,252,000.00" [ref=e1744]
+            - cell "Edit Delete" [ref=e1745]:
+              - button "Edit" [ref=e1746] [cursor=pointer]
+              - button "Delete" [ref=e1747] [cursor=pointer]
+          - row "201 2 2BHK + Maid 1,467 AED 2,768,000.00 Edit Delete" [ref=e1748]:
+            - cell "201" [ref=e1749]
+            - cell "2" [ref=e1750]
+            - cell "2BHK + Maid" [ref=e1751]
+            - cell "1,467" [ref=e1752]
+            - cell "AED 2,768,000.00" [ref=e1753]
+            - cell "Edit Delete" [ref=e1754]:
+              - button "Edit" [ref=e1755] [cursor=pointer]
+              - button "Delete" [ref=e1756] [cursor=pointer]
+          - row "202 2 2BHK + Maid 1,468 AED 2,768,000.00 Edit Delete" [ref=e1757]:
+            - cell "202" [ref=e1758]
+            - cell "2" [ref=e1759]
+            - cell "2BHK + Maid" [ref=e1760]
+            - cell "1,468" [ref=e1761]
+            - cell "AED 2,768,000.00" [ref=e1762]
+            - cell "Edit Delete" [ref=e1763]:
+              - button "Edit" [ref=e1764] [cursor=pointer]
+              - button "Delete" [ref=e1765] [cursor=pointer]
+          - row "203 2 2BHK - Normal 986 AED 2,210,000.00 Edit Delete" [ref=e1766]:
+            - cell "203" [ref=e1767]
+            - cell "2" [ref=e1768]
+            - cell "2BHK - Normal" [ref=e1769]
+            - cell "986" [ref=e1770]
+            - cell "AED 2,210,000.00" [ref=e1771]
+            - cell "Edit Delete" [ref=e1772]:
+              - button "Edit" [ref=e1773] [cursor=pointer]
+              - button "Delete" [ref=e1774] [cursor=pointer]
+          - row "204 2 2BHK + Maid 1,508 AED 2,930,000.00 Edit Delete" [ref=e1775]:
+            - cell "204" [ref=e1776]
+            - cell "2" [ref=e1777]
+            - cell "2BHK + Maid" [ref=e1778]
+            - cell "1,508" [ref=e1779]
+            - cell "AED 2,930,000.00" [ref=e1780]
+            - cell "Edit Delete" [ref=e1781]:
+              - button "Edit" [ref=e1782] [cursor=pointer]
+              - button "Delete" [ref=e1783] [cursor=pointer]
+          - row "205 2 2BHK + Maid 1,508 AED 2,850,000.00 Edit Delete" [ref=e1784]:
+            - cell "205" [ref=e1785]
+            - cell "2" [ref=e1786]
+            - cell "2BHK + Maid" [ref=e1787]
+            - cell "1,508" [ref=e1788]
+            - cell "AED 2,850,000.00" [ref=e1789]
+            - cell "Edit Delete" [ref=e1790]:
+              - button "Edit" [ref=e1791] [cursor=pointer]
+              - button "Delete" [ref=e1792] [cursor=pointer]
+          - row "206 2 2BHK - Normal 987 AED 2,383,000.00 Edit Delete" [ref=e1793]:
+            - cell "206" [ref=e1794]
+            - cell "2" [ref=e1795]
+            - cell "2BHK - Normal" [ref=e1796]
+            - cell "987" [ref=e1797]
+            - cell "AED 2,383,000.00" [ref=e1798]
+            - cell "Edit Delete" [ref=e1799]:
+              - button "Edit" [ref=e1800] [cursor=pointer]
+              - button "Delete" [ref=e1801] [cursor=pointer]
+          - row "301 3 3BHK 1,582 AED 3,228,000.00 Edit Delete" [ref=e1802]:
+            - cell "301" [ref=e1803]
+            - cell "3" [ref=e1804]
+            - cell "3BHK" [ref=e1805]
+            - cell "1,582" [ref=e1806]
+            - cell "AED 3,228,000.00" [ref=e1807]
+            - cell "Edit Delete" [ref=e1808]:
+              - button "Edit" [ref=e1809] [cursor=pointer]
+              - button "Delete" [ref=e1810] [cursor=pointer]
+          - row "302 3 3BHK 1,583 AED 3,228,000.00 Edit Delete" [ref=e1811]:
+            - cell "302" [ref=e1812]
+            - cell "3" [ref=e1813]
+            - cell "3BHK" [ref=e1814]
+            - cell "1,583" [ref=e1815]
+            - cell "AED 3,228,000.00" [ref=e1816]
+            - cell "Edit Delete" [ref=e1817]:
+              - button "Edit" [ref=e1818] [cursor=pointer]
+              - button "Delete" [ref=e1819] [cursor=pointer]
+          - row "303 3 2BHK - Normal 954 AED 2,250,000.00 Edit Delete" [ref=e1820]:
+            - cell "303" [ref=e1821]
+            - cell "3" [ref=e1822]
+            - cell "2BHK - Normal" [ref=e1823]
+            - cell "954" [ref=e1824]
+            - cell "AED 2,250,000.00" [ref=e1825]
+            - cell "Edit Delete" [ref=e1826]:
+              - button "Edit" [ref=e1827] [cursor=pointer]
+              - button "Delete" [ref=e1828] [cursor=pointer]
+          - row "304 3 1BHK Sky Loft - Small 880 AED 1,966,000.00 Edit Delete" [ref=e1829]:
+            - cell "304" [ref=e1830]
+            - cell "3" [ref=e1831]
+            - cell "1BHK Sky Loft - Small" [ref=e1832]
+            - cell "880" [ref=e1833]
+            - cell "AED 1,966,000.00" [ref=e1834]
+            - cell "Edit Delete" [ref=e1835]:
+              - button "Edit" [ref=e1836] [cursor=pointer]
+              - button "Delete" [ref=e1837] [cursor=pointer]
+          - row "305 3 1BHK Sky Loft - Large A 1,283 AED 2,099,000.00 Edit Delete" [ref=e1838]:
+            - cell "305" [ref=e1839]
+            - cell "3" [ref=e1840]
+            - cell "1BHK Sky Loft - Large A" [ref=e1841]
+            - cell "1,283" [ref=e1842]
+            - cell "AED 2,099,000.00" [ref=e1843]
+            - cell "Edit Delete" [ref=e1844]:
+              - button "Edit" [ref=e1845] [cursor=pointer]
+              - button "Delete" [ref=e1846] [cursor=pointer]
+          - row "306 3 2BHK + Maid 1,483 AED 2,999,000.00 Edit Delete" [ref=e1847]:
+            - cell "306" [ref=e1848]
+            - cell "3" [ref=e1849]
+            - cell "2BHK + Maid" [ref=e1850]
+            - cell "1,483" [ref=e1851]
+            - cell "AED 2,999,000.00" [ref=e1852]
+            - cell "Edit Delete" [ref=e1853]:
+              - button "Edit" [ref=e1854] [cursor=pointer]
+              - button "Delete" [ref=e1855] [cursor=pointer]
+          - row "307 3 2BHK + Maid 1,483 AED 2,999,000.00 Edit Delete" [ref=e1856]:
+            - cell "307" [ref=e1857]
+            - cell "3" [ref=e1858]
+            - cell "2BHK + Maid" [ref=e1859]
+            - cell "1,483" [ref=e1860]
+            - cell "AED 2,999,000.00" [ref=e1861]
+            - cell "Edit Delete" [ref=e1862]:
+              - button "Edit" [ref=e1863] [cursor=pointer]
+              - button "Delete" [ref=e1864] [cursor=pointer]
+          - row "308 3 1BHK Sky Loft - Large B 1,423 AED 2,181,000.00 Edit Delete" [ref=e1865]:
+            - cell "308" [ref=e1866]
+            - cell "3" [ref=e1867]
+            - cell "1BHK Sky Loft - Large B" [ref=e1868]
+            - cell "1,423" [ref=e1869]
+            - cell "AED 2,181,000.00" [ref=e1870]
+            - cell "Edit Delete" [ref=e1871]:
+              - button "Edit" [ref=e1872] [cursor=pointer]
+              - button "Delete" [ref=e1873] [cursor=pointer]
+          - row "309 3 1BHK Sky Loft - Small 881 AED 2,020,000.00 Edit Delete" [ref=e1874]:
+            - cell "309" [ref=e1875]
+            - cell "3" [ref=e1876]
+            - cell "1BHK Sky Loft - Small" [ref=e1877]
+            - cell "881" [ref=e1878]
+            - cell "AED 2,020,000.00" [ref=e1879]
+            - cell "Edit Delete" [ref=e1880]:
+              - button "Edit" [ref=e1881] [cursor=pointer]
+              - button "Delete" [ref=e1882] [cursor=pointer]
+          - row "310 3 2BHK - Normal 954 AED 2,355,000.00 Edit Delete" [ref=e1883]:
+            - cell "310" [ref=e1884]
+            - cell "3" [ref=e1885]
+            - cell "2BHK - Normal" [ref=e1886]
+            - cell "954" [ref=e1887]
+            - cell "AED 2,355,000.00" [ref=e1888]
+            - cell "Edit Delete" [ref=e1889]:
+              - button "Edit" [ref=e1890] [cursor=pointer]
+              - button "Delete" [ref=e1891] [cursor=pointer]
+          - row "401 4 2BHK + Maid 1,467 AED 2,860,000.00 Edit Delete" [ref=e1892]:
+            - cell "401" [ref=e1893]
+            - cell "4" [ref=e1894]
+            - cell "2BHK + Maid" [ref=e1895]
+            - cell "1,467" [ref=e1896]
+            - cell "AED 2,860,000.00" [ref=e1897]
+            - cell "Edit Delete" [ref=e1898]:
+              - button "Edit" [ref=e1899] [cursor=pointer]
+              - button "Delete" [ref=e1900] [cursor=pointer]
+          - row "402 4 2BHK + Maid 1,468 AED 2,860,000.00 Edit Delete" [ref=e1901]:
+            - cell "402" [ref=e1902]
+            - cell "4" [ref=e1903]
+            - cell "2BHK + Maid" [ref=e1904]
+            - cell "1,468" [ref=e1905]
+            - cell "AED 2,860,000.00" [ref=e1906]
+            - cell "Edit Delete" [ref=e1907]:
+              - button "Edit" [ref=e1908] [cursor=pointer]
+              - button "Delete" [ref=e1909] [cursor=pointer]
+          - row "403 4 2BHK - Normal 986 AED 2,310,000.00 Edit Delete" [ref=e1910]:
+            - cell "403" [ref=e1911]
+            - cell "4" [ref=e1912]
+            - cell "2BHK - Normal" [ref=e1913]
+            - cell "986" [ref=e1914]
+            - cell "AED 2,310,000.00" [ref=e1915]
+            - cell "Edit Delete" [ref=e1916]:
+              - button "Edit" [ref=e1917] [cursor=pointer]
+              - button "Delete" [ref=e1918] [cursor=pointer]
+          - row "404 4 2BHK + Maid 1,508 AED 3,000,000.00 Edit Delete" [ref=e1919]:
+            - cell "404" [ref=e1920]
+            - cell "4" [ref=e1921]
+            - cell "2BHK + Maid" [ref=e1922]
+            - cell "1,508" [ref=e1923]
+            - cell "AED 3,000,000.00" [ref=e1924]
+            - cell "Edit Delete" [ref=e1925]:
+              - button "Edit" [ref=e1926] [cursor=pointer]
+              - button "Delete" [ref=e1927] [cursor=pointer]
+          - row "405 4 2BHK + Maid 1,508 AED 3,000,000.00 Edit Delete" [ref=e1928]:
+            - cell "405" [ref=e1929]
+            - cell "4" [ref=e1930]
+            - cell "2BHK + Maid" [ref=e1931]
+            - cell "1,508" [ref=e1932]
+            - cell "AED 3,000,000.00" [ref=e1933]
+            - cell "Edit Delete" [ref=e1934]:
+              - button "Edit" [ref=e1935] [cursor=pointer]
+              - button "Delete" [ref=e1936] [cursor=pointer]
+          - row "406 4 2BHK - Normal 987 AED 2,483,000.00 Edit Delete" [ref=e1937]:
+            - cell "406" [ref=e1938]
+            - cell "4" [ref=e1939]
+            - cell "2BHK - Normal" [ref=e1940]
+            - cell "987" [ref=e1941]
+            - cell "AED 2,483,000.00" [ref=e1942]
+            - cell "Edit Delete" [ref=e1943]:
+              - button "Edit" [ref=e1944] [cursor=pointer]
+              - button "Delete" [ref=e1945] [cursor=pointer]
+          - row "501 5 3BHK 1,582 AED 3,395,000.00 Edit Delete" [ref=e1946]:
+            - cell "501" [ref=e1947]
+            - cell "5" [ref=e1948]
+            - cell "3BHK" [ref=e1949]
+            - cell "1,582" [ref=e1950]
+            - cell "AED 3,395,000.00" [ref=e1951]
+            - cell "Edit Delete" [ref=e1952]:
+              - button "Edit" [ref=e1953] [cursor=pointer]
+              - button "Delete" [ref=e1954] [cursor=pointer]
+          - row "502 5 3BHK 1,583 AED 3,395,000.00 Edit Delete" [ref=e1955]:
+            - cell "502" [ref=e1956]
+            - cell "5" [ref=e1957]
+            - cell "3BHK" [ref=e1958]
+            - cell "1,583" [ref=e1959]
+            - cell "AED 3,395,000.00" [ref=e1960]
+            - cell "Edit Delete" [ref=e1961]:
+              - button "Edit" [ref=e1962] [cursor=pointer]
+              - button "Delete" [ref=e1963] [cursor=pointer]
+          - row "503 5 2BHK - Normal 954 AED 2,330,000.00 Edit Delete" [ref=e1964]:
+            - cell "503" [ref=e1965]
+            - cell "5" [ref=e1966]
+            - cell "2BHK - Normal" [ref=e1967]
+            - cell "954" [ref=e1968]
+            - cell "AED 2,330,000.00" [ref=e1969]
+            - cell "Edit Delete" [ref=e1970]:
+              - button "Edit" [ref=e1971] [cursor=pointer]
+              - button "Delete" [ref=e1972] [cursor=pointer]
+          - row "504 5 1BHK Sky Loft - Small 880 AED 2,150,000.00 Edit Delete" [ref=e1973]:
+            - cell "504" [ref=e1974]
+            - cell "5" [ref=e1975]
+            - cell "1BHK Sky Loft - Small" [ref=e1976]
+            - cell "880" [ref=e1977]
+            - cell "AED 2,150,000.00" [ref=e1978]
+            - cell "Edit Delete" [ref=e1979]:
+              - button "Edit" [ref=e1980] [cursor=pointer]
+              - button "Delete" [ref=e1981] [cursor=pointer]
+          - row "505 5 1BHK Sky Loft - Large A 1,283 AED 2,199,000.00 Edit Delete" [ref=e1982]:
+            - cell "505" [ref=e1983]
+            - cell "5" [ref=e1984]
+            - cell "1BHK Sky Loft - Large A" [ref=e1985]
+            - cell "1,283" [ref=e1986]
+            - cell "AED 2,199,000.00" [ref=e1987]
+            - cell "Edit Delete" [ref=e1988]:
+              - button "Edit" [ref=e1989] [cursor=pointer]
+              - button "Delete" [ref=e1990] [cursor=pointer]
+          - row "506 5 2BHK + Maid 1,483 AED 3,250,000.00 Edit Delete" [ref=e1991]:
+            - cell "506" [ref=e1992]
+            - cell "5" [ref=e1993]
+            - cell "2BHK + Maid" [ref=e1994]
+            - cell "1,483" [ref=e1995]
+            - cell "AED 3,250,000.00" [ref=e1996]
+            - cell "Edit Delete" [ref=e1997]:
+              - button "Edit" [ref=e1998] [cursor=pointer]
+              - button "Delete" [ref=e1999] [cursor=pointer]
+          - row "507 5 2BHK + Maid 1,483 AED 3,250,000.00 Edit Delete" [ref=e2000]:
+            - cell "507" [ref=e2001]
+            - cell "5" [ref=e2002]
+            - cell "2BHK + Maid" [ref=e2003]
+            - cell "1,483" [ref=e2004]
+            - cell "AED 3,250,000.00" [ref=e2005]
+            - cell "Edit Delete" [ref=e2006]:
+              - button "Edit" [ref=e2007] [cursor=pointer]
+              - button "Delete" [ref=e2008] [cursor=pointer]
+          - row "508 5 1BHK Sky Loft - Large B 1,423 AED 2,304,000.00 Edit Delete" [ref=e2009]:
+            - cell "508" [ref=e2010]
+            - cell "5" [ref=e2011]
+            - cell "1BHK Sky Loft - Large B" [ref=e2012]
+            - cell "1,423" [ref=e2013]
+            - cell "AED 2,304,000.00" [ref=e2014]
+            - cell "Edit Delete" [ref=e2015]:
+              - button "Edit" [ref=e2016] [cursor=pointer]
+              - button "Delete" [ref=e2017] [cursor=pointer]
+          - row "509 5 1BHK Sky Loft - Small 881 AED 2,086,000.00 Edit Delete" [ref=e2018]:
+            - cell "509" [ref=e2019]
+            - cell "5" [ref=e2020]
+            - cell "1BHK Sky Loft - Small" [ref=e2021]
+            - cell "881" [ref=e2022]
+            - cell "AED 2,086,000.00" [ref=e2023]
+            - cell "Edit Delete" [ref=e2024]:
+              - button "Edit" [ref=e2025] [cursor=pointer]
+              - button "Delete" [ref=e2026] [cursor=pointer]
+          - row "510 5 2BHK - Normal 954 AED 2,449,000.00 Edit Delete" [ref=e2027]:
+            - cell "510" [ref=e2028]
+            - cell "5" [ref=e2029]
+            - cell "2BHK - Normal" [ref=e2030]
+            - cell "954" [ref=e2031]
+            - cell "AED 2,449,000.00" [ref=e2032]
+            - cell "Edit Delete" [ref=e2033]:
+              - button "Edit" [ref=e2034] [cursor=pointer]
+              - button "Delete" [ref=e2035] [cursor=pointer]
+          - row "601 6 2BHK + Maid 1,467 AED 2,975,000.00 Edit Delete" [ref=e2036]:
+            - cell "601" [ref=e2037]
+            - cell "6" [ref=e2038]
+            - cell "2BHK + Maid" [ref=e2039]
+            - cell "1,467" [ref=e2040]
+            - cell "AED 2,975,000.00" [ref=e2041]
+            - cell "Edit Delete" [ref=e2042]:
+              - button "Edit" [ref=e2043] [cursor=pointer]
+              - button "Delete" [ref=e2044] [cursor=pointer]
+          - row "602 6 2BHK + Maid 1,468 AED 2,975,000.00 Edit Delete" [ref=e2045]:
+            - cell "602" [ref=e2046]
+            - cell "6" [ref=e2047]
+            - cell "2BHK + Maid" [ref=e2048]
+            - cell "1,468" [ref=e2049]
+            - cell "AED 2,975,000.00" [ref=e2050]
+            - cell "Edit Delete" [ref=e2051]:
+              - button "Edit" [ref=e2052] [cursor=pointer]
+              - button "Delete" [ref=e2053] [cursor=pointer]
+          - row "603 6 2BHK - Normal 986 AED 2,375,000.00 Edit Delete" [ref=e2054]:
+            - cell "603" [ref=e2055]
+            - cell "6" [ref=e2056]
+            - cell "2BHK - Normal" [ref=e2057]
+            - cell "986" [ref=e2058]
+            - cell "AED 2,375,000.00" [ref=e2059]
+            - cell "Edit Delete" [ref=e2060]:
+              - button "Edit" [ref=e2061] [cursor=pointer]
+              - button "Delete" [ref=e2062] [cursor=pointer]
+          - row "604 6 2BHK + Maid 1,508 AED 3,275,000.00 Edit Delete" [ref=e2063]:
+            - cell "604" [ref=e2064]
+            - cell "6" [ref=e2065]
+            - cell "2BHK + Maid" [ref=e2066]
+            - cell "1,508" [ref=e2067]
+            - cell "AED 3,275,000.00" [ref=e2068]
+            - cell "Edit Delete" [ref=e2069]:
+              - button "Edit" [ref=e2070] [cursor=pointer]
+              - button "Delete" [ref=e2071] [cursor=pointer]
+          - row "605 6 2BHK + Maid 1,508 AED 3,275,000.00 Edit Delete" [ref=e2072]:
+            - cell "605" [ref=e2073]
+            - cell "6" [ref=e2074]
+            - cell "2BHK + Maid" [ref=e2075]
+            - cell "1,508" [ref=e2076]
+            - cell "AED 3,275,000.00" [ref=e2077]
+            - cell "Edit Delete" [ref=e2078]:
+              - button "Edit" [ref=e2079] [cursor=pointer]
+              - button "Delete" [ref=e2080] [cursor=pointer]
+          - row "606 6 2BHK - Normal 987 AED 2,575,000.00 Edit Delete" [ref=e2081]:
+            - cell "606" [ref=e2082]
+            - cell "6" [ref=e2083]
+            - cell "2BHK - Normal" [ref=e2084]
+            - cell "987" [ref=e2085]
+            - cell "AED 2,575,000.00" [ref=e2086]
+            - cell "Edit Delete" [ref=e2087]:
+              - button "Edit" [ref=e2088] [cursor=pointer]
+              - button "Delete" [ref=e2089] [cursor=pointer]
+          - row "701 7 3BHK 1,582 AED 3,499,000.00 Edit Delete" [ref=e2090]:
+            - cell "701" [ref=e2091]
+            - cell "7" [ref=e2092]
+            - cell "3BHK" [ref=e2093]
+            - cell "1,582" [ref=e2094]
+            - cell "AED 3,499,000.00" [ref=e2095]
+            - cell "Edit Delete" [ref=e2096]:
+              - button "Edit" [ref=e2097] [cursor=pointer]
+              - button "Delete" [ref=e2098] [cursor=pointer]
+          - row "702 7 3BHK 1,583 AED 3,499,000.00 Edit Delete" [ref=e2099]:
+            - cell "702" [ref=e2100]
+            - cell "7" [ref=e2101]
+            - cell "3BHK" [ref=e2102]
+            - cell "1,583" [ref=e2103]
+            - cell "AED 3,499,000.00" [ref=e2104]
+            - cell "Edit Delete" [ref=e2105]:
+              - button "Edit" [ref=e2106] [cursor=pointer]
+              - button "Delete" [ref=e2107] [cursor=pointer]
+          - row "703 7 2BHK - Normal 954 AED 2,449,000.00 Edit Delete" [ref=e2108]:
+            - cell "703" [ref=e2109]
+            - cell "7" [ref=e2110]
+            - cell "2BHK - Normal" [ref=e2111]
+            - cell "954" [ref=e2112]
+            - cell "AED 2,449,000.00" [ref=e2113]
+            - cell "Edit Delete" [ref=e2114]:
+              - button "Edit" [ref=e2115] [cursor=pointer]
+              - button "Delete" [ref=e2116] [cursor=pointer]
+          - row "704 7 1BHK Sky Loft - Small 880 AED 2,139,000.00 Edit Delete" [ref=e2117]:
+            - cell "704" [ref=e2118]
+            - cell "7" [ref=e2119]
+            - cell "1BHK Sky Loft - Small" [ref=e2120]
+            - cell "880" [ref=e2121]
+            - cell "AED 2,139,000.00" [ref=e2122]
+            - cell "Edit Delete" [ref=e2123]:
+              - button "Edit" [ref=e2124] [cursor=pointer]
+              - button "Delete" [ref=e2125] [cursor=pointer]
+          - row "705 7 1BHK Sky Loft - Large A 1,283 AED 2,342,000.00 Edit Delete" [ref=e2126]:
+            - cell "705" [ref=e2127]
+            - cell "7" [ref=e2128]
+            - cell "1BHK Sky Loft - Large A" [ref=e2129]
+            - cell "1,283" [ref=e2130]
+            - cell "AED 2,342,000.00" [ref=e2131]
+            - cell "Edit Delete" [ref=e2132]:
+              - button "Edit" [ref=e2133] [cursor=pointer]
+              - button "Delete" [ref=e2134] [cursor=pointer]
+          - row "706 7 2BHK + Maid 1,483 AED 3,475,000.00 Edit Delete" [ref=e2135]:
+            - cell "706" [ref=e2136]
+            - cell "7" [ref=e2137]
+            - cell "2BHK + Maid" [ref=e2138]
+            - cell "1,483" [ref=e2139]
+            - cell "AED 3,475,000.00" [ref=e2140]
+            - cell "Edit Delete" [ref=e2141]:
+              - button "Edit" [ref=e2142] [cursor=pointer]
+              - button "Delete" [ref=e2143] [cursor=pointer]
+          - row "707 7 2BHK + Maid 1,483 AED 3,475,000.00 Edit Delete" [ref=e2144]:
+            - cell "707" [ref=e2145]
+            - cell "7" [ref=e2146]
+            - cell "2BHK + Maid" [ref=e2147]
+            - cell "1,483" [ref=e2148]
+            - cell "AED 3,475,000.00" [ref=e2149]
+            - cell "Edit Delete" [ref=e2150]:
+              - button "Edit" [ref=e2151] [cursor=pointer]
+              - button "Delete" [ref=e2152] [cursor=pointer]
+          - row "708 7 1BHK Sky Loft - Large B 1,422 AED 2,378,970.00 Edit Delete" [ref=e2153]:
+            - cell "708" [ref=e2154]
+            - cell "7" [ref=e2155]
+            - cell "1BHK Sky Loft - Large B" [ref=e2156]
+            - cell "1,422" [ref=e2157]
+            - cell "AED 2,378,970.00" [ref=e2158]
+            - cell "Edit Delete" [ref=e2159]:
+              - button "Edit" [ref=e2160] [cursor=pointer]
+              - button "Delete" [ref=e2161] [cursor=pointer]
+          - row "709 7 1BHK Sky Loft - Small 881 AED 2,178,000.00 Edit Delete" [ref=e2162]:
+            - cell "709" [ref=e2163]
+            - cell "7" [ref=e2164]
+            - cell "1BHK Sky Loft - Small" [ref=e2165]
+            - cell "881" [ref=e2166]
+            - cell "AED 2,178,000.00" [ref=e2167]
+            - cell "Edit Delete" [ref=e2168]:
+              - button "Edit" [ref=e2169] [cursor=pointer]
+              - button "Delete" [ref=e2170] [cursor=pointer]
+          - row "710 7 2BHK - Normal 954 AED 2,380,500.00 Edit Delete" [ref=e2171]:
+            - cell "710" [ref=e2172]
+            - cell "7" [ref=e2173]
+            - cell "2BHK - Normal" [ref=e2174]
+            - cell "954" [ref=e2175]
+            - cell "AED 2,380,500.00" [ref=e2176]
+            - cell "Edit Delete" [ref=e2177]:
+              - button "Edit" [ref=e2178] [cursor=pointer]
+              - button "Delete" [ref=e2179] [cursor=pointer]
+          - row "801 8 2BHK + Maid 1,467 AED 3,099,000.00 Edit Delete" [ref=e2180]:
+            - cell "801" [ref=e2181]
+            - cell "8" [ref=e2182]
+            - cell "2BHK + Maid" [ref=e2183]
+            - cell "1,467" [ref=e2184]
+            - cell "AED 3,099,000.00" [ref=e2185]
+            - cell "Edit Delete" [ref=e2186]:
+              - button "Edit" [ref=e2187] [cursor=pointer]
+              - button "Delete" [ref=e2188] [cursor=pointer]
+          - row "802 8 2BHK + Maid 1,468 AED 3,099,000.00 Edit Delete" [ref=e2189]:
+            - cell "802" [ref=e2190]
+            - cell "8" [ref=e2191]
+            - cell "2BHK + Maid" [ref=e2192]
+            - cell "1,468" [ref=e2193]
+            - cell "AED 3,099,000.00" [ref=e2194]
+            - cell "Edit Delete" [ref=e2195]:
+              - button "Edit" [ref=e2196] [cursor=pointer]
+              - button "Delete" [ref=e2197] [cursor=pointer]
+          - row "803 8 2BHK - Normal 986 AED 2,525,000.00 Edit Delete" [ref=e2198]:
+            - cell "803" [ref=e2199]
+            - cell "8" [ref=e2200]
+            - cell "2BHK - Normal" [ref=e2201]
+            - cell "986" [ref=e2202]
+            - cell "AED 2,525,000.00" [ref=e2203]
+            - cell "Edit Delete" [ref=e2204]:
+              - button "Edit" [ref=e2205] [cursor=pointer]
+              - button "Delete" [ref=e2206] [cursor=pointer]
+          - row "805 8 2BHK - Normal 987 AED 2,407,500.00 Edit Delete" [ref=e2207]:
+            - cell "805" [ref=e2208]
+            - cell "8" [ref=e2209]
+            - cell "2BHK - Normal" [ref=e2210]
+            - cell "987" [ref=e2211]
+            - cell "AED 2,407,500.00" [ref=e2212]
+            - cell "Edit Delete" [ref=e2213]:
+              - button "Edit" [ref=e2214] [cursor=pointer]
+              - button "Delete" [ref=e2215] [cursor=pointer]
+          - row "PH 8 4BHK Penthouse 3,047 AED 9,613,000.00 Edit Delete" [ref=e2216]:
+            - cell "PH" [ref=e2217]
+            - cell "8" [ref=e2218]
+            - cell "4BHK Penthouse" [ref=e2219]
+            - cell "3,047" [ref=e2220]
+            - cell "AED 9,613,000.00" [ref=e2221]
+            - cell "Edit Delete" [ref=e2222]:
+              - button "Edit" [ref=e2223] [cursor=pointer]
+              - button "Delete" [ref=e2224] [cursor=pointer]

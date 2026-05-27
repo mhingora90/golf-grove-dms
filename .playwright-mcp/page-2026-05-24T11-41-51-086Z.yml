@@ -1,0 +1,221 @@
+- generic [ref=e19]:
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e22]: Active Project
+      - generic [ref=e23]: 241 Waterside
+    - generic [ref=e24]:
+      - generic [ref=e25]: MH
+      - generic [ref=e26]:
+        - generic [ref=e27]: Mohammed Hingora
+        - generic [ref=e28]: developer
+    - generic [ref=e29]: Main
+    - generic [ref=e30] [cursor=pointer]:
+      - img [ref=e31]
+      - text: Dashboard
+    - generic [ref=e36]: Document Control
+    - generic [ref=e37] [cursor=pointer]:
+      - img [ref=e38]
+      - text: Drawing Register
+    - generic [ref=e40] [cursor=pointer]:
+      - img [ref=e41]
+      - text: Submittals (DSUB)
+    - generic [ref=e44] [cursor=pointer]:
+      - img [ref=e45]
+      - text: Submittal Register
+    - generic [ref=e47]: Site
+    - generic [ref=e48] [cursor=pointer]:
+      - img [ref=e49]
+      - text: Inspection Requests
+    - generic [ref=e52] [cursor=pointer]:
+      - img [ref=e53]
+      - text: NCRs
+    - generic [ref=e56] [cursor=pointer]:
+      - img [ref=e57]
+      - text: RFIs
+    - generic [ref=e61] [cursor=pointer]:
+      - img [ref=e62]
+      - text: Transmittals
+    - generic [ref=e64] [cursor=pointer]:
+      - img [ref=e65]
+      - text: Method Statements
+    - generic [ref=e68] [cursor=pointer]:
+      - img [ref=e69]
+      - text: Correspondence
+    - generic [ref=e72] [cursor=pointer]:
+      - img [ref=e73]
+      - text: Punch List
+      - generic [ref=e76]: "0"
+    - generic [ref=e77]: Finance
+    - generic [ref=e78] [cursor=pointer]:
+      - img [ref=e79]
+      - text: Finance Overview
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: Payment Certificates
+    - generic [ref=e86] [cursor=pointer]:
+      - img [ref=e87]
+      - text: BOQ Setup
+    - generic [ref=e90]:
+      - generic [ref=e91]: Sales
+      - generic [ref=e92] [cursor=pointer]:
+        - img [ref=e93]
+        - text: CRM Home
+      - generic [ref=e98] [cursor=pointer]:
+        - img [ref=e99]
+        - text: Leads
+        - generic [ref=e103]: "0"
+      - generic [ref=e104] [cursor=pointer]:
+        - img [ref=e105]
+        - text: Unit Setup
+      - generic [ref=e108] [cursor=pointer]:
+        - img [ref=e109]
+        - text: Unit Register
+      - generic [ref=e112] [cursor=pointer]:
+        - img [ref=e113]
+        - text: Sales Revenue
+    - generic [ref=e116]: Admin
+    - generic [ref=e117] [cursor=pointer]:
+      - img [ref=e118]
+      - text: Subcontractors
+    - generic [ref=e124] [cursor=pointer]:
+      - img [ref=e125]
+      - text: User Management
+    - button "Sign Out" [ref=e129] [cursor=pointer]
+  - generic [ref=e130]:
+    - generic [ref=e131]:
+      - generic [ref=e132]:
+        - generic [ref=e133]: Sales Revenue
+        - generic [ref=e134]: Sunday, 24 May 2026
+      - generic [ref=e136] [cursor=pointer]:
+        - generic [ref=e138]: 241 Waterside
+        - generic [ref=e139]: ▼
+      - generic [ref=e142]: developer
+    - generic [ref=e143]:
+      - generic [ref=e311]:
+        - generic [ref=e312]:
+          - generic [ref=e313]: "63"
+          - generic [ref=e314]: Total Units
+          - generic [ref=e315]: 22 2BHK + Maid · 16 2BHK - Normal · 8 3BHK · 8 1BHK Sky Loft - Small · 4 1BHK Sky Loft - Large A · 4 1BHK Sky Loft - Large B · 1 4BHK Penthouse
+        - generic [ref=e316]:
+          - generic [ref=e317]: "21"
+          - generic [ref=e318]: Sold
+          - generic [ref=e319]: 33.3% of total
+        - generic [ref=e320]:
+          - generic [ref=e321]: "0"
+          - generic [ref=e322]: Reserved
+          - generic [ref=e323]: SPA in progress
+        - generic [ref=e324]:
+          - generic [ref=e325]: "40"
+          - generic [ref=e326]: Available
+          - generic [ref=e327]: 63.5% remaining
+        - generic [ref=e328]:
+          - generic [ref=e329]: 24.6K
+          - generic [ref=e330]: Sqft Sold
+          - generic [ref=e331]: of 81.8K sqft total
+      - generic [ref=e332]:
+        - generic [ref=e333]:
+          - generic [ref=e334]: AED 175.21M
+          - generic [ref=e335]: Total GDV (Listed)
+          - generic [ref=e336]: Gross Development Value
+        - generic [ref=e337]:
+          - generic [ref=e338]: AED 0.00
+          - generic [ref=e339]: Total Contracted Revenue
+          - generic [ref=e340]: 21 units (sold + reserved)
+        - generic [ref=e341]:
+          - generic [ref=e342]: AED 118.77M
+          - generic [ref=e343]: Remaining GDV (Unsold)
+          - generic [ref=e344]: 40 available units
+      - generic [ref=e346]:
+        - generic [ref=e347]: Expected Revenue by Month (Payment Plan)
+        - generic [ref=e348]: No payment milestones with due dates set yet.
+      - generic [ref=e349]:
+        - generic [ref=e351]:
+          - generic [ref=e352]: Commission Summary
+          - generic [ref=e353]:
+            - generic [ref=e354]: Total Commission Payable
+            - generic [ref=e355]: AED 0.00
+          - generic [ref=e356]:
+            - generic [ref=e357]: Avg Commission Rate
+            - generic [ref=e358]: 0.00%
+          - generic [ref=e359]:
+            - generic [ref=e360]: Units with broker
+            - generic [ref=e361]: 0 of 21 contracted
+        - generic [ref=e363]:
+          - generic [ref=e364]: Discount Summary
+          - generic [ref=e365]:
+            - generic [ref=e366]: Total Discount Given
+            - generic [ref=e367]: AED 0.00
+          - generic [ref=e368]:
+            - generic [ref=e369]: Avg Discount Rate
+            - generic [ref=e370]: 0.00%
+          - generic [ref=e371]:
+            - generic [ref=e372]: Units with discount
+            - generic [ref=e373]: 0 of 21 contracted
+      - generic [ref=e375]:
+        - generic [ref=e376]: Revenue by Unit Type
+        - table [ref=e378]:
+          - rowgroup [ref=e379]:
+            - row "Type Total Sold Avg Sqft Avg Sold Price Total Revenue" [ref=e380]:
+              - columnheader "Type" [ref=e381]
+              - columnheader "Total" [ref=e382]
+              - columnheader "Sold" [ref=e383]
+              - columnheader "Avg Sqft" [ref=e384]
+              - columnheader "Avg Sold Price" [ref=e385]
+              - columnheader "Total Revenue" [ref=e386]
+          - rowgroup [ref=e387]:
+            - row "1BHK Sky Loft - Large A 4 2 1283 sqft AED 0.00 —" [ref=e388]:
+              - cell "1BHK Sky Loft - Large A" [ref=e389]
+              - cell "4" [ref=e390]
+              - cell "2" [ref=e391]
+              - cell "1283 sqft" [ref=e392]
+              - cell "AED 0.00" [ref=e393]
+              - cell "—" [ref=e394]
+            - row "1BHK Sky Loft - Large B 4 4 1423 sqft AED 0.00 —" [ref=e395]:
+              - cell "1BHK Sky Loft - Large B" [ref=e396]
+              - cell "4" [ref=e397]
+              - cell "4" [ref=e398]
+              - cell "1423 sqft" [ref=e399]
+              - cell "AED 0.00" [ref=e400]
+              - cell "—" [ref=e401]
+            - row "1BHK Sky Loft - Small 8 5 881 sqft AED 0.00 —" [ref=e402]:
+              - cell "1BHK Sky Loft - Small" [ref=e403]
+              - cell "8" [ref=e404]
+              - cell "5" [ref=e405]
+              - cell "881 sqft" [ref=e406]
+              - cell "AED 0.00" [ref=e407]
+              - cell "—" [ref=e408]
+            - row "2BHK + Maid 22 3 1484 sqft AED 0.00 —" [ref=e409]:
+              - cell "2BHK + Maid" [ref=e410]
+              - cell "22" [ref=e411]
+              - cell "3" [ref=e412]
+              - cell "1484 sqft" [ref=e413]
+              - cell "AED 0.00" [ref=e414]
+              - cell "—" [ref=e415]
+            - row "2BHK - Normal 16 6 970 sqft AED 0.00 —" [ref=e416]:
+              - cell "2BHK - Normal" [ref=e417]
+              - cell "16" [ref=e418]
+              - cell "6" [ref=e419]
+              - cell "970 sqft" [ref=e420]
+              - cell "AED 0.00" [ref=e421]
+              - cell "—" [ref=e422]
+            - row "3BHK 8 1 1583 sqft AED 0.00 —" [ref=e423]:
+              - cell "3BHK" [ref=e424]
+              - cell "8" [ref=e425]
+              - cell "1" [ref=e426]
+              - cell "1583 sqft" [ref=e427]
+              - cell "AED 0.00" [ref=e428]
+              - cell "—" [ref=e429]
+            - row "4BHK Penthouse 1 0 3047 sqft — —" [ref=e430]:
+              - cell "4BHK Penthouse" [ref=e431]
+              - cell "1" [ref=e432]
+              - cell "0" [ref=e433]
+              - cell "3047 sqft" [ref=e434]
+              - cell "—" [ref=e435]
+              - cell "—" [ref=e436]
+            - row "Total 63 21 1298 sqft — —" [ref=e437]:
+              - cell "Total" [ref=e438]
+              - cell "63" [ref=e439]
+              - cell "21" [ref=e440]
+              - cell "1298 sqft" [ref=e441]
+              - cell "—" [ref=e442]
+              - cell "—" [ref=e443]

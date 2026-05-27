@@ -1,0 +1,133 @@
+- generic [ref=e33]:
+  - generic [ref=e34]:
+    - generic [ref=e35]:
+      - generic [ref=e36]: Active Project
+      - generic [ref=e37]: Golf Grove – Residential Building (B+G+P+7+Roof)
+    - generic [ref=e38]:
+      - generic [ref=e39]: MH
+      - generic [ref=e40]:
+        - generic [ref=e41]: Mohammed Hingora
+        - generic [ref=e42]: developer
+    - generic [ref=e43]: Main
+    - generic [ref=e44] [cursor=pointer]:
+      - img [ref=e45]
+      - text: Dashboard
+    - generic [ref=e50]: Document Control
+    - generic [ref=e51] [cursor=pointer]:
+      - img [ref=e52]
+      - text: Drawing Register
+    - generic [ref=e54] [cursor=pointer]:
+      - img [ref=e55]
+      - text: Submittals (DSUB)
+    - generic [ref=e58] [cursor=pointer]:
+      - img [ref=e59]
+      - text: Submittal Register
+    - generic [ref=e61]: Site
+    - generic [ref=e62] [cursor=pointer]:
+      - img [ref=e63]
+      - text: Inspection Requests
+    - generic [ref=e66] [cursor=pointer]:
+      - img [ref=e67]
+      - text: NCRs
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: RFIs
+    - generic [ref=e75] [cursor=pointer]:
+      - img [ref=e76]
+      - text: Transmittals
+    - generic [ref=e78] [cursor=pointer]:
+      - img [ref=e79]
+      - text: Method Statements
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: Correspondence
+    - generic [ref=e86] [cursor=pointer]:
+      - img [ref=e87]
+      - text: Punch List
+      - generic [ref=e90]: "0"
+    - generic [ref=e91]: Finance
+    - generic [ref=e92] [cursor=pointer]:
+      - img [ref=e93]
+      - text: Finance Overview
+    - generic [ref=e96] [cursor=pointer]:
+      - img [ref=e97]
+      - text: Payment Certificates
+    - generic [ref=e100] [cursor=pointer]:
+      - img [ref=e101]
+      - text: BOQ Setup
+    - generic [ref=e104]:
+      - generic [ref=e105]: Sales
+      - generic [ref=e106] [cursor=pointer]:
+        - img [ref=e107]
+        - text: CRM
+        - generic [ref=e111]: "0"
+      - generic [ref=e112] [cursor=pointer]:
+        - img [ref=e113]
+        - text: Unit Setup
+      - generic [ref=e116] [cursor=pointer]:
+        - img [ref=e117]
+        - text: Unit Register
+      - generic [ref=e120] [cursor=pointer]:
+        - img [ref=e121]
+        - text: Sales Revenue
+    - generic [ref=e124]: Admin
+    - generic [ref=e125] [cursor=pointer]:
+      - img [ref=e126]
+      - text: Subcontractors
+    - generic [ref=e132] [cursor=pointer]:
+      - img [ref=e133]
+      - text: User Management
+    - button "Sign Out" [ref=e137] [cursor=pointer]
+  - generic [ref=e138]:
+    - generic [ref=e139]:
+      - generic [ref=e140]:
+        - generic [ref=e141]: Finance Overview
+        - generic [ref=e142]: Saturday, 16 May 2026
+      - generic [ref=e144] [cursor=pointer]:
+        - generic [ref=e146]: 241 Waterside
+        - generic [ref=e147]: ▼
+      - generic [ref=e150]: developer
+    - generic [ref=e151]:
+      - generic [ref=e152]:
+        - generic [ref=e153]:
+          - generic "AED 0.00" [ref=e154]
+          - generic [ref=e155]: Contract Sum
+        - generic [ref=e156]:
+          - generic "AED 0.00" [ref=e157]
+          - generic [ref=e158]: Total Certified (Gross)
+        - generic [ref=e159]:
+          - generic "AED 0.00" [ref=e160]
+          - generic [ref=e161]: Total Paid (Net + Mob. Advance)
+        - generic [ref=e162]:
+          - generic "AED 0.00" [ref=e163]
+          - generic [ref=e164]: Outstanding (Certified–Paid)
+        - generic [ref=e165]:
+          - generic "AED 0.00" [ref=e166]
+          - generic [ref=e167]: Retention Held
+        - generic [ref=e168]:
+          - generic [ref=e169]: 0.0%
+          - generic [ref=e170]: "% Certified vs Contract"
+      - generic [ref=e171]:
+        - generic [ref=e172]:
+          - generic [ref=e173]: Contract Progress
+          - generic [ref=e174]: AED 0.00 of AED 0.00
+        - generic [ref=e176]:
+          - generic [ref=e177]: "0"
+          - generic [ref=e178]: AED 0.00 Contract Sum
+      - generic [ref=e179]:
+        - generic [ref=e180]:
+          - generic [ref=e181]: Retention
+          - generic [ref=e182]:
+            - generic [ref=e183]:
+              - generic [ref=e184]: Withheld to Date
+              - generic [ref=e185]: AED 0.00
+            - generic [ref=e186]:
+              - generic [ref=e187]: On Practical Completion (50%)
+              - generic [ref=e188]: AED 0.00
+            - generic [ref=e189]:
+              - generic [ref=e190]: On Defects Liability (50%)
+              - generic [ref=e191]: AED 0.00
+        - generic [ref=e192]:
+          - generic [ref=e193]: Mobilisation Advance
+          - generic [ref=e194]: No mobilisation advance recorded
+      - generic [ref=e195]: No certified or paid certificates yet.

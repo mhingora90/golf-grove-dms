@@ -1,0 +1,5 @@
+[     916ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[     916ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/#crm:0
+[  208833ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/crm_leads?select=*&project_id=eq.00000000-0000-0000-0000-000000000002&order=created_at.desc&offset=0&limit=25:0
+[  215969ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/crm_leads?select=*&project_id=eq.00000000-0000-0000-0000-000000000002&order=created_at.desc&offset=0&limit=25:0
+[  219242ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/crm_leads?select=*&project_id=eq.00000000-0000-0000-0000-000000000002&order=created_at.desc&offset=0&limit=25:0

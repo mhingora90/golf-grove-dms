@@ -1,0 +1,213 @@
+<style>
+  :root {
+    --bg1:#1a1916;--bg2:#201f1c;--bg3:#272521;--bg4:#2e2c28;
+    --border:#3a3833;--border2:#46433e;
+    --charcoal:#f0ece4;--text2:#c8c3b8;--text3:#8a8579;
+    --amber:#C4863A;--amber-light:#FAC775;--amber-bg:rgba(196,134,58,.1);
+    --green:#27ae60;
+    --font:'Plus Jakarta Sans',system-ui,sans-serif;
+    --radius:8px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg1);color:var(--charcoal);font-family:var(--font);}
+  .section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+  .section-label::after{content:'';flex:1;height:0.5px;background:var(--border);}
+  .shell{border:0.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:6px;}
+  .flow-arrow{text-align:center;font-size:18px;color:var(--text3);margin:6px 0;line-height:1;}
+  .flow-note{text-align:center;font-size:10px;color:var(--text3);margin-bottom:12px;}
+
+  /* Topbar */
+  .topbar{height:44px;display:flex;align-items:center;padding:0 12px;gap:8px;background:var(--bg2);border-bottom:0.5px solid var(--border);}
+  .logo{font-weight:800;font-size:13px;color:var(--amber-light);white-space:nowrap;}
+  .topbar-divider{width:0.5px;height:16px;background:var(--border2);flex-shrink:0;}
+  .topbar-spacer{flex:1;}
+  .avatar{width:24px;height:24px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;}
+  .btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg3);color:var(--charcoal);font:600 11px var(--font);cursor:pointer;}
+  .btn-primary{background:var(--amber);border-color:var(--amber);color:#fff;}
+
+  /* Project switcher pill */
+  .proj-switcher{
+    display:flex;align-items:center;gap:5px;
+    background:var(--bg3);border:0.5px solid var(--border2);
+    border-radius:6px;padding:4px 8px;cursor:pointer;
+    font-size:11px;font-weight:700;color:var(--charcoal);
+    white-space:nowrap;flex-shrink:0;
+    transition:border-color .15s;
+  }
+  .proj-switcher:hover{border-color:var(--amber);}
+  .proj-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;}
+  .proj-caret{font-size:8px;color:var(--text3);margin-left:2px;}
+
+  /* Module nav — exactly like current app */
+  .nav-items{display:flex;gap:1px;}
+  .nav-item{padding:4px 7px;border-radius:5px;font-size:10px;font-weight:600;color:var(--text3);}
+  .nav-item.active{background:var(--bg3);color:var(--charcoal);}
+
+  /* Project grid */
+  .page{padding:16px;}
+  .page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px;}
+  .page-title{font-size:16px;font-weight:800;}
+  .page-sub{font-size:10px;color:var(--text3);margin-top:2px;}
+  .proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+  .proj-card{background:var(--bg3);border:0.5px solid var(--border2);border-radius:8px;overflow:hidden;cursor:pointer;}
+  .proj-card-top{padding:10px 11px 9px;border-bottom:0.5px solid var(--border);}
+  .proj-icon{font-size:16px;margin-bottom:5px;}
+  .proj-name{font-size:11px;font-weight:700;}
+  .proj-status{font-size:9px;color:var(--green);font-weight:600;margin-top:1px;display:flex;align-items:center;gap:3px;}
+  .proj-status::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);}
+  .proj-card-bottom{padding:6px 11px;display:flex;align-items:center;gap:5px;}
+  .proj-users{display:flex;}
+  .proj-udot{width:16px;height:16px;border-radius:50%;background:var(--bg4);border:1.5px solid var(--bg2);font-size:7px;font-weight:700;color:var(--text3);display:flex;align-items:center;justify-content:center;margin-left:-4px;}
+  .proj-udot:first-child{margin-left:0;}
+  .proj-manage{margin-left:auto;font-size:9px;color:var(--text3);padding:2px 6px;border:0.5px solid var(--border2);border-radius:20px;}
+  .proj-new{background:var(--bg3);border:0.5px dashed var(--border2);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:14px 8px;cursor:pointer;}
+  .proj-new-icon{font-size:16px;color:var(--text3);}
+  .proj-new-label{font-size:9px;font-weight:600;color:var(--text3);}
+
+  /* Current app content */
+  .content{padding:12px 14px;background:var(--bg1);}
+  .mod-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .mod-title{font-size:14px;font-weight:800;}
+  .mini-table{width:100%;border-collapse:collapse;font-size:10px;}
+  .mini-table th{padding:5px 8px;background:var(--bg3);color:var(--text3);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.04em;text-align:left;border-bottom:0.5px solid var(--border);}
+  .mini-table td{padding:5px 8px;border-bottom:0.5px solid var(--border);color:var(--text2);}
+  .badge{display:inline-block;padding:1px 5px;border-radius:20px;font-size:9px;font-weight:600;}
+  .badge-warn{background:rgba(196,134,58,.15);color:var(--amber-light);}
+  .badge-info{background:rgba(41,182,246,.12);color:#63d3fd;}
+  .badge-success{background:rgba(39,174,96,.12);color:#6fcf97;}
+
+  /* Dropdown mockup */
+  .dropdown{
+    position:absolute;top:38px;left:0;
+    background:var(--bg2);border:0.5px solid var(--border2);border-radius:8px;
+    padding:5px;min-width:170px;z-index:10;
+    box-shadow:0 8px 24px rgba(0,0,0,.4);
+  }
+  .dd-item{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:5px;font-size:11px;cursor:pointer;color:var(--text2);}
+  .dd-item:hover{background:var(--bg3);}
+  .dd-item.active{color:var(--charcoal);font-weight:700;}
+  .dd-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .dd-dot.on{background:var(--amber);}
+  .dd-dot.off{background:var(--border2);}
+  .dd-divider{height:0.5px;background:var(--border);margin:4px 0;}
+  .dd-new{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:5px;font-size:10px;cursor:pointer;color:var(--amber);font-weight:600;}
+  .dd-checkmark{margin-left:auto;font-size:10px;color:var(--amber);}
+  .rel{position:relative;}
+</style>
+
+<h2 style="font-size:16px;font-weight:800;margin-bottom:3px;">Design v2 — Project Switcher in Topbar</h2>
+<p style="font-size:11px;color:var(--text3);margin-bottom:16px;">Grid to select on login. Switcher in topbar to jump between projects without leaving current module.</p>
+
+<!-- SCREEN 1 -->
+<div class="section-label">Screen 1 — Project Grid (login / "All Projects")</div>
+<div class="shell">
+  <div class="topbar">
+    <span class="logo">Golf Grove DMS</span>
+    <div class="topbar-spacer"></div>
+    <button class="btn btn-primary" style="font-size:10px;padding:4px 10px;">+ New Project</button>
+    <div class="avatar">MH</div>
+  </div>
+  <div class="page">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Projects</div>
+        <div class="page-sub">Select a project to open it</div>
+      </div>
+    </div>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <div class="proj-card-top">
+          <div class="proj-icon">🏗️</div>
+          <div class="proj-name">Golf Grove – DPC</div>
+          <div class="proj-status">Active</div>
+        </div>
+        <div class="proj-card-bottom">
+          <div class="proj-users">
+            <div class="proj-udot">MH</div><div class="proj-udot">AK</div><div class="proj-udot">+3</div>
+          </div>
+          <div class="proj-manage">Manage users</div>
+        </div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-card-top">
+          <div class="proj-icon">🏢</div>
+          <div class="proj-name">Palm Grove Tower</div>
+          <div class="proj-status">Active</div>
+        </div>
+        <div class="proj-card-bottom">
+          <div class="proj-users">
+            <div class="proj-udot">SA</div><div class="proj-udot">+1</div>
+          </div>
+          <div class="proj-manage">Manage users</div>
+        </div>
+      </div>
+      <div class="proj-new">
+        <div class="proj-new-icon">＋</div>
+        <div class="proj-new-label">New Project</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flow-arrow">↓</div>
+<div class="flow-note">Click "Golf Grove – DPC" → enters project, UI unchanged</div>
+
+<!-- SCREEN 2: Inside project, unchanged UI -->
+<div class="section-label">Screen 2 — Inside Project (current app UI, unchanged)</div>
+<div class="shell">
+  <div class="topbar">
+    <span class="logo">Golf Grove DMS</span>
+    <div class="topbar-divider"></div>
+    <!-- Project switcher replaces static name -->
+    <div class="rel">
+      <div class="proj-switcher">
+        <div class="proj-dot"></div>
+        Golf Grove – DPC
+        <span class="proj-caret">▾</span>
+      </div>
+      <!-- Dropdown shown open for illustration -->
+      <div class="dropdown">
+        <div class="dd-item active"><div class="dd-dot on"></div>Golf Grove – DPC<span class="dd-checkmark">✓</span></div>
+        <div class="dd-item"><div class="dd-dot off"></div>Palm Grove Tower</div>
+        <div class="dd-divider"></div>
+        <div class="dd-new">+ New Project</div>
+      </div>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="nav-items">
+      <div class="nav-item">BOQ</div>
+      <div class="nav-item">IPC</div>
+      <div class="nav-item">Sub</div>
+      <div class="nav-item active">CRM</div>
+      <div class="nav-item">IR</div>
+      <div class="nav-item">NCR</div>
+      <div class="nav-item">Sales</div>
+    </div>
+    <div class="topbar-spacer"></div>
+    <div class="avatar">MH</div>
+  </div>
+  <div class="content">
+    <div class="mod-header">
+      <div class="mod-title">CRM</div>
+      <span style="font-size:10px;color:var(--text3)">142 leads</span>
+    </div>
+    <table class="mini-table">
+      <thead>
+        <tr><th>Name</th><th>Company</th><th>Stage</th><th>Assigned</th><th>Age</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Ahmed Al Rashid</td><td>Emirates Realty</td><td><span class="badge badge-warn">New Lead</span></td><td>Hamad</td><td>2d</td></tr>
+        <tr><td>Sara Al Mansoori</td><td>—</td><td><span class="badge badge-info">Contacted</span></td><td>Yousef</td><td>5d</td></tr>
+        <tr><td>Khalid Ibrahim</td><td>Gulf Properties</td><td><span class="badge badge-success">Site Visit</span></td><td>Hamad</td><td>8d</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div style="margin-top:14px;padding:11px 13px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:8px;font-size:11px;color:var(--text2);line-height:1.65;">
+  <strong style="color:var(--amber-light);">Switcher behaviour</strong><br>
+  • Click switcher → dropdown lists your assigned projects + "All Projects" link back to grid<br>
+  • Pick different project → reloads current module scoped to new project<br>
+  • "+ New Project" in dropdown → developer only (hidden for other roles)<br>
+  • Module tabs, layout, all interactions <strong style="color:var(--charcoal)">exactly unchanged</strong> from current app
+</div>

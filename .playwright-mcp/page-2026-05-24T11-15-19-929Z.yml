@@ -1,0 +1,756 @@
+- generic [ref=e49]:
+  - generic [ref=e50]:
+    - generic [ref=e51]:
+      - generic [ref=e52]: Active Project
+      - generic [ref=e53]: 241 Waterside
+    - generic [ref=e54]:
+      - generic [ref=e55]: MH
+      - generic [ref=e56]:
+        - generic [ref=e57]: Mohammed Hingora
+        - generic [ref=e58]: developer
+    - generic [ref=e59]: Main
+    - generic [ref=e60] [cursor=pointer]:
+      - img [ref=e61]
+      - text: Dashboard
+    - generic [ref=e66]: Document Control
+    - generic [ref=e67] [cursor=pointer]:
+      - img [ref=e68]
+      - text: Drawing Register
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: Submittals (DSUB)
+    - generic [ref=e74] [cursor=pointer]:
+      - img [ref=e75]
+      - text: Submittal Register
+    - generic [ref=e77]: Site
+    - generic [ref=e78] [cursor=pointer]:
+      - img [ref=e79]
+      - text: Inspection Requests
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: NCRs
+    - generic [ref=e86] [cursor=pointer]:
+      - img [ref=e87]
+      - text: RFIs
+    - generic [ref=e91] [cursor=pointer]:
+      - img [ref=e92]
+      - text: Transmittals
+    - generic [ref=e94] [cursor=pointer]:
+      - img [ref=e95]
+      - text: Method Statements
+    - generic [ref=e98] [cursor=pointer]:
+      - img [ref=e99]
+      - text: Correspondence
+    - generic [ref=e102] [cursor=pointer]:
+      - img [ref=e103]
+      - text: Punch List
+      - generic [ref=e106]: "0"
+    - generic [ref=e107]: Finance
+    - generic [ref=e108] [cursor=pointer]:
+      - img [ref=e109]
+      - text: Finance Overview
+    - generic [ref=e112] [cursor=pointer]:
+      - img [ref=e113]
+      - text: Payment Certificates
+    - generic [ref=e116] [cursor=pointer]:
+      - img [ref=e117]
+      - text: BOQ Setup
+    - generic [ref=e120]:
+      - generic [ref=e121]: Sales
+      - generic [ref=e122] [cursor=pointer]:
+        - img [ref=e123]
+        - text: CRM Home
+      - generic [ref=e128] [cursor=pointer]:
+        - img [ref=e129]
+        - text: Leads
+        - generic [ref=e133]: "0"
+      - generic [ref=e134] [cursor=pointer]:
+        - img [ref=e135]
+        - text: Unit Setup
+      - generic [ref=e138] [cursor=pointer]:
+        - img [ref=e139]
+        - text: Unit Register
+      - generic [ref=e142] [cursor=pointer]:
+        - img [ref=e143]
+        - text: Sales Revenue
+    - generic [ref=e146]: Admin
+    - generic [ref=e147] [cursor=pointer]:
+      - img [ref=e148]
+      - text: Subcontractors
+    - generic [ref=e154] [cursor=pointer]:
+      - img [ref=e155]
+      - text: User Management
+    - button "Sign Out" [ref=e159] [cursor=pointer]
+  - generic [ref=e160]:
+    - generic [ref=e161]:
+      - generic [ref=e162]:
+        - generic [ref=e163]: Unit Register
+        - generic [ref=e164]: Sunday, 24 May 2026
+      - generic [ref=e166] [cursor=pointer]:
+        - generic [ref=e168]: 241 Waterside
+        - generic [ref=e169]: ▼
+      - generic [ref=e172]: developer
+    - generic [ref=e173]:
+      - generic [ref=e341]:
+        - combobox [ref=e342]:
+          - option "All Types" [selected]
+          - option "Studio"
+          - option "1BHK"
+        - combobox [ref=e343]:
+          - option "All Statuses" [selected]
+          - option "Available"
+          - option "Reserved"
+          - option "Sold"
+        - combobox [ref=e344]:
+          - option "All Floors" [selected]
+          - option "Floor 1"
+          - option "Floor 2"
+          - option "Floor 3"
+          - option "Floor 4"
+          - option "Floor 5"
+          - option "Floor 6"
+          - option "Floor 7"
+          - option "Floor 8"
+        - textbox "Search unit / buyer…" [active] [ref=e345]
+      - table [ref=e348]:
+        - rowgroup [ref=e349]:
+          - row "Unit Floor Type Sqft Listed Price Buyer SPA Oqood Status" [ref=e350]:
+            - columnheader "Unit" [ref=e351]
+            - columnheader "Floor" [ref=e352]
+            - columnheader "Type" [ref=e353]
+            - columnheader "Sqft" [ref=e354]
+            - columnheader "Listed Price" [ref=e355]
+            - columnheader "Buyer" [ref=e356]
+            - columnheader "SPA" [ref=e357]
+            - columnheader "Oqood" [ref=e358]
+            - columnheader "Status" [ref=e359]
+          - row "101 1 3BHK 1,582 AED 3,188,000.00 — — — Sold" [ref=e360] [cursor=pointer]:
+            - cell "101" [ref=e361]
+            - cell "1" [ref=e362]
+            - cell "3BHK" [ref=e363]
+            - cell "1,582" [ref=e364]
+            - cell "AED 3,188,000.00" [ref=e365]
+            - cell "—" [ref=e366]
+            - cell "—" [ref=e367]
+            - cell "—" [ref=e368]
+            - cell "Sold" [ref=e369]
+          - row "102 1 3BHK 1,583 AED 3,188,000.00 — — — Sold" [ref=e370] [cursor=pointer]:
+            - cell "102" [ref=e371]
+            - cell "1" [ref=e372]
+            - cell "3BHK" [ref=e373]
+            - cell "1,583" [ref=e374]
+            - cell "AED 3,188,000.00" [ref=e375]
+            - cell "—" [ref=e376]
+            - cell "—" [ref=e377]
+            - cell "—" [ref=e378]
+            - cell "Sold" [ref=e379]
+          - row "103 1 2BHK - Normal 954 AED 2,189,000.00 — — — Sold" [ref=e380] [cursor=pointer]:
+            - cell "103" [ref=e381]
+            - cell "1" [ref=e382]
+            - cell "2BHK - Normal" [ref=e383]
+            - cell "954" [ref=e384]
+            - cell "AED 2,189,000.00" [ref=e385]
+            - cell "—" [ref=e386]
+            - cell "—" [ref=e387]
+            - cell "—" [ref=e388]
+            - cell "Sold" [ref=e389]
+          - row "104 1 1BHK Sky Loft - Small 880 AED 1,889,000.00 — Not Signed Not Registered Sold" [ref=e390] [cursor=pointer]:
+            - cell "104" [ref=e391]
+            - cell "1" [ref=e392]
+            - cell "1BHK Sky Loft - Small" [ref=e393]
+            - cell "880" [ref=e394]
+            - cell "AED 1,889,000.00" [ref=e395]
+            - cell "—" [ref=e396]
+            - cell "Not Signed" [ref=e397]
+            - cell "Not Registered" [ref=e398]
+            - cell "Sold" [ref=e399]
+          - row "105 1 1BHK Sky Loft - Large A 1,283 AED 2,059,000.00 — Not Signed Not Registered Sold" [ref=e400] [cursor=pointer]:
+            - cell "105" [ref=e401]
+            - cell "1" [ref=e402]
+            - cell "1BHK Sky Loft - Large A" [ref=e403]
+            - cell "1,283" [ref=e404]
+            - cell "AED 2,059,000.00" [ref=e405]
+            - cell "—" [ref=e406]
+            - cell "Not Signed" [ref=e407]
+            - cell "Not Registered" [ref=e408]
+            - cell "Sold" [ref=e409]
+          - row "106 1 2BHK + Maid 1,483 AED 2,900,000.00 — — — Sold" [ref=e410] [cursor=pointer]:
+            - cell "106" [ref=e411]
+            - cell "1" [ref=e412]
+            - cell "2BHK + Maid" [ref=e413]
+            - cell "1,483" [ref=e414]
+            - cell "AED 2,900,000.00" [ref=e415]
+            - cell "—" [ref=e416]
+            - cell "—" [ref=e417]
+            - cell "—" [ref=e418]
+            - cell "Sold" [ref=e419]
+          - row "107 1 2BHK + Maid 1,483 AED 2,900,000.00 — — — Sold" [ref=e420] [cursor=pointer]:
+            - cell "107" [ref=e421]
+            - cell "1" [ref=e422]
+            - cell "2BHK + Maid" [ref=e423]
+            - cell "1,483" [ref=e424]
+            - cell "AED 2,900,000.00" [ref=e425]
+            - cell "—" [ref=e426]
+            - cell "—" [ref=e427]
+            - cell "—" [ref=e428]
+            - cell "Sold" [ref=e429]
+          - row "108 1 1BHK Sky Loft - Large B 1,423 AED 2,141,000.00 — Not Signed Not Registered Sold" [ref=e430] [cursor=pointer]:
+            - cell "108" [ref=e431]
+            - cell "1" [ref=e432]
+            - cell "1BHK Sky Loft - Large B" [ref=e433]
+            - cell "1,423" [ref=e434]
+            - cell "AED 2,141,000.00" [ref=e435]
+            - cell "—" [ref=e436]
+            - cell "Not Signed" [ref=e437]
+            - cell "Not Registered" [ref=e438]
+            - cell "Sold" [ref=e439]
+          - row "109 1 1BHK Sky Loft - Small 881 AED 1,939,000.00 — Not Signed Not Registered Sold" [ref=e440] [cursor=pointer]:
+            - cell "109" [ref=e441]
+            - cell "1" [ref=e442]
+            - cell "1BHK Sky Loft - Small" [ref=e443]
+            - cell "881" [ref=e444]
+            - cell "AED 1,939,000.00" [ref=e445]
+            - cell "—" [ref=e446]
+            - cell "Not Signed" [ref=e447]
+            - cell "Not Registered" [ref=e448]
+            - cell "Sold" [ref=e449]
+          - row "110 1 2BHK - Normal 954 AED 2,252,000.00 — — — Sold" [ref=e450] [cursor=pointer]:
+            - cell "110" [ref=e451]
+            - cell "1" [ref=e452]
+            - cell "2BHK - Normal" [ref=e453]
+            - cell "954" [ref=e454]
+            - cell "AED 2,252,000.00" [ref=e455]
+            - cell "—" [ref=e456]
+            - cell "—" [ref=e457]
+            - cell "—" [ref=e458]
+            - cell "Sold" [ref=e459]
+          - row "201 2 2BHK + Maid 1,467 AED 2,768,000.00 — — — Sold" [ref=e460] [cursor=pointer]:
+            - cell "201" [ref=e461]
+            - cell "2" [ref=e462]
+            - cell "2BHK + Maid" [ref=e463]
+            - cell "1,467" [ref=e464]
+            - cell "AED 2,768,000.00" [ref=e465]
+            - cell "—" [ref=e466]
+            - cell "—" [ref=e467]
+            - cell "—" [ref=e468]
+            - cell "Sold" [ref=e469]
+          - row "202 2 2BHK + Maid 1,468 AED 2,768,000.00 — — — Sold" [ref=e470] [cursor=pointer]:
+            - cell "202" [ref=e471]
+            - cell "2" [ref=e472]
+            - cell "2BHK + Maid" [ref=e473]
+            - cell "1,468" [ref=e474]
+            - cell "AED 2,768,000.00" [ref=e475]
+            - cell "—" [ref=e476]
+            - cell "—" [ref=e477]
+            - cell "—" [ref=e478]
+            - cell "Sold" [ref=e479]
+          - row "203 2 2BHK - Normal 986 AED 2,210,000.00 — — — Sold" [ref=e480] [cursor=pointer]:
+            - cell "203" [ref=e481]
+            - cell "2" [ref=e482]
+            - cell "2BHK - Normal" [ref=e483]
+            - cell "986" [ref=e484]
+            - cell "AED 2,210,000.00" [ref=e485]
+            - cell "—" [ref=e486]
+            - cell "—" [ref=e487]
+            - cell "—" [ref=e488]
+            - cell "Sold" [ref=e489]
+          - row "204 2 2BHK + Maid 1,508 AED 2,930,000.00 — Not Signed Not Registered Sold" [ref=e490] [cursor=pointer]:
+            - cell "204" [ref=e491]
+            - cell "2" [ref=e492]
+            - cell "2BHK + Maid" [ref=e493]
+            - cell "1,508" [ref=e494]
+            - cell "AED 2,930,000.00" [ref=e495]
+            - cell "—" [ref=e496]
+            - cell "Not Signed" [ref=e497]
+            - cell "Not Registered" [ref=e498]
+            - cell "Sold" [ref=e499]
+          - row "205 2 2BHK + Maid 1,508 AED 2,850,000.00 — — — Sold" [ref=e500] [cursor=pointer]:
+            - cell "205" [ref=e501]
+            - cell "2" [ref=e502]
+            - cell "2BHK + Maid" [ref=e503]
+            - cell "1,508" [ref=e504]
+            - cell "AED 2,850,000.00" [ref=e505]
+            - cell "—" [ref=e506]
+            - cell "—" [ref=e507]
+            - cell "—" [ref=e508]
+            - cell "Sold" [ref=e509]
+          - row "206 2 2BHK - Normal 987 AED 2,383,000.00 — — — Sold" [ref=e510] [cursor=pointer]:
+            - cell "206" [ref=e511]
+            - cell "2" [ref=e512]
+            - cell "2BHK - Normal" [ref=e513]
+            - cell "987" [ref=e514]
+            - cell "AED 2,383,000.00" [ref=e515]
+            - cell "—" [ref=e516]
+            - cell "—" [ref=e517]
+            - cell "—" [ref=e518]
+            - cell "Sold" [ref=e519]
+          - row "301 3 3BHK 1,582 AED 3,228,000.00 — Not Signed Not Registered Sold" [ref=e520] [cursor=pointer]:
+            - cell "301" [ref=e521]
+            - cell "3" [ref=e522]
+            - cell "3BHK" [ref=e523]
+            - cell "1,582" [ref=e524]
+            - cell "AED 3,228,000.00" [ref=e525]
+            - cell "—" [ref=e526]
+            - cell "Not Signed" [ref=e527]
+            - cell "Not Registered" [ref=e528]
+            - cell "Sold" [ref=e529]
+          - row "302 3 3BHK 1,583 AED 3,228,000.00 — — — Blocked" [ref=e530] [cursor=pointer]:
+            - cell "302" [ref=e531]
+            - cell "3" [ref=e532]
+            - cell "3BHK" [ref=e533]
+            - cell "1,583" [ref=e534]
+            - cell "AED 3,228,000.00" [ref=e535]
+            - cell "—" [ref=e536]
+            - cell "—" [ref=e537]
+            - cell "—" [ref=e538]
+            - cell "Blocked" [ref=e539]
+          - row "303 3 2BHK - Normal 954 AED 2,250,000.00 — Not Signed Not Registered Sold" [ref=e540] [cursor=pointer]:
+            - cell "303" [ref=e541]
+            - cell "3" [ref=e542]
+            - cell "2BHK - Normal" [ref=e543]
+            - cell "954" [ref=e544]
+            - cell "AED 2,250,000.00" [ref=e545]
+            - cell "—" [ref=e546]
+            - cell "Not Signed" [ref=e547]
+            - cell "Not Registered" [ref=e548]
+            - cell "Sold" [ref=e549]
+          - row "304 3 1BHK Sky Loft - Small 880 AED 1,966,000.00 — Not Signed Not Registered Sold" [ref=e550] [cursor=pointer]:
+            - cell "304" [ref=e551]
+            - cell "3" [ref=e552]
+            - cell "1BHK Sky Loft - Small" [ref=e553]
+            - cell "880" [ref=e554]
+            - cell "AED 1,966,000.00" [ref=e555]
+            - cell "—" [ref=e556]
+            - cell "Not Signed" [ref=e557]
+            - cell "Not Registered" [ref=e558]
+            - cell "Sold" [ref=e559]
+          - row "305 3 1BHK Sky Loft - Large A 1,283 AED 2,099,000.00 — — — Sold" [ref=e560] [cursor=pointer]:
+            - cell "305" [ref=e561]
+            - cell "3" [ref=e562]
+            - cell "1BHK Sky Loft - Large A" [ref=e563]
+            - cell "1,283" [ref=e564]
+            - cell "AED 2,099,000.00" [ref=e565]
+            - cell "—" [ref=e566]
+            - cell "—" [ref=e567]
+            - cell "—" [ref=e568]
+            - cell "Sold" [ref=e569]
+          - row "306 3 2BHK + Maid 1,483 AED 2,999,000.00 — — — Sold" [ref=e570] [cursor=pointer]:
+            - cell "306" [ref=e571]
+            - cell "3" [ref=e572]
+            - cell "2BHK + Maid" [ref=e573]
+            - cell "1,483" [ref=e574]
+            - cell "AED 2,999,000.00" [ref=e575]
+            - cell "—" [ref=e576]
+            - cell "—" [ref=e577]
+            - cell "—" [ref=e578]
+            - cell "Sold" [ref=e579]
+          - row "307 3 2BHK + Maid 1,483 AED 2,999,000.00 — — — Sold" [ref=e580] [cursor=pointer]:
+            - cell "307" [ref=e581]
+            - cell "3" [ref=e582]
+            - cell "2BHK + Maid" [ref=e583]
+            - cell "1,483" [ref=e584]
+            - cell "AED 2,999,000.00" [ref=e585]
+            - cell "—" [ref=e586]
+            - cell "—" [ref=e587]
+            - cell "—" [ref=e588]
+            - cell "Sold" [ref=e589]
+          - row "308 3 1BHK Sky Loft - Large B 1,423 AED 2,181,000.00 — Not Signed Not Registered Sold" [ref=e590] [cursor=pointer]:
+            - cell "308" [ref=e591]
+            - cell "3" [ref=e592]
+            - cell "1BHK Sky Loft - Large B" [ref=e593]
+            - cell "1,423" [ref=e594]
+            - cell "AED 2,181,000.00" [ref=e595]
+            - cell "—" [ref=e596]
+            - cell "Not Signed" [ref=e597]
+            - cell "Not Registered" [ref=e598]
+            - cell "Sold" [ref=e599]
+          - row "309 3 1BHK Sky Loft - Small 881 AED 2,020,000.00 — Not Signed Not Registered Sold" [ref=e600] [cursor=pointer]:
+            - cell "309" [ref=e601]
+            - cell "3" [ref=e602]
+            - cell "1BHK Sky Loft - Small" [ref=e603]
+            - cell "881" [ref=e604]
+            - cell "AED 2,020,000.00" [ref=e605]
+            - cell "—" [ref=e606]
+            - cell "Not Signed" [ref=e607]
+            - cell "Not Registered" [ref=e608]
+            - cell "Sold" [ref=e609]
+          - row "310 3 2BHK - Normal 954 AED 2,355,000.00 — Not Signed Not Registered Sold" [ref=e610] [cursor=pointer]:
+            - cell "310" [ref=e611]
+            - cell "3" [ref=e612]
+            - cell "2BHK - Normal" [ref=e613]
+            - cell "954" [ref=e614]
+            - cell "AED 2,355,000.00" [ref=e615]
+            - cell "—" [ref=e616]
+            - cell "Not Signed" [ref=e617]
+            - cell "Not Registered" [ref=e618]
+            - cell "Sold" [ref=e619]
+          - row "401 4 2BHK + Maid 1,467 AED 2,860,000.00 — — — Sold" [ref=e620] [cursor=pointer]:
+            - cell "401" [ref=e621]
+            - cell "4" [ref=e622]
+            - cell "2BHK + Maid" [ref=e623]
+            - cell "1,467" [ref=e624]
+            - cell "AED 2,860,000.00" [ref=e625]
+            - cell "—" [ref=e626]
+            - cell "—" [ref=e627]
+            - cell "—" [ref=e628]
+            - cell "Sold" [ref=e629]
+          - row "402 4 2BHK + Maid 1,468 AED 2,860,000.00 — — — Sold" [ref=e630] [cursor=pointer]:
+            - cell "402" [ref=e631]
+            - cell "4" [ref=e632]
+            - cell "2BHK + Maid" [ref=e633]
+            - cell "1,468" [ref=e634]
+            - cell "AED 2,860,000.00" [ref=e635]
+            - cell "—" [ref=e636]
+            - cell "—" [ref=e637]
+            - cell "—" [ref=e638]
+            - cell "Sold" [ref=e639]
+          - row "403 4 2BHK - Normal 986 AED 2,310,000.00 — — — Sold" [ref=e640] [cursor=pointer]:
+            - cell "403" [ref=e641]
+            - cell "4" [ref=e642]
+            - cell "2BHK - Normal" [ref=e643]
+            - cell "986" [ref=e644]
+            - cell "AED 2,310,000.00" [ref=e645]
+            - cell "—" [ref=e646]
+            - cell "—" [ref=e647]
+            - cell "—" [ref=e648]
+            - cell "Sold" [ref=e649]
+          - row "404 4 2BHK + Maid 1,508 AED 3,000,000.00 — Not Signed Not Registered Sold" [ref=e650] [cursor=pointer]:
+            - cell "404" [ref=e651]
+            - cell "4" [ref=e652]
+            - cell "2BHK + Maid" [ref=e653]
+            - cell "1,508" [ref=e654]
+            - cell "AED 3,000,000.00" [ref=e655]
+            - cell "—" [ref=e656]
+            - cell "Not Signed" [ref=e657]
+            - cell "Not Registered" [ref=e658]
+            - cell "Sold" [ref=e659]
+          - row "405 4 2BHK + Maid 1,508 AED 3,000,000.00 — Not Signed Not Registered Sold" [ref=e660] [cursor=pointer]:
+            - cell "405" [ref=e661]
+            - cell "4" [ref=e662]
+            - cell "2BHK + Maid" [ref=e663]
+            - cell "1,508" [ref=e664]
+            - cell "AED 3,000,000.00" [ref=e665]
+            - cell "—" [ref=e666]
+            - cell "Not Signed" [ref=e667]
+            - cell "Not Registered" [ref=e668]
+            - cell "Sold" [ref=e669]
+          - row "406 4 2BHK - Normal 987 AED 2,483,000.00 — Not Signed Not Registered Sold" [ref=e670] [cursor=pointer]:
+            - cell "406" [ref=e671]
+            - cell "4" [ref=e672]
+            - cell "2BHK - Normal" [ref=e673]
+            - cell "987" [ref=e674]
+            - cell "AED 2,483,000.00" [ref=e675]
+            - cell "—" [ref=e676]
+            - cell "Not Signed" [ref=e677]
+            - cell "Not Registered" [ref=e678]
+            - cell "Sold" [ref=e679]
+          - row "501 5 3BHK 1,582 AED 3,395,000.00 — — — Sold" [ref=e680] [cursor=pointer]:
+            - cell "501" [ref=e681]
+            - cell "5" [ref=e682]
+            - cell "3BHK" [ref=e683]
+            - cell "1,582" [ref=e684]
+            - cell "AED 3,395,000.00" [ref=e685]
+            - cell "—" [ref=e686]
+            - cell "—" [ref=e687]
+            - cell "—" [ref=e688]
+            - cell "Sold" [ref=e689]
+          - row "502 5 3BHK 1,583 AED 3,395,000.00 — — — Sold" [ref=e690] [cursor=pointer]:
+            - cell "502" [ref=e691]
+            - cell "5" [ref=e692]
+            - cell "3BHK" [ref=e693]
+            - cell "1,583" [ref=e694]
+            - cell "AED 3,395,000.00" [ref=e695]
+            - cell "—" [ref=e696]
+            - cell "—" [ref=e697]
+            - cell "—" [ref=e698]
+            - cell "Sold" [ref=e699]
+          - row "503 5 2BHK - Normal 954 AED 2,330,000.00 — — — Sold" [ref=e700] [cursor=pointer]:
+            - cell "503" [ref=e701]
+            - cell "5" [ref=e702]
+            - cell "2BHK - Normal" [ref=e703]
+            - cell "954" [ref=e704]
+            - cell "AED 2,330,000.00" [ref=e705]
+            - cell "—" [ref=e706]
+            - cell "—" [ref=e707]
+            - cell "—" [ref=e708]
+            - cell "Sold" [ref=e709]
+          - row "504 5 1BHK Sky Loft - Small 880 AED 2,150,000.00 — Not Signed Not Registered Sold" [ref=e710] [cursor=pointer]:
+            - cell "504" [ref=e711]
+            - cell "5" [ref=e712]
+            - cell "1BHK Sky Loft - Small" [ref=e713]
+            - cell "880" [ref=e714]
+            - cell "AED 2,150,000.00" [ref=e715]
+            - cell "—" [ref=e716]
+            - cell "Not Signed" [ref=e717]
+            - cell "Not Registered" [ref=e718]
+            - cell "Sold" [ref=e719]
+          - row "505 5 1BHK Sky Loft - Large A 1,283 AED 2,199,000.00 — Not Signed Not Registered Sold" [ref=e720] [cursor=pointer]:
+            - cell "505" [ref=e721]
+            - cell "5" [ref=e722]
+            - cell "1BHK Sky Loft - Large A" [ref=e723]
+            - cell "1,283" [ref=e724]
+            - cell "AED 2,199,000.00" [ref=e725]
+            - cell "—" [ref=e726]
+            - cell "Not Signed" [ref=e727]
+            - cell "Not Registered" [ref=e728]
+            - cell "Sold" [ref=e729]
+          - row "506 5 2BHK + Maid 1,483 AED 3,250,000.00 — — — Sold" [ref=e730] [cursor=pointer]:
+            - cell "506" [ref=e731]
+            - cell "5" [ref=e732]
+            - cell "2BHK + Maid" [ref=e733]
+            - cell "1,483" [ref=e734]
+            - cell "AED 3,250,000.00" [ref=e735]
+            - cell "—" [ref=e736]
+            - cell "—" [ref=e737]
+            - cell "—" [ref=e738]
+            - cell "Sold" [ref=e739]
+          - row "507 5 2BHK + Maid 1,483 AED 3,250,000.00 — — — Sold" [ref=e740] [cursor=pointer]:
+            - cell "507" [ref=e741]
+            - cell "5" [ref=e742]
+            - cell "2BHK + Maid" [ref=e743]
+            - cell "1,483" [ref=e744]
+            - cell "AED 3,250,000.00" [ref=e745]
+            - cell "—" [ref=e746]
+            - cell "—" [ref=e747]
+            - cell "—" [ref=e748]
+            - cell "Sold" [ref=e749]
+          - row "508 5 1BHK Sky Loft - Large B 1,423 AED 2,304,000.00 — Not Signed Not Registered Sold" [ref=e750] [cursor=pointer]:
+            - cell "508" [ref=e751]
+            - cell "5" [ref=e752]
+            - cell "1BHK Sky Loft - Large B" [ref=e753]
+            - cell "1,423" [ref=e754]
+            - cell "AED 2,304,000.00" [ref=e755]
+            - cell "—" [ref=e756]
+            - cell "Not Signed" [ref=e757]
+            - cell "Not Registered" [ref=e758]
+            - cell "Sold" [ref=e759]
+          - row "509 5 1BHK Sky Loft - Small 881 AED 2,086,000.00 — — — Sold" [ref=e760] [cursor=pointer]:
+            - cell "509" [ref=e761]
+            - cell "5" [ref=e762]
+            - cell "1BHK Sky Loft - Small" [ref=e763]
+            - cell "881" [ref=e764]
+            - cell "AED 2,086,000.00" [ref=e765]
+            - cell "—" [ref=e766]
+            - cell "—" [ref=e767]
+            - cell "—" [ref=e768]
+            - cell "Sold" [ref=e769]
+          - row "510 5 2BHK - Normal 954 AED 2,449,000.00 — Not Signed Not Registered Sold" [ref=e770] [cursor=pointer]:
+            - cell "510" [ref=e771]
+            - cell "5" [ref=e772]
+            - cell "2BHK - Normal" [ref=e773]
+            - cell "954" [ref=e774]
+            - cell "AED 2,449,000.00" [ref=e775]
+            - cell "—" [ref=e776]
+            - cell "Not Signed" [ref=e777]
+            - cell "Not Registered" [ref=e778]
+            - cell "Sold" [ref=e779]
+          - row "601 6 2BHK + Maid 1,467 AED 2,975,000.00 — — — Sold" [ref=e780] [cursor=pointer]:
+            - cell "601" [ref=e781]
+            - cell "6" [ref=e782]
+            - cell "2BHK + Maid" [ref=e783]
+            - cell "1,467" [ref=e784]
+            - cell "AED 2,975,000.00" [ref=e785]
+            - cell "—" [ref=e786]
+            - cell "—" [ref=e787]
+            - cell "—" [ref=e788]
+            - cell "Sold" [ref=e789]
+          - row "602 6 2BHK + Maid 1,468 AED 2,975,000.00 — — — Sold" [ref=e790] [cursor=pointer]:
+            - cell "602" [ref=e791]
+            - cell "6" [ref=e792]
+            - cell "2BHK + Maid" [ref=e793]
+            - cell "1,468" [ref=e794]
+            - cell "AED 2,975,000.00" [ref=e795]
+            - cell "—" [ref=e796]
+            - cell "—" [ref=e797]
+            - cell "—" [ref=e798]
+            - cell "Sold" [ref=e799]
+          - row "603 6 2BHK - Normal 986 AED 2,375,000.00 — — — Sold" [ref=e800] [cursor=pointer]:
+            - cell "603" [ref=e801]
+            - cell "6" [ref=e802]
+            - cell "2BHK - Normal" [ref=e803]
+            - cell "986" [ref=e804]
+            - cell "AED 2,375,000.00" [ref=e805]
+            - cell "—" [ref=e806]
+            - cell "—" [ref=e807]
+            - cell "—" [ref=e808]
+            - cell "Sold" [ref=e809]
+          - row "604 6 2BHK + Maid 1,508 AED 3,275,000.00 — — — Sold" [ref=e810] [cursor=pointer]:
+            - cell "604" [ref=e811]
+            - cell "6" [ref=e812]
+            - cell "2BHK + Maid" [ref=e813]
+            - cell "1,508" [ref=e814]
+            - cell "AED 3,275,000.00" [ref=e815]
+            - cell "—" [ref=e816]
+            - cell "—" [ref=e817]
+            - cell "—" [ref=e818]
+            - cell "Sold" [ref=e819]
+          - row "605 6 2BHK + Maid 1,508 AED 3,275,000.00 — — — Sold" [ref=e820] [cursor=pointer]:
+            - cell "605" [ref=e821]
+            - cell "6" [ref=e822]
+            - cell "2BHK + Maid" [ref=e823]
+            - cell "1,508" [ref=e824]
+            - cell "AED 3,275,000.00" [ref=e825]
+            - cell "—" [ref=e826]
+            - cell "—" [ref=e827]
+            - cell "—" [ref=e828]
+            - cell "Sold" [ref=e829]
+          - row "606 6 2BHK - Normal 987 AED 2,575,000.00 — — — Sold" [ref=e830] [cursor=pointer]:
+            - cell "606" [ref=e831]
+            - cell "6" [ref=e832]
+            - cell "2BHK - Normal" [ref=e833]
+            - cell "987" [ref=e834]
+            - cell "AED 2,575,000.00" [ref=e835]
+            - cell "—" [ref=e836]
+            - cell "—" [ref=e837]
+            - cell "—" [ref=e838]
+            - cell "Sold" [ref=e839]
+          - row "701 7 3BHK 1,582 AED 3,499,000.00 — — — Sold" [ref=e840] [cursor=pointer]:
+            - cell "701" [ref=e841]
+            - cell "7" [ref=e842]
+            - cell "3BHK" [ref=e843]
+            - cell "1,582" [ref=e844]
+            - cell "AED 3,499,000.00" [ref=e845]
+            - cell "—" [ref=e846]
+            - cell "—" [ref=e847]
+            - cell "—" [ref=e848]
+            - cell "Sold" [ref=e849]
+          - row "702 7 3BHK 1,583 AED 3,499,000.00 — — — Blocked" [ref=e850] [cursor=pointer]:
+            - cell "702" [ref=e851]
+            - cell "7" [ref=e852]
+            - cell "3BHK" [ref=e853]
+            - cell "1,583" [ref=e854]
+            - cell "AED 3,499,000.00" [ref=e855]
+            - cell "—" [ref=e856]
+            - cell "—" [ref=e857]
+            - cell "—" [ref=e858]
+            - cell "Blocked" [ref=e859]
+          - row "703 7 2BHK - Normal 954 AED 2,449,000.00 — — — Sold" [ref=e860] [cursor=pointer]:
+            - cell "703" [ref=e861]
+            - cell "7" [ref=e862]
+            - cell "2BHK - Normal" [ref=e863]
+            - cell "954" [ref=e864]
+            - cell "AED 2,449,000.00" [ref=e865]
+            - cell "—" [ref=e866]
+            - cell "—" [ref=e867]
+            - cell "—" [ref=e868]
+            - cell "Sold" [ref=e869]
+          - row "704 7 1BHK Sky Loft - Small 880 AED 2,139,000.00 — — — Available" [ref=e870] [cursor=pointer]:
+            - cell "704" [ref=e871]
+            - cell "7" [ref=e872]
+            - cell "1BHK Sky Loft - Small" [ref=e873]
+            - cell "880" [ref=e874]
+            - cell "AED 2,139,000.00" [ref=e875]
+            - cell "—" [ref=e876]
+            - cell "—" [ref=e877]
+            - cell "—" [ref=e878]
+            - cell "Available" [ref=e879]
+          - row "705 7 1BHK Sky Loft - Large A 1,283 AED 2,342,000.00 — — — Sold" [ref=e880] [cursor=pointer]:
+            - cell "705" [ref=e881]
+            - cell "7" [ref=e882]
+            - cell "1BHK Sky Loft - Large A" [ref=e883]
+            - cell "1,283" [ref=e884]
+            - cell "AED 2,342,000.00" [ref=e885]
+            - cell "—" [ref=e886]
+            - cell "—" [ref=e887]
+            - cell "—" [ref=e888]
+            - cell "Sold" [ref=e889]
+          - row "706 7 2BHK + Maid 1,483 AED 3,475,000.00 — — — Sold" [ref=e890] [cursor=pointer]:
+            - cell "706" [ref=e891]
+            - cell "7" [ref=e892]
+            - cell "2BHK + Maid" [ref=e893]
+            - cell "1,483" [ref=e894]
+            - cell "AED 3,475,000.00" [ref=e895]
+            - cell "—" [ref=e896]
+            - cell "—" [ref=e897]
+            - cell "—" [ref=e898]
+            - cell "Sold" [ref=e899]
+          - row "707 7 2BHK + Maid 1,483 AED 3,475,000.00 — — — Sold" [ref=e900] [cursor=pointer]:
+            - cell "707" [ref=e901]
+            - cell "7" [ref=e902]
+            - cell "2BHK + Maid" [ref=e903]
+            - cell "1,483" [ref=e904]
+            - cell "AED 3,475,000.00" [ref=e905]
+            - cell "—" [ref=e906]
+            - cell "—" [ref=e907]
+            - cell "—" [ref=e908]
+            - cell "Sold" [ref=e909]
+          - row "708 7 1BHK Sky Loft - Large B 1,422 AED 2,378,970.00 — Not Signed Not Registered Sold" [ref=e910] [cursor=pointer]:
+            - cell "708" [ref=e911]
+            - cell "7" [ref=e912]
+            - cell "1BHK Sky Loft - Large B" [ref=e913]
+            - cell "1,422" [ref=e914]
+            - cell "AED 2,378,970.00" [ref=e915]
+            - cell "—" [ref=e916]
+            - cell "Not Signed" [ref=e917]
+            - cell "Not Registered" [ref=e918]
+            - cell "Sold" [ref=e919]
+          - row "709 7 1BHK Sky Loft - Small 881 AED 2,178,000.00 — — — Sold" [ref=e920] [cursor=pointer]:
+            - cell "709" [ref=e921]
+            - cell "7" [ref=e922]
+            - cell "1BHK Sky Loft - Small" [ref=e923]
+            - cell "881" [ref=e924]
+            - cell "AED 2,178,000.00" [ref=e925]
+            - cell "—" [ref=e926]
+            - cell "—" [ref=e927]
+            - cell "—" [ref=e928]
+            - cell "Sold" [ref=e929]
+          - row "710 7 2BHK - Normal 954 AED 2,380,500.00 — Not Signed Not Registered Sold" [ref=e930] [cursor=pointer]:
+            - cell "710" [ref=e931]
+            - cell "7" [ref=e932]
+            - cell "2BHK - Normal" [ref=e933]
+            - cell "954" [ref=e934]
+            - cell "AED 2,380,500.00" [ref=e935]
+            - cell "—" [ref=e936]
+            - cell "Not Signed" [ref=e937]
+            - cell "Not Registered" [ref=e938]
+            - cell "Sold" [ref=e939]
+          - row "801 8 2BHK + Maid 1,467 AED 3,099,000.00 — — — Available" [ref=e940] [cursor=pointer]:
+            - cell "801" [ref=e941]
+            - cell "8" [ref=e942]
+            - cell "2BHK + Maid" [ref=e943]
+            - cell "1,467" [ref=e944]
+            - cell "AED 3,099,000.00" [ref=e945]
+            - cell "—" [ref=e946]
+            - cell "—" [ref=e947]
+            - cell "—" [ref=e948]
+            - cell "Available" [ref=e949]
+          - row "802 8 2BHK + Maid 1,468 AED 3,099,000.00 — — — Available" [ref=e950] [cursor=pointer]:
+            - cell "802" [ref=e951]
+            - cell "8" [ref=e952]
+            - cell "2BHK + Maid" [ref=e953]
+            - cell "1,468" [ref=e954]
+            - cell "AED 3,099,000.00" [ref=e955]
+            - cell "—" [ref=e956]
+            - cell "—" [ref=e957]
+            - cell "—" [ref=e958]
+            - cell "Available" [ref=e959]
+          - row "803 8 2BHK - Normal 986 AED 2,525,000.00 — — — Available" [ref=e960] [cursor=pointer]:
+            - cell "803" [ref=e961]
+            - cell "8" [ref=e962]
+            - cell "2BHK - Normal" [ref=e963]
+            - cell "986" [ref=e964]
+            - cell "AED 2,525,000.00" [ref=e965]
+            - cell "—" [ref=e966]
+            - cell "—" [ref=e967]
+            - cell "—" [ref=e968]
+            - cell "Available" [ref=e969]
+          - row "805 8 2BHK - Normal 987 AED 2,407,500.00 — Not Signed Not Registered Sold" [ref=e970] [cursor=pointer]:
+            - cell "805" [ref=e971]
+            - cell "8" [ref=e972]
+            - cell "2BHK - Normal" [ref=e973]
+            - cell "987" [ref=e974]
+            - cell "AED 2,407,500.00" [ref=e975]
+            - cell "—" [ref=e976]
+            - cell "Not Signed" [ref=e977]
+            - cell "Not Registered" [ref=e978]
+            - cell "Sold" [ref=e979]
+          - row "PH 8 4BHK Penthouse 3,047 AED 9,613,000.00 — — — Available" [ref=e980] [cursor=pointer]:
+            - cell "PH" [ref=e981]
+            - cell "8" [ref=e982]
+            - cell "4BHK Penthouse" [ref=e983]
+            - cell "3,047" [ref=e984]
+            - cell "AED 9,613,000.00" [ref=e985]
+            - cell "—" [ref=e986]
+            - cell "—" [ref=e987]
+            - cell "—" [ref=e988]
+            - cell "Available" [ref=e989]

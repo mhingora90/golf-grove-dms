@@ -1,0 +1,194 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Google Apps Script" [ref=e10] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - generic [ref=e16]:
+            - button "Rename" [ref=e18] [cursor=pointer]: Untitled project
+            - generic [ref=e1420]:
+              - generic [ref=e1421]: cloud_done
+              - text: Saved to Drive
+          - generic [ref=e26]:
+            - button "Deploy" [ref=e31] [cursor=pointer]:
+              - generic [ref=e34]:
+                - text: Deploy
+                - generic [ref=e35]: 
+            - button "Support" [ref=e37] [cursor=pointer]:
+              - generic [ref=e40]: help_outline
+        - generic [ref=e42]:
+          - button "Google apps" [ref=e46] [cursor=pointer]:
+            - img [ref=e47]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e52] [cursor=pointer]':
+            - img [ref=e54]
+    - generic [ref=e56]:
+      - navigation "Apps Script project pages" [ref=e58]:
+        - link "Overview" [ref=e59] [cursor=pointer]:
+          - generic [ref=e61]: info_outline
+          - generic [ref=e62]: Overview
+        - link "Editor" [ref=e63] [cursor=pointer]:
+          - generic [ref=e65]: code
+          - generic [ref=e66]: Editor
+        - link "Project History" [ref=e67] [cursor=pointer]:
+          - generic [ref=e69]: history
+          - generic [ref=e70]: Project History
+        - link "Triggers" [ref=e71] [cursor=pointer]:
+          - generic [ref=e73]: alarm
+          - generic [ref=e74]: Triggers
+        - link "Executions" [ref=e75] [cursor=pointer]:
+          - generic [ref=e77]: playlist_play
+          - generic [ref=e78]: Executions
+        - link "Project Settings" [ref=e79] [cursor=pointer]:
+          - generic [ref=e81]: settings
+          - generic [ref=e82]: Project Settings
+      - generic [ref=e83]:
+        - heading "Editor" [level=1] [ref=e84]
+        - generic [ref=e85]:
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - heading "Files" [level=2] [ref=e89]
+              - generic [ref=e91]:
+                - button "Sort files alphabetically" [disabled] [ref=e93]:
+                  - generic [ref=e96]: sort_by_alpha
+                - button "Add a file" [ref=e98] [cursor=pointer]:
+                  - generic [ref=e101]: add
+            - listbox "Project files" [ref=e103]:
+              - option "Code.gs" [ref=e104] [cursor=pointer]:
+                - generic "Code.gs" [ref=e105]
+                - button "File operations menu for Code.gs." [ref=e106]:
+                  - button "File operations menu for Code.gs." [ref=e107]:
+                    - generic [ref=e110]: 
+            - generic [ref=e111]:
+              - heading "Libraries" [level=2] [ref=e112]
+              - button "Add a library" [ref=e115] [cursor=pointer]:
+                - generic [ref=e118]: add
+            - generic:
+              - listbox "Library Dependencies"
+            - generic [ref=e119]:
+              - heading "Services" [level=2] [ref=e120]
+              - button "Add a service" [ref=e123] [cursor=pointer]:
+                - generic [ref=e126]: add
+            - generic:
+              - listbox "Service Dependencies"
+          - generic [ref=e133]:
+            - region [ref=e134]:
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - generic [ref=e139]:
+                    - button "Undo code edit" [disabled]:
+                      - generic: undo
+                  - generic [ref=e142]:
+                    - button "Redo code edit" [disabled]:
+                      - generic: redo
+                - generic [ref=e146]:
+                  - button "Save project to Drive" [disabled]:
+                    - img
+                - generic [ref=e1422]:
+                  - button "Run the selected function" [ref=e1426]:
+                    - generic [ref=e1429]: play_arrow
+                    - generic [ref=e1430]: Run
+                  - button "Debug the selected function" [ref=e1434]:
+                    - img [ref=e1437]
+                    - generic [ref=e1440]: Debug
+                  - listbox "Select function to run" [ref=e1443] [cursor=pointer]:
+                    - option "upsertAllLeads" [selected] [ref=e1444]
+                - button "Open the execution log panel" [ref=e1169]:
+                  - generic [ref=e177]: Execution log
+            - generic [ref=e179]:
+              - main [ref=e183]:
+                - generic [ref=e184]: .
+                - generic [ref=e186]:
+                  - iframe [ref=e187]:
+                    
+                  - code [ref=e189]:
+                    - generic [ref=e190]:
+                      - generic [ref=e203]:
+                        - generic [ref=e1172]: "1"
+                        - generic [ref=e1174]: "2"
+                        - generic [ref=e1175]:
+                          - generic [ref=e1176] [cursor=pointer]: 
+                          - generic [ref=e1177]: "3"
+                        - generic [ref=e1179]: "4"
+                        - generic [ref=e1181]: "5"
+                        - generic [ref=e1183]: "6"
+                        - generic [ref=e1185]: "7"
+                        - generic [ref=e1187]: "8"
+                        - generic [ref=e1189]: "9"
+                        - generic [ref=e1191]: "10"
+                        - generic [ref=e1193]: "11"
+                        - generic [ref=e1195]: "12"
+                        - generic [ref=e1197]: "13"
+                        - generic [ref=e1199]: "14"
+                        - generic [ref=e1201]: "15"
+                        - generic [ref=e1203]: "16"
+                        - generic [ref=e1205]: "17"
+                        - generic [ref=e1206]:
+                          - generic [ref=e1207] [cursor=pointer]: 
+                          - generic [ref=e1208]: "18"
+                        - generic [ref=e1210]: "19"
+                        - generic [ref=e1212]: "20"
+                        - generic [ref=e1214]: "21"
+                        - generic [ref=e1216]: "22"
+                        - generic [ref=e1217]:
+                          - generic [ref=e1218] [cursor=pointer]: 
+                          - generic [ref=e1219]: "23"
+                        - generic [ref=e1221]: "24"
+                        - generic [ref=e1222]:
+                          - generic [ref=e1223] [cursor=pointer]: 
+                          - generic [ref=e1224]: "25"
+                        - generic [ref=e1226]: "26"
+                        - generic [ref=e1228]: "27"
+                        - generic [ref=e1229]:
+                          - generic [ref=e1230] [cursor=pointer]: 
+                          - generic [ref=e1231]: "28"
+                        - generic [ref=e1233]: "29"
+                        - generic [ref=e1235]: "30"
+                        - generic [ref=e1237]: "31"
+                      - generic [ref=e374]:
+                        - generic [ref=e1329]: // Upsert ALL sheet rows → inserts missing leads + updates existing ones.
+                        - generic [ref=e1331]: // Run once manually to recover leads that were missed when anon key was active.
+                        - generic [ref=e1333]: "function upsertAllLeads() {"
+                        - generic [ref=e1335]: const ss = SpreadsheetApp.openById('1MilS5L6fbmbm4w1xStoVvitX5vgvyrG0RWczSHRxNqo');
+                        - generic [ref=e1337]: const sheet = ss.getSheetByName(SHEET_NAME);
+                        - generic [ref=e1339]: "if (!sheet) { Logger.log('Sheet not found: ' + SHEET_NAME); return; }"
+                        - generic [ref=e1341]: const data = sheet.getDataRange().getValues();
+                        - generic [ref=e1343]: "Logger.log('Rows found: ' + data.length);"
+                        - generic [ref=e1345]: // Log structure
+                        - generic [ref=e1347]: "Logger.log('Row1 (headers?): ' + JSON.stringify(data[1].slice(0,25)));"
+                        - generic [ref=e1349]: "Logger.log('Row2 (data?): ' + JSON.stringify(data[2] ? data[2].slice(0,25) : 'none'));"
+                        - generic [ref=e1351]: "Logger.log('Row3 (data?): ' + JSON.stringify(data[3] ? data[3].slice(0,25) : 'none'));"
+                        - generic [ref=e1353]: if (data.length < 2) return;
+                        - generic [ref=e1391]: const headers = data[0].map(h => String(h).trim().toLowerCase());
+                        - generic [ref=e1393]: let inserted = 0, updated = 0, errors = 0;
+                        - generic [ref=e1395]: "for (let i = 1; i < data.length; i++) {"
+                        - generic [ref=e1397]: const row = data[i];
+                        - generic [ref=e1399]: const payload = buildPayload(headers, row);
+                        - generic [ref=e1401]: if (!payload.meta_lead_id && !payload.email) continue;
+                        - generic [ref=e1403]: const res = UrlFetchApp.fetch(
+                        - generic [ref=e1405]: SUPABASE_URL + '/rest/v1/crm_leads?on_conflict=meta_lead_id',
+                        - generic [ref=e1374]: "{"
+                        - generic [ref=e1407]: "method: 'post',"
+                        - generic [ref=e1409]: "contentType: 'application/json',"
+                        - generic [ref=e1411]: "headers: {"
+                        - generic [ref=e1413]: "apikey: SUPABASE_KEY,"
+                        - generic [ref=e1415]: "Authorization: 'Bearer ' + SUPABASE_KEY,"
+                        - generic [ref=e1417]: "Prefer: 'resolution=merge-duplicates,return=minimal',"
+                      - textbox "Editor content;Press Alt+F1 for Accessibility Options." [active] [ref=e193]: "// Upsert ALL sheet rows → inserts missing leads + updates existing ones. // Run once manually to recover leads that were missed when anon key was active. function upsertAllLeads() { const ss = SpreadsheetApp.openById('1MilS5L6fbmbm4w1xStoVvitX5vgvyrG0RWczSHRxNqo'); const sheet = ss.getSheetByName(SHEET_NAME); if (!sheet) { Logger.log('Sheet not found: ' + SHEET_NAME); return; } const data = sheet.getDataRange().getValues(); Logger.log('Rows found: ' + data.length); // Log structure"
+              - generic:
+                - generic:
+                  - button "Close execution logs pane" [ref=e194] [cursor=pointer]:
+                    - generic [ref=e195]: close
+                  - tooltip [ref=e196]: Close execution log
+  - generic: Saving project...
+  - generic [ref=e197]:
+    - alert
+    - alert
+    - complementary
+    - complementary
+  - generic [ref=e808]: Saving project...
+  - generic [ref=e1447]: Saving project...

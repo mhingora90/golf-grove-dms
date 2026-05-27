@@ -31,7 +31,20 @@
       "mcp__plugin_playwright_playwright__browser_type",
       "mcp__plugin_playwright_playwright__browser_tabs",
       "mcp__plugin_playwright_playwright__browser_handle_dialog",
-      "mcp__plugin_playwright_playwright__browser_wait_for"
+      "mcp__plugin_playwright_playwright__browser_wait_for",
+      "mcp__plugin_playwright_playwright__browser_console_messages",
+      "mcp__plugin_playwright_playwright__browser_select_option",
+      "mcp__plugin_playwright_playwright__browser_run_code_unsafe",
+      "PowerShell(python --version; python3 --version)",
+      "PowerShell(python -c \"import pdfplumber; print\\('ok'\\)\" 2>&1; python -c \"import pypdf; print\\('ok'\\)\" 2>&1; python -c \"import PyPDF2; print\\('ok'\\)\" 2>&1)",
+      "PowerShell(pip install *)",
+      "PowerShell($pdf = \"C:\\\\Users\\\\USER\\\\Cloud-Drive\\\\Regent Developments\\\\Legacy Developments\\\\241 Waterside\\\\Contracting\\\\Enabling Works\\\\Awarded Contract - Aquapile\\\\QTS-AQP-TST108R2-REGENT DEV - FINAL QUOTE.pdf\")",
+      "PowerShell(Get-Process | Where-Object {$_.Name -match 'chrome|playwright|chromium'} | Select-Object Id,Name)",
+      "mcp__playwright__browser_tabs",
+      "PowerShell(Get-Process | Where-Object {$_.MainWindowHandle -ne 0 -or $_.Name -match 'chrome'} | Select-Object Id, Name, MainWindowTitle | Where-Object {$_.Name -match 'chrome'})",
+      "mcp__playwright__browser_select_option",
+      "mcp__playwright__browser_resize",
+      "mcp__plugin_playwright_playwright__browser_file_upload"
     ]
   }
 }

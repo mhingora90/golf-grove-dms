@@ -1,0 +1,134 @@
+- generic [active] [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link [ref=e622] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - button [ref=e623] [cursor=pointer]: Untitled project
+          - generic [ref=e26]:
+            - button [ref=e624] [cursor=pointer]:
+              - generic [ref=e34]:
+                - text: Deploy
+                - generic [ref=e35]: 
+            - button [ref=e625] [cursor=pointer]:
+              - generic [ref=e376]: help_outline
+        - generic [ref=e42]:
+          - button [ref=e626] [cursor=pointer]:
+            - img [ref=e47]
+          - button [ref=e627] [cursor=pointer]:
+            - img [ref=e54]
+    - generic [ref=e378]:
+      - navigation [ref=e628]:
+        - link [ref=e629] [cursor=pointer]:
+          - generic [ref=e383]: info_outline
+          - generic [ref=e384]: Overview
+        - link [ref=e630] [cursor=pointer]:
+          - generic [ref=e387]: code
+          - generic [ref=e388]: Editor
+        - link [ref=e631] [cursor=pointer]:
+          - generic [ref=e391]: history
+          - generic [ref=e392]: Project History
+        - link [ref=e632] [cursor=pointer]:
+          - generic [ref=e395]: alarm
+          - generic [ref=e396]: Triggers
+        - link [ref=e633] [cursor=pointer]:
+          - generic [ref=e399]: playlist_play
+          - generic [ref=e400]: Executions
+        - link [ref=e634] [cursor=pointer]:
+          - generic [ref=e403]: settings
+          - generic [ref=e404]: Project Settings
+      - generic [ref=e406]:
+        - generic [ref=e407]:
+          - heading [level=1] [ref=e635]: Triggers
+          - generic [ref=e411]: Showing 0 triggers
+        - button [ref=e636] [cursor=pointer]:
+          - generic [ref=e413]: add
+          - generic [ref=e414]: Add Trigger
+        - generic [ref=e637]:
+          - list [ref=e417]:
+            - listitem [ref=e418]:
+              - generic [ref=e419]:
+                - generic [ref=e420]: 
+                - text: Add a filter
+              - generic [ref=e422]:
+                - textbox [disabled] [ref=e423]
+                - combobox [ref=e638]
+          - grid [ref=e427]:
+            - rowgroup [ref=e428]:
+              - row [ref=e639]:
+                - columnheader [ref=e640] [cursor=pointer]:
+                  - generic [ref=e432]: Owned by
+                - columnheader [ref=e641] [cursor=pointer]:
+                  - generic [ref=e435]: Last run
+                - columnheader [ref=e642] [cursor=pointer]:
+                  - generic [ref=e438]: Deployment
+                - columnheader [ref=e643] [cursor=pointer]:
+                  - generic [ref=e441]: Event
+                - columnheader [ref=e644] [cursor=pointer]:
+                  - generic [ref=e444]: Function
+                - columnheader [ref=e645] [cursor=pointer]:
+                  - generic [ref=e447]: Error rate
+            - rowgroup [ref=e448]:
+              - row [ref=e646]:
+                - gridcell [ref=e647]:
+                  - generic [ref=e598]:
+                    - img [ref=e599]
+                    - generic [ref=e613]: No results
+                    - generic [ref=e614]:
+                      - text: Try adjusting your filter criteria or
+                      - button [ref=e648]:
+                        - generic [ref=e617]: create a new trigger.
+    - dialog "Add Trigger for Untitled project" [ref=e651]:
+      - heading "Add Trigger for Untitled project" [level=1] [ref=e653]
+      - generic [ref=e655]:
+        - generic [ref=e656]:
+          - generic [ref=e657]:
+            - generic [ref=e659]:
+              - generic [ref=e660]: Choose which function to run
+              - listbox "Choose which function to run" [ref=e662] [cursor=pointer]:
+                - option "buildPayload" [selected] [ref=e663]
+                - option "syncTodayLeads"
+                - option "backfillAllLeads"
+                - option "upsertAllLeads"
+            - generic [ref=e665]:
+              - generic [ref=e666]: Choose which deployment should run
+              - listbox "Choose which deployment should run" [ref=e668] [cursor=pointer]:
+                - option "Head" [selected] [ref=e669]
+            - generic [ref=e670]: Select event source
+            - listbox "Select event source" [ref=e671] [cursor=pointer]:
+              - option "From spreadsheet" [selected] [ref=e672]
+              - option "Time-driven"
+              - option "From calendar"
+            - generic [ref=e675]:
+              - generic [ref=e676]: Select event type
+              - listbox "Select event type" [ref=e677] [cursor=pointer]:
+                - option "On open" [selected] [ref=e678]
+                - option "On edit"
+                - option "On change"
+                - option "On form submit"
+          - generic [ref=e679]:
+            - generic [ref=e680]:
+              - generic [ref=e681]: Failure notification settings
+              - button "Add new failure notification setting" [ref=e682] [cursor=pointer]:
+                - generic [ref=e683]: add
+            - listbox "Select when you would like to be notified" [ref=e687] [cursor=pointer]:
+              - option "Notify me immediately"
+              - option "Notify me hourly"
+              - option "Notify me daily" [selected] [ref=e688]
+              - option "Notify me weekly"
+        - generic [ref=e689]:
+          - button "Cancel" [ref=e690]:
+            - generic [ref=e692]: Cancel
+          - button "Save" [ref=e693]:
+            - generic [ref=e695]: Save
+  - generic [ref=e365]:
+    - alert
+    - alert
+    - complementary
+    - complementary
+  - generic [ref=e618]: Trigger permanently deleted.

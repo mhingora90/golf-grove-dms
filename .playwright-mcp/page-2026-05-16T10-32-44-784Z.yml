@@ -1,0 +1,202 @@
+- generic [ref=e19]:
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e22]: Active Project
+      - generic [ref=e23]: Golf Grove – Residential Building (B+G+P+7+Roof)
+    - generic [ref=e24]:
+      - generic [ref=e25]: MH
+      - generic [ref=e26]:
+        - generic [ref=e27]: Mohammed Hingora
+        - generic [ref=e28]: developer
+    - generic [ref=e29]: Main
+    - generic [ref=e30] [cursor=pointer]:
+      - img [ref=e31]
+      - text: Dashboard
+    - generic [ref=e36]: Document Control
+    - generic [ref=e37] [cursor=pointer]:
+      - img [ref=e38]
+      - text: Drawing Register
+    - generic [ref=e40] [cursor=pointer]:
+      - img [ref=e41]
+      - text: Submittals (DSUB)
+      - generic [ref=e44]: "1"
+    - generic [ref=e45] [cursor=pointer]:
+      - img [ref=e46]
+      - text: Submittal Register
+    - generic [ref=e48]: Site
+    - generic [ref=e49] [cursor=pointer]:
+      - img [ref=e50]
+      - text: Inspection Requests
+    - generic [ref=e53] [cursor=pointer]:
+      - img [ref=e54]
+      - text: NCRs
+    - generic [ref=e57] [cursor=pointer]:
+      - img [ref=e58]
+      - text: RFIs
+    - generic [ref=e62] [cursor=pointer]:
+      - img [ref=e63]
+      - text: Transmittals
+    - generic [ref=e65] [cursor=pointer]:
+      - img [ref=e66]
+      - text: Method Statements
+    - generic [ref=e69] [cursor=pointer]:
+      - img [ref=e70]
+      - text: Correspondence
+    - generic [ref=e73] [cursor=pointer]:
+      - img [ref=e74]
+      - text: Punch List
+      - generic [ref=e77]: "0"
+    - generic [ref=e78]: Finance
+    - generic [ref=e79] [cursor=pointer]:
+      - img [ref=e80]
+      - text: Finance Overview
+    - generic [ref=e83] [cursor=pointer]:
+      - img [ref=e84]
+      - text: Payment Certificates
+    - generic [ref=e87] [cursor=pointer]:
+      - img [ref=e88]
+      - text: BOQ Setup
+    - generic [ref=e91]:
+      - generic [ref=e92]: Sales
+      - generic [ref=e93] [cursor=pointer]:
+        - img [ref=e94]
+        - text: CRM
+        - generic [ref=e98]: "11"
+      - generic [ref=e99] [cursor=pointer]:
+        - img [ref=e100]
+        - text: Unit Setup
+      - generic [ref=e103] [cursor=pointer]:
+        - img [ref=e104]
+        - text: Unit Register
+      - generic [ref=e107] [cursor=pointer]:
+        - img [ref=e108]
+        - text: Sales Revenue
+    - generic [ref=e111]: Admin
+    - generic [ref=e112] [cursor=pointer]:
+      - img [ref=e113]
+      - text: Subcontractors
+    - generic [ref=e119] [cursor=pointer]:
+      - img [ref=e120]
+      - text: User Management
+    - button "Sign Out" [ref=e124] [cursor=pointer]
+  - generic [ref=e125]:
+    - generic [ref=e126]:
+      - generic [ref=e127]:
+        - generic [ref=e128]: CRM
+        - generic [ref=e129]: Saturday, 16 May 2026
+      - generic [ref=e131]: developer
+    - generic [ref=e132]:
+      - generic [ref=e561]:
+        - generic [ref=e562] [cursor=pointer]:
+          - generic [ref=e563]: "11"
+          - generic [ref=e564]: Total Leads
+        - generic [ref=e565] [cursor=pointer]:
+          - generic [ref=e566]: "0"
+          - generic [ref=e567]: New
+        - generic [ref=e568] [cursor=pointer]:
+          - generic [ref=e569]: "10"
+          - generic [ref=e570]: Contacted
+        - generic [ref=e571] [cursor=pointer]:
+          - generic [ref=e572]: "0"
+          - generic [ref=e573]: Site Visit
+        - generic [ref=e574] [cursor=pointer]:
+          - generic [ref=e575]: "0"
+          - generic [ref=e576]: Follow-Up
+        - generic [ref=e577] [cursor=pointer]:
+          - generic [ref=e578]: "0"
+          - generic [ref=e579]: Closed Won
+        - generic [ref=e580] [cursor=pointer]:
+          - generic [ref=e581]: "0"
+          - generic [ref=e582]: Closed Lost
+        - generic [ref=e583]:
+          - generic [ref=e584]: "11"
+          - generic [ref=e585]: Active Pipeline
+      - generic [ref=e586]:
+        - textbox "Search name, email, phone…" [active] [ref=e587]: Viquar
+        - combobox [ref=e589] [cursor=pointer]:
+          - 'option "Stage: All" [selected]'
+          - option "New Lead"
+          - option "Contacted"
+          - option "No Response"
+          - option "Site Visit"
+          - option "Follow-Up"
+          - option "Closed Won"
+          - option "Closed Lost"
+        - combobox [ref=e590] [cursor=pointer]:
+          - 'option "Source: All" [selected]'
+          - option "meta ads"
+          - option "website"
+          - option "referral"
+          - option "walk in"
+          - option "other"
+        - combobox [ref=e591] [cursor=pointer]:
+          - 'option "Assigned: All" [selected]'
+        - textbox "Created from" [ref=e593] [cursor=pointer]
+        - textbox "Created to" [ref=e594] [cursor=pointer]
+        - button "+ Add Lead" [ref=e595] [cursor=pointer]
+      - generic [ref=e596]:
+        - button "All 11" [ref=e597] [cursor=pointer]:
+          - text: All
+          - generic [ref=e598]: "11"
+        - button "New Lead 0" [ref=e599] [cursor=pointer]:
+          - text: New Lead
+          - generic [ref=e600]: "0"
+        - button "Contacted 10" [ref=e601] [cursor=pointer]:
+          - text: Contacted
+          - generic [ref=e602]: "10"
+        - button "No Response 1" [ref=e603] [cursor=pointer]:
+          - text: No Response
+          - generic [ref=e604]: "1"
+        - button "Site Visit 0" [ref=e605] [cursor=pointer]:
+          - text: Site Visit
+          - generic [ref=e606]: "0"
+        - button "Follow-Up 0" [ref=e607] [cursor=pointer]:
+          - text: Follow-Up
+          - generic [ref=e608]: "0"
+        - button "Closed Won 0" [ref=e609] [cursor=pointer]:
+          - text: Closed Won
+          - generic [ref=e610]: "0"
+        - button "Closed Lost 0" [ref=e611] [cursor=pointer]:
+          - text: Closed Lost
+          - generic [ref=e612]: "0"
+      - table [ref=e613]:
+        - rowgroup [ref=e614]:
+          - row "Name Company Email Phone Budget Prop. Type Stage Assigned Age ↓" [ref=e615]:
+            - columnheader [ref=e616]:
+              - checkbox [ref=e617]
+            - columnheader "Name" [ref=e618] [cursor=pointer]
+            - columnheader "Company" [ref=e619] [cursor=pointer]
+            - columnheader "Email" [ref=e620]
+            - columnheader "Phone" [ref=e621]
+            - columnheader "Budget" [ref=e622]
+            - columnheader "Prop. Type" [ref=e623]
+            - columnheader "Stage" [ref=e624] [cursor=pointer]
+            - columnheader "Assigned" [ref=e625] [cursor=pointer]
+            - columnheader "Age ↓" [ref=e626] [cursor=pointer]
+            - columnheader [ref=e627]
+        - rowgroup [ref=e628]:
+          - row "Viquar One Knock Real Estate viquarsayeed2@gmail.com +971547575768 AED 1.8m – AED 2.1m 2 Bedroom Contacted — 19h ago View →" [ref=e629]:
+            - cell [ref=e630]:
+              - checkbox [ref=e631]
+            - cell "Viquar" [ref=e632]
+            - cell "One Knock Real Estate" [ref=e633]
+            - cell "viquarsayeed2@gmail.com" [ref=e634]
+            - cell "+971547575768" [ref=e635]
+            - cell "AED 1.8m – AED 2.1m" [ref=e636]
+            - cell "2 Bedroom" [ref=e637]
+            - cell "Contacted" [ref=e638]:
+              - generic [ref=e639]: Contacted
+            - cell "—" [ref=e640]
+            - cell "19h ago" [ref=e641]
+            - cell "View →" [ref=e642]
+      - generic [ref=e643]:
+        - generic [ref=e644]:
+          - text: Showing
+          - strong [ref=e645]: 1–1
+          - text: of
+          - strong [ref=e646]: "1"
+          - text: leads
+        - generic [ref=e647]:
+          - button "←" [disabled] [ref=e648]
+          - button "→" [disabled] [ref=e649]
+        - generic [ref=e650]: 25 per page

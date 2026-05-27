@@ -1,0 +1,167 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Google Apps Script" [ref=e10] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - generic [ref=e16]:
+            - button "Rename" [ref=e18] [cursor=pointer]: Untitled project
+            - generic [ref=e1740]: cloud_done
+          - generic [ref=e26]:
+            - button "Deploy" [ref=e31] [cursor=pointer]:
+              - generic [ref=e34]:
+                - text: Deploy
+                - generic [ref=e35]: 
+            - button "Support" [ref=e37] [cursor=pointer]:
+              - generic [ref=e40]: help_outline
+        - generic [ref=e42]:
+          - button "Google apps" [ref=e46] [cursor=pointer]:
+            - img [ref=e47]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e52] [cursor=pointer]':
+            - img [ref=e54]
+    - generic [ref=e56]:
+      - navigation "Apps Script project pages" [ref=e58]:
+        - link "Overview" [ref=e59] [cursor=pointer]:
+          - generic [ref=e61]: info_outline
+          - generic [ref=e62]: Overview
+        - link "Editor" [ref=e63] [cursor=pointer]:
+          - generic [ref=e65]: code
+          - generic [ref=e66]: Editor
+        - link "Project History" [ref=e67] [cursor=pointer]:
+          - generic [ref=e69]: history
+          - generic [ref=e70]: Project History
+        - link "Triggers" [ref=e71] [cursor=pointer]:
+          - generic [ref=e73]: alarm
+          - generic [ref=e74]: Triggers
+        - link "Executions" [ref=e75] [cursor=pointer]:
+          - generic [ref=e77]: playlist_play
+          - generic [ref=e78]: Executions
+        - link "Project Settings" [ref=e79] [cursor=pointer]:
+          - generic [ref=e81]: settings
+          - generic [ref=e82]: Project Settings
+      - generic [ref=e83]:
+        - heading "Editor" [level=1] [ref=e84]
+        - generic [ref=e85]:
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - heading "Files" [level=2] [ref=e89]
+              - generic [ref=e91]:
+                - button "Sort files alphabetically" [disabled] [ref=e93]:
+                  - generic [ref=e96]: sort_by_alpha
+                - button "Add a file" [ref=e98] [cursor=pointer]:
+                  - generic [ref=e101]: add
+            - listbox "Project files" [ref=e103]:
+              - option "Code.gs" [ref=e104] [cursor=pointer]:
+                - generic "Code.gs" [ref=e105]
+                - button "File operations menu for Code.gs." [ref=e106]:
+                  - button "File operations menu for Code.gs." [ref=e107]:
+                    - generic [ref=e110]: 
+            - generic [ref=e111]:
+              - heading "Libraries" [level=2] [ref=e112]
+              - button "Add a library" [ref=e115] [cursor=pointer]:
+                - generic [ref=e118]: add
+            - generic:
+              - listbox "Library Dependencies"
+            - generic [ref=e119]:
+              - heading "Services" [level=2] [ref=e120]
+              - button "Add a service" [ref=e123] [cursor=pointer]:
+                - generic [ref=e126]: add
+            - generic:
+              - listbox "Service Dependencies"
+          - generic [ref=e133]:
+            - region [ref=e134]:
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - generic [ref=e139]:
+                    - button "Undo code edit" [disabled]:
+                      - generic: undo
+                  - generic [ref=e142]:
+                    - button "Redo code edit" [disabled]:
+                      - generic: redo
+                - generic [ref=e146]:
+                  - button "Save project to Drive" [disabled]:
+                    - img
+                - generic [ref=e1712]:
+                  - button "Run the selected function" [ref=e1716]:
+                    - generic [ref=e1719]: play_arrow
+                    - generic [ref=e1720]: Run
+                  - button "Debug the selected function" [ref=e1724]:
+                    - img [ref=e1727]
+                    - generic [ref=e1730]: Debug
+                  - listbox "Select function to run" [ref=e1733]:
+                    - option "upsertAllLeads" [selected] [ref=e1734]
+                - button "Close the execution log panel" [ref=e1749]:
+                  - generic [ref=e177]: Execution log
+            - generic [ref=e179]:
+              - main [ref=e183]:
+                - generic [ref=e184]: .
+                - generic [ref=e186]:
+                  - iframe [ref=e187]:
+                    
+                  - code [ref=e189]:
+                    - generic [ref=e190]:
+                      - generic [ref=e203]:
+                        - generic [ref=e1493]: "1"
+                        - generic [ref=e1495]: "2"
+                        - generic [ref=e1497]: "3"
+                        - generic [ref=e1498]:
+                          - generic [ref=e1499] [cursor=pointer]: 
+                          - generic [ref=e1500]: "4"
+                        - generic [ref=e1502]: "5"
+                        - generic [ref=e1504]: "6"
+                        - generic [ref=e1506]: "7"
+                        - generic [ref=e1508]: "8"
+                        - generic [ref=e1510]: "9"
+                        - generic [ref=e1512]: "10"
+                        - generic [ref=e1514]: "11"
+                        - generic [ref=e1516]: "12"
+                        - generic [ref=e1518]: "13"
+                      - generic [ref=e374]:
+                        - generic [ref=e1624]: // Upsert ALL sheet rows → inserts missing leads + updates existing ones.
+                        - generic [ref=e1626]: // Row 1 (index 1) is the real header row. Row 0 is also a valid data row.
+                        - generic [ref=e1628]: // Lead ID is always at column index 0 with 'l:' prefix.
+                        - generic [ref=e1630]: "function upsertAllLeads() {"
+                        - generic [ref=e1632]: const ss = SpreadsheetApp.openById('1MilS5L6fbmbm4w1xStoVvitX5vgvyrG0RWczSHRxNqo');
+                        - generic [ref=e1634]: const sheet = ss.getSheetByName(SHEET_NAME);
+                        - generic [ref=e1636]: "if (!sheet) { Logger.log('Sheet not found: ' + SHEET_NAME); return; }"
+                        - generic [ref=e1638]: const data = sheet.getDataRange().getValues();
+                        - generic [ref=e1640]: "if (data.length < 3) { Logger.log('Not enough rows: ' + data.length); return; }"
+                        - generic [ref=e1643]: // Row index 1 is the header row
+                        - generic [ref=e1645]: const headers = data[1].map(h => String(h).trim().toLowerCase());
+                        - generic [ref=e1647]: const idx = (h) => headers.findIndex(header => header === h);
+                      - textbox "Editor content;Press Alt+F1 for Accessibility Options." [active] [ref=e193]: "// Upsert ALL sheet rows → inserts missing leads + updates existing ones. // Row 1 (index 1) is the real header row. Row 0 is also a valid data row. // Lead ID is always at column index 0 with 'l:' prefix. function upsertAllLeads() { const ss = SpreadsheetApp.openById('1MilS5L6fbmbm4w1xStoVvitX5vgvyrG0RWczSHRxNqo'); const sheet = ss.getSheetByName(SHEET_NAME); if (!sheet) { Logger.log('Sheet not found: ' + SHEET_NAME); return; } const data = sheet.getDataRange().getValues(); if (data.l"
+              - generic [ref=e487]:
+                - complementary [ref=e489]:
+                  - generic [ref=e491]: Execution log
+                  - list "Logs" [ref=e1753]:
+                    - listitem "Log 1. 2:14:57 PM. Notice. Execution started." [ref=e1754]:
+                      - generic [ref=e1755]: 2:14:57 PM
+                      - generic [ref=e1756]: Notice
+                      - generic [ref=e1757]: Execution started
+                    - listitem "Log 2. 2:14:59 PM. Info. Indices — name:18 company:17 email:19 phone:20." [ref=e1758]:
+                      - generic [ref=e1759]: 2:14:59 PM
+                      - generic [ref=e1760]: Info
+                      - generic [ref=e1761]: Indices — name:18 company:17 email:19 phone:20
+                    - 'listitem "Log 3. 2:15:12 PM. Info. Upsert done — inserted: 15, updated: 6, skipped: 0, errors: 0." [ref=e1793]':
+                      - generic [ref=e1794]: 2:15:12 PM
+                      - generic [ref=e1795]: Info
+                      - generic [ref=e1796]: "Upsert done — inserted: 15, updated: 6, skipped: 0, errors: 0"
+                    - listitem "Log 4. 2:15:10 PM. Notice. Execution completed." [ref=e1797]:
+                      - generic [ref=e1798]: 2:15:10 PM
+                      - generic [ref=e1799]: Notice
+                      - generic [ref=e1800]: Execution completed
+                - generic:
+                  - button "Close execution logs pane" [ref=e194] [cursor=pointer]:
+                    - generic [ref=e195]: close
+                  - tooltip [ref=e196]: Close execution log
+  - generic: Saving project...
+  - generic [ref=e197]:
+    - alert
+    - alert
+    - complementary
+    - complementary

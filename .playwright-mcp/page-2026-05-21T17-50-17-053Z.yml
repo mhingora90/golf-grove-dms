@@ -1,0 +1,436 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: Active Project
+      - generic [ref=e6]: Golf Grove – Residential Building (B+G+P+7+Roof)
+    - generic [ref=e7]:
+      - generic [ref=e8]: MH
+      - generic [ref=e9]:
+        - generic [ref=e10]: Mohammed Hingora
+        - generic [ref=e11]: developer
+    - generic [ref=e12]: Main
+    - generic [ref=e13] [cursor=pointer]:
+      - img [ref=e14]
+      - text: Dashboard
+    - generic [ref=e19]: Document Control
+    - generic [ref=e20] [cursor=pointer]:
+      - img [ref=e21]
+      - text: Drawing Register
+    - generic [ref=e23] [cursor=pointer]:
+      - img [ref=e24]
+      - text: Submittals (DSUB)
+      - generic [ref=e27]: "0"
+    - generic [ref=e28] [cursor=pointer]:
+      - img [ref=e29]
+      - text: Submittal Register
+    - generic [ref=e31]: Site
+    - generic [ref=e32] [cursor=pointer]:
+      - img [ref=e33]
+      - text: Inspection Requests
+      - generic [ref=e36]: "0"
+    - generic [ref=e37] [cursor=pointer]:
+      - img [ref=e38]
+      - text: NCRs
+      - generic [ref=e41]: "0"
+    - generic [ref=e42] [cursor=pointer]:
+      - img [ref=e43]
+      - text: RFIs
+      - generic [ref=e47]: "0"
+    - generic [ref=e48] [cursor=pointer]:
+      - img [ref=e49]
+      - text: Transmittals
+    - generic [ref=e51] [cursor=pointer]:
+      - img [ref=e52]
+      - text: Method Statements
+    - generic [ref=e55] [cursor=pointer]:
+      - img [ref=e56]
+      - text: Correspondence
+    - generic [ref=e59] [cursor=pointer]:
+      - img [ref=e60]
+      - text: Punch List
+      - generic [ref=e63]: "0"
+    - generic [ref=e64]: Finance
+    - generic [ref=e65] [cursor=pointer]:
+      - img [ref=e66]
+      - text: Finance Overview
+    - generic [ref=e69] [cursor=pointer]:
+      - img [ref=e70]
+      - text: Payment Certificates
+    - generic [ref=e73] [cursor=pointer]:
+      - img [ref=e74]
+      - text: BOQ Setup
+    - generic [ref=e77]:
+      - generic [ref=e78]: Sales
+      - generic [ref=e79] [cursor=pointer]:
+        - img [ref=e80]
+        - text: CRM
+        - generic [ref=e84]: "17"
+      - generic [ref=e85] [cursor=pointer]:
+        - img [ref=e86]
+        - text: Unit Setup
+      - generic [ref=e89] [cursor=pointer]:
+        - img [ref=e90]
+        - text: Unit Register
+      - generic [ref=e93] [cursor=pointer]:
+        - img [ref=e94]
+        - text: Sales Revenue
+    - generic [ref=e97]: Admin
+    - generic [ref=e98] [cursor=pointer]:
+      - img [ref=e99]
+      - text: Subcontractors
+    - generic [ref=e105] [cursor=pointer]:
+      - img [ref=e106]
+      - text: User Management
+    - button "Sign Out" [ref=e110] [cursor=pointer]
+  - generic [ref=e111]:
+    - generic [ref=e112]:
+      - generic [ref=e113]:
+        - generic [ref=e114]: CRM
+        - generic [ref=e115]: Thursday, 21 May 2026
+      - generic [ref=e117] [cursor=pointer]:
+        - generic [ref=e119]: 241 Waterside
+        - generic [ref=e120]: ▼
+      - generic [ref=e123]: developer
+    - generic [ref=e124]:
+      - generic [ref=e126]:
+        - generic [ref=e127] [cursor=pointer]:
+          - generic [ref=e128]: "17"
+          - generic [ref=e129]: Total Leads
+        - generic [ref=e130] [cursor=pointer]:
+          - generic [ref=e131]: "0"
+          - generic [ref=e132]: New
+        - generic [ref=e133] [cursor=pointer]:
+          - generic [ref=e134]: "13"
+          - generic [ref=e135]: Contacted
+        - generic [ref=e136] [cursor=pointer]:
+          - generic [ref=e137]: "0"
+          - generic [ref=e138]: Site Visit
+        - generic [ref=e139] [cursor=pointer]:
+          - generic [ref=e140]: "1"
+          - generic [ref=e141]: Follow-Up
+        - generic [ref=e142] [cursor=pointer]:
+          - generic [ref=e143]: "0"
+          - generic [ref=e144]: Closed Won
+        - generic [ref=e145] [cursor=pointer]:
+          - generic [ref=e146]: "1"
+          - generic [ref=e147]: Closed Lost
+        - generic [ref=e148]:
+          - generic [ref=e149]: "16"
+          - generic [ref=e150]: Active Pipeline
+      - generic [ref=e151]:
+        - textbox "Search name, email, phone…" [ref=e152]
+        - combobox [ref=e154] [cursor=pointer]:
+          - 'option "Stage: All" [selected]'
+          - option "New Lead"
+          - option "Contacted"
+          - option "No Response"
+          - option "Site Visit"
+          - option "Follow-Up"
+          - option "Closed Won"
+          - option "Closed Lost"
+        - combobox [ref=e155] [cursor=pointer]:
+          - 'option "Source: All" [selected]'
+          - option "Meta Ads"
+          - option "Website"
+          - option "Referral"
+          - option "Walk-In"
+          - option "Other"
+        - combobox [ref=e156] [cursor=pointer]:
+          - 'option "Assigned: All" [selected]'
+        - generic [ref=e158]:
+          - text: From
+          - textbox "Created from date" [ref=e159] [cursor=pointer]
+        - generic [ref=e160]:
+          - text: To
+          - textbox "Created to date" [ref=e161] [cursor=pointer]
+        - button "+ Add Lead" [ref=e162] [cursor=pointer]
+      - generic [ref=e163]:
+        - button "All 17" [ref=e164] [cursor=pointer]:
+          - text: All
+          - generic [ref=e165]: "17"
+        - button "New Lead 0" [ref=e166] [cursor=pointer]:
+          - text: New Lead
+          - generic [ref=e167]: "0"
+        - button "Contacted 13" [ref=e168] [cursor=pointer]:
+          - text: Contacted
+          - generic [ref=e169]: "13"
+        - button "No Response 2" [ref=e170] [cursor=pointer]:
+          - text: No Response
+          - generic [ref=e171]: "2"
+        - button "Site Visit 0" [ref=e172] [cursor=pointer]:
+          - text: Site Visit
+          - generic [ref=e173]: "0"
+        - button "Follow-Up 1" [ref=e174] [cursor=pointer]:
+          - text: Follow-Up
+          - generic [ref=e175]: "1"
+        - button "Closed Won 0" [ref=e176] [cursor=pointer]:
+          - text: Closed Won
+          - generic [ref=e177]: "0"
+        - button "Closed Lost 1" [ref=e178] [cursor=pointer]:
+          - text: Closed Lost
+          - generic [ref=e179]: "1"
+      - table [ref=e180]:
+        - rowgroup [ref=e181]:
+          - row "Name Company Email Phone Budget Prop. Type Stage Assigned Age ↓" [ref=e182] [cursor=pointer]:
+            - columnheader [ref=e183]:
+              - checkbox [ref=e184]
+            - columnheader "Name" [ref=e185]
+            - columnheader "Company" [ref=e186]
+            - columnheader "Email" [ref=e187]
+            - columnheader "Phone" [ref=e188]
+            - columnheader "Budget" [ref=e189]
+            - columnheader "Prop. Type" [ref=e190]
+            - columnheader "Stage" [ref=e191]
+            - columnheader "Assigned" [ref=e192]
+            - columnheader "Age ↓" [ref=e193]
+            - columnheader [ref=e194]
+        - rowgroup [ref=e195]:
+          - row "Matt Amaf properties matt.far@hotmail.com +971504409191 AED 2.1m – AED 2.8m 2 Bedroom Follow-Up — 14h ago View →" [ref=e196] [cursor=pointer]:
+            - cell [ref=e197]:
+              - checkbox [ref=e198]
+            - cell "Matt" [ref=e199]
+            - cell "Amaf properties" [ref=e200]
+            - cell "matt.far@hotmail.com" [ref=e201]
+            - cell "+971504409191" [ref=e202]
+            - cell "AED 2.1m – AED 2.8m" [ref=e203]
+            - cell "2 Bedroom" [ref=e204]
+            - cell "Follow-Up" [ref=e205]:
+              - generic [ref=e206]: Follow-Up
+            - cell "—" [ref=e207]
+            - cell "14h ago" [ref=e208]
+            - cell "View →" [ref=e209]
+          - row "Jonaid Ali Huntington Real Estate LLC jonaid@huntington.ae +971568655786 AED 3.5m+ Penthouse No Response — 2d ago View →" [ref=e210] [cursor=pointer]:
+            - cell [ref=e211]:
+              - checkbox [ref=e212]
+            - cell "Jonaid Ali" [ref=e213]
+            - cell "Huntington Real Estate LLC" [ref=e214]
+            - cell "jonaid@huntington.ae" [ref=e215]
+            - cell "+971568655786" [ref=e216]
+            - cell "AED 3.5m+" [ref=e217]
+            - cell "Penthouse" [ref=e218]
+            - cell "No Response" [ref=e219]:
+              - generic [ref=e220]: No Response
+            - cell "—" [ref=e221]
+            - cell "2d ago" [ref=e222]
+            - cell "View →" [ref=e223]
+          - row "Poonam R Capri Realty poonamthacker@gmail.com +971558328854 AED 1.8m – AED 2.1m 2 Bedroom Contacted — 2d ago View →" [ref=e224] [cursor=pointer]:
+            - cell [ref=e225]:
+              - checkbox [ref=e226]
+            - cell "Poonam R" [ref=e227]
+            - cell "Capri Realty" [ref=e228]
+            - cell "poonamthacker@gmail.com" [ref=e229]
+            - cell "+971558328854" [ref=e230]
+            - cell "AED 1.8m – AED 2.1m" [ref=e231]
+            - cell "2 Bedroom" [ref=e232]
+            - cell "Contacted" [ref=e233]:
+              - generic [ref=e234]: Contacted
+            - cell "—" [ref=e235]
+            - cell "2d ago" [ref=e236]
+            - cell "View →" [ref=e237]
+          - row "علی ہارون Royal Choice Real Estate aliharoon359@gmail.com +971564592551 AED 1.8m – AED 2.1m 2 Bedroom Contacted — 3d ago View →" [ref=e238] [cursor=pointer]:
+            - cell [ref=e239]:
+              - checkbox [ref=e240]
+            - cell "علی ہارون" [ref=e241]
+            - cell "Royal Choice Real Estate" [ref=e242]
+            - cell "aliharoon359@gmail.com" [ref=e243]
+            - cell "+971564592551" [ref=e244]
+            - cell "AED 1.8m – AED 2.1m" [ref=e245]
+            - cell "2 Bedroom" [ref=e246]
+            - cell "Contacted" [ref=e247]:
+              - generic [ref=e248]: Contacted
+            - cell "—" [ref=e249]
+            - cell "3d ago" [ref=e250]
+            - cell "View →" [ref=e251]
+          - row "Emon Living Walls property imhossain496@gmail.com +971522584157 AED 1.8m – AED 2.1m 2 Bedroom Contacted — 3d ago View →" [ref=e252] [cursor=pointer]:
+            - cell [ref=e253]:
+              - checkbox [ref=e254]
+            - cell "Emon" [ref=e255]
+            - cell "Living Walls property" [ref=e256]
+            - cell "imhossain496@gmail.com" [ref=e257]
+            - cell "+971522584157" [ref=e258]
+            - cell "AED 1.8m – AED 2.1m" [ref=e259]
+            - cell "2 Bedroom" [ref=e260]
+            - cell "Contacted" [ref=e261]:
+              - generic [ref=e262]: Contacted
+            - cell "—" [ref=e263]
+            - cell "3d ago" [ref=e264]
+            - cell "View →" [ref=e265]
+          - row "Alaa abraj Alsafwa Properties abrajalsafwa@gmail.com +971558443601 AED 1.8m – AED 2.1m Sky Loft Contacted — 4d ago View →" [ref=e266] [cursor=pointer]:
+            - cell [ref=e267]:
+              - checkbox [ref=e268]
+            - cell "Alaa" [ref=e269]
+            - cell "abraj Alsafwa Properties" [ref=e270]
+            - cell "abrajalsafwa@gmail.com" [ref=e271]
+            - cell "+971558443601" [ref=e272]
+            - cell "AED 1.8m – AED 2.1m" [ref=e273]
+            - cell "Sky Loft" [ref=e274]
+            - cell "Contacted" [ref=e275]:
+              - generic [ref=e276]: Contacted
+            - cell "—" [ref=e277]
+            - cell "4d ago" [ref=e278]
+            - cell "View →" [ref=e279]
+          - row "Syed kamran Ali Avenue 360 Properties LLC kamran@avenue360.ae +971528952161 — — Contacted — 5d ago View →" [ref=e280] [cursor=pointer]:
+            - cell [ref=e281]:
+              - checkbox [ref=e282]
+            - cell "Syed kamran Ali" [ref=e283]
+            - cell "Avenue 360 Properties LLC" [ref=e284]
+            - cell "kamran@avenue360.ae" [ref=e285]
+            - cell "+971528952161" [ref=e286]
+            - cell "—" [ref=e287]
+            - cell "—" [ref=e288]
+            - cell "Contacted" [ref=e289]:
+              - generic [ref=e290]: Contacted
+            - cell "—" [ref=e291]
+            - cell "5d ago" [ref=e292]
+            - cell "View →" [ref=e293]
+          - row "Viquar One Knock Real Estate viquarsayeed2@gmail.com +971547575768 AED 1.8m – AED 2.1m 2 Bedroom Contacted — 6d ago View →" [ref=e294] [cursor=pointer]:
+            - cell [ref=e295]:
+              - checkbox [ref=e296]
+            - cell "Viquar" [ref=e297]
+            - cell "One Knock Real Estate" [ref=e298]
+            - cell "viquarsayeed2@gmail.com" [ref=e299]
+            - cell "+971547575768" [ref=e300]
+            - cell "AED 1.8m – AED 2.1m" [ref=e301]
+            - cell "2 Bedroom" [ref=e302]
+            - cell "Contacted" [ref=e303]:
+              - generic [ref=e304]: Contacted
+            - cell "—" [ref=e305]
+            - cell "6d ago" [ref=e306]
+            - cell "View →" [ref=e307]
+          - row "Shahzad Truss shahzadkhan669988@gmail.com +971556243877 AED 1.8m – AED 2.1m Sky Loft Contacted — 6d ago View →" [ref=e308] [cursor=pointer]:
+            - cell [ref=e309]:
+              - checkbox [ref=e310]
+            - cell "Shahzad" [ref=e311]
+            - cell "Truss" [ref=e312]
+            - cell "shahzadkhan669988@gmail.com" [ref=e313]
+            - cell "+971556243877" [ref=e314]
+            - cell "AED 1.8m – AED 2.1m" [ref=e315]
+            - cell "Sky Loft" [ref=e316]
+            - cell "Contacted" [ref=e317]:
+              - generic [ref=e318]: Contacted
+            - cell "—" [ref=e319]
+            - cell "6d ago" [ref=e320]
+            - cell "View →" [ref=e321]
+          - row "Mostafa best deal abdalhak43@gmail.com +971555303080 AED 1.8m – AED 2.1m Sky Loft Contacted — 14/05/2026 View →" [ref=e322] [cursor=pointer]:
+            - cell [ref=e323]:
+              - checkbox [ref=e324]
+            - cell "Mostafa" [ref=e325]
+            - cell "best deal" [ref=e326]
+            - cell "abdalhak43@gmail.com" [ref=e327]
+            - cell "+971555303080" [ref=e328]
+            - cell "AED 1.8m – AED 2.1m" [ref=e329]
+            - cell "Sky Loft" [ref=e330]
+            - cell "Contacted" [ref=e331]:
+              - generic [ref=e332]: Contacted
+            - cell "—" [ref=e333]
+            - cell "14/05/2026" [ref=e334]
+            - cell "View →" [ref=e335]
+          - row "Emad Etazhi emadst@yahoo.com +971564704829 AED 2.1m – AED 2.8m 2 Bedroom Closed Lost — 14/05/2026 View →" [ref=e336] [cursor=pointer]:
+            - cell [ref=e337]:
+              - checkbox [ref=e338]
+            - cell "Emad" [ref=e339]
+            - cell "Etazhi" [ref=e340]
+            - cell "emadst@yahoo.com" [ref=e341]
+            - cell "+971564704829" [ref=e342]
+            - cell "AED 2.1m – AED 2.8m" [ref=e343]
+            - cell "2 Bedroom" [ref=e344]
+            - cell "Closed Lost" [ref=e345]:
+              - generic [ref=e346]: Closed Lost
+            - cell "—" [ref=e347]
+            - cell "14/05/2026" [ref=e348]
+            - cell "View →" [ref=e349]
+          - row "Ehtisham H Square Real Estate ehtishammgl@gmail.com +971569116674 AED 1.8m – AED 2.1m 2 Bedroom Contacted — 14/05/2026 View →" [ref=e350] [cursor=pointer]:
+            - cell [ref=e351]:
+              - checkbox [ref=e352]
+            - cell "Ehtisham" [ref=e353]
+            - cell "H Square Real Estate" [ref=e354]
+            - cell "ehtishammgl@gmail.com" [ref=e355]
+            - cell "+971569116674" [ref=e356]
+            - cell "AED 1.8m – AED 2.1m" [ref=e357]
+            - cell "2 Bedroom" [ref=e358]
+            - cell "Contacted" [ref=e359]:
+              - generic [ref=e360]: Contacted
+            - cell "—" [ref=e361]
+            - cell "14/05/2026" [ref=e362]
+            - cell "View →" [ref=e363]
+          - row "MD Kaiser Mahmud Ideal Greenland Real Estate LLC igre.kaiser@gmail.com +971581005220 AED 1.8m – AED 2.1m Penthouse No Response — 13/05/2026 View →" [ref=e364] [cursor=pointer]:
+            - cell [ref=e365]:
+              - checkbox [ref=e366]
+            - cell "MD Kaiser Mahmud" [ref=e367]
+            - cell "Ideal Greenland Real Estate LLC" [ref=e368]
+            - cell "igre.kaiser@gmail.com" [ref=e369]
+            - cell "+971581005220" [ref=e370]
+            - cell "AED 1.8m – AED 2.1m" [ref=e371]
+            - cell "Penthouse" [ref=e372]
+            - cell "No Response" [ref=e373]:
+              - generic [ref=e374]: No Response
+            - cell "—" [ref=e375]
+            - cell "13/05/2026" [ref=e376]
+            - cell "View →" [ref=e377]
+          - row "Reyansh Broadway Signature properties praful.rawat@gmail.com +971558950540 AED 1.8m – AED 2.1m 2 Bedroom Contacted — 13/05/2026 View →" [ref=e378] [cursor=pointer]:
+            - cell [ref=e379]:
+              - checkbox [ref=e380]
+            - cell "Reyansh" [ref=e381]
+            - cell "Broadway Signature properties" [ref=e382]
+            - cell "praful.rawat@gmail.com" [ref=e383]
+            - cell "+971558950540" [ref=e384]
+            - cell "AED 1.8m – AED 2.1m" [ref=e385]
+            - cell "2 Bedroom" [ref=e386]
+            - cell "Contacted" [ref=e387]:
+              - generic [ref=e388]: Contacted
+            - cell "—" [ref=e389]
+            - cell "13/05/2026" [ref=e390]
+            - cell "View →" [ref=e391]
+          - row "Ebrahim Yousef Valirya Property Info@valiryaproperty.com +971583060948 AED 1.8m – AED 2.1m 2 Bedroom Contacted — 13/05/2026 View →" [ref=e392] [cursor=pointer]:
+            - cell [ref=e393]:
+              - checkbox [ref=e394]
+            - cell "Ebrahim Yousef" [ref=e395]
+            - cell "Valirya Property" [ref=e396]
+            - cell "Info@valiryaproperty.com" [ref=e397]
+            - cell "+971583060948" [ref=e398]
+            - cell "AED 1.8m – AED 2.1m" [ref=e399]
+            - cell "2 Bedroom" [ref=e400]
+            - cell "Contacted" [ref=e401]:
+              - generic [ref=e402]: Contacted
+            - cell "—" [ref=e403]
+            - cell "13/05/2026" [ref=e404]
+            - cell "View →" [ref=e405]
+          - row "Mohamed Sufyan Astute real estate llc skintl888@gmail.com +971508378611 AED 1.8m – AED 2.1m 2 Bedroom Contacted — 13/05/2026 View →" [ref=e406] [cursor=pointer]:
+            - cell [ref=e407]:
+              - checkbox [ref=e408]
+            - cell "Mohamed Sufyan" [ref=e409]
+            - cell "Astute real estate llc" [ref=e410]
+            - cell "skintl888@gmail.com" [ref=e411]
+            - cell "+971508378611" [ref=e412]
+            - cell "AED 1.8m – AED 2.1m" [ref=e413]
+            - cell "2 Bedroom" [ref=e414]
+            - cell "Contacted" [ref=e415]:
+              - generic [ref=e416]: Contacted
+            - cell "—" [ref=e417]
+            - cell "13/05/2026" [ref=e418]
+            - cell "View →" [ref=e419]
+          - row "Sky Mode Properties theonlineworkonly@gmail.com +971564676763 AED 1.8m – AED 2.1m 2 Bedroom Contacted — 13/05/2026 View →" [ref=e420] [cursor=pointer]:
+            - cell [ref=e421]:
+              - checkbox [ref=e422]
+            - cell "Sky" [ref=e423]
+            - cell "Mode Properties" [ref=e424]
+            - cell "theonlineworkonly@gmail.com" [ref=e425]
+            - cell "+971564676763" [ref=e426]
+            - cell "AED 1.8m – AED 2.1m" [ref=e427]
+            - cell "2 Bedroom" [ref=e428]
+            - cell "Contacted" [ref=e429]:
+              - generic [ref=e430]: Contacted
+            - cell "—" [ref=e431]
+            - cell "13/05/2026" [ref=e432]
+            - cell "View →" [ref=e433]
+      - generic [ref=e434]:
+        - generic [ref=e435]:
+          - text: Showing
+          - strong [ref=e436]: 1–17
+          - text: of
+          - strong [ref=e437]: "17"
+          - text: leads
+        - generic [ref=e438]:
+          - button "Previous page" [disabled] [ref=e439]: ←
+          - button "Next page" [disabled] [ref=e440]: →
+        - generic [ref=e441]: 25 per page

@@ -1,0 +1,115 @@
+<h2>Mobile Navigation Pattern</h2>
+<p class="subtitle">The current sidebar is 220px fixed — it needs to change on mobile. Which pattern fits best?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f9fa;padding:16px;font-family:monospace;font-size:12px">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <div style="background:#1a1a2e;color:#fff;padding:8px 6px;border-radius:6px;width:36px;min-height:160px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:9px">
+          <div style="width:18px;height:18px;background:#4a9eff;border-radius:3px"></div>
+          <div style="width:14px;height:2px;background:#666;border-radius:1px"></div>
+          <div style="width:14px;height:2px;background:#666;border-radius:1px"></div>
+          <div style="width:14px;height:2px;background:#666;border-radius:1px"></div>
+        </div>
+        <div style="flex:1;background:#fff;border-radius:6px;padding:8px;min-height:160px">
+          <div style="height:10px;background:#eee;border-radius:3px;margin-bottom:6px;width:60%"></div>
+          <div style="height:8px;background:#f0f0f0;border-radius:3px;margin-bottom:4px"></div>
+          <div style="height:8px;background:#f0f0f0;border-radius:3px;margin-bottom:4px;width:80%"></div>
+          <div style="height:8px;background:#f0f0f0;border-radius:3px;width:70%"></div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:10px;color:#666;text-align:center">Icon-only sidebar (36px) always visible</div>
+    </div>
+    <div class="card-body">
+      <h3>A — Slim Icon Sidebar</h3>
+      <p>Sidebar collapses to 36px icons-only strip. Tap icon = navigate. No full-screen overlay. Desktop stays unchanged.</p>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>Pros</h4><ul><li>Always visible — no hidden nav</li><li>Familiar to desktop users</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Icons alone need to be clear</li><li>Still eats 36px screen width</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f9fa;padding:16px;font-family:monospace;font-size:12px">
+      <div style="position:relative">
+        <div style="background:#fff;border-radius:6px;padding:8px;min-height:160px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div style="font-size:10px;font-weight:bold;color:#333">CRM Home</div>
+            <div style="width:20px;height:14px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
+              <div style="height:2px;background:#333;border-radius:1px"></div>
+              <div style="height:2px;background:#333;border-radius:1px"></div>
+              <div style="height:2px;background:#333;border-radius:1px"></div>
+            </div>
+          </div>
+          <div style="height:8px;background:#f0f0f0;border-radius:3px;margin-bottom:4px"></div>
+          <div style="height:8px;background:#f0f0f0;border-radius:3px;margin-bottom:4px;width:80%"></div>
+          <div style="height:8px;background:#f0f0f0;border-radius:3px;width:70%"></div>
+        </div>
+        <div style="position:absolute;top:0;left:0;right:0;bottom:0;border-radius:6px;overflow:hidden;pointer-events:none">
+          <div style="position:absolute;top:0;left:0;width:60%;height:100%;background:#1a1a2e;padding:8px;box-sizing:border-box;opacity:0.95">
+            <div style="font-size:9px;color:#aaa;margin-bottom:4px">MAIN</div>
+            <div style="font-size:9px;color:#fff;padding:3px 4px;background:#4a9eff;border-radius:3px;margin-bottom:2px">Dashboard</div>
+            <div style="font-size:9px;color:#aaa;padding:3px 4px;margin-bottom:2px">Drawing Register</div>
+            <div style="font-size:9px;color:#aaa;margin-top:4px;margin-bottom:2px">SITE</div>
+            <div style="font-size:9px;color:#aaa;padding:3px 4px;margin-bottom:2px">Inspection Requests</div>
+            <div style="font-size:9px;color:#aaa;padding:3px 4px;margin-bottom:2px">NCRs</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:10px;color:#666;text-align:center">Hamburger ☰ opens full sidebar overlay</div>
+    </div>
+    <div class="card-body">
+      <h3>B — Hamburger Drawer</h3>
+      <p>Topbar with ☰ button. Tap opens full sidebar sliding in from the left. Tap outside to close. Full screen used for content.</p>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>Pros</h4><ul><li>Full content width on mobile</li><li>Familiar pattern (most apps)</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Nav hidden by default</li><li>Extra tap to navigate</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f9fa;padding:16px;font-family:monospace;font-size:12px">
+      <div style="background:#fff;border-radius:6px;padding:8px;min-height:130px">
+        <div style="height:8px;background:#f0f0f0;border-radius:3px;margin-bottom:4px"></div>
+        <div style="height:8px;background:#f0f0f0;border-radius:3px;margin-bottom:4px;width:80%"></div>
+        <div style="height:8px;background:#f0f0f0;border-radius:3px;width:70%"></div>
+        <div style="height:8px;background:#f0f0f0;border-radius:3px;margin-top:4px"></div>
+      </div>
+      <div style="display:flex;background:#1a1a2e;border-radius:6px;padding:6px 4px;margin-top:6px;justify-content:space-around">
+        <div style="text-align:center">
+          <div style="width:16px;height:16px;background:#4a9eff;border-radius:3px;margin:0 auto 2px"></div>
+          <div style="font-size:8px;color:#aaa">Dash</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:16px;height:16px;background:#555;border-radius:3px;margin:0 auto 2px"></div>
+          <div style="font-size:8px;color:#aaa">Site</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:16px;height:16px;background:#555;border-radius:3px;margin:0 auto 2px"></div>
+          <div style="font-size:8px;color:#aaa">Finance</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:16px;height:16px;background:#555;border-radius:3px;margin:0 auto 2px"></div>
+          <div style="font-size:8px;color:#aaa">Sales</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:16px;height:16px;background:#555;border-radius:3px;margin:0 auto 2px"></div>
+          <div style="font-size:8px;color:#aaa">More</div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:10px;color:#666;text-align:center">Bottom tab bar — group nav by section</div>
+    </div>
+    <div class="card-body">
+      <h3>C — Bottom Tab Bar</h3>
+      <p>Sidebar gone on mobile. Bottom bar shows 4-5 section tabs (Main, Site, Finance, Sales, Admin). Tapping a tab shows sub-nav or goes straight to the section's first page.</p>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>Pros</h4><ul><li>Native-app feel on iOS/Android</li><li>Thumb-reachable navigation</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Biggest departure from desktop</li><li>Sub-nav needs extra handling</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+</div>

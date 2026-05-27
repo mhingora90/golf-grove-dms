@@ -1,0 +1,187 @@
+- generic [ref=e49]:
+  - generic [ref=e50]:
+    - generic [ref=e51]:
+      - generic [ref=e52]: Active Project
+      - generic [ref=e53]: Golf Grove – DPC
+    - generic [ref=e54]:
+      - generic [ref=e55]: MH
+      - generic [ref=e56]:
+        - generic [ref=e57]: Mohammed Hingora
+        - generic [ref=e58]: developer
+    - generic [ref=e59]: Main
+    - generic [ref=e60] [cursor=pointer]:
+      - img [ref=e61]
+      - text: Dashboard
+    - generic [ref=e66]: Document Control
+    - generic [ref=e67] [cursor=pointer]:
+      - img [ref=e68]
+      - text: Drawing Register
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: Submittals (DSUB)
+      - generic [ref=e74]: "1"
+    - generic [ref=e75] [cursor=pointer]:
+      - img [ref=e76]
+      - text: Submittal Register
+    - generic [ref=e78]: Site
+    - generic [ref=e79] [cursor=pointer]:
+      - img [ref=e80]
+      - text: Inspection Requests
+    - generic [ref=e83] [cursor=pointer]:
+      - img [ref=e84]
+      - text: NCRs
+    - generic [ref=e87] [cursor=pointer]:
+      - img [ref=e88]
+      - text: RFIs
+    - generic [ref=e92] [cursor=pointer]:
+      - img [ref=e93]
+      - text: Transmittals
+    - generic [ref=e95] [cursor=pointer]:
+      - img [ref=e96]
+      - text: Method Statements
+    - generic [ref=e99] [cursor=pointer]:
+      - img [ref=e100]
+      - text: Correspondence
+    - generic [ref=e103] [cursor=pointer]:
+      - img [ref=e104]
+      - text: Punch List
+      - generic [ref=e107]: "0"
+    - generic [ref=e108]: Finance
+    - generic [ref=e109] [cursor=pointer]:
+      - img [ref=e110]
+      - text: Finance Overview
+    - generic [ref=e113] [cursor=pointer]:
+      - img [ref=e114]
+      - text: Payment Certificates
+    - generic [ref=e117] [cursor=pointer]:
+      - img [ref=e118]
+      - text: BOQ Setup
+    - generic [ref=e121]:
+      - generic [ref=e122]: Sales
+      - generic [ref=e123] [cursor=pointer]:
+        - img [ref=e124]
+        - text: CRM Home
+      - generic [ref=e129] [cursor=pointer]:
+        - img [ref=e130]
+        - text: Leads
+        - generic [ref=e134]: "0"
+      - generic [ref=e135] [cursor=pointer]:
+        - img [ref=e136]
+        - text: Unit Setup
+      - generic [ref=e139] [cursor=pointer]:
+        - img [ref=e140]
+        - text: Unit Register
+      - generic [ref=e143] [cursor=pointer]:
+        - img [ref=e144]
+        - text: Sales Revenue
+    - generic [ref=e147]: Admin
+    - generic [ref=e148] [cursor=pointer]:
+      - img [ref=e149]
+      - text: Subcontractors
+    - generic [ref=e155] [cursor=pointer]:
+      - img [ref=e156]
+      - text: User Management
+    - button "Sign Out" [ref=e160] [cursor=pointer]
+  - generic [ref=e161]:
+    - generic [ref=e162]:
+      - generic [ref=e163]:
+        - generic [ref=e164]: Sales Revenue
+        - generic [ref=e165]: Sunday, 24 May 2026
+      - generic [ref=e167] [cursor=pointer]:
+        - generic [ref=e169]: Golf Grove – DPC
+        - generic [ref=e170]: ▼
+      - generic [ref=e173]: developer
+    - generic [ref=e174]:
+      - generic [ref=e3574]:
+        - generic [ref=e3575]:
+          - generic [ref=e3576]: "98"
+          - generic [ref=e3577]: Total Units
+          - generic [ref=e3578]: 56 Studio · 42 1 Bedroom
+        - generic [ref=e3579]:
+          - generic [ref=e3580]: "92"
+          - generic [ref=e3581]: Sold
+          - generic [ref=e3582]: 93.9% of total
+        - generic [ref=e3583]:
+          - generic [ref=e3584]: "0"
+          - generic [ref=e3585]: Reserved
+          - generic [ref=e3586]: SPA in progress
+        - generic [ref=e3587]:
+          - generic [ref=e3588]: "6"
+          - generic [ref=e3589]: Available
+          - generic [ref=e3590]: 6.1% remaining
+        - generic [ref=e3591]:
+          - generic [ref=e3592]: 50.8K
+          - generic [ref=e3593]: Sqft Sold
+          - generic [ref=e3594]: of 50.8K sqft total
+      - generic [ref=e3595]:
+        - generic [ref=e3596]:
+          - generic [ref=e3597]: AED 78.07M
+          - generic [ref=e3598]: Total GDV (Listed)
+          - generic [ref=e3599]: Gross Development Value
+        - generic [ref=e3600]:
+          - generic [ref=e3601]: AED 70.28M
+          - generic [ref=e3602]: Total Contracted Revenue
+          - generic [ref=e3603]: 92 units (sold + reserved)
+        - generic [ref=e3604]:
+          - generic [ref=e3605]: AED 6.51M
+          - generic [ref=e3606]: Remaining GDV (Unsold)
+          - generic [ref=e3607]: 6 available units
+      - generic [ref=e3609]:
+        - generic [ref=e3610]: Expected Revenue by Month (Payment Plan)
+        - generic [ref=e3611]: No payment milestones with due dates set yet.
+      - generic [ref=e3612]:
+        - generic [ref=e3614]:
+          - generic [ref=e3615]: Commission Summary
+          - generic [ref=e3616]:
+            - generic [ref=e3617]: Total Commission Payable
+            - generic [ref=e3618]: AED 112,500.00
+          - generic [ref=e3619]:
+            - generic [ref=e3620]: Avg Commission Rate
+            - generic [ref=e3621]: 9.00%
+          - generic [ref=e3622]:
+            - generic [ref=e3623]: Units with broker
+            - generic [ref=e3624]: 0 of 92 contracted
+        - generic [ref=e3626]:
+          - generic [ref=e3627]: Discount Summary
+          - generic [ref=e3628]:
+            - generic [ref=e3629]: Total Discount Given
+            - generic [ref=e3630]: AED 1,231,765.00
+          - generic [ref=e3631]:
+            - generic [ref=e3632]: Avg Discount Rate
+            - generic [ref=e3633]: 6.64%
+          - generic [ref=e3634]:
+            - generic [ref=e3635]: Units with discount
+            - generic [ref=e3636]: 20 of 92 contracted
+      - generic [ref=e3638]:
+        - generic [ref=e3639]: Revenue by Unit Type
+        - table [ref=e3641]:
+          - rowgroup [ref=e3642]:
+            - row "Type Total Sold Avg Sqft Avg Sold Price Total Revenue" [ref=e3643]:
+              - columnheader "Type" [ref=e3644]
+              - columnheader "Total" [ref=e3645]
+              - columnheader "Sold" [ref=e3646]
+              - columnheader "Avg Sqft" [ref=e3647]
+              - columnheader "Avg Sold Price" [ref=e3648]
+              - columnheader "Total Revenue" [ref=e3649]
+          - rowgroup [ref=e3650]:
+            - row "1 Bedroom 42 36 664 sqft AED 990,749.00 AED 35,666,975.00" [ref=e3651]:
+              - cell "1 Bedroom" [ref=e3652]
+              - cell "42" [ref=e3653]
+              - cell "36" [ref=e3654]
+              - cell "664 sqft" [ref=e3655]
+              - cell "AED 990,749.00" [ref=e3656]
+              - cell "AED 35,666,975.00" [ref=e3657]
+            - row "Studio 56 56 409 sqft AED 618,174.00 AED 34,617,760.00" [ref=e3658]:
+              - cell "Studio" [ref=e3659]
+              - cell "56" [ref=e3660]
+              - cell "56" [ref=e3661]
+              - cell "409 sqft" [ref=e3662]
+              - cell "AED 618,174.00" [ref=e3663]
+              - cell "AED 34,617,760.00" [ref=e3664]
+            - row "Total 98 92 518 sqft — AED 70,284,735.00" [ref=e3665]:
+              - cell "Total" [ref=e3666]
+              - cell "98" [ref=e3667]
+              - cell "92" [ref=e3668]
+              - cell "518 sqft" [ref=e3669]
+              - cell "—" [ref=e3670]
+              - cell "AED 70,284,735.00" [ref=e3671]

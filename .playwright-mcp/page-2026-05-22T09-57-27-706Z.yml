@@ -1,0 +1,182 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Google Apps Script" [ref=e10] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - generic [ref=e16]:
+            - button "Rename" [ref=e18] [cursor=pointer]: Untitled project
+            - generic [ref=e603]:
+              - generic [ref=e604]: cloud_done
+              - text: Saved to Drive
+          - generic [ref=e26]:
+            - button "Deploy" [ref=e31] [cursor=pointer]:
+              - generic [ref=e34]:
+                - text: Deploy
+                - generic [ref=e35]: 
+            - button "Support" [ref=e37] [cursor=pointer]:
+              - generic [ref=e40]: help_outline
+        - generic [ref=e42]:
+          - button "Google apps" [ref=e46] [cursor=pointer]:
+            - img [ref=e47]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e52] [cursor=pointer]':
+            - img [ref=e54]
+    - generic [ref=e56]:
+      - navigation "Apps Script project pages" [ref=e58]:
+        - link "Overview" [ref=e59] [cursor=pointer]:
+          - generic [ref=e61]: info_outline
+          - generic [ref=e62]: Overview
+        - link "Editor" [ref=e63] [cursor=pointer]:
+          - generic [ref=e65]: code
+          - generic [ref=e66]: Editor
+        - link "Project History" [ref=e67] [cursor=pointer]:
+          - generic [ref=e69]: history
+          - generic [ref=e70]: Project History
+        - link "Triggers" [ref=e71] [cursor=pointer]:
+          - generic [ref=e73]: alarm
+          - generic [ref=e74]: Triggers
+        - link "Executions" [ref=e75] [cursor=pointer]:
+          - generic [ref=e77]: playlist_play
+          - generic [ref=e78]: Executions
+        - link "Project Settings" [ref=e79] [cursor=pointer]:
+          - generic [ref=e81]: settings
+          - generic [ref=e82]: Project Settings
+      - generic [ref=e83]:
+        - heading "Editor" [level=1] [ref=e84]
+        - generic [ref=e85]:
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - heading "Files" [level=2] [ref=e89]
+              - generic [ref=e91]:
+                - button "Sort files alphabetically" [disabled] [ref=e93]:
+                  - generic [ref=e96]: sort_by_alpha
+                - button "Add a file" [ref=e98] [cursor=pointer]:
+                  - generic [ref=e101]: add
+            - listbox "Project files" [ref=e103]:
+              - option "Code.gs" [ref=e104] [cursor=pointer]:
+                - generic "Code.gs" [ref=e105]
+                - button "File operations menu for Code.gs." [ref=e106]:
+                  - button "File operations menu for Code.gs." [ref=e107]:
+                    - generic [ref=e110]: 
+            - generic [ref=e111]:
+              - heading "Libraries" [level=2] [ref=e112]
+              - button "Add a library" [ref=e115] [cursor=pointer]:
+                - generic [ref=e118]: add
+            - generic:
+              - listbox "Library Dependencies"
+            - generic [ref=e119]:
+              - heading "Services" [level=2] [ref=e120]
+              - button "Add a service" [ref=e123] [cursor=pointer]:
+                - generic [ref=e126]: add
+            - generic:
+              - listbox "Service Dependencies"
+          - generic [ref=e133]:
+            - region [ref=e134]:
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - generic [ref=e139]:
+                    - button "Undo code edit" [disabled]:
+                      - generic: undo
+                  - generic [ref=e142]:
+                    - button "Redo code edit" [disabled]:
+                      - generic: redo
+                - generic [ref=e146]:
+                  - button "Save project to Drive" [disabled]:
+                    - img
+                - generic [ref=e605]:
+                  - button "Run the selected function" [ref=e609]:
+                    - generic [ref=e612]: play_arrow
+                    - generic [ref=e613]: Run
+                  - button "Debug the selected function" [ref=e617]:
+                    - img [ref=e620]
+                    - generic [ref=e623]: Debug
+                  - listbox "Select function to run" [ref=e626] [cursor=pointer]:
+                    - option "buildPayload" [selected] [ref=e627]
+                - button "Open the execution log panel" [ref=e174]:
+                  - generic [ref=e177]: Execution log
+            - generic [ref=e179]:
+              - main [ref=e183]:
+                - generic [ref=e184]: .
+                - generic [ref=e186]:
+                  - iframe [ref=e187]:
+                    
+                  - code [ref=e189]:
+                    - generic [ref=e190]:
+                      - generic [ref=e193]:
+                        - generic [ref=e438]: "1"
+                        - generic [ref=e440]: "2"
+                        - generic [ref=e442]: "3"
+                        - generic [ref=e444]: "4"
+                        - generic [ref=e446]: "5"
+                        - generic [ref=e448]: "6"
+                        - generic [ref=e452]: "7"
+                        - generic [ref=e454]: "8"
+                        - generic [ref=e456]: "9"
+                        - generic [ref=e458]: "10"
+                        - generic [ref=e460]: "11"
+                        - generic [ref=e462]: "12"
+                        - generic [ref=e464]: "13"
+                        - generic [ref=e466]: "14"
+                        - generic [ref=e468]: "15"
+                        - generic [ref=e470]: "16"
+                        - generic [ref=e472]: "17"
+                        - generic [ref=e473]:
+                          - generic [ref=e474] [cursor=pointer]: 
+                          - generic [ref=e475]: "18"
+                        - generic [ref=e477]: "19"
+                        - generic [ref=e479]: "20"
+                        - generic [ref=e481]: "21"
+                        - generic [ref=e483]: "22"
+                        - generic [ref=e485]: "23"
+                        - generic [ref=e487]: "24"
+                        - generic [ref=e489]: "25"
+                        - generic [ref=e491]: "26"
+                        - generic [ref=e493]: "27"
+                        - generic [ref=e495]: "28"
+                        - generic [ref=e497]: "29"
+                      - generic [ref=e300]:
+                        - generic [ref=e542]: // Google Apps Script — syncLeadsToCRM + backfillAllLeads
+                        - generic [ref=e544]: "// Project: 1_k0ADnbsdTFeUjfgKZ5pFg1MTSnUzLMhMs6OtYMKiuSvqImrQyqi0S-e"
+                        - generic [ref=e546]: "// Sheet: \"Automatic Meta Leads\""
+                        - generic [ref=e549]: const SUPABASE_URL = 'https://kdxvhrwnnehicgdryowu.supabase.co';
+                        - generic [ref=e551]: const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+                        - generic [ref=e553]: eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkeHZocndubmVoaWNnZHJ5b3d1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTY1ODY2MywiZXhwIjoyMDkxMjM0NjYzfQ.
+                        - generic [ref=e555]: q9i53Jx2GXHpX5t89Tdzly0WPiS-TOeiuY36D6uRnUA';
+                        - generic [ref=e557]: const SHEET_NAME = 'Automatic Meta Leads';
+                        - generic [ref=e560]: "// Column mapping: sheet headers are misleading — actual data locations:"
+                        - generic [ref=e562]: // adset_name → name
+                        - generic [ref=e564]: // adset_id → company_name
+                        - generic [ref=e566]: // campaign_id → email
+                        - generic [ref=e568]: // campaign_name → phone
+                        - generic [ref=e570]: // created_time → budget (stored as created_time)
+                        - generic [ref=e572]: // ad_id → property type (stored as ad_id)
+                        - generic [ref=e574]: // id (or lead_id) → meta_lead_id
+                        - generic [ref=e577]: "function buildPayload(headers, row) {"
+                        - generic [ref=e579]: const idx = (h) => headers.findIndex(header => header === h);
+                        - generic [ref=e582]: const idxName = idx('adset_name');
+                        - generic [ref=e584]: const idxCompany = idx('adset_id');
+                        - generic [ref=e586]: const idxEmail = idx('campaign_id');
+                        - generic [ref=e588]: const idxPhone = idx('campaign_name');
+                        - generic [ref=e590]: const idxBudget = idx('created_time');
+                        - generic [ref=e592]: const idxPropType = idx('ad_id');
+                        - generic [ref=e594]: const idxLeadId = idx('form_name'); // e.g. "l:999128779718002" — strip "l:" prefix
+                        - generic [ref=e597]: "const str = (i) => i >= 0 ? (String(row[i] || '').trim() || null) : null;"
+                      - textbox "Editor content;Press Alt+F1 for Accessibility Options." [active] [ref=e360]: "// Google Apps Script — syncLeadsToCRM + backfillAllLeads // Project: 1_k0ADnbsdTFeUjfgKZ5pFg1MTSnUzLMhMs6OtYMKiuSvqImrQyqi0S-e // Sheet: \"Automatic Meta Leads\" const SUPABASE_URL = 'https://kdxvhrwnnehicgdryowu.supabase.co'; const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ"
+              - generic:
+                - generic:
+                  - button "Close execution logs pane" [ref=e361] [cursor=pointer]:
+                    - generic [ref=e362]: close
+                  - tooltip [ref=e363]: Close execution log
+  - generic: Saving project...
+  - generic [ref=e364]:
+    - alert
+    - alert
+    - complementary
+    - complementary
+  - generic [ref=e628]: Saving project...
+  - generic [ref=e631]: Saving project...

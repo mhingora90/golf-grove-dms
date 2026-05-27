@@ -1,0 +1,178 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Google Apps Script" [ref=e10] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - generic [ref=e16]:
+            - button "Rename" [ref=e18] [cursor=pointer]: Untitled project
+            - generic [ref=e1133]: cloud_done
+          - generic [ref=e26]:
+            - button "Deploy" [ref=e31] [cursor=pointer]:
+              - generic [ref=e34]:
+                - text: Deploy
+                - generic [ref=e35]: 
+            - button "Support" [ref=e37] [cursor=pointer]:
+              - generic [ref=e40]: help_outline
+        - generic [ref=e42]:
+          - button "Google apps" [ref=e46] [cursor=pointer]:
+            - img [ref=e47]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e52] [cursor=pointer]':
+            - img [ref=e54]
+    - generic [ref=e56]:
+      - navigation "Apps Script project pages" [ref=e58]:
+        - link "Overview" [ref=e59] [cursor=pointer]:
+          - generic [ref=e61]: info_outline
+          - generic [ref=e62]: Overview
+        - link "Editor" [ref=e63] [cursor=pointer]:
+          - generic [ref=e65]: code
+          - generic [ref=e66]: Editor
+        - link "Project History" [ref=e67] [cursor=pointer]:
+          - generic [ref=e69]: history
+          - generic [ref=e70]: Project History
+        - link "Triggers" [ref=e71] [cursor=pointer]:
+          - generic [ref=e73]: alarm
+          - generic [ref=e74]: Triggers
+        - link "Executions" [ref=e75] [cursor=pointer]:
+          - generic [ref=e77]: playlist_play
+          - generic [ref=e78]: Executions
+        - link "Project Settings" [ref=e79] [cursor=pointer]:
+          - generic [ref=e81]: settings
+          - generic [ref=e82]: Project Settings
+      - generic [ref=e83]:
+        - heading "Editor" [level=1] [ref=e84]
+        - generic [ref=e85]:
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - heading "Files" [level=2] [ref=e89]
+              - generic [ref=e91]:
+                - button "Sort files alphabetically" [disabled] [ref=e93]:
+                  - generic [ref=e96]: sort_by_alpha
+                - button "Add a file" [ref=e98] [cursor=pointer]:
+                  - generic [ref=e101]: add
+            - listbox "Project files" [ref=e103]:
+              - option "Code.gs" [ref=e104] [cursor=pointer]:
+                - generic "Code.gs" [ref=e105]
+                - button "File operations menu for Code.gs." [ref=e106]:
+                  - button "File operations menu for Code.gs." [ref=e107]:
+                    - generic [ref=e110]: 
+            - generic [ref=e111]:
+              - heading "Libraries" [level=2] [ref=e112]
+              - button "Add a library" [ref=e115] [cursor=pointer]:
+                - generic [ref=e118]: add
+            - generic:
+              - listbox "Library Dependencies"
+            - generic [ref=e119]:
+              - heading "Services" [level=2] [ref=e120]
+              - button "Add a service" [ref=e123] [cursor=pointer]:
+                - generic [ref=e126]: add
+            - generic:
+              - listbox "Service Dependencies"
+          - generic [ref=e133]:
+            - region [ref=e134]:
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - generic [ref=e139]:
+                    - button "Undo code edit" [disabled]:
+                      - generic: undo
+                  - generic [ref=e142]:
+                    - button "Redo code edit" [disabled]:
+                      - generic: redo
+                - generic [ref=e146]:
+                  - button "Save project to Drive" [disabled]:
+                    - img
+                - generic [ref=e1105]:
+                  - button "Run the selected function" [ref=e1109]:
+                    - generic [ref=e1112]: play_arrow
+                    - generic [ref=e1113]: Run
+                  - button "Debug the selected function" [ref=e1117]:
+                    - img [ref=e1120]
+                    - generic [ref=e1123]: Debug
+                  - listbox "Select function to run" [ref=e1126] [cursor=pointer]:
+                    - option "upsertAllLeads" [selected] [ref=e1127]
+                - button "Close the execution log panel" [ref=e1134]:
+                  - generic [ref=e177]: Execution log
+            - generic [ref=e179]:
+              - main [ref=e183]:
+                - generic [ref=e184]: .
+                - generic [ref=e186]:
+                  - iframe [ref=e187]:
+                    
+                  - code [ref=e189]:
+                    - generic [ref=e190]:
+                      - generic [ref=e203]:
+                        - generic [ref=e850]: "1"
+                        - generic [ref=e852]: "2"
+                        - generic [ref=e853]:
+                          - generic [ref=e854] [cursor=pointer]: 
+                          - generic [ref=e855]: "3"
+                        - generic [ref=e857]: "4"
+                        - generic [ref=e859]: "5"
+                        - generic [ref=e861]: "6"
+                        - generic [ref=e863]: "7"
+                        - generic [ref=e865]: "8"
+                        - generic [ref=e867]: "9"
+                        - generic [ref=e869]: "10"
+                        - generic [ref=e871]: "11"
+                        - generic [ref=e873]: "12"
+                        - generic [ref=e875]: "13"
+                      - generic [ref=e374]:
+                        - generic [ref=e1010]: // Upsert ALL sheet rows → inserts missing leads + updates existing ones.
+                        - generic [ref=e1012]: // Run once manually to recover leads that were missed when anon key was active.
+                        - generic [ref=e1014]: "function upsertAllLeads() {"
+                        - generic [ref=e1016]: const ss = SpreadsheetApp.openById('1MilS5L6fbmbm4w1xStoVvitX5vgvyrG0RWczSHRxNqo');
+                        - generic [ref=e1018]: const sheet = ss.getSheetByName(SHEET_NAME);
+                        - generic [ref=e1020]: "if (!sheet) { Logger.log('Sheet not found: ' + SHEET_NAME); return; }"
+                        - generic [ref=e1022]: const data = sheet.getDataRange().getValues();
+                        - generic [ref=e1024]: "Logger.log('Rows found: ' + data.length);"
+                        - generic [ref=e1026]: // Log ALL columns to understand structure
+                        - generic [ref=e1028]: "Logger.log('Row0 ALL: ' + JSON.stringify(data[0]));"
+                        - generic [ref=e1030]: "Logger.log('Row1 ALL: ' + JSON.stringify(data[1]));"
+                        - generic [ref=e1032]: if (data.length < 2) return;
+                      - textbox "Editor content;Press Alt+F1 for Accessibility Options." [active] [ref=e193]: "// Upsert ALL sheet rows → inserts missing leads + updates existing ones. // Run once manually to recover leads that were missed when anon key was active. function upsertAllLeads() { const ss = SpreadsheetApp.openById('1MilS5L6fbmbm4w1xStoVvitX5vgvyrG0RWczSHRxNqo'); const sheet = ss.getSheetByName(SHEET_NAME); if (!sheet) { Logger.log('Sheet not found: ' + SHEET_NAME); return; } const data = sheet.getDataRange().getValues(); Logger.log('Rows found: ' + data.length); // Log ALL colum"
+              - generic [ref=e487]:
+                - complementary [ref=e489]:
+                  - generic [ref=e491]: Execution log
+                  - list "Logs" [ref=e1138]:
+                    - listitem "Log 1. 2:07:20 PM. Notice. Execution started." [ref=e1139]:
+                      - generic [ref=e1140]: 2:07:20 PM
+                      - generic [ref=e1141]: Notice
+                      - generic [ref=e1142]: Execution started
+                    - 'listitem "Log 2. 2:07:23 PM. Info. Rows found: 22." [ref=e1143]':
+                      - generic [ref=e1144]: 2:07:23 PM
+                      - generic [ref=e1145]: Info
+                      - generic [ref=e1146]: "Rows found: 22"
+                    - 'listitem "Log 3. 2:07:23 PM. Info. Row0 ALL: [\"l:2069797484418580\",\"2026-05-22T02:30:14-05:00\",\"ag:120244087472600634\",\"Video\",\"as:120239117993080634\",\"Broad | Test | 25 +\",\"c:120239117993050634\",\"Lead Generation | 13th May | CBO\",\"f:1552506906032143\",\"Lead Generation | Intent form | Real Estate Brokers | 7th Feb |\",\"false\",\"ig\",\"CREATED\",\"real_estate_broker_/_agent\",\"aed_1.8m_–_aed_2.1m\",\"sky_loft\",\"within_1–3_months\",\"Noorzad\",\"Ahmed\",\"ahmedaljasmi968@gmail.com\",\"p:+971544226262\",\"id\",\"created_time\",\"ad_id\",\"ad_name\",\"adset_id\",\"adset_name\",\"campaign_id\",\"campaign_name\",\"form_id\",\"form_name\",\"is_organic\",\"platform\",\"broker_type\",\"client''s_budget_range_you_handle?_\",\"property_types_you_can_sell?_\",\"availability_to_promote_this_project?_\",\"what''s_your_company_/_brokerage_name?\",\"first_name\",\"email\",\"phone_number\",\"\",\"lead_status\"]." [ref=e1147]':
+                      - generic [ref=e1148]: 2:07:23 PM
+                      - generic [ref=e1149]: Info
+                      - generic [ref=e1150]: "Row0 ALL: [\"l:2069797484418580\",\"2026-05-22T02:30:14-05:00\",\"ag:120244087472600634\",\"Video\",\"as:120239117993080634\",\"Broad | Test | 25 +\",\"c:120239117993050634\",\"Lead Generation | 13th May | CBO\",\"f:1552506906032143\",\"Lead Generation | Intent form | Real Estate Brokers | 7th Feb |\",\"false\",\"ig\",\"CREATED\",\"real_estate_broker_/_agent\",\"aed_1.8m_–_aed_2.1m\",\"sky_loft\",\"within_1–3_months\",\"Noorzad\",\"Ahmed\",\"ahmedaljasmi968@gmail.com\",\"p:+971544226262\",\"id\",\"created_time\",\"ad_id\",\"ad_name\",\"adset_id\",\"adset_name\",\"campaign_id\",\"campaign_name\",\"form_id\",\"form_name\",\"is_organic\",\"platform\",\"broker_type\",\"client's_budget_range_you_handle?_\",\"property_types_you_can_sell?_\",\"availability_to_promote_this_project?_\",\"what's_your_company_/_brokerage_name?\",\"first_name\",\"email\",\"phone_number\",\"\",\"lead_status\"]"
+                    - 'listitem "Log 4. 2:07:23 PM. Info. Row1 ALL: [\" \",\"is_organic\",\"platform\",\"broker_type\",\"client''s_budget_range_you_handle?_\",\"property_types_you_can_sell?_\",\"availability_to_promote_this_project?_\",\"what''s_your_company_/_brokerage_name?\",\"first_name\",\"email\",\"phone_number\",\"Comments\",\"lead_status\",\"id\",\"created_time\",\"ad_id\",\"ad_name\",\"adset_id\",\"adset_name\",\"campaign_id\",\"campaign_name\",\"form_id\",\"form_name\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]." [ref=e1151]':
+                      - generic [ref=e1152]: 2:07:23 PM
+                      - generic [ref=e1153]: Info
+                      - generic [ref=e1154]: "Row1 ALL: [\" \",\"is_organic\",\"platform\",\"broker_type\",\"client's_budget_range_you_handle?_\",\"property_types_you_can_sell?_\",\"availability_to_promote_this_project?_\",\"what's_your_company_/_brokerage_name?\",\"first_name\",\"email\",\"phone_number\",\"Comments\",\"lead_status\",\"id\",\"created_time\",\"ad_id\",\"ad_name\",\"adset_id\",\"adset_name\",\"campaign_id\",\"campaign_name\",\"form_id\",\"form_name\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+                    - 'listitem "Log 5. 2:07:23 PM. Info. Upsert done — inserted: 0, updated: 0, errors: 0." [ref=e1155]':
+                      - generic [ref=e1156]: 2:07:23 PM
+                      - generic [ref=e1157]: Info
+                      - generic [ref=e1158]: "Upsert done — inserted: 0, updated: 0, errors: 0"
+                    - listitem "Log 6. 2:07:21 PM. Notice. Execution completed." [ref=e1159]:
+                      - generic [ref=e1160]: 2:07:21 PM
+                      - generic [ref=e1161]: Notice
+                      - generic [ref=e1162]: Execution completed
+                - generic:
+                  - button "Close execution logs pane" [ref=e194] [cursor=pointer]:
+                    - generic [ref=e195]: close
+                  - tooltip [ref=e196]: Close execution log
+  - generic: Saving project...
+  - generic [ref=e197]:
+    - alert
+    - alert
+    - complementary
+    - complementary
+  - generic [ref=e808]: Saving project...
+  - generic:
+    - generic: Select function to run

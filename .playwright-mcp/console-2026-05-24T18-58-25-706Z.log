@@ -1,0 +1,6 @@
+[     658ms] [ERROR] Failed to load resource: net::ERR_FAILED @ chrome-extension://invalid/:0
+[    3767ms] [WARNING] An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing. @ https://docs.google.com/drivesharing/clientmodel?id=1MilS5L6fbmbm4w1xStoVvitX5vgvyrG0RWczSHRxNqo&foreignService=ritz&authuser=0&origin=https%3A%2F%2Fdocs.google.com:0
+[    5614ms] [ERROR] Failed to load resource: net::ERR_FAILED @ chrome-extension://invalid/:0
+[    5679ms] [ERROR] Failed to load resource: net::ERR_FAILED @ chrome-extension://invalid/:0
+[    6098ms] [ERROR] Failed to load resource: net::ERR_FAILED @ chrome-extension://invalid/:0
+[    6131ms] [ERROR] Failed to load resource: net::ERR_FAILED @ chrome-extension://invalid/:0

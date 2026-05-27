@@ -1,0 +1,14 @@
+[     386ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/:0
+[     387ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/:0
+[   14644ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubject%3Atitle%2Cdue_date&project_id=eq.00000000-0000-0000-0000-000000000002&status=eq.Open&due_date=lt.2026-05-24&limit=20:0
+[   14645ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Celements%3Atitle%2Cdue_date&project_id=eq.00000000-0000-0000-0000-000000000002&status=eq.Pending&due_date=lt.2026-05-24&limit=20:0
+[168082605ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/#crm-home:0
+[168082606ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/#crm-home:0
+[168126572ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/#crm-home:0
+[168126576ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/#crm-home:0
+[168217527ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Celements%3Atitle%2Cdue_date&project_id=eq.00000000-0000-0000-0000-000000000002&status=eq.Pending&due_date=lt.2026-05-26&limit=20:0
+[168217527ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubject%3Atitle%2Cdue_date&project_id=eq.00000000-0000-0000-0000-000000000002&status=eq.Open&due_date=lt.2026-05-26&limit=20:0
+[168226896ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/#dash:0
+[168226897ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/#dash:0
+[168228464ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Celements%3Atitle%2Cdue_date&project_id=eq.00000000-0000-0000-0000-000000000002&status=eq.Pending&due_date=lt.2026-05-26&limit=20:0
+[168228466ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubject%3Atitle%2Cdue_date&project_id=eq.00000000-0000-0000-0000-000000000002&status=eq.Open&due_date=lt.2026-05-26&limit=20:0

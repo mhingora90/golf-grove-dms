@@ -1,0 +1,297 @@
+<style>
+  :root {
+    --bg1:#1a1916;--bg2:#201f1c;--bg3:#272521;--bg4:#2e2c28;
+    --border:#3a3833;--border2:#46433e;
+    --charcoal:#f0ece4;--text2:#c8c3b8;--text3:#8a8579;
+    --amber:#C4863A;--amber-light:#FAC775;
+    --font:'Plus Jakarta Sans',system-ui,sans-serif;
+    --radius:8px;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg1); color:var(--charcoal); font-family:var(--font); }
+
+  .page-title { font-size:22px; font-weight:700; margin-bottom:6px; }
+  .page-sub { color:var(--text3); font-size:13px; margin-bottom:28px; }
+
+  .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+
+  .card {
+    background:var(--bg2);
+    border:1.5px solid var(--border);
+    border-radius:12px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:border-color .18s, box-shadow .18s;
+  }
+  .card:hover { border-color:var(--amber); box-shadow:0 0 0 3px rgba(196,134,58,.15); }
+  .card.selected { border-color:var(--amber-light); box-shadow:0 0 0 3px rgba(250,199,117,.18); }
+
+  .card-badge {
+    display:inline-block;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border-radius:20px;
+    margin-bottom:10px;
+  }
+  .badge-rec { background:rgba(196,134,58,.18); color:var(--amber-light); }
+  .badge-alt { background:var(--bg4); color:var(--text3); }
+
+  .card-body { padding:18px; }
+  .card-title { font-size:15px; font-weight:700; margin-bottom:6px; }
+  .card-desc { font-size:12px; color:var(--text2); line-height:1.55; margin-bottom:14px; }
+
+  .pros-cons { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:0; }
+  .pros, .cons { font-size:11px; }
+  .pros-label { color:#6fcf97; font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+  .cons-label { color:#eb5757; font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+  .pros li, .cons li { color:var(--text2); margin-left:14px; margin-bottom:2px; line-height:1.4; }
+
+  /* ── Mockup frames ── */
+  .mockup-frame {
+    background:var(--bg3);
+    border-bottom:1px solid var(--border);
+    padding:10px;
+    height:200px;
+    overflow:hidden;
+    position:relative;
+  }
+
+  /* Option A: top switcher */
+  .opt-a-nav {
+    display:flex; align-items:center; gap:8px;
+    background:var(--bg4); padding:7px 10px; border-radius:6px;
+    border:0.5px solid var(--border); margin-bottom:8px;
+    font-size:11px;
+  }
+  .opt-a-logo { font-weight:800; font-size:12px; color:var(--amber-light); margin-right:4px; }
+  .opt-a-proj {
+    background:var(--bg2); border:0.5px solid var(--border2);
+    border-radius:5px; padding:3px 20px 3px 7px; font-size:10px;
+    color:var(--charcoal); position:relative;
+  }
+  .opt-a-proj::after { content:"▾"; position:absolute; right:5px; top:3px; font-size:9px; color:var(--text3); }
+  .opt-a-nav-items { display:flex; gap:10px; margin-left:8px; font-size:10px; color:var(--text3); }
+  .opt-a-nav-items span.active { color:var(--charcoal); font-weight:600; }
+  .opt-a-content {
+    background:var(--bg2); border-radius:6px; padding:10px;
+    border:0.5px solid var(--border); font-size:10px; color:var(--text3);
+  }
+  .opt-a-content-title { font-weight:700; font-size:11px; color:var(--charcoal); margin-bottom:4px; }
+  .opt-a-rows { display:flex; flex-direction:column; gap:3px; }
+  .opt-a-row { background:var(--bg3); border-radius:4px; padding:4px 6px; display:flex; gap:8px; font-size:9px; color:var(--text2); }
+
+  /* Option B: landing page */
+  .opt-b-header {
+    text-align:center; padding:8px 0 10px;
+  }
+  .opt-b-logo { font-weight:800; font-size:13px; color:var(--amber-light); margin-bottom:3px; }
+  .opt-b-sub { font-size:9px; color:var(--text3); margin-bottom:10px; }
+  .opt-b-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+  .opt-b-card {
+    background:var(--bg4); border:0.5px solid var(--border2); border-radius:6px;
+    padding:8px 7px; cursor:pointer;
+  }
+  .opt-b-card-name { font-size:10px; font-weight:700; color:var(--charcoal); }
+  .opt-b-card-sub  { font-size:9px; color:var(--text3); margin-top:1px; }
+  .opt-b-card-dots { display:flex; gap:3px; margin-top:5px; }
+  .opt-b-dot { width:5px; height:5px; border-radius:50%; background:var(--border2); }
+  .opt-b-dot.active { background:var(--amber); }
+  .opt-b-new {
+    background:var(--bg3); border:0.5px dashed var(--border2); border-radius:6px;
+    padding:8px 7px; display:flex; align-items:center; justify-content:center;
+    font-size:9px; color:var(--text3);
+  }
+
+  /* Option C: sidebar projects */
+  .opt-c-wrap { display:flex; gap:6px; height:165px; }
+  .opt-c-sidebar {
+    width:110px; background:var(--bg4); border-radius:6px; padding:6px 5px;
+    border:0.5px solid var(--border); flex-shrink:0;
+  }
+  .opt-c-sidebar-label { font-size:8px; text-transform:uppercase; letter-spacing:.06em; color:var(--text3); font-weight:700; padding:0 4px; margin-bottom:4px; }
+  .opt-c-proj-item {
+    display:flex; align-items:center; gap:5px; padding:4px 5px; border-radius:5px;
+    font-size:9px; color:var(--text2); cursor:pointer; margin-bottom:1px;
+  }
+  .opt-c-proj-item.active { background:rgba(196,134,58,.12); color:var(--amber-light); }
+  .opt-c-proj-dot { width:6px; height:6px; border-radius:50%; background:var(--border2); flex-shrink:0; }
+  .opt-c-proj-dot.active { background:var(--amber); }
+  .opt-c-divider { height:0.5px; background:var(--border); margin:5px 0; }
+  .opt-c-modules { display:flex; flex-direction:column; gap:1px; padding-left:10px; }
+  .opt-c-mod { font-size:9px; color:var(--text3); padding:2px 4px; border-radius:3px; }
+  .opt-c-mod.active { color:var(--charcoal); background:var(--bg3); }
+  .opt-c-main {
+    flex:1; background:var(--bg2); border-radius:6px; padding:8px;
+    border:0.5px solid var(--border);
+  }
+  .opt-c-main-title { font-size:10px; font-weight:700; color:var(--charcoal); margin-bottom:6px; }
+  .opt-c-rows { display:flex; flex-direction:column; gap:3px; }
+  .opt-c-row { background:var(--bg3); border-radius:3px; height:14px; }
+</style>
+
+<h2 class="page-title">Multi-Project Support — 3 Approaches</h2>
+<p class="page-sub">Pick the navigation pattern that feels right. Click a card to select it.</p>
+
+<div class="cards">
+
+  <!-- Option A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="mockup-frame">
+      <div class="opt-a-nav">
+        <span class="opt-a-logo">GG</span>
+        <div class="opt-a-proj">Marina Heights ↓</div>
+        <div class="opt-a-nav-items">
+          <span>BOQ</span><span>Sub</span><span class="active">CRM</span><span>IR</span>
+        </div>
+      </div>
+      <div class="opt-a-content">
+        <div class="opt-a-content-title">CRM — Marina Heights</div>
+        <div class="opt-a-rows">
+          <div class="opt-a-row"><span>Ahmed Al Rashid</span><span style="margin-left:auto;color:#C4863A">New Lead</span></div>
+          <div class="opt-a-row"><span>Sara Al Mansoori</span><span style="margin-left:auto;color:#6fcf97">Won</span></div>
+          <div class="opt-a-row"><span>Khalid Ibrahim</span><span style="margin-left:auto;color:var(--text3)">Contacted</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <span class="card-badge badge-alt">Option A</span>
+      <div class="card-title">Top-bar Project Switcher</div>
+      <div class="card-desc">Project dropdown in the top nav bar. Switch projects without leaving your current module. URL stays the same.</div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-label">Pros</div>
+          <ul>
+            <li>Stay in same module view</li>
+            <li>Quick to switch</li>
+            <li>Minimal layout change</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-label">Cons</div>
+          <ul>
+            <li>Easy to forget which project</li>
+            <li>Can't see all projects at once</li>
+            <li>No project overview</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="mockup-frame">
+      <div class="opt-b-header">
+        <div class="opt-b-logo">Golf Grove DMS</div>
+        <div class="opt-b-sub">Select a project to continue</div>
+      </div>
+      <div class="opt-b-grid">
+        <div class="opt-b-card">
+          <div class="opt-b-card-name">Marina Heights</div>
+          <div class="opt-b-card-sub">142 leads · Active</div>
+          <div class="opt-b-card-dots">
+            <div class="opt-b-dot active"></div>
+            <div class="opt-b-dot active"></div>
+            <div class="opt-b-dot active"></div>
+            <div class="opt-b-dot"></div>
+          </div>
+        </div>
+        <div class="opt-b-card">
+          <div class="opt-b-card-name">Palm Grove</div>
+          <div class="opt-b-card-sub">38 leads · Active</div>
+          <div class="opt-b-card-dots">
+            <div class="opt-b-dot active"></div>
+            <div class="opt-b-dot active"></div>
+            <div class="opt-b-dot"></div>
+            <div class="opt-b-dot"></div>
+          </div>
+        </div>
+        <div class="opt-b-new">+ New Project</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <span class="card-badge badge-rec">⭐ Recommended</span>
+      <div class="card-title">Project Selection Landing Page</div>
+      <div class="card-desc">Login leads to a project grid. Click any project to enter its full module suite. "Back to projects" exits to the grid.</div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-label">Pros</div>
+          <ul>
+            <li>See all projects at a glance</li>
+            <li>Clear context — always know which project</li>
+            <li>Clean architecture</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-label">Cons</div>
+          <ul>
+            <li>Extra click to switch projects</li>
+            <li>Must leave current module</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option C -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="mockup-frame" style="padding:8px">
+      <div class="opt-c-wrap">
+        <div class="opt-c-sidebar">
+          <div class="opt-c-sidebar-label">Projects</div>
+          <div class="opt-c-proj-item active">
+            <div class="opt-c-proj-dot active"></div>Marina Heights
+          </div>
+          <div class="opt-c-modules">
+            <div class="opt-c-mod">BOQ</div>
+            <div class="opt-c-mod active">CRM</div>
+            <div class="opt-c-mod">IR</div>
+          </div>
+          <div class="opt-c-divider"></div>
+          <div class="opt-c-proj-item">
+            <div class="opt-c-proj-dot"></div>Palm Grove
+          </div>
+          <div class="opt-c-divider"></div>
+          <div class="opt-c-proj-item" style="color:var(--amber);font-size:9px">+ New Project</div>
+        </div>
+        <div class="opt-c-main">
+          <div class="opt-c-main-title">CRM — Marina Heights</div>
+          <div class="opt-c-rows">
+            <div class="opt-c-row"></div>
+            <div class="opt-c-row" style="width:85%"></div>
+            <div class="opt-c-row" style="width:92%"></div>
+            <div class="opt-c-row" style="width:78%"></div>
+            <div class="opt-c-row" style="width:88%"></div>
+            <div class="opt-c-row" style="width:95%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <span class="card-badge badge-alt">Option C</span>
+      <div class="card-title">Sidebar Project Tree</div>
+      <div class="card-desc">Projects listed in the left sidebar. Expand a project to show its modules. Similar to how Slack shows workspaces.</div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-label">Pros</div>
+          <ul>
+            <li>All projects always visible</li>
+            <li>Fast cross-project navigation</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-label">Cons</div>
+          <ul>
+            <li>Sidebar gets crowded fast</li>
+            <li>Big layout change from current app</li>
+            <li>Most complex to build</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

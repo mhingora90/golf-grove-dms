@@ -1,0 +1,101 @@
+- application [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - banner "Menu bar" [ref=e3]:
+    - generic [ref=e6]:
+      - link "Sheets home" [ref=e8] [cursor=pointer]:
+        - /url: https://docs.google.com/spreadsheets/u/0/?authuser=0&usp=sheets_web
+      - generic [ref=e15]:
+        - generic "Regent Developments - Paid Media Plan" [ref=e17]:
+          - generic [ref=e18]:
+            - generic: Regent Developments - Paid Media Plan
+        - generic [ref=e23]:
+          - button [disabled] [ref=e25]
+          - button [ref=e29]
+          - generic [ref=e34]:
+            - button "Share" [disabled] [ref=e35]: Share
+            - button "Quick sharing actions" [ref=e37]
+          - 'button "Google Account: Mohammed Hingora (mhingora@gmail.com)" [ref=e41] [cursor=pointer]':
+            - img [ref=e42]
+    - generic [ref=e43]:
+      - menubar [ref=e45]:
+        - menuitem "File" [ref=e46]
+        - menuitem "Edit" [ref=e47]
+        - menuitem "View" [ref=e48]
+        - menuitem "Insert" [ref=e49]
+        - menuitem "Format" [ref=e50]
+        - menuitem "Data" [ref=e51]
+        - menuitem "Tools" [ref=e52]
+        - menuitem "Extensions" [ref=e53]
+        - menuitem "Help" [ref=e54]
+      - generic [ref=e55]:
+        - generic [ref=e56]:
+          - textbox [ref=e59]
+          - generic "Main" [ref=e60]:
+            - button [disabled] [ref=e61]
+            - button [disabled] [ref=e66]
+            - button [disabled] [ref=e71]
+            - button [disabled] [ref=e76]
+            - button "$" [disabled] [ref=e82]:
+              - generic [ref=e84]: $
+            - button "%" [disabled] [ref=e85]:
+              - generic [ref=e87]: "%"
+            - button [disabled] [ref=e88]
+            - button [disabled] [ref=e93]
+            - button "123" [disabled] [ref=e98]:
+              - generic [ref=e101]: "123"
+            - button [disabled] [ref=e103]
+            - button [disabled] [ref=e110]
+            - button [disabled] [ref=e115] [cursor=pointer]
+            - button [disabled] [ref=e119]
+            - button [disabled] [ref=e125]
+            - button [disabled] [ref=e130]
+            - button [disabled] [ref=e135]
+            - button [disabled] [ref=e140]
+            - button [disabled] [ref=e148]
+            - button [disabled] [ref=e155]
+            - button [disabled] [ref=e161]
+            - button [disabled] [ref=e166]
+            - button [disabled] [ref=e173]
+            - button [disabled] [ref=e182]
+            - button [disabled] [ref=e191]
+            - button [disabled] [ref=e201]
+            - button [disabled] [ref=e206]
+            - button [disabled] [ref=e211]
+            - button [disabled] [ref=e216]
+            - button [disabled] [ref=e221]
+        - generic "Mode and view" [ref=e228]:
+          - button [disabled] [ref=e229]
+    - generic [ref=e237]:
+      - textbox [disabled] [ref=e238]
+      - button [disabled] [ref=e239] [cursor=pointer]
+  - navigation "Sheet tab bar" [ref=e287]:
+    - toolbar [ref=e288]:
+      - button "Add Sheet" [ref=e289] [cursor=pointer]
+      - button "All Sheets" [ref=e294] [cursor=pointer]
+    - toolbar [ref=e303]:
+      - button "April 2026 Media PLan" [ref=e304]:
+        - generic [ref=e308]: April 2026 Media PLan
+      - button "March 2026" [ref=e312] [cursor=pointer]:
+        - generic [ref=e316]: March 2026
+      - button "Feb 2026" [ref=e320] [cursor=pointer]:
+        - generic [ref=e324]: Feb 2026
+      - button "Statistics Report" [ref=e328] [cursor=pointer]:
+        - generic [ref=e332]: Statistics Report
+      - button "Automatic Meta Leads" [ref=e336] [cursor=pointer]:
+        - generic [ref=e340]: Automatic Meta Leads
+      - button "Keywords Research" [ref=e344] [cursor=pointer]:
+        - generic [ref=e348]: Keywords Research
+      - button "Ad Copies" [ref=e352] [cursor=pointer]:
+        - generic [ref=e356]: Ad Copies
+      - button "241 Waterside Scope" [ref=e360] [cursor=pointer]:
+        - generic [ref=e364]: 241 Waterside Scope
+      - button "old leads" [ref=e368] [cursor=pointer]:
+        - generic [ref=e372]: old leads
+    - toolbar [ref=e376]:
+      - button "Scroll left" [disabled] [ref=e377]
+      - button "Scroll right" [ref=e382] [cursor=pointer]
+  - generic [ref=e387]:
+    - textbox [active]
+  - link "Turn on screen reader support" [ref=e388] [cursor=pointer]:
+    - /url: "#"

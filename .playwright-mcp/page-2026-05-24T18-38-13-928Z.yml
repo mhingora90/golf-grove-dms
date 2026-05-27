@@ -1,0 +1,117 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link [ref=e519] [cursor=pointer]:
+          - /url: /home
+          - img [ref=e11]
+          - generic [ref=e12]: Apps Script
+        - generic [ref=e13]:
+          - button [ref=e520] [cursor=pointer]: Untitled project
+          - generic [ref=e26]:
+            - button [ref=e521] [cursor=pointer]:
+              - generic [ref=e34]:
+                - text: Deploy
+                - generic [ref=e35]: 
+            - button [ref=e522] [cursor=pointer]:
+              - generic [ref=e376]: help_outline
+        - generic [ref=e42]:
+          - button [ref=e523] [cursor=pointer]:
+            - img [ref=e47]
+          - button [ref=e524] [cursor=pointer]:
+            - img [ref=e54]
+    - generic [ref=e378]:
+      - navigation [ref=e525]:
+        - link [ref=e526] [cursor=pointer]:
+          - generic [ref=e383]: info_outline
+          - generic [ref=e384]: Overview
+        - link [ref=e527] [cursor=pointer]:
+          - generic [ref=e387]: code
+          - generic [ref=e388]: Editor
+        - link [ref=e528] [cursor=pointer]:
+          - generic [ref=e391]: history
+          - generic [ref=e392]: Project History
+        - link [ref=e529] [cursor=pointer]:
+          - generic [ref=e395]: alarm
+          - generic [ref=e396]: Triggers
+        - link [ref=e530] [cursor=pointer]:
+          - generic [ref=e399]: playlist_play
+          - generic [ref=e400]: Executions
+        - link [ref=e531] [cursor=pointer]:
+          - generic [ref=e403]: settings
+          - generic [ref=e404]: Project Settings
+      - generic [ref=e406]:
+        - generic [ref=e407]:
+          - heading [level=1] [ref=e532]: Triggers
+          - generic [ref=e411]: Showing 1 trigger
+        - button [ref=e533] [cursor=pointer]:
+          - generic [ref=e413]: add
+          - generic [ref=e414]: Add Trigger
+        - generic [ref=e534]:
+          - list [ref=e417]:
+            - listitem [ref=e418]:
+              - generic [ref=e419]:
+                - generic [ref=e420]: 
+                - text: Add a filter
+              - generic [ref=e422]:
+                - textbox [disabled] [ref=e423]
+                - combobox [ref=e535]
+          - generic [ref=e425]:
+            - grid [ref=e427]:
+              - rowgroup [ref=e428]:
+                - row [ref=e536]:
+                  - columnheader [ref=e537] [cursor=pointer]:
+                    - generic [ref=e432]: Owned by
+                  - columnheader [ref=e538] [cursor=pointer]:
+                    - generic [ref=e435]: Last run
+                  - columnheader [ref=e539] [cursor=pointer]:
+                    - generic [ref=e438]: Deployment
+                  - columnheader [ref=e540] [cursor=pointer]:
+                    - generic [ref=e441]: Event
+                  - columnheader [ref=e541] [cursor=pointer]:
+                    - generic [ref=e444]: Function
+                  - columnheader [ref=e542] [cursor=pointer]:
+                    - generic [ref=e447]: Error rate
+              - rowgroup [ref=e448]:
+                - row [selected] [ref=e543]:
+                  - gridcell [ref=e544]: Me
+                  - gridcell [ref=e545]: May 24, 2026, 10:29:29 AM
+                  - gridcell [ref=e546]: Head
+                  - gridcell [ref=e547]: From spreadsheet - On change
+                  - gridcell [ref=e548]: syncLeadsToCRM
+                  - gridcell [ref=e549]:
+                    - generic [ref=e457]:
+                      - generic [ref=e458]: 0%
+                      - button [ref=e550] [cursor=pointer]:
+                        - generic [ref=e463]: 
+            - navigation [ref=e551]:
+              - generic [ref=e471]:
+                - generic [ref=e472]: "Rows per page:"
+                - listbox [ref=e552] [cursor=pointer]:
+                  - option [selected] [ref=e553]: "25"
+                  - text: 50 100
+              - generic [ref=e476]:
+                - button [disabled] [ref=e554]:
+                  - generic [ref=e480]: 
+                - status [ref=e481]: Page 1 of 1
+                - button [disabled] [ref=e555]:
+                  - generic [ref=e485]: 
+                - button [disabled] [ref=e556]:
+                  - generic [ref=e489]: 
+    - dialog "Delete forever?" [ref=e559]:
+      - heading "Delete forever?" [level=1] [ref=e561]
+      - generic [ref=e562]:
+        - text: Deleting this trigger may cause the associated project 'Untitled project' to behave poorly. Are you sure you want to permanently delete this trigger?
+        - text: You can't undo this action.
+      - generic [ref=e563]:
+        - button "Cancel" [ref=e564] [cursor=pointer]:
+          - generic [ref=e567]: Cancel
+        - button "Delete Forever" [active] [ref=e568] [cursor=pointer]:
+          - generic [ref=e571]: Delete Forever
+  - generic [ref=e365]:
+    - alert
+    - alert
+    - complementary
+    - complementary

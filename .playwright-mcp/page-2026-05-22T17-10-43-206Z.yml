@@ -1,0 +1,28 @@
+- generic [ref=e22]:
+  - generic [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e25]: Projects
+      - generic [ref=e26]: Select a project to continue
+    - button "+ New Project" [ref=e27] [cursor=pointer]
+  - generic [ref=e28]:
+    - generic [ref=e29] [cursor=pointer]:
+      - generic [ref=e30]:
+        - generic [ref=e31]: 🏗
+        - generic [ref=e32]: Golf Grove – DPC
+        - generic [ref=e33]: Active
+      - generic [ref=e34]:
+        - generic [ref=e36]: "17"
+        - generic [ref=e37]: Manage users
+        - generic [ref=e38]: Delete
+    - generic [ref=e39] [cursor=pointer]:
+      - generic [ref=e40]:
+        - generic [ref=e41]: 🏗
+        - generic [ref=e42]: 241 Waterside
+        - generic [ref=e43]: Active
+      - generic [ref=e44]:
+        - generic [ref=e46]: "17"
+        - generic [ref=e47]: Manage users
+        - generic [ref=e48]: Delete
+    - generic [ref=e49] [cursor=pointer]:
+      - generic [ref=e50]: +
+      - generic [ref=e51]: New Project

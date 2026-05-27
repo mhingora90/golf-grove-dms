@@ -1,0 +1,234 @@
+- generic [ref=e49]:
+  - generic [ref=e50]:
+    - generic [ref=e51]:
+      - generic [ref=e52]: Active Project
+      - generic [ref=e53]: 241 Waterside
+    - generic [ref=e54]:
+      - generic [ref=e55]: MH
+      - generic [ref=e56]:
+        - generic [ref=e57]: Mohammed Hingora
+        - generic [ref=e58]: developer
+    - generic [ref=e59]: Main
+    - generic [ref=e60] [cursor=pointer]:
+      - img [ref=e61]
+      - text: Dashboard
+    - generic [ref=e66]: Document Control
+    - generic [ref=e67] [cursor=pointer]:
+      - img [ref=e68]
+      - text: Drawing Register
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: Submittals (DSUB)
+    - generic [ref=e74] [cursor=pointer]:
+      - img [ref=e75]
+      - text: Submittal Register
+    - generic [ref=e77]: Site
+    - generic [ref=e78] [cursor=pointer]:
+      - img [ref=e79]
+      - text: Inspection Requests
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: NCRs
+    - generic [ref=e86] [cursor=pointer]:
+      - img [ref=e87]
+      - text: RFIs
+    - generic [ref=e91] [cursor=pointer]:
+      - img [ref=e92]
+      - text: Transmittals
+    - generic [ref=e94] [cursor=pointer]:
+      - img [ref=e95]
+      - text: Method Statements
+    - generic [ref=e98] [cursor=pointer]:
+      - img [ref=e99]
+      - text: Correspondence
+    - generic [ref=e102] [cursor=pointer]:
+      - img [ref=e103]
+      - text: Punch List
+      - generic [ref=e106]: "0"
+    - generic [ref=e107]: Finance
+    - generic [ref=e108] [cursor=pointer]:
+      - img [ref=e109]
+      - text: Finance Overview
+    - generic [ref=e112] [cursor=pointer]:
+      - img [ref=e113]
+      - text: Payment Certificates
+    - generic [ref=e116] [cursor=pointer]:
+      - img [ref=e117]
+      - text: BOQ Setup
+    - generic [ref=e120]:
+      - generic [ref=e121]: Sales
+      - generic [ref=e122] [cursor=pointer]:
+        - img [ref=e123]
+        - text: CRM
+        - generic [ref=e127]: "0"
+      - generic [ref=e128] [cursor=pointer]:
+        - img [ref=e129]
+        - text: Unit Setup
+      - generic [ref=e132] [cursor=pointer]:
+        - img [ref=e133]
+        - text: Unit Register
+      - generic [ref=e136] [cursor=pointer]:
+        - img [ref=e137]
+        - text: Sales Revenue
+    - generic [ref=e140]: Admin
+    - generic [ref=e141] [cursor=pointer]:
+      - img [ref=e142]
+      - text: Subcontractors
+    - generic [ref=e148] [cursor=pointer]:
+      - img [ref=e149]
+      - text: User Management
+    - button "Sign Out" [ref=e153] [cursor=pointer]
+  - generic [ref=e154]:
+    - generic [ref=e155]:
+      - generic [ref=e156]:
+        - generic [ref=e157]: Dashboard
+        - generic [ref=e158]: Friday, 22 May 2026
+      - generic [ref=e160] [cursor=pointer]:
+        - generic [ref=e162]: 241 Waterside
+        - generic [ref=e163]: ▼
+      - generic [ref=e166]: developer
+    - generic [ref=e167]:
+      - generic [ref=e168]:
+        - generic [ref=e169]:
+          - generic [ref=e170]: Drawings
+          - generic [ref=e171]: "0"
+          - generic [ref=e172]: 0 approved
+        - generic [ref=e173]:
+          - generic [ref=e174]: Submittals
+          - generic [ref=e175]: "0"
+          - generic [ref=e176]: 0 pending review
+        - generic [ref=e177]:
+          - generic [ref=e178]: Inspections
+          - generic [ref=e179]: "0"
+          - generic [ref=e180]: 0 awaiting response
+        - generic [ref=e181]:
+          - generic [ref=e182]: Open NCRs
+          - generic [ref=e183]: "0"
+          - generic [ref=e184]: 0 closed
+        - generic [ref=e185]:
+          - generic [ref=e186]: Open RFIs
+          - generic [ref=e187]: "0"
+          - generic [ref=e188]: 0 closed
+        - generic [ref=e189] [cursor=pointer]:
+          - generic [ref=e190]: Payment Certs
+          - generic [ref=e191]: "0"
+          - generic [ref=e192]: 0 paid
+      - generic [ref=e194]:
+        - generic [ref=e195]:
+          - generic [ref=e196]: 0%
+          - generic [ref=e197]: ISO Compliance
+        - generic [ref=e198]:
+          - generic [ref=e200]:
+            - generic [ref=e201]: Published or Archived
+            - generic [ref=e202]: 0%
+          - generic [ref=e205]:
+            - generic [ref=e206]: Complete metadata (ISO §5.3.2)
+            - generic [ref=e207]: 0%
+        - generic [ref=e209]:
+          - text: 0 drawings
+          - text: tracked
+      - generic [ref=e210]:
+        - generic [ref=e211]:
+          - generic [ref=e212]:
+            - generic [ref=e213]: Drawing approval
+            - generic [ref=e214]: 0 total
+          - generic [ref=e215]:
+            - img [ref=e216]:
+              - generic [ref=e218]: 0%
+              - generic [ref=e219]: IFC or better
+            - generic [ref=e220]:
+              - generic [ref=e221]:
+                - text: Approved
+                - generic [ref=e223]: "0"
+              - generic [ref=e224]:
+                - text: IFC
+                - generic [ref=e226]: "0"
+              - generic [ref=e227]:
+                - text: Under Review
+                - generic [ref=e229]: "0"
+              - generic [ref=e230]:
+                - text: Revise & Resubmit
+                - generic [ref=e232]: "0"
+        - generic [ref=e233]:
+          - generic [ref=e234]:
+            - generic [ref=e235]: Discipline completion
+            - generic [ref=e236]: by approved drawings
+          - generic [ref=e238]: No drawings yet
+        - generic [ref=e239]:
+          - generic [ref=e240]:
+            - generic [ref=e241]: Open items
+            - generic [ref=e242]: NCRs + RFIs
+          - generic [ref=e243]:
+            - generic [ref=e244]:
+              - generic [ref=e245]:
+                - generic [ref=e246]: NCRs
+                - generic [ref=e247]: "0"
+                - generic [ref=e248]: 0 closed
+              - generic [ref=e249]:
+                - generic [ref=e250]: RFIs
+                - generic [ref=e251]: "0"
+                - generic [ref=e252]: 0 closed
+            - generic [ref=e253]:
+              - generic [ref=e254]: Submittals pending
+              - generic [ref=e257]: 0/0
+        - generic [ref=e258]:
+          - generic [ref=e259]:
+            - generic [ref=e260]: SLA Status
+            - generic [ref=e261]: All clear
+          - generic [ref=e262]:
+            - generic [ref=e263]:
+              - generic [ref=e265]: Overdue IRs
+              - generic [ref=e266]: "0"
+              - generic [ref=e267]: —
+            - generic [ref=e268]:
+              - generic [ref=e270]: Overdue NCRs
+              - generic [ref=e271]: "0"
+              - generic [ref=e272]: —
+            - generic [ref=e273]:
+              - generic [ref=e275]: Overdue RFIs
+              - generic [ref=e276]: "0"
+              - generic [ref=e277]: —
+            - generic [ref=e278]:
+              - generic [ref=e280]: Overdue Submittals
+              - generic [ref=e281]: "0"
+              - generic [ref=e282]: —
+      - generic [ref=e283]:
+        - generic [ref=e284]:
+          - generic [ref=e286]: Pending submittals
+          - table [ref=e289]:
+            - rowgroup [ref=e290]:
+              - row "Ref Title Status" [ref=e291]:
+                - columnheader "Ref" [ref=e292]
+                - columnheader "Title" [ref=e293]
+                - columnheader "Status" [ref=e294]
+              - row "No pending submittals" [ref=e295]:
+                - cell "No pending submittals" [ref=e296]
+          - generic [ref=e298]: Open NCRs
+          - table [ref=e301]:
+            - rowgroup [ref=e302]:
+              - row "Ref Title Severity" [ref=e303]:
+                - columnheader "Ref" [ref=e304]
+                - columnheader "Title" [ref=e305]
+                - columnheader "Severity" [ref=e306]
+              - row "No open NCRs" [ref=e307]:
+                - cell "No open NCRs" [ref=e308]
+        - generic [ref=e309]:
+          - generic [ref=e311]: Pending inspections
+          - table [ref=e314]:
+            - rowgroup [ref=e315]:
+              - row "Ref Description Date" [ref=e316]:
+                - columnheader "Ref" [ref=e317]
+                - columnheader "Description" [ref=e318]
+                - columnheader "Date" [ref=e319]
+              - row "No pending inspections" [ref=e320]:
+                - cell "No pending inspections" [ref=e321]
+          - generic [ref=e323]: Recent drawings
+          - table [ref=e326]:
+            - rowgroup [ref=e327]:
+              - row "No. Title Rev Status" [ref=e328]:
+                - columnheader "No." [ref=e329]
+                - columnheader "Title" [ref=e330]
+                - columnheader "Rev" [ref=e331]
+                - columnheader "Status" [ref=e332]
+              - row "No drawings uploaded yet" [ref=e333]:
+                - cell "No drawings uploaded yet" [ref=e334]

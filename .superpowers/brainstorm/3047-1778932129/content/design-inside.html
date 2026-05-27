@@ -1,0 +1,120 @@
+<style>
+  :root {
+    --bg1:#1a1916;--bg2:#201f1c;--bg3:#272521;--bg4:#2e2c28;
+    --border:#3a3833;--border2:#46433e;
+    --charcoal:#f0ece4;--text2:#c8c3b8;--text3:#8a8579;
+    --amber:#C4863A;--amber-light:#FAC775;--amber-bg:rgba(196,134,58,.1);
+    --font:'Plus Jakarta Sans',system-ui,sans-serif;
+    --radius:8px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg1);color:var(--charcoal);font-family:var(--font);}
+
+  .shell{display:flex;flex-direction:column;border:0.5px solid var(--border);border-radius:12px;overflow:hidden;}
+
+  /* Topbar */
+  .topbar{height:52px;display:flex;align-items:center;padding:0 16px;gap:10px;background:var(--bg2);border-bottom:0.5px solid var(--border);}
+  .back-btn{
+    display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);
+    padding:4px 8px;border-radius:6px;cursor:pointer;border:0.5px solid var(--border);
+    transition:color .15s,border-color .15s;
+  }
+  .back-btn:hover{color:var(--amber-light);border-color:var(--amber);}
+  .topbar-divider{width:0.5px;height:18px;background:var(--border2);}
+  .proj-badge{
+    display:flex;align-items:center;gap:6px;
+    font-size:12px;font-weight:700;color:var(--charcoal);
+  }
+  .proj-dot{width:8px;height:8px;border-radius:50%;background:var(--amber);}
+  .topbar-spacer{flex:1;}
+  .nav-items{display:flex;gap:2px;}
+  .nav-item{padding:5px 9px;border-radius:6px;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;}
+  .nav-item.active{background:var(--bg3);color:var(--charcoal);}
+  .avatar{width:28px;height:28px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;margin-left:6px;}
+
+  /* Content area */
+  .content{padding:20px;background:var(--bg1);}
+  .module-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .module-title{font-size:18px;font-weight:800;letter-spacing:-.02em;}
+
+  /* Mini table preview */
+  .mini-table{width:100%;border-collapse:collapse;font-size:11px;}
+  .mini-table th{padding:6px 10px;background:var(--bg3);color:var(--text3);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.04em;text-align:left;border-bottom:0.5px solid var(--border);}
+  .mini-table td{padding:7px 10px;border-bottom:0.5px solid var(--border);color:var(--text2);}
+  .mini-table tr:hover td{background:var(--bg3);}
+  .badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600;}
+  .badge-warn{background:rgba(196,134,58,.15);color:var(--amber-light);}
+  .badge-info{background:rgba(41,182,246,.12);color:#63d3fd;}
+  .badge-success{background:rgba(39,174,96,.12);color:#6fcf97;}
+
+  /* Annotation */
+  .annotation{margin-top:16px;padding:12px 16px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:8px;font-size:11px;color:var(--text2);line-height:1.6;}
+  .annotation strong{color:var(--amber-light);}
+  .ann-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+  .ann-item{background:var(--bg4);border-radius:6px;padding:10px 12px;font-size:11px;color:var(--text2);}
+  .ann-item strong{color:var(--charcoal);display:block;margin-bottom:3px;}
+</style>
+
+<div class="shell">
+  <!-- Topbar while inside a project -->
+  <div class="topbar">
+    <div class="back-btn">← Projects</div>
+    <div class="topbar-divider"></div>
+    <div class="proj-badge"><div class="proj-dot"></div>Golf Grove – DPC</div>
+    <div class="topbar-spacer"></div>
+    <div class="nav-items">
+      <div class="nav-item">BOQ</div>
+      <div class="nav-item">IPC</div>
+      <div class="nav-item">Sub</div>
+      <div class="nav-item active">CRM</div>
+      <div class="nav-item">IR</div>
+      <div class="nav-item">NCR</div>
+      <div class="nav-item">RFI</div>
+      <div class="nav-item">Sales</div>
+    </div>
+    <div class="avatar">MH</div>
+  </div>
+
+  <!-- Module content (CRM example) -->
+  <div class="content">
+    <div class="module-header">
+      <div class="module-title">CRM</div>
+      <span style="font-size:11px;color:var(--text3)">142 leads</span>
+    </div>
+
+    <table class="mini-table">
+      <thead>
+        <tr>
+          <th>Name</th><th>Company</th><th>Stage</th><th>Assigned</th><th>Age</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Ahmed Al Rashid</td><td>Emirates Realty</td><td><span class="badge badge-warn">New Lead</span></td><td>Hamad</td><td>2d</td></tr>
+        <tr><td>Sara Al Mansoori</td><td>—</td><td><span class="badge badge-info">Contacted</span></td><td>Yousef</td><td>5d</td></tr>
+        <tr><td>Khalid Ibrahim</td><td>Gulf Properties</td><td><span class="badge badge-success">Site Visit</span></td><td>Hamad</td><td>8d</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="annotation" style="margin-top:14px">
+  <strong>Inside a project — what changes</strong>
+  <div class="ann-grid">
+    <div class="ann-item">
+      <strong>← Projects button</strong>
+      Top-left. Returns to project grid. All module state resets.
+    </div>
+    <div class="ann-item">
+      <strong>Project name in topbar</strong>
+      Always visible so user knows which project they're in.
+    </div>
+    <div class="ann-item">
+      <strong>All queries scoped</strong>
+      Every Supabase query adds <code style="font-size:10px;background:var(--bg1);padding:1px 4px;border-radius:3px">.eq('project_id', currentProject.id)</code>
+    </div>
+    <div class="ann-item">
+      <strong>Nav unchanged</strong>
+      Same module tabs — BOQ, IPC, CRM, etc. No layout changes.
+    </div>
+  </div>
+</div>

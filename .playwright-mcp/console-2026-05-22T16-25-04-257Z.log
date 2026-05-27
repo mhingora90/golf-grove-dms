@@ -1,0 +1,2 @@
+[     346ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:52131/full-dashboard.html:0
+[     486ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:52131/favicon.ico:0

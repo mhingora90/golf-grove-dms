@@ -1,0 +1,7 @@
+[    1063ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/:0
+[    1063ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://golf-grove-dms.vercel.app/:0
+[   13894ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=ref_no%2Celements%3Atitle%2Cdue_date&project_id=eq.00000000-0000-0000-0000-000000000002&status=eq.Pending&due_date=lt.2026-05-21&limit=20:0
+[   13911ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=ref_no%2Csubject%3Atitle%2Cdue_date&project_id=eq.00000000-0000-0000-0000-000000000002&status=eq.Open&due_date=lt.2026-05-21&limit=20:0
+[   74710ms] TypeError: sb.from(...).eq is not a function
+    at _openNewIPCForContract (https://golf-grove-dms.vercel.app/:6370:49)
+    at openNewIPC (https://golf-grove-dms.vercel.app/:6349:13)

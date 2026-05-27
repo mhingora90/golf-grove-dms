@@ -1,0 +1,265 @@
+- generic [ref=e49]:
+  - generic [ref=e50]:
+    - generic [ref=e51]:
+      - generic [ref=e52]: Active Project
+      - generic [ref=e53]: 241 Waterside
+    - generic [ref=e54]:
+      - generic [ref=e55]: MH
+      - generic [ref=e56]:
+        - generic [ref=e57]: Mohammed Hingora
+        - generic [ref=e58]: developer
+    - generic [ref=e59]: Main
+    - generic [ref=e60] [cursor=pointer]:
+      - img [ref=e61]
+      - text: Dashboard
+    - generic [ref=e66]: Document Control
+    - generic [ref=e67] [cursor=pointer]:
+      - img [ref=e68]
+      - text: Drawing Register
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: Submittals (DSUB)
+    - generic [ref=e74] [cursor=pointer]:
+      - img [ref=e75]
+      - text: Submittal Register
+    - generic [ref=e77]: Site
+    - generic [ref=e78] [cursor=pointer]:
+      - img [ref=e79]
+      - text: Inspection Requests
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: NCRs
+    - generic [ref=e86] [cursor=pointer]:
+      - img [ref=e87]
+      - text: RFIs
+    - generic [ref=e91] [cursor=pointer]:
+      - img [ref=e92]
+      - text: Transmittals
+    - generic [ref=e94] [cursor=pointer]:
+      - img [ref=e95]
+      - text: Method Statements
+    - generic [ref=e98] [cursor=pointer]:
+      - img [ref=e99]
+      - text: Correspondence
+    - generic [ref=e102] [cursor=pointer]:
+      - img [ref=e103]
+      - text: Punch List
+      - generic [ref=e106]: "0"
+    - generic [ref=e107]: Finance
+    - generic [ref=e108] [cursor=pointer]:
+      - img [ref=e109]
+      - text: Finance Overview
+    - generic [ref=e112] [cursor=pointer]:
+      - img [ref=e113]
+      - text: Payment Certificates
+    - generic [ref=e116] [cursor=pointer]:
+      - img [ref=e117]
+      - text: BOQ Setup
+    - generic [ref=e120]:
+      - generic [ref=e121]: Sales
+      - generic [ref=e122] [cursor=pointer]:
+        - img [ref=e123]
+        - text: CRM Home
+      - generic [ref=e128] [cursor=pointer]:
+        - img [ref=e129]
+        - text: Leads
+        - generic [ref=e133]: "0"
+      - generic [ref=e134] [cursor=pointer]:
+        - img [ref=e135]
+        - text: Unit Setup
+      - generic [ref=e138] [cursor=pointer]:
+        - img [ref=e139]
+        - text: Unit Register
+      - generic [ref=e142] [cursor=pointer]:
+        - img [ref=e143]
+        - text: Sales Revenue
+    - generic [ref=e146]: Admin
+    - generic [ref=e147] [cursor=pointer]:
+      - img [ref=e148]
+      - text: Subcontractors
+    - generic [ref=e154] [cursor=pointer]:
+      - img [ref=e155]
+      - text: User Management
+    - button "Sign Out" [ref=e159] [cursor=pointer]
+  - generic [ref=e160]:
+    - generic [ref=e161]:
+      - generic [ref=e162]:
+        - generic [ref=e163]: CRM Home
+        - generic [ref=e164]: Tuesday, 26 May 2026
+      - generic [ref=e166] [cursor=pointer]:
+        - generic [ref=e168]: 241 Waterside
+        - generic [ref=e169]: ▼
+      - generic [ref=e172]: developer
+    - generic [ref=e174]:
+      - generic [ref=e175]:
+        - generic [ref=e176]:
+          - generic [ref=e177]: "0"
+          - generic [ref=e178]: Overdue Tasks
+        - generic [ref=e179]:
+          - generic [ref=e180]: "0"
+          - generic [ref=e181]: Due Today
+        - generic [ref=e182]:
+          - generic [ref=e183]: "21"
+          - generic [ref=e184]: Active Leads
+        - generic [ref=e185]:
+          - generic [ref=e186]: "0"
+          - generic [ref=e187]: Won This Month
+        - generic [ref=e188]:
+          - generic [ref=e189]: "20"
+          - generic [ref=e190]: No Task Set
+      - generic [ref=e191]:
+        - generic [ref=e192]:
+          - generic [ref=e193]:
+            - generic [ref=e195]: ⚠ Overdue Tasks
+            - generic [ref=e196]: No overdue tasks
+          - generic [ref=e197]:
+            - generic [ref=e199]: Due Today
+            - generic [ref=e200]: Nothing due today
+          - generic [ref=e201]:
+            - generic [ref=e203]: This Week
+            - generic [ref=e204]:
+              - generic [ref=e205]:
+                - generic [ref=e206]: Mon
+                - generic [ref=e207]: "0"
+                - generic [ref=e208]: 25/5
+              - generic [ref=e209]:
+                - generic [ref=e210]: Tue
+                - generic [ref=e211]: "0"
+                - generic [ref=e212]: 26/5
+              - generic [ref=e213]:
+                - generic [ref=e214]: Wed
+                - generic [ref=e215]: "0"
+                - generic [ref=e216]: 27/5
+              - generic [ref=e217]:
+                - generic [ref=e218]: Thu
+                - generic [ref=e219]: "0"
+                - generic [ref=e220]: 28/5
+              - generic [ref=e221]:
+                - generic [ref=e222]: Fri
+                - generic [ref=e223]: "1"
+                - generic [ref=e224]: 29/5
+          - generic [ref=e225]:
+            - generic [ref=e226]:
+              - generic [ref=e227]: Going Cold
+              - generic [ref=e228]: No contact in 7+ days
+            - generic [ref=e229]:
+              - generic [ref=e230]: Reyansh
+              - generic [ref=e231]: New Lead
+              - generic [ref=e232]: 13d no contact
+              - button "Open" [ref=e233] [cursor=pointer]
+        - generic [ref=e234]:
+          - generic [ref=e235]:
+            - generic [ref=e237]: My Leads
+            - generic [ref=e238]: No leads assigned to Mohammed Hingora
+          - generic [ref=e239]:
+            - generic [ref=e240]:
+              - generic [ref=e241]: Pipeline
+              - button "View All →" [ref=e242] [cursor=pointer]
+            - generic [ref=e243]:
+              - generic "New Lead" [ref=e244]
+              - generic [ref=e247]: "2"
+            - generic [ref=e248]:
+              - generic "Contacted" [ref=e249]
+              - generic [ref=e252]: "14"
+            - generic [ref=e253]:
+              - generic "No Response" [ref=e254]
+              - generic [ref=e257]: "2"
+            - generic [ref=e258]:
+              - generic "Site Visit" [ref=e259]
+              - generic [ref=e261]: "0"
+            - generic [ref=e262]:
+              - generic "Follow-Up" [ref=e263]
+              - generic [ref=e266]: "3"
+            - generic [ref=e267]:
+              - generic "Closed Won" [ref=e268]
+              - generic [ref=e270]: "0"
+            - generic [ref=e271]:
+              - generic "Closed Lost" [ref=e272]
+              - generic [ref=e275]: "1"
+          - generic [ref=e276]:
+            - generic [ref=e277]:
+              - generic [ref=e278]: No Task Set
+              - generic [ref=e279]: "20"
+            - generic [ref=e280]:
+              - generic [ref=e281]: Sky
+              - generic [ref=e282]: Contacted
+              - button "Open" [ref=e283] [cursor=pointer]
+            - generic [ref=e284]:
+              - generic [ref=e285]: MD Kaiser Mahmud
+              - generic [ref=e286]: No Response
+              - button "Open" [ref=e287] [cursor=pointer]
+            - generic [ref=e288]:
+              - generic [ref=e289]: Emon
+              - generic [ref=e290]: Contacted
+              - button "Open" [ref=e291] [cursor=pointer]
+            - generic [ref=e292]:
+              - generic [ref=e293]: Mostafa
+              - generic [ref=e294]: Contacted
+              - button "Open" [ref=e295] [cursor=pointer]
+            - generic [ref=e296]:
+              - generic [ref=e297]: Mohamed Sufyan
+              - generic [ref=e298]: Contacted
+              - button "Open" [ref=e299] [cursor=pointer]
+            - generic [ref=e300]:
+              - generic [ref=e301]: علی ہارون
+              - generic [ref=e302]: Contacted
+              - button "Open" [ref=e303] [cursor=pointer]
+            - generic [ref=e304]:
+              - generic [ref=e305]: Shahzad
+              - generic [ref=e306]: Contacted
+              - button "Open" [ref=e307] [cursor=pointer]
+            - generic [ref=e308]:
+              - generic [ref=e309]: Bhupendra
+              - generic [ref=e310]: Contacted
+              - button "Open" [ref=e311] [cursor=pointer]
+            - generic [ref=e312] [cursor=pointer]: +12 more — View Leads →
+          - generic [ref=e313]:
+            - generic [ref=e315]: Recent Activity
+            - generic [ref=e316]:
+              - generic [ref=e317]: ✅
+              - generic [ref=e318]:
+                - generic [ref=e319]: Anushka
+                - generic [ref=e320]: Follow up with this agent
+              - generic [ref=e321]: just now
+            - generic [ref=e322]:
+              - generic [ref=e323]: 📝
+              - generic [ref=e324]:
+                - generic [ref=e325]: Anushka
+                - generic [ref=e326]: Has a active client with 1.5-1.6M budget, Shared with her SO for 1 Bed.
+              - generic [ref=e327]: 1d ago
+            - generic [ref=e328]:
+              - generic [ref=e329]: 📝
+              - generic [ref=e330]:
+                - generic [ref=e331]: Bhupendra
+                - generic [ref=e332]: Shared 2 SO for 2beds
+              - generic [ref=e333]: 1d ago
+            - generic [ref=e334]:
+              - generic [ref=e335]: 📝
+              - generic [ref=e336]:
+                - generic [ref=e337]: Anushka
+                - generic [ref=e338]: Gave her a call again, She disconnected my call. Dropped her a whatsapp message
+              - generic [ref=e339]: 1d ago
+            - generic [ref=e340]:
+              - generic [ref=e341]: 📝
+              - generic [ref=e342]:
+                - generic [ref=e343]: Bhupendra
+                - generic [ref=e344]: Called at 10am, no response
+              - generic [ref=e345]: 1d ago
+            - generic [ref=e346]:
+              - generic [ref=e347]: 📝
+              - generic [ref=e348]:
+                - generic [ref=e349]: Alaa
+                - generic [ref=e350]: Upon request shared SC address, Waiting for a confirmation on a time and date to set up a meeting
+              - generic [ref=e351]: 1d ago
+            - generic [ref=e352]:
+              - generic [ref=e353]: 📝
+              - generic [ref=e354]:
+                - generic [ref=e355]: Ahmed
+                - generic [ref=e356]: Reverted back to agent and called him up as well to set up a meeting - no response
+              - generic [ref=e357]: 1d ago
+            - generic [ref=e358]:
+              - generic [ref=e359]: 📝
+              - generic [ref=e360]:
+                - generic [ref=e361]: Ebrahim Yousef
+                - generic [ref=e362]: Mustafa - Met at office, not a serious agent (one man agency)
+              - generic [ref=e363]: 1d ago

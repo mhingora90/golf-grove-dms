@@ -1,0 +1,397 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e49]:
+    - generic [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e52]: Active Project
+        - generic [ref=e53]: 241 Waterside
+      - generic [ref=e54]:
+        - generic [ref=e55]: MH
+        - generic [ref=e56]:
+          - generic [ref=e57]: Mohammed Hingora
+          - generic [ref=e58]: developer
+      - generic [ref=e59]: Main
+      - generic [ref=e60] [cursor=pointer]:
+        - img [ref=e61]
+        - text: Dashboard
+      - generic [ref=e66]: Document Control
+      - generic [ref=e67] [cursor=pointer]:
+        - img [ref=e68]
+        - text: Drawing Register
+      - generic [ref=e70] [cursor=pointer]:
+        - img [ref=e71]
+        - text: Submittals (DSUB)
+      - generic [ref=e74] [cursor=pointer]:
+        - img [ref=e75]
+        - text: Submittal Register
+      - generic [ref=e77]: Site
+      - generic [ref=e78] [cursor=pointer]:
+        - img [ref=e79]
+        - text: Inspection Requests
+      - generic [ref=e82] [cursor=pointer]:
+        - img [ref=e83]
+        - text: NCRs
+      - generic [ref=e86] [cursor=pointer]:
+        - img [ref=e87]
+        - text: RFIs
+      - generic [ref=e91] [cursor=pointer]:
+        - img [ref=e92]
+        - text: Transmittals
+      - generic [ref=e94] [cursor=pointer]:
+        - img [ref=e95]
+        - text: Method Statements
+      - generic [ref=e98] [cursor=pointer]:
+        - img [ref=e99]
+        - text: Correspondence
+      - generic [ref=e102] [cursor=pointer]:
+        - img [ref=e103]
+        - text: Punch List
+        - generic [ref=e106]: "0"
+      - generic [ref=e107]: Finance
+      - generic [ref=e108] [cursor=pointer]:
+        - img [ref=e109]
+        - text: Finance Overview
+      - generic [ref=e112] [cursor=pointer]:
+        - img [ref=e113]
+        - text: Payment Certificates
+      - generic [ref=e116] [cursor=pointer]:
+        - img [ref=e117]
+        - text: BOQ Setup
+      - generic [ref=e120]:
+        - generic [ref=e121]: Sales
+        - generic [ref=e122] [cursor=pointer]:
+          - img [ref=e123]
+          - text: CRM Home
+        - generic [ref=e128] [cursor=pointer]:
+          - img [ref=e129]
+          - text: Leads
+          - generic [ref=e133]: "22"
+        - generic [ref=e134] [cursor=pointer]:
+          - img [ref=e135]
+          - text: Unit Setup
+        - generic [ref=e138] [cursor=pointer]:
+          - img [ref=e139]
+          - text: Unit Register
+        - generic [ref=e142] [cursor=pointer]:
+          - img [ref=e143]
+          - text: Sales Revenue
+      - generic [ref=e146]: Admin
+      - generic [ref=e147] [cursor=pointer]:
+        - img [ref=e148]
+        - text: Subcontractors
+      - generic [ref=e154] [cursor=pointer]:
+        - img [ref=e155]
+        - text: User Management
+      - button "Sign Out" [ref=e159] [cursor=pointer]
+    - generic [ref=e160]:
+      - generic [ref=e161]:
+        - generic [ref=e162]:
+          - generic [ref=e163]: CRM Home
+          - generic [ref=e164]: Sunday, 24 May 2026
+        - generic [ref=e166] [cursor=pointer]:
+          - generic [ref=e168]: 241 Waterside
+          - generic [ref=e169]: ▼
+        - generic [ref=e172]: developer
+      - generic [ref=e1101]:
+        - generic [ref=e1102]:
+          - generic [ref=e1103]:
+            - generic [ref=e1104]: "0"
+            - generic [ref=e1105]: Overdue Tasks
+          - generic [ref=e1106]:
+            - generic [ref=e1107]: "0"
+            - generic [ref=e1108]: Due Today
+          - generic [ref=e1109]:
+            - generic [ref=e1110]: "21"
+            - generic [ref=e1111]: Active Leads
+          - generic [ref=e1112]:
+            - generic [ref=e1113]: "0"
+            - generic [ref=e1114]: Won This Month
+          - generic [ref=e1115]:
+            - generic [ref=e1116]: "21"
+            - generic [ref=e1117]: No Task Set
+        - generic [ref=e1118]:
+          - generic [ref=e1119]:
+            - generic [ref=e1120]:
+              - generic [ref=e1122]: ⚠ Overdue Tasks
+              - generic [ref=e1123]: No overdue tasks
+            - generic [ref=e1124]:
+              - generic [ref=e1126]: Due Today
+              - generic [ref=e1127]: Nothing due today
+            - generic [ref=e1128]:
+              - generic [ref=e1130]: This Week
+              - generic [ref=e1131]:
+                - generic [ref=e1132]:
+                  - generic [ref=e1133]: Mon
+                  - generic [ref=e1134]: "0"
+                  - generic [ref=e1135]: 18/5
+                - generic [ref=e1136]:
+                  - generic [ref=e1137]: Tue
+                  - generic [ref=e1138]: "0"
+                  - generic [ref=e1139]: 19/5
+                - generic [ref=e1140]:
+                  - generic [ref=e1141]: Wed
+                  - generic [ref=e1142]: "0"
+                  - generic [ref=e1143]: 20/5
+                - generic [ref=e1144]:
+                  - generic [ref=e1145]: Thu
+                  - generic [ref=e1146]: "0"
+                  - generic [ref=e1147]: 21/5
+                - generic [ref=e1148]:
+                  - generic [ref=e1149]: Fri
+                  - generic [ref=e1150]: "0"
+                  - generic [ref=e1151]: 22/5
+            - generic [ref=e1152]:
+              - generic [ref=e1153]:
+                - generic [ref=e1154]: Going Cold
+                - generic [ref=e1155]: No contact in 7+ days
+              - generic [ref=e1156]:
+                - generic [ref=e1157]: Reyansh
+                - generic [ref=e1158]: New Lead
+                - generic [ref=e1159]: 11d no contact
+                - button "Open" [ref=e1160] [cursor=pointer]
+              - generic [ref=e1161]:
+                - generic [ref=e1162]: Viquar
+                - generic [ref=e1163]: Contacted
+                - generic [ref=e1164]: 9d no contact
+                - button "Open" [ref=e1165] [cursor=pointer]
+          - generic [ref=e1166]:
+            - generic [ref=e1167]:
+              - generic [ref=e1169]: My Leads
+              - generic [ref=e1170]: No leads assigned to Mohammed Hingora
+            - generic [ref=e1171]:
+              - generic [ref=e1172]:
+                - generic [ref=e1173]: Pipeline
+                - button "View All →" [ref=e1174] [cursor=pointer]
+              - generic [ref=e1175]:
+                - generic "New Lead" [ref=e1176]
+                - generic [ref=e1179]: "5"
+              - generic [ref=e1180]:
+                - generic "Contacted" [ref=e1181]
+                - generic [ref=e1184]: "11"
+              - generic [ref=e1185]:
+                - generic "No Response" [ref=e1186]
+                - generic [ref=e1189]: "1"
+              - generic [ref=e1190]:
+                - generic "Site Visit" [ref=e1191]
+                - generic [ref=e1193]: "0"
+              - generic [ref=e1194]:
+                - generic "Follow-Up" [ref=e1195]
+                - generic [ref=e1198]: "4"
+              - generic [ref=e1199]:
+                - generic "Closed Won" [ref=e1200]
+                - generic [ref=e1202]: "0"
+              - generic [ref=e1203]:
+                - generic "Closed Lost" [ref=e1204]
+                - generic [ref=e1207]: "1"
+            - generic [ref=e1208]:
+              - generic [ref=e1209]:
+                - generic [ref=e1210]: No Task Set
+                - generic [ref=e1211]: "21"
+              - generic [ref=e1212]:
+                - generic [ref=e1213]: Sky
+                - generic [ref=e1214]: Contacted
+                - button "Open" [ref=e1215] [cursor=pointer]
+              - generic [ref=e1216]:
+                - generic [ref=e1217]: MD Kaiser Mahmud
+                - generic [ref=e1218]: No Response
+                - button "Open" [ref=e1219] [cursor=pointer]
+              - generic [ref=e1220]:
+                - generic [ref=e1221]: Emon
+                - generic [ref=e1222]: Contacted
+                - button "Open" [ref=e1223] [cursor=pointer]
+              - generic [ref=e1224]:
+                - generic [ref=e1225]: Mostafa
+                - generic [ref=e1226]: Contacted
+                - button "Open" [ref=e1227] [cursor=pointer]
+              - generic [ref=e1228]:
+                - generic [ref=e1229]: Anushka
+                - generic [ref=e1230]: New Lead
+                - button "Open" [ref=e1231] [cursor=pointer]
+              - generic [ref=e1232]:
+                - generic [ref=e1233]: Mohamed Sufyan
+                - generic [ref=e1234]: Contacted
+                - button "Open" [ref=e1235] [cursor=pointer]
+              - generic [ref=e1236]:
+                - generic [ref=e1237]: علی ہارون
+                - generic [ref=e1238]: Contacted
+                - button "Open" [ref=e1239] [cursor=pointer]
+              - generic [ref=e1240]:
+                - generic [ref=e1241]: Shahzad
+                - generic [ref=e1242]: Contacted
+                - button "Open" [ref=e1243] [cursor=pointer]
+              - generic [ref=e1244] [cursor=pointer]: +13 more — View Leads →
+            - generic [ref=e1245]:
+              - generic [ref=e1247]: Recent Activity
+              - generic [ref=e1248]:
+                - generic [ref=e1249]: ✅
+                - generic [ref=e1250]:
+                  - generic [ref=e1251]: Bhupendra
+                  - generic [ref=e1252]: Call and try to set up meeting as per script
+                - generic [ref=e1253]: 32m ago
+              - generic [ref=e1254]:
+                - generic [ref=e1255]: ✅
+                - generic [ref=e1256]:
+                  - generic [ref=e1257]: Anushka
+                  - generic [ref=e1258]: Call and try to set up meeting as per script
+                - generic [ref=e1259]: 52m ago
+              - generic [ref=e1260]:
+                - generic [ref=e1261]: 📞
+                - generic [ref=e1262]:
+                  - generic [ref=e1263]: MD Kaiser Mahmud
+                  - generic [ref=e1264]: Tried Calling MD Kaiser Mahmud, No Response
+                - generic [ref=e1265]: 1d ago
+              - generic [ref=e1266]:
+                - generic [ref=e1267]: 📝
+                - generic [ref=e1268]:
+                  - generic [ref=e1269]: Sky
+                  - generic [ref=e1270]: No Revert back
+                - generic [ref=e1271]: 1d ago
+              - generic [ref=e1272]:
+                - generic [ref=e1273]: ✅
+                - generic [ref=e1274]:
+                  - generic [ref=e1275]: Emon
+                  - generic [ref=e1276]: Due today test task
+                - generic [ref=e1277]: 2d ago
+              - generic [ref=e1278]:
+                - generic [ref=e1279]: ✅
+                - generic [ref=e1280]:
+                  - generic [ref=e1281]: Mostafa
+                  - generic [ref=e1282]: Follow up call - test task
+                - generic [ref=e1283]: 2d ago
+              - generic [ref=e1284]:
+                - generic [ref=e1285]: ✅
+                - generic [ref=e1286]:
+                  - generic [ref=e1287]: Ahmed
+                  - generic [ref=e1288]: Follow-up Call
+                - generic [ref=e1289]: 2d ago
+              - generic [ref=e1290]:
+                - generic [ref=e1291]: ✅
+                - generic [ref=e1292]:
+                  - generic [ref=e1293]: Mohhamed Ibrahim
+                  - generic [ref=e1294]: Follow-up Call
+                - generic [ref=e1295]: 2d ago
+  - dialog "Lead — Anushka" [ref=e925]:
+    - generic [ref=e926]:
+      - generic [ref=e927]: Lead — Anushka
+      - button "Close" [ref=e928] [cursor=pointer]: ×
+    - generic [ref=e929]:
+      - generic [ref=e1383]:
+        - generic [ref=e1384]:
+          - generic [ref=e1385]: Name
+          - generic [ref=e1386]: Anushka
+        - generic [ref=e1387]:
+          - generic [ref=e1388]: First Name
+          - generic [ref=e1389]: —
+        - generic [ref=e1390]:
+          - generic [ref=e1391]: Email
+          - generic [ref=e1392]: anushka.dilani7@gmail.com
+        - generic [ref=e1393]:
+          - generic [ref=e1394]: Phone
+          - generic [ref=e1395]: "+971522247585"
+        - generic [ref=e1396]:
+          - generic [ref=e1397]: Company
+          - generic [ref=e1398]: Evoke
+        - generic [ref=e1399]:
+          - generic [ref=e1400]: Broker Type
+          - generic [ref=e1401]: —
+        - generic [ref=e1402]:
+          - generic [ref=e1403]: Budget
+          - generic [ref=e1404]: AED 1.8m – AED 2.1m
+        - generic [ref=e1405]:
+          - generic [ref=e1406]: Property Type
+          - generic [ref=e1407]: Sky Loft
+        - generic [ref=e1408]:
+          - generic [ref=e1409]: Availability
+          - generic [ref=e1410]: —
+        - generic [ref=e1411]:
+          - generic [ref=e1412]: Source
+          - generic [ref=e1413]: Meta Ads
+        - generic [ref=e1414]:
+          - generic [ref=e1415]: Meta Lead ID
+          - generic [ref=e1416]: "4457749201179925"
+        - generic [ref=e1417]:
+          - generic [ref=e1418]: Created
+          - generic [ref=e1419]: 24/05/2026, 10:29:26
+      - generic [ref=e1420]:
+        - generic [ref=e1421]:
+          - generic [ref=e1422]: Stage
+          - combobox [ref=e1423]:
+            - option "New Lead" [selected]
+            - option "Contacted"
+            - option "No Response"
+            - option "Site Visit"
+            - option "Follow-Up"
+            - option "Closed Won"
+            - option "Closed Lost"
+        - generic [ref=e1424]:
+          - generic [ref=e1425]: Assigned To
+          - combobox [ref=e1426]:
+            - option "— Unassigned —"
+            - option "2af84ce2-fdd4-4734-a2d3-f018c55be9b6"
+            - option "c56c39fb-4ee9-4ec1-ba76-b033cb046327"
+            - option "Test User"
+            - option "Swizel Fernandes" [selected]
+            - option "Mustafa Hingora"
+            - option "15d40033-bb5f-4bfc-a7f5-19c98306421e"
+            - option "Mohammed Hingora"
+            - option "e9ca4789-62f6-4663-a1ed-84a940d2a844"
+            - option "f8ee85fc-9289-42d9-9931-4395e55b0b84"
+        - generic [ref=e1427]:
+          - generic [ref=e1428]: Rating
+          - generic [ref=e1429]:
+            - button "🔴 Hot" [ref=e1430] [cursor=pointer]
+            - button "🟡 Warm" [ref=e1431] [cursor=pointer]
+            - button "🔵 Cold" [ref=e1432] [cursor=pointer]
+      - generic [ref=e1433]:
+        - generic [ref=e1434]: Activity
+        - generic [ref=e1435]:
+          - button "All" [ref=e1436] [cursor=pointer]
+          - button "Tasks" [ref=e1437] [cursor=pointer]
+          - button "Calls" [ref=e1438] [cursor=pointer]
+          - button "Emails" [ref=e1439] [cursor=pointer]
+          - button "Other" [ref=e1440] [cursor=pointer]
+        - generic [ref=e1441]:
+          - generic [ref=e1442]: 📋 Tasks
+          - generic [ref=e1443]:
+            - generic [ref=e1444]:
+              - generic [ref=e1445]: ✅
+              - generic [ref=e1446]: Task
+              - generic [ref=e1447]: ·
+              - generic [ref=e1448]: Mohammed Hingora
+              - generic [ref=e1449]: ·
+              - generic [ref=e1450]: "Due: 25 May 2026, 11:00"
+              - button "✓ Done" [ref=e1451] [cursor=pointer]
+              - button "↩ Reply" [ref=e1452] [cursor=pointer]
+            - generic [ref=e1453]: Call and try to set up meeting as per script
+          - generic [ref=e1454]:
+            - generic [ref=e1455]:
+              - generic [ref=e1456]: ✅
+              - generic [ref=e1457]: Task
+              - generic [ref=e1458]: ·
+              - generic [ref=e1459]: Mohammed Hingora
+              - generic [ref=e1460]: ·
+              - generic [ref=e1461]: "Due: 25 May 2026, 23:41"
+              - button "✓ Done" [ref=e1462] [cursor=pointer]
+              - button "↩ Reply" [ref=e1463] [cursor=pointer]
+            - generic [ref=e1464]: Test task — due today
+        - generic [ref=e1465]:
+          - button "📞 Schedule Call" [ref=e1466] [cursor=pointer]
+          - button "💬 Schedule WhatsApp" [ref=e1467] [cursor=pointer]
+          - button "🤝 Schedule Meeting" [ref=e1468] [cursor=pointer]
+        - generic [ref=e1469]:
+          - combobox [ref=e1470]:
+            - option "📞 Call"
+            - option "💬 WhatsApp"
+            - option "✉️ Email"
+            - option "🤝 Meeting"
+            - option "🏠 Site Visit"
+            - option "📝 Note" [selected]
+            - option "✅ Task"
+          - generic [ref=e1471]:
+            - generic [ref=e1472]: Contact time
+            - textbox [ref=e1473]: 2026-05-24T23:41
+          - textbox "Add activity note…" [ref=e1474]
+          - button "Add" [ref=e1475] [cursor=pointer]
+    - generic [ref=e1012]:
+      - button "Convert Lead" [ref=e1476] [cursor=pointer]
+      - button "Delete" [ref=e1477] [cursor=pointer]
+      - button "Close" [ref=e1478] [cursor=pointer]
