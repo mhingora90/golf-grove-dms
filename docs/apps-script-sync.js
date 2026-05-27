@@ -3,9 +3,11 @@
 // Sheet: "Automatic Meta Leads"
 
 const SUPABASE_URL = 'https://kdxvhrwnnehicgdryowu.supabase.co';
-// Service role key — bypasses RLS so the script can insert leads without a user session.
-// Safe here: Apps Script runs server-side and is not publicly visible.
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkeHZocndubmVoaWNnZHJ5b3d1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTY1ODY2MywiZXhwIjoyMDkxMjM0NjYzfQ.q9i53Jx2GXHpX5t89Tdzly0WPiS-TOeiuY36D6uRnUA';
+// Secret key — bypasses RLS so the script can insert leads without a user session.
+// Apps Script runs server-side and is not publicly visible.
+// Get the value from: Supabase dashboard → Settings → API Keys → Secret keys → default
+// Paste it into the Apps Script editor directly (do NOT commit the value here).
+const SUPABASE_KEY = 'PASTE_NEW_SECRET_KEY_HERE';
 const SHEET_NAME = 'Automatic Meta Leads';
 
 // Column mapping: sheet headers are misleading — actual data locations:

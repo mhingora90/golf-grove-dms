@@ -11,8 +11,8 @@ const path = require('path');
 
 module.exports = {
   SUPABASE_URL : 'https://kdxvhrwnnehicgdryowu.supabase.co',
-  ANON_KEY     : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkeHZocndubmVoaWNnZHJ5b3d1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTg2NjMsImV4cCI6MjA5MTIzNDY2M30.uMlyBkTeth6nVl8ofBu9g_AYlnDLkgDyVTsxxaHI_ic',
-  SERVICE_KEY  : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkeHZocndubmVoaWNnZHJ5b3d1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTY1ODY2MywiZXhwIjoyMDkxMjM0NjYzfQ.q9i53Jx2GXHpX5t89Tdzly0WPiS-TOeiuY36D6uRnUA',
+  ANON_KEY     : 'sb_publishable_EASrK2EfbUZ5Jz1VBNw8Kw_nqq18szU',
+  SERVICE_KEY  : process.env.SUPABASE_SERVICE_KEY || (() => { throw new Error('Set SUPABASE_SERVICE_KEY env var (new sb_secret_... key from Supabase dashboard)'); })(),
 
   // Vercel deployment (use for full E2E; storage uploads require HTTPS)
   APP_URL  : process.env.APP_URL || 'https://golf-grove-dms.vercel.app',

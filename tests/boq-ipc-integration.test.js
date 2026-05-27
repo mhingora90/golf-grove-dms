@@ -21,7 +21,7 @@ const { URL } = require('url');
 // ═══════════════════════════════════════════════════════════════════════════
 
 const SUPABASE_URL = 'https://kdxvhrwnnehicgdryowu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkeHZocndubmVoaWNnZHJ5b3d1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTg2NjMsImV4cCI6MjA5MTIzNDY2M30.uMlyBkTeth6nVl8ofBu9g_AYlnDLkgDyVTsxxaHI_ic';
+const SUPABASE_KEY = 'sb_publishable_EASrK2EfbUZ5Jz1VBNw8Kw_nqq18szU';
 
 const results = [];
 function pass(n)      { results.push({ name: n, status: 'PASS' }); console.log(`  ✓  PASS  ${n}`); }
