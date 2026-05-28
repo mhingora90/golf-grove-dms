@@ -39,7 +39,7 @@ function nav(page, el, opts) {
   if(fab) fab.style.display = canCreateOnPage(page) ? '' : 'none';
   // Persist page in URL hash for refresh recovery
   history.replaceState(null,'','#'+page);
-  render();
+  render(true);
 }
 
 // ─── ROLE PERMISSIONS ─────────────────────────────────────────────
@@ -55,31 +55,58 @@ function can(action) {
   return perms[role]?.[action]||false;
 }
 
+// ─── RENDER CACHE (show cached HTML instantly, refresh in background) ───
+const _pageCache = {};
+const _PAGE_CACHE_TTL = 60_000;
+
+function _cacheKey() { return currentPage + '_' + (currentProject?.id || ''); }
+
+async function _execRender(page) {
+  if(page==='dash') await renderDash();
+  else if(page==='draw') await renderDrawings();
+  else if(page==='sub') await renderSubmittals();
+  else if(page==='sreg') await renderSubmittalRegister();
+  else if(page==='corr') await renderCorrespondence();
+  else if(page==='punch') await renderPunchList();
+  else if(page==='ir') await renderInspections();
+  else if(page==='ncr') await renderNCRs();
+  else if(page==='rfi') await renderRFIs();
+  else if(page==='trans') await renderTransmittals();
+  else if(page==='subs') await renderSubcontractors();
+  else if(page==='ms') await renderMS();
+  else if(page==='users') await renderUsers();
+  else if(page==='ipc') await renderIPC();
+  else if(page==='boq') await renderBOQ();
+  else if(page==='finance') await renderFinance();
+  else if(page==='usetup') await renderUnitSetup();
+  else if(page==='ureg') await renderUnitRegister();
+  else if(page==='srev') await renderSalesRevenue();
+  else if(page==='crm') { resetCRM(); await renderCRM(); }
+  else if(page==='crm-home') await renderCRMHome();
+}
+
 // ─── RENDER ───────────────────────────────────────────────────────
-async function render() {
+// fromNav=true  → use cache (nav click); fromNav=false → bust cache (post-mutation)
+async function render(fromNav = false) {
   const el = document.getElementById('content');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
-  if(currentPage==='dash') await renderDash();
-  else if(currentPage==='draw') await renderDrawings();
-  else if(currentPage==='sub') await renderSubmittals();
-  else if(currentPage==='sreg') await renderSubmittalRegister();
-  else if(currentPage==='corr') await renderCorrespondence();
-  else if(currentPage==='punch') await renderPunchList();
-  else if(currentPage==='ir') await renderInspections();
-  else if(currentPage==='ncr') await renderNCRs();
-  else if(currentPage==='rfi') await renderRFIs();
-  else if(currentPage==='trans') await renderTransmittals();
-  else if(currentPage==='subs') await renderSubcontractors();
-  else if(currentPage==='ms') await renderMS();
-  else if(currentPage==='users') await renderUsers();
-  else if(currentPage==='ipc') await renderIPC();
-  else if(currentPage==='boq') await renderBOQ();
-  else if(currentPage==='finance') await renderFinance();
-  else if(currentPage==='usetup') await renderUnitSetup();
-  else if(currentPage==='ureg') await renderUnitRegister();
-  else if(currentPage==='srev') await renderSalesRevenue();
-  else if(currentPage==='crm') { resetCRM(); await renderCRM(); }
-  else if(currentPage==='crm-home') await renderCRMHome();
+  const key = _cacheKey();
+  if (!fromNav) delete _pageCache[key];
+  const cached = _pageCache[key];
+  const now = Date.now();
+
+  if (cached && (now - cached.ts) < _PAGE_CACHE_TTL) {
+    // Show cached content instantly, refresh silently in background
+    el.innerHTML = cached.html;
+    const page = currentPage;
+    _execRender(page).then(() => {
+      if (currentPage === page) _pageCache[_cacheKey()] = { html: el.innerHTML, ts: Date.now() };
+    }).catch(() => {});
+  } else {
+    el.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+    const page = currentPage;
+    await _execRender(page);
+    if (currentPage === page) _pageCache[key] = { html: el.innerHTML, ts: Date.now() };
+  }
   await updateBadges();
 }
 
