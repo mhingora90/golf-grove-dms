@@ -39,6 +39,7 @@ function nav(page, el, opts) {
   if(fab) fab.style.display = canCreateOnPage(page) ? '' : 'none';
   // Persist page in URL hash for refresh recovery
   history.replaceState(null,'','#'+page);
+  if (page !== 'reports') localStorage.removeItem('_reportsState');
   render(true);
 }
 
