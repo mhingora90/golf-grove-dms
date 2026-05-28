@@ -163,15 +163,17 @@ function _calcFinanceStats(data, year, month) {
   const priorMonth = month === 1 ? 12 : month - 1;
   const priorYear  = month === 1 ? year - 1 : year;
 
-  const cumCerts      = certs.filter(c => beforeOrIn(dCert(c), year, month));
-  const priorCumCerts = certs.filter(c => beforeOrIn(dCert(c), priorYear, priorMonth));
+  // Certs with no dates but certified/paid status count unconditionally toward cumulative totals
+  const isCertified = c => c.status === 'Certified' || c.status === 'Paid';
+  const cumCerts      = certs.filter(c => { const d = dCert(c); return d ? beforeOrIn(d, year, month) : isCertified(c); });
+  const priorCumCerts = certs.filter(c => { const d = dCert(c); return d ? beforeOrIn(d, priorYear, priorMonth) : false; });
 
   const totalContractValue = contracts.reduce((s, c) => s + (c.contract_value || 0), 0);
   const totalBOQ           = Object.values(boqByContract).reduce((s, v) => s + v, 0);
   const pctDenominator     = totalContractValue > 0 ? totalContractValue : totalBOQ;
 
   const certifiedToDate = cumCerts.reduce((s, c) => s + ((certAmt[c.id] || {}).certified || 0), 0);
-  const paidToDate      = certs.filter(c => beforeOrIn(dPaid(c), year, month)).reduce((s, c) => s + (c.amount_paid || 0), 0);
+  const paidToDate      = certs.filter(c => { const d = dPaid(c); return d ? beforeOrIn(d, year, month) : c.status === 'Paid'; }).reduce((s, c) => s + (c.amount_paid || 0), 0);
   const retentionHeld   = cumCerts.reduce((s, c) => s + ((certAmt[c.id] || {}).certified || 0) * (c.retention_pct || 0) / 100, 0);
 
   const outstandingList    = cumCerts.filter(c => c.status !== 'Paid');
