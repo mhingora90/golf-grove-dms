@@ -154,8 +154,8 @@ function _calcFinanceStats(data, year, month) {
   });
 
   // Date helpers
-  const dCert = c => c.certified_date ? new Date(c.certified_date) : null;
-  const dPaid = c => c.paid_date ? new Date(c.paid_date) : null;
+  const dCert = c => c.certified_date ? new Date(c.certified_date) : (c.submitted_date ? new Date(c.submitted_date) : null);
+  const dPaid = c => c.paid_date ? new Date(c.paid_date) : (c.certified_date ? new Date(c.certified_date) : null);
   const dSub  = c => c.submitted_date ? new Date(c.submitted_date) : null;
   const beforeOrIn = (d, y, m) => d && (d.getFullYear() < y || (d.getFullYear() === y && d.getMonth() + 1 <= m));
   const inMonth    = (d, y, m) => d && d.getFullYear() === y && d.getMonth() + 1 === m;
