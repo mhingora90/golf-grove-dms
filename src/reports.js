@@ -167,6 +167,8 @@ function _calcFinanceStats(data, year, month) {
   const priorCumCerts = certs.filter(c => beforeOrIn(dCert(c), priorYear, priorMonth));
 
   const totalContractValue = contracts.reduce((s, c) => s + (c.contract_value || 0), 0);
+  const totalBOQ           = Object.values(boqByContract).reduce((s, v) => s + v, 0);
+  const pctDenominator     = totalContractValue > 0 ? totalContractValue : totalBOQ;
 
   const certifiedToDate = cumCerts.reduce((s, c) => s + ((certAmt[c.id] || {}).certified || 0), 0);
   const paidToDate      = certs.filter(c => beforeOrIn(dPaid(c), year, month)).reduce((s, c) => s + (c.amount_paid || 0), 0);
@@ -174,7 +176,7 @@ function _calcFinanceStats(data, year, month) {
 
   const outstandingList    = cumCerts.filter(c => c.status !== 'Paid');
   const outstandingBalance = outstandingList.reduce((s, c) => s + Math.max(0, _netPay(c, certAmt) - (c.amount_paid || 0)), 0);
-  const pctComplete        = totalContractValue > 0 ? Math.round((certifiedToDate / totalContractValue) * 100) : 0;
+  const pctComplete        = pctDenominator > 0 ? Math.round((certifiedToDate / pctDenominator) * 100) : 0;
 
   const priorCertifiedToDate = priorCumCerts.reduce((s, c) => s + ((certAmt[c.id] || {}).certified || 0), 0);
   const priorPaidToDate      = certs.filter(c => beforeOrIn(dPaid(c), priorYear, priorMonth)).reduce((s, c) => s + (c.amount_paid || 0), 0);
