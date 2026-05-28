@@ -7,39 +7,29 @@ async function renderReports() {
 
 function buildReportsHub() {
   return [
-    // ── Page header ──────────────────────────────────────────────
     '<div style="padding:28px 28px 0">',
     '<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:24px">',
     '<h1 style="font-size:22px;font-weight:600;color:var(--charcoal);letter-spacing:-.3px;margin:0">Reports</h1>',
     '<span style="font-size:11px;color:var(--text3);font-weight:400">' + currentProject.name + '</span>',
     '</div>',
-
-    // ── Finance Report — featured card ───────────────────────────
     '<div style="position:relative;background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;',
     'padding:28px 28px 24px;margin-bottom:28px;overflow:hidden;cursor:pointer;',
     'box-shadow:0 1px 4px rgba(44,42,36,.06);transition:box-shadow .2s,transform .15s"',
     ' onmouseover="this.style.boxShadow=\'0 8px 28px rgba(44,42,36,.12)\';this.style.transform=\'translateY(-1px)\'"',
     ' onmouseout="this.style.boxShadow=\'0 1px 4px rgba(44,42,36,.06)\';this.style.transform=\'none\'"',
     ' onclick="_openFinanceReport()">',
-
-    // background accent stripe
     '<div style="position:absolute;top:0;left:0;width:4px;height:100%;background:var(--green);border-radius:16px 0 0 16px"></div>',
-
-    // top row: label + badge
     '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-left:12px">',
     '<div style="display:flex;align-items:center;gap:10px">',
     '<div style="width:36px;height:36px;border-radius:9px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">',
-    '<svg width="18" height="18" viewBox="0 0 18 18" fill="none">',
-    '<path d="M3 14V9M7 14V6M11 14V9M15 14V4" stroke="#3B6D11" stroke-width="1.6" stroke-linecap="round"/>',
-    '</svg></div>',
+    '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14V9M7 14V6M11 14V9M15 14V4" stroke="#3B6D11" stroke-width="1.6" stroke-linecap="round"/></svg>',
+    '</div>',
     '<div>',
     '<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;margin-bottom:1px">Finance</div>',
     '<div style="font-size:15px;font-weight:600;color:var(--charcoal);letter-spacing:-.2px">Finance Report</div>',
     '</div></div>',
     '<span class="badge badge-success" style="font-size:10px">&#9679; Live</span>',
     '</div>',
-
-    // description row
     '<div style="padding-left:12px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:20px">',
     '<div>',
     '<div style="font-size:12px;color:var(--text2);line-height:1.7;max-width:500px">',
@@ -65,120 +55,41 @@ function buildReportsHub() {
     '</div>',
     '</div>',
     '</div>',
-
-    // ── Coming soon section ───────────────────────────────────────
     '<div style="margin-bottom:12px">',
     '<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;margin-bottom:12px">In Development</div>',
     '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">',
-
-    // Quality card
-    '<div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px">',
-    '<div style="display:flex;align-items:center;justify-content:space-between">',
-    '<div style="width:30px;height:30px;border-radius:8px;background:var(--bg4);display:flex;align-items:center;justify-content:center">',
-    '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 7.5l3 3 6-6" stroke="#B4A88C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    '</div>',
-    '<span class="badge badge-neutral" style="font-size:9px">Soon</span>',
-    '</div>',
-    '<div>',
-    '<div style="font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:3px">Quality &amp; Site</div>',
-    '<div style="font-size:11px;color:var(--text3);line-height:1.5">NCRs, punch list, inspection rates</div>',
-    '</div>',
-    '</div>',
-
-    // Document Control card
-    '<div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px">',
-    '<div style="display:flex;align-items:center;justify-content:space-between">',
-    '<div style="width:30px;height:30px;border-radius:8px;background:var(--bg4);display:flex;align-items:center;justify-content:center">',
-    '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="3" y="2" width="9" height="11" rx="1.5" stroke="#B4A88C" stroke-width="1.2"/><path d="M5 5.5h5M5 8h3" stroke="#B4A88C" stroke-width="1" stroke-linecap="round"/></svg>',
-    '</div>',
-    '<span class="badge badge-neutral" style="font-size:9px">Soon</span>',
-    '</div>',
-    '<div>',
-    '<div style="font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:3px">Document Control</div>',
-    '<div style="font-size:11px;color:var(--text3);line-height:1.5">Submittals, drawings, RFI turnaround</div>',
-    '</div>',
-    '</div>',
-
-    // Sales card
-    '<div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px">',
-    '<div style="display:flex;align-items:center;justify-content:space-between">',
-    '<div style="width:30px;height:30px;border-radius:8px;background:var(--bg4);display:flex;align-items:center;justify-content:center">',
-    '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 11l3-4.5 2.5 2L11 4" stroke="#B4A88C" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    '</div>',
-    '<span class="badge badge-neutral" style="font-size:9px">Soon</span>',
-    '</div>',
-    '<div>',
-    '<div style="font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:3px">Sales &amp; CRM</div>',
-    '<div style="font-size:11px;color:var(--text3);line-height:1.5">Pipeline, conversion, revenue forecast</div>',
-    '</div>',
-    '</div>',
-
-    '</div>',
-    '</div>',
+    _hubSoonCard(
+      '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 7.5l3 3 6-6" stroke="#B4A88C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      'Quality &amp; Site', 'NCRs, punch list, inspection rates'),
+    _hubSoonCard(
+      '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="3" y="2" width="9" height="11" rx="1.5" stroke="#B4A88C" stroke-width="1.2"/><path d="M5 5.5h5M5 8h3" stroke="#B4A88C" stroke-width="1" stroke-linecap="round"/></svg>',
+      'Document Control', 'Submittals, drawings, RFI turnaround'),
+    _hubSoonCard(
+      '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 11l3-4.5 2.5 2L11 4" stroke="#B4A88C" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      'Sales &amp; CRM', 'Pipeline, conversion, revenue forecast'),
+    '</div></div>',
     '</div>',
   ].join('');
 }
-LE
 
-async function renderReports() {
-  const el = document.getElementById('content');
-  el.innerHTML = buildReportsHub();
-}
-
-function buildReportsHub() {
-  const iconFinance = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#EAF3DE"/><path d="M16 8v16M10 20l6 4 6-4M10 12l6-4 6 4" stroke="#3B6D11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  const iconQuality = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#F0EBE2"/><path d="M10 16l4 4 8-8" stroke="#B4A88C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  const iconDocs = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#F0EBE2"/><rect x="9" y="10" width="14" height="2" rx="1" fill="#B4A88C"/><rect x="9" y="15" width="10" height="2" rx="1" fill="#B4A88C"/><rect x="9" y="20" width="7" height="2" rx="1" fill="#B4A88C"/></svg>';
-  const iconSales = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#F0EBE2"/><path d="M8 22l5-7 4 3 6-9" stroke="#B4A88C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-  const activeCard = [
-    '<div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:22px;cursor:pointer;',
-    'box-shadow:0 1px 4px rgba(44,42,36,.05);transition:box-shadow .15s,border-color .15s;display:flex;flex-direction:column;gap:14px"',
-    ' onmouseover="this.style.boxShadow=\'0 4px 16px rgba(44,42,36,.1)\';this.style.borderColor=\'var(--border2)\'"',
-    ' onmouseout="this.style.boxShadow=\'0 1px 4px rgba(44,42,36,.05)\';this.style.borderColor=\'var(--border)\'"',
-    ' onclick="_openFinanceReport()">',
-    '<div style="display:flex;align-items:flex-start;justify-content:space-between">',
-    iconFinance,
-    '<span class="badge badge-success">Live</span>',
-    '</div>',
-    '<div>',
-    '<div style="font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:5px">Finance Report</div>',
-    '<div style="font-size:11px;color:var(--text3);line-height:1.6">Cashflow, certified &amp; paid KPIs,<br>contract breakdown, S-curve progress</div>',
-    '</div>',
-    '<div style="font-size:11px;font-weight:500;color:var(--green-light)">Open report &rarr;</div>',
-    '</div>',
-  ].join('');
-
-  const comingSoonCard = (icon, title, desc) => [
-    '<div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:22px;',
-    'cursor:default;display:flex;flex-direction:column;gap:14px">',
-    '<div style="display:flex;align-items:flex-start;justify-content:space-between">',
-    icon,
-    '<span class="badge badge-neutral">Coming Soon</span>',
-    '</div>',
-    '<div>',
-    '<div style="font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:5px">' + title + '</div>',
-    '<div style="font-size:11px;color:var(--text3);line-height:1.6">' + desc + '</div>',
-    '</div>',
-    '</div>',
-  ].join('');
-
+function _hubSoonCard(iconSvg, title, desc) {
   return [
-    '<div style="padding:24px 24px 0">',
-    '<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;margin-bottom:3px">Management Information System</div>',
-    '<h1 style="font-size:20px;font-weight:600;color:var(--charcoal);margin:0 0 6px">Reports</h1>',
-    '<div style="font-size:12px;color:var(--text2);margin-bottom:22px">Select a report for <strong>' + currentProject.name + '</strong>.</div>',
-    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">',
-    activeCard,
-    comingSoonCard(iconQuality, 'Quality &amp; Site', 'NCRs, punch list, inspection pass rates'),
-    comingSoonCard(iconDocs, 'Document Control', 'Drawing register, submittal turnaround, RFIs'),
-    comingSoonCard(iconSales, 'Sales &amp; CRM', 'Pipeline, conversion, revenue forecast'),
+    '<div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px">',
+    '<div style="display:flex;align-items:center;justify-content:space-between">',
+    '<div style="width:30px;height:30px;border-radius:8px;background:var(--bg4);display:flex;align-items:center;justify-content:center">',
+    iconSvg,
+    '</div>',
+    '<span class="badge badge-neutral" style="font-size:9px">Soon</span>',
+    '</div>',
+    '<div>',
+    '<div style="font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:3px">' + title + '</div>',
+    '<div style="font-size:11px;color:var(--text3);line-height:1.5">' + desc + '</div>',
     '</div>',
     '</div>',
   ].join('');
 }
 
-// FINANCE REPORT
+// ── Finance Report ────────────────────────────────────────────────
 
 function _openFinanceReport() {
   const now = new Date();
@@ -186,108 +97,160 @@ function _openFinanceReport() {
 }
 
 async function _fetchFinanceData(projectId) {
-  const [contractsRes, certsRes, billsRes, boqItemsRes] = await Promise.all([
-    sb.from('contracts').select('id,contractor_name,awarded_value,start_date,end_date').eq('project_id', projectId),
-    sb.from('payment_certificates').select('id,contract_id,period_month,period_year,claimed_amount,certified_amount,paid_amount,payment_date,status,reference').eq('project_id', projectId),
-    sb.from('boq_bills').select('id,contract_id,total_amount').eq('project_id', projectId),
-    sb.from('boq_items').select('bill_id,total_price').eq('project_id', projectId),
+  const [contractsRes, certsRes, billsRes] = await Promise.all([
+    sb.from('contracts').select('id,name,contractor,contract_value,start_date,end_date')
+      .eq('project_id', projectId).order('sort_order').order('created_at'),
+    sb.from('payment_certificates')
+      .select('id,cert_no,contract_id,status,retention_pct,advance_recovery_pct,vat_pct,previously_paid,amount_paid,mobilisation_advance,submitted_date,certified_date,paid_date')
+      .eq('project_id', projectId),
+    sb.from('boq_bills').select('id,contract_id').eq('project_id', projectId),
   ]);
   const certIds = (certsRes.data || []).map(c => c.id);
-  let certItems = [];
-  if (certIds.length > 0) {
-    const itemsRes = await sb.from('payment_certificate_items').select('certificate_id,retention_amount').in('certificate_id', certIds);
-    certItems = itemsRes.data || [];
-  }
+  const billIds = (billsRes.data || []).map(b => b.id);
+  const [certItemsRes, boqItemsRes] = await Promise.all([
+    certIds.length
+      ? sb.from('payment_certificate_items').select('cert_id,contractor_amount,consultant_amount').in('cert_id', certIds)
+      : Promise.resolve({ data: [] }),
+    billIds.length
+      ? sb.from('boq_items').select('bill_id,total').in('bill_id', billIds)
+      : Promise.resolve({ data: [] }),
+  ]);
   return {
     contracts: contractsRes.data || [],
     certs: certsRes.data || [],
-    certItems,
+    certItems: certItemsRes.data || [],
     boqBills: billsRes.data || [],
     boqItems: boqItemsRes.data || [],
   };
 }
 
+function _netPay(c, certAmt) {
+  const gross = (certAmt[c.id] || {}).certified || 0;
+  const rp = c.retention_pct || 0;
+  const ap = c.advance_recovery_pct || 0;
+  const vp = c.vat_pct || 0;
+  const net = gross * (1 - rp / 100 - ap / 100) - (c.previously_paid || 0);
+  return net + net * vp / 100;
+}
+
 function _calcFinanceStats(data, year, month) {
   const { contracts, certs, certItems, boqBills, boqItems } = data;
-  const boqByContract = {};
-  boqBills.forEach(b => {
-    const items = boqItems.filter(i => i.bill_id === b.id);
-    const sum = items.reduce((s, i) => s + (i.total_price || 0), 0);
-    boqByContract[b.contract_id] = (boqByContract[b.contract_id] || 0) + sum;
-  });
-  const retentionByCert = {};
+
+  // cert_id → { claimed: sum(contractor_amount), certified: sum(consultant_amount) }
+  const certAmt = {};
   certItems.forEach(i => {
-    retentionByCert[i.certificate_id] = (retentionByCert[i.certificate_id] || 0) + (i.retention_amount || 0);
+    if (!certAmt[i.cert_id]) certAmt[i.cert_id] = { claimed: 0, certified: 0 };
+    certAmt[i.cert_id].claimed += i.contractor_amount || 0;
+    certAmt[i.cert_id].certified += i.consultant_amount || 0;
   });
-  const inPeriod = (c, y, m) => c.period_year < y || (c.period_year === y && c.period_month <= m);
-  const exactPeriod = (c, y, m) => c.period_year === y && c.period_month === m;
+
+  // BOQ totals by contract
+  const billToContract = {};
+  boqBills.forEach(b => { billToContract[b.id] = b.contract_id; });
+  const boqByContract = {};
+  boqItems.forEach(i => {
+    const cid = billToContract[i.bill_id];
+    if (cid) boqByContract[cid] = (boqByContract[cid] || 0) + (i.total || 0);
+  });
+
+  // Date helpers
+  const dCert = c => c.certified_date ? new Date(c.certified_date) : null;
+  const dPaid = c => c.paid_date ? new Date(c.paid_date) : null;
+  const dSub  = c => c.submitted_date ? new Date(c.submitted_date) : null;
+  const beforeOrIn = (d, y, m) => d && (d.getFullYear() < y || (d.getFullYear() === y && d.getMonth() + 1 <= m));
+  const inMonth    = (d, y, m) => d && d.getFullYear() === y && d.getMonth() + 1 === m;
+
   const priorMonth = month === 1 ? 12 : month - 1;
-  const priorYear = month === 1 ? year - 1 : year;
-  const cumCerts = certs.filter(c => inPeriod(c, year, month));
-  const priorCumCerts = certs.filter(c => inPeriod(c, priorYear, priorMonth));
-  const sumField = (arr, f) => arr.reduce((s, c) => s + (c[f] || 0), 0);
-  const totalContractValue = contracts.reduce((s, c) => s + (c.awarded_value || 0), 0);
-  const certifiedToDate = sumField(cumCerts, 'certified_amount');
-  const paidToDate = sumField(cumCerts.filter(c => c.payment_date), 'paid_amount');
-  const retentionHeld = cumCerts.reduce((s, c) => s + (retentionByCert[c.id] || 0), 0);
-  const outstandingCerts = cumCerts.filter(c => c.status !== 'paid' && (c.certified_amount || 0) > 0);
-  const outstandingBalance = outstandingCerts.reduce((s, c) => s + (c.certified_amount || 0) - (c.paid_amount || 0), 0);
-  const pctComplete = totalContractValue > 0 ? Math.round((certifiedToDate / totalContractValue) * 100) : 0;
-  const priorCertifiedToDate = sumField(priorCumCerts, 'certified_amount');
-  const priorPaidToDate = sumField(priorCumCerts.filter(c => c.payment_date), 'paid_amount');
-  const periodCerts = certs.filter(c => exactPeriod(c, year, month));
-  const priorPeriodCerts = certs.filter(c => exactPeriod(c, priorYear, priorMonth));
-  const periodClaimed = sumField(periodCerts, 'claimed_amount');
-  const periodCertified = sumField(periodCerts, 'certified_amount');
-  const periodPaid = sumField(periodCerts.filter(c => c.payment_date), 'paid_amount');
-  const priorPeriodClaimed = sumField(priorPeriodCerts, 'claimed_amount');
-  const priorPeriodCertified = sumField(priorPeriodCerts, 'certified_amount');
-  const priorPeriodPaid = sumField(priorPeriodCerts.filter(c => c.payment_date), 'paid_amount');
-  const contractRows = contracts
-    .map(c => {
-      const cCerts = cumCerts.filter(x => x.contract_id === c.id);
-      const certified = sumField(cCerts, 'certified_amount');
-      const paid = sumField(cCerts.filter(x => x.payment_date), 'paid_amount');
-      const retention = cCerts.reduce((s, x) => s + (retentionByCert[x.id] || 0), 0);
-      const outstanding = cCerts.filter(x => x.status !== 'paid').reduce((s, x) => s + (x.certified_amount || 0) - (x.paid_amount || 0), 0);
-      const pct = (c.awarded_value || 0) > 0 ? Math.round((certified / c.awarded_value) * 100) : 0;
-      const boqTotal = boqByContract[c.id] || 0;
-      return { name: c.contractor_name, awardedValue: c.awarded_value || 0, boqTotal, certified, paid, outstanding, retention, pct };
-    })
-    .sort((a, b) => b.awardedValue - a.awardedValue);
+  const priorYear  = month === 1 ? year - 1 : year;
+
+  const cumCerts      = certs.filter(c => beforeOrIn(dCert(c), year, month));
+  const priorCumCerts = certs.filter(c => beforeOrIn(dCert(c), priorYear, priorMonth));
+
+  const totalContractValue = contracts.reduce((s, c) => s + (c.contract_value || 0), 0);
+
+  const certifiedToDate = cumCerts.reduce((s, c) => s + ((certAmt[c.id] || {}).certified || 0), 0);
+  const paidToDate      = certs.filter(c => beforeOrIn(dPaid(c), year, month)).reduce((s, c) => s + (c.amount_paid || 0), 0);
+  const retentionHeld   = cumCerts.reduce((s, c) => s + ((certAmt[c.id] || {}).certified || 0) * (c.retention_pct || 0) / 100, 0);
+
+  const outstandingList    = cumCerts.filter(c => c.status !== 'Paid');
+  const outstandingBalance = outstandingList.reduce((s, c) => s + Math.max(0, _netPay(c, certAmt) - (c.amount_paid || 0)), 0);
+  const pctComplete        = totalContractValue > 0 ? Math.round((certifiedToDate / totalContractValue) * 100) : 0;
+
+  const priorCertifiedToDate = priorCumCerts.reduce((s, c) => s + ((certAmt[c.id] || {}).certified || 0), 0);
+  const priorPaidToDate      = certs.filter(c => beforeOrIn(dPaid(c), priorYear, priorMonth)).reduce((s, c) => s + (c.amount_paid || 0), 0);
+
+  // Period KPIs
+  const periodCerts    = certs.filter(c => inMonth(dCert(c), year, month));
+  const priorPeriodC   = certs.filter(c => inMonth(dCert(c), priorYear, priorMonth));
+  const periodSub      = certs.filter(c => inMonth(dSub(c), year, month));
+  const priorSub       = certs.filter(c => inMonth(dSub(c), priorYear, priorMonth));
+
+  const periodClaimed        = periodSub.reduce((s, c) => s + ((certAmt[c.id] || {}).claimed || 0), 0);
+  const periodCertified      = periodCerts.reduce((s, c) => s + ((certAmt[c.id] || {}).certified || 0), 0);
+  const periodPaid           = certs.filter(c => inMonth(dPaid(c), year, month)).reduce((s, c) => s + (c.amount_paid || 0), 0);
+  const priorPeriodClaimed   = priorSub.reduce((s, c) => s + ((certAmt[c.id] || {}).claimed || 0), 0);
+  const priorPeriodCertified = priorPeriodC.reduce((s, c) => s + ((certAmt[c.id] || {}).certified || 0), 0);
+  const priorPeriodPaid      = certs.filter(c => inMonth(dPaid(c), priorYear, priorMonth)).reduce((s, c) => s + (c.amount_paid || 0), 0);
+
+  const fmtK = v => 'AED ' + (v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : (v / 1e3).toFixed(0) + 'K');
+  const outstandingStr = outstandingList.length
+    ? outstandingList.map(c => {
+        const bal = Math.max(0, _netPay(c, certAmt) - (c.amount_paid || 0));
+        return (c.cert_no || 'IPC') + ' (' + fmtK(bal) + ')';
+      }).join(', ') + ' outstanding.'
+    : '';
+
+  // Contract rows
+  const contractRows = contracts.map(c => {
+    const cc = certs.filter(x => x.contract_id === c.id);
+    const cumCC   = cc.filter(x => beforeOrIn(dCert(x), year, month));
+    const certified  = cumCC.reduce((s, x) => s + ((certAmt[x.id] || {}).certified || 0), 0);
+    const paid       = cc.filter(x => beforeOrIn(dPaid(x), year, month)).reduce((s, x) => s + (x.amount_paid || 0), 0);
+    const retention  = cumCC.reduce((s, x) => s + ((certAmt[x.id] || {}).certified || 0) * (x.retention_pct || 0) / 100, 0);
+    const outstanding = cumCC.filter(x => x.status !== 'Paid').reduce((s, x) => s + Math.max(0, _netPay(x, certAmt) - (x.amount_paid || 0)), 0);
+    const pct = (c.contract_value || 0) > 0 ? Math.min(100, Math.round((certified / c.contract_value) * 100)) : 0;
+    return { name: c.name, contractor: c.contractor, awardedValue: c.contract_value || 0, boqTotal: boqByContract[c.id] || 0, certified, paid, outstanding, retention, pct };
+  }).sort((a, b) => b.awardedValue - a.awardedValue);
+
+  // Monthly cashflow (last 6 months)
   const monthMap = [];
   for (let i = 5; i >= 0; i--) {
     let m = month - i; let y = year;
     if (m <= 0) { m += 12; y -= 1; }
-    const mc = certs.filter(c => exactPeriod(c, y, m));
+    const certInM = certs.filter(x => inMonth(dCert(x), y, m));
+    const subInM  = certs.filter(x => inMonth(dSub(x), y, m));
+    const paidInM = certs.filter(x => inMonth(dPaid(x), y, m));
     monthMap.push({
-      label: new Date(y, m - 1).toLocaleString('default', { month: 'short' }),
-      claimed: sumField(mc, 'claimed_amount'),
-      certified: sumField(mc, 'certified_amount'),
-      paid: sumField(mc.filter(c => c.payment_date), 'paid_amount'),
+      label:     new Date(y, m - 1).toLocaleString('default', { month: 'short' }),
+      claimed:   subInM.reduce((s, x) => s + ((certAmt[x.id] || {}).claimed || 0), 0),
+      certified: certInM.reduce((s, x) => s + ((certAmt[x.id] || {}).certified || 0), 0),
+      paid:      paidInM.reduce((s, x) => s + (x.amount_paid || 0), 0),
     });
   }
-  const allStarts = contracts.map(c => c.start_date).filter(Boolean).sort();
-  const allEnds = contracts.map(c => c.end_date).filter(Boolean).sort();
-  const projectStart = allStarts[0] ? new Date(allStarts[0]) : new Date(year, 0);
-  const projectEnd = allEnds[allEnds.length - 1] ? new Date(allEnds[allEnds.length - 1]) : new Date(year + 1, 11);
-  const totalMonths = Math.max(1, (projectEnd.getFullYear() - projectStart.getFullYear()) * 12 + projectEnd.getMonth() - projectStart.getMonth() + 1);
+
+  // S-curve
+  const allStarts  = contracts.map(c => c.start_date).filter(Boolean).sort();
+  const allEnds    = contracts.map(c => c.end_date).filter(Boolean).sort();
+  const projStart  = allStarts[0] ? new Date(allStarts[0]) : new Date(year, 0);
+  const projEnd    = allEnds[allEnds.length - 1] ? new Date(allEnds[allEnds.length - 1]) : new Date(year + 1, 11);
+  const totalMonths = Math.max(1, (projEnd.getFullYear() - projStart.getFullYear()) * 12 + projEnd.getMonth() - projStart.getMonth() + 1);
   const monthlyPlanned = totalContractValue / totalMonths;
   const sCurvePoints = [];
   let cumPlanned = 0; let cumActual = 0;
   for (let i = 0; i < totalMonths; i++) {
-    const d = new Date(projectStart.getFullYear(), projectStart.getMonth() + i);
+    const d = new Date(projStart.getFullYear(), projStart.getMonth() + i);
     cumPlanned += monthlyPlanned;
-    const mc = certs.filter(c => exactPeriod(c, d.getFullYear(), d.getMonth() + 1));
-    cumActual += sumField(mc, 'certified_amount');
+    const mc = certs.filter(x => inMonth(dCert(x), d.getFullYear(), d.getMonth() + 1));
+    cumActual += mc.reduce((s, x) => s + ((certAmt[x.id] || {}).certified || 0), 0);
     const isPast = d.getFullYear() < year || (d.getFullYear() === year && d.getMonth() + 1 <= month);
     sCurvePoints.push({ month: i, cumPlanned, cumActual: isPast ? cumActual : null });
   }
+
   return {
     totalContractValue, certifiedToDate, paidToDate, retentionHeld, outstandingBalance, pctComplete,
-    priorCertifiedToDate, priorPaidToDate, outstandingCerts,
+    priorCertifiedToDate, priorPaidToDate, outstandingStr,
     periodClaimed, periodCertified, periodPaid,
-    periodCertsRefs: periodCerts.map(c => c.reference).filter(Boolean),
+    periodCertsRefs: periodCerts.map(c => c.cert_no).filter(Boolean),
     priorPeriodClaimed, priorPeriodCertified, priorPeriodPaid,
     contractRows, monthMap, sCurvePoints, totalMonths,
   };
@@ -300,10 +263,10 @@ async function renderFinanceReport(year, month) {
   const stats = _calcFinanceStats(data, year, month);
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const curYear = new Date().getFullYear();
-  const yearOpts = [curYear-2,curYear-1,curYear,curYear+1,curYear+2]
-    .map(y => '<option value="' + y + '"' + (y===year?' selected':'') + '>' + y + '</option>').join('');
+  const yearOpts  = [curYear-2,curYear-1,curYear,curYear+1,curYear+2]
+    .map(y => '<option value="' + y + '"' + (y === year ? ' selected' : '') + '>' + y + '</option>').join('');
   const monthOpts = months
-    .map((m,i) => '<option value="' + (i+1) + '"' + (i+1===month?' selected':'') + '>' + m + '</option>').join('');
+    .map((m, i) => '<option value="' + (i + 1) + '"' + (i + 1 === month ? ' selected' : '') + '>' + m + '</option>').join('');
   const container = document.createElement('div');
   container.id = 'finance-report-container';
   container.style.cssText = 'padding-bottom:32px';
@@ -313,19 +276,19 @@ async function renderFinanceReport(year, month) {
 }
 
 function buildFinanceReportHTML(stats, year, month, months, yearOpts, monthOpts) {
-  const rptYear = "document.getElementById('rpt-year').value";
+  const rptYear  = "document.getElementById('rpt-year').value";
   const rptMonth = "document.getElementById('rpt-month').value";
   const header = [
     '<div class="page-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">',
-    '<a href="#" onclick="renderReports();return false" style="font-size:13px;color:var(--accent)">&larr; All Reports</a>',
-    '<h1 style="flex:1;margin:0">Finance MIS Report &mdash; ' + currentProject.name + '</h1>',
+    '<a href="#" onclick="renderReports();return false" style="font-size:13px;color:var(--green-light)">&larr; All Reports</a>',
+    '<h1 style="flex:1;margin:0;font-size:18px;font-weight:600;color:var(--charcoal)">Finance MIS Report &mdash; ' + currentProject.name + '</h1>',
     '<button class="btn btn-sm btn-secondary" onclick="exportFinanceReportPDF(' + year + ',' + month + ')">&#8595; Export PDF</button>',
     '</div>',
     '<div style="display:flex;align-items:center;gap:8px;padding:0 24px 16px">',
-    '<label style="font-size:13px">Period:</label>',
+    '<label style="font-size:13px;color:var(--text2)">Period:</label>',
     '<select id="rpt-month" onchange="renderFinanceReport(+' + rptYear + ',+this.value)" style="padding:4px 8px">' + monthOpts + '</select>',
     '<select id="rpt-year" onchange="renderFinanceReport(+this.value,+' + rptMonth + ')" style="padding:4px 8px">' + yearOpts + '</select>',
-    '<span style="font-size:11px;color:var(--text-muted)">Generated ' + new Date().toLocaleDateString('en-GB') + '</span>',
+    '<span style="font-size:11px;color:var(--text3)">Generated ' + new Date().toLocaleDateString('en-GB') + '</span>',
     '</div>',
   ].join('');
   const sections = [
@@ -341,25 +304,22 @@ function buildFinanceReportHTML(stats, year, month, months, yearOpts, monthOpts)
 }
 
 function _financeSummaryNarrative(stats, year, month, months) {
-  const fmt = v => 'AED ' + (v >= 1e6 ? (v/1e6).toFixed(1)+'M' : (v/1e3).toFixed(0)+'K');
-  const { totalContractValue, certifiedToDate, pctComplete, periodCertified, priorPeriodCertified, outstandingCerts, retentionHeld } = stats;
-  const delta = periodCertified - priorPeriodCertified;
-  const deltaPct = priorPeriodCertified > 0 ? Math.abs(Math.round((delta/priorPeriodCertified)*100)) : null;
+  const fmt = v => 'AED ' + (v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : (v / 1e3).toFixed(0) + 'K');
+  const { totalContractValue, certifiedToDate, pctComplete, periodCertified, priorPeriodCertified, outstandingStr, retentionHeld } = stats;
+  const delta    = periodCertified - priorPeriodCertified;
+  const deltaPct = priorPeriodCertified > 0 ? Math.abs(Math.round((delta / priorPeriodCertified) * 100)) : null;
   const priorLabel = months[month === 1 ? 11 : month - 2];
   const deltaStr = deltaPct !== null
     ? (delta >= 0 ? '&#8593; ' + deltaPct + '% vs ' + priorLabel : '&#8595; ' + deltaPct + '% vs ' + priorLabel)
     : 'no prior period data';
-  const outstandingStr = outstandingCerts.length > 0
-    ? outstandingCerts.map(c => (c.reference || 'IPC') + ' (' + fmt((c.certified_amount||0) - (c.paid_amount||0)) + ')').join(', ') + ' outstanding. '
-    : '';
   return [
-    '<div style="background:rgba(74,222,128,.08);border-left:3px solid #4ade80;border-radius:4px;padding:12px 16px">',
-    '<div style="color:#86efac;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:6px">EXECUTIVE SUMMARY</div>',
-    '<p style="color:var(--text);font-size:13px;line-height:1.7;margin:0">',
-    'As of ' + months[month-1] + ' ' + year + ', the project is <strong>' + pctComplete + '% complete</strong>. ',
+    '<div style="background:var(--green-bg);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:14px 18px">',
+    '<div style="color:var(--green);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Executive Summary</div>',
+    '<p style="color:var(--charcoal);font-size:13px;line-height:1.75;margin:0">',
+    'As of ' + months[month - 1] + ' ' + year + ', the project is <strong>' + pctComplete + '% complete</strong>. ',
     fmt(certifiedToDate) + ' has been certified against a total contract value of ' + fmt(totalContractValue) + '. ',
     'This period, ' + fmt(periodCertified) + ' was certified &mdash; ' + deltaStr + '. ',
-    outstandingStr,
+    outstandingStr ? outstandingStr + ' ' : '',
     retentionHeld > 0 ? 'Retention of ' + fmt(retentionHeld) + ' is held to date.' : '',
     '</p></div>',
   ].join('');
@@ -368,154 +328,156 @@ function _financeSummaryNarrative(stats, year, month, months) {
 function _delta(current, prior) {
   const diff = current - prior;
   if (prior === 0 && diff === 0) return '';
-  const abs = Math.abs(diff);
-  const fmtAmt = abs >= 1e6 ? 'AED ' + (abs/1e6).toFixed(1)+'M' : 'AED ' + (abs/1e3).toFixed(0)+'K';
-  const color = diff >= 0 ? '#4ade80' : '#f87171';
-  const arrow = diff >= 0 ? '&#8593;' : '&#8595;';
-  const sign = diff >= 0 ? '+' : '&minus;';
-  return '<div style="color:' + color + ';font-size:10px">' + arrow + ' ' + sign + fmtAmt + '</div>';
+  const abs    = Math.abs(diff);
+  const fmtAmt = abs >= 1e6 ? 'AED ' + (abs / 1e6).toFixed(1) + 'M' : 'AED ' + (abs / 1e3).toFixed(0) + 'K';
+  const color  = diff >= 0 ? 'var(--green)' : 'var(--amber)';
+  const arrow  = diff >= 0 ? '&#8593;' : '&#8595;';
+  const sign   = diff >= 0 ? '+' : '&minus;';
+  return '<div style="color:' + color + ';font-size:10px;margin-top:2px">' + arrow + ' ' + sign + fmtAmt + '</div>';
+}
+
+function _kpiTile(label, value, color, extra) {
+  return '<div style="background:var(--bg2);border:0.5px solid var(--border);padding:12px;border-radius:8px;text-align:center">' +
+    '<div style="color:var(--text3);font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px">' + label + '</div>' +
+    '<div style="color:' + color + ';font-weight:700;font-size:14px;letter-spacing:-.3px">' + value + '</div>' +
+    (extra || '') + '</div>';
 }
 
 function _financeCumulativeKPIs(stats) {
-  const fmt = v => 'AED ' + (v >= 1e6 ? (v/1e6).toFixed(1)+'M' : (v/1e3).toFixed(0)+'K');
-  const { totalContractValue, certifiedToDate, paidToDate, outstandingBalance, retentionHeld, pctComplete,
-          priorCertifiedToDate, priorPaidToDate } = stats;
-  const tile = (label, value, color, extra) =>
-    '<div style="background:var(--surface2,#1e2a3e);padding:10px;border-radius:6px;text-align:center">' +
-    '<div style="color:var(--text-muted);font-size:9px;font-weight:700;letter-spacing:1px;margin-bottom:4px">' + label + '</div>' +
-    '<div style="color:' + color + ';font-weight:700;font-size:14px">' + value + '</div>' +
-    (extra || '') + '</div>';
+  const fmt = v => 'AED ' + (v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : (v / 1e3).toFixed(0) + 'K');
+  const { totalContractValue, certifiedToDate, paidToDate, outstandingBalance, retentionHeld, pctComplete, priorCertifiedToDate, priorPaidToDate } = stats;
   return [
     '<div>',
-    '<div style="color:var(--text-muted);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px">PROJECT TO DATE (CUMULATIVE)</div>',
+    '<div style="color:var(--text3);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px">Project to Date (Cumulative)</div>',
     '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">',
-    tile('CONTRACT VALUE', fmt(totalContractValue), 'var(--text)', ''),
-    tile('CERTIFIED', fmt(certifiedToDate), '#4ade80', _delta(certifiedToDate, priorCertifiedToDate)),
-    tile('PAID', fmt(paidToDate), '#60a5fa', _delta(paidToDate, priorPaidToDate)),
-    tile('OUTSTANDING', fmt(outstandingBalance), outstandingBalance > 0 ? '#f87171' : 'var(--text)', ''),
-    tile('RETENTION', fmt(retentionHeld), '#f59e0b', ''),
-    tile('% COMPLETE', pctComplete + '%', '#a78bfa', ''),
+    _kpiTile('Contract Value', fmt(totalContractValue), 'var(--charcoal)', ''),
+    _kpiTile('Certified', fmt(certifiedToDate), 'var(--green)', _delta(certifiedToDate, priorCertifiedToDate)),
+    _kpiTile('Paid', fmt(paidToDate), 'var(--blue)', _delta(paidToDate, priorPaidToDate)),
+    _kpiTile('Outstanding', fmt(outstandingBalance), outstandingBalance > 0 ? 'var(--amber)' : 'var(--text2)', ''),
+    _kpiTile('Retention', fmt(retentionHeld), 'var(--sand)', ''),
+    _kpiTile('% Complete', pctComplete + '%', 'var(--charcoal)', ''),
     '</div></div>',
   ].join('');
 }
 
 function _financePeriodKPIs(stats, year, month, months) {
-  const fmt = v => 'AED ' + (v >= 1e6 ? (v/1e6).toFixed(1)+'M' : (v/1e3).toFixed(0)+'K');
-  const { periodClaimed, periodCertified, periodPaid, periodCertsRefs,
-          priorPeriodClaimed, priorPeriodCertified, priorPeriodPaid } = stats;
-  const tile = (label, value, color, extra) =>
-    '<div style="background:var(--surface2,#1e2a3e);padding:10px;border-radius:6px;text-align:center;border:1px solid var(--border)">' +
-    '<div style="color:var(--text-muted);font-size:9px;font-weight:700;letter-spacing:1px;margin-bottom:4px">' + label + '</div>' +
-    '<div style="color:' + color + ';font-weight:700;font-size:14px">' + value + '</div>' +
-    (extra || '') + '</div>';
+  const fmt = v => 'AED ' + (v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : (v / 1e3).toFixed(0) + 'K');
+  const { periodClaimed, periodCertified, periodPaid, periodCertsRefs, priorPeriodClaimed, priorPeriodCertified, priorPeriodPaid } = stats;
   const certsExtra = periodCertsRefs.length > 0
-    ? '<div style="color:var(--text-muted);font-size:10px">' + periodCertsRefs.join(', ') + '</div>'
+    ? '<div style="color:var(--text3);font-size:10px;margin-top:2px">' + periodCertsRefs.join(', ') + '</div>'
     : '';
   return [
     '<div>',
-    '<div style="color:var(--text-muted);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px">THIS PERIOD &mdash; ' + months[month-1].toUpperCase() + ' ' + year + '</div>',
+    '<div style="color:var(--text3);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px">This Period &mdash; ' + months[month - 1] + ' ' + year + '</div>',
     '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">',
-    tile('CLAIMED', fmt(periodClaimed), 'var(--text)', _delta(periodClaimed, priorPeriodClaimed)),
-    tile('CERTIFIED', fmt(periodCertified), '#4ade80', _delta(periodCertified, priorPeriodCertified)),
-    tile('PAID', fmt(periodPaid), '#60a5fa', _delta(periodPaid, priorPeriodPaid)),
-    tile('CERTS ISSUED', String(periodCertsRefs.length), 'var(--text)', certsExtra),
+    _kpiTile('Claimed', fmt(periodClaimed), 'var(--sand)', _delta(periodClaimed, priorPeriodClaimed)),
+    _kpiTile('Certified', fmt(periodCertified), 'var(--green)', _delta(periodCertified, priorPeriodCertified)),
+    _kpiTile('Paid', fmt(periodPaid), 'var(--blue)', _delta(periodPaid, priorPeriodPaid)),
+    _kpiTile('Certs Issued', String(periodCertsRefs.length), 'var(--charcoal)', certsExtra),
     '</div></div>',
   ].join('');
 }
 
 function _financeContractTable(stats) {
-  const fmt = v => v >= 1e6 ? (v/1e6).toFixed(2)+'M' : (v/1e3).toFixed(0)+'K';
+  const fmt = v => v >= 1e6 ? (v / 1e6).toFixed(2) + 'M' : (v / 1e3).toFixed(0) + 'K';
   const { contractRows } = stats;
   if (!contractRows.length) return '<p class="subtitle">No contracts found for this project.</p>';
   const rows = contractRows.map(r => [
-    '<tr style="border-bottom:1px solid var(--border)">',
-    '<td style="padding:6px 8px">' + (r.name || '&mdash;') + '</td>',
-    '<td style="text-align:right;padding:6px 8px">' + fmt(r.awardedValue) + '</td>',
-    '<td style="text-align:right;padding:6px 8px">' + (r.boqTotal ? fmt(r.boqTotal) : '&mdash;') + '</td>',
-    '<td style="text-align:right;padding:6px 8px;color:#4ade80">' + fmt(r.certified) + '</td>',
-    '<td style="text-align:right;padding:6px 8px;color:#60a5fa">' + fmt(r.paid) + '</td>',
-    '<td style="text-align:right;padding:6px 8px;color:' + (r.outstanding > 0 ? '#f87171' : 'var(--text)') + '">' + fmt(r.outstanding) + '</td>',
-    '<td style="text-align:right;padding:6px 8px;color:#f59e0b">' + fmt(r.retention) + '</td>',
-    '<td style="text-align:right;padding:6px 8px;color:#a78bfa">' + r.pct + '%</td>',
+    '<tr style="border-bottom:0.5px solid var(--border)">',
+    '<td style="padding:8px 10px;font-weight:500">' + (r.name || '&mdash;') + '</td>',
+    '<td style="padding:8px 10px;color:var(--text2)">' + (r.contractor || '&mdash;') + '</td>',
+    '<td style="padding:8px 10px;text-align:right">' + fmt(r.awardedValue) + '</td>',
+    '<td style="padding:8px 10px;text-align:right;color:var(--text2)">' + (r.boqTotal ? fmt(r.boqTotal) : '&mdash;') + '</td>',
+    '<td style="padding:8px 10px;text-align:right;color:var(--green)">' + fmt(r.certified) + '</td>',
+    '<td style="padding:8px 10px;text-align:right;color:var(--blue)">' + fmt(r.paid) + '</td>',
+    '<td style="padding:8px 10px;text-align:right;color:' + (r.outstanding > 0 ? 'var(--amber)' : 'var(--text2)') + '">' + fmt(r.outstanding) + '</td>',
+    '<td style="padding:8px 10px;text-align:right;color:var(--sand)">' + fmt(r.retention) + '</td>',
+    '<td style="padding:8px 10px;text-align:right">',
+    '<div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">',
+    '<div style="width:36px;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden">',
+    '<div style="width:' + r.pct + '%;height:100%;background:var(--green);border-radius:2px"></div>',
+    '</div>',
+    r.pct + '%</div></td>',
     '</tr>',
   ].join('')).join('');
+  const th = label => '<th style="text-align:right;padding:8px 10px;font-weight:500;color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.05em">' + label + '</th>';
+  const thL = label => '<th style="text-align:left;padding:8px 10px;font-weight:500;color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.05em">' + label + '</th>';
   return [
     '<div>',
-    '<div style="color:var(--text-muted);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px">CONTRACT BREAKDOWN</div>',
-    '<table style="width:100%;border-collapse:collapse;font-size:12px">',
-    '<thead><tr style="color:var(--text-muted);font-size:10px;border-bottom:1px solid var(--border)">',
-    '<th style="text-align:left;padding:6px 8px">CONTRACTOR</th>',
-    '<th style="text-align:right;padding:6px 8px">AWARDED</th>',
-    '<th style="text-align:right;padding:6px 8px">BOQ</th>',
-    '<th style="text-align:right;padding:6px 8px">CERTIFIED</th>',
-    '<th style="text-align:right;padding:6px 8px">PAID</th>',
-    '<th style="text-align:right;padding:6px 8px">OUTSTANDING</th>',
-    '<th style="text-align:right;padding:6px 8px">RETENTION</th>',
-    '<th style="text-align:right;padding:6px 8px">%</th>',
+    '<div style="color:var(--text3);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px">Contract Breakdown</div>',
+    '<div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:8px;overflow:hidden">',
+    '<table style="width:100%;border-collapse:collapse;font-size:12px;color:var(--charcoal)">',
+    '<thead><tr style="background:var(--bg3);border-bottom:0.5px solid var(--border)">',
+    thL('Contract') + thL('Contractor') + th('Awarded') + th('BOQ') + th('Certified') + th('Paid') + th('Outstanding') + th('Retention') + th('%'),
     '</tr></thead>',
     '<tbody>' + rows + '</tbody>',
-    '</table></div>',
+    '</table></div></div>',
   ].join('');
 }
 
 function _financeCharts(stats) {
   const { monthMap, sCurvePoints, totalMonths, totalContractValue } = stats;
-  const plotH = 80;
+
+  // Cashflow bar chart
+  const plotH  = 90;
   const allVals = monthMap.flatMap(m => [m.claimed, m.certified, m.paid]);
-  const maxVal = Math.max(...allVals, 1);
-  const barW = 10; const barGap = 2; const groupGap = 8;
-  const groupW = barW * 3 + barGap * 2 + groupGap;
-  const svgW = monthMap.length * groupW + 20;
-  const cashflowBars = monthMap.map((m, i) => {
-    const x = 10 + i * groupW;
-    const hClaim = m.claimed > 0 ? Math.max(1, Math.round((m.claimed / maxVal) * plotH)) : 0;
-    const hCert = m.certified > 0 ? Math.max(1, Math.round((m.certified / maxVal) * plotH)) : 0;
-    const hPaid = m.paid > 0 ? Math.max(1, Math.round((m.paid / maxVal) * plotH)) : 0;
+  const maxVal  = Math.max(...allVals, 1);
+  const barW = 10; const barGap = 2; const groupGap = 10;
+  const groupW  = barW * 3 + barGap * 2 + groupGap;
+  const svgW    = monthMap.length * groupW + 20;
+  const bars = monthMap.map((m, i) => {
+    const x      = 10 + i * groupW;
+    const hClaim = m.claimed   > 0 ? Math.max(2, Math.round((m.claimed   / maxVal) * plotH)) : 0;
+    const hCert  = m.certified > 0 ? Math.max(2, Math.round((m.certified / maxVal) * plotH)) : 0;
+    const hPaid  = m.paid      > 0 ? Math.max(2, Math.round((m.paid      / maxVal) * plotH)) : 0;
     return [
-      '<rect x="' + x + '" y="' + (plotH - hClaim) + '" width="' + barW + '" height="' + hClaim + '" fill="#64748b" rx="1"/>',
-      '<rect x="' + (x + barW + barGap) + '" y="' + (plotH - hCert) + '" width="' + barW + '" height="' + hCert + '" fill="#4ade80" rx="1"/>',
-      '<rect x="' + (x + (barW + barGap) * 2) + '" y="' + (plotH - hPaid) + '" width="' + barW + '" height="' + hPaid + '" fill="#60a5fa" rx="1"/>',
-      '<text x="' + (x + groupW/2 - groupGap/2) + '" y="' + (plotH + 12) + '" fill="#64748b" font-size="8" text-anchor="middle">' + m.label + '</text>',
+      hClaim ? '<rect x="' + x                        + '" y="' + (plotH - hClaim) + '" width="' + barW + '" height="' + hClaim + '" fill="#C4A882" rx="2"/>' : '',
+      hCert  ? '<rect x="' + (x + barW + barGap)      + '" y="' + (plotH - hCert)  + '" width="' + barW + '" height="' + hCert  + '" fill="#3B6D11" rx="2"/>' : '',
+      hPaid  ? '<rect x="' + (x + (barW+barGap) * 2)  + '" y="' + (plotH - hPaid)  + '" width="' + barW + '" height="' + hPaid  + '" fill="#185FA5" rx="2"/>' : '',
+      '<text x="' + (x + groupW / 2 - groupGap / 2) + '" y="' + (plotH + 13) + '" fill="#B4A88C" font-size="8" text-anchor="middle">' + m.label + '</text>',
     ].join('');
   }).join('');
-  const cashflowSVG = '<svg width="' + svgW + '" height="' + (plotH + 18) + '" viewBox="0 0 ' + svgW + ' ' + (plotH + 18) + '" style="overflow:visible">' + cashflowBars + '</svg>';
+  const cashflowSVG = '<svg width="' + svgW + '" height="' + (plotH + 20) + '" viewBox="0 0 ' + svgW + ' ' + (plotH + 20) + '" style="overflow:visible">' + bars + '</svg>';
   const cashflowChart = [
     '<div>',
-    '<div style="color:var(--text-muted);font-size:9px;margin-bottom:6px">MONTHLY CASHFLOW (Claimed / Certified / Paid)</div>',
+    '<div style="color:var(--text3);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">Monthly Cashflow</div>',
     cashflowSVG,
-    '<div style="display:flex;gap:10px;font-size:10px;color:var(--text-muted);margin-top:4px">',
-    '<span><span style="color:#64748b">&#9646;</span> Claimed</span>',
-    '<span><span style="color:#4ade80">&#9646;</span> Certified</span>',
-    '<span><span style="color:#60a5fa">&#9646;</span> Paid</span>',
+    '<div style="display:flex;gap:12px;font-size:10px;color:var(--text3);margin-top:6px">',
+    '<span><span style="color:#C4A882">&#9646;</span> Claimed</span>',
+    '<span><span style="color:#3B6D11">&#9646;</span> Certified</span>',
+    '<span><span style="color:#185FA5">&#9646;</span> Paid</span>',
     '</div></div>',
   ].join('');
-  const sCurveW = 240; const sCurveH = 80;
+
+  // S-curve
+  const sCW = 280; const sCH = 90;
   const maxCum = totalContractValue || 1;
-  const ptX = (idx) => Math.round((idx / Math.max(totalMonths - 1, 1)) * sCurveW);
-  const ptY = (val) => Math.round(sCurveH - (val / maxCum) * sCurveH);
+  const ptX = idx => Math.round((idx / Math.max(totalMonths - 1, 1)) * sCW);
+  const ptY = val => Math.round(sCH - (val / maxCum) * sCH);
   const plannedPts = sCurvePoints.map((p, i) => ptX(i) + ',' + ptY(p.cumPlanned)).join(' ');
   const actualFiltered = sCurvePoints.filter(p => p.cumActual !== null);
-  const actualPts = actualFiltered.map(p => ptX(sCurvePoints.indexOf(p)) + ',' + ptY(p.cumActual)).join(' ');
+  const actualPts  = actualFiltered.map(p => ptX(sCurvePoints.indexOf(p)) + ',' + ptY(p.cumActual)).join(' ');
   const lastActual = actualFiltered[actualFiltered.length - 1];
-  const lastIdx = lastActual ? sCurvePoints.indexOf(lastActual) : -1;
-  const sCurveParts = ['<svg width="' + sCurveW + '" height="' + (sCurveH + 4) + '" viewBox="0 0 ' + sCurveW + ' ' + (sCurveH + 4) + '">'];
-  if (plannedPts) sCurveParts.push('<polyline points="' + plannedPts + '" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,2"/>');
-  if (actualPts) sCurveParts.push('<polyline points="' + actualPts + '" fill="none" stroke="#4ade80" stroke-width="2"/>');
-  if (lastIdx >= 0) sCurveParts.push('<circle cx="' + ptX(lastIdx) + '" cy="' + ptY(lastActual.cumActual) + '" r="3" fill="#4ade80"/>');
-  sCurveParts.push('</svg>');
+  const lastIdx    = lastActual ? sCurvePoints.indexOf(lastActual) : -1;
+  const scParts = ['<svg width="' + sCW + '" height="' + (sCH + 4) + '" viewBox="0 0 ' + sCW + ' ' + (sCH + 4) + '">'];
+  if (plannedPts) scParts.push('<polyline points="' + plannedPts + '" fill="none" stroke="#B4A88C" stroke-width="1.5" stroke-dasharray="4,3"/>');
+  if (actualPts)  scParts.push('<polyline points="' + actualPts  + '" fill="none" stroke="#3B6D11" stroke-width="2"/>');
+  if (lastIdx >= 0) scParts.push('<circle cx="' + ptX(lastIdx) + '" cy="' + ptY(lastActual.cumActual) + '" r="3" fill="#3B6D11"/>');
+  scParts.push('</svg>');
   const sCurve = [
     '<div>',
-    '<div style="color:var(--text-muted);font-size:9px;margin-bottom:6px">S-CURVE (Cumulative Certified vs Planned)</div>',
-    sCurveParts.join(''),
-    '<div style="display:flex;gap:10px;font-size:10px;color:var(--text-muted);margin-top:4px">',
-    '<span style="color:#4ade80">&#8212; Actual</span>',
-    '<span style="color:#64748b">- - Planned</span>',
+    '<div style="color:var(--text3);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">S-Curve (Cumulative Certified vs Planned)</div>',
+    scParts.join(''),
+    '<div style="display:flex;gap:12px;font-size:10px;color:var(--text3);margin-top:6px">',
+    '<span style="color:#3B6D11">&#8212; Actual</span>',
+    '<span style="color:#B4A88C">- - Planned</span>',
     '</div></div>',
   ].join('');
+
   return [
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">',
-    '<div style="background:var(--surface2,#1e2a3e);border-radius:6px;padding:12px">' + cashflowChart + '</div>',
-    '<div style="background:var(--surface2,#1e2a3e);border-radius:6px;padding:12px">' + sCurve + '</div>',
+    '<div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:8px;padding:16px">' + cashflowChart + '</div>',
+    '<div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:8px;padding:16px">' + sCurve + '</div>',
     '</div>',
   ].join('');
 }
@@ -534,6 +496,3 @@ function exportFinanceReportPDF(year, month) {
   };
   html2pdf().set(opt).from(el).save();
 }
-
-
-
