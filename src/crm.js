@@ -435,7 +435,8 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
       <label style="font-size:10px;color:var(--text3);font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:4px">To <input type="date" class="crm-date-input" id="crm-date-to" value="${esc(crmDateTo)}"
         onchange="crmSetFilter('dateTo',this.value)" oninput="crmSetFilter('dateTo',this.value)" style="min-width:120px" aria-label="Created to date"></label>
       ${(crmDateFrom || crmDateTo) ? '<button class="btn" onclick="crmClearDates()" style="padding:3px 8px;font-size:11px;line-height:1" title="Clear date filter">\u00d7 Dates</button>' : ''}
-      <button class="btn btn-primary" onclick="openAddLead()" style="margin-left:auto">+ Add Lead</button>
+      <button class="btn" onclick="crmExportExcel()" title="Export visible leads + activity log to Excel" style="margin-left:auto">↓ Export Excel</button>
+      <button class="btn btn-primary" onclick="openAddLead()">+ Add Lead</button>
     </div>`;
 
   const pills = `
@@ -1107,4 +1108,92 @@ function timeAgo(dateStr) {
   const days = Math.floor(hrs/24);
   if(days<7) return days+'d ago';
   return new Date(dateStr).toLocaleDateString('en-GB');
+}
+
+// ─── EXPORT TO EXCEL ──────────────────────────────────────────────
+async function crmExportExcel() {
+  toast('Preparing export…', 'info');
+
+  // Fetch all leads matching current filters (no pagination)
+  let q = sb.from('crm_leads').select('*').eq('project_id', currentProject.id);
+  if (crmSearch) { const s = crmSearch.replace(/,/g,''); q = q.or(`name.ilike.%${s}%,email.ilike.%${s}%,phone.ilike.%${s}%`); }
+  if (crmStage)    q = q.eq('stage', crmStage);
+  if (crmSource)   q = q.eq('source', crmSource);
+  if (crmAssigned) q = q.eq('assigned_to', crmAssigned);
+  if (crmDateFrom) q = q.gte('created_at', crmDateFrom);
+  if (crmDateTo)   q = q.lte('created_at', crmDateTo + 'T23:59:59');
+  q = q.order(crmSortCol, { ascending: crmSortAsc });
+  const { data: leads, error } = await q;
+  if (error) { toast('Export failed: ' + error.message, 'error'); return; }
+  if (!leads || !leads.length) { toast('No leads to export', 'warning'); return; }
+
+  // Fetch all activities for these leads in one query
+  const leadIds = leads.map(l => l.id);
+  const { data: activities } = await sb.from('crm_lead_activities')
+    .select('lead_id,method,body,contacted_at,author_name,completed,due_at')
+    .in('lead_id', leadIds)
+    .order('contacted_at', { ascending: true });
+
+  // Group activities by lead_id
+  const actMap = {};
+  (activities || []).forEach(a => {
+    if (!actMap[a.lead_id]) actMap[a.lead_id] = [];
+    actMap[a.lead_id].push(a);
+  });
+
+  const stageLabel = key => CRM_STAGES.find(s => s.key === key)?.label || key || '—';
+  const sourceLabel = s => ({ meta_ads:'Meta Ads', website:'Website', referral:'Referral', walk_in:'Walk-In', other:'Other' }[s] || s || '—');
+  const fmt = v => v ? new Date(v).toLocaleDateString('en-GB') : '';
+  const fmtMethod = m => ({ call:'📞 Call', email:'✉ Email', whatsapp:'💬 WhatsApp', meeting:'🤝 Meeting', note:'📝 Note', task:'✓ Task' }[m] || m || '');
+
+  // Build rows — one row per lead, activities as timestamped log in one cell
+  const rows = leads.map(lead => {
+    const acts = actMap[lead.id] || [];
+    const actLog = acts.map(a => {
+      const date = a.contacted_at ? new Date(a.contacted_at).toLocaleDateString('en-GB') : (a.due_at ? new Date(a.due_at).toLocaleDateString('en-GB') : '');
+      const status = a.completed === false ? ' [Pending]' : '';
+      return `[${date}] ${fmtMethod(a.method)}${a.author_name ? ' — ' + a.author_name : ''}${status}: ${a.body || ''}`;
+    }).join('\n');
+
+    return {
+      'Name':           lead.name || '',
+      'Email':          lead.email || '',
+      'Phone':          lead.phone || '',
+      'Stage':          stageLabel(lead.stage),
+      'Source':         sourceLabel(lead.source),
+      'Rating':         lead.rating ? '★'.repeat(lead.rating) : '',
+      'Assigned To':    lead.assigned_to || '',
+      'Budget Range':   lead.budget_range || '',
+      'Property Types': lead.property_types || '',
+      'Broker Type':    lead.broker_type || '',
+      'Company':        lead.company_name || '',
+      'Created':        fmt(lead.created_at),
+      'Last Contacted': fmt(lead.last_contacted_at),
+      'Activities (#)': acts.length,
+      'Notes & Activity Log': actLog,
+    };
+  });
+
+  const ws = XLSX.utils.json_to_sheet(rows);
+
+  // Column widths
+  ws['!cols'] = [
+    {wch:25},{wch:28},{wch:18},{wch:16},{wch:14},{wch:8},{wch:20},
+    {wch:16},{wch:20},{wch:14},{wch:20},{wch:12},{wch:14},{wch:12},{wch:60},
+  ];
+
+  // Wrap text on the activity log column
+  const range = XLSX.utils.decode_range(ws['!ref']);
+  for (let R = 1; R <= range.e.r; R++) {
+    const cell = ws[XLSX.utils.encode_cell({r:R, c:14})];
+    if (cell) cell.s = { alignment: { wrapText: true, vertical: 'top' } };
+  }
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Leads');
+
+  const project = currentProject?.name?.replace(/[^a-zA-Z0-9_-]/g,'_') || 'Leads';
+  const date = new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb, `CRM_Leads_${project}_${date}.xlsx`);
+  toast(`Exported ${leads.length} leads`, 'success');
 }
