@@ -6,6 +6,126 @@ async function renderReports() {
 }
 
 function buildReportsHub() {
+  return [
+    // ── Page header ──────────────────────────────────────────────
+    '<div style="padding:28px 28px 0">',
+    '<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:24px">',
+    '<h1 style="font-size:22px;font-weight:600;color:var(--charcoal);letter-spacing:-.3px;margin:0">Reports</h1>',
+    '<span style="font-size:11px;color:var(--text3);font-weight:400">' + currentProject.name + '</span>',
+    '</div>',
+
+    // ── Finance Report — featured card ───────────────────────────
+    '<div style="position:relative;background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;',
+    'padding:28px 28px 24px;margin-bottom:28px;overflow:hidden;cursor:pointer;',
+    'box-shadow:0 1px 4px rgba(44,42,36,.06);transition:box-shadow .2s,transform .15s"',
+    ' onmouseover="this.style.boxShadow=\'0 8px 28px rgba(44,42,36,.12)\';this.style.transform=\'translateY(-1px)\'"',
+    ' onmouseout="this.style.boxShadow=\'0 1px 4px rgba(44,42,36,.06)\';this.style.transform=\'none\'"',
+    ' onclick="_openFinanceReport()">',
+
+    // background accent stripe
+    '<div style="position:absolute;top:0;left:0;width:4px;height:100%;background:var(--green);border-radius:16px 0 0 16px"></div>',
+
+    // top row: label + badge
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-left:12px">',
+    '<div style="display:flex;align-items:center;gap:10px">',
+    '<div style="width:36px;height:36px;border-radius:9px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">',
+    '<svg width="18" height="18" viewBox="0 0 18 18" fill="none">',
+    '<path d="M3 14V9M7 14V6M11 14V9M15 14V4" stroke="#3B6D11" stroke-width="1.6" stroke-linecap="round"/>',
+    '</svg></div>',
+    '<div>',
+    '<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;margin-bottom:1px">Finance</div>',
+    '<div style="font-size:15px;font-weight:600;color:var(--charcoal);letter-spacing:-.2px">Finance Report</div>',
+    '</div></div>',
+    '<span class="badge badge-success" style="font-size:10px">&#9679; Live</span>',
+    '</div>',
+
+    // description row
+    '<div style="padding-left:12px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:20px">',
+    '<div>',
+    '<div style="font-size:12px;color:var(--text2);line-height:1.7;max-width:500px">',
+    'Period-by-period cashflow, certified &amp; paid KPIs with month-on-month delta, contract breakdown ',
+    'table, monthly cashflow bars, and S-curve progress. Exportable as A4 PDF.',
+    '</div>',
+    '<div style="display:flex;gap:16px;margin-top:14px">',
+    '<span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px">',
+    '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x=".5" y=".5" width="10" height="10" rx="2" stroke="#B4A88C" stroke-width=".8"/><path d="M2.5 5.5h6M2.5 7.5h4" stroke="#B4A88C" stroke-width=".8" stroke-linecap="round"/></svg>',
+    'Contract breakdown</span>',
+    '<span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px">',
+    '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1.5 9l2.5-4 2 1.5 3-5" stroke="#B4A88C" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    'S-curve &amp; cashflow</span>',
+    '<span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px">',
+    '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 9.5V2h7l-2 2.5 2 2.5H2" stroke="#B4A88C" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    'PDF export</span>',
+    '</div>',
+    '</div>',
+    '<div style="display:flex;align-items:center;gap:6px;padding:9px 16px;background:var(--green-bg);border:0.5px solid #C0DD97;',
+    'border-radius:8px;white-space:nowrap;font-size:12px;font-weight:500;color:var(--green-light)">',
+    'Open report',
+    '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="#639922" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    '</div>',
+    '</div>',
+    '</div>',
+
+    // ── Coming soon section ───────────────────────────────────────
+    '<div style="margin-bottom:12px">',
+    '<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;margin-bottom:12px">In Development</div>',
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">',
+
+    // Quality card
+    '<div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px">',
+    '<div style="display:flex;align-items:center;justify-content:space-between">',
+    '<div style="width:30px;height:30px;border-radius:8px;background:var(--bg4);display:flex;align-items:center;justify-content:center">',
+    '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 7.5l3 3 6-6" stroke="#B4A88C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    '</div>',
+    '<span class="badge badge-neutral" style="font-size:9px">Soon</span>',
+    '</div>',
+    '<div>',
+    '<div style="font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:3px">Quality &amp; Site</div>',
+    '<div style="font-size:11px;color:var(--text3);line-height:1.5">NCRs, punch list, inspection rates</div>',
+    '</div>',
+    '</div>',
+
+    // Document Control card
+    '<div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px">',
+    '<div style="display:flex;align-items:center;justify-content:space-between">',
+    '<div style="width:30px;height:30px;border-radius:8px;background:var(--bg4);display:flex;align-items:center;justify-content:center">',
+    '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="3" y="2" width="9" height="11" rx="1.5" stroke="#B4A88C" stroke-width="1.2"/><path d="M5 5.5h5M5 8h3" stroke="#B4A88C" stroke-width="1" stroke-linecap="round"/></svg>',
+    '</div>',
+    '<span class="badge badge-neutral" style="font-size:9px">Soon</span>',
+    '</div>',
+    '<div>',
+    '<div style="font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:3px">Document Control</div>',
+    '<div style="font-size:11px;color:var(--text3);line-height:1.5">Submittals, drawings, RFI turnaround</div>',
+    '</div>',
+    '</div>',
+
+    // Sales card
+    '<div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px">',
+    '<div style="display:flex;align-items:center;justify-content:space-between">',
+    '<div style="width:30px;height:30px;border-radius:8px;background:var(--bg4);display:flex;align-items:center;justify-content:center">',
+    '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 11l3-4.5 2.5 2L11 4" stroke="#B4A88C" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    '</div>',
+    '<span class="badge badge-neutral" style="font-size:9px">Soon</span>',
+    '</div>',
+    '<div>',
+    '<div style="font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:3px">Sales &amp; CRM</div>',
+    '<div style="font-size:11px;color:var(--text3);line-height:1.5">Pipeline, conversion, revenue forecast</div>',
+    '</div>',
+    '</div>',
+
+    '</div>',
+    '</div>',
+    '</div>',
+  ].join('');
+}
+LE
+
+async function renderReports() {
+  const el = document.getElementById('content');
+  el.innerHTML = buildReportsHub();
+}
+
+function buildReportsHub() {
   const iconFinance = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#EAF3DE"/><path d="M16 8v16M10 20l6 4 6-4M10 12l6-4 6 4" stroke="#3B6D11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const iconQuality = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#F0EBE2"/><path d="M10 16l4 4 8-8" stroke="#B4A88C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const iconDocs = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#F0EBE2"/><rect x="9" y="10" width="14" height="2" rx="1" fill="#B4A88C"/><rect x="9" y="15" width="10" height="2" rx="1" fill="#B4A88C"/><rect x="9" y="20" width="7" height="2" rx="1" fill="#B4A88C"/></svg>';
@@ -414,5 +534,6 @@ function exportFinanceReportPDF(year, month) {
   };
   html2pdf().set(opt).from(el).save();
 }
+
 
 
