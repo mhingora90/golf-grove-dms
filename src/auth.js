@@ -91,6 +91,7 @@ async function loadApp(user) {
   }
   if(profile?.role==='developer'){
     document.getElementById('n-users-wrap').style.display='';
+    document.getElementById('n-reports-wrap').style.display='';
   }
   if(profile?.role==='admin'){
     ['n-dash','n-draw','n-sub','n-sreg','n-ir','n-ncr','n-rfi','n-trans','n-ms','n-corr','n-punch','n-finance','n-ipc','n-boq','n-subs'].forEach(id=>{

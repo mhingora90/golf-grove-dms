@@ -1,6 +1,6 @@
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM — Leads','crm-home':'CRM Home'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',reports:'Reports',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM — Leads','crm-home':'CRM Home'};
 
 function canCreateOnPage(page) {
   if(page==='draw') return can('upload');
@@ -83,6 +83,7 @@ async function _execRender(page) {
   else if(page==='srev') await renderSalesRevenue();
   else if(page==='crm') { resetCRM(); await renderCRM(); }
   else if(page==='crm-home') await renderCRMHome();
+  else if(page==='reports') await renderReports();
 }
 
 // ─── RENDER ───────────────────────────────────────────────────────
