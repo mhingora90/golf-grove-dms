@@ -5,84 +5,81 @@ async function renderReports() {
 }
 
 function buildReportsHub() {
+  const proj = (currentProject?.name || '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
   return [
-    '<div style="padding:28px 28px 0">',
-    '<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:24px">',
-    '<h1 style="font-size:22px;font-weight:600;color:var(--charcoal);letter-spacing:-.3px;margin:0">Reports</h1>',
-    '<span style="font-size:11px;color:var(--text3);font-weight:400">' + currentProject.name + '</span>',
+    '<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px">',
+    '<h1 style="font-size:18px;font-weight:500;color:var(--charcoal);letter-spacing:-.2px;margin:0">Reports</h1>',
+    '<span style="font-size:11px;color:var(--text3)">' + proj + '</span>',
     '</div>',
-    '<div style="position:relative;background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;',
-    'padding:28px 28px 24px;margin-bottom:28px;overflow:hidden;cursor:pointer;',
-    'box-shadow:0 1px 4px rgba(44,42,36,.06);transition:box-shadow .2s,transform .15s"',
-    ' onmouseover="this.style.boxShadow=\'0 8px 28px rgba(44,42,36,.12)\';this.style.transform=\'translateY(-1px)\'"',
-    ' onmouseout="this.style.boxShadow=\'0 1px 4px rgba(44,42,36,.06)\';this.style.transform=\'none\'"',
+
+    // Featured live report — uses .card class to match dashboard cards
+    '<div class="card" style="margin-bottom:14px;cursor:pointer;transition:box-shadow .15s"',
+    ' onmouseover="this.style.boxShadow=\'0 4px 14px rgba(44,42,36,.10)\'"',
+    ' onmouseout="this.style.boxShadow=\'0 1px 4px rgba(44,42,36,.05)\'"',
     ' onclick="_openFinanceReport()">',
-    '<div style="position:absolute;top:0;left:0;width:4px;height:100%;background:var(--green);border-radius:16px 0 0 16px"></div>',
-    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-left:12px">',
-    '<div style="display:flex;align-items:center;gap:10px">',
-    '<div style="width:36px;height:36px;border-radius:9px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">',
-    '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14V9M7 14V6M11 14V9M15 14V4" stroke="#3B6D11" stroke-width="1.6" stroke-linecap="round"/></svg>',
+    // Card header (matches dashboard card-header pattern)
+    '<div style="padding:12px 14px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center">',
+    '<div style="display:flex;align-items:center;gap:8px">',
+    '<div style="width:22px;height:22px;border-radius:6px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">',
+    '<svg width="13" height="13" viewBox="0 0 18 18" fill="none"><path d="M3 14V9M7 14V6M11 14V9M15 14V4" stroke="#3B6D11" stroke-width="1.6" stroke-linecap="round"/></svg>',
     '</div>',
+    '<span style="font-size:12px;font-weight:500;color:var(--charcoal)">Finance Report</span>',
+    '<span class="badge badge-success" style="font-size:9px">Live</span>',
+    '</div>',
+    '<span style="font-size:11px;color:var(--text3)">Updated monthly</span>',
+    '</div>',
+    // Card body
+    '<div style="padding:14px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:16px">',
     '<div>',
-    '<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;margin-bottom:1px">Finance</div>',
-    '<div style="font-size:15px;font-weight:600;color:var(--charcoal);letter-spacing:-.2px">Finance Report</div>',
-    '</div></div>',
-    '<span class="badge badge-success" style="font-size:10px">&#9679; Live</span>',
+    '<div style="font-size:11px;color:var(--text2);line-height:1.6;max-width:520px;margin-bottom:10px">',
+    'Period cashflow, certified &amp; paid KPIs with month-on-month delta, contract breakdown table, monthly cashflow bars, S-curve progress. A4 PDF export.',
     '</div>',
-    '<div style="padding-left:12px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:20px">',
-    '<div>',
-    '<div style="font-size:12px;color:var(--text2);line-height:1.7;max-width:500px">',
-    'Period-by-period cashflow, certified &amp; paid KPIs with month-on-month delta, contract breakdown ',
-    'table, monthly cashflow bars, and S-curve progress. Exportable as A4 PDF.',
-    '</div>',
-    '<div style="display:flex;gap:16px;margin-top:14px">',
-    '<span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px">',
-    '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x=".5" y=".5" width="10" height="10" rx="2" stroke="#B4A88C" stroke-width=".8"/><path d="M2.5 5.5h6M2.5 7.5h4" stroke="#B4A88C" stroke-width=".8" stroke-linecap="round"/></svg>',
-    'Contract breakdown</span>',
-    '<span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px">',
-    '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1.5 9l2.5-4 2 1.5 3-5" stroke="#B4A88C" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    'S-curve &amp; cashflow</span>',
-    '<span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px">',
-    '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 9.5V2h7l-2 2.5 2 2.5H2" stroke="#B4A88C" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    'PDF export</span>',
+    '<div style="display:flex;gap:6px;flex-wrap:wrap">',
+    _hubChip('Contract breakdown'),
+    _hubChip('S-curve'),
+    _hubChip('Cashflow'),
+    _hubChip('PDF export'),
     '</div>',
     '</div>',
-    '<div style="display:flex;align-items:center;gap:6px;padding:9px 16px;background:var(--green-bg);border:0.5px solid #C0DD97;',
-    'border-radius:8px;white-space:nowrap;font-size:12px;font-weight:500;color:var(--green-light)">',
+    '<div style="display:flex;align-items:center;gap:5px;padding:7px 12px;background:var(--green-bg);border:0.5px solid #C0DD97;border-radius:8px;white-space:nowrap;font-size:11px;font-weight:500;color:var(--green)">',
     'Open report',
-    '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="#639922" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="#3B6D11" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     '</div>',
     '</div>',
     '</div>',
-    '<div style="margin-bottom:12px">',
-    '<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;margin-bottom:12px">In Development</div>',
+
+    // Section label — matches dashboard "Open items" style
+    '<div style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-weight:500;margin:18px 0 8px">In Development</div>',
     '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">',
     _hubSoonCard(
-      '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 7.5l3 3 6-6" stroke="#B4A88C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      '<svg width="13" height="13" viewBox="0 0 15 15" fill="none"><path d="M3 7.5l3 3 6-6" stroke="#B4A88C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
       'Quality &amp; Site', 'NCRs, punch list, inspection rates'),
     _hubSoonCard(
-      '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="3" y="2" width="9" height="11" rx="1.5" stroke="#B4A88C" stroke-width="1.2"/><path d="M5 5.5h5M5 8h3" stroke="#B4A88C" stroke-width="1" stroke-linecap="round"/></svg>',
+      '<svg width="13" height="13" viewBox="0 0 15 15" fill="none"><rect x="3" y="2" width="9" height="11" rx="1.5" stroke="#B4A88C" stroke-width="1.2"/><path d="M5 5.5h5M5 8h3" stroke="#B4A88C" stroke-width="1" stroke-linecap="round"/></svg>',
       'Document Control', 'Submittals, drawings, RFI turnaround'),
     _hubSoonCard(
-      '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 11l3-4.5 2.5 2L11 4" stroke="#B4A88C" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      '<svg width="13" height="13" viewBox="0 0 15 15" fill="none"><path d="M2 11l3-4.5 2.5 2L11 4" stroke="#B4A88C" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
       'Sales &amp; CRM', 'Pipeline, conversion, revenue forecast'),
-    '</div></div>',
     '</div>',
   ].join('');
 }
 
+function _hubChip(label) {
+  return '<span style="font-size:10px;color:var(--text3);background:var(--bg3);border:0.5px solid var(--border);padding:2px 8px;border-radius:6px;font-weight:500">' + label + '</span>';
+}
+
 function _hubSoonCard(iconSvg, title, desc) {
   return [
-    '<div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px">',
+    '<div class="card" style="margin:0;padding:12px 14px;display:flex;flex-direction:column;gap:10px">',
     '<div style="display:flex;align-items:center;justify-content:space-between">',
-    '<div style="width:30px;height:30px;border-radius:8px;background:var(--bg4);display:flex;align-items:center;justify-content:center">',
+    '<div style="width:24px;height:24px;border-radius:6px;background:var(--bg3);display:flex;align-items:center;justify-content:center">',
     iconSvg,
     '</div>',
     '<span class="badge badge-neutral" style="font-size:9px">Soon</span>',
     '</div>',
     '<div>',
-    '<div style="font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:3px">' + title + '</div>',
-    '<div style="font-size:11px;color:var(--text3);line-height:1.5">' + desc + '</div>',
+    '<div style="font-size:12px;font-weight:500;color:var(--charcoal);margin-bottom:2px">' + title + '</div>',
+    '<div style="font-size:10px;color:var(--text3);line-height:1.5">' + desc + '</div>',
     '</div>',
     '</div>',
   ].join('');
