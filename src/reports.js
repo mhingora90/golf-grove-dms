@@ -6,25 +6,54 @@ async function renderReports() {
 }
 
 function buildReportsHub() {
+  const iconFinance = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#EAF3DE"/><path d="M16 8v16M10 20l6 4 6-4M10 12l6-4 6 4" stroke="#3B6D11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const iconQuality = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#F0EBE2"/><path d="M10 16l4 4 8-8" stroke="#B4A88C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const iconDocs = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#F0EBE2"/><rect x="9" y="10" width="14" height="2" rx="1" fill="#B4A88C"/><rect x="9" y="15" width="10" height="2" rx="1" fill="#B4A88C"/><rect x="9" y="20" width="7" height="2" rx="1" fill="#B4A88C"/></svg>';
+  const iconSales = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#F0EBE2"/><path d="M8 22l5-7 4 3 6-9" stroke="#B4A88C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  const activeCard = [
+    '<div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:22px;cursor:pointer;',
+    'box-shadow:0 1px 4px rgba(44,42,36,.05);transition:box-shadow .15s,border-color .15s;display:flex;flex-direction:column;gap:14px"',
+    ' onmouseover="this.style.boxShadow=\'0 4px 16px rgba(44,42,36,.1)\';this.style.borderColor=\'var(--border2)\'"',
+    ' onmouseout="this.style.boxShadow=\'0 1px 4px rgba(44,42,36,.05)\';this.style.borderColor=\'var(--border)\'"',
+    ' onclick="_openFinanceReport()">',
+    '<div style="display:flex;align-items:flex-start;justify-content:space-between">',
+    iconFinance,
+    '<span class="badge badge-success">Live</span>',
+    '</div>',
+    '<div>',
+    '<div style="font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:5px">Finance Report</div>',
+    '<div style="font-size:11px;color:var(--text3);line-height:1.6">Cashflow, certified &amp; paid KPIs,<br>contract breakdown, S-curve progress</div>',
+    '</div>',
+    '<div style="font-size:11px;font-weight:500;color:var(--green-light)">Open report &rarr;</div>',
+    '</div>',
+  ].join('');
+
+  const comingSoonCard = (icon, title, desc) => [
+    '<div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:22px;',
+    'cursor:default;display:flex;flex-direction:column;gap:14px">',
+    '<div style="display:flex;align-items:flex-start;justify-content:space-between">',
+    icon,
+    '<span class="badge badge-neutral">Coming Soon</span>',
+    '</div>',
+    '<div>',
+    '<div style="font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:5px">' + title + '</div>',
+    '<div style="font-size:11px;color:var(--text3);line-height:1.6">' + desc + '</div>',
+    '</div>',
+    '</div>',
+  ].join('');
+
   return [
-    '<div class="page-header"><h1>Reports</h1></div>',
-    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;padding:24px">',
-    '<div class="card" style="cursor:pointer" onclick="_openFinanceReport()">',
-    '<div class="card-body">',
-    '<div style="font-size:28px;margin-bottom:8px">&#128202;</div>',
-    '<h3>Finance Report</h3>',
-    '<p class="subtitle">Cashflow, KPIs, contracts</p>',
-    '<span class="badge badge-success">Active</span>',
-    '</div></div>',
-    '<div class="card" style="opacity:.5;cursor:default"><div class="card-body">',
-    '<h3>Quality &amp; Site</h3><span class="badge">Coming Soon</span>',
-    '</div></div>',
-    '<div class="card" style="opacity:.5;cursor:default"><div class="card-body">',
-    '<h3>Document Control</h3><span class="badge">Coming Soon</span>',
-    '</div></div>',
-    '<div class="card" style="opacity:.5;cursor:default"><div class="card-body">',
-    '<h3>Sales &amp; CRM</h3><span class="badge">Coming Soon</span>',
-    '</div></div>',
+    '<div style="padding:24px 24px 0">',
+    '<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;margin-bottom:3px">Management Information System</div>',
+    '<h1 style="font-size:20px;font-weight:600;color:var(--charcoal);margin:0 0 6px">Reports</h1>',
+    '<div style="font-size:12px;color:var(--text2);margin-bottom:22px">Select a report for <strong>' + currentProject.name + '</strong>.</div>',
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">',
+    activeCard,
+    comingSoonCard(iconQuality, 'Quality &amp; Site', 'NCRs, punch list, inspection pass rates'),
+    comingSoonCard(iconDocs, 'Document Control', 'Drawing register, submittal turnaround, RFIs'),
+    comingSoonCard(iconSales, 'Sales &amp; CRM', 'Pipeline, conversion, revenue forecast'),
+    '</div>',
     '</div>',
   ].join('');
 }
@@ -385,3 +414,5 @@ function exportFinanceReportPDF(year, month) {
   };
   html2pdf().set(opt).from(el).save();
 }
+
+
