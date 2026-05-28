@@ -1,9 +1,9 @@
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',reports:'Reports','reports-finance':'Finance Report','reports-quality':'Quality & Site Report',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM — Leads','crm-home':'CRM Home'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',reports:'Reports','reports-finance':'Finance Report','reports-quality':'Quality & Site Report','reports-sales':'Sales & CRM Report',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM — Leads','crm-home':'CRM Home'};
 
 // pages that share a sidebar nav-item with another page
-const NAV_ITEM_FOR = {'reports-finance':'reports','reports-quality':'reports'};
+const NAV_ITEM_FOR = {'reports-finance':'reports','reports-quality':'reports','reports-sales':'reports'};
 function navItemId(page) { return NAV_ITEM_FOR[page] || page; }
 function basePageFromHash() {
   const h = location.hash.replace('#','');
@@ -113,6 +113,16 @@ async function _execRender(page) {
       if (y && m >= 1 && m <= 12) { year = y; month = m; }
     }
     await renderQualityReport(year, month);
+  }
+  else if(page==='reports-sales') {
+    const parts = location.hash.replace('#','').split('/');
+    const now = new Date();
+    let year = now.getFullYear(), month = now.getMonth() + 1;
+    if (parts[1]) {
+      const [y,m] = parts[1].split('-').map(Number);
+      if (y && m >= 1 && m <= 12) { year = y; month = m; }
+    }
+    await renderSalesReport(year, month);
   }
 }
 
