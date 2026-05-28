@@ -182,6 +182,7 @@ function switchProject(project) {
   currentProject = project;
   window._selectedContractId = null;
   window._selectedIPCContractId = null;
+  localStorage.removeItem('_reportsState');
   document.getElementById('psw-name').textContent = project.name;
   const sbName = document.getElementById('sb-proj-name');
   if(sbName) sbName.textContent = project.name;
