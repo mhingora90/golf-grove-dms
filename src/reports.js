@@ -179,16 +179,14 @@ function _calcFinanceStats(data, year, month) {
   const priorCertifiedToDate = priorCumCerts.reduce((s, c) => s + ((certAmt[c.id] || {}).certified || 0), 0);
   const priorPaidToDate      = certs.filter(c => beforeOrIn(dPaid(c), priorYear, priorMonth)).reduce((s, c) => s + (c.amount_paid || 0), 0);
 
-  // Period KPIs
+  // Period KPIs — claimed bucketed by certified_date so claimed/certified always align
   const periodCerts    = certs.filter(c => inMonth(dCert(c), year, month));
   const priorPeriodC   = certs.filter(c => inMonth(dCert(c), priorYear, priorMonth));
-  const periodSub      = certs.filter(c => inMonth(dSub(c), year, month));
-  const priorSub       = certs.filter(c => inMonth(dSub(c), priorYear, priorMonth));
 
-  const periodClaimed        = periodSub.reduce((s, c) => s + ((certAmt[c.id] || {}).claimed || 0), 0);
+  const periodClaimed        = periodCerts.reduce((s, c) => s + ((certAmt[c.id] || {}).claimed || 0), 0);
   const periodCertified      = periodCerts.reduce((s, c) => s + ((certAmt[c.id] || {}).certified || 0), 0);
   const periodPaid           = certs.filter(c => inMonth(dPaid(c), year, month)).reduce((s, c) => s + (c.amount_paid || 0), 0);
-  const priorPeriodClaimed   = priorSub.reduce((s, c) => s + ((certAmt[c.id] || {}).claimed || 0), 0);
+  const priorPeriodClaimed   = priorPeriodC.reduce((s, c) => s + ((certAmt[c.id] || {}).claimed || 0), 0);
   const priorPeriodCertified = priorPeriodC.reduce((s, c) => s + ((certAmt[c.id] || {}).certified || 0), 0);
   const priorPeriodPaid      = certs.filter(c => inMonth(dPaid(c), priorYear, priorMonth)).reduce((s, c) => s + (c.amount_paid || 0), 0);
 
@@ -218,11 +216,10 @@ function _calcFinanceStats(data, year, month) {
     let m = month - i; let y = year;
     if (m <= 0) { m += 12; y -= 1; }
     const certInM = certs.filter(x => inMonth(dCert(x), y, m));
-    const subInM  = certs.filter(x => inMonth(dSub(x), y, m));
     const paidInM = certs.filter(x => inMonth(dPaid(x), y, m));
     monthMap.push({
       label:     new Date(y, m - 1).toLocaleString('default', { month: 'short' }),
-      claimed:   subInM.reduce((s, x) => s + ((certAmt[x.id] || {}).claimed || 0), 0),
+      claimed:   certInM.reduce((s, x) => s + ((certAmt[x.id] || {}).claimed || 0), 0),
       certified: certInM.reduce((s, x) => s + ((certAmt[x.id] || {}).certified || 0), 0),
       paid:      paidInM.reduce((s, x) => s + (x.amount_paid || 0), 0),
     });
@@ -323,20 +320,18 @@ function buildFinanceReportHTML(stats, year, month, months, yearOpts, monthOpts)
 
 function _financeSummaryNarrative(stats, year, month, months) {
   const fmt = v => 'AED ' + (v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : (v / 1e3).toFixed(0) + 'K');
-  const { totalContractValue, certifiedToDate, pctComplete, periodCertified, priorPeriodCertified, outstandingStr, retentionHeld } = stats;
-  const delta    = periodCertified - priorPeriodCertified;
-  const deltaPct = priorPeriodCertified > 0 ? Math.abs(Math.round((delta / priorPeriodCertified) * 100)) : null;
-  const priorLabel = months[month === 1 ? 11 : month - 2];
-  const deltaStr = deltaPct !== null
-    ? (delta >= 0 ? '&#8593; ' + deltaPct + '% vs ' + priorLabel : '&#8595; ' + deltaPct + '% vs ' + priorLabel)
-    : 'no prior period data';
+  const { totalContractValue, certifiedToDate, pctComplete, periodCertified, outstandingStr, retentionHeld } = stats;
+  const periodPct = certifiedToDate > 0 ? Math.round((periodCertified / certifiedToDate) * 100) : 0;
+  const periodStr = periodCertified > 0
+    ? fmt(periodCertified) + ' (' + periodPct + '% of certified to date)'
+    : fmt(periodCertified);
   return [
     '<div style="background:var(--green-bg);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:14px 18px">',
     '<div style="color:var(--green);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Executive Summary</div>',
     '<p style="color:var(--charcoal);font-size:13px;line-height:1.75;margin:0">',
     'As of ' + months[month - 1] + ' ' + year + ', the project is <strong>' + pctComplete + '% complete</strong>. ',
     fmt(certifiedToDate) + ' has been certified against a total contract value of ' + fmt(totalContractValue) + '. ',
-    'This period, ' + fmt(periodCertified) + ' was certified &mdash; ' + deltaStr + '. ',
+    'This period, ' + periodStr + ' was certified. ',
     outstandingStr ? outstandingStr + ' ' : '',
     retentionHeld > 0 ? 'Retention of ' + fmt(retentionHeld) + ' is held to date.' : '',
     '</p></div>',
