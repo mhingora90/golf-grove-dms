@@ -181,6 +181,7 @@ function closeProjectDropdown() {
 
 function switchProject(project) {
   currentProject = project;
+  localStorage.setItem('lastProjectId', project.id);
   window._selectedContractId = null;
   window._selectedIPCContractId = null;
   document.getElementById('psw-name').textContent = project.name;
