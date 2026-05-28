@@ -16,7 +16,7 @@
 | 5 | Auth & Sessions | ⚠️ PARTIAL | Medium |
 | 6 | API Response Leakage | ✅ PASS | — |
 | 7 | Audit Logs | ✅ FIXED | Medium |
-| 8 | Rate Limits | ⚠️ OPEN | Medium |
+| 8 | Rate Limits | ✅ FIXED | Medium |
 | 9 | SQL / Filter Injection | ✅ FIXED | High |
 | 10 | Dependencies | ⚠️ OPEN | Medium |
 
@@ -105,17 +105,14 @@ The `esc()` function (defined in `helpers.js`) was inconsistently applied.
 
 ---
 
-## 8. Rate Limits — OPEN
+## 8. Rate Limits — FIXED
 
 **Finding:** No rate limiting on login, API endpoints, or file uploads.
 
-**Risk:**
-- Login brute force possible (mitigated somewhat by Supabase's built-in throttling)
-- `api/meta-lead.js` can be spammed to create fake leads
-
-**Recommendation:**
-- Add Vercel Edge rate limiting middleware for `/api/meta-lead`
-- Supabase Auth has built-in brute-force protection (configurable in Auth settings — verify it's enabled)
+**Remediation:**
+- `api/meta-lead.js` now enforces 10 req/min + 100 req/hr per IP via `rate_limit_events` table
+- `checkRateLimit` / `recordEvent` / `pruneOldEvents` functions implemented with 429 + `Retry-After` header
+- Supabase Auth brute-force protection confirmed active (30 req/5 min for sign-ins)
 
 ---
 
@@ -153,12 +150,12 @@ All other queries use Supabase SDK parameterized methods — no injection risk.
 
 ## Remaining Actions
 
-| Priority | Action | Owner |
-|----------|--------|-------|
-| Medium | Migrate hardcoded admin email to role-based RLS policy | Dev |
-| Medium | Enable Supabase Auth brute-force protection in dashboard | Dev |
-| Medium | Add rate limiting to `/api/meta-lead` | Dev |
-| Low | Remove `'unsafe-inline'` from CSP (requires inline handler refactor) | Dev |
-| Low | Run `npm audit` + update pdf-parse | Dev |
-| Low | Add `package-lock.json` to repo | Dev |
-| Low | Add SRI hashes to CDN scripts in `index.html` | Dev |
+| Priority | Action | Status |
+|----------|--------|--------|
+| Medium | Migrate hardcoded admin email to role-based RLS policy | ✅ Done |
+| Medium | Enable Supabase Auth brute-force protection in dashboard | ✅ Done |
+| Medium | Add rate limiting to `/api/meta-lead` | ✅ Done |
+| Low | Run `npm audit` + update pdf-parse | ✅ Done (0 vulns) |
+| Low | Add `package-lock.json` to repo | ✅ Done |
+| Low | Add SRI hashes to CDN scripts in `index.html` | ⚠️ Versions pinned; SRI hashes unreliable due to CDN byte mismatch |
+| Low | Remove `'unsafe-inline'` from CSP (requires inline handler refactor) | ❌ Deferred — 321+ handlers across 14 files |
