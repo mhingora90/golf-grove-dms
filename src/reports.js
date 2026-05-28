@@ -1,9 +1,6 @@
 ﻿// REPORTS MODULE
 
 async function renderReports() {
-  const saved = JSON.parse(localStorage.getItem('_reportsState') || 'null');
-  if (saved?.view === 'finance') return renderFinanceReport(saved.year, saved.month);
-  localStorage.removeItem('_reportsState');
   document.getElementById('content').innerHTML = buildReportsHub();
 }
 
@@ -265,7 +262,12 @@ function _calcFinanceStats(data, year, month) {
 }
 
 async function renderFinanceReport(year, month) {
-  localStorage.setItem('_reportsState', JSON.stringify({ view: 'finance', year, month }));
+  const mm = String(month).padStart(2, '0');
+  if (location.hash !== '#reports-finance/' + year + '-' + mm) {
+    history.replaceState(null, '', '#reports-finance/' + year + '-' + mm);
+  }
+  currentPage = 'reports-finance';
+  document.getElementById('page-title').textContent = PAGE_TITLES['reports-finance'];
   const el = document.getElementById('content');
   el.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
   const data = await _fetchFinanceData(currentProject.id);
@@ -291,7 +293,7 @@ function buildFinanceReportHTML(stats, year, month, months, yearOpts, monthOpts)
     // Breadcrumb + title row
     '<div style="padding:20px 24px 0;display:flex;flex-direction:column;gap:14px">',
     '<div style="display:flex;align-items:center;gap:6px">',
-    '<a href="#" onclick="localStorage.removeItem(\'_reportsState\');renderReports();return false" style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:var(--text3);text-decoration:none;padding:4px 8px;border-radius:6px;background:var(--bg3);border:0.5px solid var(--border);transition:color .15s"',
+    '<a href="#" onclick="nav(\'reports\', document.getElementById(\'n-reports\'));return false" style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:var(--text3);text-decoration:none;padding:4px 8px;border-radius:6px;background:var(--bg3);border:0.5px solid var(--border);transition:color .15s"',
     ' onmouseover="this.style.color=\'var(--charcoal)\'" onmouseout="this.style.color=\'var(--text3)\'">',
     '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     'All Reports</a>',

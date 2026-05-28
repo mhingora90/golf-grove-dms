@@ -1,6 +1,14 @@
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',reports:'Reports',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM — Leads','crm-home':'CRM Home'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',reports:'Reports','reports-finance':'Finance Report',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM — Leads','crm-home':'CRM Home'};
+
+// pages that share a sidebar nav-item with another page
+const NAV_ITEM_FOR = {'reports-finance':'reports'};
+function navItemId(page) { return NAV_ITEM_FOR[page] || page; }
+function basePageFromHash() {
+  const h = location.hash.replace('#','');
+  return h.split('/')[0];
+}
 
 function canCreateOnPage(page) {
   if(page==='draw') return can('upload');
@@ -37,9 +45,10 @@ function nav(page, el, opts) {
   document.getElementById('page-title').textContent = PAGE_TITLES[page]||page;
   const fab = document.getElementById('new-btn');
   if(fab) fab.style.display = canCreateOnPage(page) ? '' : 'none';
-  // Persist page in URL hash for refresh recovery
-  history.replaceState(null,'','#'+page);
-  if (page !== 'reports') localStorage.removeItem('_reportsState');
+  // Persist page in URL hash for refresh recovery — preserve sub-route when
+  // navigating to the same base page (e.g. reports → reports-finance/2026-05)
+  const currentBase = basePageFromHash();
+  if (currentBase !== page) history.replaceState(null,'','#'+page);
   render(true);
 }
 
@@ -85,6 +94,16 @@ async function _execRender(page) {
   else if(page==='crm') { resetCRM(); await renderCRM(); }
   else if(page==='crm-home') await renderCRMHome();
   else if(page==='reports') await renderReports();
+  else if(page==='reports-finance') {
+    const parts = location.hash.replace('#','').split('/');
+    const now = new Date();
+    let year = now.getFullYear(), month = now.getMonth() + 1;
+    if (parts[1]) {
+      const [y,m] = parts[1].split('-').map(Number);
+      if (y && m >= 1 && m <= 12) { year = y; month = m; }
+    }
+    await renderFinanceReport(year, month);
+  }
 }
 
 // ─── RENDER ───────────────────────────────────────────────────────

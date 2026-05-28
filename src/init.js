@@ -8,10 +8,11 @@
   window.addEventListener('hashchange', ()=>{
     if(!currentProfile) return;
     const hash = location.hash.replace('#','');
+    const basePage = hash.split('/')[0];
     const validPages = Object.keys(PAGE_TITLES); // auto-includes every page registered in nav.js
-    if(validPages.includes(hash) && hash !== currentPage){
-      const navEl = document.getElementById('n-'+hash);
-      nav(hash, navEl);
+    if(validPages.includes(basePage) && basePage !== currentPage){
+      const navEl = document.getElementById('n-'+navItemId(basePage));
+      nav(basePage, navEl);
     }
   });
 })();

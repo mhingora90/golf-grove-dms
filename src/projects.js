@@ -100,10 +100,11 @@ function setCurrentProject(project) {
   if(sbName) sbName.textContent = project.name;
 
   const hash = location.hash.replace('#', '');
+  const basePage = hash.split('/')[0];
   const validPages = Object.keys(PAGE_TITLES); // auto-includes every page registered in nav.js
   const roleDefault = (currentProfile?.role === 'admin' || currentProfile?.role === 'sales') ? 'crm-home' : 'dash';
-  const defaultPage = validPages.includes(hash) ? hash : roleDefault;
-  nav(defaultPage, document.getElementById('n-' + defaultPage));
+  const defaultPage = validPages.includes(basePage) ? basePage : roleDefault;
+  nav(defaultPage, document.getElementById('n-' + navItemId(defaultPage)));
 }
 
 function returnToProjects() {
@@ -182,7 +183,6 @@ function switchProject(project) {
   currentProject = project;
   window._selectedContractId = null;
   window._selectedIPCContractId = null;
-  localStorage.removeItem('_reportsState');
   document.getElementById('psw-name').textContent = project.name;
   const sbName = document.getElementById('sb-proj-name');
   if(sbName) sbName.textContent = project.name;
