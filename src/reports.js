@@ -100,8 +100,8 @@ function _openFinanceReport() {
 
 async function _fetchFinanceData(projectId) {
   const [contractsRes, certsRes, billsRes] = await Promise.all([
-    sb.from('contracts').select('id,name,contractor,contract_value,start_date,end_date')
-      .eq('project_id', projectId).order('created_at'),
+    sb.from('contracts').select('id,name,contractor,contract_value,award_date,sort_order')
+      .eq('project_id', projectId).order('sort_order').order('created_at'),
     sb.from('payment_certificates')
       .select('id,cert_no,contract_id,status,retention_pct,advance_recovery_pct,vat_pct,previously_paid,amount_paid,mobilisation_advance,submitted_date,certified_date,paid_date')
       .eq('project_id', projectId),
