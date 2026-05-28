@@ -279,16 +279,34 @@ function buildFinanceReportHTML(stats, year, month, months, yearOpts, monthOpts)
   const rptYear  = "document.getElementById('rpt-year').value";
   const rptMonth = "document.getElementById('rpt-month').value";
   const header = [
-    '<div class="page-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">',
-    '<a href="#" onclick="renderReports();return false" style="font-size:13px;color:var(--green-light)">&larr; All Reports</a>',
-    '<h1 style="flex:1;margin:0;font-size:18px;font-weight:600;color:var(--charcoal)">Finance MIS Report &mdash; ' + currentProject.name + '</h1>',
-    '<button class="btn btn-sm btn-secondary" onclick="exportFinanceReportPDF(' + year + ',' + month + ')">&#8595; Export PDF</button>',
+    // Breadcrumb + title row
+    '<div style="padding:20px 24px 0;display:flex;flex-direction:column;gap:14px">',
+    '<div style="display:flex;align-items:center;gap:6px">',
+    '<a href="#" onclick="renderReports();return false" style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:var(--text3);text-decoration:none;padding:4px 8px;border-radius:6px;background:var(--bg3);border:0.5px solid var(--border);transition:color .15s"',
+    ' onmouseover="this.style.color=\'var(--charcoal)\'" onmouseout="this.style.color=\'var(--text3)\'">',
+    '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    'All Reports</a>',
+    '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2l4 4-4 4" stroke="#B4A88C" stroke-width="1.2" stroke-linecap="round"/></svg>',
+    '<span style="font-size:11px;color:var(--text2);font-weight:500">Finance Report</span>',
     '</div>',
-    '<div style="display:flex;align-items:center;gap:8px;padding:0 24px 16px">',
-    '<label style="font-size:13px;color:var(--text2)">Period:</label>',
-    '<select id="rpt-month" onchange="renderFinanceReport(+' + rptYear + ',+this.value)" style="padding:4px 8px">' + monthOpts + '</select>',
-    '<select id="rpt-year" onchange="renderFinanceReport(+this.value,+' + rptMonth + ')" style="padding:4px 8px">' + yearOpts + '</select>',
-    '<span style="font-size:11px;color:var(--text3)">Generated ' + new Date().toLocaleDateString('en-GB') + '</span>',
+    // Title + export button
+    '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">',
+    '<div>',
+    '<h1 style="margin:0 0 2px;font-size:18px;font-weight:600;color:var(--charcoal);letter-spacing:-.3px">Finance MIS Report</h1>',
+    '<div style="font-size:12px;color:var(--text3)">' + currentProject.name + '</div>',
+    '</div>',
+    '<button class="btn btn-sm btn-secondary" style="flex-shrink:0;margin-top:2px" onclick="exportFinanceReportPDF(' + year + ',' + month + ')">',
+    '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="margin-right:4px"><path d="M6 2v6M3 6l3 3 3-3M2 10h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    'Export PDF</button>',
+    '</div>',
+    // Period selector bar
+    '<div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--bg3);border:0.5px solid var(--border);border-radius:8px">',
+    '<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="2.5" width="10" height="9" rx="1.5" stroke="#B4A88C" stroke-width="1.1"/><path d="M4 1.5v2M9 1.5v2M1.5 5.5h10" stroke="#B4A88C" stroke-width="1.1" stroke-linecap="round"/></svg>',
+    '<span style="font-size:11px;font-weight:500;color:var(--text2)">Period</span>',
+    '<select id="rpt-month" class="filter-sel" onchange="renderFinanceReport(+' + rptYear + ',+this.value)">' + monthOpts + '</select>',
+    '<select id="rpt-year"  class="filter-sel" onchange="renderFinanceReport(+this.value,+' + rptMonth + ')">' + yearOpts + '</select>',
+    '<span style="margin-left:auto;font-size:10px;color:var(--text3)">Generated ' + new Date().toLocaleDateString('en-GB') + '</span>',
+    '</div>',
     '</div>',
   ].join('');
   const sections = [
