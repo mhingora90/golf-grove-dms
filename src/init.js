@@ -8,7 +8,7 @@
   window.addEventListener('hashchange', ()=>{
     if(!currentProfile) return;
     const hash = location.hash.replace('#','');
-    const validPages = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq'];
+    const validPages = Object.keys(PAGE_TITLES); // auto-includes every page registered in nav.js
     if(validPages.includes(hash) && hash !== currentPage){
       const navEl = document.getElementById('n-'+hash);
       nav(hash, navEl);

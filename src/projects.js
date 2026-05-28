@@ -100,7 +100,7 @@ function setCurrentProject(project) {
   if(sbName) sbName.textContent = project.name;
 
   const hash = location.hash.replace('#', '');
-  const validPages = ['dash','draw','sub','sreg','ir','ncr','rfi','trans','corr','punch','ms','subs','users','ipc','boq','finance','usetup','ureg','srev','crm','crm-home'];
+  const validPages = Object.keys(PAGE_TITLES); // auto-includes every page registered in nav.js
   const roleDefault = (currentProfile?.role === 'admin' || currentProfile?.role === 'sales') ? 'crm-home' : 'dash';
   const defaultPage = validPages.includes(hash) ? hash : roleDefault;
   nav(defaultPage, document.getElementById('n-' + defaultPage));
