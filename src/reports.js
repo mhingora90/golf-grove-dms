@@ -204,9 +204,14 @@ function _calcFinanceStats(data, year, month) {
       }).join(', ') + ' outstanding.'
     : '';
 
+  // Certs with no contract_id: attribute to the sole contract, or skip if multiple
+  const unlinkedCerts = certs.filter(x => !x.contract_id);
+  const soloContractId = contracts.length === 1 ? contracts[0].id : null;
+
   // Contract rows
   const contractRows = contracts.map(c => {
-    const cc = certs.filter(x => x.contract_id === c.id);
+    const linked = certs.filter(x => x.contract_id === c.id);
+    const cc = soloContractId === c.id ? [...linked, ...unlinkedCerts] : linked;
     const cumCC   = cc.filter(x => beforeOrIn(dCert(x), year, month));
     const certified  = cumCC.reduce((s, x) => s + ((certAmt[x.id] || {}).certified || 0), 0);
     const paid       = cc.filter(x => beforeOrIn(dPaid(x), year, month)).reduce((s, x) => s + (x.amount_paid || 0), 0);
@@ -232,8 +237,8 @@ function _calcFinanceStats(data, year, month) {
   }
 
   // S-curve
-  const allStarts  = contracts.map(c => c.start_date).filter(Boolean).sort();
-  const allEnds    = contracts.map(c => c.end_date).filter(Boolean).sort();
+  const allStarts  = contracts.map(c => c.award_date).filter(Boolean).sort();
+  const allEnds    = [].filter(Boolean).sort(); // end_date not in schema
   const projStart  = allStarts[0] ? new Date(allStarts[0]) : new Date(year, 0);
   const projEnd    = allEnds[allEnds.length - 1] ? new Date(allEnds[allEnds.length - 1]) : new Date(year + 1, 11);
   const totalMonths = Math.max(1, (projEnd.getFullYear() - projStart.getFullYear()) * 12 + projEnd.getMonth() - projStart.getMonth() + 1);
