@@ -1,0 +1,150 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: Active Project
+      - generic [ref=e6]: Golf Grove – DPC
+    - generic [ref=e7]:
+      - generic [ref=e8]: MH
+      - generic [ref=e9]:
+        - generic [ref=e10]: Mohammed Hingora
+        - generic [ref=e11]: developer
+    - generic [ref=e12]: Main
+    - generic [ref=e13] [cursor=pointer]:
+      - img [ref=e14]
+      - text: Dashboard
+    - generic [ref=e19]: Document Control
+    - generic [ref=e20] [cursor=pointer]:
+      - img [ref=e21]
+      - text: Drawing Register
+    - generic [ref=e23] [cursor=pointer]:
+      - img [ref=e24]
+      - text: Submittals (DSUB)
+      - generic [ref=e27]: "1"
+    - generic [ref=e28] [cursor=pointer]:
+      - img [ref=e29]
+      - text: Submittal Register
+    - generic [ref=e31]: Site
+    - generic [ref=e32] [cursor=pointer]:
+      - img [ref=e33]
+      - text: Inspection Requests
+    - generic [ref=e36] [cursor=pointer]:
+      - img [ref=e37]
+      - text: NCRs
+    - generic [ref=e40] [cursor=pointer]:
+      - img [ref=e41]
+      - text: RFIs
+    - generic [ref=e45] [cursor=pointer]:
+      - img [ref=e46]
+      - text: Transmittals
+    - generic [ref=e48] [cursor=pointer]:
+      - img [ref=e49]
+      - text: Method Statements
+    - generic [ref=e52] [cursor=pointer]:
+      - img [ref=e53]
+      - text: Correspondence
+    - generic [ref=e56] [cursor=pointer]:
+      - img [ref=e57]
+      - text: Punch List
+      - generic [ref=e60]: "0"
+    - generic [ref=e61]: Finance
+    - generic [ref=e62] [cursor=pointer]:
+      - img [ref=e63]
+      - text: Finance Overview
+    - generic [ref=e66] [cursor=pointer]:
+      - img [ref=e67]
+      - text: Payment Certificates
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: BOQ Setup
+    - generic [ref=e74]:
+      - generic [ref=e75]: Sales
+      - generic [ref=e76] [cursor=pointer]:
+        - img [ref=e77]
+        - text: CRM Home
+      - generic [ref=e82] [cursor=pointer]:
+        - img [ref=e83]
+        - text: Leads
+        - generic [ref=e87]: "0"
+      - generic [ref=e88] [cursor=pointer]:
+        - img [ref=e89]
+        - text: Unit Setup
+      - generic [ref=e92] [cursor=pointer]:
+        - img [ref=e93]
+        - text: Unit Register
+      - generic [ref=e96] [cursor=pointer]:
+        - img [ref=e97]
+        - text: Sales Revenue
+    - generic [ref=e100]:
+      - generic [ref=e101]: Reports
+      - generic [ref=e102] [cursor=pointer]:
+        - img [ref=e103]
+        - text: Reports
+    - generic [ref=e106]: Admin
+    - generic [ref=e107] [cursor=pointer]:
+      - img [ref=e108]
+      - text: Subcontractors
+    - generic [ref=e114] [cursor=pointer]:
+      - img [ref=e115]
+      - text: User Management
+    - button "Sign Out" [ref=e119] [cursor=pointer]
+  - generic [ref=e120]:
+    - generic [ref=e121]:
+      - generic [ref=e122]:
+        - generic [ref=e123]: Reports
+        - generic [ref=e124]: Thursday, 28 May 2026
+      - generic [ref=e126] [cursor=pointer]:
+        - generic [ref=e128]: Golf Grove – DPC
+        - generic [ref=e129]: ▼
+      - generic [ref=e132]: developer
+    - generic [ref=e330]:
+      - generic [ref=e331]:
+        - heading "Reports" [level=1] [ref=e332]
+        - generic [ref=e333]: Golf Grove – DPC
+      - generic [ref=e334] [cursor=pointer]:
+        - generic [ref=e336]:
+          - generic [ref=e337]:
+            - img [ref=e339]
+            - generic [ref=e341]:
+              - generic [ref=e342]: Finance
+              - generic [ref=e343]: Finance Report
+          - generic [ref=e344]: ● Live
+        - generic [ref=e345]:
+          - generic [ref=e346]:
+            - generic [ref=e347]: Period-by-period cashflow, certified & paid KPIs with month-on-month delta, contract breakdown table, monthly cashflow bars, and S-curve progress. Exportable as A4 PDF.
+            - generic [ref=e348]:
+              - generic [ref=e349]:
+                - img [ref=e350]
+                - text: Contract breakdown
+              - generic [ref=e353]:
+                - img [ref=e354]
+                - text: S-curve & cashflow
+              - generic [ref=e356]:
+                - img [ref=e357]
+                - text: PDF export
+          - generic [ref=e359]:
+            - text: Open report
+            - img [ref=e360]
+      - generic [ref=e362]:
+        - generic [ref=e363]: In Development
+        - generic [ref=e364]:
+          - generic [ref=e365]:
+            - generic [ref=e366]:
+              - img [ref=e368]
+              - generic [ref=e370]: Soon
+            - generic [ref=e371]:
+              - generic [ref=e372]: Quality & Site
+              - generic [ref=e373]: NCRs, punch list, inspection rates
+          - generic [ref=e374]:
+            - generic [ref=e375]:
+              - img [ref=e377]
+              - generic [ref=e380]: Soon
+            - generic [ref=e381]:
+              - generic [ref=e382]: Document Control
+              - generic [ref=e383]: Submittals, drawings, RFI turnaround
+          - generic [ref=e384]:
+            - generic [ref=e385]:
+              - img [ref=e387]
+              - generic [ref=e389]: Soon
+            - generic [ref=e390]:
+              - generic [ref=e391]: Sales & CRM
+              - generic [ref=e392]: Pipeline, conversion, revenue forecast

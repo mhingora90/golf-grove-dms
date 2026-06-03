@@ -1,0 +1,205 @@
+- generic [ref=e32]:
+  - generic [ref=e33]:
+    - generic [ref=e34]:
+      - generic [ref=e35]: Active Project
+      - generic [ref=e36]: Golf Grove – DPC
+    - generic [ref=e37]:
+      - generic [ref=e38]: MH
+      - generic [ref=e39]:
+        - generic [ref=e40]: Mohammed Hingora
+        - generic [ref=e41]: developer
+    - generic [ref=e42]: Main
+    - generic [ref=e43] [cursor=pointer]:
+      - img [ref=e44]
+      - text: Dashboard
+    - generic [ref=e49]: Document Control
+    - generic [ref=e50] [cursor=pointer]:
+      - img [ref=e51]
+      - text: Drawing Register
+    - generic [ref=e53] [cursor=pointer]:
+      - img [ref=e54]
+      - text: Submittals (DSUB)
+      - generic [ref=e57]: "1"
+    - generic [ref=e58] [cursor=pointer]:
+      - img [ref=e59]
+      - text: Submittal Register
+    - generic [ref=e61]: Site
+    - generic [ref=e62] [cursor=pointer]:
+      - img [ref=e63]
+      - text: Inspection Requests
+    - generic [ref=e66] [cursor=pointer]:
+      - img [ref=e67]
+      - text: NCRs
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: RFIs
+    - generic [ref=e75] [cursor=pointer]:
+      - img [ref=e76]
+      - text: Transmittals
+    - generic [ref=e78] [cursor=pointer]:
+      - img [ref=e79]
+      - text: Method Statements
+    - generic [ref=e82] [cursor=pointer]:
+      - img [ref=e83]
+      - text: Correspondence
+    - generic [ref=e86] [cursor=pointer]:
+      - img [ref=e87]
+      - text: Punch List
+      - generic [ref=e90]: "0"
+    - generic [ref=e91]: Finance
+    - generic [ref=e92] [cursor=pointer]:
+      - img [ref=e93]
+      - text: Finance Overview
+    - generic [ref=e96] [cursor=pointer]:
+      - img [ref=e97]
+      - text: Payment Certificates
+    - generic [ref=e100] [cursor=pointer]:
+      - img [ref=e101]
+      - text: BOQ Setup
+    - generic [ref=e104]:
+      - generic [ref=e105]: Sales
+      - generic [ref=e106] [cursor=pointer]:
+        - img [ref=e107]
+        - text: CRM Home
+      - generic [ref=e112] [cursor=pointer]:
+        - img [ref=e113]
+        - text: Leads
+        - generic [ref=e117]: "0"
+      - generic [ref=e118] [cursor=pointer]:
+        - img [ref=e119]
+        - text: Unit Setup
+      - generic [ref=e122] [cursor=pointer]:
+        - img [ref=e123]
+        - text: Unit Register
+      - generic [ref=e126] [cursor=pointer]:
+        - img [ref=e127]
+        - text: Sales Revenue
+    - generic [ref=e130]:
+      - generic [ref=e131]: Reports
+      - generic [ref=e132] [cursor=pointer]:
+        - img [ref=e133]
+        - text: Reports
+    - generic [ref=e136]: Admin
+    - generic [ref=e137] [cursor=pointer]:
+      - img [ref=e138]
+      - text: Subcontractors
+    - generic [ref=e144] [cursor=pointer]:
+      - img [ref=e145]
+      - text: User Management
+    - button "Sign Out" [ref=e149] [cursor=pointer]
+  - generic [ref=e150]:
+    - generic [ref=e151]:
+      - generic [ref=e152]:
+        - generic [ref=e153]: Reports
+        - generic [ref=e154]: Thursday, 28 May 2026
+      - generic [ref=e156] [cursor=pointer]:
+        - generic [ref=e158]: Golf Grove – DPC
+        - generic [ref=e159]: ▼
+      - generic [ref=e162]: developer
+    - generic [ref=e423]:
+      - generic [ref=e424]:
+        - generic [ref=e425]:
+          - link "All Reports" [ref=e426] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e427]
+            - text: All Reports
+          - img [ref=e429]
+          - generic [ref=e431]: Finance Report
+        - generic [ref=e432]:
+          - generic [ref=e433]:
+            - heading "Finance MIS Report" [level=1] [ref=e434]
+            - generic [ref=e435]: Golf Grove – DPC
+          - button "Export PDF" [ref=e436] [cursor=pointer]:
+            - img [ref=e437]
+            - text: Export PDF
+        - generic [ref=e439]:
+          - img [ref=e440]
+          - generic [ref=e443]: Period
+          - combobox [ref=e444] [cursor=pointer]:
+            - option "January"
+            - option "February"
+            - option "March"
+            - option "April"
+            - option "May" [selected]
+            - option "June"
+            - option "July"
+            - option "August"
+            - option "September"
+            - option "October"
+            - option "November"
+            - option "December"
+          - combobox [ref=e445] [cursor=pointer]:
+            - option "2024"
+            - option "2025"
+            - option "2026" [selected]
+            - option "2027"
+            - option "2028"
+          - generic [ref=e446]: Generated 28/05/2026
+      - generic [ref=e447]:
+        - generic [ref=e448]:
+          - generic [ref=e449]: Executive Summary
+          - paragraph [ref=e450]:
+            - text: As of May 2026, the project is
+            - strong [ref=e451]: 0% complete
+            - text: . AED 729K has been certified against a total contract value of AED 0K. This period, AED 729K (100% of certified to date) was certified. 1 (AED 650K) outstanding. Retention of AED 73K is held to date.
+        - generic [ref=e452]:
+          - generic [ref=e453]: Project to Date (Cumulative)
+          - generic [ref=e454]:
+            - generic [ref=e455]:
+              - generic [ref=e456]: Contract Value
+              - generic [ref=e457]: AED 0K
+            - generic [ref=e458]:
+              - generic [ref=e459]: Certified
+              - generic [ref=e460]: AED 729K
+              - generic [ref=e461]: ↑ +AED 729K
+            - generic [ref=e462]:
+              - generic [ref=e463]: Paid
+              - generic [ref=e464]: AED 0K
+            - generic [ref=e465]:
+              - generic [ref=e466]: Outstanding
+              - generic [ref=e467]: AED 650K
+            - generic [ref=e468]:
+              - generic [ref=e469]: Retention
+              - generic [ref=e470]: AED 73K
+            - generic [ref=e471]:
+              - generic [ref=e472]: "% Complete"
+              - generic [ref=e473]: 0%
+        - generic [ref=e474]:
+          - generic [ref=e475]: This Period — May 2026
+          - generic [ref=e476]:
+            - generic [ref=e477]:
+              - generic [ref=e478]: Claimed
+              - generic [ref=e479]: AED 729K
+              - generic [ref=e480]: ↑ +AED 729K
+            - generic [ref=e481]:
+              - generic [ref=e482]: Certified
+              - generic [ref=e483]: AED 729K
+              - generic [ref=e484]: ↑ +AED 729K
+            - generic [ref=e485]:
+              - generic [ref=e486]: Paid
+              - generic [ref=e487]: AED 0K
+            - generic [ref=e488]:
+              - generic [ref=e489]: Certs Issued
+              - generic [ref=e490]: "1"
+              - generic [ref=e491]: "1"
+        - paragraph [ref=e492]: No contracts found for this project.
+        - generic [ref=e493]:
+          - generic [ref=e495]:
+            - generic [ref=e496]: Monthly Cashflow
+            - img [ref=e497]:
+              - generic [ref=e498]: Dec
+              - generic [ref=e499]: Jan
+              - generic [ref=e500]: Feb
+              - generic [ref=e501]: Mar
+              - generic [ref=e502]: Apr
+              - generic [ref=e505]: May
+            - generic [ref=e506]:
+              - generic [ref=e507]: ▮ Claimed
+              - generic [ref=e508]: ▮ Certified
+              - generic [ref=e509]: ▮ Paid
+          - generic [ref=e511]:
+            - generic [ref=e512]: S-Curve (Cumulative Certified vs Planned)
+            - img [ref=e513]
+            - generic [ref=e516]:
+              - generic [ref=e517]: — Actual
+              - generic [ref=e518]: "- - Planned"

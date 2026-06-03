@@ -1,0 +1,8 @@
+[    3312ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8765/#reports-quality/2026-05:0
+[    3313ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8765/#reports-quality/2026-05:0
+[  219329ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/leads?select=*&limit=1:0
+[  220049ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/sales_revenue?select=*&limit=1:0
+[  220322ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/contacts?select=*&limit=1:0
+[  220528ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/deals?select=*&limit=1:0
+[  220740ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/opportunities?select=*&limit=1:0
+[  220982ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/sales_pipeline?select=*&limit=1:0

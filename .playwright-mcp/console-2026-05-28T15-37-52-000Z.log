@@ -1,0 +1,18 @@
+[11842782ms] [ERROR] Failed to load resource: net::ERR_NETWORK_IO_SUSPENDED @ https://kdxvhrwnnehicgdryowu.supabase.co/auth/v1/token?grant_type=refresh_token:0
+[11842782ms] [ERROR] TypeError: Failed to fetch
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.106.2:7:105903
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.106.2:7:110864
+    at Cr (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.106.2:7:111032)
+    at s (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.106.2:7:171289)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.106.2:7:171045
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.106.2:7:171122
+    at new Promise (<anonymous>)
+    at https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.106.2:7:170975
+    at _s._refreshAccessToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.106.2:7:171128)
+    at _s._callRefreshToken (https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.106.2:7:174000) @ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.106.2:6
+[12074010ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/boq_bills?select=id%2Cbill_no%2Cdescription%2Cproject_id%2Ccontract_id&project_id=eq.00000000-0000-0000-0000-000000000002:0
+[12074012ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/boq_bills?select=id%2Cbill_no%2Cdescription%2Cproject_id%2Ccontract_id&project_id=eq.00000000-0000-0000-0000-000000000001:0
+[12083987ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/bills?select=*&limit=1:0
+[12084218ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/boq?select=*&limit=1:0
+[12090791ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/boq_bills?select=id%2Cbill_no%2Cdescription%2Cproject_id%2Ccontract_id:0
+[12372849ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/punch_items?select=*&limit=1:0

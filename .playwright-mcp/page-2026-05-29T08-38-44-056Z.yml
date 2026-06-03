@@ -1,0 +1,99 @@
+- generic [ref=e49]:
+  - generic [ref=e50]:
+    - generic [ref=e51]:
+      - generic [ref=e52]: Active Project
+      - generic [ref=e53]: Golf Grove – DPC
+    - generic [ref=e54]:
+      - generic [ref=e55]: T
+      - generic [ref=e56]:
+        - generic [ref=e57]: test.developer@golfgrove.test
+        - generic [ref=e58]: developer
+    - generic [ref=e59]: Main
+    - generic [ref=e60] [cursor=pointer]:
+      - img [ref=e61]
+      - text: Dashboard
+    - generic [ref=e66]: Document Control
+    - generic [ref=e67] [cursor=pointer]:
+      - img [ref=e68]
+      - text: Drawing Register
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: Submittals (DSUB)
+      - generic [ref=e74]: "1"
+    - generic [ref=e75] [cursor=pointer]:
+      - img [ref=e76]
+      - text: Submittal Register
+    - generic [ref=e78]: Site
+    - generic [ref=e79] [cursor=pointer]:
+      - img [ref=e80]
+      - text: Inspection Requests
+    - generic [ref=e83] [cursor=pointer]:
+      - img [ref=e84]
+      - text: NCRs
+    - generic [ref=e87] [cursor=pointer]:
+      - img [ref=e88]
+      - text: RFIs
+    - generic [ref=e92] [cursor=pointer]:
+      - img [ref=e93]
+      - text: Transmittals
+    - generic [ref=e95] [cursor=pointer]:
+      - img [ref=e96]
+      - text: Method Statements
+    - generic [ref=e99] [cursor=pointer]:
+      - img [ref=e100]
+      - text: Correspondence
+    - generic [ref=e103] [cursor=pointer]:
+      - img [ref=e104]
+      - text: Punch List
+      - generic [ref=e107]: "0"
+    - generic [ref=e108]: Finance
+    - generic [ref=e109] [cursor=pointer]:
+      - img [ref=e110]
+      - text: Finance Overview
+    - generic [ref=e113] [cursor=pointer]:
+      - img [ref=e114]
+      - text: Payment Certificates
+    - generic [ref=e117] [cursor=pointer]:
+      - img [ref=e118]
+      - text: BOQ Setup
+    - generic [ref=e121]:
+      - generic [ref=e122]: Sales
+      - generic [ref=e123] [cursor=pointer]:
+        - img [ref=e124]
+        - text: CRM Home
+      - generic [ref=e129] [cursor=pointer]:
+        - img [ref=e130]
+        - text: Leads
+        - generic [ref=e134]: "0"
+      - generic [ref=e135] [cursor=pointer]:
+        - img [ref=e136]
+        - text: Unit Setup
+      - generic [ref=e139] [cursor=pointer]:
+        - img [ref=e140]
+        - text: Unit Register
+      - generic [ref=e143] [cursor=pointer]:
+        - img [ref=e144]
+        - text: Sales Revenue
+    - generic [ref=e147]:
+      - generic [ref=e148]: Reports
+      - generic [ref=e149] [cursor=pointer]:
+        - img [ref=e150]
+        - text: Reports
+    - generic [ref=e153]: Admin
+    - generic [ref=e154] [cursor=pointer]:
+      - img [ref=e155]
+      - text: Subcontractors
+    - generic [ref=e161] [cursor=pointer]:
+      - img [ref=e162]
+      - text: User Management
+    - button "Sign Out" [ref=e166] [cursor=pointer]
+  - generic [ref=e167]:
+    - generic [ref=e168]:
+      - generic [ref=e169]:
+        - generic [ref=e170]: Document Control Report
+        - generic [ref=e171]: Friday, 29 May 2026
+      - generic [ref=e173] [cursor=pointer]:
+        - generic [ref=e175]: Golf Grove – DPC
+        - generic [ref=e176]: ▼
+      - generic [ref=e179]: developer
+    - generic [ref=e377]: Loading...

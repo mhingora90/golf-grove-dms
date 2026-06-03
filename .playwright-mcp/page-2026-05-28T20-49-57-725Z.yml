@@ -1,0 +1,253 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: Active Project
+      - generic [ref=e6]: Golf Grove – DPC
+    - generic [ref=e7]:
+      - generic [ref=e8]: T
+      - generic [ref=e9]:
+        - generic [ref=e10]: test.developer@golfgrove.test
+        - generic [ref=e11]: developer
+    - generic [ref=e12]: Main
+    - generic [ref=e13] [cursor=pointer]:
+      - img [ref=e14]
+      - text: Dashboard
+    - generic [ref=e19]: Document Control
+    - generic [ref=e20] [cursor=pointer]:
+      - img [ref=e21]
+      - text: Drawing Register
+    - generic [ref=e23] [cursor=pointer]:
+      - img [ref=e24]
+      - text: Submittals (DSUB)
+      - generic [ref=e27]: "1"
+    - generic [ref=e28] [cursor=pointer]:
+      - img [ref=e29]
+      - text: Submittal Register
+    - generic [ref=e31]: Site
+    - generic [ref=e32] [cursor=pointer]:
+      - img [ref=e33]
+      - text: Inspection Requests
+    - generic [ref=e36] [cursor=pointer]:
+      - img [ref=e37]
+      - text: NCRs
+    - generic [ref=e40] [cursor=pointer]:
+      - img [ref=e41]
+      - text: RFIs
+    - generic [ref=e45] [cursor=pointer]:
+      - img [ref=e46]
+      - text: Transmittals
+    - generic [ref=e48] [cursor=pointer]:
+      - img [ref=e49]
+      - text: Method Statements
+    - generic [ref=e52] [cursor=pointer]:
+      - img [ref=e53]
+      - text: Correspondence
+    - generic [ref=e56] [cursor=pointer]:
+      - img [ref=e57]
+      - text: Punch List
+      - generic [ref=e60]: "0"
+    - generic [ref=e61]: Finance
+    - generic [ref=e62] [cursor=pointer]:
+      - img [ref=e63]
+      - text: Finance Overview
+    - generic [ref=e66] [cursor=pointer]:
+      - img [ref=e67]
+      - text: Payment Certificates
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: BOQ Setup
+    - generic [ref=e74]:
+      - generic [ref=e75]: Sales
+      - generic [ref=e76] [cursor=pointer]:
+        - img [ref=e77]
+        - text: CRM Home
+      - generic [ref=e82] [cursor=pointer]:
+        - img [ref=e83]
+        - text: Leads
+        - generic [ref=e87]: "0"
+      - generic [ref=e88] [cursor=pointer]:
+        - img [ref=e89]
+        - text: Unit Setup
+      - generic [ref=e92] [cursor=pointer]:
+        - img [ref=e93]
+        - text: Unit Register
+      - generic [ref=e96] [cursor=pointer]:
+        - img [ref=e97]
+        - text: Sales Revenue
+    - generic [ref=e100]:
+      - generic [ref=e101]: Reports
+      - generic [ref=e102] [cursor=pointer]:
+        - img [ref=e103]
+        - text: Reports
+    - generic [ref=e106]: Admin
+    - generic [ref=e107] [cursor=pointer]:
+      - img [ref=e108]
+      - text: Subcontractors
+    - generic [ref=e114] [cursor=pointer]:
+      - img [ref=e115]
+      - text: User Management
+    - button "Sign Out" [ref=e119] [cursor=pointer]
+  - generic [ref=e120]:
+    - generic [ref=e121]:
+      - generic [ref=e122]:
+        - generic [ref=e123]: Sales & CRM Report
+        - generic [ref=e124]: Friday, 29 May 2026
+      - generic [ref=e126] [cursor=pointer]:
+        - generic [ref=e128]: Golf Grove – DPC
+        - generic [ref=e129]: ▼
+      - generic [ref=e132]: developer
+    - generic [ref=e134]:
+      - generic [ref=e135]:
+        - generic [ref=e136]:
+          - link "All Reports" [ref=e137] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e138]
+            - text: All Reports
+          - img [ref=e140]
+          - generic [ref=e142]: Sales & CRM Report
+        - generic [ref=e143]:
+          - generic [ref=e144]:
+            - heading "Sales & CRM MIS Report" [level=1] [ref=e145]
+            - generic [ref=e146]: Golf Grove – DPC
+          - button "Export PDF" [ref=e147] [cursor=pointer]:
+            - img [ref=e148]
+            - text: Export PDF
+        - generic [ref=e150]:
+          - img [ref=e151]
+          - generic [ref=e154]: Period
+          - combobox [ref=e155] [cursor=pointer]:
+            - option "January"
+            - option "February"
+            - option "March"
+            - option "April"
+            - option "May" [selected]
+            - option "June"
+            - option "July"
+            - option "August"
+            - option "September"
+            - option "October"
+            - option "November"
+            - option "December"
+          - combobox [ref=e156] [cursor=pointer]:
+            - option "2024"
+            - option "2025"
+            - option "2026" [selected]
+            - option "2027"
+            - option "2028"
+          - generic [ref=e157]: Generated 29/05/2026
+      - generic [ref=e158]:
+        - generic [ref=e159]:
+          - generic [ref=e160]: Executive Summary
+          - paragraph [ref=e161]:
+            - text: As of May 2026, the project has
+            - strong [ref=e162]: 0 leads
+            - text: with
+            - strong [ref=e163]: 0 active in pipeline
+            - text: and a
+            - strong [ref=e164]: 0% conversion rate
+            - text: . 91 of 98 units booked or sold, generating
+            - strong [ref=e165]: AED 70.27M
+            - text: in revenue to date.
+        - generic [ref=e166]:
+          - generic [ref=e167]: Project to Date (Cumulative)
+          - generic [ref=e168]:
+            - generic [ref=e169]:
+              - generic [ref=e170]: Total Leads
+              - generic [ref=e171]: "0"
+            - generic [ref=e172]:
+              - generic [ref=e173]: Active Pipeline
+              - generic [ref=e174]: "0"
+            - generic [ref=e175]:
+              - generic [ref=e176]: Conversion Rate
+              - generic [ref=e177]: 0%
+            - generic [ref=e178]:
+              - generic [ref=e179]: Units Sold
+              - generic [ref=e180]: 91 / 98
+            - generic [ref=e181]:
+              - generic [ref=e182]: Revenue Booked
+              - generic [ref=e183]: AED 70.27M
+            - generic [ref=e184]:
+              - generic [ref=e185]: Avg Sale Cycle
+              - generic [ref=e186]: 0d
+        - generic [ref=e187]:
+          - generic [ref=e188]: This Period — May 2026
+          - generic [ref=e189]:
+            - generic [ref=e190]:
+              - generic [ref=e191]: New Leads
+              - generic [ref=e192]: "0"
+              - generic [ref=e193]: no change
+            - generic [ref=e194]:
+              - generic [ref=e195]: Activities Logged
+              - generic [ref=e196]: "0"
+              - generic [ref=e197]: no change
+            - generic [ref=e198]:
+              - generic [ref=e199]: Units Sold
+              - generic [ref=e200]: "91"
+              - generic [ref=e201]: ↑ +91
+            - generic [ref=e202]:
+              - generic [ref=e203]: Revenue Booked
+              - generic [ref=e204]: AED 70.27M
+              - generic [ref=e205]: ↑ +70266500
+        - generic [ref=e206]:
+          - generic [ref=e207]: Lead Pipeline Funnel
+          - generic [ref=e208]:
+            - generic [ref=e209]:
+              - generic [ref=e210]: New
+              - generic [ref=e212]: "0"
+            - generic [ref=e213]:
+              - generic [ref=e214]: Contacted
+              - generic [ref=e216]: "0"
+            - generic [ref=e217]:
+              - generic [ref=e218]: Qualified
+              - generic [ref=e220]: "0"
+            - generic [ref=e221]:
+              - generic [ref=e222]: Proposal
+              - generic [ref=e224]: "0"
+            - generic [ref=e225]:
+              - generic [ref=e226]: Negotiation
+              - generic [ref=e228]: "0"
+            - generic [ref=e229]:
+              - generic [ref=e230]: Closed Won
+              - generic [ref=e232]: "0"
+            - generic [ref=e233]:
+              - generic [ref=e234]: Closed Lost
+              - generic [ref=e236]: "0"
+        - generic [ref=e237]:
+          - generic [ref=e238]:
+            - generic [ref=e239]: Unit Status
+            - generic [ref=e240]:
+              - 'generic "Available: 7" [ref=e241]'
+              - 'generic "Sold: 91" [ref=e242]'
+            - generic [ref=e243]:
+              - generic [ref=e244]:
+                - text: Available
+                - generic [ref=e246]: "7"
+              - generic [ref=e247]:
+                - text: Sold
+                - generic [ref=e249]: "91"
+          - generic [ref=e250]:
+            - generic [ref=e251]:
+              - generic [ref=e252]: Leads vs Sales — 6 Month Trend
+              - generic [ref=e253]:
+                - generic [ref=e254]: Leads In
+                - generic [ref=e256]: Units Sold
+            - img [ref=e258]:
+              - generic [ref=e259]: Dec
+              - generic [ref=e260]: Jan
+              - generic [ref=e261]: Feb
+              - generic [ref=e262]: Mar
+              - generic [ref=e263]: Apr
+              - generic [ref=e265]: May
+        - generic [ref=e266]:
+          - generic [ref=e267]: Lead Source Breakdown
+          - table [ref=e269]:
+            - rowgroup [ref=e270]:
+              - row "Source Total Active Won Conversion %" [ref=e271]:
+                - columnheader "Source" [ref=e272]
+                - columnheader "Total" [ref=e273]
+                - columnheader "Active" [ref=e274]
+                - columnheader "Won" [ref=e275]
+                - columnheader "Conversion %" [ref=e276]
+            - rowgroup [ref=e277]:
+              - row "No lead sources yet." [ref=e278]:
+                - cell "No lead sources yet." [ref=e279]

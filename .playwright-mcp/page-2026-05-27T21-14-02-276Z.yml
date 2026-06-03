@@ -1,0 +1,401 @@
+- generic:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - banner:
+            - generic:
+              - generic:
+                - link:
+                  - /url: /dashboard/org/kzqoemxlflvpsvhnfdrp
+                  - img
+                - generic:
+                  - generic:
+                    - img
+                  - generic:
+                    - link:
+                      - /url: /dashboard/org/kzqoemxlflvpsvhnfdrp
+                      - img
+                      - generic: Regent Developments
+                      - generic: Free
+                    - button:
+                      - generic:
+                        - img
+                  - generic:
+                    - generic:
+                      - img
+                    - generic:
+                      - link:
+                        - /url: /dashboard/project/kdxvhrwnnehicgdryowu
+                        - img
+                        - generic: golf-grove-dms
+                      - button:
+                        - generic:
+                          - img
+                    - generic:
+                      - img
+                    - generic:
+                      - link:
+                        - /url: /dashboard/project/kdxvhrwnnehicgdryowu
+                        - generic: main
+                        - generic: Production
+                      - button:
+                        - generic:
+                          - img
+                - generic:
+                  - button:
+                    - generic:
+                      - img
+                    - generic: Connect
+              - generic:
+                - generic:
+                  - generic: Feedback
+                - generic:
+                  - button:
+                    - generic:
+                      - img
+                      - paragraph: Search...
+                    - generic:
+                      - generic: Ctrl K
+                  - button [ref=e614] [cursor=pointer]:
+                    - generic [ref=e264]:
+                      - img [ref=e265]
+                      - generic [ref=e268]: Help
+                  - button [ref=e615] [cursor=pointer]:
+                    - generic [ref=e271]:
+                      - img [ref=e272]
+                      - generic [ref=e274]: Advisor Center
+                  - button [ref=e616] [cursor=pointer]:
+                    - generic [ref=e276]:
+                      - img [ref=e277]
+                      - generic [ref=e279]: SQL Editor
+                  - button [ref=e617] [cursor=pointer]:
+                    - generic [ref=e281]:
+                      - img [ref=e284]
+                      - generic [ref=e287]: AI Assistant
+                - button [ref=e618] [cursor=pointer]:
+                  - img [ref=e619]
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - list:
+                      - generic:
+                        - listitem:
+                          - link:
+                            - /url: /dashboard/project/kdxvhrwnnehicgdryowu
+                            - img
+                        - listitem:
+                          - link:
+                            - /url: /dashboard/project/kdxvhrwnnehicgdryowu/editor
+                            - img
+                        - listitem:
+                          - link:
+                            - /url: /dashboard/project/kdxvhrwnnehicgdryowu/sql
+                            - img
+                      - generic:
+                        - listitem:
+                          - link:
+                            - /url: /dashboard/project/kdxvhrwnnehicgdryowu/database/schemas
+                            - img
+                        - listitem:
+                          - link:
+                            - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/users
+                            - img
+                        - listitem:
+                          - link:
+                            - /url: /dashboard/project/kdxvhrwnnehicgdryowu/storage/files
+                            - img
+                        - listitem:
+                          - link:
+                            - /url: /dashboard/project/kdxvhrwnnehicgdryowu/functions
+                            - img
+                        - listitem:
+                          - link:
+                            - /url: /dashboard/project/kdxvhrwnnehicgdryowu/realtime/inspector
+                            - img
+                      - generic:
+                        - generic:
+                          - listitem:
+                            - link:
+                              - /url: /dashboard/project/kdxvhrwnnehicgdryowu/advisors/security
+                              - img
+                        - listitem:
+                          - link:
+                            - /url: /dashboard/project/kdxvhrwnnehicgdryowu/observability
+                            - img
+                        - listitem:
+                          - link:
+                            - /url: /dashboard/project/kdxvhrwnnehicgdryowu/logs/explorer
+                            - img
+                        - listitem:
+                          - link:
+                            - /url: /dashboard/project/kdxvhrwnnehicgdryowu/integrations
+                            - img
+                      - generic:
+                        - listitem:
+                          - link:
+                            - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/general
+                            - img
+                - generic:
+                  - generic:
+                    - button:
+                      - generic:
+                        - img
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading [level=4]: Settings
+                              - generic:
+                                - generic:
+                                  - menu [disabled]:
+                                    - list:
+                                      - generic:
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic:
+                                                  - generic: Configuration
+                                            - generic:
+                                              - link [disabled]:
+                                                - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/general
+                                                - menuitem [disabled]:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: General
+                                              - link [disabled]:
+                                                - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/compute-and-disk
+                                                - menuitem [disabled]:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: Compute and Disk
+                                              - link [disabled]:
+                                                - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/infrastructure
+                                                - menuitem [disabled]:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: Infrastructure
+                                              - link [disabled]:
+                                                - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/integrations
+                                                - menuitem [disabled]:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: Integrations
+                                              - link [disabled]:
+                                                - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/api-keys
+                                                - menuitem [disabled]:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: API Keys
+                                              - link [disabled]:
+                                                - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/jwt
+                                                - menuitem [disabled]:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: JWT Keys
+                                              - link [disabled]:
+                                                - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/log-drains
+                                                - menuitem [disabled]:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: Log Drains
+                                              - link [disabled]:
+                                                - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/addons
+                                                - menuitem [disabled]:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: Add-ons
+                                      - generic:
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic:
+                                                  - generic: Integrations
+                                            - generic:
+                                              - link [disabled]:
+                                                - /url: /dashboard/project/kdxvhrwnnehicgdryowu/integrations/data_api/overview
+                                                - menuitem [disabled]:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: Data API
+                                                      - generic:
+                                                        - img
+                                              - link [disabled]:
+                                                - /url: /dashboard/project/kdxvhrwnnehicgdryowu/integrations/vault/overview
+                                                - menuitem [disabled]:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: Vault
+                                                        - generic: Beta
+                                                      - generic:
+                                                        - img
+                                      - generic:
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic:
+                                                  - generic: Billing
+                                            - generic:
+                                              - link [disabled]:
+                                                - /url: /dashboard/org/kzqoemxlflvpsvhnfdrp/billing
+                                                - menuitem [disabled]:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: Subscription
+                                                      - generic:
+                                                        - img
+                                              - link [disabled]:
+                                                - /url: /dashboard/org/kzqoemxlflvpsvhnfdrp/usage?projectRef=kdxvhrwnnehicgdryowu
+                                                - menuitem [disabled]:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: Usage
+                                                      - generic:
+                                                        - img
+                      - separator [disabled]:
+                        - generic:
+                          - img
+                      - generic:
+                        - generic:
+                          - main:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - generic:
+                                      - generic:
+                                        - generic:
+                                          - heading [level=1]: API Keys
+                                          - paragraph: Configure API keys to securely control access to your project
+                                    - generic:
+                                      - generic:
+                                        - link:
+                                          - /url: https://supabase.com/docs/guides/api/api-keys
+                                          - generic:
+                                            - img
+                                          - generic: Docs
+                                - navigation:
+                                  - menu:
+                                    - listitem:
+                                      - link:
+                                        - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/api-keys
+                                        - text: Publishable and secret API keys
+                                    - listitem:
+                                      - link:
+                                        - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/api-keys/legacy
+                                        - text: Legacy anon, service_role API keys
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - generic:
+                                      - generic:
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic:
+                                                  - code: anon
+                                                  - code: public
+                                          - generic:
+                                            - generic:
+                                              - group:
+                                                - textbox: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkeHZocndubmVoaWNnZHJ5b3d1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTg2NjMsImV4cCI6MjA5MTIzNDY2M30.uMlyBkTeth6nVl8ofBu9g_AYlnDLkgDyVTsxxaHI_ic
+                                                - group:
+                                                  - button:
+                                                    - generic:
+                                                      - img
+                                                    - generic: Copy
+                                            - paragraph:
+                                              - text: This key is safe to use in a browser if you have enabled Row Level Security for your tables and configured policies.
+                                              - generic:
+                                                - text: Prefer using
+                                                - link:
+                                                  - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/api-keys/new
+                                                  - text: Publishable API keys
+                                                - text: instead.
+                                      - generic:
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic:
+                                                  - code: service_role
+                                                  - code: secret
+                                          - generic:
+                                            - generic:
+                                              - group:
+                                                - textbox: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkeHZocndubmVoaWNnZHJ5b3d1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTY1ODY2MywiZXhwIjoyMDkxMjM0NjYzfQ.q9i53Jx2GXHpX5t89Tdzly0WPiS-TOeiuY36D6uRnUA
+                                                - group:
+                                                  - button:
+                                                    - generic: Reveal
+                                            - paragraph:
+                                              - text: This key has the ability to bypass Row Level Security. Never share it publicly. If leaked, generate a new JWT secret immediately.
+                                              - generic:
+                                                - text: Prefer using
+                                                - link:
+                                                  - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/api-keys/new
+                                                  - text: Secret API keys
+                                                - text: instead.
+                                - generic:
+                                  - generic:
+                                    - generic:
+                                      - generic:
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - paragraph: Disable legacy API keys
+                                              - paragraph: Make sure you are no longer using your legacy API keys before proceeding.
+                                            - button [ref=e620] [cursor=pointer]:
+                                              - generic [ref=e595]: Disable JWT-based API keys
+  - generic:
+    - alert: API Keys (Legacy) | Settings | Supabase
+  - dialog "Disable JWT-based keys" [ref=e622]:
+    - heading "Disable JWT-based keys" [level=2] [ref=e624]
+    - alert [ref=e625]:
+      - img [ref=e626]
+      - generic [ref=e631]:
+        - text: Disabling
+        - code [ref=e632]: anon
+        - text: and
+        - code [ref=e633]: service_role
+        - text: keys while they are in use will cause downtime for your application. Ensure they are no longer in use before proceeding. If you have not created a publishable and at least one secret API key, some dashboard functionality may become unavailable.
+        - generic [ref=e634]:
+          - text: This disables API keys when used in the
+          - code [ref=e635]: apikey
+          - text: header. They remain valid as a JWT.
+    - generic [ref=e636]:
+      - generic [ref=e637]:
+        - generic [ref=e638]: Type disable to confirm.
+        - textbox "Type disable to confirm." [active] [ref=e639]:
+          - /placeholder: disable
+      - generic [ref=e640]:
+        - button "Confirm to disable anon and service_role" [disabled]:
+          - generic: Confirm to disable anon and service_role
+    - button "Close" [ref=e641]:
+      - img [ref=e642]
+      - generic [ref=e645]: Close

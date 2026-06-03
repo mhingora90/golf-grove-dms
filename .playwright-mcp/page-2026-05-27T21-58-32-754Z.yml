@@ -1,0 +1,6 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: Projects
+    - generic [ref=e6]: Select a project to continue
+  - dialog [ref=e8]:
+    - button "Close" [ref=e10]: ×

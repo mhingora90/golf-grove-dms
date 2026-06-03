@@ -1,0 +1,92 @@
+<h2>Finance MIS Report — Layout Options</h2>
+<p class="subtitle">All three cover the same data. Difference is structure and emphasis.</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="padding:12px;font-size:11px;font-family:monospace;background:#1a1a2e;color:#e0e0e0;border-radius:4px;text-align:left;line-height:1.6">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px">
+          <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;text-align:center"><div style="color:#aaa;font-size:9px">CONTRACT VALUE</div><div style="color:#fff;font-weight:bold">AED 12.4M</div></div>
+          <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;text-align:center"><div style="color:#aaa;font-size:9px">CERTIFIED</div><div style="color:#4ade80;font-weight:bold">AED 8.1M</div></div>
+          <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;text-align:center"><div style="color:#aaa;font-size:9px">PAID</div><div style="color:#60a5fa;font-weight:bold">AED 7.2M</div></div>
+          <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;text-align:center"><div style="color:#aaa;font-size:9px">OUTSTANDING</div><div style="color:#f87171;font-weight:bold">AED 0.9M</div></div>
+        </div>
+        <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;margin-bottom:6px">
+          <div style="color:#aaa;font-size:9px;margin-bottom:3px">CONTRACTS TABLE</div>
+          <div style="color:#ccc;font-size:9px">Contractor · Value · Certified · Paid · Retention · %</div>
+          <div style="color:#888;font-size:9px">────────────────────────────────────</div>
+          <div style="color:#ccc;font-size:9px">Civil Works · 4.2M · 3.1M · 2.8M · 0.3M · 74%</div>
+          <div style="color:#ccc;font-size:9px">MEP · 3.8M · 2.4M · 2.1M · 0.2M · 63%</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;text-align:center;color:#aaa;font-size:9px">📊 Monthly Cashflow Chart</div>
+          <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;text-align:center;color:#aaa;font-size:9px">📈 S-Curve Progress</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Top-down</h3>
+      <p>KPI strip → contract table → charts at bottom. Classic report structure. Easy to scan top-to-bottom. Best for printing.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="padding:12px;font-size:11px;font-family:monospace;background:#1a1a2e;color:#e0e0e0;border-radius:4px;text-align:left;line-height:1.6">
+        <div style="display:grid;grid-template-columns:1fr 2fr;gap:6px;margin-bottom:6px">
+          <div>
+            <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;margin-bottom:4px">
+              <div style="color:#aaa;font-size:9px">KPI SUMMARY</div>
+              <div style="color:#4ade80;font-size:9px">✓ 65% Complete</div>
+              <div style="color:#60a5fa;font-size:9px">AED 7.2M Paid</div>
+              <div style="color:#f59e0b;font-size:9px">AED 0.9M Outstanding</div>
+            </div>
+            <div style="background:#3a1a1a;padding:4px 6px;border-radius:3px;border-left:2px solid #f87171">
+              <div style="color:#f87171;font-size:9px">⚠ ALERTS</div>
+              <div style="color:#ccc;font-size:9px">IPC-003 overdue 14d</div>
+              <div style="color:#ccc;font-size:9px">Retention due Q4</div>
+            </div>
+          </div>
+          <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;text-align:center;color:#aaa;font-size:9px;display:flex;align-items:center;justify-content:center">
+            📊 Cashflow Chart (main focus)
+          </div>
+        </div>
+        <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px">
+          <div style="color:#aaa;font-size:9px;margin-bottom:2px">CONTRACT TABLE</div>
+          <div style="color:#ccc;font-size:9px">Civil · MEP · Fit-Out · Landscaping</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Dashboard split</h3>
+      <p>KPIs + alerts left, chart dominates right, table below. Executive-style. Highlights problems immediately. Better on screen than print.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="padding:12px;font-size:11px;font-family:monospace;background:#1a1a2e;color:#e0e0e0;border-radius:4px;text-align:left;line-height:1.6">
+        <div style="background:#1e3a5f;padding:4px 8px;border-radius:3px;margin-bottom:6px;text-align:center">
+          <div style="color:#93c5fd;font-size:10px;font-weight:bold">FINANCE REPORT — GOLF GROVE DPC — MAY 2026</div>
+          <div style="color:#60a5fa;font-size:9px">Generated 28/05/2026 · Regent Developments</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:6px">
+          <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;text-align:center"><div style="color:#aaa;font-size:9px">OVERALL PROGRESS</div><div style="color:#4ade80;font-weight:bold;font-size:14px">65%</div></div>
+          <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;text-align:center"><div style="color:#aaa;font-size:9px">CERTIFIED TO DATE</div><div style="color:#fff;font-weight:bold">AED 8.1M</div></div>
+          <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;text-align:center"><div style="color:#aaa;font-size:9px">RETENTION HELD</div><div style="color:#f59e0b;font-weight:bold">AED 0.4M</div></div>
+        </div>
+        <div style="background:#2a2a4e;padding:4px 6px;border-radius:3px;margin-bottom:4px;text-align:center;color:#aaa;font-size:9px">📊 Cashflow · 📈 S-Curve · 📋 Contract Table</div>
+        <div style="background:#1a3a1a;padding:4px 6px;border-radius:3px;border-left:2px solid #4ade80">
+          <div style="color:#4ade80;font-size:9px">EXECUTIVE SUMMARY (auto-generated text)</div>
+          <div style="color:#ccc;font-size:9px">"Project is 65% complete. 3 of 4 contractors on schedule. IPC-003 payment outstanding 14 days…"</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Formal report</h3>
+      <p>Branded header, progress % as hero number, charts + table, plus auto-generated executive summary paragraph. Most professional for board presentations.</p>
+    </div>
+  </div>
+
+</div>

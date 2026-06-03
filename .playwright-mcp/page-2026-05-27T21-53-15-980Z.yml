@@ -1,0 +1,201 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - banner [ref=e6]:
+        - generic [ref=e7]:
+          - generic [ref=e8]:
+            - link "Supabase" [ref=e9] [cursor=pointer]:
+              - /url: /dashboard/org/kzqoemxlflvpsvhnfdrp
+              - img "Supabase" [ref=e10]
+            - img [ref=e14]
+            - button "Connect" [disabled] [ref=e18]:
+              - img [ref=e20]
+              - generic [ref=e22]: Connect
+          - generic [ref=e23]:
+            - generic [ref=e25] [cursor=pointer]: Feedback
+            - generic [ref=e26]:
+              - button "Search..." [ref=e27]:
+                - generic [ref=e28]:
+                  - img [ref=e29]
+                  - paragraph [ref=e32]: Search...
+                - generic [ref=e34]: Ctrl K
+              - button "Help" [ref=e35] [cursor=pointer]:
+                - generic [ref=e36]:
+                  - img [ref=e37]
+                  - generic [ref=e40]: Help
+              - button "Advisor Center" [ref=e42] [cursor=pointer]:
+                - generic [ref=e43]:
+                  - img [ref=e44]
+                  - generic [ref=e46]: Advisor Center
+              - button "SQL Editor" [ref=e47] [cursor=pointer]:
+                - generic [ref=e48]:
+                  - img [ref=e49]
+                  - generic [ref=e51]: SQL Editor
+              - button "AI Assistant" [ref=e52] [cursor=pointer]:
+                - generic [ref=e53]:
+                  - img [ref=e56]
+                  - generic [ref=e59]: AI Assistant
+            - button "mhingora90" [ref=e60] [cursor=pointer]:
+              - img "mhingora90" [ref=e62]
+      - generic [ref=e63]:
+        - generic [ref=e67]:
+          - list [ref=e70]:
+            - generic [ref=e71]:
+              - listitem [ref=e72]:
+                - link "Project Overview" [ref=e73] [cursor=pointer]:
+                  - /url: /dashboard/project/kdxvhrwnnehicgdryowu
+                  - img [ref=e74]
+                  - generic: Project Overview
+              - listitem [ref=e76]:
+                - button "Table Editor" [disabled]:
+                  - img
+                  - generic: Table Editor
+              - listitem [ref=e77]:
+                - button "SQL Editor" [disabled]:
+                  - img
+                  - generic: SQL Editor
+            - generic [ref=e78]:
+              - listitem [ref=e79]:
+                - button "Database" [disabled]:
+                  - img
+                  - generic: Database
+              - listitem [ref=e80]:
+                - button "Authentication" [disabled]:
+                  - img
+                  - generic: Authentication
+              - listitem [ref=e81]:
+                - button "Storage" [disabled]:
+                  - img
+                  - generic: Storage
+              - listitem [ref=e82]:
+                - link "Edge Functions" [ref=e83] [cursor=pointer]:
+                  - /url: /dashboard/project/kdxvhrwnnehicgdryowu/functions
+                  - img [ref=e84]
+                  - generic: Edge Functions
+              - listitem [ref=e89]:
+                - button "Realtime" [disabled]:
+                  - img
+                  - generic: Realtime
+            - generic [ref=e90]:
+              - listitem [ref=e92]:
+                - button "Advisors" [disabled]:
+                  - img
+                  - generic: Advisors
+              - listitem [ref=e93]:
+                - button "Observability" [disabled]:
+                  - img
+                  - generic: Observability
+              - listitem [ref=e94]:
+                - link "Logs" [ref=e95] [cursor=pointer]:
+                  - /url: /dashboard/project/kdxvhrwnnehicgdryowu/logs/explorer
+                  - img [ref=e96]
+                  - generic: Logs
+              - listitem [ref=e97]:
+                - button "Integrations" [disabled]:
+                  - img
+                  - generic: Integrations
+            - listitem [ref=e99]:
+              - link "Project Settings" [ref=e100] [cursor=pointer]:
+                - /url: /dashboard/project/kdxvhrwnnehicgdryowu/settings/general
+                - img [ref=e101]
+                - generic: Project Settings
+          - button "Sidebar control" [ref=e106] [cursor=pointer]:
+            - img [ref=e108]
+        - generic [ref=e115]:
+          - generic [ref=e119]:
+            - heading "Authentication" [level=4] [ref=e121]
+            - menu "Sidebar" [disabled] [ref=e124]:
+              - list [ref=e125]:
+                - generic [ref=e128]:
+                  - generic [ref=e132]: Manage
+                  - generic [ref=e133]:
+                    - link "Users" [disabled] [ref=e134] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/users
+                      - menuitem "Users" [disabled] [ref=e135]:
+                        - generic [ref=e139]: Users
+                    - link "OAuth Apps" [disabled] [ref=e140] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/oauth-apps
+                      - menuitem "OAuth Apps" [disabled] [ref=e141]:
+                        - generic [ref=e145]: OAuth Apps
+                - generic [ref=e149]:
+                  - generic [ref=e153]: Notifications
+                  - link "Emails" [disabled] [ref=e155] [cursor=pointer]:
+                    - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/templates
+                    - menuitem "Emails" [disabled] [ref=e156]:
+                      - generic [ref=e160]: Emails
+                - generic [ref=e164]:
+                  - generic [ref=e168]: Configuration
+                  - generic [ref=e169]:
+                    - link "Policies" [disabled] [ref=e170] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/policies
+                      - menuitem "Policies" [disabled] [ref=e171]:
+                        - generic [ref=e175]: Policies
+                    - link "Sign In / Providers" [disabled] [ref=e176] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/providers
+                      - menuitem "Sign In / Providers" [disabled] [ref=e177]:
+                        - generic [ref=e181]: Sign In / Providers
+                    - link "OAuth Server Beta" [disabled] [ref=e182] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/oauth-server
+                      - menuitem "OAuth Server Beta" [disabled] [ref=e183]:
+                        - generic [ref=e186]:
+                          - generic [ref=e187]: OAuth Server
+                          - generic [ref=e188]: Beta
+                    - link "Sessions" [disabled] [ref=e189] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/sessions
+                      - menuitem "Sessions" [disabled] [ref=e190]:
+                        - generic [ref=e194]: Sessions
+                    - link "Rate Limits" [disabled] [ref=e195] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/rate-limits
+                      - menuitem "Rate Limits" [disabled] [ref=e196]:
+                        - generic [ref=e200]: Rate Limits
+                    - link "Multi-Factor" [disabled] [ref=e201] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/mfa
+                      - menuitem "Multi-Factor" [disabled] [ref=e202]:
+                        - generic [ref=e206]: Multi-Factor
+                    - link "URL Configuration" [disabled] [ref=e207] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/url-configuration
+                      - menuitem "URL Configuration" [disabled] [ref=e208]:
+                        - generic [ref=e212]: URL Configuration
+                    - link "Attack Protection" [disabled] [ref=e213] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/protection
+                      - menuitem "Attack Protection" [disabled] [ref=e214]:
+                        - generic [ref=e218]: Attack Protection
+                    - link "Auth Hooks Beta" [disabled] [ref=e219] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/hooks
+                      - menuitem "Auth Hooks Beta" [disabled] [ref=e220]:
+                        - generic [ref=e223]:
+                          - generic [ref=e224]: Auth Hooks
+                          - generic [ref=e225]: Beta
+                    - link "Audit Logs" [disabled] [ref=e226] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/audit-logs
+                      - menuitem "Audit Logs" [disabled] [ref=e227]:
+                        - generic [ref=e231]: Audit Logs
+                    - link "Performance" [disabled] [ref=e232] [cursor=pointer]:
+                      - /url: /dashboard/project/kdxvhrwnnehicgdryowu/auth/performance
+                      - menuitem "Performance" [disabled] [ref=e233]:
+                        - generic [ref=e237]: Performance
+          - separator [disabled] [ref=e238]:
+            - img [ref=e240]
+          - main [ref=e249]:
+            - generic [ref=e252]:
+              - generic [ref=e253]:
+                - heading "Rate Limits" [level=1] [ref=e254]
+                - generic [ref=e255]: Safeguard against bursts of incoming traffic to prevent abuse and maximize stability
+              - link "Docs" [ref=e257] [cursor=pointer]:
+                - /url: https://supabase.com/docs/guides/platform/going-into-prod#rate-limiting-resource-allocation--abuse-prevention
+                - img [ref=e259]
+                - generic [ref=e262]: Docs
+    - generic [ref=e273]:
+      - generic:
+        - img "Background pattern"
+      - generic [ref=e274]:
+        - button "Close banner" [ref=e276] [cursor=pointer]:
+          - img [ref=e278]
+        - generic [ref=e281]:
+          - generic [ref=e282]: Notice
+          - generic [ref=e283]:
+            - paragraph [ref=e284]: We've updated our Terms of Service
+            - paragraph [ref=e285]: Updates define the responsibilities of both you and Supabase in the use of AI.
+          - button "Learn more" [ref=e286] [cursor=pointer]:
+            - generic [ref=e287]: Learn more
+  - alert [ref=e288]: Rate Limits | Authentication | Supabase

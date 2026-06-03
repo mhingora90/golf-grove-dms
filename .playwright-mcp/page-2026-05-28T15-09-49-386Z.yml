@@ -1,0 +1,230 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: Active Project
+      - generic [ref=e6]: Golf Grove – DPC
+    - generic [ref=e7]:
+      - generic [ref=e8]: MH
+      - generic [ref=e9]:
+        - generic [ref=e10]: Mohammed Hingora
+        - generic [ref=e11]: developer
+    - generic [ref=e12]: Main
+    - generic [ref=e13] [cursor=pointer]:
+      - img [ref=e14]
+      - text: Dashboard
+    - generic [ref=e19]: Document Control
+    - generic [ref=e20] [cursor=pointer]:
+      - img [ref=e21]
+      - text: Drawing Register
+    - generic [ref=e23] [cursor=pointer]:
+      - img [ref=e24]
+      - text: Submittals (DSUB)
+      - generic [ref=e27]: "1"
+    - generic [ref=e28] [cursor=pointer]:
+      - img [ref=e29]
+      - text: Submittal Register
+    - generic [ref=e31]: Site
+    - generic [ref=e32] [cursor=pointer]:
+      - img [ref=e33]
+      - text: Inspection Requests
+    - generic [ref=e36] [cursor=pointer]:
+      - img [ref=e37]
+      - text: NCRs
+    - generic [ref=e40] [cursor=pointer]:
+      - img [ref=e41]
+      - text: RFIs
+    - generic [ref=e45] [cursor=pointer]:
+      - img [ref=e46]
+      - text: Transmittals
+    - generic [ref=e48] [cursor=pointer]:
+      - img [ref=e49]
+      - text: Method Statements
+    - generic [ref=e52] [cursor=pointer]:
+      - img [ref=e53]
+      - text: Correspondence
+    - generic [ref=e56] [cursor=pointer]:
+      - img [ref=e57]
+      - text: Punch List
+      - generic [ref=e60]: "0"
+    - generic [ref=e61]: Finance
+    - generic [ref=e62] [cursor=pointer]:
+      - img [ref=e63]
+      - text: Finance Overview
+    - generic [ref=e66] [cursor=pointer]:
+      - img [ref=e67]
+      - text: Payment Certificates
+    - generic [ref=e70] [cursor=pointer]:
+      - img [ref=e71]
+      - text: BOQ Setup
+    - generic [ref=e74]:
+      - generic [ref=e75]: Sales
+      - generic [ref=e76] [cursor=pointer]:
+        - img [ref=e77]
+        - text: CRM Home
+      - generic [ref=e82] [cursor=pointer]:
+        - img [ref=e83]
+        - text: Leads
+        - generic [ref=e87]: "0"
+      - generic [ref=e88] [cursor=pointer]:
+        - img [ref=e89]
+        - text: Unit Setup
+      - generic [ref=e92] [cursor=pointer]:
+        - img [ref=e93]
+        - text: Unit Register
+      - generic [ref=e96] [cursor=pointer]:
+        - img [ref=e97]
+        - text: Sales Revenue
+    - generic [ref=e100]:
+      - generic [ref=e101]: Reports
+      - generic [ref=e102] [cursor=pointer]:
+        - img [ref=e103]
+        - text: Reports
+    - generic [ref=e106]: Admin
+    - generic [ref=e107] [cursor=pointer]:
+      - img [ref=e108]
+      - text: Subcontractors
+    - generic [ref=e114] [cursor=pointer]:
+      - img [ref=e115]
+      - text: User Management
+    - button "Sign Out" [ref=e119] [cursor=pointer]
+  - generic [ref=e120]:
+    - generic [ref=e121]:
+      - generic [ref=e122]:
+        - generic [ref=e123]: Reports
+        - generic [ref=e124]: Thursday, 28 May 2026
+      - generic [ref=e126] [cursor=pointer]:
+        - generic [ref=e128]: Golf Grove – DPC
+        - generic [ref=e129]: ▼
+      - generic [ref=e132]: developer
+    - generic [ref=e393]:
+      - generic [ref=e394]:
+        - generic [ref=e395]:
+          - link "All Reports" [ref=e396] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e397]
+            - text: All Reports
+          - img [ref=e399]
+          - generic [ref=e401]: Finance Report
+        - generic [ref=e402]:
+          - generic [ref=e403]:
+            - heading "Finance MIS Report" [level=1] [ref=e404]
+            - generic [ref=e405]: Golf Grove – DPC
+          - button "Export PDF" [ref=e406] [cursor=pointer]:
+            - img [ref=e407]
+            - text: Export PDF
+        - generic [ref=e409]:
+          - img [ref=e410]
+          - generic [ref=e413]: Period
+          - combobox [ref=e414] [cursor=pointer]:
+            - option "January"
+            - option "February"
+            - option "March"
+            - option "April"
+            - option "May" [selected]
+            - option "June"
+            - option "July"
+            - option "August"
+            - option "September"
+            - option "October"
+            - option "November"
+            - option "December"
+          - combobox [ref=e415] [cursor=pointer]:
+            - option "2024"
+            - option "2025"
+            - option "2026" [selected]
+            - option "2027"
+            - option "2028"
+          - generic [ref=e416]: Generated 28/05/2026
+      - generic [ref=e417]:
+        - generic [ref=e418]:
+          - generic [ref=e419]: Executive Summary
+          - paragraph [ref=e420]:
+            - text: As of May 2026, the project is
+            - strong [ref=e421]: 31% complete
+            - text: . AED 729K has been certified against a total contract value of AED 2.4M. This period, AED 729K (100% of certified to date) was certified. 1 (AED 650K) outstanding. Retention of AED 73K is held to date.
+        - generic [ref=e422]:
+          - generic [ref=e423]: Project to Date (Cumulative)
+          - generic [ref=e424]:
+            - generic [ref=e425]:
+              - generic [ref=e426]: Contract Value
+              - generic [ref=e427]: AED 2.4M
+            - generic [ref=e428]:
+              - generic [ref=e429]: Certified
+              - generic [ref=e430]: AED 729K
+              - generic [ref=e431]: ↑ +AED 729K
+            - generic [ref=e432]:
+              - generic [ref=e433]: Paid
+              - generic [ref=e434]: AED 0K
+            - generic [ref=e435]:
+              - generic [ref=e436]: Outstanding
+              - generic [ref=e437]: AED 650K
+            - generic [ref=e438]:
+              - generic [ref=e439]: Retention
+              - generic [ref=e440]: AED 73K
+            - generic [ref=e441]:
+              - generic [ref=e442]: "% Complete"
+              - generic [ref=e443]: 31%
+        - generic [ref=e444]:
+          - generic [ref=e445]: This Period — May 2026
+          - generic [ref=e446]:
+            - generic [ref=e447]:
+              - generic [ref=e448]: Claimed
+              - generic [ref=e449]: AED 729K
+              - generic [ref=e450]: ↑ +AED 729K
+            - generic [ref=e451]:
+              - generic [ref=e452]: Certified
+              - generic [ref=e453]: AED 729K
+              - generic [ref=e454]: ↑ +AED 729K
+            - generic [ref=e455]:
+              - generic [ref=e456]: Paid
+              - generic [ref=e457]: AED 0K
+            - generic [ref=e458]:
+              - generic [ref=e459]: Certs Issued
+              - generic [ref=e460]: "1"
+              - generic [ref=e461]: "1"
+        - generic [ref=e462]:
+          - generic [ref=e463]: Contract Breakdown
+          - table [ref=e465]:
+            - rowgroup [ref=e466]:
+              - row "Contract Contractor Awarded BOQ Certified Paid Outstanding Retention %" [ref=e467]:
+                - columnheader "Contract" [ref=e468]
+                - columnheader "Contractor" [ref=e469]
+                - columnheader "Awarded" [ref=e470]
+                - columnheader "BOQ" [ref=e471]
+                - columnheader "Certified" [ref=e472]
+                - columnheader "Paid" [ref=e473]
+                - columnheader "Outstanding" [ref=e474]
+                - columnheader "Retention" [ref=e475]
+                - columnheader "%" [ref=e476]
+            - rowgroup [ref=e477]:
+              - row "Enabling Works Aquapile Contracting LLC 2.35M — 0K 0K 0K 0K 0%" [ref=e478]:
+                - cell "Enabling Works" [ref=e479]
+                - cell "Aquapile Contracting LLC" [ref=e480]
+                - cell "2.35M" [ref=e481]
+                - cell "—" [ref=e482]
+                - cell "0K" [ref=e483]
+                - cell "0K" [ref=e484]
+                - cell "0K" [ref=e485]
+                - cell "0K" [ref=e486]
+                - cell "0%" [ref=e487]:
+                  - generic [ref=e488]: 0%
+        - generic [ref=e490]:
+          - generic [ref=e492]:
+            - generic [ref=e493]: Monthly Cashflow
+            - img [ref=e494]:
+              - generic [ref=e495]: Dec
+              - generic [ref=e496]: Jan
+              - generic [ref=e497]: Feb
+              - generic [ref=e498]: Mar
+              - generic [ref=e499]: Apr
+              - generic [ref=e502]: May
+            - generic [ref=e503]:
+              - generic [ref=e504]: ▮ Claimed
+              - generic [ref=e505]: ▮ Certified
+              - generic [ref=e506]: ▮ Paid
+          - generic [ref=e508]:
+            - generic [ref=e509]: S-Curve (Cumulative Certified vs Planned)
+            - img [ref=e510]
+            - generic [ref=e514]:
+              - generic [ref=e515]: — Actual
+              - generic [ref=e516]: "- - Planned"

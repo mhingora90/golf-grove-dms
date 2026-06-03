@@ -1,0 +1,25 @@
+[      93ms] ReferenceError: renderDocsReport is not defined
+    at _execRender (http://localhost:8080/src/nav.js:135:5)
+    at render (http://localhost:8080/src/nav.js:158:11)
+    at nav (http://localhost:8080/src/nav.js:52:3)
+    at http://localhost:8080/src/init.js:15:7
+[   10967ms] Identifier '_DISC_ORDER' has already been declared
+[   10952ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8080/#reports-docs:0
+[   10953ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8080/#reports-docs:0
+[   11558ms] ReferenceError: renderDocsReport is not defined
+    at _execRender (http://localhost:8080/src/nav.js:135:5)
+    at render (http://localhost:8080/src/nav.js:158:11)
+    at nav (http://localhost:8080/src/nav.js:52:3)
+    at setCurrentProject (http://localhost:8080/src/projects.js:107:3)
+    at loadApp (http://localhost:8080/src/auth.js:116:16)
+    at async http://localhost:8080/src/init.js:5:21
+[   80949ms] Identifier '_DISC_ORDER' has already been declared
+[   80958ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8080/#reports-docs:0
+[   80962ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8080/#reports-docs:0
+[   82069ms] ReferenceError: renderDocsReport is not defined
+    at _execRender (http://localhost:8080/src/nav.js:135:5)
+    at render (http://localhost:8080/src/nav.js:158:11)
+    at nav (http://localhost:8080/src/nav.js:52:3)
+    at setCurrentProject (http://localhost:8080/src/projects.js:107:3)
+    at loadApp (http://localhost:8080/src/auth.js:116:16)
+    at async http://localhost:8080/src/init.js:5:21

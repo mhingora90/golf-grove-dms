@@ -436,6 +436,7 @@ function crmHTML(leads, count, stageMap, totalAll, totalPages) {
         onchange="crmSetFilter('dateTo',this.value)" oninput="crmSetFilter('dateTo',this.value)" style="min-width:120px" aria-label="Created to date"></label>
       ${(crmDateFrom || crmDateTo) ? '<button class="btn" onclick="crmClearDates()" style="padding:3px 8px;font-size:11px;line-height:1" title="Clear date filter">\u00d7 Dates</button>' : ''}
       <button class="btn" onclick="crmExportExcel()" title="Export visible leads + activity log to Excel" style="margin-left:auto">↓ Export Excel</button>
+      <button class="btn" id="crm-sync-btn" onclick="crmSyncMetaLeads()" title="Pull new Meta leads from Google Sheet into CRM">\u21bb Sync</button>
       <button class="btn btn-primary" onclick="openAddLead()">+ Add Lead</button>
     </div>`;
 
@@ -1196,4 +1197,37 @@ async function crmExportExcel() {
   const date = new Date().toISOString().slice(0,10);
   XLSX.writeFile(wb, `CRM_Leads_${project}_${date}.xlsx`);
   toast(`Exported ${leads.length} leads`, 'success');
+}
+
+// ─── Manual sync of Meta leads from Google Sheet ─────────────────
+async function crmSyncMetaLeads() {
+  const btn = document.getElementById('crm-sync-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '\u21bb Syncing\u2026'; }
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    const token = session?.access_token;
+    if (!token) { toast('Not signed in', 'error'); return; }
+    const res = await fetch('/api/sync-meta-leads', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      toast(`Sync failed: ${body.error || res.status}`, 'error');
+      return;
+    }
+    const { inserted = 0, duplicates = 0, errors = 0 } = body;
+    if (errors > 0) {
+      toast(`Sync done with ${errors} error(s) — ${inserted} new, ${duplicates} existing`, 'error');
+    } else if (inserted > 0) {
+      toast(`Synced ${inserted} new lead${inserted > 1 ? 's' : ''} (${duplicates} already in CRM)`, 'success');
+    } else {
+      toast(`Up to date — no new leads (${duplicates} checked)`, 'success');
+    }
+    if (typeof renderCRM === 'function') await renderCRM();
+  } catch (e) {
+    toast(`Sync error: ${e.message}`, 'error');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '\u21bb Sync'; }
+  }
 }

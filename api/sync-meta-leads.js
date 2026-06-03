@@ -61,12 +61,37 @@ function rowToLead(r) {
   };
 }
 
-export default async function handler(request) {
-  // Auth: Vercel cron sends `Authorization: Bearer <CRON_SECRET>`.
-  // Also allow manual GET with same header.
-  const auth = request.headers.get('authorization') || '';
+async function isCronSecret(auth) {
   const expected = `Bearer ${process.env.CRON_SECRET || ''}`;
-  if (!process.env.CRON_SECRET || auth !== expected) {
+  return Boolean(process.env.CRON_SECRET) && auth === expected;
+}
+
+// Validate Supabase user JWT: caller must be sales or developer.
+async function isAuthorizedUser(auth) {
+  if (!auth.startsWith('Bearer ')) return false;
+  const token = auth.slice(7);
+  const anonKey = process.env.SUPABASE_ANON_KEY;
+  if (!anonKey) return false;
+  // RLS allows users to read their own profile; query with their token.
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/profiles?select=role&limit=1`,
+    {
+      headers: {
+        apikey: anonKey,
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  if (!res.ok) return false;
+  const rows = await res.json();
+  const role = rows?.[0]?.role;
+  return role === 'sales' || role === 'developer';
+}
+
+export default async function handler(request) {
+  const auth = request.headers.get('authorization') || '';
+  const allowed = (await isCronSecret(auth)) || (await isAuthorizedUser(auth));
+  if (!allowed) {
     return new Response(JSON.stringify({ error: 'unauthorized' }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },

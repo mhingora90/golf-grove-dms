@@ -1,0 +1,10 @@
+[   23839ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/inspections?select=id%2Cref_no%2Cstatus%2Cdepartment%2Cinspection_date%2Crequest_date%2Cdue_date%2Cclosed_date%2Ccreated_at&project_id=eq.00000000-0000-0000-0000-000000000001:0
+[   23840ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/ncrs?select=id%2Cref_no%2Cstatus%2Cseverity%2Croot_cause%2Cdiscipline%2Craised_date%2Cclosed_date%2Ccreated_at%2Cdue_date&project_id=eq.00000000-0000-0000-0000-000000000001:0
+[   23841ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://kdxvhrwnnehicgdryowu.supabase.co/rest/v1/rfis?select=id%2Cref_no%2Cstatus%2Cdue_date%2Ccreated_at%2Cclosed_date%2Cdiscipline&project_id=eq.00000000-0000-0000-0000-000000000001:0
+[   23849ms] TypeError: Cannot read properties of undefined (reading 'reduce')
+    at http://localhost:8765/src/reports-quality.js:338:62
+    at Array.map (<anonymous>)
+    at _qualityAgingChart (http://localhost:8765/src/reports-quality.js:338:43)
+    at _qualityCharts (http://localhost:8765/src/reports-quality.js:429:5)
+    at buildQualityReportHTML (http://localhost:8765/src/reports-quality.js:228:5)
+    at renderQualityReport (http://localhost:8765/src/reports-quality.js:185:25)
