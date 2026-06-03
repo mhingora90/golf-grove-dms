@@ -72,15 +72,20 @@ async function isAuthorizedUser(auth) {
   const token = auth.slice(7);
   const anonKey = process.env.SUPABASE_ANON_KEY;
   if (!anonKey) return false;
-  // RLS allows users to read their own profile; query with their token.
+
+  // Resolve uid from token via Supabase auth endpoint.
+  const userRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+    headers: { apikey: anonKey, Authorization: `Bearer ${token}` },
+  });
+  if (!userRes.ok) return false;
+  const user = await userRes.json();
+  const uid = user?.id;
+  if (!uid) return false;
+
+  // Fetch caller's own profile (RLS lets authenticated users read any profile).
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/profiles?select=role&limit=1`,
-    {
-      headers: {
-        apikey: anonKey,
-        Authorization: `Bearer ${token}`,
-      },
-    },
+    `${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(uid)}&select=role`,
+    { headers: { apikey: anonKey, Authorization: `Bearer ${token}` } },
   );
   if (!res.ok) return false;
   const rows = await res.json();
