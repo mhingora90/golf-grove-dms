@@ -2,6 +2,9 @@
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
+  "crons": [
+    { "path": "/api/sync-meta-leads", "schedule": "0 5 * * *" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

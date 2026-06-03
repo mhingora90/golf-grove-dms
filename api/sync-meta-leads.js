@@ -1,0 +1,145 @@
+// @ts-check
+// Cron: pulls Google Sheet (public CSV) → upserts crm_leads for 241 Waterside.
+// Replaces broken Apps Script trigger. Runs on Vercel cron schedule.
+
+export const config = { runtime: 'edge' };
+
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://kdxvhrwnnehicgdryowu.supabase.co';
+const SHEET_ID = '1MilS5L6fbmbm4w1xStoVvitX5vgvyrG0RWczSHRxNqo';
+const SHEET_NAME = 'Automatic Meta Leads';
+const PROJECT_ID = '00000000-0000-0000-0000-000000000002'; // 241 Waterside
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [], cell = '', inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQ) {
+      if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+      else if (c === '"') inQ = false;
+      else cell += c;
+    } else {
+      if (c === '"') inQ = true;
+      else if (c === ',') { row.push(cell); cell = ''; }
+      else if (c === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+      else if (c === '\r') { /* skip */ }
+      else cell += c;
+    }
+  }
+  if (cell.length || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+
+// SyncWith export layout (observed in sheet):
+// 0=meta_lead_id(l:), 1=created_time, 2=ad_id, 3=ad_name, 4=adset_id, 5=adset_name,
+// 6=campaign_id, 7=campaign_name, 8=form_id(f:), 9=form_name, 10=is_organic,
+// 11=platform, 12=status, 13=broker_type, 14=budget_range, 15=property_types,
+// 16=availability, 17=company_name, 18=first_name, 19=email, 20=phone(p:)
+function rowToLead(r) {
+  const idRaw = (r[0] || '').trim();
+  const metaLeadId = idRaw.startsWith('l:') ? idRaw.slice(2) : idRaw;
+  if (!metaLeadId) return null;
+  const phone = (r[20] || '').replace(/^p:/, '').trim() || null;
+  const formId = (r[8] || '').replace(/^f:/, '').trim() || null;
+  return {
+    project_id:     PROJECT_ID,
+    meta_lead_id:   metaLeadId,
+    name:           (r[18] || '').trim() || null,
+    company_name:   (r[17] || '').trim() || null,
+    email:          (r[19] || '').trim() || null,
+    phone,
+    created_time:   (r[14] || '').trim() || null,
+    ad_id:          (r[15] || '').trim() || null,
+    created_at:     (r[1]  || '').trim() || null,
+    source:         'meta_ads',
+    broker_type:    (r[13] || '').trim() || null,
+    budget_range:   (r[14] || '').trim() || null,
+    property_types: (r[15] || '').trim() || null,
+    availability:   (r[16] || '').trim() || null,
+    first_name:     (r[18] || '').trim() || null,
+    meta_form_id:   formId,
+  };
+}
+
+export default async function handler(request) {
+  // Auth: Vercel cron sends `Authorization: Bearer <CRON_SECRET>`.
+  // Also allow manual GET with same header.
+  const auth = request.headers.get('authorization') || '';
+  const expected = `Bearer ${process.env.CRON_SECRET || ''}`;
+  if (!process.env.CRON_SECRET || auth !== expected) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const SUPABASE_KEY = process.env.SUPABASE_KEY;
+  if (!SUPABASE_KEY) {
+    return new Response(JSON.stringify({ error: 'missing SUPABASE_KEY' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  try {
+    const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
+    const csvRes = await fetch(csvUrl);
+    if (!csvRes.ok) {
+      return new Response(JSON.stringify({ error: 'sheet fetch failed', status: csvRes.status }), {
+        status: 502,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    const csv = await csvRes.text();
+    const rows = parseCSV(csv);
+
+    // Row 0 = SyncWith data row, Row 1 = shifted headers (ignored), Row 2+ = leads.
+    const dataRows = [rows[0], ...rows.slice(2)];
+    const leads = dataRows.map(rowToLead).filter(Boolean);
+
+    const sbHeaders = {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      Prefer: 'resolution=ignore-duplicates,return=representation',
+    };
+
+    let inserted = 0, duplicates = 0, errors = 0;
+    const errorDetails = [];
+
+    for (const lead of leads) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/crm_leads?on_conflict=meta_lead_id`, {
+        method: 'POST',
+        headers: sbHeaders,
+        body: JSON.stringify(lead),
+      });
+      if (res.ok) {
+        const body = await res.json();
+        if (body.length === 0) duplicates++;
+        else inserted++;
+      } else {
+        errors++;
+        if (errorDetails.length < 3) {
+          errorDetails.push({ id: lead.meta_lead_id, status: res.status, body: (await res.text()).slice(0, 200) });
+        }
+      }
+    }
+
+    return new Response(JSON.stringify({
+      status: 'ok',
+      total: leads.length,
+      inserted,
+      duplicates,
+      errors,
+      errorDetails: errorDetails.length ? errorDetails : undefined,
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (e) {
+    return new Response(JSON.stringify({ error: e.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
