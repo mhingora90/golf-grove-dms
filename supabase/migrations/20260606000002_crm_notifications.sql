@@ -21,6 +21,19 @@ CREATE INDEX IF NOT EXISTS crm_notifications_user_unread_idx
 CREATE INDEX IF NOT EXISTS crm_notifications_activity_idx
   ON public.crm_notifications (activity_id);
 
+-- Back the ON CONFLICT DO NOTHING in fan_out_crm_notifications() with a real
+-- unique key so duplicate user UUIDs in NEW.mentions don't create twin rows.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint WHERE conname = 'crm_notifications_mention_unique'
+  ) THEN
+    ALTER TABLE public.crm_notifications
+      ADD CONSTRAINT crm_notifications_mention_unique
+      UNIQUE (user_id, activity_id, type);
+  END IF;
+END $$;
+
 ALTER TABLE public.crm_notifications ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "own notifications: select" ON public.crm_notifications;
