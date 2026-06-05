@@ -1487,6 +1487,79 @@ function _crmAttnRowHtml(r) {
   </div>`;
 }
 
+let _crmInboxTab = 'all';
+
+async function renderCrmNotifications() {
+  initCrmNotifications();
+  document.querySelectorAll('.notif-tab').forEach(btn => {
+    btn.onclick = () => { _crmInboxTab = btn.dataset.tab; _crmInboxRender(); _crmInboxSyncTabsActive(); };
+    btn.classList.toggle('active', btn.dataset.tab === _crmInboxTab);
+  });
+  const mark = document.getElementById('crm-notif-mark-all');
+  if (mark) mark.onclick = crmMarkAllNotifsRead;
+  const loadMoreBox = document.getElementById('crm-notif-loadmore');
+  if (loadMoreBox) {
+    loadMoreBox.style.display = _crmNotifState.rows.length >= 50 ? '' : 'none';
+    loadMoreBox.querySelector('button').onclick = _crmInboxLoadMore;
+  }
+  _crmInboxRender();
+}
+
+function _crmInboxSyncTabsActive() {
+  document.querySelectorAll('.notif-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === _crmInboxTab);
+  });
+}
+
+function _crmInboxRender() {
+  const list = document.getElementById('crm-notif-list');
+  if (!list) return;
+  let rows = _crmNotifState.rows;
+  if (_crmInboxTab === 'mention')      rows = rows.filter(r => r.type === 'mention');
+  else if (_crmInboxTab === 'reply')   rows = rows.filter(r => r.type === 'reply');
+  else if (_crmInboxTab === 'unread')  rows = rows.filter(r => !r.read_at);
+  if (!rows.length) {
+    list.innerHTML = '<div style="padding:32px;text-align:center;color:#9ca3af">Nothing here</div>';
+    return;
+  }
+  list.innerHTML = rows.map(_crmNotifRowHtml).join('');
+  const unreadIds = rows.filter(r => !r.read_at).map(r => r.id);
+  if (unreadIds.length) _crmNotifMarkRead(unreadIds);
+}
+
+function _crmNotifRefreshInboxIfActive() {
+  const sec = document.getElementById('sec-crm-notifications');
+  if (sec && sec.style.display !== 'none') _crmInboxRender();
+}
+
+async function _crmInboxLoadMore() {
+  const offset = _crmNotifState.rows.length;
+  const { data } = await sb.from('crm_notifications')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('read_at', { ascending: true, nullsFirst: true })
+    .order('created_at', { ascending: false })
+    .range(offset, offset + 49);
+  if (!data?.length) {
+    const box = document.getElementById('crm-notif-loadmore');
+    if (box) box.style.display = 'none';
+    return;
+  }
+  _crmNotifState.rows.push(...data);
+  const newLeadIds = [...new Set(data.map(r => r.lead_id))]
+    .filter(id => !(window._crmLeadNameCache && window._crmLeadNameCache[id]));
+  if (newLeadIds.length) {
+    const { data: leads } = await sb.from('crm_leads').select('id,name').in('id', newLeadIds);
+    window._crmLeadNameCache = window._crmLeadNameCache || {};
+    (leads||[]).forEach(l => { window._crmLeadNameCache[l.id] = l.name; });
+  }
+  _crmInboxRender();
+  const box = document.getElementById('crm-notif-loadmore');
+  if (box) box.style.display = data.length >= 50 ? '' : 'none';
+}
+
+window.renderCrmNotifications = renderCrmNotifications;
+
 // ─── CRM @MENTION AUTOCOMPLETE ────────────────────────────────────
 let _crmMentionPool = null;
 async function _crmGetMentionPool() {
