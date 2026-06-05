@@ -20,6 +20,7 @@ let crmSearchTimer = null;
 
 // ─── CRM HOME DASHBOARD ───────────────────────────────────────────
 async function renderCRMHome() {
+  initCrmNotifications();
   const pid = currentProject.id;
   const now = new Date();
   const todayStr = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
@@ -361,6 +362,7 @@ async function renderCRMHome() {
 }
 
 async function renderCRM() {
+  initCrmNotifications();
   let q = sb.from("crm_leads").select("*", { count: "exact" });
   q = q.eq("project_id", currentProject.id);
   if (crmSearch) { const s = crmSearch.replace(/,/g, ""); q = q.or(`name.ilike.%${s}%,email.ilike.%${s}%,phone.ilike.%${s}%`); }
@@ -837,7 +839,7 @@ function _renderActItem(a, leadId, now, isThreaded=false) {
     ? `<button class="act-done-btn" onclick="completeTask('${a.id}','${leadId}')">✓ Done</button>` : '';
   const replyBtn = !isThreaded
     ? `<button class="act-reply-btn" style="margin-left:6px" onclick="startActReply('${a.id}',this.closest('.act-item').querySelector('.act-body').textContent)">↩ Reply</button>` : '';
-  return `<div class="${cls}" data-method="${esc(a.method)}">
+  return `<div id="act-${esc(a.id)}" class="${cls}" data-method="${esc(a.method)}">
     <div class="act-meta">
       <span>${m.icon}</span><span class="act-badge">${m.label}</span>
       <span>·</span><span>${esc(a.author_name)}</span>
@@ -1231,3 +1233,201 @@ async function crmSyncMetaLeads() {
     if (btn) { btn.disabled = false; btn.textContent = '\u21bb Sync'; }
   }
 }
+
+// ─── CRM NOTIFICATIONS ────────────────────────────────────────────
+const _crmNotifState = {
+  rows: [],
+  unread: 0,
+  loaded: false,
+  channel: null,
+  pageOffset: 0,
+};
+
+async function initCrmNotifications() {
+  if (_crmNotifState.channel) return;
+  if (!currentUser?.id) return;
+  if (!can('crm')) return;
+  await _crmNotifFetchInitial();
+  _crmNotifSubscribe();
+  _crmNotifMountBell();
+}
+
+async function _crmNotifFetchInitial() {
+  const { data, error } = await sb
+    .from('crm_notifications')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('read_at', { ascending: true, nullsFirst: true })
+    .order('created_at', { ascending: false })
+    .limit(50);
+  if (error) { console.warn('[crm-notif] fetch:', error); return; }
+  _crmNotifState.rows = data || [];
+  _crmNotifState.unread = (data || []).filter(r => !r.read_at).length;
+  _crmNotifState.loaded = true;
+  // Populate lead-name cache
+  const leadIds = [...new Set(_crmNotifState.rows.map(r => r.lead_id))];
+  if (leadIds.length) {
+    const { data: leads } = await sb.from('crm_leads').select('id,name').in('id', leadIds);
+    window._crmLeadNameCache = window._crmLeadNameCache || {};
+    (leads || []).forEach(l => { window._crmLeadNameCache[l.id] = l.name; });
+  }
+  _crmNotifRenderBell();
+}
+
+function _crmNotifSubscribe() {
+  if (_crmNotifState.channel) return;
+  _crmNotifState.channel = sb
+    .channel(`crm-notifs-${currentUser.id}`)
+    .on('postgres_changes', {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'crm_notifications',
+      filter: `user_id=eq.${currentUser.id}`,
+    }, async ({ new: row }) => {
+      if (!window._crmLeadNameCache?.[row.lead_id]) {
+        const { data: l } = await sb.from('crm_leads').select('id,name').eq('id', row.lead_id).maybeSingle();
+        if (l) { window._crmLeadNameCache = window._crmLeadNameCache || {}; window._crmLeadNameCache[l.id] = l.name; }
+      }
+      _crmNotifState.rows.unshift(row);
+      if (!row.read_at) _crmNotifState.unread++;
+      _crmNotifRenderBell();
+      _crmNotifRenderDropdown();
+      _crmNotifRefreshHomeWidget?.();
+      _crmNotifRefreshInboxIfActive?.();
+    })
+    .subscribe();
+}
+
+function _crmNotifMountBell() {
+  const root = document.getElementById('crm-bell-root');
+  if (!root) return;
+  root.style.display = '';
+  root.innerHTML = `
+    <div class="crm-bell" id="crm-bell-btn" title="Notifications" onclick="toggleCrmBellDropdown(event)">
+      🔔
+      <div class="crm-bell-dot" id="crm-bell-dot" style="display:none">0</div>
+    </div>
+    <div class="crm-bell-dropdown hidden" id="crm-bell-dropdown"></div>
+  `;
+  _crmNotifRenderBell();
+}
+
+function _crmNotifRenderBell() {
+  const dot = document.getElementById('crm-bell-dot');
+  if (!dot) return;
+  const n = _crmNotifState.unread;
+  if (n <= 0) { dot.style.display = 'none'; return; }
+  dot.style.display = '';
+  dot.textContent = n > 99 ? '99+' : String(n);
+}
+
+function toggleCrmBellDropdown(ev) {
+  ev?.stopPropagation();
+  const dd = document.getElementById('crm-bell-dropdown');
+  if (!dd) return;
+  const opening = dd.classList.contains('hidden');
+  dd.classList.toggle('hidden');
+  if (opening) {
+    _crmNotifRenderDropdown();
+    _crmNotifMarkRead(_crmNotifState.rows.slice(0, 10).filter(r => !r.read_at).map(r => r.id));
+  }
+}
+
+document.addEventListener('click', (e) => {
+  const dd = document.getElementById('crm-bell-dropdown');
+  if (!dd || dd.classList.contains('hidden')) return;
+  if (e.target.closest('#crm-bell-dropdown') || e.target.closest('#crm-bell-btn')) return;
+  dd.classList.add('hidden');
+});
+
+function _crmNotifRenderDropdown() {
+  const dd = document.getElementById('crm-bell-dropdown');
+  if (!dd) return;
+  const top10 = _crmNotifState.rows.slice(0, 10);
+  const body = top10.length
+    ? top10.map(_crmNotifRowHtml).join('')
+    : '<div style="padding:24px;text-align:center;color:#9ca3af;font-size:13px">No notifications</div>';
+  dd.innerHTML = `
+    <div class="head">
+      <span class="title">Notifications</span>
+      <span class="markall" onclick="crmMarkAllNotifsRead()">Mark all read</span>
+    </div>
+    ${body}
+    <div class="foot" onclick="nav('crm-notifications', document.getElementById('n-crm-notifications'))">View all notifications →</div>
+  `;
+}
+
+function _crmNotifRowHtml(r) {
+  const initials = (r.actor_name || '?').split(/\s+/).slice(0,2).map(s => s[0]||'').join('').toUpperCase();
+  const pillCls  = r.type === 'reply' ? 'pill reply' : 'pill';
+  const verb     = r.type === 'reply' ? 'replied to your comment on' : 'mentioned you on';
+  const leadLabel = (window._crmLeadNameCache && window._crmLeadNameCache[r.lead_id]) || 'Lead';
+  return `<div class="crm-notif ${r.read_at ? '' : 'unread'}"
+    onclick="crmOpenNotif('${r.id}','${r.lead_id}','${r.activity_id}')">
+    <div class="avatar">${esc(initials)}</div>
+    <div class="body">
+      <div class="meta"><strong>${esc(r.actor_name)}</strong> ${verb} <strong>${esc(leadLabel)}</strong><span class="${pillCls}">${r.type}</span></div>
+      <div class="snippet">${_crmRenderMentionedText(r.snippet)}</div>
+      <div class="time">${_crmRelTime(r.created_at)}</div>
+    </div>
+  </div>`;
+}
+
+function _crmRelTime(iso) {
+  const s = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s/60) + ' min ago';
+  if (s < 86400) return Math.floor(s/3600) + ' h ago';
+  if (s < 7*86400) return Math.floor(s/86400) + ' d ago';
+  return new Date(iso).toLocaleDateString('en-GB');
+}
+
+function _crmRenderMentionedText(text) {
+  return esc(text || '').replace(/@\[([^\]]+)\]\(([0-9a-f-]+)\)/g,
+    (_, name) => `<span class="act-mention-chip">@${esc(name)}</span>`);
+}
+
+async function crmOpenNotif(notifId, leadId, activityId) {
+  await _crmNotifMarkRead([notifId]);
+  document.getElementById('crm-bell-dropdown')?.classList.add('hidden');
+  await viewLead(leadId);
+  setTimeout(() => {
+    const el = document.getElementById(`act-${activityId}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.style.outline = '2px solid #2563eb';
+      setTimeout(() => { el.style.outline = ''; }, 1500);
+    }
+  }, 200);
+}
+
+async function _crmNotifMarkRead(ids) {
+  if (!ids || !ids.length) return;
+  const now = new Date().toISOString();
+  const { error } = await sb.from('crm_notifications')
+    .update({ read_at: now })
+    .in('id', ids).is('read_at', null);
+  if (error) { console.warn('[crm-notif] mark read:', error); return; }
+  ids.forEach(id => {
+    const r = _crmNotifState.rows.find(x => x.id === id);
+    if (r && !r.read_at) { r.read_at = now; _crmNotifState.unread = Math.max(0, _crmNotifState.unread - 1); }
+  });
+  _crmNotifRenderBell();
+  _crmNotifRefreshHomeWidget?.();
+}
+
+async function crmMarkAllNotifsRead() {
+  const now = new Date().toISOString();
+  const { error } = await sb.from('crm_notifications')
+    .update({ read_at: now })
+    .eq('user_id', currentUser.id).is('read_at', null);
+  if (error) { toast('Error: '+error.message,'error'); return; }
+  _crmNotifState.rows.forEach(r => { if (!r.read_at) r.read_at = now; });
+  _crmNotifState.unread = 0;
+  _crmNotifRenderBell();
+  _crmNotifRenderDropdown();
+  _crmNotifRefreshHomeWidget?.();
+  _crmNotifRefreshInboxIfActive?.();
+  toast('All notifications marked read','success');
+}
+
