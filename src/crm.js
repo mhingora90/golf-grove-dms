@@ -1544,7 +1544,7 @@ function _crmInboxRender() {
 }
 
 function _crmNotifRefreshInboxIfActive() {
-  if (document.getElementById('crm-notif-list')) _crmInboxRender();
+  if (typeof currentPage !== 'undefined' && currentPage === 'crm-notifications') _crmInboxRender();
 }
 
 async function _crmInboxLoadMore() {
