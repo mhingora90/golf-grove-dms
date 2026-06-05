@@ -1266,7 +1266,8 @@ const _crmNotifState = {
 async function initCrmNotifications() {
   if (_crmNotifState.channel) return;
   if (!currentUser?.id) return;
-  if (!can('crm')) return;
+  const r = currentProfile?.role;
+  if (r !== 'developer' && r !== 'sales' && r !== 'admin') return;
   await _crmNotifFetchInitial();
   _crmNotifSubscribe();
   _crmNotifMountBell();
