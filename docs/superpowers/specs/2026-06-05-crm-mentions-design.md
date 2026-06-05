@@ -187,8 +187,9 @@ CREATE TRIGGER trg_fan_out_crm_notifications
 - Trigger character: `@` followed by 1+ alphanumeric.
 - Popup positioned at caret. Up/Down to navigate, Enter or click to select. Esc to dismiss.
 - Source: `SELECT id, full_name, role FROM profiles WHERE role IN ('developer','sales','admin') AND id <> auth.uid() ORDER BY full_name`. Cache in memory for the session.
-- Selecting inserts the display name as a span/token in the textarea and pushes user_id into a hidden `mentions[]` array tracked alongside the body.
-- On submit: insert into `crm_lead_activities` with `body` (display text) + `mentions` (uuid[]) + `parent_id` if replying.
+- Selecting inserts a token of the form `@[Full Name](user-uuid)` into the body string and pushes `user-uuid` into a tracked `mentions[]` array. Display in the textarea uses a contenteditable shim that renders the token as a colored chip; submitted body keeps the marker form.
+- Renderer for the activity feed parses `@[Name](uuid)` and emits a blue mention chip. Plain `@text` (no marker) renders as literal text.
+- On submit: insert into `crm_lead_activities` with `body` (marker form) + `mentions` (uuid[]) + `parent_id` if replying.
 
 ### 6. Reply UX
 
@@ -244,7 +245,7 @@ const channel = sb
 - `supabase/migrations/20260606000001_crm_notifications.sql` — new table, RLS, trigger
 - `supabase/migrations/20260606000002_crm_activities_mentions.sql` — column + constraint on `crm_lead_activities`
 - `src/crm.js` — bell component, dropdown, widget integration, `@` autocomplete, reply UX, realtime subscription, inbox page
-- `index.html` — nav items `n-crm-notifications`, bell mount point in CRM toolbar
+- `index.html` — nav item `n-crm-notifications` added to Sales nav group; bell DOM element mounted into the existing CRM toolbar bar (same row as "+ New Lead" / "↻ Sync" / "↓ Export Excel" buttons) so it appears across `#crm`, `#crm-home`, and `#crm-notifications`
 - `tests/contracts-crm-rls.test.js` — extend with `crm_notifications` RLS coverage
 - `tests/crm-notifications.test.js` — new: trigger fan-out, dedupe, self-skip
 
