@@ -262,6 +262,9 @@ async function renderCRMHome() {
       <!-- LEFT -->
       <div class="crm-home-left">
 
+        <!-- NEEDS YOUR ATTENTION SLOT -->
+        <div id="ch-attn-slot"></div>
+
         <!-- OVERDUE -->
         <div class="ch-card">
           <div class="ch-card-head warn-head">
@@ -359,6 +362,8 @@ async function renderCRMHome() {
       </div>
     </div>
   </div>`;
+
+  _crmNotifRefreshHomeWidget();
 }
 
 async function renderCRM() {
@@ -1444,6 +1449,42 @@ async function crmMarkAllNotifsRead() {
   _crmNotifRefreshHomeWidget?.();
   _crmNotifRefreshInboxIfActive?.();
   toast('All notifications marked read','success');
+}
+
+function _crmNotifRefreshHomeWidget() {
+  const slot = document.getElementById('ch-attn-slot');
+  if (!slot) return;
+  const unread = _crmNotifState.rows.filter(r => !r.read_at).slice(0, 5);
+  if (!unread.length) { slot.innerHTML = ''; return; }
+  slot.innerHTML = `
+    <div class="ch-attn">
+      <div class="ch-attn-hdr">
+        🔔 Needs your attention
+        <span class="ch-attn-badge">${_crmNotifState.unread}</span>
+        <span class="ch-attn-markall" onclick="crmMarkAllNotifsRead()">Mark all read</span>
+      </div>
+      ${unread.map(_crmAttnRowHtml).join('')}
+      ${_crmNotifState.unread > 5
+        ? `<div style="text-align:center;padding-top:8px"><a href="#" onclick="nav('crm-notifications',document.getElementById('n-crm-notifications'));return false">+${_crmNotifState.unread - 5} more</a></div>`
+        : ''}
+    </div>
+  `;
+  _crmNotifMarkRead(unread.map(r => r.id));
+}
+
+function _crmAttnRowHtml(r) {
+  const initials = (r.actor_name || '?').split(/\s+/).slice(0,2).map(s => s[0]||'').join('').toUpperCase();
+  const verb = r.type === 'reply' ? 'replied' : 'mentioned you';
+  const leadLabel = (window._crmLeadNameCache && window._crmLeadNameCache[r.lead_id]) || 'Lead';
+  return `<div class="ch-attn-row" onclick="crmOpenNotif('${r.id}','${r.lead_id}','${r.activity_id}')">
+    <div class="crm-notif"><div class="avatar">${esc(initials)}</div></div>
+    <div style="flex:1">
+      <div class="lead">${esc(leadLabel)}</div>
+      <div class="meta">${esc(r.actor_name)} ${verb} · ${_crmRelTime(r.created_at)}</div>
+      <div class="snippet">"${_crmRenderMentionedText(r.snippet)}"</div>
+    </div>
+    <div class="open">Open →</div>
+  </div>`;
 }
 
 // ─── CRM @MENTION AUTOCOMPLETE ────────────────────────────────────
