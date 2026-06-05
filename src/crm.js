@@ -846,7 +846,7 @@ function _renderActItem(a, leadId, now, isThreaded=false) {
       <span>·</span><span>${isTask?'Due: ':''}<b>${dateStr}</b></span>
       ${overdueTag}${doneBtn}${replyBtn}
     </div>
-    <div class="act-body">${esc(a.body)}</div>
+    <div class="act-body">${_crmRenderMentionedText(a.body || '')}</div>
   </div>`;
 }
 
@@ -962,6 +962,10 @@ async function viewLead(id) {
     `${convertBtn}<button class="btn btn-danger" onclick="deleteLead('${lead.id}')">Delete</button><button class="btn" onclick="closeModal()">Close</button>`,
     true);
   setTimeout(()=>{ const f=document.getElementById('act-feed'); if(f) f.scrollTop=f.scrollHeight; },60);
+  setTimeout(() => {
+    const inputEl = document.getElementById('act-body');
+    if (inputEl && !inputEl.dataset.atWired) _crmAtInit(inputEl);
+  }, 80);
 }
 
 async function updateLeadStage(id) {
@@ -1006,6 +1010,7 @@ async function addLeadActivity(id) {
       assignedToName = authorName;
     }
   }
+  const mentions = (_crmAtState?.chosen || []).map(c => c.id);
   const {error} = await sb.from('crm_lead_activities').insert({
     lead_id: id,
     author_id: currentUser?.id,
@@ -1018,8 +1023,18 @@ async function addLeadActivity(id) {
     parent_id: parentId,
     assigned_to: assignedToId,
     assigned_to_name: assignedToName,
+    mentions,
   });
-  if(error) { _crmReplyTo=parentId; toast('Error: '+error.message,'error'); return; }
+  if(error) {
+    _crmReplyTo=parentId;
+    if ((error.message || '').includes('crm_activities_mentions_max_10')) {
+      toast('Maximum 10 mentions per comment', 'error');
+    } else {
+      toast('Error: '+error.message,'error');
+    }
+    return;
+  }
+  if (_crmAtState) _crmAtState.chosen = [];
   if(!isTask) await sb.from('crm_leads').update({last_contacted_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('id',id);
   viewLead(id);
 }
@@ -1430,4 +1445,97 @@ async function crmMarkAllNotifsRead() {
   _crmNotifRefreshInboxIfActive?.();
   toast('All notifications marked read','success');
 }
+
+// ─── CRM @MENTION AUTOCOMPLETE ────────────────────────────────────
+let _crmMentionPool = null;
+async function _crmGetMentionPool() {
+  if (_crmMentionPool) return _crmMentionPool;
+  const { data } = await sb.from('profiles')
+    .select('id, full_name, role')
+    .in('role', ['developer', 'sales', 'admin'])
+    .neq('id', currentUser?.id || '00000000-0000-0000-0000-000000000000')
+    .order('full_name');
+  _crmMentionPool = data || [];
+  return _crmMentionPool;
+}
+
+let _crmAtState = { active: false, anchorStart: -1, query: '', idx: 0, items: [], chosen: [] };
+
+function _crmAtInit(inputEl) {
+  if (!inputEl) return;
+  inputEl.dataset.atWired = '1';
+  _crmAtState.chosen = [];
+  inputEl.addEventListener('input', (e) => _crmAtOnInput(inputEl, e));
+  inputEl.addEventListener('keydown', (e) => _crmAtOnKeyDown(inputEl, e));
+  inputEl.addEventListener('blur', () => setTimeout(_crmAtClose, 150));
+}
+
+async function _crmAtOnInput(inputEl) {
+  const val = inputEl.value;
+  const caret = inputEl.selectionStart || val.length;
+  let i = caret - 1;
+  while (i >= 0 && /[A-Za-z0-9_]/.test(val[i])) i--;
+  if (i < 0 || val[i] !== '@' || (i > 0 && /\w/.test(val[i-1]))) { _crmAtClose(); return; }
+  const query = val.slice(i + 1, caret).toLowerCase();
+  _crmAtState.active = true;
+  _crmAtState.anchorStart = i;
+  _crmAtState.query = query;
+  const pool = await _crmGetMentionPool();
+  _crmAtState.items = pool.filter(p => (p.full_name||'').toLowerCase().includes(query)).slice(0, 8);
+  _crmAtState.idx = 0;
+  _crmAtRender(inputEl);
+}
+
+function _crmAtRender(inputEl) {
+  let pop = document.getElementById('crm-at-popup');
+  if (!pop) {
+    pop = document.createElement('div');
+    pop.id = 'crm-at-popup';
+    pop.className = 'crm-at-popup';
+    document.body.appendChild(pop);
+  }
+  if (!_crmAtState.items.length) { _crmAtClose(); return; }
+  pop.innerHTML = _crmAtState.items.map((p, i) => `
+    <div class="crm-at-item ${i === _crmAtState.idx ? 'active' : ''}"
+         onmousedown="event.preventDefault(); _crmAtPick(${i})">
+      <span>${esc(p.full_name || p.id)}</span><span class="role">${esc(p.role||'')}</span>
+    </div>
+  `).join('');
+  const rect = inputEl.getBoundingClientRect();
+  pop.style.left = rect.left + 'px';
+  pop.style.top = (rect.bottom + 4 + window.scrollY) + 'px';
+  pop.style.display = '';
+}
+
+function _crmAtClose() {
+  _crmAtState.active = false;
+  const pop = document.getElementById('crm-at-popup');
+  if (pop) pop.style.display = 'none';
+}
+
+function _crmAtOnKeyDown(inputEl, e) {
+  if (!_crmAtState.active) return;
+  if (e.key === 'ArrowDown') { e.preventDefault();
+    _crmAtState.idx = (_crmAtState.idx + 1) % _crmAtState.items.length; _crmAtRender(inputEl); }
+  else if (e.key === 'ArrowUp') { e.preventDefault();
+    _crmAtState.idx = (_crmAtState.idx - 1 + _crmAtState.items.length) % _crmAtState.items.length; _crmAtRender(inputEl); }
+  else if (e.key === 'Enter') { e.preventDefault(); _crmAtPick(_crmAtState.idx); }
+  else if (e.key === 'Escape') { _crmAtClose(); }
+}
+
+window._crmAtPick = function(idx) {
+  const inputEl = document.getElementById('act-body');
+  if (!inputEl) return;
+  const item = _crmAtState.items[idx];
+  if (!item) return;
+  const before = inputEl.value.slice(0, _crmAtState.anchorStart);
+  const after  = inputEl.value.slice(inputEl.selectionStart || inputEl.value.length);
+  const marker = `@[${item.full_name || item.id}](${item.id}) `;
+  inputEl.value = before + marker + after;
+  inputEl.focus();
+  const caret = (before + marker).length;
+  inputEl.setSelectionRange(caret, caret);
+  if (!_crmAtState.chosen.find(c => c.id === item.id)) _crmAtState.chosen.push(item);
+  _crmAtClose();
+};
 
