@@ -14,7 +14,7 @@
  * Run: node tests/contracts-crm-rls.test.js
  */
 const https = require('https');
-const { SUPABASE_URL, ANON_KEY, TEST_ACCOUNTS, TEST_PASSWORD } = require('./config');
+const { SUPABASE_URL, ANON_KEY, SERVICE_KEY, TEST_ACCOUNTS, TEST_PASSWORD } = require('./config');
 
 const results = [];
 function pass(n)     { results.push({name:n,status:'PASS'}); console.log('  \u2713  PASS  ' + n); }
@@ -53,6 +53,37 @@ function req(method, path, body, token) {
 async function signIn(email, password) {
   const r = await req('POST', '/auth/v1/token?grant_type=password', {email, password});
   return r.data?.access_token || null;
+}
+
+// Service-key request: the new sb_secret_... keys are NOT JWTs. Send the
+// secret as both apikey and Bearer (Supabase accepts this combo for the
+// new key format) and PostgREST will run with service_role privileges.
+// Do NOT include the ANON_KEY apikey here — that would scope to anon.
+function reqSvc(method, path, body) {
+  return new Promise((resolve, reject) => {
+    const url  = new URL(path, SUPABASE_URL);
+    const data = body ? JSON.stringify(body) : null;
+    const opts = {
+      hostname: url.hostname, path: url.pathname + url.search, method,
+      headers: {
+        'apikey': SERVICE_KEY,
+        'Authorization': 'Bearer ' + SERVICE_KEY,
+        'Content-Type': 'application/json', 'Prefer': 'return=representation',
+        ...(data ? {'Content-Length': Buffer.byteLength(data)} : {})
+      }
+    };
+    const r = https.request(opts, res => {
+      let d = '';
+      res.on('data', c => d += c);
+      res.on('end', () => {
+        try { resolve({status: res.statusCode, data: JSON.parse(d)}); }
+        catch(e) { resolve({status: res.statusCode, data: d}); }
+      });
+    });
+    r.on('error', reject);
+    if (data) r.write(data);
+    r.end();
+  });
 }
 
 async function run() {
@@ -422,6 +453,157 @@ async function run() {
 
     // reset rating
     await req('PATCH', `/rest/v1/crm_leads?id=eq.${testLeadId}`, {rating: null}, dev);
+  }
+
+  // ═════════════════════════════════════════════════════════════════════════
+  // 7. crm_notifications — RLS (SELECT / INSERT block / UPDATE isolation)
+  // ═════════════════════════════════════════════════════════════════════════
+  section('7. crm_notifications — RLS');
+
+  {
+    // Resolve user IDs for dev + consultant.
+    const devUserResp = await req('GET', '/auth/v1/user', null, dev);
+    const consUserResp = await req('GET', '/auth/v1/user', null, cons);
+    const devUserId  = devUserResp.data?.id || null;
+    const consUserId = consUserResp.data?.id || null;
+
+    if (!devUserId || !consUserId || !testLeadId) {
+      skip('crm_notifications RLS', 'missing dev/cons user id or testLeadId');
+    } else {
+      const seededActivityIds = [];
+      const seededNotifIds    = [];
+
+      try {
+        // ── Seed via SERVICE_KEY: bypasses RLS, fires fan_out trigger. ──
+        // Activity 1: dev mentions consultant → 1 notif row for consultant.
+        const seed1 = await reqSvc('POST', '/rest/v1/crm_lead_activities', {
+          lead_id: testLeadId,
+          author_id: devUserId,
+          author_name: 'Test Developer',
+          method: 'note',
+          contacted_at: new Date().toISOString(),
+          body: '@[Cons](x) RLS notif seed dev->cons',
+          mentions: [consUserId],
+        });
+        if (seed1.status === 201 && seed1.data?.[0]?.id) {
+          seededActivityIds.push(seed1.data[0].id);
+        } else {
+          fail('Seed activity (dev mentions cons)', `HTTP ${seed1.status} ${JSON.stringify(seed1.data)}`);
+        }
+
+        // Activity 2: consultant mentions developer → 1 notif row for developer.
+        const seed2 = await reqSvc('POST', '/rest/v1/crm_lead_activities', {
+          lead_id: testLeadId,
+          author_id: consUserId,
+          author_name: 'Test Consultant',
+          method: 'note',
+          contacted_at: new Date().toISOString(),
+          body: '@[Dev](x) RLS notif seed cons->dev',
+          mentions: [devUserId],
+        });
+        if (seed2.status === 201 && seed2.data?.[0]?.id) {
+          seededActivityIds.push(seed2.data[0].id);
+        } else {
+          fail('Seed activity (cons mentions dev)', `HTTP ${seed2.status} ${JSON.stringify(seed2.data)}`);
+        }
+
+        // Fetch the seeded notif rows via service key for cleanup + UPDATE test.
+        let devNotifId = null, consNotifId = null;
+        if (seededActivityIds.length > 0) {
+          const notifLookup = await reqSvc('GET',
+            `/rest/v1/crm_notifications?select=id,user_id,activity_id&activity_id=in.(${seededActivityIds.join(',')})`,
+            null);
+          if (notifLookup.status === 200 && Array.isArray(notifLookup.data)) {
+            for (const n of notifLookup.data) {
+              seededNotifIds.push(n.id);
+              if (n.user_id === devUserId)  devNotifId  = n.id;
+              if (n.user_id === consUserId) consNotifId = n.id;
+            }
+          }
+        }
+
+        // ── Test A: SELECT isolation. ──
+        {
+          const r = await req('GET',
+            '/rest/v1/crm_notifications?select=id,user_id&limit=100', null, dev);
+          if (r.status === 200 && Array.isArray(r.data)) {
+            const foreign = r.data.filter(n => n.user_id !== devUserId);
+            foreign.length === 0
+              ? pass(`developer sees only own crm_notifications (${r.data.length} rows)`)
+              : fail('developer SELECT isolation', `${foreign.length} foreign rows leaked`);
+          } else {
+            fail('developer SELECT crm_notifications', `HTTP ${r.status}`);
+          }
+        }
+        {
+          const r = await req('GET',
+            '/rest/v1/crm_notifications?select=id,user_id&limit=100', null, cons);
+          if (r.status === 200 && Array.isArray(r.data)) {
+            const foreign = r.data.filter(n => n.user_id !== consUserId);
+            foreign.length === 0
+              ? pass(`consultant sees only own crm_notifications (${r.data.length} rows)`)
+              : fail('consultant SELECT isolation', `${foreign.length} foreign rows leaked`);
+          } else {
+            fail('consultant SELECT crm_notifications', `HTTP ${r.status}`);
+          }
+        }
+
+        // ── Test B: direct INSERT is blocked (no INSERT policy). ──
+        {
+          const r = await req('POST', '/rest/v1/crm_notifications', {
+            user_id: devUserId,
+            type: 'mention',
+            lead_id: testLeadId,
+            activity_id: seededActivityIds[0] || '00000000-0000-0000-0000-000000000000',
+            actor_name: 'Hacker',
+            snippet: 'direct insert attempt',
+          }, dev);
+          r.status !== 201
+            ? pass(`developer blocked from direct INSERT into crm_notifications (HTTP ${r.status})`)
+            : fail('developer blocked from direct INSERT into crm_notifications',
+                   'Insert succeeded — RLS gap (no INSERT policy expected)');
+        }
+
+        // ── Test C: UPDATE isolation. ──
+        if (devNotifId) {
+          const r1 = await req('PATCH',
+            `/rest/v1/crm_notifications?id=eq.${devNotifId}`,
+            { read_at: new Date().toISOString() }, dev);
+          (r1.status === 200 && Array.isArray(r1.data) && r1.data.length === 1)
+            ? pass('developer can UPDATE own crm_notification (mark read)')
+            : fail('developer UPDATE own crm_notification',
+                   `HTTP ${r1.status} rows=${Array.isArray(r1.data)?r1.data.length:'?'}`);
+        } else {
+          skip('developer UPDATE own crm_notification', 'no dev notif row seeded');
+        }
+
+        if (consNotifId) {
+          const r2 = await req('PATCH',
+            `/rest/v1/crm_notifications?id=eq.${consNotifId}`,
+            { read_at: new Date().toISOString() }, dev);
+          (r2.status === 200 && Array.isArray(r2.data) && r2.data.length === 0)
+            ? pass('developer cannot UPDATE other user crm_notification (RLS hides row)')
+            : fail('developer UPDATE other user crm_notification',
+                   `HTTP ${r2.status} rows=${Array.isArray(r2.data)?r2.data.length:'?'}`);
+        } else {
+          skip('developer cannot UPDATE other user crm_notification', 'no cons notif row seeded');
+        }
+
+      } finally {
+        // Cleanup: notifs first (cascade also handles it, but be explicit), then activities.
+        if (seededNotifIds.length > 0) {
+          await reqSvc('DELETE',
+            `/rest/v1/crm_notifications?id=in.(${seededNotifIds.join(',')})`,
+            null);
+        }
+        if (seededActivityIds.length > 0) {
+          await reqSvc('DELETE',
+            `/rest/v1/crm_lead_activities?id=in.(${seededActivityIds.join(',')})`,
+            null);
+        }
+        pass('crm_notifications test rows cleaned up');
+      }
+    }
   }
 
   // ═════════════════════════════════════════════════════════════════════════
