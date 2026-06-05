@@ -1491,7 +1491,22 @@ function _crmAttnRowHtml(r) {
 let _crmInboxTab = 'all';
 
 async function renderCrmNotifications() {
-  initCrmNotifications();
+  await initCrmNotifications();
+  document.getElementById('content').innerHTML = `
+    <div class="page-header">
+      <h2>Notifications</h2>
+      <button class="btn" id="crm-notif-mark-all">Mark all read</button>
+    </div>
+    <div class="notif-tabs">
+      <button class="notif-tab" data-tab="all">All</button>
+      <button class="notif-tab" data-tab="mention">Mentions</button>
+      <button class="notif-tab" data-tab="reply">Replies</button>
+      <button class="notif-tab" data-tab="unread">Unread</button>
+    </div>
+    <div class="notif-list" id="crm-notif-list"></div>
+    <div id="crm-notif-loadmore" style="text-align:center;padding:12px;display:none">
+      <button class="btn">Load more</button>
+    </div>`;
   document.querySelectorAll('.notif-tab').forEach(btn => {
     btn.onclick = () => { _crmInboxTab = btn.dataset.tab; _crmInboxRender(); _crmInboxSyncTabsActive(); };
     btn.classList.toggle('active', btn.dataset.tab === _crmInboxTab);
@@ -1529,8 +1544,7 @@ function _crmInboxRender() {
 }
 
 function _crmNotifRefreshInboxIfActive() {
-  const sec = document.getElementById('sec-crm-notifications');
-  if (sec && sec.style.display !== 'none') _crmInboxRender();
+  if (document.getElementById('crm-notif-list')) _crmInboxRender();
 }
 
 async function _crmInboxLoadMore() {
