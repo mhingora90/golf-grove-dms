@@ -95,9 +95,9 @@ DECLARE
   v_recipient     uuid;
   v_parent_author uuid;
 BEGIN
-  IF NEW.method <> 'comment' THEN
-    RETURN NEW;
-  END IF;
+  -- Fan out on every method (call/whatsapp/email/meeting/site_visit/note/task).
+  -- Activity rows are the canonical place for free-form text in CRM; @mentions
+  -- and replies are valid on all of them.
 
   v_actor_name := COALESCE(NEW.author_name, 'Someone');
   v_snippet    := LEFT(COALESCE(NEW.body, ''), 140);
@@ -141,7 +141,7 @@ CREATE TRIGGER trg_fan_out_crm_notifications
 
 **Rules enforced:**
 
-- Fires only when `method = 'comment'`.
+- Fires on every method (call/whatsapp/email/meeting/site_visit/note/task) — the activity row is the unit of communication regardless of label.
 - Self-actions skipped (`recipient <> actor`).
 - Same person mentioned **and** parent author → single `mention` row (de-dupe block).
 - Atomic with the comment insert; trigger failure rolls back the comment.
@@ -255,7 +255,7 @@ const channel = sb
 - Watching / following a lead for all activity (Q1 = B, not C)
 - Push / browser notifications
 - Notification preferences per user
-- Mentions on tasks (`method='task'`) — only `comment` triggers
+- Distinct routing per method — every method fans out the same way
 - Cross-project notifications — CRM is single-project context
 - Mention edits (changing `mentions[]` after insert) — no re-fan-out
 
