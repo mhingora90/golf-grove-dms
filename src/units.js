@@ -275,7 +275,7 @@ function _renderUregTable() {
         '<option value="all">All Types</option><option value="Studio">Studio</option><option value="1BHK">1BHK</option>' +
       '</select>' +
       '<select id="urf-status" class="form-control" style="width:auto;padding:5px 8px;font-size:12px;margin-left:6px" onchange="_renderUregTable()">' +
-        '<option value="all">All Statuses</option><option value="available">Available</option><option value="reserved">Reserved</option><option value="sold">Sold</option>' +
+        '<option value="all">All Statuses</option><option value="available">Available</option><option value="reserved">Reserved</option><option value="sold">Sold</option><option value="blocked_by_developer">Blocked by Developer</option>' +
       '</select>' +
       '<select id="urf-floor" class="form-control" style="width:auto;padding:5px 8px;font-size:12px;margin-left:6px" onchange="_renderUregTable()">' +
         '<option value="all">All Floors</option>' + floorOpts +
@@ -445,7 +445,7 @@ function openSaleForm(unitId, saleId) {
       '<div class="form-group" style="margin:0"><label class="form-label">Brokerage</label><input id="sf-brokerage" class="form-input" value="' + esc(sale?.brokerage_name||'') + '" /></div>' +
     '</div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">' +
-      '<div class="form-group" style="margin:0"><label class="form-label">Unit Status</label>' + sel('sf-status',[['reserved','Reserved'],['sold','Sold']], sale?.status||'reserved') + '</div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Unit Status</label>' + sel('sf-status',[['reserved','Reserved'],['sold','Sold'],['blocked_by_developer','Blocked by Developer']], sale?.status||'reserved') + '</div>' +
       '<div></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">SPA Status</label>' + sel('sf-spa',[['not_signed','Not Signed'],['signed_buyer','Signed \u2014 Buyer'],['fully_signed','Fully Signed']], sale?.spa_status||'not_signed') + '</div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">SPA Date</label><input id="sf-spadate" type="date" class="form-input" value="' + esc(sale?.spa_date||'') + '" /></div>' +
@@ -518,9 +518,20 @@ async function saveSaleForm(unitId, saleId) {
     if(msErr) { toast('Milestone error: ' + msErr.message,'error'); return; }
   }
 
-  // Sync units.sale_status with the unit_sales status
-  const newSaleStatus = (status === 'sold') ? 'sold' : 'available';
-  const {error: unitErr} = await sb.from('units').update({sale_status: newSaleStatus}).eq('id', unitId);
+  // Sync units.sale_status + blocked with the unit_sales status. Blocked-by-
+  // developer rows keep the client_name on the sale row but flag the unit as
+  // un-sellable so it drops out of the available pool.
+  let newSaleStatus = 'available';
+  let newBlocked    = false;
+  if (status === 'sold') {
+    newSaleStatus = 'sold';
+  } else if (status === 'blocked_by_developer') {
+    newSaleStatus = 'blocked_by_developer';
+    newBlocked    = true;
+  }
+  const {error: unitErr} = await sb.from('units')
+    .update({sale_status: newSaleStatus, blocked: newBlocked})
+    .eq('id', unitId);
   if(unitErr) { toast('Unit status error: ' + unitErr.message,'error'); return; }
 
   toast('Sale saved','success');

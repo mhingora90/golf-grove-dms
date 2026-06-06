@@ -113,7 +113,8 @@ def classify(raw: str):
     if raw == "UNRELEASED":
         return "available", True, False, None
     if raw == "BLOCKED BY DEVELOPER":
-        return "blocked_by_developer", True, False, None
+        # Carry the client_name on a sale row so it surfaces in the register.
+        return "blocked_by_developer", True, True, "blocked_by_developer"
     if raw == "BOOKED":
         return "available", False, True, "reserved"
     if raw == "REGISTERED":
