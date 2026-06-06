@@ -16,7 +16,7 @@ window.Customers = (function () {
       .select('id, name, phone, email, nationality, project_id, unit_sale_customers(unit_sale_id, is_primary, unit_sales(units(project_id)))')
       .order('name');
     if (error) { toast('Failed to load customers: ' + error.message, 'error'); return []; }
-    const projectId = window.currentProject?.id;
+    const projectId = (typeof currentProject !== 'undefined' && currentProject) ? currentProject.id : null;
     if (!projectId) return data || [];
     // Scope strictly to currentProject: home project matches, or any linked
     // unit belongs to this project (joint owners across projects show in each).
@@ -318,7 +318,7 @@ window.Customers = (function () {
     const nationality = document.getElementById('cust-new-nat')?.value?.trim() || null;
     const { error } = await sb.from('customers').insert({
       name, phone, email, nationality,
-      project_id: window.currentProject?.id || null,
+      project_id: (typeof currentProject !== 'undefined' && currentProject) ? currentProject.id : null,
       created_by: currentUser?.id,
     });
     if (error) { toast('Failed: ' + error.message, 'error'); return; }
