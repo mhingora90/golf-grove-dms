@@ -1285,12 +1285,18 @@ async function _crmNotifFetchInitial() {
   _crmNotifState.rows = data || [];
   _crmNotifState.unread = (data || []).filter(r => !r.read_at).length;
   _crmNotifState.loaded = true;
-  // Populate lead-name cache
-  const leadIds = [...new Set(_crmNotifState.rows.map(r => r.lead_id))];
+  // Populate lead-name + customer-name caches
+  const leadIds = [...new Set(_crmNotifState.rows.map(r => r.lead_id).filter(Boolean))];
+  const custIds = [...new Set(_crmNotifState.rows.map(r => r.customer_id).filter(Boolean))];
   if (leadIds.length) {
     const { data: leads } = await sb.from('crm_leads').select('id,name').in('id', leadIds);
     window._crmLeadNameCache = window._crmLeadNameCache || {};
     (leads || []).forEach(l => { window._crmLeadNameCache[l.id] = l.name; });
+  }
+  if (custIds.length) {
+    const { data: custs } = await sb.from('customers').select('id,name').in('id', custIds);
+    window._crmCustomerNameCache = window._crmCustomerNameCache || {};
+    (custs || []).forEach(c => { window._crmCustomerNameCache[c.id] = c.name; });
   }
   _crmNotifRenderBell();
 }
@@ -1305,9 +1311,13 @@ function _crmNotifSubscribe() {
       table: 'crm_notifications',
       filter: `user_id=eq.${currentUser.id}`,
     }, async ({ new: row }) => {
-      if (!window._crmLeadNameCache?.[row.lead_id]) {
+      if (row.lead_id && !window._crmLeadNameCache?.[row.lead_id]) {
         const { data: l } = await sb.from('crm_leads').select('id,name').eq('id', row.lead_id).maybeSingle();
         if (l) { window._crmLeadNameCache = window._crmLeadNameCache || {}; window._crmLeadNameCache[l.id] = l.name; }
+      }
+      if (row.customer_id && !window._crmCustomerNameCache?.[row.customer_id]) {
+        const { data: c } = await sb.from('customers').select('id,name').eq('id', row.customer_id).maybeSingle();
+        if (c) { window._crmCustomerNameCache = window._crmCustomerNameCache || {}; window._crmCustomerNameCache[c.id] = c.name; }
       }
       _crmNotifState.rows.unshift(row);
       if (!row.read_at) _crmNotifState.unread++;
@@ -1382,12 +1392,14 @@ function _crmNotifRowHtml(r) {
   const initials = (r.actor_name || '?').split(/\s+/).slice(0,2).map(s => s[0]||'').join('').toUpperCase();
   const pillCls  = r.type === 'reply' ? 'pill reply' : 'pill';
   const verb     = r.type === 'reply' ? 'replied to your comment on' : 'mentioned you on';
-  const leadLabel = (window._crmLeadNameCache && window._crmLeadNameCache[r.lead_id]) || 'Lead';
+  const label    = r.customer_id
+    ? ((window._crmCustomerNameCache && window._crmCustomerNameCache[r.customer_id]) || 'Customer')
+    : ((window._crmLeadNameCache && window._crmLeadNameCache[r.lead_id]) || 'Lead');
   return `<div class="crm-notif ${r.read_at ? '' : 'unread'}"
-    onclick="crmOpenNotif('${r.id}','${r.lead_id}','${r.activity_id}')">
+    onclick="crmOpenNotif('${r.id}')">
     <div class="avatar">${esc(initials)}</div>
     <div class="body">
-      <div class="meta"><strong>${esc(r.actor_name)}</strong> ${verb} <strong>${esc(leadLabel)}</strong><span class="${pillCls}">${r.type}</span></div>
+      <div class="meta"><strong>${esc(r.actor_name)}</strong> ${verb} <strong>${esc(label)}</strong><span class="${pillCls}">${r.type}</span></div>
       <div class="snippet">${_crmRenderMentionedText(r.snippet)}</div>
       <div class="time">${_crmRelTime(r.created_at)}</div>
     </div>
@@ -1408,10 +1420,17 @@ function _crmRenderMentionedText(text) {
     (_, name) => `<span class="act-mention-chip">@${esc(name)}</span>`);
 }
 
-async function crmOpenNotif(notifId, leadId, activityId) {
+async function crmOpenNotif(notifId) {
   await _crmNotifMarkRead([notifId]);
   document.getElementById('crm-bell-dropdown')?.classList.add('hidden');
-  await viewLead(leadId);
+  const row = _crmNotifState.rows.find(r => r.id === notifId);
+  if (!row) return;
+  const activityId = row.activity_id;
+  if (row.customer_id && window.Customers?.openProfile) {
+    await window.Customers.openProfile(row.customer_id);
+  } else if (row.lead_id) {
+    await viewLead(row.lead_id);
+  }
   setTimeout(() => {
     const el = document.getElementById(`act-${activityId}`);
     if (el) {
@@ -1476,11 +1495,13 @@ function _crmNotifRefreshHomeWidget() {
 function _crmAttnRowHtml(r) {
   const initials = (r.actor_name || '?').split(/\s+/).slice(0,2).map(s => s[0]||'').join('').toUpperCase();
   const verb = r.type === 'reply' ? 'replied' : 'mentioned you';
-  const leadLabel = (window._crmLeadNameCache && window._crmLeadNameCache[r.lead_id]) || 'Lead';
-  return `<div class="ch-attn-row" onclick="crmOpenNotif('${r.id}','${r.lead_id}','${r.activity_id}')">
+  const label = r.customer_id
+    ? ((window._crmCustomerNameCache && window._crmCustomerNameCache[r.customer_id]) || 'Customer')
+    : ((window._crmLeadNameCache && window._crmLeadNameCache[r.lead_id]) || 'Lead');
+  return `<div class="ch-attn-row" onclick="crmOpenNotif('${r.id}')">
     <div class="avatar">${esc(initials)}</div>
     <div style="flex:1">
-      <div class="lead">${esc(leadLabel)}</div>
+      <div class="lead">${esc(label)}</div>
       <div class="meta">${esc(r.actor_name)} ${verb} · ${_crmRelTime(r.created_at)}</div>
       <div class="snippet">"${_crmRenderMentionedText(r.snippet)}"</div>
     </div>
@@ -1561,12 +1582,19 @@ async function _crmInboxLoadMore() {
     return;
   }
   _crmNotifState.rows.push(...data);
-  const newLeadIds = [...new Set(data.map(r => r.lead_id))]
+  const newLeadIds = [...new Set(data.map(r => r.lead_id).filter(Boolean))]
     .filter(id => !(window._crmLeadNameCache && window._crmLeadNameCache[id]));
   if (newLeadIds.length) {
     const { data: leads } = await sb.from('crm_leads').select('id,name').in('id', newLeadIds);
     window._crmLeadNameCache = window._crmLeadNameCache || {};
     (leads||[]).forEach(l => { window._crmLeadNameCache[l.id] = l.name; });
+  }
+  const newCustIds = [...new Set(data.map(r => r.customer_id).filter(Boolean))]
+    .filter(id => !(window._crmCustomerNameCache && window._crmCustomerNameCache[id]));
+  if (newCustIds.length) {
+    const { data: custs } = await sb.from('customers').select('id,name').in('id', newCustIds);
+    window._crmCustomerNameCache = window._crmCustomerNameCache || {};
+    (custs||[]).forEach(c => { window._crmCustomerNameCache[c.id] = c.name; });
   }
   _crmInboxRender();
   const box = document.getElementById('crm-notif-loadmore');
