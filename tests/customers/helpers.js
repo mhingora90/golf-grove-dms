@@ -9,3 +9,14 @@ export function devClient() {
     auth: { autoRefreshToken: false, persistSession: false },
   });
 }
+
+export async function makeMentionedUser(db) {
+  const email = 'mention-' + Date.now() + '@test.local';
+  const { data, error } = await db.auth.admin.createUser({
+    email,
+    password: 'TestPass123!',
+    email_confirm: true,
+  });
+  if (error) throw new Error('makeMentionedUser: ' + error.message);
+  return { id: data.user.id };
+}
