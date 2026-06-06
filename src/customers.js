@@ -13,10 +13,18 @@ window.Customers = (function () {
   async function loadCustomers() {
     const { data, error } = await sb
       .from('customers')
-      .select('id, name, phone, email, nationality, unit_sale_customers(unit_sale_id, is_primary)')
+      .select('id, name, phone, email, nationality, unit_sale_customers(unit_sale_id, is_primary, unit_sales(units(project_id)))')
       .order('name');
     if (error) { toast('Failed to load customers: ' + error.message, 'error'); return []; }
-    return data || [];
+    const projectId = window.currentProject?.id;
+    if (!projectId) return data || [];
+    // Scope to currentProject: keep customers with at least one linked unit in
+    // this project, plus orphans (no unit links — manual entries belong to all).
+    return (data || []).filter(c => {
+      const links = c.unit_sale_customers || [];
+      if (links.length === 0) return true;
+      return links.some(l => l.unit_sales?.units?.project_id === projectId);
+    });
   }
 
   async function loadLastInteractions(customerIds) {
