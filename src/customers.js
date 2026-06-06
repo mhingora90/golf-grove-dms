@@ -32,65 +32,125 @@ window.Customers = (function () {
     return out;
   }
 
-  function buildListHtml(customers, last) {
+  function buildListHtml(customers, last, totalAll) {
+    const total = totalAll ?? customers.length;
+    const fresh = customers.filter(c => _bucket(last[c.id]?.contacted_at) === 'fresh').length;
+    const stale = customers.filter(c => _bucket(last[c.id]?.contacted_at) === 'cold').length;
+    const noTouch = customers.filter(c => !last[c.id]).length;
+
+    const stats = `
+      <div class="cust-stats">
+        <div class="cust-stat">
+          <div class="cust-stat-label">Total Customers</div>
+          <div class="cust-stat-val">${total}</div>
+          <div class="cust-stat-sub">across all projects</div>
+        </div>
+        <div class="cust-stat is-fresh">
+          <div class="cust-stat-label">Touched &lt; 30 d</div>
+          <div class="cust-stat-val">${fresh}</div>
+          <div class="cust-stat-sub">recent engagement</div>
+        </div>
+        <div class="cust-stat is-warn">
+          <div class="cust-stat-label">Cold (60 d+)</div>
+          <div class="cust-stat-val">${stale}</div>
+          <div class="cust-stat-sub">needs follow-up</div>
+        </div>
+        <div class="cust-stat is-danger">
+          <div class="cust-stat-label">No Interactions</div>
+          <div class="cust-stat-val">${noTouch}</div>
+          <div class="cust-stat-sub">never contacted</div>
+        </div>
+      </div>`;
+
+    const grid = customers.length === 0
+      ? `<div class="cust-empty">
+           <div class="cust-empty-emoji">🪶</div>
+           <div class="cust-empty-title">No customers yet</div>
+           <div class="cust-empty-sub">${_custSearch || _custRecency ? 'Nothing matches your filters. Try clearing them.' : 'Customers appear here once units are sold, or add them manually below.'}</div>
+         </div>`
+      : `<div class="cust-grid">${customers.map(c => _cardHtml(c, last[c.id])).join('')}</div>`;
+
     return `
-      <div class="page-section">
-        <div class="page-section-header" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <h2 style="margin:0;flex:1">Customers</h2>
-          <input id="cust-search" class="form-control" placeholder="Search name, phone, email…"
-                 value="${esc(_custSearch)}" style="max-width:280px"
-                 oninput="Customers.onSearch(this.value)"/>
-          <select id="cust-recency" class="form-control" style="max-width:180px"
-                  onchange="Customers.onRecency(this.value)">
-            <option value="">Any recency</option>
-            <option value="30" ${_custRecency==='30'?'selected':''}>&lt; 30 days</option>
-            <option value="60" ${_custRecency==='60'?'selected':''}>&lt; 60 days</option>
-            <option value="90" ${_custRecency==='90'?'selected':''}>&lt; 90 days</option>
-            <option value="none" ${_custRecency==='none'?'selected':''}>No interactions</option>
-          </select>
-          <button class="btn btn-primary" onclick="Customers.openCreate()">+ New Customer</button>
+      <div class="cust-page">
+        <div class="cust-header">
+          <div class="cust-header-lede">
+            <div class="cust-eyebrow">Post-sale Ledger</div>
+            <div class="cust-h1">Customers</div>
+            <div class="cust-sub">Track every interaction with your buyers — calls, meetings, WhatsApps. Joint owners stay linked to the right unit.</div>
+          </div>
+          <div class="cust-header-tools">
+            <input id="cust-search" class="form-control" placeholder="Search name, phone, email…"
+                   value="${esc(_custSearch)}" style="width:240px"
+                   oninput="Customers.onSearch(this.value)"/>
+            <select id="cust-recency" class="form-control" style="width:170px"
+                    onchange="Customers.onRecency(this.value)">
+              <option value="">Any recency</option>
+              <option value="30" ${_custRecency==='30'?'selected':''}>&lt; 30 days</option>
+              <option value="60" ${_custRecency==='60'?'selected':''}>&lt; 60 days</option>
+              <option value="90" ${_custRecency==='90'?'selected':''}>&lt; 90 days</option>
+              <option value="none" ${_custRecency==='none'?'selected':''}>No interactions</option>
+            </select>
+            <button class="btn btn-primary" onclick="Customers.openCreate()">+ New Customer</button>
+          </div>
         </div>
-        <div class="page-section-body">
-          ${customers.length === 0
-            ? '<div class="empty-state">No customers yet. They will appear here once a unit is sold.</div>'
-            : `<table class="data-table">
-                 <thead><tr>
-                   <th>Name</th><th>Phone</th><th>Email</th>
-                   <th style="text-align:center">Units</th>
-                   <th>Last contact</th><th style="text-align:center">Method</th>
-                 </tr></thead>
-                 <tbody>
-                   ${customers.map(c => _rowHtml(c, last[c.id])).join('')}
-                 </tbody>
-               </table>`}
-        </div>
+        ${stats}
+        ${grid}
       </div>`;
   }
 
-  function _rowHtml(c, lastAct) {
+  function _cardHtml(c, lastAct) {
     const unitCount = (c.unit_sale_customers || []).length;
     const lastTs = lastAct?.contacted_at;
-    const lastMethod = lastAct?.method;
-    const methodIcon = (window.ActivityFeed?.METHODS?.[lastMethod]?.icon) || '—';
-    return `<tr data-customer-id="${esc(c.id)}" style="cursor:pointer"
-                onclick="Customers.openProfile('${esc(c.id)}')">
-      <td>${esc(c.name)}</td>
-      <td>${esc(c.phone || '')}</td>
-      <td>${esc(c.email || '')}</td>
-      <td style="text-align:center">${unitCount}</td>
-      <td>${_fmtRel(lastTs)}</td>
-      <td style="text-align:center">${methodIcon}</td>
-    </tr>`;
+    const methodIcon = (window.ActivityFeed?.METHODS?.[lastAct?.method]?.icon) || '·';
+    const methodLabel = (window.ActivityFeed?.METHODS?.[lastAct?.method]?.label) || '';
+    const touch = _touchChip(lastTs, methodIcon, methodLabel);
+    const unitsCls = unitCount === 0 ? ' is-zero' : '';
+
+    return `<div class="cust-card" onclick="Customers.openProfile('${esc(c.id)}')">
+      <div class="cust-card-head">
+        <div class="cust-mono">${_initials(c.name)}</div>
+        <div style="min-width:0;flex:1">
+          <div class="cust-card-name">${esc(c.name)}</div>
+          ${c.nationality ? `<div class="cust-card-nat">${esc(c.nationality)}</div>` : ''}
+        </div>
+      </div>
+      <div class="cust-card-contact">
+        ${c.phone ? `<div><span class="ico">☎</span><span class="val">${esc(c.phone)}</span></div>` : ''}
+        ${c.email ? `<div><span class="ico">✉</span><span class="val">${esc(c.email)}</span></div>` : ''}
+        ${!c.phone && !c.email ? `<div style="color:var(--text3);font-style:italic">No contact info</div>` : ''}
+      </div>
+      <div class="cust-card-foot">
+        <span class="cust-units-chip${unitsCls}">${unitCount} unit${unitCount === 1 ? '' : 's'}</span>
+        ${touch}
+      </div>
+    </div>`;
   }
 
-  function _fmtRel(ts) {
-    if (!ts) return '<span style="color:#c44545">never</span>';
+  function _initials(name) {
+    return esc((name || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(s => s[0]).join('').toUpperCase() || '?');
+  }
+
+  function _bucket(ts) {
+    if (!ts) return 'never';
     const days = Math.floor((Date.now() - new Date(ts).getTime()) / 86400000);
-    if (days === 0) return 'today';
-    if (days === 1) return 'yesterday';
-    if (days < 30) return days + ' days ago';
-    if (days < 60) return Math.floor(days / 7) + ' weeks ago';
-    return '<span style="color:#c44545">' + days + ' days ago</span>';
+    if (days < 30) return 'fresh';
+    if (days < 60) return 'week';
+    if (days < 90) return 'warn';
+    return 'cold';
+  }
+
+  function _touchChip(ts, icon, label) {
+    if (!ts) return `<span class="cust-touch is-cold" title="No interactions">✕ never</span>`;
+    const days = Math.floor((Date.now() - new Date(ts).getTime()) / 86400000);
+    const cls = _bucket(ts);
+    let text;
+    if (days === 0) text = 'today';
+    else if (days === 1) text = '1 d ago';
+    else if (days < 30) text = days + ' d ago';
+    else if (days < 60) text = Math.floor(days / 7) + ' w ago';
+    else if (days < 90) text = Math.floor(days / 30) + ' mo ago';
+    else text = Math.floor(days / 30) + ' mo ago';
+    return `<span class="cust-touch is-${cls}" title="${esc(label || 'Last contact')}">${icon} ${text}</span>`;
   }
 
   function _applyFilters(customers, last) {
@@ -150,29 +210,48 @@ window.Customers = (function () {
       .maybeSingle();
     if (error || !c) { toast('Customer not found', 'error'); return; }
 
+    const unitCount = (c.unit_sale_customers || []).length;
     const unitChips = (c.unit_sale_customers || []).map(link => {
       const u = link.unit_sales?.units;
       const projName = u?.projects?.name || '';
       const unitNo = u?.unit_no || '';
-      const primaryTag = link.is_primary
-        ? '<span class="role-badge" style="margin-left:6px;background:#d4b87a;color:#fff;font-size:10px;padding:2px 6px;border-radius:8px">PRIMARY</span>'
-        : '';
-      return `<span style="display:inline-flex;align-items:center;gap:4px;background:#f4efe2;padding:6px 12px;border-radius:6px;color:#5a3a16;font-size:13px;border:1px solid #e0d4b0;margin-right:6px;margin-bottom:6px">
-        <strong>${esc(projName)} · ${esc(unitNo)}</strong>${primaryTag}
+      const pct = link.ownership_pct != null ? ` <span style="color:var(--text3);font-size:10px">· ${link.ownership_pct}%</span>` : '';
+      const primaryTag = link.is_primary ? '<span class="cust-unit-pri">PRIMARY</span>' : '';
+      return `<span class="cust-unit-chip">
+        <strong>${esc(projName)}</strong>
+        <span style="color:var(--text2)">·</span>
+        <span>${esc(unitNo)}</span>${pct}
+        ${primaryTag}
       </span>`;
     }).join('');
 
-    openModal('Customer — ' + esc(c.name), `
+    const summary = [
+      c.phone ? c.phone : null,
+      c.email ? c.email : null,
+      c.nationality ? c.nationality : null,
+    ].filter(Boolean).join('  ·  ');
+
+    openModal('Customer Profile', `
+      <div class="cust-profile-hero">
+        <div class="cust-profile-mono">${_initials(c.name)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="cust-profile-name">${esc(c.name)}</div>
+          <div class="cust-profile-meta">${esc(summary || 'No contact details on file')}</div>
+        </div>
+        <span class="cust-units-chip${unitCount === 0 ? ' is-zero' : ''}">${unitCount} unit${unitCount === 1 ? '' : 's'}</span>
+      </div>
+
       <div class="detail-grid">
         <div class="detail-item"><div class="detail-label">Phone</div><div class="detail-value">${esc(c.phone || '—')}</div></div>
         <div class="detail-item"><div class="detail-label">Email</div><div class="detail-value">${esc(c.email || '—')}</div></div>
         <div class="detail-item"><div class="detail-label">Nationality</div><div class="detail-value">${esc(c.nationality || '—')}</div></div>
       </div>
-      <div style="margin-top:14px">
-        <div style="font-size:11px;font-weight:600;color:var(--charcoal);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Units owned</div>
-        <div>${unitChips || '<span style="color:var(--text3);font-size:13px">No units linked yet</span>'}</div>
-      </div>
-      <div id="cust-feed-container" style="margin-top:14px"></div>`,
+
+      <div class="cust-section-hdr">Units Owned</div>
+      <div>${unitChips || '<span style="color:var(--text3);font-size:12px;font-style:italic">No units linked yet</span>'}</div>
+
+      <div class="cust-section-hdr">Activity</div>
+      <div id="cust-feed-container"></div>`,
       `<button class="btn btn-danger" onclick="Customers.doDelete('${esc(c.id)}')">Delete</button>
        <button class="btn" onclick="closeModal()">Close</button>`,
       true);
