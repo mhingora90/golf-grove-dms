@@ -16,15 +16,17 @@ window.Customers = (function () {
       .select('id, name, phone, email, nationality, project_id, unit_sale_customers(unit_sale_id, is_primary, unit_sales(units(project_id)))')
       .order('name');
     if (error) { toast('Failed to load customers: ' + error.message, 'error'); return []; }
-    const projectId = (typeof currentProject !== 'undefined' && currentProject) ? currentProject.id : null;
+    const cp = (typeof currentProject !== 'undefined' && currentProject) ? currentProject : (window.currentProject || null);
+    const projectId = cp?.id || null;
+    console.log('[customers] filter scope', { projectId, totalRows: (data || []).length, cp });
     if (!projectId) return data || [];
-    // Scope strictly to currentProject: home project matches, or any linked
-    // unit belongs to this project (joint owners across projects show in each).
-    return (data || []).filter(c => {
+    const filtered = (data || []).filter(c => {
       if (c.project_id === projectId) return true;
       const links = c.unit_sale_customers || [];
       return links.some(l => l.unit_sales?.units?.project_id === projectId);
     });
+    console.log('[customers] after filter', { kept: filtered.length });
+    return filtered;
   }
 
   async function loadLastInteractions(customerIds) {

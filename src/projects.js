@@ -90,6 +90,7 @@ async function deleteProject(projectId, projectName) {
 
 function setCurrentProject(project) {
   currentProject = project;
+  window.currentProject = project;
   localStorage.setItem('lastProjectId', project.id);
   document.getElementById('project-screen').style.display = 'none';
   document.getElementById('app-screen').style.display     = 'flex';
@@ -109,6 +110,7 @@ function setCurrentProject(project) {
 
 function returnToProjects() {
   currentProject = null;
+  window.currentProject = null;
   localStorage.removeItem('lastProjectId');
   closeProjectDropdown();
   renderProjectGrid();
@@ -181,6 +183,7 @@ function closeProjectDropdown() {
 
 function switchProject(project) {
   currentProject = project;
+  window.currentProject = project;
   localStorage.setItem('lastProjectId', project.id);
   window._selectedContractId = null;
   window._selectedIPCContractId = null;
