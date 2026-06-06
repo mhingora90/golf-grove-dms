@@ -1478,7 +1478,7 @@ function _crmAttnRowHtml(r) {
   const verb = r.type === 'reply' ? 'replied' : 'mentioned you';
   const leadLabel = (window._crmLeadNameCache && window._crmLeadNameCache[r.lead_id]) || 'Lead';
   return `<div class="ch-attn-row" onclick="crmOpenNotif('${r.id}','${r.lead_id}','${r.activity_id}')">
-    <div class="crm-notif"><div class="avatar">${esc(initials)}</div></div>
+    <div class="avatar">${esc(initials)}</div>
     <div style="flex:1">
       <div class="lead">${esc(leadLabel)}</div>
       <div class="meta">${esc(r.actor_name)} ${verb} · ${_crmRelTime(r.created_at)}</div>
@@ -1493,7 +1493,7 @@ let _crmInboxTab = 'all';
 async function renderCrmNotifications() {
   await initCrmNotifications();
   document.getElementById('content').innerHTML = `
-    <div class="page-header">
+    <div class="notif-page-header">
       <h2>Notifications</h2>
       <button class="btn" id="crm-notif-mark-all">Mark all read</button>
     </div>
@@ -1504,7 +1504,7 @@ async function renderCrmNotifications() {
       <button class="notif-tab" data-tab="unread">Unread</button>
     </div>
     <div class="notif-list" id="crm-notif-list"></div>
-    <div id="crm-notif-loadmore" style="text-align:center;padding:12px;display:none">
+    <div class="notif-loadmore" id="crm-notif-loadmore" style="display:none">
       <button class="btn">Load more</button>
     </div>`;
   document.querySelectorAll('.notif-tab').forEach(btn => {
@@ -1535,7 +1535,7 @@ function _crmInboxRender() {
   else if (_crmInboxTab === 'reply')   rows = rows.filter(r => r.type === 'reply');
   else if (_crmInboxTab === 'unread')  rows = rows.filter(r => !r.read_at);
   if (!rows.length) {
-    list.innerHTML = '<div style="padding:32px;text-align:center;color:#9ca3af">Nothing here</div>';
+    list.innerHTML = '<div class="notif-empty"><span class="glyph">🔕</span>Nothing here</div>';
     return;
   }
   list.innerHTML = rows.map(_crmNotifRowHtml).join('');
