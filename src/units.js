@@ -434,13 +434,12 @@ function openSaleForm(unitId, saleId) {
 
   const body =
     '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">Sale Details</div>' +
+    '<div id="sf-owners-host" style="margin-bottom:14px"></div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">' +
-      '<div class="form-group" style="margin:0"><label class="form-label">Buyer Name</label><input id="sf-buyer" class="form-input" value="' + esc(sale?.buyer_name||'') + '" /></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Sale Date</label><input id="sf-saledate" type="date" class="form-input" value="' + esc(sale?.sale_date||'') + '" /></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Sold Price (AED)</label><input id="sf-price" type="number" class="form-input" value="' + (sale?.sold_price||'') + '" /></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Discount (AED)</label><input id="sf-discount" type="number" class="form-input" value="' + (sale?.discount_amount||0) + '" /></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Commission %</label><input id="sf-commpct" type="number" step="0.01" class="form-input" value="' + (sale?.commission_pct ?? (isEdit ? 0 : 9)) + '" /></div>' +
-      '<div></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Broker Name</label><input id="sf-broker" class="form-input" value="' + esc(sale?.broker_name||'') + '" /></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Brokerage</label><input id="sf-brokerage" class="form-input" value="' + esc(sale?.brokerage_name||'') + '" /></div>' +
     '</div>' +
@@ -464,10 +463,26 @@ function openSaleForm(unitId, saleId) {
     '<button class="btn btn-primary" onclick="saveSaleForm(\'' + unitId + '\',\'' + (saleId||'') + '\')">Save</button><button class="btn" onclick="closeModal()">Cancel</button>',
     true
   );
+
+  // Mount customer picker (replaces former buyer_name text input)
+  (async () => {
+    const host = document.getElementById('sf-owners-host');
+    if (!host || !window.Customers?.pickCustomer) return;
+    const initial = isEdit && saleId
+      ? await window.Customers.loadOwnersForSale(saleId)
+      : (sale?.buyer_name
+          ? [{ customer_id: '__pending__', name: sale.buyer_name, is_primary: true, ownership_pct: null }]
+          : []);
+    // strip pending sentinel before mount if no saved owners yet
+    const seeded = initial.filter(r => r.customer_id !== '__pending__');
+    window._saleFormPicker = window.Customers.pickCustomer({ container: host, initial: seeded });
+  })();
 }
 
 async function saveSaleForm(unitId, saleId) {
-  const buyer_name      = document.getElementById('sf-buyer')?.value.trim()||null;
+  const ownersFromPicker = window._saleFormPicker?.getValue() || [];
+  const primaryOwner     = ownersFromPicker.find(o => o.is_primary) || ownersFromPicker[0] || null;
+  const buyer_name       = primaryOwner?.name || null;
   const sale_date       = document.getElementById('sf-saledate')?.value||null;
   const sold_price      = parseFloat(document.getElementById('sf-price')?.value)||null;
   const discount_amount = parseFloat(document.getElementById('sf-discount')?.value)||0;
@@ -516,6 +531,15 @@ async function saveSaleForm(unitId, saleId) {
     const rows = milestones.map(m=>({...m, unit_sale_id:targetSaleId}));
     const {error:msErr} = await sb.from('payment_milestones').insert(rows);
     if(msErr) { toast('Milestone error: ' + msErr.message,'error'); return; }
+  }
+
+  // Sync joint owners → unit_sale_customers (replaces buyer_name free-text).
+  // Returns the primary owner name; refresh buyer_name if it diverged.
+  if (window.Customers?.syncSaleOwners) {
+    const primaryName = await window.Customers.syncSaleOwners(targetSaleId, ownersFromPicker);
+    if (primaryName && primaryName !== buyer_name) {
+      await sb.from('unit_sales').update({ buyer_name: primaryName }).eq('id', targetSaleId);
+    }
   }
 
   // Sync units.sale_status + blocked with the unit_sales status. Blocked-by-

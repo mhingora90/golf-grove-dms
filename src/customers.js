@@ -226,5 +226,144 @@ window.Customers = (function () {
     await init();
   }
 
-  return { init, openProfile, openCreate, doCreate, doDelete, onSearch, onRecency };
+  // ─── pickCustomer widget (used by Unit Register sale form) ─────
+  async function loadOwnersForSale(saleId) {
+    if (!saleId) return [];
+    const { data, error } = await sb
+      .from('unit_sale_customers')
+      .select('customer_id, is_primary, ownership_pct, customers(name)')
+      .eq('unit_sale_id', saleId);
+    if (error) return [];
+    return (data || []).map(r => ({
+      customer_id: r.customer_id,
+      name: r.customers?.name || '(unknown)',
+      is_primary: !!r.is_primary,
+      ownership_pct: r.ownership_pct,
+    }));
+  }
+
+  async function syncSaleOwners(saleId, owners) {
+    await sb.from('unit_sale_customers').delete().eq('unit_sale_id', saleId);
+    if (!owners?.length) return null;
+    const rows = owners.map(o => ({
+      unit_sale_id: saleId,
+      customer_id: o.customer_id,
+      is_primary: !!o.is_primary,
+      ownership_pct: o.ownership_pct,
+    }));
+    const { error } = await sb.from('unit_sale_customers').insert(rows);
+    if (error) { toast('Owner link error: ' + error.message, 'error'); return null; }
+    const primary = owners.find(o => o.is_primary) || owners[0];
+    return primary?.name || null;
+  }
+
+  function pickCustomer({ container, initial = [] }) {
+    let rows = (initial || []).map(r => ({ ...r }));
+
+    function _rowHtml(r) {
+      const tag = r.is_primary
+        ? '<span style="background:#d4b87a;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600">PRIMARY</span>'
+        : '<span style="background:#aaa;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600">JOINT</span>';
+      return `<div data-row-id="${esc(r.customer_id)}" style="display:flex;gap:8px;align-items:center;background:#fff;padding:8px;border-radius:6px;border:1px solid #e8e3d6;margin-bottom:6px">
+        ${tag}
+        <span style="flex:1;font-size:13px;color:#3d2817">${esc(r.name)}</span>
+        <input class="form-input pk-pct" type="number" min="0" max="100" placeholder="%" value="${r.ownership_pct ?? ''}" style="max-width:80px">
+        <button type="button" class="pk-rm" style="background:none;border:none;color:#c44545;cursor:pointer;font-size:14px">✕</button>
+      </div>`;
+    }
+
+    function render() {
+      container.innerHTML = `
+        <div style="border:1px solid #e0d4b0;background:#faf6ea;border-radius:8px;padding:12px;margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <strong style="font-size:11px;color:var(--charcoal);text-transform:uppercase;letter-spacing:.05em">Owners</strong>
+          </div>
+          <div>${rows.length ? rows.map(_rowHtml).join('') : '<div style="font-size:12px;color:var(--text3);padding:4px 0">No owners linked yet</div>'}</div>
+          <div style="position:relative;margin-top:10px">
+            <input id="pk-search" class="form-input" placeholder="Search customers or type a new name…" autocomplete="off">
+            <div id="pk-results" style="position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #e0d4b0;border-radius:6px;margin-top:4px;box-shadow:0 4px 12px rgba(0,0,0,.08);display:none;z-index:10;max-height:240px;overflow-y:auto"></div>
+          </div>
+        </div>`;
+      _wire();
+    }
+
+    async function _search(term) {
+      const safe = term.replace(/[,%]/g, '');
+      const { data, error } = await sb
+        .from('customers')
+        .select('id, name, phone, email')
+        .or(`name.ilike.%${safe}%,phone.ilike.%${safe}%,email.ilike.%${safe}%`)
+        .order('name')
+        .limit(8);
+      if (error) return [];
+      return data || [];
+    }
+
+    function _wire() {
+      const search = container.querySelector('#pk-search');
+      const results = container.querySelector('#pk-results');
+      let timer = null;
+
+      search.addEventListener('input', () => {
+        clearTimeout(timer);
+        const term = search.value.trim();
+        if (!term) { results.style.display = 'none'; return; }
+        timer = setTimeout(async () => {
+          const hits = await _search(term);
+          const hitHtml = hits.map(c => `
+            <div data-id="${esc(c.id)}" data-name="${esc(c.name)}" class="pk-hit" style="padding:8px 12px;border-bottom:1px solid #f0ead7;cursor:pointer">
+              <div style="font-size:13px;color:#5a3a16;font-weight:500">${esc(c.name)}</div>
+              <div style="font-size:11px;color:#7a6438">${esc(c.phone || c.email || '')}</div>
+            </div>`).join('');
+          results.innerHTML = hitHtml + `
+            <div data-create="${esc(term)}" class="pk-hit" style="padding:8px 12px;cursor:pointer;background:#faf6ea">
+              <div style="font-size:13px;color:#3d2817;font-weight:600">+ Create new customer "${esc(term)}"</div>
+            </div>`;
+          results.style.display = '';
+          results.querySelectorAll('.pk-hit').forEach(el => el.addEventListener('mousedown', async (e) => {
+            e.preventDefault();
+            let id = el.dataset.id;
+            let name = el.dataset.name;
+            const createName = el.dataset.create;
+            if (createName) {
+              const { data, error } = await sb.from('customers')
+                .insert({ name: createName, created_by: currentUser?.id })
+                .select().single();
+              if (error) { toast('Create failed: ' + error.message, 'error'); return; }
+              id = data.id; name = data.name;
+            }
+            if (!rows.some(r => r.customer_id === id)) {
+              rows.push({ customer_id: id, name, is_primary: rows.length === 0, ownership_pct: null });
+            }
+            search.value = '';
+            results.style.display = 'none';
+            render();
+          }));
+        }, 220);
+      });
+
+      search.addEventListener('blur', () => setTimeout(() => { results.style.display = 'none'; }, 220));
+
+      container.querySelectorAll('.pk-pct').forEach(inp => inp.addEventListener('input', () => {
+        const id = inp.closest('[data-row-id]').dataset.rowId;
+        const r = rows.find(x => x.customer_id === id);
+        if (r) { const v = parseFloat(inp.value); r.ownership_pct = isNaN(v) ? null : v; }
+      }));
+
+      container.querySelectorAll('.pk-rm').forEach(btn => btn.addEventListener('click', () => {
+        const id = btn.closest('[data-row-id]').dataset.rowId;
+        rows = rows.filter(r => r.customer_id !== id);
+        if (rows.length && !rows.some(r => r.is_primary)) rows[0].is_primary = true;
+        render();
+      }));
+    }
+
+    render();
+    return { getValue: () => rows };
+  }
+
+  return {
+    init, openProfile, openCreate, doCreate, doDelete, onSearch, onRecency,
+    pickCustomer, loadOwnersForSale, syncSaleOwners,
+  };
 })();
