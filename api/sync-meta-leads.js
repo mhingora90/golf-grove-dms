@@ -41,6 +41,7 @@ function rowToLead(r) {
   if (!metaLeadId) return null;
   const phone = (r[20] || '').replace(/^p:/, '').trim() || null;
   const formId = (r[8] || '').replace(/^f:/, '').trim() || null;
+  const adId   = (r[2]  || '').replace(/^ag:/, '').trim() || null;
   return {
     project_id:     PROJECT_ID,
     meta_lead_id:   metaLeadId,
@@ -48,9 +49,8 @@ function rowToLead(r) {
     company_name:   (r[17] || '').trim() || null,
     email:          (r[19] || '').trim() || null,
     phone,
-    created_time:   (r[14] || '').trim() || null,
-    ad_id:          (r[15] || '').trim() || null,
-    created_at:     (r[1]  || '').trim() || null,
+    created_time:   (r[1]  || '').trim() || null,
+    ad_id:          adId,
     source:         'meta_ads',
     broker_type:    (r[13] || '').trim() || null,
     budget_range:   (r[14] || '').trim() || null,
@@ -125,16 +125,31 @@ export default async function handler(request) {
 
     // Row 0 = SyncWith data row, Row 1 = shifted headers (ignored), Row 2+ = leads.
     const dataRows = [rows[0], ...rows.slice(2)];
-    const leads = dataRows.map(rowToLead).filter(Boolean);
+    const allLeads = dataRows.map(rowToLead).filter(Boolean);
+
+    // SyncWith occasionally emits the same meta_lead_id for distinct people
+    // (collision bug). Rule: keep the earliest occurrence in the sheet, drop
+    // later ones. Dedup by meta_lead_id keeping first seen.
+    const seen = new Set();
+    const leads = [];
+    let droppedCollisions = 0;
+    for (const l of allLeads) {
+      if (seen.has(l.meta_lead_id)) { droppedCollisions++; continue; }
+      seen.add(l.meta_lead_id);
+      leads.push(l);
+    }
 
     const sbHeaders = {
       apikey: SUPABASE_KEY,
       Authorization: `Bearer ${SUPABASE_KEY}`,
       'Content-Type': 'application/json',
-      Prefer: 'resolution=ignore-duplicates,return=representation',
+      // merge-duplicates so re-syncs repair stale meta-side columns. CRM-side
+      // columns (stage, assigned_to, notes, rating, …) aren't in the body so
+      // they're preserved.
+      Prefer: 'resolution=merge-duplicates,return=representation',
     };
 
-    let inserted = 0, duplicates = 0, errors = 0;
+    let inserted = 0, updated = 0, errors = 0;
     const errorDetails = [];
 
     for (const lead of leads) {
@@ -145,7 +160,9 @@ export default async function handler(request) {
       });
       if (res.ok) {
         const body = await res.json();
-        if (body.length === 0) duplicates++;
+        // merge-duplicates returns the row in both insert and update paths;
+        // we can't distinguish here so count any 2xx as "merged".
+        if (body.length === 0) updated++;
         else inserted++;
       } else {
         errors++;
@@ -157,9 +174,11 @@ export default async function handler(request) {
 
     return new Response(JSON.stringify({
       status: 'ok',
-      total: leads.length,
-      inserted,
-      duplicates,
+      sheet_rows: allLeads.length,
+      unique_leads: leads.length,
+      dropped_collisions: droppedCollisions,
+      inserted_or_merged: inserted,
+      empty_response: updated,
       errors,
       errorDetails: errorDetails.length ? errorDetails : undefined,
     }), {
