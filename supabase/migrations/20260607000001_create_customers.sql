@@ -17,8 +17,11 @@ create index if not exists customers_phone_idx on public.customers (phone);
 create index if not exists customers_email_idx on public.customers (lower(email));
 
 create or replace function public.has_customer_access() returns boolean
-  language sql stable as
-  $$ select public.get_user_role() in ('admin','developer','sales') $$;
+  language sql
+  security definer
+  stable
+  set search_path = public
+  as $$ select public.get_user_role() in ('admin','developer','sales') $$;
 
 alter table public.customers enable row level security;
 
