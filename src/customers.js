@@ -13,16 +13,16 @@ window.Customers = (function () {
   async function loadCustomers() {
     const { data, error } = await sb
       .from('customers')
-      .select('id, name, phone, email, nationality, unit_sale_customers(unit_sale_id, is_primary, unit_sales(units(project_id)))')
+      .select('id, name, phone, email, nationality, project_id, unit_sale_customers(unit_sale_id, is_primary, unit_sales(units(project_id)))')
       .order('name');
     if (error) { toast('Failed to load customers: ' + error.message, 'error'); return []; }
     const projectId = window.currentProject?.id;
     if (!projectId) return data || [];
-    // Scope to currentProject: keep customers with at least one linked unit in
-    // this project, plus orphans (no unit links — manual entries belong to all).
+    // Scope strictly to currentProject: home project matches, or any linked
+    // unit belongs to this project (joint owners across projects show in each).
     return (data || []).filter(c => {
+      if (c.project_id === projectId) return true;
       const links = c.unit_sale_customers || [];
-      if (links.length === 0) return true;
       return links.some(l => l.unit_sales?.units?.project_id === projectId);
     });
   }
@@ -317,7 +317,9 @@ window.Customers = (function () {
     const email = document.getElementById('cust-new-email')?.value?.trim() || null;
     const nationality = document.getElementById('cust-new-nat')?.value?.trim() || null;
     const { error } = await sb.from('customers').insert({
-      name, phone, email, nationality, created_by: currentUser?.id,
+      name, phone, email, nationality,
+      project_id: window.currentProject?.id || null,
+      created_by: currentUser?.id,
     });
     if (error) { toast('Failed: ' + error.message, 'error'); return; }
     toast('Customer added', 'success');
