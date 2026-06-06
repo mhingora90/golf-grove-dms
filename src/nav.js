@@ -1,6 +1,6 @@
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',reports:'Reports','reports-finance':'Finance Report','reports-quality':'Quality & Site Report','reports-sales':'Sales & CRM Report','reports-docs':'Document Control Report',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM — Leads','crm-home':'CRM Home','crm-notifications':'CRM Notifications'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',reports:'Reports','reports-finance':'Finance Report','reports-quality':'Quality & Site Report','reports-sales':'Sales & CRM Report','reports-docs':'Document Control Report',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM — Leads','crm-home':'CRM Home','crm-notifications':'CRM Notifications',customers:'Customers'};
 
 // pages that share a sidebar nav-item with another page
 const NAV_ITEM_FOR = {'reports-finance':'reports','reports-quality':'reports','reports-sales':'reports','reports-docs':'reports'};
@@ -94,6 +94,7 @@ async function _execRender(page) {
   else if(page==='crm') { resetCRM(); await renderCRM(); }
   else if(page==='crm-home') await renderCRMHome();
   else if(page==='crm-notifications') await renderCrmNotifications();
+  else if(page==='customers') await Customers.init();
   else if(page==='reports') await renderReports();
   else if(page==='reports-finance') {
     const parts = location.hash.replace('#','').split('/');
