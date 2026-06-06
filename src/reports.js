@@ -54,6 +54,19 @@ function buildReportsHub() {
     }),
 
     _hubLiveCard({
+      onclick: '_openCrmReport()',
+      title: 'CRM Activity Report',
+      iconBg: 'var(--sand-bg)',
+      iconSvg: '<svg width="13" height="13" viewBox="0 0 18 18" fill="none"><path d="M3 4h12v8H6l-3 3V4z" stroke="#8B7355" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      desc: 'Customer interactions over a date range. Methods, daily volume, top performers.',
+      chips: ['Date range','Methods','PDF'],
+      accentBg: 'var(--sand-bg)',
+      accentBorder: '#E0D2BC',
+      accentColor: 'var(--sand)',
+      arrowStroke: '#8B7355',
+    }),
+
+    _hubLiveCard({
       onclick: '_openDocsReport()',
       title: 'Document Control Report',
       iconBg: '#FFF8EC',

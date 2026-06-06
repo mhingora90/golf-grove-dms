@@ -1,9 +1,9 @@
 
 // ─── NAVIGATION ──────────────────────────────────────────────────
-const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',reports:'Reports','reports-finance':'Finance Report','reports-quality':'Quality & Site Report','reports-sales':'Sales & CRM Report','reports-docs':'Document Control Report',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM — Leads','crm-home':'CRM Home','crm-notifications':'CRM Notifications',customers:'Customers'};
+const PAGE_TITLES = {dash:'Dashboard',draw:'Drawing Register',sub:'Submittals (DSUB)',sreg:'Submittal Register',ir:'Inspection Requests',ncr:'Non-Conformance Reports',rfi:'RFI Register',trans:'Transmittal Log',corr:'Correspondence Register',punch:'Punch List / Defects',subs:'Subcontractors',users:'User Management',ms:'Method Statements',ipc:'Payment Certificates',boq:'BOQ Setup',finance:'Finance Overview',reports:'Reports','reports-finance':'Finance Report','reports-quality':'Quality & Site Report','reports-sales':'Sales & CRM Report','reports-docs':'Document Control Report','reports-crm':'CRM Activity Report',usetup:'Unit Setup',ureg:'Unit Register',srev:'Sales Revenue',crm:'CRM — Leads','crm-home':'CRM Home','crm-notifications':'CRM Notifications',customers:'Customers'};
 
 // pages that share a sidebar nav-item with another page
-const NAV_ITEM_FOR = {'reports-finance':'reports','reports-quality':'reports','reports-sales':'reports','reports-docs':'reports'};
+const NAV_ITEM_FOR = {'reports-finance':'reports','reports-quality':'reports','reports-sales':'reports','reports-docs':'reports','reports-crm':'reports'};
 function navItemId(page) { return NAV_ITEM_FOR[page] || page; }
 function basePageFromHash() {
   const h = location.hash.replace('#','');
@@ -135,6 +135,20 @@ async function _execRender(page) {
       if (y && m >= 1 && m <= 12) { year = y; month = m; }
     }
     await renderDocsReport(year, month);
+  }
+  else if(page==='reports-crm') {
+    const parts = location.hash.replace('#','').split('/');
+    const now = new Date();
+    const to = _crmFmtDateISO(now);
+    const fromD = new Date(now); fromD.setDate(fromD.getDate() - 29);
+    let from = _crmFmtDateISO(fromD), toFinal = to;
+    if (parts[1]) {
+      const [f, t] = parts[1].split('_');
+      if (/^\d{4}-\d{2}-\d{2}$/.test(f) && /^\d{4}-\d{2}-\d{2}$/.test(t)) {
+        from = f; toFinal = t;
+      }
+    }
+    await renderCrmReport(from, toFinal);
   }
 }
 
