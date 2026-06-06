@@ -116,7 +116,8 @@ def classify(raw: str):
         # Carry the client_name on a sale row so it surfaces in the register.
         return "blocked_by_developer", True, True, "blocked_by_developer"
     if raw == "BOOKED":
-        return "available", False, True, "reserved"
+        # OTP signed; we surface as sold so the buyer name shows on the register.
+        return "sold", False, True, "sold"
     if raw == "REGISTERED":
         return "sold", False, True, "sold"
     raise ValueError(f"unknown status: {raw}")
