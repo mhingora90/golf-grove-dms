@@ -41,10 +41,11 @@ window.Customers = (function () {
   }
 
   function buildListHtml(customers, last, totalAll) {
-    const total = totalAll ?? customers.length;
-    const fresh = customers.filter(c => _bucket(last[c.id]?.contacted_at) === 'fresh').length;
-    const stale = customers.filter(c => _bucket(last[c.id]?.contacted_at) === 'cold').length;
-    const noTouch = customers.filter(c => !last[c.id]).length;
+    const statsSrc = _custCache || customers;
+    const total = totalAll ?? statsSrc.length;
+    const fresh = statsSrc.filter(c => _bucket(last[c.id]?.contacted_at) === 'fresh').length;
+    const stale = statsSrc.filter(c => _bucket(last[c.id]?.contacted_at) === 'cold').length;
+    const noTouch = statsSrc.filter(c => !last[c.id]).length;
 
     const stats = `
       <div class="cust-stats">
@@ -186,7 +187,18 @@ window.Customers = (function () {
     const root = document.getElementById('content');
     if (!root || !_custCache) return;
     const filtered = _applyFilters(_custCache, _lastCache || {});
-    root.innerHTML = buildListHtml(filtered, _lastCache || {});
+    const focused = document.activeElement;
+    const wasSearchFocused = focused?.id === 'cust-search';
+    const caret = wasSearchFocused ? focused.selectionStart : null;
+    root.innerHTML = buildListHtml(filtered, _lastCache || {}, _custCache.length);
+    if (wasSearchFocused) {
+      const el = document.getElementById('cust-search');
+      if (el) {
+        el.focus();
+        const pos = caret ?? _custSearch.length;
+        try { el.setSelectionRange(pos, pos); } catch (_) {}
+      }
+    }
   }
 
   async function init() {
