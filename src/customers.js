@@ -134,21 +134,64 @@ window.Customers = (function () {
   function onRecency(val) { _custRecency = val || ''; _rerender(); }
 
   async function openProfile(id) {
-    // Drawer implementation lands in Task 11. For now, a stub modal
-    // so the row click + nav route round-trip can be smoke-tested.
-    const c = (_custCache || []).find(x => x.id === id);
-    if (!c) { toast('Customer not found', 'error'); return; }
-    if (typeof openModal === 'function') {
-      openModal('Customer — ' + esc(c.name), `
-        <div class="detail-grid">
-          <div class="detail-item"><div class="detail-label">Phone</div><div class="detail-value">${esc(c.phone || '—')}</div></div>
-          <div class="detail-item"><div class="detail-label">Email</div><div class="detail-value">${esc(c.email || '—')}</div></div>
-          <div class="detail-item"><div class="detail-label">Nationality</div><div class="detail-value">${esc(c.nationality || '—')}</div></div>
-          <div class="detail-item"><div class="detail-label">Units</div><div class="detail-value">${(c.unit_sale_customers || []).length}</div></div>
-        </div>
-        <div style="margin-top:12px;color:var(--text3);font-size:12px">Profile drawer + interaction feed coming in next task.</div>`,
-        `<button class="btn" onclick="closeModal()">Close</button>`);
-    }
+    const { data: c, error } = await sb
+      .from('customers')
+      .select(`
+        id, name, phone, email, nationality,
+        unit_sale_customers(
+          is_primary, ownership_pct,
+          unit_sales(
+            id, buyer_name,
+            units(id, unit_no, project_id, projects(name))
+          )
+        )
+      `)
+      .eq('id', id)
+      .maybeSingle();
+    if (error || !c) { toast('Customer not found', 'error'); return; }
+
+    const unitChips = (c.unit_sale_customers || []).map(link => {
+      const u = link.unit_sales?.units;
+      const projName = u?.projects?.name || '';
+      const unitNo = u?.unit_no || '';
+      const primaryTag = link.is_primary
+        ? '<span class="role-badge" style="margin-left:6px;background:#d4b87a;color:#fff;font-size:10px;padding:2px 6px;border-radius:8px">PRIMARY</span>'
+        : '';
+      return `<span style="display:inline-flex;align-items:center;gap:4px;background:#f4efe2;padding:6px 12px;border-radius:6px;color:#5a3a16;font-size:13px;border:1px solid #e0d4b0;margin-right:6px;margin-bottom:6px">
+        <strong>${esc(projName)} · ${esc(unitNo)}</strong>${primaryTag}
+      </span>`;
+    }).join('');
+
+    openModal('Customer — ' + esc(c.name), `
+      <div class="detail-grid">
+        <div class="detail-item"><div class="detail-label">Phone</div><div class="detail-value">${esc(c.phone || '—')}</div></div>
+        <div class="detail-item"><div class="detail-label">Email</div><div class="detail-value">${esc(c.email || '—')}</div></div>
+        <div class="detail-item"><div class="detail-label">Nationality</div><div class="detail-value">${esc(c.nationality || '—')}</div></div>
+      </div>
+      <div style="margin-top:14px">
+        <div style="font-size:11px;font-weight:600;color:var(--charcoal);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Units owned</div>
+        <div>${unitChips || '<span style="color:var(--text3);font-size:13px">No units linked yet</span>'}</div>
+      </div>
+      <div id="cust-feed-container" style="margin-top:14px"></div>`,
+      `<button class="btn btn-danger" onclick="Customers.doDelete('${esc(c.id)}')">Delete</button>
+       <button class="btn" onclick="closeModal()">Close</button>`,
+      true);
+
+    setTimeout(() => {
+      const container = document.getElementById('cust-feed-container');
+      if (container && window.ActivityFeed) {
+        window.ActivityFeed.render({ container, parentType: 'customer', parentId: id });
+      }
+    }, 60);
+  }
+
+  async function doDelete(id) {
+    if (!confirm('Delete this customer? Linked sales will keep their buyer_name text but lose the customer link.')) return;
+    const { error } = await sb.from('customers').delete().eq('id', id);
+    if (error) { toast('Failed: ' + error.message, 'error'); return; }
+    toast('Customer deleted', 'success');
+    closeModal();
+    await init();
   }
 
   function openCreate() {
@@ -183,5 +226,5 @@ window.Customers = (function () {
     await init();
   }
 
-  return { init, openProfile, openCreate, doCreate, onSearch, onRecency };
+  return { init, openProfile, openCreate, doCreate, doDelete, onSearch, onRecency };
 })();
