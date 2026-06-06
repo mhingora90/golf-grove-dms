@@ -70,5 +70,8 @@ $$;
 comment on function public.run_customer_backfill() is
   'Parses unit_sales.buyer_name on & / and (case-insensitive) and populates customers + unit_sale_customers. Idempotent.';
 
+revoke execute on function public.run_customer_backfill() from public;
+grant execute on function public.run_customer_backfill() to service_role;
+
 -- Run once at migration time.
 select public.run_customer_backfill();
