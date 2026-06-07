@@ -1,0 +1,60 @@
+name: Supabase Storage Daily Backup
+
+on:
+  schedule:
+    # Daily at 00:30 UTC (offset from DB backup to avoid overlap)
+    - cron: '30 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: supabase-backup-storage
+  cancel-in-progress: false
+
+jobs:
+  backup-storage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+
+      - name: Sync storage buckets
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          BACKUP_BUCKETS: drawings,attachments
+          BACKUP_DIR: backups/storage
+        run: node scripts/backup-storage.mjs
+
+      - name: Track binary files with Git LFS
+        run: |
+          git lfs install
+          git lfs track "backups/storage/**"
+          git add .gitattributes
+
+      - name: Commit storage backup
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backups/storage
+          if git diff --cached --quiet; then
+            echo "No storage changes to commit."
+            exit 0
+          fi
+          STAMP="$(date -u +'%Y-%m-%d %H:%M UTC')"
+          git commit -m "Supabase storage backup - ${STAMP}"
+          git pull --rebase origin main
+          git push
