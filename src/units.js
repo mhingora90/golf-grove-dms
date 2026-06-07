@@ -66,11 +66,18 @@ async function renderUnitSetup() {
     '</table></div></div>';
 }
 
-function openAddUnitForm() {
+async function openAddUnitForm() {
+  const {data:existing} = await sb.from('units').select('unit_type').eq('project_id',currentProject.id);
+  const types = [...new Set((existing||[]).map(u=>u.unit_type).filter(Boolean))].sort();
+  const typeOpts = types.map(t=>'<option value="' + esc(t) + '"></option>').join('');
   openModal('Add Unit',
     '<div class="form-group"><label class="form-label">Unit No.</label><input id="uf-no" class="form-input" placeholder="e.g. 101" /></div>' +
     '<div class="form-group"><label class="form-label">Floor</label><input id="uf-floor" type="number" min="1" class="form-input" placeholder="1" /></div>' +
-    '<div class="form-group"><label class="form-label">Type</label><select id="uf-type" class="form-input"><option value="Studio">Studio</option><option value="1BHK">1BHK</option></select></div>' +
+    '<div class="form-group"><label class="form-label">Type</label>' +
+      '<input id="uf-type" class="form-input" list="uf-type-list" placeholder="e.g. Studio, 1BHK, 2BHK, Penthouse" />' +
+      '<datalist id="uf-type-list">' + typeOpts + '</datalist>' +
+      (types.length ? '<div style="font-size:10px;color:var(--text3);margin-top:3px">Existing: ' + types.map(esc).join(', ') + '</div>' : '') +
+    '</div>' +
     '<div class="form-group"><label class="form-label">Area (sqft)</label><input id="uf-sqft" type="number" min="1" class="form-input" placeholder="490" /></div>' +
     '<div class="form-group"><label class="form-label">Listed Price (AED)</label><input id="uf-price" type="number" min="1" class="form-input" placeholder="625000" /></div>',
     '<button class="btn btn-primary" onclick="saveNewUnit()">Add Unit</button><button class="btn" onclick="closeModal()">Cancel</button>'
@@ -80,10 +87,10 @@ function openAddUnitForm() {
 async function saveNewUnit() {
   const unit_no      = document.getElementById('uf-no')?.value.trim();
   const floor        = parseInt(document.getElementById('uf-floor')?.value);
-  const unit_type    = document.getElementById('uf-type')?.value;
+  const unit_type    = document.getElementById('uf-type')?.value?.trim();
   const area_sqft    = parseFloat(document.getElementById('uf-sqft')?.value);
   const listed_price = parseFloat(document.getElementById('uf-price')?.value);
-  if(!unit_no || !floor || !area_sqft || !listed_price) { toast('Fill in all fields','error'); return; }
+  if(!unit_no || !floor || !unit_type || !area_sqft || !listed_price) { toast('Fill in all fields','error'); return; }
   const {error} = await sb.from('units').insert({project_id:currentProject.id,unit_no, floor, unit_type, area_sqft, listed_price});
   if(error) { toast('Error: ' + error.message,'error'); return; }
   toast('Unit added','success');
@@ -94,13 +101,16 @@ async function saveNewUnit() {
 async function openEditUnit(id) {
   const {data:u, error} = await sb.from('units').select('*').eq('id',id).single();
   if(error||!u) { toast('Failed to load unit','error'); return; }
+  const {data:existing} = await sb.from('units').select('unit_type').eq('project_id',currentProject.id);
+  const types = [...new Set((existing||[]).map(x=>x.unit_type).filter(Boolean))].sort();
+  const typeOpts = types.map(t=>'<option value="' + esc(t) + '"></option>').join('');
   openModal('Edit Unit ' + esc(u.unit_no),
     '<div class="form-group"><label class="form-label">Unit No.</label><input id="eu-no" class="form-input" value="' + esc(u.unit_no) + '" /></div>' +
     '<div class="form-group"><label class="form-label">Floor</label><input id="eu-floor" type="number" class="form-input" value="' + esc(u.floor) + '" /></div>' +
-    '<div class="form-group"><label class="form-label">Type</label><select id="eu-type" class="form-input">' +
-      '<option value="Studio"' + (u.unit_type==='Studio'?' selected':'') + '>Studio</option>' +
-      '<option value="1BHK"' + (u.unit_type==='1BHK'?' selected':'') + '>1BHK</option>' +
-    '</select></div>' +
+    '<div class="form-group"><label class="form-label">Type</label>' +
+      '<input id="eu-type" class="form-input" list="eu-type-list" value="' + esc(u.unit_type||'') + '" />' +
+      '<datalist id="eu-type-list">' + typeOpts + '</datalist>' +
+    '</div>' +
     '<div class="form-group"><label class="form-label">Area (sqft)</label><input id="eu-sqft" type="number" class="form-input" value="' + esc(u.area_sqft) + '" /></div>' +
     '<div class="form-group"><label class="form-label">Listed Price (AED)</label><input id="eu-price" type="number" class="form-input" value="' + esc(u.listed_price) + '" /></div>',
     '<button class="btn btn-primary" onclick="saveEditUnit(\'' + id + '\')">Save</button><button class="btn" onclick="closeModal()">Cancel</button>'
@@ -110,10 +120,10 @@ async function openEditUnit(id) {
 async function saveEditUnit(id) {
   const unit_no      = document.getElementById('eu-no')?.value.trim();
   const floor        = parseInt(document.getElementById('eu-floor')?.value);
-  const unit_type    = document.getElementById('eu-type')?.value;
+  const unit_type    = document.getElementById('eu-type')?.value?.trim();
   const area_sqft    = parseFloat(document.getElementById('eu-sqft')?.value);
   const listed_price = parseFloat(document.getElementById('eu-price')?.value);
-  if(!unit_no || !floor || !area_sqft || !listed_price) { toast('Fill in all fields','error'); return; }
+  if(!unit_no || !floor || !unit_type || !area_sqft || !listed_price) { toast('Fill in all fields','error'); return; }
   const {error} = await sb.from('units').update({unit_no, floor, unit_type, area_sqft, listed_price}).eq('id',id);
   if(error) { toast('Error: ' + error.message,'error'); return; }
   toast('Unit updated','success');
@@ -236,6 +246,9 @@ async function renderUnitRegister() {
     return;
   }
   window._uregData = units||[];
+  // Reset status segmented filter on entry — segmented chip is rendered fresh
+  // and its state lives on window, so clearing prevents bleed across projects.
+  window._uregStatusF = 'all';
   _renderUregTable();
 }
 
@@ -246,8 +259,8 @@ function _setUregStatus(s) {
 
 function _renderUregTable() {
   const units  = window._uregData||[];
-  const typeF   = document.getElementById('urf-type')?.value   || 'all';
-  const floorF  = document.getElementById('urf-floor')?.value  || 'all';
+  let typeF    = document.getElementById('urf-type')?.value   || 'all';
+  let floorF   = document.getElementById('urf-floor')?.value  || 'all';
   const statusF = window._uregStatusF || 'all';
   const searchEl = document.getElementById('urf-search');
   const savedRaw  = searchEl?.value || '';
@@ -255,6 +268,11 @@ function _renderUregTable() {
   const search  = savedRaw.toLowerCase().trim();
 
   const floors = [...new Set(units.map(u=>u.floor))].sort((a,b)=>a-b);
+  const types  = [...new Set(units.map(u=>u.unit_type).filter(Boolean))].sort();
+
+  // Clamp stale filter values (e.g. switched project, type no longer present).
+  if (typeF !== 'all' && !types.includes(typeF)) typeF = 'all';
+  if (floorF !== 'all' && !floors.map(String).includes(floorF)) floorF = 'all';
 
   // KPI counts on raw set (before filter)
   const total     = units.length;
@@ -329,7 +347,7 @@ function _renderUregTable() {
         (blocked ? seg('blocked_by_developer','Blocked',blocked) : '') +
       '</div>' +
       '<select id="urf-type" class="form-control" style="width:auto;padding:6px 8px;font-size:12px" onchange="_renderUregTable()">' +
-        '<option value="all">All Types</option><option value="Studio">Studio</option><option value="1BHK">1BHK</option>' +
+        '<option value="all">All Types</option>' + types.map(t=>'<option value="' + esc(t) + '">' + esc(t) + '</option>').join('') +
       '</select>' +
       '<select id="urf-floor" class="form-control" style="width:auto;padding:6px 8px;font-size:12px" onchange="_renderUregTable()">' +
         '<option value="all">All Floors</option>' + floorOpts +
