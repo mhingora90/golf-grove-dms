@@ -76,6 +76,21 @@ UPDATE profiles SET role = 'developer' WHERE email = 'mohammed@regent-developmen
 ## Supabase
 
 **URL:** `https://kdxvhrwnnehicgdryowu.supabase.co`
+**Project ref:** `kdxvhrwnnehicgdryowu` (org: Regent Developments)
+
+### Local DB CLI
+- `npm run db:push` — apply pending migrations to remote
+- `npm run db:pull` — pull remote schema
+- `npm run db:status` — list applied migrations
+- Wrapper: `scripts/db-cli.mjs` loads `SUPABASE_DB_URL` from gitignored `.env.local` via `dotenv-cli`
+- Connection: Session pooler (IPv4-compat): `postgresql://postgres.kdxvhrwnnehicgdryowu:[PWD]@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres`
+- Pwd rotation: edit `.env.local` + update GH secret `SUPABASE_DB_URL`; npm scripts unchanged
+
+### Backups
+- Nightly GH Actions workflow `.github/workflows/backup.yml` (00:00 UTC + manual dispatch)
+- Dumps `roles.sql`, `schema.sql`, `data.sql` via Supabase CLI into `backups/`
+- Auto-commits with date in message
+- Uses GH secret `SUPABASE_DB_URL`
 
 ### Tables
 
