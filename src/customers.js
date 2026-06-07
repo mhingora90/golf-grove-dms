@@ -290,10 +290,13 @@ window.Customers = (function () {
 
   async function doDelete(id) {
     if (!confirm('Delete this customer? Their unit links will be removed and the buyer name will clear from the Unit Register.')) return;
-    const { error } = await sb.from('customers').delete().eq('id', id);
+    const { error, count } = await sb.from('customers').delete({ count: 'exact' }).eq('id', id);
     if (error) { toast('Failed: ' + error.message, 'error'); return; }
+    if (count === 0) { toast('Delete blocked by policy — contact admin', 'error'); return; }
     toast('Customer deleted', 'success');
     closeModal();
+    // Bust the page render cache so navigating back doesn't show stale row.
+    if (typeof _pageCache !== 'undefined') delete _pageCache['customers_' + (currentProject?.id || '')];
     await init();
   }
 
