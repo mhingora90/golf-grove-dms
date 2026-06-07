@@ -101,11 +101,13 @@ window.Customers = (function () {
               <option value="90" ${_custRecency==='90'?'selected':''}>&lt; 90 days</option>
               <option value="none" ${_custRecency==='none'?'selected':''}>No interactions</option>
             </select>
-            <button class="btn btn-primary" onclick="Customers.openCreate()">+ New Customer</button>
           </div>
         </div>
         ${stats}
         ${grid}
+        <div style="margin-top:14px;padding:10px 14px;background:var(--bg3);border:0.5px dashed var(--border);border-radius:8px;font-size:11px;color:var(--text3);line-height:1.5">
+          Customers are created from <strong>Unit Register</strong> when a buyer is assigned to a unit. They appear here automatically.
+        </div>
       </div>`;
   }
 
@@ -392,9 +394,10 @@ window.Customers = (function () {
 
     async function _search(term) {
       const safe = term.replace(/[,%]/g, '');
-      const { data, error } = await sb
-        .from('customers')
-        .select('id, name, phone, email')
+      const pid = (typeof currentProject !== 'undefined' && currentProject) ? currentProject.id : (window.currentProject?.id || null);
+      let q = sb.from('customers').select('id, name, phone, email');
+      if (pid) q = q.eq('project_id', pid);
+      const { data, error } = await q
         .or(`name.ilike.%${safe}%,phone.ilike.%${safe}%,email.ilike.%${safe}%`)
         .order('name')
         .limit(8);
@@ -429,11 +432,13 @@ window.Customers = (function () {
             let name = el.dataset.name;
             const createName = el.dataset.create;
             if (createName) {
+              const pid = (typeof currentProject !== 'undefined' && currentProject) ? currentProject.id : (window.currentProject?.id || null);
               const { data, error } = await sb.from('customers')
-                .insert({ name: createName, created_by: currentUser?.id })
+                .insert({ name: createName, project_id: pid, created_by: currentUser?.id })
                 .select().single();
               if (error) { toast('Create failed: ' + error.message, 'error'); return; }
               id = data.id; name = data.name;
+              toast('Customer "' + name + '" added', 'success');
             }
             if (!rows.some(r => r.customer_id === id)) {
               rows.push({ customer_id: id, name, is_primary: rows.length === 0, ownership_pct: null });
