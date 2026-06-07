@@ -1,6 +1,12 @@
 {
+  "scripts": {
+    "db:push":   "dotenv -e .env.local -- node scripts/db-cli.mjs push",
+    "db:pull":   "dotenv -e .env.local -- node scripts/db-cli.mjs pull",
+    "db:status": "dotenv -e .env.local -- node scripts/db-cli.mjs status"
+  },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
+    "dotenv-cli": "^11.0.0",
     "playwright": "^1.59.1",
     "supabase": "^2.92.1"
   },
