@@ -350,6 +350,20 @@ window.Customers = (function () {
   async function syncSaleOwners(saleId, owners) {
     await sb.from('unit_sale_customers').delete().eq('unit_sale_id', saleId);
     if (!owners?.length) return null;
+
+    // Materialize pending new customers (those without a real customer_id).
+    const pid = (typeof currentProject !== 'undefined' && currentProject) ? currentProject.id : (window.currentProject?.id || null);
+    for (const o of owners) {
+      if (!o.customer_id && o._pendingName) {
+        const { data, error } = await sb.from('customers')
+          .insert({ name: o._pendingName, project_id: pid, created_by: currentUser?.id })
+          .select('id, name').single();
+        if (error) { toast('Customer create failed: ' + error.message, 'error'); return null; }
+        o.customer_id = data.id;
+        o.name = data.name;
+      }
+    }
+
     const rows = owners.map(o => ({
       unit_sale_id: saleId,
       customer_id: o.customer_id,
@@ -365,12 +379,15 @@ window.Customers = (function () {
   function pickCustomer({ container, initial = [] }) {
     let rows = (initial || []).map(r => ({ ...r }));
 
-    function _rowHtml(r) {
+    function _rowHtml(r, idx) {
       const tag = r.is_primary
         ? '<span style="background:#d4b87a;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600">PRIMARY</span>'
         : '<span style="background:#aaa;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600">JOINT</span>';
-      return `<div data-row-id="${esc(r.customer_id)}" style="display:flex;gap:8px;align-items:center;background:#fff;padding:8px;border-radius:6px;border:1px solid #e8e3d6;margin-bottom:6px">
-        ${tag}
+      const newTag = !r.customer_id
+        ? '<span style="background:#2B6CB0;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600">NEW</span>'
+        : '';
+      return `<div data-row-idx="${idx}" style="display:flex;gap:8px;align-items:center;background:#fff;padding:8px;border-radius:6px;border:1px solid #e8e3d6;margin-bottom:6px">
+        ${tag}${newTag}
         <span style="flex:1;font-size:13px;color:#3d2817">${esc(r.name)}</span>
         <input class="form-input pk-pct" type="number" min="0" max="100" placeholder="%" value="${r.ownership_pct ?? ''}" style="max-width:80px">
         <button type="button" class="pk-rm" style="background:none;border:none;color:#c44545;cursor:pointer;font-size:14px">✕</button>
@@ -383,7 +400,7 @@ window.Customers = (function () {
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
             <strong style="font-size:11px;color:var(--charcoal);text-transform:uppercase;letter-spacing:.05em">Owners</strong>
           </div>
-          <div>${rows.length ? rows.map(_rowHtml).join('') : '<div style="font-size:12px;color:var(--text3);padding:4px 0">No owners linked yet</div>'}</div>
+          <div>${rows.length ? rows.map((r, i) => _rowHtml(r, i)).join('') : '<div style="font-size:12px;color:var(--text3);padding:4px 0">No owners linked yet</div>'}</div>
           <div style="position:relative;margin-top:10px">
             <input id="pk-search" class="form-input" placeholder="Search customers or type a new name…" autocomplete="off">
             <div id="pk-results" style="position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #e0d4b0;border-radius:6px;margin-top:4px;box-shadow:0 4px 12px rgba(0,0,0,.08);display:none;z-index:10;max-height:240px;overflow-y:auto"></div>
@@ -426,21 +443,18 @@ window.Customers = (function () {
               <div style="font-size:13px;color:#3d2817;font-weight:600">+ Create new customer "${esc(term)}"</div>
             </div>`;
           results.style.display = '';
-          results.querySelectorAll('.pk-hit').forEach(el => el.addEventListener('mousedown', async (e) => {
+          results.querySelectorAll('.pk-hit').forEach(el => el.addEventListener('mousedown', (e) => {
             e.preventDefault();
-            let id = el.dataset.id;
-            let name = el.dataset.name;
+            const id = el.dataset.id;
+            const name = el.dataset.name;
             const createName = el.dataset.create;
             if (createName) {
-              const pid = (typeof currentProject !== 'undefined' && currentProject) ? currentProject.id : (window.currentProject?.id || null);
-              const { data, error } = await sb.from('customers')
-                .insert({ name: createName, project_id: pid, created_by: currentUser?.id })
-                .select().single();
-              if (error) { toast('Create failed: ' + error.message, 'error'); return; }
-              id = data.id; name = data.name;
-              toast('Customer "' + name + '" added', 'success');
-            }
-            if (!rows.some(r => r.customer_id === id)) {
+              // Defer DB insert — customer is only materialized when the sale is saved.
+              const dupe = rows.some(r => !r.customer_id && (r._pendingName || '').toLowerCase() === createName.toLowerCase());
+              if (!dupe) {
+                rows.push({ customer_id: null, _pendingName: createName, name: createName, is_primary: rows.length === 0, ownership_pct: null });
+              }
+            } else if (id && !rows.some(r => r.customer_id === id)) {
               rows.push({ customer_id: id, name, is_primary: rows.length === 0, ownership_pct: null });
             }
             search.value = '';
@@ -453,14 +467,14 @@ window.Customers = (function () {
       search.addEventListener('blur', () => setTimeout(() => { results.style.display = 'none'; }, 220));
 
       container.querySelectorAll('.pk-pct').forEach(inp => inp.addEventListener('input', () => {
-        const id = inp.closest('[data-row-id]').dataset.rowId;
-        const r = rows.find(x => x.customer_id === id);
+        const idx = parseInt(inp.closest('[data-row-idx]').dataset.rowIdx, 10);
+        const r = rows[idx];
         if (r) { const v = parseFloat(inp.value); r.ownership_pct = isNaN(v) ? null : v; }
       }));
 
       container.querySelectorAll('.pk-rm').forEach(btn => btn.addEventListener('click', () => {
-        const id = btn.closest('[data-row-id]').dataset.rowId;
-        rows = rows.filter(r => r.customer_id !== id);
+        const idx = parseInt(btn.closest('[data-row-idx]').dataset.rowIdx, 10);
+        rows.splice(idx, 1);
         if (rows.length && !rows.some(r => r.is_primary)) rows[0].is_primary = true;
         render();
       }));
