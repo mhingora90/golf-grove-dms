@@ -1,0 +1,54 @@
+name: Supabase Nightly Backup
+
+on:
+  schedule:
+    # Every day at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Ensure backups directory exists
+        run: mkdir -p backups
+
+      - name: Dump roles
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: supabase db dump --db-url "$SUPABASE_DB_URL" --role-only -f backups/roles.sql
+
+      - name: Dump schema
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: supabase db dump --db-url "$SUPABASE_DB_URL" -f backups/schema.sql
+
+      - name: Dump data
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: supabase db dump --db-url "$SUPABASE_DB_URL" --data-only -f backups/data.sql
+
+      - name: Commit backup files
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backups/roles.sql backups/schema.sql backups/data.sql
+          if git diff --cached --quiet; then
+            echo "No backup changes to commit."
+            exit 0
+          fi
+          DATE="$(date -u +'%Y-%m-%d')"
+          git commit -m "Supabase backup - ${DATE}"
+          git push
