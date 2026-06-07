@@ -11,8 +11,6 @@ async function renderUnitSetup() {
   const totalSqft   = list.reduce((s,u)=>s+ +u.area_sqft,0);
   const totalGDV    = list.reduce((s,u)=>s+ +u.listed_price,0);
   const avgPpsf     = totalSqft ? Math.round(totalGDV/totalSqft) : 0;
-  const typeCounts  = list.reduce((acc,u)=>{ acc[u.unit_type]=(acc[u.unit_type]||0)+1; return acc; },{});
-  const mixLabel    = Object.entries(typeCounts).sort((a,b)=>b[1]-a[1]).map(([t,n])=>n+' '+t).join(' · ') || '—';
 
   const toolbar =
     '<div class="fbar">' +
@@ -38,7 +36,6 @@ async function renderUnitSetup() {
   const statsBar =
     '<div class="module-bar">' +
       '<div class="module-stat"><div class="module-stat-val">' + list.length + '</div><div class="module-stat-label">Total Units</div></div>' +
-      '<div class="module-stat"><div class="module-stat-val" style="font-size:14px;font-weight:500;padding-top:6px">' + esc(mixLabel) + '</div><div class="module-stat-label">Mix</div></div>' +
       '<div class="module-stat"><div class="module-stat-val">' + totalSqft.toLocaleString() + '</div><div class="module-stat-label">Total Area (sqft)</div></div>' +
       '<div class="module-stat"><div class="module-stat-val">' + fmtCompact(totalGDV) + '</div><div class="module-stat-label">Total Listed Value</div></div>' +
       '<div class="module-stat"><div class="module-stat-val">' + fmtAED(avgPpsf) + '</div><div class="module-stat-label">Avg Price / sqft</div></div>' +
