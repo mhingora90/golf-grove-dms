@@ -8,43 +8,57 @@ async function renderUnitSetup() {
     return;
   }
   const list = units||[];
-  const studioCount = list.filter(u=>u.unit_type==='Studio').length;
-  const bhkCount    = list.filter(u=>u.unit_type==='1BHK').length;
   const totalSqft   = list.reduce((s,u)=>s+ +u.area_sqft,0);
   const totalGDV    = list.reduce((s,u)=>s+ +u.listed_price,0);
+  const avgPpsf     = totalSqft ? Math.round(totalGDV/totalSqft) : 0;
+  const typeCounts  = list.reduce((acc,u)=>{ acc[u.unit_type]=(acc[u.unit_type]||0)+1; return acc; },{});
+  const mixLabel    = Object.entries(typeCounts).sort((a,b)=>b[1]-a[1]).map(([t,n])=>n+' '+t).join(' · ') || '—';
 
-  const rowsHTML = list.length
-    ? list.map(u =>
-        '<tr>' +
-        '<td style="font-weight:600">' + esc(u.unit_no) + '</td>' +
-        '<td>' + esc(u.floor) + '</td>' +
-        '<td>' + esc(u.unit_type) + '</td>' +
-        '<td style="text-align:right">' + (+u.area_sqft).toLocaleString() + '</td>' +
-        '<td style="text-align:right">' + fmtAED(u.listed_price) + '</td>' +
-        '<td style="white-space:nowrap">' +
-          '<button class="btn btn-sm" onclick="openEditUnit(\'' + u.id + '\')">Edit</button>' +
-          '<button class="btn btn-sm btn-danger" onclick="deleteUnit(\'' + u.id + '\',\'' + esc(u.unit_no) + '\')" style="margin-left:4px">Delete</button>' +
-        '</td></tr>'
-      ).join('')
-    : '<tr><td colspan="6" class="empty-state">No units yet. Use \u201c+ New\u201d or Import CSV to add units.</td></tr>';
-
-  const statsBar = list.length
-    ? '<div class="module-bar" style="margin-bottom:14px">' +
-        '<div class="module-stat"><div class="module-stat-val">' + list.length + '</div><div class="module-stat-label">Total Units</div></div>' +
-        '<div class="module-stat"><div class="module-stat-val">' + studioCount + '</div><div class="module-stat-label">Studio</div></div>' +
-        '<div class="module-stat"><div class="module-stat-val">' + bhkCount + '</div><div class="module-stat-label">1BHK</div></div>' +
-        '<div class="module-stat"><div class="module-stat-val">' + totalSqft.toLocaleString() + ' sqft</div><div class="module-stat-label">Total Area</div></div>' +
-        '<div class="module-stat"><div class="module-stat-val">' + fmtCompact(totalGDV) + '</div><div class="module-stat-label">Total Listed Value</div></div>' +
-      '</div>'
-    : '';
-
-  document.getElementById('content').innerHTML =
-    '<div class="fbar" style="margin-bottom:14px">' +
-      '<button class="btn" onclick="downloadUnitCSVTemplate()">Download CSV Template</button>' +
-      '<label class="btn" style="margin-left:6px;cursor:pointer">Import CSV' +
+  const toolbar =
+    '<div class="fbar">' +
+      '<button class="btn btn-primary" onclick="openAddUnitForm()">+ New Unit</button>' +
+      '<button class="btn" onclick="downloadUnitCSVTemplate()">CSV Template</button>' +
+      '<label class="btn" style="cursor:pointer;margin:0">Import CSV' +
         '<input type="file" accept=".csv" style="display:none" onchange="handleUnitCSV(event)">' +
       '</label>' +
-    '</div>' +
+    '</div>';
+
+  if (!list.length) {
+    document.getElementById('content').innerHTML =
+      toolbar +
+      '<div class="unit-empty">' +
+        '<div class="unit-empty-emoji">🏢</div>' +
+        '<div class="unit-empty-title">No units in this project yet</div>' +
+        '<div class="unit-empty-sub">Add units one-by-one or bulk-import the master list via CSV. Each unit needs number, floor, type, area, and listed price.</div>' +
+        '<button class="btn btn-primary" onclick="openAddUnitForm()">+ Add first unit</button>' +
+      '</div>';
+    return;
+  }
+
+  const statsBar =
+    '<div class="module-bar">' +
+      '<div class="module-stat"><div class="module-stat-val">' + list.length + '</div><div class="module-stat-label">Total Units</div></div>' +
+      '<div class="module-stat"><div class="module-stat-val" style="font-size:14px;font-weight:500;padding-top:6px">' + esc(mixLabel) + '</div><div class="module-stat-label">Mix</div></div>' +
+      '<div class="module-stat"><div class="module-stat-val">' + totalSqft.toLocaleString() + '</div><div class="module-stat-label">Total Area (sqft)</div></div>' +
+      '<div class="module-stat"><div class="module-stat-val">' + fmtCompact(totalGDV) + '</div><div class="module-stat-label">Total Listed Value</div></div>' +
+      '<div class="module-stat"><div class="module-stat-val">' + fmtAED(avgPpsf) + '</div><div class="module-stat-label">Avg Price / sqft</div></div>' +
+    '</div>';
+
+  const rowsHTML = list.map(u =>
+    '<tr>' +
+    '<td style="font-weight:600">' + esc(u.unit_no) + '</td>' +
+    '<td>' + esc(u.floor) + '</td>' +
+    '<td>' + esc(u.unit_type) + '</td>' +
+    '<td style="text-align:right;font-variant-numeric:tabular-nums">' + (+u.area_sqft).toLocaleString() + '</td>' +
+    '<td style="text-align:right;font-variant-numeric:tabular-nums">' + fmtAED(u.listed_price) + '</td>' +
+    '<td style="white-space:nowrap;text-align:right">' +
+      '<button class="unit-icon-btn" title="Edit" onclick="openEditUnit(\'' + u.id + '\')">✎</button>' +
+      '<button class="unit-icon-btn danger" title="Delete" onclick="deleteUnit(\'' + u.id + '\',\'' + esc(u.unit_no) + '\')" style="margin-left:2px">🗑</button>' +
+    '</td></tr>'
+  ).join('');
+
+  document.getElementById('content').innerHTML =
+    toolbar +
     statsBar +
     '<div class="card"><div class="tw"><table>' +
       '<tr><th>Unit No.</th><th>Floor</th><th>Type</th><th style="text-align:right">Area (sqft)</th><th style="text-align:right">Listed Price</th><th></th></tr>' +
@@ -181,32 +195,32 @@ function _unitSaleStatus(u) {
 
 function _unitStatusBadge(status) {
   const cfg = {
-    available:             ['#E3F0FB','#1255A0','Available'],
-    reserved:              ['#FEF3E8','#854F0B','Reserved'],
-    sold:                  ['#d4edbc','#2d6a0a','Sold'],
-    blocked_by_developer:  ['#F0F0F0','#666666','Blocked'],
+    available:            ['available','Available'],
+    reserved:             ['reserved','Reserved'],
+    sold:                 ['sold','Sold'],
+    blocked_by_developer: ['blocked','Blocked'],
   };
-  const [bg,color,label] = cfg[status]||cfg.available;
-  return '<span style="background:' + bg + ';color:' + color + ';padding:1px 8px;border-radius:4px;font-size:10px;font-weight:500">' + label + '</span>';
+  const [variant,label] = cfg[status]||cfg.available;
+  return '<span class="unit-badge unit-badge--' + variant + '">' + label + '</span>';
 }
 
 function _spaBadge(s) {
   const cfg = {
-    not_signed:   ['#e8e4dc','#666','Not Signed'],
-    signed_buyer: ['#FEF3E8','#854F0B','Signed \u2014 Buyer'],
-    fully_signed: ['#d4edbc','#2d6a0a','Fully Signed'],
+    not_signed:   ['muted','Not Signed'],
+    signed_buyer: ['warn','Signed — Buyer'],
+    fully_signed: ['ok','Fully Signed'],
   };
-  const [bg,color,label] = cfg[s||'not_signed']||cfg.not_signed;
-  return '<span style="background:' + bg + ';color:' + color + ';padding:1px 6px;border-radius:4px;font-size:10px">' + label + '</span>';
+  const [variant,label] = cfg[s||'not_signed']||cfg.not_signed;
+  return '<span class="unit-badge unit-badge--' + variant + '">' + label + '</span>';
 }
 
 function _oqoodBadge(s) {
   const cfg = {
-    not_registered: ['#e8e4dc','#666','Not Registered'],
-    registered:     ['#d4edbc','#2d6a0a','Registered'],
+    not_registered: ['muted','Not Registered'],
+    registered:     ['ok','Registered'],
   };
-  const [bg,color,label] = cfg[s||'not_registered']||cfg.not_registered;
-  return '<span style="background:' + bg + ';color:' + color + ';padding:1px 6px;border-radius:4px;font-size:10px">' + label + '</span>';
+  const [variant,label] = cfg[s||'not_registered']||cfg.not_registered;
+  return '<span class="unit-badge unit-badge--' + variant + '">' + label + '</span>';
 }
 
 async function renderUnitRegister() {
@@ -225,17 +239,34 @@ async function renderUnitRegister() {
   _renderUregTable();
 }
 
+function _setUregStatus(s) {
+  window._uregStatusF = s;
+  _renderUregTable();
+}
+
 function _renderUregTable() {
   const units  = window._uregData||[];
   const typeF   = document.getElementById('urf-type')?.value   || 'all';
-  const statusF = document.getElementById('urf-status')?.value || 'all';
   const floorF  = document.getElementById('urf-floor')?.value  || 'all';
+  const statusF = window._uregStatusF || 'all';
   const searchEl = document.getElementById('urf-search');
   const savedRaw  = searchEl?.value || '';
   const savedCursor = searchEl?.selectionStart ?? savedRaw.length;
   const search  = savedRaw.toLowerCase().trim();
 
   const floors = [...new Set(units.map(u=>u.floor))].sort((a,b)=>a-b);
+
+  // KPI counts on raw set (before filter)
+  const total     = units.length;
+  const sold      = units.filter(u=>_unitSaleStatus(u)==='sold').length;
+  const reserved  = units.filter(u=>_unitSaleStatus(u)==='reserved').length;
+  const available = units.filter(u=>_unitSaleStatus(u)==='available').length;
+  const blocked   = units.filter(u=>_unitSaleStatus(u)==='blocked_by_developer').length;
+  const contracted = units.reduce((s,u)=>{
+    const st = _unitSaleStatus(u);
+    if(st==='sold' || st==='reserved') return s + (+u.unit_sales?.sold_price||0);
+    return s;
+  },0);
 
   const filtered = units.filter(u => {
     const st = _unitSaleStatus(u);
@@ -253,15 +284,21 @@ function _renderUregTable() {
     ? filtered.map(u => {
         const sale = u.unit_sales;
         const st   = _unitSaleStatus(u);
-        return '<tr style="cursor:pointer" onclick="openUnitModal(\'' + u.id + '\')">' +
+        const rowCls = st==='sold' ? 'unit-row-tint--sold'
+                    : st==='blocked_by_developer' ? 'unit-row-tint--blocked'
+                    : st==='reserved' ? 'unit-row-tint--reserved' : '';
+        const buyerCell = sale && sale.buyer_name
+          ? '<span style="color:var(--charcoal);font-weight:500">' + esc(sale.buyer_name) + '</span>'
+          : '<span style="color:var(--text3)">—</span>';
+        return '<tr class="' + rowCls + '" style="cursor:pointer" onclick="openUnitModal(\'' + u.id + '\')">' +
           '<td style="font-weight:600">' + esc(u.unit_no) + '</td>' +
           '<td>' + esc(u.floor) + '</td>' +
           '<td>' + esc(u.unit_type) + '</td>' +
-          '<td style="text-align:right">' + (+u.area_sqft).toLocaleString() + '</td>' +
-          '<td style="text-align:right">' + fmtAED(u.listed_price) + '</td>' +
-          '<td style="color:var(--blue)">' + (sale ? esc(sale.buyer_name||'\u2014') : '\u2014') + '</td>' +
-          '<td>' + (sale ? _spaBadge(sale.spa_status) : '\u2014') + '</td>' +
-          '<td>' + (sale ? _oqoodBadge(sale.oqood_status) : '\u2014') + '</td>' +
+          '<td style="text-align:right;font-variant-numeric:tabular-nums">' + (+u.area_sqft).toLocaleString() + '</td>' +
+          '<td style="text-align:right;font-variant-numeric:tabular-nums">' + fmtAED(u.listed_price) + '</td>' +
+          '<td>' + buyerCell + '</td>' +
+          '<td>' + (sale ? _spaBadge(sale.spa_status) : '<span style="color:var(--text3);font-size:11px">—</span>') + '</td>' +
+          '<td>' + (sale ? _oqoodBadge(sale.oqood_status) : '<span style="color:var(--text3);font-size:11px">—</span>') + '</td>' +
           '<td>' + _unitStatusBadge(st) + '</td>' +
           '</tr>';
       }).join('')
@@ -269,32 +306,48 @@ function _renderUregTable() {
 
   const floorOpts = floors.map(f=>'<option value="' + f + '">Floor ' + f + '</option>').join('');
 
+  const kpiBar =
+    '<div class="module-bar">' +
+      '<div class="module-stat"><div class="module-stat-val">' + total + '</div><div class="module-stat-label">Total Units</div></div>' +
+      '<div class="module-stat"><div class="module-stat-val" style="color:var(--green)">' + sold + '</div><div class="module-stat-label">Sold</div></div>' +
+      '<div class="module-stat"><div class="module-stat-val warn">' + reserved + '</div><div class="module-stat-label">Reserved</div></div>' +
+      '<div class="module-stat"><div class="module-stat-val" style="color:var(--blue)">' + available + '</div><div class="module-stat-label">Available</div></div>' +
+      (blocked ? '<div class="module-stat"><div class="module-stat-val" style="color:var(--text2)">' + blocked + '</div><div class="module-stat-label">Blocked</div></div>' : '') +
+      '<div class="module-stat"><div class="module-stat-val">' + fmtCompact(contracted) + '</div><div class="module-stat-label">Contracted AED</div></div>' +
+    '</div>';
+
+  const seg = (val,label,count) =>
+    '<button class="' + (statusF===val?'active':'') + '" onclick="_setUregStatus(\'' + val + '\')">' + label + (count!=null?' <span style="opacity:.55;margin-left:3px">'+count+'</span>':'') + '</button>';
+
   const filterBar =
-    '<div class="fbar" style="margin-bottom:14px">' +
-      '<select id="urf-type" class="form-control" style="width:auto;padding:5px 8px;font-size:12px" onchange="_renderUregTable()">' +
+    '<div class="fbar">' +
+      '<div class="unit-seg">' +
+        seg('all','All',total) +
+        seg('available','Available',available) +
+        seg('reserved','Reserved',reserved) +
+        seg('sold','Sold',sold) +
+        (blocked ? seg('blocked_by_developer','Blocked',blocked) : '') +
+      '</div>' +
+      '<select id="urf-type" class="form-control" style="width:auto;padding:6px 8px;font-size:12px" onchange="_renderUregTable()">' +
         '<option value="all">All Types</option><option value="Studio">Studio</option><option value="1BHK">1BHK</option>' +
       '</select>' +
-      '<select id="urf-status" class="form-control" style="width:auto;padding:5px 8px;font-size:12px;margin-left:6px" onchange="_renderUregTable()">' +
-        '<option value="all">All Statuses</option><option value="available">Available</option><option value="reserved">Reserved</option><option value="sold">Sold</option><option value="blocked_by_developer">Blocked by Developer</option>' +
-      '</select>' +
-      '<select id="urf-floor" class="form-control" style="width:auto;padding:5px 8px;font-size:12px;margin-left:6px" onchange="_renderUregTable()">' +
+      '<select id="urf-floor" class="form-control" style="width:auto;padding:6px 8px;font-size:12px" onchange="_renderUregTable()">' +
         '<option value="all">All Floors</option>' + floorOpts +
       '</select>' +
-      '<input id="urf-search" class="form-control" style="width:180px;padding:5px 8px;font-size:12px;margin-left:6px" placeholder="Search unit / buyer\u2026" oninput="_renderUregTable()" />' +
+      '<input id="urf-search" class="form-control" style="width:200px;padding:6px 10px;font-size:12px;margin-left:auto" placeholder="Search unit / buyer…" oninput="_renderUregTable()" />' +
     '</div>';
 
   document.getElementById('content').innerHTML =
+    kpiBar +
     filterBar +
     '<div class="card"><div class="tw"><table>' +
       '<tr><th>Unit</th><th>Floor</th><th>Type</th><th style="text-align:right">Sqft</th><th style="text-align:right">Listed Price</th><th>Buyer</th><th>SPA</th><th>Oqood</th><th>Status</th></tr>' +
       rowsHTML +
     '</table></div></div>';
 
-  // Restore filter values + focus after innerHTML wipe
   const t = document.getElementById('urf-type');
   if(t) {
     t.value = typeF;
-    document.getElementById('urf-status').value = statusF;
     document.getElementById('urf-floor').value  = floorF;
     const s = document.getElementById('urf-search');
     s.value = savedRaw;
@@ -311,17 +364,25 @@ function openUnitModal(unitId) {
   const sale   = u.unit_sales;
   const ms     = (sale?.payment_milestones||[]).sort((a,b)=>a.sort_order-b.sort_order);
   const isDev  = currentProfile?.role==='developer';
+  const status = _unitSaleStatus(u);
 
-  const field = (label, val) =>
-    '<div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">' + label + '</div><div>' + val + '</div></div>';
+  const field = (label, val, cls) =>
+    '<div><div class="unit-field-label">' + label + '</div><div class="unit-field-val' + (cls?' '+cls:'') + '">' + val + '</div></div>';
 
-  // Unit info strip
-  const infoStrip =
-    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--border);margin-bottom:14px">' +
-    '<div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Unit No.</div><div style="font-weight:600">' + esc(u.unit_no) + '</div></div>' +
-    '<div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Type</div><div>' + esc(u.unit_type) + '</div></div>' +
-    '<div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Floor</div><div>' + esc(u.floor) + '</div></div>' +
-    '<div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Area (sqft)</div><div style="font-weight:600">' + (+u.area_sqft).toLocaleString() + ' sqft</div></div>' +
+  // Hero strip
+  const hero =
+    '<div class="unit-profile-hero">' +
+      '<div class="unit-profile-mono">' + esc(u.unit_no) + '</div>' +
+      '<div style="flex:1;min-width:0">' +
+        '<div class="unit-profile-name">Unit ' + esc(u.unit_no) + '</div>' +
+        '<div class="unit-profile-meta">' +
+          '<span><b>' + esc(u.unit_type) + '</b></span><span>·</span>' +
+          '<span>Floor <b>' + esc(u.floor) + '</b></span><span>·</span>' +
+          '<span><b>' + (+u.area_sqft).toLocaleString() + '</b> sqft</span><span>·</span>' +
+          '<span>Listed <b>' + fmtAED(u.listed_price) + '</b></span>' +
+        '</div>' +
+      '</div>' +
+      _unitStatusBadge(status) +
     '</div>';
 
   // Sale details
@@ -330,75 +391,77 @@ function openUnitModal(unitId) {
     const commVal = ((+sale.sold_price||0) * (+sale.commission_pct||0) / 100);
     const discPct = (+u.listed_price) ? (((+sale.discount_amount||0) / (+u.listed_price)) * 100).toFixed(2) : '0.00';
     saleSection =
-      '<div style="margin-bottom:14px">' +
-      '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Sale Details</div>' +
-      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' +
-        field('Buyer Name', '<span style="font-weight:500">' + esc(sale.buyer_name||'\u2014') + '</span>') +
-        field('Sale Date', esc(sale.sale_date||'\u2014')) +
-        field('Listed Price', fmtAED(u.listed_price)) +
-        field('Discount', '<span style="color:var(--amber)">' + fmtAED(sale.discount_amount||0) + ' (' + discPct + '%)</span>') +
-        field('Sold Price', '<span style="font-weight:600;color:var(--green)">' + fmtAED(sale.sold_price||0) + '</span>') +
-        '<div></div>' +
-        field('Commission %', (+sale.commission_pct||0).toFixed(2) + '%') +
-        field('Commission Value', '<span style="font-weight:500;color:var(--blue)">' + fmtAED(commVal) + '</span>') +
-        field('Broker Name', esc(sale.broker_name||'\u2014')) +
-        field('Brokerage', esc(sale.brokerage_name||'\u2014')) +
-      '</div></div>';
+      '<div class="unit-section-hdr">Sale Details</div>' +
+      '<div class="unit-card">' +
+        '<div class="unit-grid">' +
+          field('Buyer Name', esc(sale.buyer_name||'—')) +
+          field('Sale Date', esc(sale.sale_date||'—')) +
+          field('Sold Price', fmtAED(sale.sold_price||0), 'green') +
+          field('Discount', fmtAED(sale.discount_amount||0) + ' (' + discPct + '%)', 'amber') +
+          field('Commission %', (+sale.commission_pct||0).toFixed(2) + '%') +
+          field('Commission Value', fmtAED(commVal), 'blue') +
+          field('Broker Name', esc(sale.broker_name||'—')) +
+          field('Brokerage', esc(sale.brokerage_name||'—')) +
+        '</div>' +
+      '</div>';
   }
 
   // SPA + Oqood
   let spaSection = '';
   if(sale) {
     spaSection =
-      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px;background:var(--bg3);border-radius:8px;margin-bottom:14px">' +
-      '<div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">SPA Status</div>' +
-        _spaBadge(sale.spa_status) +
-        '<div style="font-size:10px;color:var(--text3);margin-top:4px">Date: ' + esc(sale.spa_date||'\u2014') + '</div></div>' +
-      '<div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Oqood Status</div>' +
-        _oqoodBadge(sale.oqood_status) +
-        '<div style="font-size:10px;color:var(--text3);margin-top:4px">Date: ' + esc(sale.oqood_date||'\u2014') + '</div></div>' +
+      '<div class="unit-card-strip">' +
+        '<div>' +
+          '<div class="unit-field-label">SPA Status</div>' +
+          _spaBadge(sale.spa_status) +
+          '<div style="font-size:10px;color:var(--text3);margin-top:4px">Date: ' + esc(sale.spa_date||'—') + '</div>' +
+        '</div>' +
+        '<div>' +
+          '<div class="unit-field-label">Oqood Status</div>' +
+          _oqoodBadge(sale.oqood_status) +
+          '<div style="font-size:10px;color:var(--text3);margin-top:4px">Date: ' + esc(sale.oqood_date||'—') + '</div>' +
+        '</div>' +
       '</div>';
   }
 
   // Payment milestones
   let msSection = '';
   if(sale && ms.length) {
+    const totalAmount = ms.reduce((s,m)=>s+(+m.amount||0),0);
+    const totalPct    = ms.reduce((s,m)=>s+(+m.pct_of_sale||0),0);
     const msRows = ms.map(m =>
-      '<tr style="border-bottom:0.5px solid var(--border)">' +
-      '<td style="padding:5px 8px">' + esc(m.milestone_name) + '</td>' +
-      '<td style="padding:5px 8px;text-align:right">' + fmtAED(m.amount) + '</td>' +
-      '<td style="padding:5px 8px;text-align:right;color:var(--text2)">' + (+m.pct_of_sale).toFixed(0) + '%</td>' +
-      '<td style="padding:5px 8px;color:' + (m.due_date?'inherit':'var(--text3)') + '">' + esc(m.due_date||'On Handover') + '</td>' +
+      '<tr>' +
+      '<td>' + esc(m.milestone_name) + '</td>' +
+      '<td class="num">' + fmtAED(m.amount) + '</td>' +
+      '<td class="num" style="color:var(--text2)">' + (+m.pct_of_sale).toFixed(0) + '%</td>' +
+      '<td style="color:' + (m.due_date?'inherit':'var(--text3)') + '">' + esc(m.due_date||'On Handover') + '</td>' +
       '</tr>'
     ).join('');
     msSection =
-      '<div>' +
-      '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em;display:flex;justify-content:space-between;align-items:center">' +
-        'Payment Plan Milestones' +
-        '<span style="font-size:10px;font-weight:400;color:var(--text2)">' + fmtAED(sale.sold_price||0) + ' contracted</span>' +
-      '</div>' +
-      '<div class="tw"><table style="width:100%;font-size:11px;border-collapse:collapse">' +
-        '<tr style="background:var(--bg3)"><th style="padding:5px 8px;text-align:left">Milestone</th><th style="padding:5px 8px;text-align:right">Amount</th><th style="padding:5px 8px;text-align:right">%</th><th style="padding:5px 8px;text-align:left">Due Date</th></tr>' +
-        msRows +
-      '</table></div></div>';
+      '<div class="unit-section-hdr">Payment Plan Milestones <span class="meta">' + fmtAED(sale.sold_price||0) + ' contracted</span></div>' +
+      '<div class="tw"><table class="ms-table">' +
+        '<thead><tr><th>Milestone</th><th class="num">Amount</th><th class="num">%</th><th>Due Date</th></tr></thead>' +
+        '<tbody>' + msRows + '</tbody>' +
+        '<tfoot><tr><td>Total</td><td class="num">' + fmtAED(totalAmount) + '</td><td class="num">' + totalPct.toFixed(0) + '%</td><td></td></tr></tfoot>' +
+      '</table></div>';
   }
 
   const availNote = !sale
-    ? '<div style="padding:14px;background:var(--green-bg);border-radius:8px;font-size:12px;color:var(--green);margin-bottom:14px">No sale recorded \u2014 unit is available.</div>'
+    ? '<div style="padding:12px 14px;background:var(--green-bg);border:0.5px solid #C0DD97;border-radius:10px;font-size:12px;color:var(--green);margin-bottom:12px;display:flex;align-items:center;gap:8px"><span style="font-size:14px">✓</span>No sale recorded — unit is available.</div>'
     : '';
 
-  const body = infoStrip + availNote + saleSection + spaSection + msSection;
+  const body = hero + availNote + saleSection + spaSection + msSection;
 
   const footer = isDev
     ? (sale
-        ? '<button class="btn btn-primary" onclick="openSaleForm(\'' + u.id + '\',\'' + sale.id + '\')">Edit Sale</button>' +
-          '<button class="btn btn-danger" onclick="markUnitAvailable(\'' + sale.id + '\',\'' + esc(u.unit_no) + '\')" style="margin-left:6px">Mark Available</button>' +
-          '<button class="btn" onclick="closeModal()" style="margin-left:auto">Close</button>'
-        : '<button class="btn btn-primary" onclick="openSaleForm(\'' + u.id + '\',null)">+ Add Sale</button>' +
-          '<button class="btn" onclick="closeModal()" style="margin-left:auto">Close</button>')
+        ? '<button class="btn btn-danger" onclick="markUnitAvailable(\'' + sale.id + '\',\'' + esc(u.unit_no) + '\')">Mark Available</button>' +
+          '<button class="btn" onclick="closeModal()" style="margin-left:auto">Close</button>' +
+          '<button class="btn btn-primary" onclick="openSaleForm(\'' + u.id + '\',\'' + sale.id + '\')">Edit Sale</button>'
+        : '<button class="btn" onclick="closeModal()" style="margin-right:auto">Close</button>' +
+          '<button class="btn btn-primary" onclick="openSaleForm(\'' + u.id + '\',null)">+ Add Sale</button>')
     : '<button class="btn" onclick="closeModal()">Close</button>';
 
-  openModal('Unit ' + esc(u.unit_no) + ' \u2014 ' + esc(u.unit_type) + ' \u00b7 Floor ' + esc(u.floor), body, footer, true);
+  openModal('Unit ' + esc(u.unit_no), body, footer, true);
 }
 
 // ─── SALE FORM ───────────────────────────────────────────────────────────────
@@ -433,16 +496,25 @@ function openSaleForm(unitId, saleId) {
     '</select>';
 
   const body =
-    '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">Sale Details</div>' +
+    '<div class="unit-section-hdr">Owners</div>' +
     '<div id="sf-owners-host" style="margin-bottom:14px"></div>' +
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">' +
+
+    '<div class="unit-section-hdr">Sale & Brokerage</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px">' +
       '<div class="form-group" style="margin:0"><label class="form-label">Sale Date</label><input id="sf-saledate" type="date" class="form-input" value="' + esc(sale?.sale_date||'') + '" /></div>' +
-      '<div class="form-group" style="margin:0"><label class="form-label">Sold Price (AED)</label><input id="sf-price" type="number" class="form-input" value="' + (sale?.sold_price||'') + '" /></div>' +
-      '<div class="form-group" style="margin:0"><label class="form-label">Discount (AED)</label><input id="sf-discount" type="number" class="form-input" value="' + (sale?.discount_amount||0) + '" /></div>' +
-      '<div class="form-group" style="margin:0"><label class="form-label">Commission %</label><input id="sf-commpct" type="number" step="0.01" class="form-input" value="' + (sale?.commission_pct ?? (isEdit ? 0 : 9)) + '" /></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Sold Price (AED)</label><input id="sf-price" type="number" class="form-input" oninput="_sfPreview()" value="' + (sale?.sold_price||'') + '" /></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Discount (AED)</label><input id="sf-discount" type="number" class="form-input" oninput="_sfPreview()" value="' + (sale?.discount_amount||0) + '" /></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Commission %</label><input id="sf-commpct" type="number" step="0.01" class="form-input" oninput="_sfPreview()" value="' + (sale?.commission_pct ?? (isEdit ? 0 : 9)) + '" /></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Broker Name</label><input id="sf-broker" class="form-input" value="' + esc(sale?.broker_name||'') + '" /></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Brokerage</label><input id="sf-brokerage" class="form-input" value="' + esc(sale?.brokerage_name||'') + '" /></div>' +
     '</div>' +
+    '<div id="sf-preview" style="display:flex;gap:14px;flex-wrap:wrap;padding:8px 12px;background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;margin-bottom:14px;font-size:11px;color:var(--text2)">' +
+      '<span>Commission: <b id="sf-pv-comm" style="color:var(--blue)">' + fmtAED(0) + '</b></span>' +
+      '<span>Discount: <b id="sf-pv-disc" style="color:var(--amber)">0.00%</b></span>' +
+      '<span>Listed: <b style="color:var(--charcoal)">' + fmtAED(u.listed_price) + '</b></span>' +
+    '</div>' +
+
+    '<div class="unit-section-hdr">Status & Documents</div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">' +
       '<div class="form-group" style="margin:0"><label class="form-label">Unit Status</label>' + sel('sf-status',[['reserved','Reserved'],['sold','Sold'],['blocked_by_developer','Blocked by Developer']], sale?.status||'reserved') + '</div>' +
       '<div></div>' +
@@ -451,10 +523,11 @@ function openSaleForm(unitId, saleId) {
       '<div class="form-group" style="margin:0"><label class="form-label">Oqood Status</label>' + sel('sf-oqood',[['not_registered','Not Registered'],['registered','Registered']], sale?.oqood_status||'not_registered') + '</div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Oqood Date</label><input id="sf-oqooddate" type="date" class="form-input" value="' + esc(sale?.oqood_date||'') + '" /></div>' +
     '</div>' +
-    '<div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Payment Plan Milestones</div>' +
-    '<div class="tw"><table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:14px">' +
-      '<tr style="background:var(--bg3)"><th style="padding:4px 6px;text-align:left">Milestone</th><th style="padding:4px 6px;text-align:right">Amount (AED)</th><th style="padding:4px 6px;text-align:right">%</th><th style="padding:4px 6px">Due Date</th></tr>' +
-      msRows +
+
+    '<div class="unit-section-hdr">Payment Plan Milestones</div>' +
+    '<div class="tw"><table class="ms-table" style="margin-bottom:14px">' +
+      '<thead><tr><th>Milestone</th><th class="num">Amount (AED)</th><th class="num">%</th><th>Due Date</th></tr></thead>' +
+      '<tbody>' + msRows + '</tbody>' +
     '</table></div>';
 
   openModal(
@@ -477,6 +550,22 @@ function openSaleForm(unitId, saleId) {
     const seeded = initial.filter(r => r.customer_id !== '__pending__');
     window._saleFormPicker = window.Customers.pickCustomer({ container: host, initial: seeded });
   })();
+
+  window._sfListedPrice = +u.listed_price || 0;
+  setTimeout(_sfPreview, 50);
+}
+
+function _sfPreview() {
+  const price = parseFloat(document.getElementById('sf-price')?.value) || 0;
+  const disc  = parseFloat(document.getElementById('sf-discount')?.value) || 0;
+  const pct   = parseFloat(document.getElementById('sf-commpct')?.value) || 0;
+  const listed = window._sfListedPrice || 0;
+  const commVal = price * pct / 100;
+  const discPct = listed ? (disc / listed * 100) : 0;
+  const cEl = document.getElementById('sf-pv-comm');
+  const dEl = document.getElementById('sf-pv-disc');
+  if (cEl) cEl.textContent = fmtAED(Math.round(commVal));
+  if (dEl) dEl.textContent = discPct.toFixed(2) + '%';
 }
 
 async function saveSaleForm(unitId, saleId) {
