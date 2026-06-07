@@ -289,7 +289,7 @@ window.Customers = (function () {
   }
 
   async function doDelete(id) {
-    if (!confirm('Delete this customer? Linked sales will keep their buyer_name text but lose the customer link.')) return;
+    if (!confirm('Delete this customer? Their unit links will be removed and the buyer name will clear from the Unit Register.')) return;
     const { error } = await sb.from('customers').delete().eq('id', id);
     if (error) { toast('Failed: ' + error.message, 'error'); return; }
     toast('Customer deleted', 'success');
