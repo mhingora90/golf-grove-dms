@@ -178,7 +178,13 @@
       }).eq('id', parentId);
     }
 
-    // Re-render the feed in place.
+    const bodyEl = document.getElementById('act-body');
+    if (bodyEl) bodyEl.value = '';
+    const dtEl = document.getElementById('act-contacted-at');
+    if (dtEl) dtEl.value = _nowLocal();
+    const banner = document.getElementById('act-reply-banner');
+    if (banner) banner.style.display = 'none';
+
     await reload(parentType, parentId);
   }
 
@@ -332,9 +338,29 @@
       </div>
     `).join('');
     const rect = inputEl.getBoundingClientRect();
-    pop.style.left = rect.left + 'px';
-    pop.style.top = (rect.bottom + 4 + window.scrollY) + 'px';
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    // Reset so we measure natural size.
+    pop.style.maxHeight = '';
     pop.style.display = '';
+    pop.style.left = '0px';
+    pop.style.top = '0px';
+    const popW = pop.offsetWidth || 260;
+    const popH = pop.offsetHeight || 0;
+    // Clamp height to the larger of space-below / space-above, minus 12px gutter.
+    const spaceBelow = vh - rect.bottom - 12;
+    const spaceAbove = rect.top - 12;
+    const flipUp = popH > spaceBelow && spaceAbove > spaceBelow;
+    const maxH = Math.max(120, flipUp ? spaceAbove : spaceBelow);
+    pop.style.maxHeight = maxH + 'px';
+    pop.style.overflowY = 'auto';
+    // Re-measure after clamp.
+    const finalH = Math.min(popH, maxH);
+    let left = rect.left;
+    if (left + popW + 8 > vw) left = Math.max(8, vw - popW - 8);
+    const top = flipUp ? (rect.top - finalH - 4) : (rect.bottom + 4);
+    pop.style.left = (left + window.scrollX) + 'px';
+    pop.style.top = (top + window.scrollY) + 'px';
   }
 
   function _atClose() {

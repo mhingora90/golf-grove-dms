@@ -113,16 +113,16 @@ tr:hover td{background:var(--bg3);cursor:pointer;color:var(--charcoal)}
 .srch-hide{display:none!important}
 
 /* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(44,42,36,.35);z-index:1000;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;backdrop-filter:blur(3px)}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(44,42,36,.35);z-index:1000;align-items:center;justify-content:center;padding:24px 16px;overflow-y:auto;backdrop-filter:blur(3px)}
 .modal-bg.open{display:flex}
-.modal{background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;width:680px;max-width:100%;overflow:hidden;box-shadow:0 8px 40px rgba(44,42,36,.12)}
+.modal{background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;width:680px;max-width:100%;max-height:calc(100vh - 48px);overflow:hidden;box-shadow:0 8px 40px rgba(44,42,36,.12);display:flex;flex-direction:column}
 .modal.wide{width:860px}
-.modal-header{padding:16px 20px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-header{padding:16px 20px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .modal-title{font-size:14px;font-weight:500;color:var(--charcoal)}
 .modal-close{background:none;border:none;font-size:18px;color:var(--text3);cursor:pointer;line-height:1;padding:8px 10px;min-width:36px;min-height:36px;border-radius:4px;display:flex;align-items:center;justify-content:center}
 .modal-close:hover{background:var(--bg3);color:var(--text)}
-.modal-body{padding:20px;display:flex;flex-direction:column;gap:14px;max-height:78vh;overflow-y:auto;scroll-behavior:smooth}
-.modal-footer{padding:14px 20px;border-top:0.5px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+.modal-body{padding:20px;display:flex;flex-direction:column;gap:14px;flex:1 1 auto;min-height:0;overflow-y:auto;scroll-behavior:smooth;overscroll-behavior:contain}
+.modal-footer{padding:14px 20px;border-top:0.5px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
 .form-group{display:flex;flex-direction:column;gap:4px}
 .form-label-dark{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
 .form-control{font-size:12px;padding:8px 10px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg3);color:var(--charcoal);width:100%;font-family:inherit;transition:.15s}
