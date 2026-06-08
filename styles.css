@@ -692,6 +692,12 @@ textarea.form-control{resize:vertical;min-height:70px}
   .module-bar { display: grid !important; grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .module-stat { min-width: 0; }
 
+  /* ── Lead modal activity input: stack rows so body input + Add button
+     don't get crushed inside a 4-col grid at phone widths ── */
+  .act-input-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .act-input-row > input[type="text"],
+  .act-input-row > button { grid-column: 1 / -1; }
+
   /* ── Filter bar ── */
   .fbar { gap: 6px; }
   .filter-sel { flex: 1 1 40%; min-width: 0; font-size: 12px; }
