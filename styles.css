@@ -695,7 +695,11 @@ textarea.form-control{resize:vertical;min-height:70px}
   /* ── Filter bar ── */
   .fbar { gap: 6px; }
   .filter-sel { flex: 1 1 40%; min-width: 0; font-size: 12px; }
-  .reg-search { min-width: 0 !important; width: 100%; flex-basis: 100%; }
+  /* Scope flex-basis:100% to filter-bar context; otherwise reg-search inside
+     a column-flex modal stretches vertically (input renders ~500px tall) */
+  .fbar .reg-search,
+  .filter-row .reg-search { min-width: 0 !important; width: 100%; flex-basis: 100%; }
+  .reg-search { min-width: 0 !important; width: 100%; flex-shrink: 0; }
 
   /* ── Dashboard stats grid: 6 → 2 columns ── */
   .stats { grid-template-columns: repeat(2, 1fr) !important; }
@@ -751,13 +755,29 @@ textarea.form-control{resize:vertical;min-height:70px}
     background: var(--bg);
     flex-shrink: 0;
   }
-  .modal-body { flex: 1; overflow-y: auto; }
+  .modal-body { flex: 1; overflow-y: auto; padding: 16px; }
+  /* Prevent form fields from stretching vertically when modal-body is itself
+     a flex column container. Any direct input/select stays at its natural
+     height instead of growing to fill remaining space. */
+  .modal-body { display: block; }
+  .modal-body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  .modal-body select,
+  .modal-body textarea { flex-shrink: 0; box-sizing: border-box; }
+  .modal-body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  .modal-body select { min-height: 44px; }
+  .modal-body textarea { min-height: 88px; resize: vertical; }
   .modal-footer {
     position: sticky;
     bottom: 0;
     background: var(--bg);
     flex-shrink: 0;
+    padding: 12px 16px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
+  .modal-footer .btn, .modal-footer button { flex: 0 0 auto; }
 
   /* ── Touch targets — 44px minimum ── */
   button, .btn, .nav-item, [role="button"] {
