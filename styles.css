@@ -860,6 +860,12 @@ textarea.form-control{resize:vertical;min-height:70px}
   .psw-dd { left: auto; right: 0; }
   /* "developer" role badge takes space — let it shrink */
   .role-badge { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* Lead modal activity input: 4-col grid crushes body input at iPad widths.
+     Stack body input + Add button below the method/datetime row. */
+  .act-input-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .act-input-row > input[type="text"],
+  .act-input-row > button { grid-column: 1 / -1; }
 }
 
 /* ─── CUSTOMERS MODULE ───────────────────────────────────────────── */
