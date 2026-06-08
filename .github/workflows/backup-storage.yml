@@ -56,5 +56,5 @@ jobs:
           fi
           STAMP="$(date -u +'%Y-%m-%d %H:%M UTC')"
           git commit -m "Supabase storage backup - ${STAMP}"
-          git pull --rebase origin main
+          git -c rebase.autoStash=true pull --rebase origin main
           git push
