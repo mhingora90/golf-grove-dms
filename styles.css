@@ -576,12 +576,13 @@ textarea.form-control{resize:vertical;min-height:70px}
 .pc-new-icon{font-size:22px;color:var(--text3)}
 .pc-new-label{font-size:12px;font-weight:600;color:var(--text3)}
 /* ── PROJECT SWITCHER ─────────────────────────── */
-.psw-wrap{position:relative}
-.psw-pill{display:flex;align-items:center;gap:6px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--radius);padding:5px 10px;cursor:pointer;font-size:12px;font-weight:700;color:var(--charcoal);transition:border-color .15s;white-space:nowrap}
+.psw-wrap{position:relative;flex-shrink:0;min-width:0}
+.psw-pill{display:flex;align-items:center;gap:6px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--radius);padding:5px 10px;cursor:pointer;font-size:12px;font-weight:700;color:var(--charcoal);transition:border-color .15s;white-space:nowrap;overflow:hidden;min-height:32px;min-width:0;max-width:100%}
 .psw-pill:hover{border-color:var(--sand)}
+#psw-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1 1 auto}
 .psw-dot{width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0}
-.psw-caret{font-size:9px;color:var(--text3);margin-left:2px}
-.psw-dd{position:absolute;top:calc(100% + 6px);left:0;background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:5px;min-width:190px;z-index:200;box-shadow:0 8px 24px rgba(44,42,36,.12);display:none}
+.psw-caret{font-size:9px;color:var(--text3);margin-left:2px;flex-shrink:0}
+.psw-dd{position:absolute;top:calc(100% + 6px);left:0;background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:5px;min-width:190px;max-width:calc(100vw - 16px);z-index:200;box-shadow:0 8px 24px rgba(44,42,36,.12);display:none}
 .psw-dd.open{display:block}
 .psw-item{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:var(--radius);font-size:12px;cursor:pointer;color:var(--text2);transition:background .1s}
 .psw-item:hover,.psw-all:hover,.psw-new:hover{background:var(--bg3);color:var(--charcoal)}
@@ -670,9 +671,11 @@ textarea.form-control{resize:vertical;min-height:70px}
   }
   #topbar-date { display: none; }
   .topbar-right { gap: 4px; flex-shrink: 0; }
-  .psw-wrap { max-width: 120px; flex-shrink: 0; }
+  .psw-wrap { max-width: 150px; min-width: 110px; flex-shrink: 0; }
   .psw-wrap .tb-proj-div,
   .psw-wrap button { font-size: 12px; }
+  /* Right-anchor dropdown so it never overflows viewport on phones/iPad split-view */
+  .psw-dd { left: auto; right: 0; min-width: 180px; max-width: calc(100vw - 24px); }
   #new-btn { font-size: 12px; padding: 0 10px; white-space: nowrap; }
 
   /* ── Page content padding ── */
@@ -818,6 +821,20 @@ textarea.form-control{resize:vertical;min-height:70px}
   .cust-stats { grid-template-columns: repeat(2, 1fr) !important; }
   .cust-header { flex-direction: column !important; align-items: stretch !important; }
   .cust-header-tools { width: 100%; flex-wrap: wrap; }
+}
+
+/* ─── Tablet range (iPad portrait, 769–1024) ─────────────────────── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Topbar cramped — sidebar is 220px, only ~550–800px left. Bulletproof switcher. */
+  .topbar { gap: 8px; padding: 0 12px; }
+  .topbar > div:first-of-type { min-width: 0; flex-shrink: 1; }
+  .topbar-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topbar-right { gap: 6px; flex-shrink: 0; }
+  .psw-wrap { max-width: 180px; min-width: 130px; flex-shrink: 0; }
+  /* Right-anchor dropdown so it never overflows past topbar-right */
+  .psw-dd { left: auto; right: 0; }
+  /* "developer" role badge takes space — let it shrink */
+  .role-badge { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 }
 
 /* ─── CUSTOMERS MODULE ───────────────────────────────────────────── */
