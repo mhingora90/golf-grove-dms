@@ -764,8 +764,14 @@ textarea.form-control{resize:vertical;min-height:70px}
     padding: 12px 16px;
     font-size: 14px;
   }
-  /* Table action buttons */
-  td button, td .btn { min-height: 36px; padding: 6px 12px; }
+  /* Table action buttons (compact but still tappable: 36px tall, 44px wide min) */
+  td button, td .btn { min-height: 36px; min-width: 44px; padding: 6px 12px; }
+  /* Modal close button — bump from 36px to 44px for WCAG */
+  .modal-close { min-width: 44px; min-height: 44px; }
+  /* CRM pagination buttons — bump to 44px tall for tap */
+  .crm-page-btn { min-height: 44px; min-width: 44px; padding: 5px 14px; }
+  /* Unit register icon buttons — override fixed 28px sizing */
+  .unit-icon-btn { width: 44px; height: 44px; font-size: 15px; }
 
   /* ── iOS input zoom prevention (font-size < 16px triggers zoom) ── */
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
