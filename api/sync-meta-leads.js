@@ -138,14 +138,18 @@ export default async function handler(request) {
       .filter(l => !/\s/.test(l.meta_lead_id));
 
     // SyncWith occasionally emits the same meta_lead_id for distinct people
-    // (collision bug). Rule: keep the earliest occurrence in the sheet, drop
-    // later ones. Dedup by meta_lead_id keeping first seen.
+    // (collision bug). Distinguish by email: same meta_lead_id + same email =
+    // genuine duplicate (drop); same meta_lead_id + different emails = two
+    // distinct people sharing a SyncWith-reused id (keep both). The DB's
+    // composite unique on (project_id, sync_key) where sync_key =
+    // meta_lead_id || '|' || lower(email) makes this safe at insert time.
     const seen = new Set();
     const leads = [];
     let droppedCollisions = 0;
     for (const l of allLeads) {
-      if (seen.has(l.meta_lead_id)) { droppedCollisions++; continue; }
-      seen.add(l.meta_lead_id);
+      const dedupKey = `${l.meta_lead_id}|${(l.email || '').toLowerCase()}`;
+      if (seen.has(dedupKey)) { droppedCollisions++; continue; }
+      seen.add(dedupKey);
       leads.push(l);
     }
 
@@ -164,7 +168,7 @@ export default async function handler(request) {
     const errorDetails = [];
 
     for (const lead of leads) {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/crm_leads?on_conflict=meta_lead_id`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/crm_leads?on_conflict=project_id,sync_key`, {
         method: 'POST',
         headers: sbHeaders,
         body: JSON.stringify(lead),
