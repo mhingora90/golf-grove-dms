@@ -29,8 +29,11 @@ alter table public.crm_leads
     end
   ) stored;
 
+-- Non-partial unique index. NULL sync_key (i.e. non-Meta leads) is allowed
+-- freely because Postgres treats NULLs as distinct in unique indexes.
+-- Must be non-partial so PostgREST's ON CONFLICT (project_id, sync_key) can
+-- match it without supplying the index predicate.
 create unique index if not exists crm_leads_project_sync_key_idx
-  on public.crm_leads (project_id, sync_key)
-  where sync_key is not null;
+  on public.crm_leads (project_id, sync_key);
 
 commit;
