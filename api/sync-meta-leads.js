@@ -153,13 +153,14 @@ export default async function handler(request) {
       apikey: SUPABASE_KEY,
       Authorization: `Bearer ${SUPABASE_KEY}`,
       'Content-Type': 'application/json',
-      // merge-duplicates so re-syncs repair stale meta-side columns. CRM-side
-      // columns (stage, assigned_to, notes, rating, …) aren't in the body so
-      // they're preserved.
-      Prefer: 'resolution=merge-duplicates,return=representation',
+      // ignore-duplicates: never touch an existing row. SyncWith reuses
+      // meta_lead_ids across different real people; merge-duplicates was
+      // overwriting human-curated CRM data (e.g. Bhupendra → Raha incident,
+      // 2026-06-10). Inserts only; existing rows are immutable to this sync.
+      Prefer: 'resolution=ignore-duplicates,return=representation',
     };
 
-    let inserted = 0, updated = 0, errors = 0;
+    let inserted = 0, skipped_existing = 0, errors = 0;
     const errorDetails = [];
 
     for (const lead of leads) {
@@ -170,9 +171,9 @@ export default async function handler(request) {
       });
       if (res.ok) {
         const body = await res.json();
-        // merge-duplicates returns the row in both insert and update paths;
-        // we can't distinguish here so count any 2xx as "merged".
-        if (body.length === 0) updated++;
+        // ignore-duplicates: empty body = conflict, row already exists, skipped.
+        // Non-empty body = actually inserted.
+        if (body.length === 0) skipped_existing++;
         else inserted++;
       } else {
         errors++;
@@ -187,8 +188,8 @@ export default async function handler(request) {
       sheet_rows: allLeads.length,
       unique_leads: leads.length,
       dropped_collisions: droppedCollisions,
-      inserted_or_merged: inserted,
-      empty_response: updated,
+      inserted: inserted,
+      skipped_existing,
       errors,
       errorDetails: errorDetails.length ? errorDetails : undefined,
     }), {
