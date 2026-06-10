@@ -1238,13 +1238,20 @@ async function crmSyncMetaLeads() {
       toast(`Sync failed: ${body.error || res.status}`, 'error');
       return;
     }
-    const { inserted = 0, duplicates = 0, errors = 0 } = body;
+    const {
+      sheet_rows = 0,
+      unique_leads = 0,
+      dropped_collisions = 0,
+      inserted_or_merged = 0,
+      errors = 0,
+    } = body;
+    const collisionNote = dropped_collisions > 0 ? ` (skipped ${dropped_collisions} ID collision${dropped_collisions > 1 ? 's' : ''})` : '';
     if (errors > 0) {
-      toast(`Sync done with ${errors} error(s) — ${inserted} new, ${duplicates} existing`, 'error');
-    } else if (inserted > 0) {
-      toast(`Synced ${inserted} new lead${inserted > 1 ? 's' : ''} (${duplicates} already in CRM)`, 'success');
+      toast(`Sync done with ${errors} error(s) — ${inserted_or_merged}/${unique_leads} processed${collisionNote}`, 'error');
+    } else if (inserted_or_merged > 0) {
+      toast(`Synced ${inserted_or_merged} lead${inserted_or_merged > 1 ? 's' : ''} from sheet${collisionNote}`, 'success');
     } else {
-      toast(`Up to date — no new leads (${duplicates} checked)`, 'success');
+      toast(`Sheet empty — nothing to sync${collisionNote}`, 'success');
     }
     if (typeof renderCRM === 'function') await renderCRM();
   } catch (e) {

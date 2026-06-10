@@ -123,9 +123,19 @@ export default async function handler(request) {
     const csv = await csvRes.text();
     const rows = parseCSV(csv);
 
-    // Row 0 = SyncWith data row, Row 1 = shifted headers (ignored), Row 2+ = leads.
-    const dataRows = [rows[0], ...rows.slice(2)];
-    const allLeads = dataRows.map(rowToLead).filter(Boolean);
+    // Row 0 is SyncWith's batch-jam row — every lead's values jammed
+    // space-separated into single cells. Junk for our parser (produces a row
+    // with embedded spaces in meta_lead_id that won't dedupe and won't render).
+    // Skip it. Rows 1+ are individual lead rows (1-row-per-lead format).
+    // Past assumption that row 1 was "shifted headers" was wrong; row 1 is a
+    // real lead and was being silently dropped every sync.
+    const dataRows = rows.slice(1);
+    const allLeads = dataRows
+      .map(rowToLead)
+      .filter(Boolean)
+      // Defensive: drop anything where meta_lead_id still has whitespace
+      // (means the row wasn't a proper single-lead row).
+      .filter(l => !/\s/.test(l.meta_lead_id));
 
     // SyncWith occasionally emits the same meta_lead_id for distinct people
     // (collision bug). Rule: keep the earliest occurrence in the sheet, drop
