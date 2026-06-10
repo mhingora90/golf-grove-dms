@@ -576,8 +576,8 @@ function crmRow(lead) {
       <td onclick="viewLead('${lead.id}')">${company}</td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(lead.email || "—")}</td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc((lead.phone || '').replace(/^p:/,'') || '--')}</td>
-      <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(fmtLeadField(lead.created_time))}</td>
-      <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(fmtLeadField(lead.ad_id || lead.property_types))}</td>
+      <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(fmtLeadField(lead.budget_range))}</td>
+      <td onclick="viewLead('${lead.id}')" class="crm-muted">${esc(fmtLeadField(lead.property_types))}</td>
       <td onclick="viewLead('${lead.id}')"><span class="badge ${stageClass}">${stageLabel}</span></td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${assigned}</td>
       <td onclick="viewLead('${lead.id}')" class="crm-muted">${timeAgo(lead.created_at)}</td>
@@ -910,8 +910,8 @@ async function viewLead(id) {
       <div class="detail-item"><div class="detail-label">Phone</div><div class="detail-value">${esc(lead.phone||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Company</div><div class="detail-value">${esc(lead.company_name||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Broker Type</div><div class="detail-value">${esc(lead.broker_type||'—')}</div></div>
-      <div class="detail-item"><div class="detail-label">Budget</div><div class="detail-value">${esc(fmtLeadField(lead.budget_range||lead.created_time))}</div></div>
-      <div class="detail-item"><div class="detail-label">Property Type</div><div class="detail-value">${esc(fmtLeadField(lead.property_types||lead.ad_id))}</div></div>
+      <div class="detail-item"><div class="detail-label">Budget</div><div class="detail-value">${esc(fmtLeadField(lead.budget_range))}</div></div>
+      <div class="detail-item"><div class="detail-label">Property Type</div><div class="detail-value">${esc(fmtLeadField(lead.property_types))}</div></div>
       <div class="detail-item"><div class="detail-label">Availability</div><div class="detail-value">${esc(lead.availability||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Source</div><div class="detail-value">${esc(({'meta_ads':'Meta Ads','website':'Website','referral':'Referral','walk_in':'Walk-In','other':'Other'})[lead.source]||lead.source||'—')}</div></div>
       <div class="detail-item"><div class="detail-label">Meta Lead ID</div><div class="detail-value mono">${esc(lead.meta_lead_id||'—')}</div></div>
