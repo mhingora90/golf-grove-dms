@@ -1,0 +1,71 @@
+name: CRM Sync Tests
+
+# Why this gate exists
+# -------------------
+# CRM sync had a silent overwrite bug (Bhupendra → Raha, Shiban → Ashok,
+# 2026-06-10) where SyncWith reused Meta lead IDs across distinct real
+# people and merge-duplicates clobbered human-curated rows. This workflow
+# runs the parser/dedup unit tests and the no-overwrite integration tests
+# on every change so the regression can never sneak back in.
+#
+# Set repo secret `SUPABASE_SERVICE_KEY` (sb_secret_...) in Settings →
+# Secrets → Actions before merging this workflow.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/sync-meta-leads.js'
+      - 'api/_sync-meta-leads-core.mjs'
+      - 'src/crm.js'
+      - 'tests/crm-sync-*.test.js'
+      - 'tests/helpers/**'
+      - 'tests/config.js'
+      - 'supabase/migrations/**crm_leads**'
+      - 'package.json'
+      - '.github/workflows/crm-sync-tests.yml'
+  pull_request:
+    paths:
+      - 'api/sync-meta-leads.js'
+      - 'api/_sync-meta-leads-core.mjs'
+      - 'src/crm.js'
+      - 'tests/crm-sync-*.test.js'
+      - 'tests/helpers/**'
+      - 'tests/config.js'
+      - 'supabase/migrations/**crm_leads**'
+      - 'package.json'
+      - '.github/workflows/crm-sync-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  unit:
+    name: Unit (parser, dedup, sync_key formula)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: 'npm' }
+      - run: npm ci --no-audit --no-fund
+      - run: npm run test:crm-sync:unit
+
+  integration:
+    name: Integration (no-overwrite contract vs Supabase)
+    runs-on: ubuntu-latest
+    needs: unit
+    # Only run integration if the repo secret is configured. Forked PRs
+    # skip this job; main-branch pushes and trusted PRs run it.
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: 'npm' }
+      - run: npm ci --no-audit --no-fund
+      - name: Run integration tests
+        env:
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_SERVICE_KEY" ]; then
+            echo "::warning::SUPABASE_SERVICE_KEY not set; skipping integration tests."
+            exit 0
+          fi
+          node tests/crm-sync-integration.test.js

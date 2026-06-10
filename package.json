@@ -2,7 +2,12 @@
   "scripts": {
     "db:push":   "dotenv -e .env.local -- node scripts/db-cli.mjs push",
     "db:pull":   "dotenv -e .env.local -- node scripts/db-cli.mjs pull",
-    "db:status": "dotenv -e .env.local -- node scripts/db-cli.mjs status"
+    "db:status": "dotenv -e .env.local -- node scripts/db-cli.mjs status",
+
+    "test:crm-sync:unit":        "node tests/crm-sync-unit.test.js",
+    "test:crm-sync:integration": "dotenv -e .env.test -- node tests/crm-sync-integration.test.js",
+    "test:crm-sync:e2e":         "dotenv -e .env.test -- npx playwright test tests/crm-sync-e2e.test.js --reporter=list",
+    "test:crm-sync":             "npm run test:crm-sync:unit && npm run test:crm-sync:integration"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
