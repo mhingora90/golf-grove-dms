@@ -44,6 +44,71 @@ async function isAuthorizedUser(auth) {
   return role === 'sales' || role === 'developer';
 }
 
+function escapeHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function fmtBudget(v) {
+  if (!v) return '';
+  return String(v).replace(/_/g, ' ').replace(/aed /gi, 'AED ');
+}
+
+function renderLeadDigestHtml(leads) {
+  const rows = leads.map(l => `
+    <tr>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee"><strong>${escapeHtml(l.name || '—')}</strong></td>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee">${escapeHtml(l.email || '—')}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee">${escapeHtml((l.phone || '').replace(/^p:/, '') || '—')}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee">${escapeHtml(fmtBudget(l.budget_range) || '—')}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee">${escapeHtml(l.company_name || '—')}</td>
+    </tr>`).join('');
+  return `
+    <div style="font-family:system-ui,Segoe UI,sans-serif;color:#1a1a1a">
+      <h2 style="margin:0 0 8px">${leads.length} new lead${leads.length === 1 ? '' : 's'} — 241 Waterside</h2>
+      <p style="margin:0 0 16px;color:#555">From Meta Ads via Google Sheet sync.</p>
+      <table style="border-collapse:collapse;width:100%;font-size:14px">
+        <thead>
+          <tr style="background:#f6f6f6;text-align:left">
+            <th style="padding:8px 12px">Name</th>
+            <th style="padding:8px 12px">Email</th>
+            <th style="padding:8px 12px">Phone</th>
+            <th style="padding:8px 12px">Budget</th>
+            <th style="padding:8px 12px">Company</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <p style="margin:16px 0 0">
+        <a href="https://golf-grove-dms.vercel.app/#crm" style="color:#2563eb">Open CRM →</a>
+      </p>
+    </div>`;
+}
+
+async function sendLeadDigest(insertedLeads) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const to     = (process.env.LEAD_NOTIFY_TO || '').split(',').map(s => s.trim()).filter(Boolean);
+  const from   = process.env.LEAD_NOTIFY_FROM || 'onboarding@resend.dev';
+  if (!apiKey)    return { ok: false, skipped: 'missing RESEND_API_KEY' };
+  if (!to.length) return { ok: false, skipped: 'missing LEAD_NOTIFY_TO' };
+
+  const subject = `${insertedLeads.length} new lead${insertedLeads.length === 1 ? '' : 's'} — 241 Waterside`;
+  const html    = renderLeadDigestHtml(insertedLeads);
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from, to, subject, html }),
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    return { ok: false, status: res.status, body: body.slice(0, 200) };
+  }
+  const data = await res.json().catch(() => ({}));
+  return { ok: true, id: data.id, count: insertedLeads.length, to };
+}
+
 export default async function handler(request) {
   const auth = request.headers.get('authorization') || '';
   const allowed = (await isCronSecret(auth)) || (await isAuthorizedUser(auth));
@@ -74,10 +139,15 @@ export default async function handler(request) {
     const csv = await csvRes.text();
     const { sheetRows, leads, droppedCollisions } = csvToLeads(csv, PROJECT_ID);
 
-    const { inserted, skipped_existing, errors, errorDetails } = await upsertLeads(leads, {
+    const { inserted, skipped_existing, errors, errorDetails, insertedLeads } = await upsertLeads(leads, {
       supabaseUrl: SUPABASE_URL,
       supabaseKey: SUPABASE_KEY,
     });
+
+    let digest = undefined;
+    if (insertedLeads && insertedLeads.length) {
+      digest = await sendLeadDigest(insertedLeads).catch(e => ({ ok: false, error: e.message }));
+    }
 
     return new Response(JSON.stringify({
       status: 'ok',
@@ -88,6 +158,7 @@ export default async function handler(request) {
       skipped_existing,
       errors,
       errorDetails: errorDetails.length ? errorDetails : undefined,
+      digest,
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },

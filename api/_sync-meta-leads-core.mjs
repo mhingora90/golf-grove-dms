@@ -158,6 +158,7 @@ export async function upsertLeads(leads, opts) {
 
   let inserted = 0, skipped_existing = 0, errors = 0;
   const errorDetails = [];
+  const insertedLeads = [];
 
   for (const lead of leads) {
     const res = await fetchImpl(
@@ -169,7 +170,10 @@ export async function upsertLeads(leads, opts) {
       // ignore-duplicates: empty body = conflict, row already exists, skipped.
       // Non-empty body = actually inserted.
       if (Array.isArray(body) && body.length === 0) skipped_existing++;
-      else inserted++;
+      else {
+        inserted++;
+        if (Array.isArray(body) && body[0]) insertedLeads.push(body[0]);
+      }
     } else {
       errors++;
       if (errorDetails.length < maxErrorDetails) {
@@ -180,5 +184,5 @@ export async function upsertLeads(leads, opts) {
     }
   }
 
-  return { inserted, skipped_existing, errors, errorDetails };
+  return { inserted, skipped_existing, errors, errorDetails, insertedLeads };
 }
