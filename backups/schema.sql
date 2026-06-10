@@ -500,6 +500,11 @@ CREATE TABLE IF NOT EXISTS "public"."crm_leads" (
     "project_id" "uuid" NOT NULL,
     "rating" "text",
     "converted_unit_id" "uuid",
+    "sync_key" "text" GENERATED ALWAYS AS (
+CASE
+    WHEN ("meta_lead_id" IS NOT NULL) THEN (("meta_lead_id" || '|'::"text") || COALESCE("lower"("email"), ''::"text"))
+    ELSE NULL::"text"
+END) STORED,
     CONSTRAINT "crm_leads_rating_check" CHECK (("rating" = ANY (ARRAY['hot'::"text", 'warm'::"text", 'cold'::"text"])))
 );
 
@@ -1032,11 +1037,6 @@ ALTER TABLE ONLY "public"."crm_lead_activities"
 
 
 ALTER TABLE ONLY "public"."crm_leads"
-    ADD CONSTRAINT "crm_leads_meta_lead_id_key" UNIQUE ("meta_lead_id");
-
-
-
-ALTER TABLE ONLY "public"."crm_leads"
     ADD CONSTRAINT "crm_leads_pkey" PRIMARY KEY ("id");
 
 
@@ -1177,6 +1177,10 @@ ALTER TABLE ONLY "public"."units"
 
 
 CREATE INDEX "crm_activities_customer_idx" ON "public"."crm_lead_activities" USING "btree" ("customer_id", "contacted_at" DESC) WHERE ("customer_id" IS NOT NULL);
+
+
+
+CREATE UNIQUE INDEX "crm_leads_project_sync_key_idx" ON "public"."crm_leads" USING "btree" ("project_id", "sync_key");
 
 
 
