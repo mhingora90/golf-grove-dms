@@ -24,7 +24,7 @@ jobs:
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 2.105.0
 
       - name: Ensure backups directory exists
         run: mkdir -p backups
@@ -32,17 +32,44 @@ jobs:
       - name: Dump roles
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
-        run: supabase db dump --db-url "$SUPABASE_DB_URL" --role-only -f backups/roles.sql
+        run: |
+          for attempt in 1 2 3; do
+            if supabase db dump --db-url "$SUPABASE_DB_URL" --role-only -f backups/roles.sql; then
+              exit 0
+            fi
+            echo "Attempt $attempt failed; retrying in $((attempt * 15))s..."
+            sleep $((attempt * 15))
+          done
+          echo "Dump roles failed after 3 attempts"
+          exit 1
 
       - name: Dump schema
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
-        run: supabase db dump --db-url "$SUPABASE_DB_URL" -f backups/schema.sql
+        run: |
+          for attempt in 1 2 3; do
+            if supabase db dump --db-url "$SUPABASE_DB_URL" -f backups/schema.sql; then
+              exit 0
+            fi
+            echo "Attempt $attempt failed; retrying in $((attempt * 15))s..."
+            sleep $((attempt * 15))
+          done
+          echo "Dump schema failed after 3 attempts"
+          exit 1
 
       - name: Dump data
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
-        run: supabase db dump --db-url "$SUPABASE_DB_URL" --data-only -f backups/data.sql
+        run: |
+          for attempt in 1 2 3; do
+            if supabase db dump --db-url "$SUPABASE_DB_URL" --data-only -f backups/data.sql; then
+              exit 0
+            fi
+            echo "Attempt $attempt failed; retrying in $((attempt * 15))s..."
+            sleep $((attempt * 15))
+          done
+          echo "Dump data failed after 3 attempts"
+          exit 1
 
       - name: Commit backup files
         run: |
