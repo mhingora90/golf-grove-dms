@@ -7,3 +7,9 @@ node_modules/
 dist/
 
 .vercel
+.superpowers/
+
+# Modal audit outputs (reproducible from scripts)
+_modal-audit/modals/
+_modal-audit/results/
+_modal-audit/debug.mjs
