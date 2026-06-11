@@ -36,6 +36,41 @@ function closeMobileNav() {
   document.getElementById('app-screen').classList.remove('nav-open');
 }
 
+// ─── COLLAPSIBLE SIDEBAR (desktop) ───
+const _SIDEBAR_KEY = 'sidebarCollapsed';
+function _applySidebarTooltips(collapsed) {
+  document.querySelectorAll('.sidebar .nav-item').forEach(it => {
+    if (collapsed) {
+      const label = (it.textContent || '').trim();
+      if (label && !it.getAttribute('title')) it.setAttribute('title', label);
+    } else {
+      it.removeAttribute('title');
+    }
+  });
+  const btn = document.querySelector('.sb-collapse-btn');
+  if (btn) btn.setAttribute('title', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+}
+function toggleSidebar() {
+  const sb = document.querySelector('.sidebar');
+  if (!sb) return;
+  const collapsed = sb.classList.toggle('collapsed');
+  try { localStorage.setItem(_SIDEBAR_KEY, collapsed ? '1' : '0'); } catch (_) {}
+  _applySidebarTooltips(collapsed);
+}
+function restoreSidebarState() {
+  const sb = document.querySelector('.sidebar');
+  if (!sb) return;
+  let collapsed = false;
+  try { collapsed = localStorage.getItem(_SIDEBAR_KEY) === '1'; } catch (_) {}
+  sb.classList.toggle('collapsed', collapsed);
+  _applySidebarTooltips(collapsed);
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', restoreSidebarState);
+} else {
+  restoreSidebarState();
+}
+
 function nav(page, el, opts) {
   closeMobileNav();
   currentPage = page;

@@ -40,7 +40,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13
 /* APP LAYOUT */
 .app{display:flex;height:100vh;overflow:hidden}
 .sidebar{width:220px;min-width:220px;background:var(--bg2);border-right:0.5px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
-.sb-header{padding:18px 18px 14px;border-bottom:0.5px solid var(--border)}
+.sb-header{padding:18px 18px 14px;border-bottom:0.5px solid var(--border);position:relative}
+.sb-collapse-btn{position:absolute;top:10px;right:8px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:transparent;border:0.5px solid var(--border2);border-radius:6px;color:var(--text3);cursor:pointer;padding:0;transition:.12s}
+.sb-collapse-btn:hover{background:var(--bg3);color:var(--charcoal);border-color:var(--text3)}
+.sb-collapse-icon{width:11px;height:11px;transition:transform .15s}
+.sidebar.collapsed .sb-collapse-icon{transform:rotate(180deg)}
 .sb-proj-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
 .sb-proj-name{font-size:12px;font-weight:500;color:var(--charcoal);line-height:1.35}
 .sb-user{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:0.5px solid var(--border)}
@@ -595,6 +599,23 @@ textarea.form-control{resize:vertical;min-height:70px}
 .psw-new{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:var(--radius);font-size:11px;cursor:pointer;color:var(--sand);font-weight:600}
 .tb-proj-div{width:0.5px;height:18px;background:var(--border2);flex-shrink:0}
 
+/* ─── Collapsible sidebar (desktop) ─── */
+.sidebar{transition:width .18s ease,min-width .18s ease}
+.sidebar.collapsed{width:56px;min-width:56px}
+.sidebar.collapsed .sb-header{padding:36px 6px 10px}
+.sidebar.collapsed .sb-collapse-btn{top:8px;right:50%;transform:translateX(50%)}
+.sidebar.collapsed .sb-proj-label,
+.sidebar.collapsed .sb-proj-name,
+.sidebar.collapsed .sb-user-info,
+.sidebar.collapsed .sb-section{display:none}
+.sidebar.collapsed .sb-user{justify-content:center;padding:10px 6px}
+.sidebar.collapsed .nav-item{justify-content:center;padding:9px 4px;margin:1px 6px;font-size:0;gap:0;position:relative}
+.sidebar.collapsed .nav-item .nav-icon{font-size:15px}
+.sidebar.collapsed .nav-badge{position:absolute;top:2px;right:2px;margin:0;padding:0;min-width:7px;height:7px;border-radius:50%;font-size:0;background:var(--sand);border:none}
+.sidebar.collapsed .sb-logout{padding:10px 6px}
+.sidebar.collapsed .btn-logout{font-size:0;padding:7px 0;position:relative;height:30px}
+.sidebar.collapsed .btn-logout::before{content:"⎋";font-size:14px;display:block}
+
 /* ─── Mobile responsive layer ─── */
 .hamburger-btn { display: none; }
 .nav-backdrop  { display: none; }
@@ -629,16 +650,30 @@ textarea.form-control{resize:vertical;min-height:70px}
   }
 
   /* ── Sidebar becomes overlay drawer ── */
-  .sidebar {
+  .sidebar,
+  .sidebar.collapsed {
     position: fixed;
     top: 0;
     left: 0;
     height: 100%;
+    width: 220px;
+    min-width: 220px;
     z-index: 200;
     transform: translateX(-220px);
     transition: transform 0.25s ease;
     overflow-y: auto;
   }
+  .sb-collapse-btn { display: none; }
+  /* Restore full nav-item layout on mobile even if .collapsed lingered */
+  .sidebar.collapsed .sb-header { padding: 18px 18px 14px; }
+  .sidebar.collapsed .sb-proj-label,
+  .sidebar.collapsed .sb-proj-name,
+  .sidebar.collapsed .sb-user-info,
+  .sidebar.collapsed .sb-section { display: block; }
+  .sidebar.collapsed .nav-item { justify-content: flex-start; padding: 7px 12px; margin: 1px 8px; font-size: 12px; gap: 9px; }
+  .sidebar.collapsed .nav-badge { position: static; min-width: 0; height: auto; border-radius: 8px; font-size: 10px; padding: 1px 6px; background: var(--sand-bg); color: var(--sand); border: 0.5px solid var(--border2); }
+  .sidebar.collapsed .btn-logout { font-size: 12px; padding: 7px; height: auto; }
+  .sidebar.collapsed .btn-logout::before { content: none; }
   .nav-open .sidebar {
     transform: translateX(0);
     box-shadow: 4px 0 24px rgba(0,0,0,0.25);
