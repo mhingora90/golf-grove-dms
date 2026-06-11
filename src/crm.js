@@ -953,7 +953,7 @@ async function viewLead(id) {
       </div>
       <div class="act-input-row">
         <select class="form-control" id="act-method" onchange="onActMethodChange()">${methodOpts}</select>
-        <div><div class="act-dt-label" id="act-dt-label">Contact time</div><input type="datetime-local" class="form-control" id="act-contacted-at" value="${_nowLocal()}"/></div>
+        <div class="act-dt-wrap"><div class="act-dt-label" id="act-dt-label">Contact time</div><input type="datetime-local" class="form-control" id="act-contacted-at" value="${_nowLocal()}"/></div>
         <input type="text" class="form-control" id="act-body" placeholder="Add activity note…" onkeydown="if(event.key==='Enter')addLeadActivity('${lead.id}')"/>
         <button class="btn btn-primary" onclick="addLeadActivity('${lead.id}')">Add</button>
       </div>

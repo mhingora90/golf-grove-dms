@@ -203,7 +203,12 @@ textarea.form-control{resize:vertical;min-height:70px}
 .act-filter-btn{padding:4px 12px;border-radius:6px;font-size:11px;border:none;background:none;cursor:pointer;color:var(--text3);font-family:inherit;transition:.15s;font-weight:500;white-space:nowrap}
 .act-filter-btn:hover{color:var(--charcoal)}
 .act-filter-btn.active{background:var(--bg2);color:var(--charcoal);font-weight:600;box-shadow:0 1px 3px rgba(44,42,36,.1)}
-.act-input-row{display:grid;grid-template-columns:140px 180px 1fr auto;gap:8px;align-items:end}
+.act-input-row{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.act-input-row > #act-method{flex:0 0 auto;width:140px;min-width:0}
+.act-input-row .act-dt-wrap{flex:0 0 auto;width:200px;min-width:0;display:flex;flex-direction:column}
+.act-input-row .act-dt-wrap input[type="datetime-local"]{width:100%;min-width:0;box-sizing:border-box}
+.act-input-row > #act-body{flex:1 1 220px;min-width:0}
+.act-input-row > .btn{flex:0 0 auto}
 .act-dt-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
 .lead-controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
 .rating-group{display:flex;border:0.5px solid var(--border2);border-radius:6px;overflow:hidden}
@@ -727,12 +732,6 @@ textarea.form-control{resize:vertical;min-height:70px}
   .module-bar { display: grid !important; grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .module-stat { min-width: 0; }
 
-  /* ── Lead modal activity input: stack rows so body input + Add button
-     don't get crushed inside a 4-col grid at phone widths ── */
-  .act-input-row { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .act-input-row > input[type="text"],
-  .act-input-row > button { grid-column: 1 / -1; }
-
   /* ── Filter bar ── */
   .fbar { gap: 6px; }
   .filter-sel { flex: 1 1 40%; min-width: 0; font-size: 12px; }
@@ -896,11 +895,6 @@ textarea.form-control{resize:vertical;min-height:70px}
   /* "developer" role badge takes space — let it shrink */
   .role-badge { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* Lead modal activity input: 4-col grid crushes body input at iPad widths.
-     Stack body input + Add button below the method/datetime row. */
-  .act-input-row { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .act-input-row > input[type="text"],
-  .act-input-row > button { grid-column: 1 / -1; }
 }
 
 /* ─── CUSTOMERS MODULE ───────────────────────────────────────────── */
