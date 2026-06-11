@@ -203,11 +203,11 @@ textarea.form-control{resize:vertical;min-height:70px}
 .act-filter-btn{padding:4px 12px;border-radius:6px;font-size:11px;border:none;background:none;cursor:pointer;color:var(--text3);font-family:inherit;transition:.15s;font-weight:500;white-space:nowrap}
 .act-filter-btn:hover{color:var(--charcoal)}
 .act-filter-btn.active{background:var(--bg2);color:var(--charcoal);font-weight:600;box-shadow:0 1px 3px rgba(44,42,36,.1)}
-.act-input-row{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.act-input-row{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:flex-end}
 .act-input-row > #act-method{flex:0 0 auto;width:140px;min-width:0}
-.act-input-row .act-dt-wrap{flex:0 0 auto;width:200px;min-width:0;display:flex;flex-direction:column}
+.act-input-row .act-dt-wrap{flex:0 0 auto;width:180px;min-width:0;display:flex;flex-direction:column}
 .act-input-row .act-dt-wrap input[type="datetime-local"]{width:100%;min-width:0;box-sizing:border-box}
-.act-input-row > #act-body{flex:1 1 220px;min-width:0}
+.act-input-row > #act-body{flex:1 1 180px;min-width:0}
 .act-input-row > .btn{flex:0 0 auto}
 .act-dt-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
 .lead-controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
