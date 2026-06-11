@@ -227,18 +227,36 @@ async function closeAnyModal(page) {
   });
 }
 
+async function tryOpenFirstRow(page) {
+  const row = page.locator('#content tbody tr').first();
+  if (!(await row.isVisible().catch(() => false))) return false;
+  await row.click().catch(() => {});
+  await page.waitForTimeout(700);
+  return await page.locator('.modal-bg.open').isVisible().catch(() => false);
+}
+
 async function runRouteTest(page, vpName, vp, route) {
   await page.setViewportSize(vp);
   await login(page);
   await pickFirstProject(page);
   await navTo(page, route);
   const result = await probePage(page, route, vpName);
-  const modalOpened = await tryOpenNew(page).catch(() => false);
-  if (modalOpened) {
-    const m = await probeModal(page, route, vpName, '+ New');
-    result.modal = m;
+
+  // + New modal
+  const newOpened = await tryOpenNew(page).catch(() => false);
+  if (newOpened) {
+    result.newModal = await probeModal(page, route, vpName, '+ New');
+    await closeAnyModal(page);
+    await page.waitForTimeout(200);
+  }
+
+  // Row-click detail modal (catches taller detail/edit modals)
+  const rowOpened = await tryOpenFirstRow(page).catch(() => false);
+  if (rowOpened) {
+    result.rowModal = await probeModal(page, route, vpName, 'row-click');
     await closeAnyModal(page);
   }
+
   const shotPath = path.join(OUT_DIR, `${vpName}__${route}.png`);
   await page.screenshot({ path: shotPath, fullPage: true }).catch(() => {});
   result.screenshot = path.basename(shotPath);
@@ -246,12 +264,14 @@ async function runRouteTest(page, vpName, vp, route) {
   saveReport();
 
   const errors = (result.issues || []).filter((i) => i.severity === 'error');
-  const modalErrors = ((result.modal && result.modal.issues) || []).filter((i) => i.severity === 'error');
-  if (errors.length || modalErrors.length) {
-    console.log(`FAIL ${vpName} ${route}:`, JSON.stringify({ errors, modalErrors }, null, 2));
+  const newErrors = ((result.newModal && result.newModal.issues) || []).filter((i) => i.severity === 'error');
+  const rowErrors = ((result.rowModal && result.rowModal.issues) || []).filter((i) => i.severity === 'error');
+  if (errors.length || newErrors.length || rowErrors.length) {
+    console.log(`FAIL ${vpName} ${route}:`, JSON.stringify({ errors, newErrors, rowErrors }, null, 2));
   }
   expect(errors).toEqual([]);
-  expect(modalErrors).toEqual([]);
+  expect(newErrors).toEqual([]);
+  expect(rowErrors).toEqual([]);
 }
 
 test.describe('iPad portrait (768x1024)', () => {
@@ -301,6 +321,41 @@ test.describe('static CSS audit', () => {
       flags.forEach((f) => console.log(`  styles.css:${f.line}: ${f.text}`));
     }
     // Not a failure — informational. Comment out next line to enforce.
+    // expect(flags).toEqual([]);
+  });
+
+  test('flag input font-sizes <16px outside coarse-pointer guard', async () => {
+    const css = fs.readFileSync(path.join(__dirname, '..', 'styles.css'), 'utf8');
+    const lines = css.split(/\r?\n/);
+    const flags = [];
+    const inputRe = /(?:^|[ ,>+~.#])(input|select|textarea|form-control|form-input|filter-sel|reg-search|crm-date-input)\b/i;
+    // Detect bracketed @media (pointer: coarse) blocks and exclude them.
+    let depth = 0;
+    let coarseDepth = -1;
+    for (let i = 0; i < lines.length; i++) {
+      const ln = lines[i];
+      const isCoarseMedia = /@media[^{]*pointer\s*:\s*coarse/i.test(ln);
+      if (isCoarseMedia && coarseDepth < 0) coarseDepth = depth;
+      const opens = (ln.match(/\{/g) || []).length;
+      const closes = (ln.match(/\}/g) || []).length;
+      depth += opens - closes;
+      if (coarseDepth >= 0 && depth <= coarseDepth) coarseDepth = -1;
+      if (coarseDepth >= 0) continue;
+      if (!inputRe.test(ln)) continue;
+      const m = ln.match(/font-size:\s*(\d+)px/);
+      if (m && Number(m[1]) < 16) {
+        flags.push({ line: i + 1, size: Number(m[1]), text: ln.trim().slice(0, 200) });
+      }
+    }
+    REPORT.cssAudit = REPORT.cssAudit || {};
+    REPORT.cssAudit.input_fontsize_lt_16 = flags;
+    saveReport();
+    if (flags.length) {
+      console.log('Input/select/textarea font-size <16px (iOS auto-zoom risk):');
+      flags.forEach((f) => console.log(`  styles.css:${f.line} (${f.size}px): ${f.text}`));
+    }
+    // Informational only — coarse-pointer @media block in styles.css already
+    // bumps these to 16px on touch. Uncomment to enforce.
     // expect(flags).toEqual([]);
   });
 });

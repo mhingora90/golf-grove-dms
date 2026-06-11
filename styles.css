@@ -1024,3 +1024,20 @@ textarea.form-control{resize:vertical;min-height:70px}
 .unit-section-hdr { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--text3); margin:14px 0 8px; display:flex; align-items:center; gap:10px; }
 .unit-section-hdr::after { content:''; flex:1; height:0.5px; background:var(--border); }
 .unit-section-hdr .meta { font-size:10px; font-weight:400; color:var(--text2); text-transform:none; letter-spacing:0; }
+
+/* ─── iOS auto-zoom prevention (coarse pointers only) ─── */
+/* iOS Safari auto-zooms when a focused input's rendered font-size is <16px.
+   Bump all interactive form controls to 16px on touch devices only,
+   preserving desktop's compact 11-13px sizing. */
+@media (pointer: coarse) {
+  input,
+  select,
+  textarea,
+  .form-input,
+  .form-control,
+  .filter-sel,
+  .reg-search,
+  .crm-date-input {
+    font-size: 16px !important;
+  }
+}
