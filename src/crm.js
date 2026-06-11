@@ -941,7 +941,7 @@ async function viewLead(id) {
         <button class="act-filter-btn" data-filter="other" onclick="filterActFeed('other')">Other</button>
       </div>
       <div class="act-feed" id="act-feed">${feedHtml}</div>
-      <div style="display:flex;gap:6px;margin-bottom:8px">
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
         <button class="act-quick-btn" onclick="quickSchedule('call')">📞 Schedule Call</button>
         <button class="act-quick-btn" onclick="quickSchedule('whatsapp')">💬 Schedule WhatsApp</button>
         <button class="act-quick-btn" onclick="quickSchedule('meeting')">🤝 Schedule Meeting</button>
