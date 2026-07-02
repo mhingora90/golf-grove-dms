@@ -185,8 +185,8 @@ function _cfBuildHTML(stats, year, month, months, yearOpts, monthOpts) {
     '<div style="padding:0 24px;display:flex;flex-direction:column;gap:16px;margin-top:16px">',
     _cfSummary(stats, year, month, months),
     _cfKPIs(stats, year, month, months),
-    _cfChart(stats),
     _cfMonthlyTable(stats, year, month),
+    _cfChart(stats),
     '</div>',
   ].join('');
   return header + sections;
