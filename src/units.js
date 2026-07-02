@@ -593,9 +593,11 @@ function _sfMsAdd() {
   const body = document.getElementById('sf-ms-body');
   if (!body) return;
   const i = body.children.length;
-  const tr = document.createElement('tr');
-  tr.innerHTML = _sfMsRowHtml({milestone_name:'', pct_of_sale:'', amount:'', due_date:''}, i).replace(/^<tr>|<\/tr>$/g,'');
-  body.appendChild(tr);
+  const html = _sfMsRowHtml({milestone_name:'', pct_of_sale:'', amount:'', due_date:''}, i);
+  const tmp = document.createElement('tbody');
+  tmp.innerHTML = html;
+  const tr = tmp.firstElementChild;
+  if (tr) body.appendChild(tr);
 }
 
 function _sfMsRemove(btn) {
