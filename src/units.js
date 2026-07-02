@@ -539,7 +539,7 @@ function openSaleForm(unitId, saleId) {
       '<tbody id="sf-ms-body">' + msRows + '</tbody>' +
     '</table></div>' +
     '<div style="display:flex;gap:8px;margin-bottom:14px">' +
-      '<button type="button" class="btn" data-sf-action="ms-add" onclick="window._sfMsAdd();return false;" style="padding:4px 12px;font-size:11px;cursor:pointer;position:relative;z-index:2">+ Add Milestone</button>' +
+      '<button type="button" class="btn" data-sf-action="ms-add" onclick="event.stopPropagation();window._sfMsAdd();return false;" style="padding:4px 12px;font-size:11px;cursor:pointer;position:relative;z-index:2">+ Add Milestone</button>' +
       '<span style="font-size:10px;color:var(--text3);align-self:center">Amount auto-computes from Sold Price × %. Editable.</span>' +
     '</div>';
 
@@ -602,7 +602,7 @@ function _sfMsRowHtml(m, i) {
     '<td><input type="number" class="form-control" data-ms="amount" data-i="' + i + '" value="' + (m.amount||'') + '" style="width:110px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
     '<td><input type="number" class="form-control" data-ms="pct" data-i="' + i + '" value="' + (m.pct_of_sale||'') + '" oninput="_sfMsPctChanged(this)" style="width:60px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
     '<td><input type="date" class="form-control" data-ms="due" data-i="' + i + '" value="' + (m.due_date||'') + '" style="padding:4px 6px;font-size:11px" /></td>' +
-    '<td style="text-align:center"><button type="button" class="btn" data-sf-action="ms-remove" onclick="window._sfMsRemove(this);return false;" style="padding:2px 8px;font-size:12px;color:var(--red);border-color:var(--red);background:transparent;cursor:pointer">×</button></td>' +
+    '<td style="text-align:center"><button type="button" class="btn" data-sf-action="ms-remove" onclick="event.stopPropagation();window._sfMsRemove(this);return false;" style="padding:2px 8px;font-size:12px;color:var(--red);border-color:var(--red);background:transparent;cursor:pointer">×</button></td>' +
   '</tr>';
 }
 
