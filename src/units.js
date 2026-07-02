@@ -567,21 +567,17 @@ function openSaleForm(unitId, saleId) {
   window._sfListedPrice = +u.listed_price || 0;
   setTimeout(_sfPreview, 50);
 
-  // Delegated handler — inline onclick strings can fail silently if the
-  // handler symbol isn't reachable from the modal-body eval scope (some
-  // cache/deploy skews reintroduce this). Delegation attaches once to the
-  // modal body and reads data-action.
+  _sfWireMsButtons();
+}
+
+function _sfWireMsButtons() {
   const modalBody = document.getElementById('modal-body');
-  if (modalBody && !modalBody._sfDelegated) {
-    modalBody._sfDelegated = true;
-    modalBody.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-sf-action]');
-      if (!t) return;
-      const action = t.dataset.sfAction;
-      if (action === 'ms-add')    { e.preventDefault(); _sfMsAdd(); }
-      if (action === 'ms-remove') { e.preventDefault(); _sfMsRemove(t); }
-    });
-  }
+  if (!modalBody) return;
+  const addBtn = modalBody.querySelector('[data-sf-action="ms-add"]');
+  if (addBtn) addBtn.onclick = (e) => { e.preventDefault(); _sfMsAdd(); };
+  modalBody.querySelectorAll('[data-sf-action="ms-remove"]').forEach(btn => {
+    btn.onclick = (e) => { e.preventDefault(); _sfMsRemove(btn); };
+  });
 }
 
 function _sfAutoDiscount() {
@@ -613,7 +609,10 @@ function _sfMsAdd() {
   const tmp = document.createElement('tbody');
   tmp.innerHTML = html;
   const tr = tmp.firstElementChild;
-  if (tr) body.appendChild(tr);
+  if (tr) {
+    body.appendChild(tr);
+    _sfWireMsButtons();
+  }
 }
 
 function _sfMsRemove(btn) {
@@ -924,3 +923,15 @@ async function renderSalesRevenue() {
       '</table></div>' +
     '</div></div>';
 }
+
+// Explicit window exposure — belt & suspenders for inline handlers in
+// concatenated HTML strings (Vercel/CDN edge cases have shown these can
+// fail to resolve when scope evaluation quirks surface).
+window._sfMsAdd        = _sfMsAdd;
+window._sfMsRemove     = _sfMsRemove;
+window._sfMsPctChanged = _sfMsPctChanged;
+window._sfPriceChanged = _sfPriceChanged;
+window._sfAutoDiscount = _sfAutoDiscount;
+window._sfPreview      = _sfPreview;
+window._sfSyncMsAmounts= _sfSyncMsAmounts;
+window._sfWireMsButtons= _sfWireMsButtons;
