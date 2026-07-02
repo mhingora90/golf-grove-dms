@@ -311,13 +311,14 @@ function _renderUregTable() {
           '<td>' + esc(u.unit_type) + '</td>' +
           '<td style="text-align:right;font-variant-numeric:tabular-nums">' + (+u.area_sqft).toLocaleString() + '</td>' +
           '<td style="text-align:right;font-variant-numeric:tabular-nums">' + fmtAED(u.listed_price) + '</td>' +
+          '<td style="text-align:right;font-variant-numeric:tabular-nums">' + (sale && sale.sold_price ? fmtAED(sale.sold_price) : '<span style="color:var(--text3)">—</span>') + '</td>' +
           '<td>' + buyerCell + '</td>' +
           '<td>' + (sale ? _spaBadge(sale.spa_status) : '<span style="color:var(--text3);font-size:11px">—</span>') + '</td>' +
           '<td>' + (sale ? _oqoodBadge(sale.oqood_status) : '<span style="color:var(--text3);font-size:11px">—</span>') + '</td>' +
           '<td>' + _unitStatusBadge(st) + '</td>' +
           '</tr>';
       }).join('')
-    : '<tr><td colspan="9" class="empty-state">No units match filters.</td></tr>';
+    : '<tr><td colspan="10" class="empty-state">No units match filters.</td></tr>';
 
   const floorOpts = floors.map(f=>'<option value="' + f + '">Floor ' + f + '</option>').join('');
 
@@ -356,7 +357,7 @@ function _renderUregTable() {
     kpiBar +
     filterBar +
     '<div class="card"><div class="tw"><table>' +
-      '<tr><th>Unit</th><th>Floor</th><th>Type</th><th style="text-align:right">Sqft</th><th style="text-align:right">Listed Price</th><th>Buyer</th><th>SPA</th><th>Oqood</th><th>Status</th></tr>' +
+      '<tr><th>Unit</th><th>Floor</th><th>Type</th><th style="text-align:right">Sqft</th><th style="text-align:right">Listed Price</th><th style="text-align:right">Sold Price</th><th>Buyer</th><th>SPA</th><th>Oqood</th><th>Status</th></tr>' +
       rowsHTML +
     '</table></div></div>';
 
