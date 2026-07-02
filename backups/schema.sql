@@ -2151,7 +2151,7 @@ CREATE POLICY "units_select" ON "public"."units" FOR SELECT USING (("public"."is
 
 
 
-CREATE POLICY "usc: delete" ON "public"."unit_sale_customers" FOR DELETE TO "authenticated" USING (("public"."get_user_role"() = 'admin'::"text"));
+CREATE POLICY "usc: delete" ON "public"."unit_sale_customers" FOR DELETE TO "authenticated" USING (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
