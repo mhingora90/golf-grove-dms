@@ -497,14 +497,7 @@ function openSaleForm(unitId, saleId) {
   ];
   const msSource = (isEdit && ms.length) ? ms : defaultMS;
 
-  const msRows = msSource.map((m,i) =>
-    '<tr>' +
-    '<td><input class="form-control" data-ms="name" data-i="' + i + '" value="' + esc(m.milestone_name) + '" style="width:100%;padding:4px 6px;font-size:11px" /></td>' +
-    '<td><input type="number" class="form-control" data-ms="amount" data-i="' + i + '" value="' + (m.amount||'') + '" style="width:95px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
-    '<td><input type="number" class="form-control" data-ms="pct" data-i="' + i + '" value="' + (m.pct_of_sale||'') + '" style="width:55px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
-    '<td><input type="date" class="form-control" data-ms="due" data-i="' + i + '" value="' + (m.due_date||'') + '" style="padding:4px 6px;font-size:11px" /></td>' +
-    '</tr>'
-  ).join('');
+  const msRows = msSource.map((m,i) => _sfMsRowHtml(m,i)).join('');
 
   const sel = (id, opts, val) =>
     '<select id="' + id + '" class="form-input">' +
@@ -518,7 +511,7 @@ function openSaleForm(unitId, saleId) {
     '<div class="unit-section-hdr">Sale & Brokerage</div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px">' +
       '<div class="form-group" style="margin:0"><label class="form-label">Sale Date</label><input id="sf-saledate" type="date" class="form-input" value="' + esc(sale?.sale_date||'') + '" /></div>' +
-      '<div class="form-group" style="margin:0"><label class="form-label">Sold Price (AED)</label><input id="sf-price" type="number" class="form-input" oninput="_sfAutoDiscount()" value="' + (sale?.sold_price||'') + '" /></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Sold Price (AED)</label><input id="sf-price" type="number" class="form-input" oninput="_sfPriceChanged()" value="' + (sale?.sold_price||'') + '" /></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Discount (AED)</label><input id="sf-discount" type="number" class="form-input" oninput="_sfPreview()" value="' + (sale?.discount_amount||0) + '" /><div style="font-size:10px;color:var(--text3);margin-top:3px">Auto = Listed − Sold. Editable.</div></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Commission %</label><input id="sf-commpct" type="number" step="0.01" class="form-input" oninput="_sfPreview()" value="' + (sale?.commission_pct ?? (isEdit ? 0 : 9)) + '" /></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Broker Name</label><input id="sf-broker" class="form-input" value="' + esc(sale?.broker_name||'') + '" /></div>' +
@@ -541,10 +534,14 @@ function openSaleForm(unitId, saleId) {
     '</div>' +
 
     '<div class="unit-section-hdr">Payment Plan Milestones</div>' +
-    '<div class="tw"><table class="ms-table" style="margin-bottom:14px">' +
-      '<thead><tr><th>Milestone</th><th class="num">Amount (AED)</th><th class="num">%</th><th>Due Date</th></tr></thead>' +
-      '<tbody>' + msRows + '</tbody>' +
-    '</table></div>';
+    '<div class="tw"><table class="ms-table" style="margin-bottom:8px">' +
+      '<thead><tr><th>Milestone</th><th class="num">Amount (AED)</th><th class="num">%</th><th>Due Date</th><th></th></tr></thead>' +
+      '<tbody id="sf-ms-body">' + msRows + '</tbody>' +
+    '</table></div>' +
+    '<div style="display:flex;gap:8px;margin-bottom:14px">' +
+      '<button class="btn" onclick="_sfMsAdd()" style="padding:4px 12px;font-size:11px">+ Add Milestone</button>' +
+      '<span style="font-size:10px;color:var(--text3);align-self:center">Amount auto-computes from Sold Price × %. Editable.</span>' +
+    '</div>';
 
   openModal(
     (isEdit ? 'Edit Sale \u2014 Unit ' : 'Add Sale \u2014 Unit ') + esc(u.unit_no),
@@ -580,6 +577,54 @@ function _sfAutoDiscount() {
     discEl.value = Math.max(0, listed - price);
   }
   _sfPreview();
+}
+
+function _sfMsRowHtml(m, i) {
+  return '<tr>' +
+    '<td><input class="form-control" data-ms="name" data-i="' + i + '" value="' + esc(m.milestone_name||'') + '" style="width:100%;padding:4px 6px;font-size:11px" /></td>' +
+    '<td><input type="number" class="form-control" data-ms="amount" data-i="' + i + '" value="' + (m.amount||'') + '" style="width:110px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
+    '<td><input type="number" class="form-control" data-ms="pct" data-i="' + i + '" value="' + (m.pct_of_sale||'') + '" oninput="_sfMsPctChanged(this)" style="width:60px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
+    '<td><input type="date" class="form-control" data-ms="due" data-i="' + i + '" value="' + (m.due_date||'') + '" style="padding:4px 6px;font-size:11px" /></td>' +
+    '<td style="text-align:center"><button class="btn" onclick="_sfMsRemove(this)" style="padding:2px 8px;font-size:12px;color:var(--red);border-color:var(--red);background:transparent">×</button></td>' +
+  '</tr>';
+}
+
+function _sfMsAdd() {
+  const body = document.getElementById('sf-ms-body');
+  if (!body) return;
+  const i = body.children.length;
+  const tr = document.createElement('tr');
+  tr.innerHTML = _sfMsRowHtml({milestone_name:'', pct_of_sale:'', amount:'', due_date:''}, i).replace(/^<tr>|<\/tr>$/g,'');
+  body.appendChild(tr);
+}
+
+function _sfMsRemove(btn) {
+  const tr = btn.closest('tr');
+  if (tr) tr.remove();
+}
+
+function _sfMsPctChanged(pctEl) {
+  const price = parseFloat(document.getElementById('sf-price')?.value) || 0;
+  const pct   = parseFloat(pctEl.value) || 0;
+  const row   = pctEl.closest('tr');
+  const amtEl = row?.querySelector('[data-ms="amount"]');
+  if (amtEl && price && pct) amtEl.value = Math.round(price * pct / 100);
+}
+
+function _sfSyncMsAmounts() {
+  const price = parseFloat(document.getElementById('sf-price')?.value) || 0;
+  if (!price) return;
+  const rows = document.querySelectorAll('#sf-ms-body tr');
+  rows.forEach(row => {
+    const pct = parseFloat(row.querySelector('[data-ms="pct"]')?.value) || 0;
+    const amtEl = row.querySelector('[data-ms="amount"]');
+    if (amtEl && pct) amtEl.value = Math.round(price * pct / 100);
+  });
+}
+
+function _sfPriceChanged() {
+  _sfAutoDiscount();
+  _sfSyncMsAmounts();
 }
 
 function _sfPreview() {
@@ -665,6 +710,8 @@ async function saveSaleForm(unitId, saleId) {
   let newBlocked    = false;
   if (status === 'sold') {
     newSaleStatus = 'sold';
+  } else if (status === 'reserved') {
+    newSaleStatus = 'reserved';
   } else if (status === 'blocked_by_developer') {
     newSaleStatus = 'blocked_by_developer';
     newBlocked    = true;
