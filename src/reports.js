@@ -54,6 +54,19 @@ function buildReportsHub() {
     }),
 
     _hubLiveCard({
+      onclick: '_openCashFlowReport()',
+      title: 'Sales Cash Flow',
+      iconBg: 'var(--green-bg)',
+      iconSvg: '<svg width="13" height="13" viewBox="0 0 18 18" fill="none"><path d="M2 13l4-4 3 3 7-7M14 5h3v3" stroke="#3B6D11" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      desc: 'Expected monthly cash inflow from contracted payment plans. 12-month forward view &amp; cumulative curve.',
+      chips: ['Monthly','12-mo forward','PDF'],
+      accentBg: 'var(--green-bg)',
+      accentBorder: '#C0DD97',
+      accentColor: 'var(--green)',
+      arrowStroke: '#3B6D11',
+    }),
+
+    _hubLiveCard({
       onclick: '_openCrmReport()',
       title: 'CRM Activity Report',
       iconBg: 'var(--sand-bg)',
