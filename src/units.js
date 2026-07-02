@@ -805,6 +805,8 @@ async function renderSalesRevenue() {
   const totalGDV        = all.reduce((s,u)=>s+(+u.listed_price||0),0);
   const totalContracted = contracted.reduce((s,u)=>s+(+u.unit_sales?.sold_price||0),0);
   const remainingGDV    = availUnits.reduce((s,u)=>s+(+u.listed_price||0),0);
+  const contractedSqft  = contracted.reduce((s,u)=>s+(+u.area_sqft||0),0);
+  const avgPsfAchieved  = contractedSqft ? Math.round(totalContracted / contractedSqft) : 0;
   const totalSqftSold   = soldUnits.reduce((s,u)=>s+(+u.area_sqft||0),0);
   const totalSqft       = all.reduce((s,u)=>s+(+u.area_sqft||0),0);
   const soldPct         = all.length ? (soldUnits.length/all.length*100).toFixed(1) : '0.0';
@@ -911,9 +913,10 @@ async function renderSalesRevenue() {
       sc((totalSqftSold/1000).toFixed(1)+'K','Sqft Sold','of ' + (totalSqft/1000).toFixed(1) + 'K sqft total') +
     '</div>' +
     // Revenue strip
-    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">' +
+    '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">' +
       rc(fmtCompact(totalGDV),'Total GDV (Listed)','Gross Development Value','var(--green-bg)','#C0DD97','var(--green)') +
       rc(fmtCompact(totalContracted),'Total Contracted Revenue', contracted.length + ' units (sold + reserved)','var(--green-bg)','#C0DD97','var(--green)') +
+      rc(fmtAED(avgPsfAchieved)+'/sqft','Avg Price/Sqft Achieved', contracted.length + ' units \u00b7 ' + (contractedSqft/1000).toFixed(1) + 'K sqft','var(--green-bg)','#C0DD97','var(--green)') +
       rc(fmtCompact(remainingGDV),'Remaining GDV (Unsold)', availUnits.length + ' available units','var(--bg3)','var(--border2)','var(--text2)') +
     '</div>' +
     // Monthly revenue table
