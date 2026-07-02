@@ -378,8 +378,8 @@ function openUnitModal(unitId) {
   if(!u) { toast('Unit not found','error'); return; }
   const sale   = u.unit_sales;
   const ms     = (sale?.payment_milestones||[]).sort((a,b)=>a.sort_order-b.sort_order);
-  const isDev  = currentProfile?.role==='developer';
-  const status = _unitSaleStatus(u);
+  const canSell = currentProfile?.role==='developer' || currentProfile?.role==='admin';
+  const status  = _unitSaleStatus(u);
 
   const field = (label, val, cls) =>
     '<div><div class="unit-field-label">' + label + '</div><div class="unit-field-val' + (cls?' '+cls:'') + '">' + val + '</div></div>';
@@ -467,7 +467,7 @@ function openUnitModal(unitId) {
 
   const body = hero + availNote + saleSection + spaSection + msSection;
 
-  const footer = isDev
+  const footer = canSell
     ? (sale
         ? '<button class="btn btn-danger" onclick="markUnitAvailable(\'' + sale.id + '\',\'' + esc(u.unit_no) + '\')">Mark Available</button>' +
           '<button class="btn" onclick="closeModal()" style="margin-left:auto">Close</button>' +
