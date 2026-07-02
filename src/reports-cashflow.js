@@ -87,20 +87,36 @@ function _cfCalcStats(units, year, month) {
   const next12          = monthKeys.filter(isNext12).reduce((s, k) => s + monthMap[k].amount, 0);
   const beyond12 = totalMilestoneValue - collectedToDate - periodExpected - next12 - onHandover;
 
-  // 12-month forward chart data (from anchor month, inclusive)
+  // Full timeline chart: earliest dated milestone → latest dated milestone,
+  // month-by-month (inclusive), zero-filled. On Handover appended as trailing bar.
   const chartMonths = [];
-  for (let i = 0; i < 12; i++) {
-    const d = new Date(anchor.getFullYear(), anchor.getMonth() + i, 1);
-    const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
-    const b = monthMap[key] || { amount: 0, count: 0 };
-    chartMonths.push({ key, label: d.toLocaleString('default', { month: 'short' }) + ' ' + String(d.getFullYear()).slice(-2), amount: b.amount, count: b.count });
+  if (monthKeys.length) {
+    const [fy, fm] = monthKeys[0].split('-').map(Number);
+    const [ly, lm] = monthKeys[monthKeys.length - 1].split('-').map(Number);
+    const start = new Date(fy, fm - 1, 1);
+    const end   = new Date(ly, lm - 1, 1);
+    const totalMs = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
+    for (let i = 0; i < totalMs; i++) {
+      const d = new Date(start.getFullYear(), start.getMonth() + i, 1);
+      const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+      const b = monthMap[key] || { amount: 0, count: 0 };
+      chartMonths.push({ key, label: d.toLocaleString('default', { month: 'short' }) + " '" + String(d.getFullYear()).slice(-2), amount: b.amount, count: b.count, kind: 'month' });
+    }
   }
+  if (onHandoverCount > 0) {
+    chartMonths.push({ key: 'handover', label: 'Handover', amount: onHandover, count: onHandoverCount, kind: 'handover' });
+  }
+
+  // Timeline bounds for narrative
+  const firstMonthKey = monthKeys[0] || null;
+  const lastMonthKey  = monthKeys[monthKeys.length - 1] || null;
 
   return {
     totalContracted, totalContractValue, totalMilestoneValue,
     onHandover, onHandoverCount,
     monthRows, chartMonths,
     collectedToDate, periodExpected, next12, beyond12,
+    firstMonthKey, lastMonthKey,
   };
 }
 
@@ -177,15 +193,18 @@ function _cfBuildHTML(stats, year, month, months, yearOpts, monthOpts) {
 }
 
 function _cfSummary(stats, year, month, months) {
-  const { totalContracted, totalContractValue, totalMilestoneValue, collectedToDate, periodExpected, next12, onHandover } = stats;
+  const { totalContracted, totalContractValue, totalMilestoneValue, collectedToDate, periodExpected, onHandover, firstMonthKey, lastMonthKey } = stats;
+  const spanTxt = firstMonthKey && lastMonthKey
+    ? _cfMonthLabel(firstMonthKey) + ' through ' + _cfMonthLabel(lastMonthKey)
+    : 'no scheduled dates';
   return [
     '<div style="background:var(--green-bg);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:14px 18px">',
     '<div style="color:var(--green);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Executive Summary</div>',
     '<p style="color:var(--charcoal);font-size:13px;line-height:1.75;margin:0">',
     '<strong>' + totalContracted + ' contracted unit' + (totalContracted === 1 ? '' : 's') + '</strong> totalling <strong>' + _sFmtAED(totalContractValue) + '</strong> in sold price. ',
-    'Payment plans schedule <strong>' + _sFmtAED(totalMilestoneValue) + '</strong> across all milestones. ',
+    'Payment plans schedule <strong>' + _sFmtAED(totalMilestoneValue) + '</strong> across all milestones, spanning ' + spanTxt + '. ',
     _sFmtAED(collectedToDate) + ' has fallen due prior to ' + months[month - 1] + ' ' + year + '. ',
-    '<strong>' + _sFmtAED(periodExpected) + '</strong> is expected in ' + months[month - 1] + ' and <strong>' + _sFmtAED(next12) + '</strong> across the following 12 months. ',
+    '<strong>' + _sFmtAED(periodExpected) + '</strong> is expected in ' + months[month - 1] + '. ',
     onHandover > 0 ? _sFmtAED(onHandover) + ' is scheduled on handover (undated).' : '',
     '</p></div>',
   ].join('');
@@ -208,13 +227,35 @@ function _cfKPIs(stats, year, month, months) {
 }
 
 function _cfChart(stats) {
-  const { chartMonths } = stats;
-  const W = 720, H = 220, PAD_L = 56, PAD_R = 12, PAD_T = 12, PAD_B = 40;
-  const innerW = W - PAD_L - PAD_R;
+  const { chartMonths, totalMilestoneValue, firstMonthKey, lastMonthKey } = stats;
+  if (!chartMonths.length) {
+    return [
+      '<div class="card" style="padding:14px">',
+      '<div style="font-size:12px;font-weight:600;color:var(--charcoal);margin-bottom:10px">Expected Monthly Inflow</div>',
+      '<div style="text-align:center;color:var(--text3);font-size:12px;padding:24px 0">No scheduled milestones yet.</div>',
+      '</div>',
+    ].join('');
+  }
+
+  const PAD_L = 64, PAD_R = 16, PAD_T = 16, PAD_B = 48;
+  const H = 260;
   const innerH = H - PAD_T - PAD_B;
+  const groupW = 44; // per-bar allocation
+  const barW = 26;
+  const innerW = Math.max(320, chartMonths.length * groupW);
+  const W = PAD_L + innerW + PAD_R;
+
   const maxVal = Math.max(1, ...chartMonths.map(m => m.amount));
-  const groupW = innerW / chartMonths.length;
-  const barW = Math.max(10, groupW * 0.55);
+
+  // Cumulative curve (running total across timeline)
+  const cumMax = totalMilestoneValue || 1;
+  let running = 0;
+  const cumPts = chartMonths.map((m, i) => {
+    running += m.amount;
+    const x = PAD_L + groupW * i + groupW / 2;
+    const y = PAD_T + innerH - (running / cumMax) * innerH;
+    return { x, y, running };
+  });
 
   const yTicks = 4;
   const gridLines = [];
@@ -225,26 +266,46 @@ function _cfChart(stats) {
     gridLines.push('<text x="' + (PAD_L - 6) + '" y="' + (y + 3) + '" text-anchor="end" font-size="9" fill="var(--text3)">' + _sFmtAED(v) + '</text>');
   }
 
+  // Show value label only if amount > 0. Show every month label but rotate for readability.
   const bars = chartMonths.map((m, i) => {
     const x = PAD_L + groupW * i + (groupW - barW) / 2;
     const h = m.amount > 0 ? Math.max(2, (m.amount / maxVal) * innerH) : 0;
     const y = PAD_T + innerH - h;
-    const valLabel = m.amount > 0 ? '<text x="' + (x + barW / 2) + '" y="' + (y - 3) + '" text-anchor="middle" font-size="8" fill="var(--text2)">' + _sFmtAED(m.amount) + '</text>' : '';
+    const fill = m.kind === 'handover' ? 'var(--amber)' : 'var(--green)';
+    const valLabel = m.amount > 0 ? '<text x="' + (x + barW / 2) + '" y="' + (y - 4) + '" text-anchor="middle" font-size="8" fill="var(--text2)">' + _sFmtAED(m.amount) + '</text>' : '';
+    const labelY = H - PAD_B + 14;
     return [
-      h > 0 ? '<rect x="' + x + '" y="' + y + '" width="' + barW + '" height="' + h + '" fill="var(--green)" rx="2"/>' : '',
+      h > 0 ? '<rect x="' + x + '" y="' + y + '" width="' + barW + '" height="' + h + '" fill="' + fill + '" rx="2"/>' : '',
       valLabel,
-      '<text x="' + (x + barW / 2) + '" y="' + (H - 20) + '" text-anchor="middle" font-size="9" fill="var(--text3)">' + m.label + '</text>',
-      '<text x="' + (x + barW / 2) + '" y="' + (H - 8)  + '" text-anchor="middle" font-size="8" fill="var(--text3)">' + m.count + ' inst' + '</text>',
+      '<text x="' + (x + barW / 2) + '" y="' + labelY + '" text-anchor="end" font-size="9" fill="var(--text3)" transform="rotate(-45 ' + (x + barW / 2) + ' ' + labelY + ')">' + m.label + '</text>',
     ].join('');
   }).join('');
+
+  // Cumulative line + endpoint dot
+  const cumPolyline = cumPts.map(p => p.x + ',' + p.y).join(' ');
+  const cumLine = '<polyline points="' + cumPolyline + '" fill="none" stroke="#2B6CB0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const lastPt = cumPts[cumPts.length - 1];
+  const cumDot = '<circle cx="' + lastPt.x + '" cy="' + lastPt.y + '" r="3" fill="#2B6CB0"/>';
+  const cumEndLabel = '<text x="' + lastPt.x + '" y="' + (lastPt.y - 8) + '" text-anchor="middle" font-size="9" font-weight="600" fill="#2B6CB0">' + _sFmtAED(lastPt.running) + '</text>';
+
+  const spanLabel = firstMonthKey && lastMonthKey
+    ? _cfMonthLabel(firstMonthKey) + ' → ' + _cfMonthLabel(lastMonthKey) + (stats.onHandoverCount > 0 ? ' + Handover' : '')
+    : '';
 
   return [
     '<div class="card" style="padding:14px">',
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">',
-    '<div style="font-size:12px;font-weight:600;color:var(--charcoal)">Expected Monthly Inflow &mdash; 12 Month Forward</div>',
-    '<div style="font-size:10px;color:var(--text3)">from anchor month</div>',
+    '<div style="font-size:12px;font-weight:600;color:var(--charcoal)">Expected Cash Inflow &mdash; Full Timeline</div>',
+    '<div style="font-size:10px;color:var(--text3)">' + spanLabel + '</div>',
     '</div>',
-    '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" style="display:block">' + gridLines.join('') + bars + '</svg>',
+    '<div style="overflow-x:auto;overflow-y:hidden">',
+    '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" style="display:block;min-width:' + W + 'px">' + gridLines.join('') + bars + cumLine + cumDot + cumEndLabel + '</svg>',
+    '</div>',
+    '<div style="display:flex;gap:14px;font-size:10px;color:var(--text3);margin-top:8px">',
+    '<span><span style="display:inline-block;width:10px;height:10px;background:var(--green);border-radius:2px;vertical-align:middle;margin-right:4px"></span>Monthly Expected</span>',
+    stats.onHandoverCount > 0 ? '<span><span style="display:inline-block;width:10px;height:10px;background:var(--amber);border-radius:2px;vertical-align:middle;margin-right:4px"></span>On Handover</span>' : '',
+    '<span><span style="display:inline-block;width:14px;height:2px;background:#2B6CB0;vertical-align:middle;margin-right:4px"></span>Cumulative</span>',
+    '</div>',
     '</div>',
   ].join('');
 }
