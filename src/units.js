@@ -518,8 +518,8 @@ function openSaleForm(unitId, saleId) {
     '<div class="unit-section-hdr">Sale & Brokerage</div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px">' +
       '<div class="form-group" style="margin:0"><label class="form-label">Sale Date</label><input id="sf-saledate" type="date" class="form-input" value="' + esc(sale?.sale_date||'') + '" /></div>' +
-      '<div class="form-group" style="margin:0"><label class="form-label">Sold Price (AED)</label><input id="sf-price" type="number" class="form-input" oninput="_sfPreview()" value="' + (sale?.sold_price||'') + '" /></div>' +
-      '<div class="form-group" style="margin:0"><label class="form-label">Discount (AED)</label><input id="sf-discount" type="number" class="form-input" oninput="_sfPreview()" value="' + (sale?.discount_amount||0) + '" /></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Sold Price (AED)</label><input id="sf-price" type="number" class="form-input" oninput="_sfAutoDiscount()" value="' + (sale?.sold_price||'') + '" /></div>' +
+      '<div class="form-group" style="margin:0"><label class="form-label">Discount (AED)</label><input id="sf-discount" type="number" class="form-input" oninput="_sfPreview()" value="' + (sale?.discount_amount||0) + '" /><div style="font-size:10px;color:var(--text3);margin-top:3px">Auto = Listed − Sold. Editable.</div></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Commission %</label><input id="sf-commpct" type="number" step="0.01" class="form-input" oninput="_sfPreview()" value="' + (sale?.commission_pct ?? (isEdit ? 0 : 9)) + '" /></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Broker Name</label><input id="sf-broker" class="form-input" value="' + esc(sale?.broker_name||'') + '" /></div>' +
       '<div class="form-group" style="margin:0"><label class="form-label">Brokerage</label><input id="sf-brokerage" class="form-input" value="' + esc(sale?.brokerage_name||'') + '" /></div>' +
@@ -569,6 +569,17 @@ function openSaleForm(unitId, saleId) {
 
   window._sfListedPrice = +u.listed_price || 0;
   setTimeout(_sfPreview, 50);
+}
+
+function _sfAutoDiscount() {
+  const priceEl = document.getElementById('sf-price');
+  const discEl  = document.getElementById('sf-discount');
+  const listed  = window._sfListedPrice || 0;
+  const price   = parseFloat(priceEl?.value) || 0;
+  if (discEl && listed && price) {
+    discEl.value = Math.max(0, listed - price);
+  }
+  _sfPreview();
 }
 
 function _sfPreview() {
