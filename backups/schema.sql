@@ -994,7 +994,7 @@ CREATE TABLE IF NOT EXISTS "public"."units" (
     "project_id" "uuid" NOT NULL,
     "blocked" boolean DEFAULT false NOT NULL,
     "sale_status" "text" DEFAULT 'available'::"text" NOT NULL,
-    CONSTRAINT "units_sale_status_check" CHECK (("sale_status" = ANY (ARRAY['available'::"text", 'sold'::"text", 'blocked_by_developer'::"text"])))
+    CONSTRAINT "units_sale_status_check" CHECK (("sale_status" = ANY (ARRAY['available'::"text", 'reserved'::"text", 'sold'::"text", 'blocked_by_developer'::"text"])))
 );
 
 
@@ -1896,19 +1896,19 @@ CREATE POLICY "payment_certs_update_developer" ON "public"."payment_certificates
 ALTER TABLE "public"."payment_milestones" ENABLE ROW LEVEL SECURITY;
 
 
-CREATE POLICY "payment_milestones: developer delete" ON "public"."payment_milestones" FOR DELETE TO "authenticated" USING (("public"."get_user_role"() = 'developer'::"text"));
+CREATE POLICY "payment_milestones: developer delete" ON "public"."payment_milestones" FOR DELETE TO "authenticated" USING (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
-CREATE POLICY "payment_milestones: developer insert" ON "public"."payment_milestones" FOR INSERT TO "authenticated" WITH CHECK (("public"."get_user_role"() = 'developer'::"text"));
+CREATE POLICY "payment_milestones: developer insert" ON "public"."payment_milestones" FOR INSERT TO "authenticated" WITH CHECK (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
-CREATE POLICY "payment_milestones: developer select" ON "public"."payment_milestones" FOR SELECT TO "authenticated" USING (("public"."get_user_role"() = 'developer'::"text"));
+CREATE POLICY "payment_milestones: developer select" ON "public"."payment_milestones" FOR SELECT TO "authenticated" USING (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
-CREATE POLICY "payment_milestones: developer update" ON "public"."payment_milestones" FOR UPDATE TO "authenticated" USING (("public"."get_user_role"() = 'developer'::"text")) WITH CHECK (("public"."get_user_role"() = 'developer'::"text"));
+CREATE POLICY "payment_milestones: developer update" ON "public"."payment_milestones" FOR UPDATE TO "authenticated" USING (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"]))) WITH CHECK (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
@@ -2108,38 +2108,38 @@ ALTER TABLE "public"."unit_sale_customers" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."unit_sales" ENABLE ROW LEVEL SECURITY;
 
 
-CREATE POLICY "unit_sales: developer delete" ON "public"."unit_sales" FOR DELETE TO "authenticated" USING (("public"."get_user_role"() = 'developer'::"text"));
+CREATE POLICY "unit_sales: developer delete" ON "public"."unit_sales" FOR DELETE TO "authenticated" USING (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
-CREATE POLICY "unit_sales: developer insert" ON "public"."unit_sales" FOR INSERT TO "authenticated" WITH CHECK (("public"."get_user_role"() = 'developer'::"text"));
+CREATE POLICY "unit_sales: developer insert" ON "public"."unit_sales" FOR INSERT TO "authenticated" WITH CHECK (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
-CREATE POLICY "unit_sales: developer select" ON "public"."unit_sales" FOR SELECT TO "authenticated" USING (("public"."get_user_role"() = 'developer'::"text"));
+CREATE POLICY "unit_sales: developer select" ON "public"."unit_sales" FOR SELECT TO "authenticated" USING (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
-CREATE POLICY "unit_sales: developer update" ON "public"."unit_sales" FOR UPDATE TO "authenticated" USING (("public"."get_user_role"() = 'developer'::"text")) WITH CHECK (("public"."get_user_role"() = 'developer'::"text"));
+CREATE POLICY "unit_sales: developer update" ON "public"."unit_sales" FOR UPDATE TO "authenticated" USING (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"]))) WITH CHECK (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
 ALTER TABLE "public"."units" ENABLE ROW LEVEL SECURITY;
 
 
-CREATE POLICY "units: developer delete" ON "public"."units" FOR DELETE TO "authenticated" USING (("public"."get_user_role"() = 'developer'::"text"));
+CREATE POLICY "units: developer delete" ON "public"."units" FOR DELETE TO "authenticated" USING (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
-CREATE POLICY "units: developer insert" ON "public"."units" FOR INSERT TO "authenticated" WITH CHECK (("public"."get_user_role"() = 'developer'::"text"));
+CREATE POLICY "units: developer insert" ON "public"."units" FOR INSERT TO "authenticated" WITH CHECK (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
-CREATE POLICY "units: developer select" ON "public"."units" FOR SELECT TO "authenticated" USING (("public"."get_user_role"() = 'developer'::"text"));
+CREATE POLICY "units: developer select" ON "public"."units" FOR SELECT TO "authenticated" USING (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
-CREATE POLICY "units: developer update" ON "public"."units" FOR UPDATE TO "authenticated" USING (("public"."get_user_role"() = 'developer'::"text")) WITH CHECK (("public"."get_user_role"() = 'developer'::"text"));
+CREATE POLICY "units: developer update" ON "public"."units" FOR UPDATE TO "authenticated" USING (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"]))) WITH CHECK (("public"."get_user_role"() = ANY (ARRAY['developer'::"text", 'admin'::"text"])));
 
 
 
