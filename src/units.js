@@ -497,7 +497,12 @@ function openSaleForm(unitId, saleId) {
   ];
   const msSource = (isEdit && ms.length) ? ms : defaultMS;
 
-  const msRows = msSource.map((m,i) => _sfMsRowHtml(m,i)).join('');
+  window._sfMsState = msSource.map(m => ({
+    name:   m.milestone_name || '',
+    pct:    m.pct_of_sale || '',
+    amount: m.amount || '',
+    due:    m.due_date || '',
+  }));
 
   const sel = (id, opts, val) =>
     '<select id="' + id + '" class="form-input">' +
@@ -534,14 +539,7 @@ function openSaleForm(unitId, saleId) {
     '</div>' +
 
     '<div class="unit-section-hdr">Payment Plan Milestones</div>' +
-    '<div class="tw"><table class="ms-table" style="margin-bottom:8px">' +
-      '<thead><tr><th>Milestone</th><th class="num">Amount (AED)</th><th class="num">%</th><th>Due Date</th><th></th></tr></thead>' +
-      '<tbody id="sf-ms-body">' + msRows + '</tbody>' +
-    '</table></div>' +
-    '<div style="display:flex;gap:8px;margin-bottom:14px">' +
-      '<button type="button" class="btn" data-sf-action="ms-add" onclick="event.stopPropagation();window._sfMsAdd();return false;" style="padding:4px 12px;font-size:11px;cursor:pointer;position:relative;z-index:2">+ Add Milestone</button>' +
-      '<span style="font-size:10px;color:var(--text3);align-self:center">Amount auto-computes from Sold Price × %. Editable.</span>' +
-    '</div>';
+    '<div id="sf-ms-mount" style="margin-bottom:14px"></div>';
 
   openModal(
     (isEdit ? 'Edit Sale \u2014 Unit ' : 'Add Sale \u2014 Unit ') + esc(u.unit_no),
@@ -567,22 +565,80 @@ function openSaleForm(unitId, saleId) {
   window._sfListedPrice = +u.listed_price || 0;
   setTimeout(_sfPreview, 50);
 
-  _sfWireMsButtons();
+  _sfRenderMs();
 }
 
-function _sfWireMsButtons() {
-  const modalBody = document.getElementById('modal-body');
-  if (!modalBody) return;
-  if (!modalBody._sfDelegated) {
-    modalBody.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-sf-action]');
-      if (!t || !modalBody.contains(t)) return;
-      const act = t.getAttribute('data-sf-action');
-      if (act === 'ms-add')    { e.preventDefault(); _sfMsAdd(); }
-      if (act === 'ms-remove') { e.preventDefault(); _sfMsRemove(t); }
+function _sfRenderMs() {
+  const mount = document.getElementById('sf-ms-mount');
+  if (!mount) return;
+  const state = window._sfMsState || [];
+  const price = parseFloat(document.getElementById('sf-price')?.value) || 0;
+
+  const rowsHtml = state.map((m, i) =>
+    '<tr>' +
+      '<td><input class="form-control sf-ms-in" data-i="' + i + '" data-f="name" value="' + esc(m.name) + '" style="width:100%;padding:4px 6px;font-size:11px" /></td>' +
+      '<td><input type="number" class="form-control sf-ms-in" data-i="' + i + '" data-f="amount" value="' + (m.amount||'') + '" style="width:110px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
+      '<td><input type="number" class="form-control sf-ms-in" data-i="' + i + '" data-f="pct" value="' + (m.pct||'') + '" style="width:60px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
+      '<td><input type="date" class="form-control sf-ms-in" data-i="' + i + '" data-f="due" value="' + (m.due||'') + '" style="padding:4px 6px;font-size:11px" /></td>' +
+      '<td style="text-align:center"><button type="button" class="sf-ms-rm" data-i="' + i + '" style="padding:2px 10px;font-size:14px;color:#dc2626;border:1px solid #dc2626;background:transparent;border-radius:4px;cursor:pointer">×</button></td>' +
+    '</tr>'
+  ).join('');
+
+  mount.innerHTML =
+    '<div class="tw"><table class="ms-table" style="margin-bottom:8px">' +
+      '<thead><tr><th>Milestone</th><th class="num">Amount (AED)</th><th class="num">%</th><th>Due Date</th><th></th></tr></thead>' +
+      '<tbody>' + rowsHtml + '</tbody>' +
+    '</table></div>' +
+    '<div style="display:flex;gap:8px">' +
+      '<button type="button" id="sf-ms-add-btn" style="padding:6px 14px;font-size:12px;background:#2563eb;color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:500">+ Add Milestone</button>' +
+      '<span style="font-size:10px;color:var(--text3);align-self:center">Amount auto-computes from Sold Price × %. Editable.</span>' +
+    '</div>';
+
+  const addBtn = document.getElementById('sf-ms-add-btn');
+  if (addBtn) {
+    addBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window._sfMsState.push({name:'', pct:'', amount:'', due:''});
+      _sfRenderMs();
     });
-    modalBody._sfDelegated = true;
   }
+
+  mount.querySelectorAll('.sf-ms-rm').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const i = +btn.dataset.i;
+      window._sfMsState.splice(i, 1);
+      _sfRenderMs();
+    });
+  });
+
+  mount.querySelectorAll('.sf-ms-in').forEach(inp => {
+    inp.addEventListener('input', () => {
+      const i = +inp.dataset.i;
+      const f = inp.dataset.f;
+      window._sfMsState[i][f] = inp.value;
+      if (f === 'pct') {
+        const curPrice = parseFloat(document.getElementById('sf-price')?.value) || 0;
+        const pct = parseFloat(inp.value) || 0;
+        if (curPrice && pct) {
+          const amt = Math.round(curPrice * pct / 100);
+          window._sfMsState[i].amount = amt;
+          const amtEl = mount.querySelector('.sf-ms-in[data-i="' + i + '"][data-f="amount"]');
+          if (amtEl) amtEl.value = amt;
+        }
+      }
+    });
+  });
+}
+
+function _sfSyncMsAmounts() {
+  const price = parseFloat(document.getElementById('sf-price')?.value) || 0;
+  if (!price || !window._sfMsState) return;
+  window._sfMsState.forEach(m => {
+    const pct = parseFloat(m.pct) || 0;
+    if (pct) m.amount = Math.round(price * pct / 100);
+  });
+  _sfRenderMs();
 }
 
 function _sfAutoDiscount() {
@@ -594,54 +650,6 @@ function _sfAutoDiscount() {
     discEl.value = Math.max(0, listed - price);
   }
   _sfPreview();
-}
-
-function _sfMsRowHtml(m, i) {
-  return '<tr>' +
-    '<td><input class="form-control" data-ms="name" data-i="' + i + '" value="' + esc(m.milestone_name||'') + '" style="width:100%;padding:4px 6px;font-size:11px" /></td>' +
-    '<td><input type="number" class="form-control" data-ms="amount" data-i="' + i + '" value="' + (m.amount||'') + '" style="width:110px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
-    '<td><input type="number" class="form-control" data-ms="pct" data-i="' + i + '" value="' + (m.pct_of_sale||'') + '" oninput="_sfMsPctChanged(this)" style="width:60px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
-    '<td><input type="date" class="form-control" data-ms="due" data-i="' + i + '" value="' + (m.due_date||'') + '" style="padding:4px 6px;font-size:11px" /></td>' +
-    '<td style="text-align:center"><button type="button" class="btn" data-sf-action="ms-remove" onclick="event.stopPropagation();window._sfMsRemove(this);return false;" style="padding:2px 8px;font-size:12px;color:var(--red);border-color:var(--red);background:transparent;cursor:pointer">×</button></td>' +
-  '</tr>';
-}
-
-function _sfMsAdd() {
-  const body = document.getElementById('sf-ms-body');
-  if (!body) return;
-  const i = body.children.length;
-  const html = _sfMsRowHtml({milestone_name:'', pct_of_sale:'', amount:'', due_date:''}, i);
-  const tmp = document.createElement('tbody');
-  tmp.innerHTML = html;
-  const tr = tmp.firstElementChild;
-  if (tr) {
-    body.appendChild(tr);
-    _sfWireMsButtons();
-  }
-}
-
-function _sfMsRemove(btn) {
-  const tr = btn.closest('tr');
-  if (tr) tr.remove();
-}
-
-function _sfMsPctChanged(pctEl) {
-  const price = parseFloat(document.getElementById('sf-price')?.value) || 0;
-  const pct   = parseFloat(pctEl.value) || 0;
-  const row   = pctEl.closest('tr');
-  const amtEl = row?.querySelector('[data-ms="amount"]');
-  if (amtEl && price && pct) amtEl.value = Math.round(price * pct / 100);
-}
-
-function _sfSyncMsAmounts() {
-  const price = parseFloat(document.getElementById('sf-price')?.value) || 0;
-  if (!price) return;
-  const rows = document.querySelectorAll('#sf-ms-body tr');
-  rows.forEach(row => {
-    const pct = parseFloat(row.querySelector('[data-ms="pct"]')?.value) || 0;
-    const amtEl = row.querySelector('[data-ms="amount"]');
-    if (amtEl && pct) amtEl.value = Math.round(price * pct / 100);
-  });
 }
 
 function _sfPriceChanged() {
@@ -678,16 +686,12 @@ async function saveSaleForm(unitId, saleId) {
   const oqood_status    = document.getElementById('sf-oqood')?.value||'not_registered';
   const oqood_date      = document.getElementById('sf-oqooddate')?.value||null;
 
-  const nameEls   = [...document.querySelectorAll('[data-ms="name"]')];
-  const amountEls = [...document.querySelectorAll('[data-ms="amount"]')];
-  const pctEls    = [...document.querySelectorAll('[data-ms="pct"]')];
-  const dueEls    = [...document.querySelectorAll('[data-ms="due"]')];
-  const milestones = nameEls
-    .map((el,i)=>({
-      milestone_name: el.value.trim(),
-      amount: parseFloat(amountEls[i]?.value)||0,
-      pct_of_sale: parseFloat(pctEls[i]?.value)||0,
-      due_date: dueEls[i]?.value||null,
+  const milestones = (window._sfMsState || [])
+    .map((m,i)=>({
+      milestone_name: (m.name||'').trim(),
+      amount: parseFloat(m.amount)||0,
+      pct_of_sale: parseFloat(m.pct)||0,
+      due_date: m.due||null,
       sort_order: i,
     }))
     .filter(m=>m.milestone_name);
@@ -929,14 +933,8 @@ async function renderSalesRevenue() {
     '</div></div>';
 }
 
-// Explicit window exposure — belt & suspenders for inline handlers in
-// concatenated HTML strings (Vercel/CDN edge cases have shown these can
-// fail to resolve when scope evaluation quirks surface).
-window._sfMsAdd        = _sfMsAdd;
-window._sfMsRemove     = _sfMsRemove;
-window._sfMsPctChanged = _sfMsPctChanged;
-window._sfPriceChanged = _sfPriceChanged;
-window._sfAutoDiscount = _sfAutoDiscount;
-window._sfPreview      = _sfPreview;
-window._sfSyncMsAmounts= _sfSyncMsAmounts;
-window._sfWireMsButtons= _sfWireMsButtons;
+window._sfPriceChanged  = _sfPriceChanged;
+window._sfAutoDiscount  = _sfAutoDiscount;
+window._sfPreview       = _sfPreview;
+window._sfRenderMs      = _sfRenderMs;
+window._sfSyncMsAmounts = _sfSyncMsAmounts;
