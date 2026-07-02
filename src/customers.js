@@ -351,7 +351,8 @@ window.Customers = (function () {
   }
 
   async function syncSaleOwners(saleId, owners) {
-    await sb.from('unit_sale_customers').delete().eq('unit_sale_id', saleId);
+    const { error: delErr } = await sb.from('unit_sale_customers').delete().eq('unit_sale_id', saleId);
+    if (delErr) { toast('Owner link delete failed: ' + delErr.message, 'error'); return null; }
     if (!owners?.length) return null;
 
     // Materialize pending new customers (those without a real customer_id).
