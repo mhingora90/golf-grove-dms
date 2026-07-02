@@ -4,7 +4,7 @@ SET session_replication_role = replica;
 -- PostgreSQL database dump
 --
 
--- \restrict fZS7PXmLZgfvMKjugqAQuf9caLICW5pCaoxJ59EDltpx5CJOjTUAP8hBsfsbmxh
+-- \restrict uiCFeRlxAWnvwZpD2aRt37xAAJhlzBa38i14rPgBoSgNrNapN7M5DwYHpMxx2nF
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -44,10 +44,10 @@ SET row_security = off;
 --
 
 INSERT INTO "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at", "last_sign_in_at", "raw_app_meta_data", "raw_user_meta_data", "is_super_admin", "created_at", "updated_at", "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at", "is_anonymous") VALUES
-	('00000000-0000-0000-0000-000000000000', '4936665c-b65b-4f93-ac4d-09770a578ea5', 'authenticated', 'authenticated', 'mohammed@regent-developments.com', '$2a$10$9mCmnT62lT8Uk1hrBLGle.ruaCTDVoKB/nqbEguVM5.yO98UcbASi', '2026-04-08 16:06:50.938359+00', NULL, '', '2026-04-08 16:06:30.785405+00', '', NULL, '', '', NULL, '2026-07-02 14:45:26.121261+00', '{"provider": "email", "providers": ["email"]}', '{"sub": "4936665c-b65b-4f93-ac4d-09770a578ea5", "email": "mohammed@regent-developments.com", "full_name": "Mohammed Hingora", "email_verified": true, "phone_verified": false}', NULL, '2026-04-08 16:06:30.750593+00', '2026-07-02 15:21:04.826403+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false),
 	('00000000-0000-0000-0000-000000000000', '965b6174-619e-4706-b79f-71eaa2f7aa25', 'authenticated', 'authenticated', 'mention-1780768672703@test.local', '$2a$10$.v6iS3rg4ih31kpj0rqj8.mkrPsWW.hFC3Z84FYUhNcDXD7BsSh5y', '2026-06-06 17:57:54.040521+00', NULL, '', NULL, '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email"]}', '{"email_verified": true}', NULL, '2026-06-06 17:57:54.032367+00', '2026-06-06 17:57:54.041405+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false),
 	('00000000-0000-0000-0000-000000000000', '753af8ce-4f70-48e7-baed-af79be526d25', 'authenticated', 'authenticated', 'tmp-con-1777418939498@boqtest.internal', '$2a$10$rZb455MR6aCNOBAVIfG5Xe7xD6RdxGFHKAmPOFv8hCbOSzx.wg4vS', '2026-04-28 23:29:00.650826+00', NULL, '', NULL, '', NULL, '', '', NULL, '2026-04-28 23:29:01.490922+00', '{"provider": "email", "providers": ["email"]}', '{"email_verified": true}', NULL, '2026-04-28 23:29:00.636103+00', '2026-04-28 23:29:01.493816+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false),
 	('00000000-0000-0000-0000-000000000000', '5199dcab-9e73-453f-8a14-50f9224777f2', 'authenticated', 'authenticated', 'tmp-con-1777419053174@boqtest.internal', '$2a$10$wcJXGZ8UbEFwzutLc3RPqeYuhSdqSSbakvqOHiHcYMEzB.os/.Oum', '2026-04-28 23:30:54.055744+00', NULL, '', NULL, '', NULL, '', '', NULL, '2026-04-28 23:30:54.654837+00', '{"provider": "email", "providers": ["email"]}', '{"email_verified": true}', NULL, '2026-04-28 23:30:54.047643+00', '2026-04-28 23:30:54.657041+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false),
+	('00000000-0000-0000-0000-000000000000', '4936665c-b65b-4f93-ac4d-09770a578ea5', 'authenticated', 'authenticated', 'mohammed@regent-developments.com', '$2a$10$9mCmnT62lT8Uk1hrBLGle.ruaCTDVoKB/nqbEguVM5.yO98UcbASi', '2026-04-08 16:06:50.938359+00', NULL, '', '2026-04-08 16:06:30.785405+00', '', NULL, '', '', NULL, '2026-07-02 21:00:41.744836+00', '{"provider": "email", "providers": ["email"]}', '{"sub": "4936665c-b65b-4f93-ac4d-09770a578ea5", "email": "mohammed@regent-developments.com", "full_name": "Mohammed Hingora", "email_verified": true, "phone_verified": false}', NULL, '2026-04-08 16:06:30.750593+00', '2026-07-02 21:00:41.816712+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false),
 	('00000000-0000-0000-0000-000000000000', '2bfe5982-7f08-4d11-b26d-dabf3e6127d5', 'authenticated', 'authenticated', 'tmp-ctr-1777418939498@boqtest.internal', '$2a$10$LVuIIqPhj8X.bbEERGMKQuNuMpwPrxnPlN4GNA4bUUmGaZ39za9LG', '2026-04-28 23:29:01.774373+00', NULL, '', NULL, '', NULL, '', '', NULL, '2026-04-28 23:29:02.297773+00', '{"provider": "email", "providers": ["email"]}', '{"email_verified": true}', NULL, '2026-04-28 23:29:01.771106+00', '2026-04-28 23:29:02.299794+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false),
 	('00000000-0000-0000-0000-000000000000', 'f8ee85fc-9289-42d9-9931-4395e55b0b84', 'authenticated', 'authenticated', 'test.consultant@golfgrove.test', '$2a$10$JMPh7DzAHXxceHfm5BMzqeKLIEwj03crp6VyurISo8FnBb/sI6VpC', '2026-04-29 21:33:06.890714+00', NULL, '', NULL, '', NULL, '', '', NULL, '2026-06-06 18:02:47.427509+00', '{"provider": "email", "providers": ["email"]}', '{"email_verified": true}', NULL, '2026-04-29 21:33:06.886357+00', '2026-06-06 18:02:47.429366+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false),
 	('00000000-0000-0000-0000-000000000000', 'c56c39fb-4ee9-4ec1-ba76-b033cb046327', 'authenticated', 'authenticated', 'test.contractor@golfgrove.test', '$2a$10$FY3AVIpu4ISMVixPBV3fcOUVeJNaazUuonU34ES1Pme.wQnBFYu5S', '2026-04-29 21:33:07.414831+00', NULL, '', NULL, '', NULL, '', '', NULL, '2026-06-05 20:43:20.60494+00', '{"provider": "email", "providers": ["email"]}', '{"email_verified": true}', NULL, '2026-04-29 21:33:07.412019+00', '2026-06-05 20:43:20.607847+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false),
@@ -617,9 +617,10 @@ INSERT INTO "auth"."sessions" ("id", "user_id", "created_at", "updated_at", "fac
 	('91d88c20-bc2a-4379-91ac-370d86c1a556', '4936665c-b65b-4f93-ac4d-09770a578ea5', '2026-06-11 18:48:27.937334+00', '2026-06-11 18:48:27.937334+00', NULL, 'aal1', NULL, NULL, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36', '86.97.93.201', NULL, NULL, NULL, NULL, NULL),
 	('bd97c139-8650-4f87-85c2-79450351dbfb', '4936665c-b65b-4f93-ac4d-09770a578ea5', '2026-06-11 18:56:49.741082+00', '2026-06-11 18:56:49.741082+00', NULL, 'aal1', NULL, NULL, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36', '86.97.93.201', NULL, NULL, NULL, NULL, NULL),
 	('bc8a035d-47ca-4da9-a5bc-4f6e417f78d4', '55826e6e-bbb7-40e0-b83b-68fc0d1f629f', '2026-07-02 14:27:18.801981+00', '2026-07-02 14:27:18.801981+00', NULL, 'aal1', NULL, NULL, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', '86.98.88.254', NULL, NULL, NULL, NULL, NULL),
-	('9af9af27-3e5e-4638-9c9b-5ec803f6064c', '4936665c-b65b-4f93-ac4d-09770a578ea5', '2026-07-02 14:45:26.122361+00', '2026-07-02 14:45:26.122361+00', NULL, 'aal1', NULL, NULL, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', '86.98.88.254', NULL, NULL, NULL, NULL, NULL),
-	('788ebd35-c934-443c-9e20-2422f4bf69b7', '4936665c-b65b-4f93-ac4d-09770a578ea5', '2026-05-27 22:00:53.274168+00', '2026-07-02 15:06:58.687719+00', NULL, 'aal1', NULL, '2026-07-02 15:06:58.687605', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', '86.98.88.254', NULL, NULL, NULL, NULL, NULL),
-	('9ebea3de-29d7-41a1-8c59-afa30d947ba5', '4936665c-b65b-4f93-ac4d-09770a578ea5', '2026-06-29 15:21:02.328991+00', '2026-07-02 15:21:04.836969+00', NULL, 'aal1', NULL, '2026-07-02 15:21:04.836857', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', '86.98.88.254', NULL, NULL, NULL, NULL, NULL);
+	('9ebea3de-29d7-41a1-8c59-afa30d947ba5', '4936665c-b65b-4f93-ac4d-09770a578ea5', '2026-06-29 15:21:02.328991+00', '2026-07-02 19:52:33.090174+00', NULL, 'aal1', NULL, '2026-07-02 19:52:33.090064', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', '2.51.74.110', NULL, NULL, NULL, NULL, NULL),
+	('9af9af27-3e5e-4638-9c9b-5ec803f6064c', '4936665c-b65b-4f93-ac4d-09770a578ea5', '2026-07-02 14:45:26.122361+00', '2026-07-02 20:15:40.732777+00', NULL, 'aal1', NULL, '2026-07-02 20:15:40.731988', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', '2.51.74.110', NULL, NULL, NULL, NULL, NULL),
+	('788ebd35-c934-443c-9e20-2422f4bf69b7', '4936665c-b65b-4f93-ac4d-09770a578ea5', '2026-05-27 22:00:53.274168+00', '2026-07-02 20:19:27.263029+00', NULL, 'aal1', NULL, '2026-07-02 20:19:27.26288', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', '2.51.74.110', NULL, NULL, NULL, NULL, NULL),
+	('6619dd6d-90b6-4ec4-a5b3-d7c5ad31eb32', '4936665c-b65b-4f93-ac4d-09770a578ea5', '2026-07-02 21:00:41.745934+00', '2026-07-02 21:00:41.745934+00', NULL, 'aal1', NULL, NULL, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', '2.51.74.110', NULL, NULL, NULL, NULL, NULL);
 
 
 --
@@ -1112,7 +1113,8 @@ INSERT INTO "auth"."mfa_amr_claims" ("session_id", "created_at", "updated_at", "
 	('bd97c139-8650-4f87-85c2-79450351dbfb', '2026-06-11 18:56:49.815018+00', '2026-06-11 18:56:49.815018+00', 'password', '25d35eee-adf3-4a57-8f78-62d7dbce3189'),
 	('9ebea3de-29d7-41a1-8c59-afa30d947ba5', '2026-06-29 15:21:02.396724+00', '2026-06-29 15:21:02.396724+00', 'password', '8d83b3f0-40ed-47a6-b4fb-223738872d31'),
 	('bc8a035d-47ca-4da9-a5bc-4f6e417f78d4', '2026-07-02 14:27:18.84838+00', '2026-07-02 14:27:18.84838+00', 'password', '4fd941e9-5426-49b7-aa53-71642484d061'),
-	('9af9af27-3e5e-4638-9c9b-5ec803f6064c', '2026-07-02 14:45:26.174997+00', '2026-07-02 14:45:26.174997+00', 'password', 'b86d7ef7-9383-4068-af09-e0ab61f39076');
+	('9af9af27-3e5e-4638-9c9b-5ec803f6064c', '2026-07-02 14:45:26.174997+00', '2026-07-02 14:45:26.174997+00', 'password', 'b86d7ef7-9383-4068-af09-e0ab61f39076'),
+	('6619dd6d-90b6-4ec4-a5b3-d7c5ad31eb32', '2026-07-02 21:00:41.83314+00', '2026-07-02 21:00:41.83314+00', 'password', '50205588-9dd7-4261-8d31-82f00c2f02b7');
 
 
 --
@@ -2127,11 +2129,15 @@ INSERT INTO "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "r
 	('00000000-0000-0000-0000-000000000000', 1225, 'jzx3t6orgcum', '55826e6e-bbb7-40e0-b83b-68fc0d1f629f', false, '2026-07-02 14:08:26.410478+00', '2026-07-02 14:08:26.410478+00', 'pj7r3yn42sio', '50145587-ce1f-449b-a3ee-9977992eda6e'),
 	('00000000-0000-0000-0000-000000000000', 1223, 'yytgmnmwkqez', '4936665c-b65b-4f93-ac4d-09770a578ea5', true, '2026-07-02 13:24:21.74839+00', '2026-07-02 14:22:51.09512+00', 'h56svhnhbsxa', '9ebea3de-29d7-41a1-8c59-afa30d947ba5'),
 	('00000000-0000-0000-0000-000000000000', 1227, 'mj3fmv2tx6mh', '55826e6e-bbb7-40e0-b83b-68fc0d1f629f', false, '2026-07-02 14:27:18.833375+00', '2026-07-02 14:27:18.833375+00', NULL, 'bc8a035d-47ca-4da9-a5bc-4f6e417f78d4'),
-	('00000000-0000-0000-0000-000000000000', 1228, 'vl5jb2rtmggc', '4936665c-b65b-4f93-ac4d-09770a578ea5', false, '2026-07-02 14:45:26.149461+00', '2026-07-02 14:45:26.149461+00', NULL, '9af9af27-3e5e-4638-9c9b-5ec803f6064c'),
 	('00000000-0000-0000-0000-000000000000', 1224, 'om7v5ejwuxe5', '4936665c-b65b-4f93-ac4d-09770a578ea5', true, '2026-07-02 14:08:02.554774+00', '2026-07-02 15:06:58.632686+00', '47oi2kmryuei', '788ebd35-c934-443c-9e20-2422f4bf69b7'),
-	('00000000-0000-0000-0000-000000000000', 1229, 'zvdhwxkhmmta', '4936665c-b65b-4f93-ac4d-09770a578ea5', false, '2026-07-02 15:06:58.657021+00', '2026-07-02 15:06:58.657021+00', 'om7v5ejwuxe5', '788ebd35-c934-443c-9e20-2422f4bf69b7'),
 	('00000000-0000-0000-0000-000000000000', 1226, '4msrxdjdy2l6', '4936665c-b65b-4f93-ac4d-09770a578ea5', true, '2026-07-02 14:22:51.111888+00', '2026-07-02 15:21:04.809284+00', 'yytgmnmwkqez', '9ebea3de-29d7-41a1-8c59-afa30d947ba5'),
-	('00000000-0000-0000-0000-000000000000', 1230, '7zkuhqrwvqcn', '4936665c-b65b-4f93-ac4d-09770a578ea5', false, '2026-07-02 15:21:04.821145+00', '2026-07-02 15:21:04.821145+00', '4msrxdjdy2l6', '9ebea3de-29d7-41a1-8c59-afa30d947ba5');
+	('00000000-0000-0000-0000-000000000000', 1230, '7zkuhqrwvqcn', '4936665c-b65b-4f93-ac4d-09770a578ea5', true, '2026-07-02 15:21:04.821145+00', '2026-07-02 19:52:33.056047+00', '4msrxdjdy2l6', '9ebea3de-29d7-41a1-8c59-afa30d947ba5'),
+	('00000000-0000-0000-0000-000000000000', 1231, '4jm7esv2m6da', '4936665c-b65b-4f93-ac4d-09770a578ea5', false, '2026-07-02 19:52:33.07272+00', '2026-07-02 19:52:33.07272+00', '7zkuhqrwvqcn', '9ebea3de-29d7-41a1-8c59-afa30d947ba5'),
+	('00000000-0000-0000-0000-000000000000', 1228, 'vl5jb2rtmggc', '4936665c-b65b-4f93-ac4d-09770a578ea5', true, '2026-07-02 14:45:26.149461+00', '2026-07-02 20:15:40.678094+00', NULL, '9af9af27-3e5e-4638-9c9b-5ec803f6064c'),
+	('00000000-0000-0000-0000-000000000000', 1232, '23dvirnjlzxy', '4936665c-b65b-4f93-ac4d-09770a578ea5', false, '2026-07-02 20:15:40.699517+00', '2026-07-02 20:15:40.699517+00', 'vl5jb2rtmggc', '9af9af27-3e5e-4638-9c9b-5ec803f6064c'),
+	('00000000-0000-0000-0000-000000000000', 1229, 'zvdhwxkhmmta', '4936665c-b65b-4f93-ac4d-09770a578ea5', true, '2026-07-02 15:06:58.657021+00', '2026-07-02 20:19:27.237623+00', 'om7v5ejwuxe5', '788ebd35-c934-443c-9e20-2422f4bf69b7'),
+	('00000000-0000-0000-0000-000000000000', 1233, 'wqkvjugfxhfs', '4936665c-b65b-4f93-ac4d-09770a578ea5', false, '2026-07-02 20:19:27.245207+00', '2026-07-02 20:19:27.245207+00', 'zvdhwxkhmmta', '788ebd35-c934-443c-9e20-2422f4bf69b7'),
+	('00000000-0000-0000-0000-000000000000', 1234, 'uclv7zojs7sg', '4936665c-b65b-4f93-ac4d-09770a578ea5', false, '2026-07-02 21:00:41.787883+00', '2026-07-02 21:00:41.787883+00', NULL, '6619dd6d-90b6-4ec4-a5b3-d7c5ad31eb32');
 
 
 --
@@ -2875,6 +2881,7 @@ INSERT INTO "public"."units" ("id", "unit_no", "floor", "unit_type", "area_sqft"
 	('20cf5c6d-66f7-432f-99d1-a80f67d611fd', '507', 5, '2BHK + Maid', 1483, 3250000, '2026-05-09 09:55:04.469112+00', '00000000-0000-0000-0000-000000000002', false, 'available'),
 	('77712c57-4978-442b-9e00-45cecc195993', '708', 7, '1BHK Sky Loft - Large B', 1422, 2378970, '2026-05-09 09:55:04.469112+00', '00000000-0000-0000-0000-000000000002', false, 'sold'),
 	('7d4d199e-ef8e-4eed-8071-0d58d7fdb56a', '305', 3, '1BHK Sky Loft - Large A', 1283, 2099000, '2026-05-09 09:55:04.469112+00', '00000000-0000-0000-0000-000000000002', false, 'sold'),
+	('42431ec2-5dde-4cf2-baf9-985b090ea104', '104', 1, '1BHK Sky Loft - Small', 880, 1889000, '2026-05-09 09:55:04.469112+00', '00000000-0000-0000-0000-000000000002', false, 'sold'),
 	('94160fc4-6cb4-4025-ba2a-90c5dc15277c', '204', 2, '2BHK + Maid', 1508, 2930000, '2026-05-09 09:55:04.469112+00', '00000000-0000-0000-0000-000000000002', false, 'sold'),
 	('f0c78659-bd39-4615-904e-99918132c7a0', '302', 3, '3BHK', 1583, 3228000, '2026-05-09 09:55:04.469112+00', '00000000-0000-0000-0000-000000000002', true, 'blocked_by_developer'),
 	('248f63e2-36e9-47a2-8ed7-234c26b2b9b8', '306', 3, '2BHK + Maid', 1483, 2999000, '2026-05-09 09:55:04.469112+00', '00000000-0000-0000-0000-000000000002', false, 'available'),
@@ -2891,7 +2898,6 @@ INSERT INTO "public"."units" ("id", "unit_no", "floor", "unit_type", "area_sqft"
 	('2e8bfc29-8848-41fc-adcf-d0a5e2fbd786', '406', 4, 'Studio', 417.31, 599000, '2026-05-24 11:37:24.709528+00', '00000000-0000-0000-0000-000000000001', false, 'sold'),
 	('93657a55-f68d-4b46-9a90-f6a04c1d8b04', '407', 4, 'Studio', 419.67, 610000, '2026-05-24 11:37:24.709528+00', '00000000-0000-0000-0000-000000000001', false, 'sold'),
 	('7cd82060-ce6c-4f74-b313-bd332f090fa1', '508', 5, '1BHK Sky Loft - Large B', 1423, 2304000, '2026-05-09 09:55:04.469112+00', '00000000-0000-0000-0000-000000000002', false, 'sold'),
-	('42431ec2-5dde-4cf2-baf9-985b090ea104', '104', 1, '1BHK Sky Loft - Small', 880, 1889000, '2026-05-09 09:55:04.469112+00', '00000000-0000-0000-0000-000000000002', false, 'sold'),
 	('9c7067f6-345e-48cd-ad0d-a0af7fb06ab9', '105', 1, '1BHK Sky Loft - Large A', 1283, 2059000, '2026-05-09 09:55:04.469112+00', '00000000-0000-0000-0000-000000000002', false, 'sold'),
 	('a212a836-7f1b-4858-8b7e-a18f224510a9', '108', 1, '1BHK Sky Loft - Large B', 1423, 2141000, '2026-05-09 09:55:04.469112+00', '00000000-0000-0000-0000-000000000002', false, 'sold'),
 	('e53e1d24-116f-4006-bd62-9b5a0902cbb5', '109', 1, '1BHK Sky Loft - Small', 881, 1939000, '2026-05-09 09:55:04.469112+00', '00000000-0000-0000-0000-000000000002', false, 'sold'),
@@ -4819,7 +4825,7 @@ INSERT INTO "public"."unit_sales" ("id", "unit_id", "status", "buyer_name", "sal
 	('91e4adb6-8c29-4fa5-b725-ae48e6a5ee5f', '7dbe9d67-4d33-4f62-b448-5b766a58acca', 'sold', 'Scott Shepherd', NULL, 1001000, 0, 0, NULL, NULL, 'not_signed', NULL, 'not_registered', NULL, '2026-05-24 11:37:24.709528+00', '2026-05-24 11:37:24.709528+00'),
 	('004dca41-e852-43e3-9545-6d44f8c1d499', 'd745f0e7-d80b-4b82-91f5-026fb75c837e', 'sold', 'Fahad Labaran Tanko', NULL, 943920, 82080, 0, NULL, NULL, 'not_signed', NULL, 'not_registered', NULL, '2026-05-24 11:37:24.709528+00', '2026-05-24 11:37:24.709528+00'),
 	('848fa723-6acb-4fa3-b829-a05d85651619', '7d4d199e-ef8e-4eed-8071-0d58d7fdb56a', 'sold', 'Rebecca Ann Claire Pickard', '2026-06-24', 1931080, 167920, 8, 'Julian Peter Roverato', 'Phoenix Homes Real Estate Brokers LLC', 'fully_signed', '2026-06-30', 'registered', '2026-07-02', '2026-07-02 14:18:41.926244+00', '2026-07-02 14:18:42.935+00'),
-	('23fa7e5a-ec39-4f0e-9a19-2903d7dadb64', '42431ec2-5dde-4cf2-baf9-985b090ea104', 'sold', 'Linda Sabolova', '2026-02-06', 1889000, 0, 8, 'Aneesh Bagga', 'Move Homes Real Estate Brokers LLC', 'fully_signed', NULL, 'registered', NULL, '2026-06-06 14:51:12.686356+00', '2026-06-06 14:51:12.686356+00'),
+	('23fa7e5a-ec39-4f0e-9a19-2903d7dadb64', '42431ec2-5dde-4cf2-baf9-985b090ea104', 'sold', 'Linda Sabolova', '2026-02-06', 1889000, 0, 8, 'Aneesh Bagga', 'Move Homes Real Estate Brokers LLC', 'fully_signed', NULL, 'registered', NULL, '2026-06-06 14:51:12.686356+00', '2026-07-02 20:20:35.531+00'),
 	('58949336-5648-456a-82e2-090e7fb4ad14', '94160fc4-6cb4-4025-ba2a-90c5dc15277c', 'sold', 'Michel Vlap', '2025-12-12', 2930000, 0, 8, 'Julian Peter Roverato', 'Voya Properties LLC', 'fully_signed', NULL, 'registered', NULL, '2026-06-06 14:51:13.559025+00', '2026-06-06 14:51:13.559025+00'),
 	('bf770976-8e63-43fa-9a7c-cf6c886721a6', '2ed57450-fa9c-4078-ad5c-3cc6539c86d8', 'sold', 'Dariusz Adam Kurzydym', '2025-12-16', 2230000, 0, 8, 'Svitlana Shved', 'Berg Ham Properties LLC', 'fully_signed', NULL, 'registered', NULL, '2026-06-06 14:51:14.398164+00', '2026-06-06 14:51:14.398164+00'),
 	('b19ff14b-3d0e-47af-8957-49133229d21f', '1313de37-6926-45fe-9c4a-ecfd8dfd3dfb', 'sold', 'Wesley Theodorus Hoedt', '2025-12-12', 3000000, 0, 8, 'Julian Peter Roverato', 'Voya Properties LLC', 'fully_signed', NULL, 'registered', NULL, '2026-06-06 14:51:15.280819+00', '2026-06-06 14:51:15.280819+00'),
@@ -4855,7 +4861,11 @@ INSERT INTO "public"."payment_milestones" ("id", "unit_sale_id", "milestone_name
 	('0495ad99-37c2-469e-b69d-153bcd6bfd74', '43141cb1-ce62-411a-9eb9-98d92bd58acf', 'Booking Deposit', 0, 10, NULL, 0),
 	('24b661ef-446b-4e33-8e8d-d41efe8784a3', '43141cb1-ce62-411a-9eb9-98d92bd58acf', '1st Instalment', 0, 30, NULL, 1),
 	('6e72478f-d5d6-44b7-ad3d-5b57b1750c82', '43141cb1-ce62-411a-9eb9-98d92bd58acf', '2nd Instalment', 0, 30, NULL, 2),
-	('a485cd2f-1fcb-4e8b-b49c-4fc8343cb0e6', '43141cb1-ce62-411a-9eb9-98d92bd58acf', 'Handover', 0, 30, NULL, 3);
+	('a485cd2f-1fcb-4e8b-b49c-4fc8343cb0e6', '43141cb1-ce62-411a-9eb9-98d92bd58acf', 'Handover', 0, 30, NULL, 3),
+	('916a1b0b-0ecb-444e-90e3-f23e50f74110', '23fa7e5a-ec39-4f0e-9a19-2903d7dadb64', 'Booking Deposit', 0, 10, NULL, 0),
+	('c0666a4a-fc72-48d9-ba34-f3381b5fe3fe', '23fa7e5a-ec39-4f0e-9a19-2903d7dadb64', '1st Instalment', 0, 30, NULL, 1),
+	('54b5b952-458c-4c06-ada4-784e57ce0cb7', '23fa7e5a-ec39-4f0e-9a19-2903d7dadb64', '2nd Instalment', 0, 30, NULL, 2),
+	('07839ee1-a5a3-4245-88f3-66ad469c1655', '23fa7e5a-ec39-4f0e-9a19-2903d7dadb64', 'Handover', 0, 30, NULL, 3);
 
 
 --
@@ -5437,13 +5447,13 @@ INSERT INTO "storage"."objects" ("id", "bucket_id", "name", "owner", "created_at
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 1230, true);
+SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 1234, true);
 
 
 --
 -- PostgreSQL database dump complete
 --
 
--- \unrestrict fZS7PXmLZgfvMKjugqAQuf9caLICW5pCaoxJ59EDltpx5CJOjTUAP8hBsfsbmxh
+-- \unrestrict uiCFeRlxAWnvwZpD2aRt37xAAJhlzBa38i14rPgBoSgNrNapN7M5DwYHpMxx2nF
 
 RESET ALL;
