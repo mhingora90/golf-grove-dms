@@ -539,7 +539,7 @@ function openSaleForm(unitId, saleId) {
       '<tbody id="sf-ms-body">' + msRows + '</tbody>' +
     '</table></div>' +
     '<div style="display:flex;gap:8px;margin-bottom:14px">' +
-      '<button class="btn" onclick="_sfMsAdd()" style="padding:4px 12px;font-size:11px">+ Add Milestone</button>' +
+      '<button class="btn" data-sf-action="ms-add" style="padding:4px 12px;font-size:11px">+ Add Milestone</button>' +
       '<span style="font-size:10px;color:var(--text3);align-self:center">Amount auto-computes from Sold Price × %. Editable.</span>' +
     '</div>';
 
@@ -566,6 +566,22 @@ function openSaleForm(unitId, saleId) {
 
   window._sfListedPrice = +u.listed_price || 0;
   setTimeout(_sfPreview, 50);
+
+  // Delegated handler — inline onclick strings can fail silently if the
+  // handler symbol isn't reachable from the modal-body eval scope (some
+  // cache/deploy skews reintroduce this). Delegation attaches once to the
+  // modal body and reads data-action.
+  const modalBody = document.getElementById('modal-body');
+  if (modalBody && !modalBody._sfDelegated) {
+    modalBody._sfDelegated = true;
+    modalBody.addEventListener('click', (e) => {
+      const t = e.target.closest('[data-sf-action]');
+      if (!t) return;
+      const action = t.dataset.sfAction;
+      if (action === 'ms-add')    { e.preventDefault(); _sfMsAdd(); }
+      if (action === 'ms-remove') { e.preventDefault(); _sfMsRemove(t); }
+    });
+  }
 }
 
 function _sfAutoDiscount() {
@@ -585,7 +601,7 @@ function _sfMsRowHtml(m, i) {
     '<td><input type="number" class="form-control" data-ms="amount" data-i="' + i + '" value="' + (m.amount||'') + '" style="width:110px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
     '<td><input type="number" class="form-control" data-ms="pct" data-i="' + i + '" value="' + (m.pct_of_sale||'') + '" oninput="_sfMsPctChanged(this)" style="width:60px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
     '<td><input type="date" class="form-control" data-ms="due" data-i="' + i + '" value="' + (m.due_date||'') + '" style="padding:4px 6px;font-size:11px" /></td>' +
-    '<td style="text-align:center"><button class="btn" onclick="_sfMsRemove(this)" style="padding:2px 8px;font-size:12px;color:var(--red);border-color:var(--red);background:transparent">×</button></td>' +
+    '<td style="text-align:center"><button class="btn" data-sf-action="ms-remove" style="padding:2px 8px;font-size:12px;color:var(--red);border-color:var(--red);background:transparent">×</button></td>' +
   '</tr>';
 }
 
