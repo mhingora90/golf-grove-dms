@@ -574,19 +574,34 @@ function _sfRenderMs() {
   const state = window._sfMsState || [];
   const price = parseFloat(document.getElementById('sf-price')?.value) || 0;
 
+  const inStyleBase = 'width:100%;box-sizing:border-box;padding:4px 6px;font-size:11px';
   const rowsHtml = state.map((m, i) =>
     '<tr>' +
-      '<td><input class="form-control sf-ms-in" data-i="' + i + '" data-f="name" value="' + esc(m.name) + '" style="width:100%;padding:4px 6px;font-size:11px" /></td>' +
-      '<td><input type="number" class="form-control sf-ms-in" data-i="' + i + '" data-f="amount" value="' + (m.amount||'') + '" style="width:110px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
-      '<td><input type="number" class="form-control sf-ms-in" data-i="' + i + '" data-f="pct" value="' + (m.pct||'') + '" style="width:60px;padding:4px 6px;font-size:11px;text-align:right" /></td>' +
-      '<td><input type="date" class="form-control sf-ms-in" data-i="' + i + '" data-f="due" value="' + (m.due||'') + '" style="padding:4px 6px;font-size:11px" /></td>' +
-      '<td style="text-align:center"><button type="button" class="sf-ms-rm" data-i="' + i + '" style="padding:2px 10px;font-size:14px;color:#dc2626;border:1px solid #dc2626;background:transparent;border-radius:4px;cursor:pointer">×</button></td>' +
+      '<td style="padding:4px 6px"><input class="form-control sf-ms-in" data-i="' + i + '" data-f="name" value="' + esc(m.name) + '" style="' + inStyleBase + '" /></td>' +
+      '<td style="padding:4px 6px"><input type="number" class="form-control sf-ms-in" data-i="' + i + '" data-f="amount" value="' + (m.amount||'') + '" style="' + inStyleBase + ';text-align:right" /></td>' +
+      '<td style="padding:4px 6px"><input type="number" class="form-control sf-ms-in" data-i="' + i + '" data-f="pct" value="' + (m.pct||'') + '" style="' + inStyleBase + ';text-align:right" /></td>' +
+      '<td style="padding:4px 6px"><input type="date" class="form-control sf-ms-in" data-i="' + i + '" data-f="due" value="' + (m.due||'') + '" style="' + inStyleBase + '" /></td>' +
+      '<td style="padding:4px 6px;text-align:center"><button type="button" class="sf-ms-rm" data-i="' + i + '" style="padding:2px 10px;font-size:14px;color:#dc2626;border:1px solid #dc2626;background:transparent;border-radius:4px;cursor:pointer">×</button></td>' +
     '</tr>'
   ).join('');
 
+  const thStyle = 'padding:6px;font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border)';
   mount.innerHTML =
-    '<div class="tw"><table class="ms-table" style="margin-bottom:8px">' +
-      '<thead><tr><th>Milestone</th><th class="num">Amount (AED)</th><th class="num">%</th><th>Due Date</th><th></th></tr></thead>' +
+    '<div class="tw"><table style="width:100%;table-layout:fixed;border-collapse:collapse;margin-bottom:8px">' +
+      '<colgroup>' +
+        '<col style="width:auto">' +
+        '<col style="width:130px">' +
+        '<col style="width:70px">' +
+        '<col style="width:150px">' +
+        '<col style="width:44px">' +
+      '</colgroup>' +
+      '<thead><tr>' +
+        '<th style="' + thStyle + ';text-align:left">Milestone</th>' +
+        '<th style="' + thStyle + ';text-align:right">Amount (AED)</th>' +
+        '<th style="' + thStyle + ';text-align:right">%</th>' +
+        '<th style="' + thStyle + ';text-align:left">Due Date</th>' +
+        '<th style="' + thStyle + '"></th>' +
+      '</tr></thead>' +
       '<tbody>' + rowsHtml + '</tbody>' +
     '</table></div>' +
     '<div style="display:flex;gap:8px">' +
