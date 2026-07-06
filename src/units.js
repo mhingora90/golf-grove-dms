@@ -233,7 +233,7 @@ function _oqoodBadge(s) {
 async function renderUnitRegister() {
   const {data:units, error} = await sb
     .from('units')
-    .select('*, unit_sales(*, payment_milestones(*))')
+    .select('*, unit_sales(*, payment_milestones(*), unit_sale_customers(is_primary, ownership_pct, customers(name)))')
     .eq('project_id', currentProject.id)
     .order('floor')
     .order('unit_no');
@@ -241,6 +241,23 @@ async function renderUnitRegister() {
     document.getElementById('content').innerHTML =
       '<div class="empty-state" style="padding:48px;text-align:center;color:var(--red)">Failed to load: ' + esc(error.message) + '</div>';
     return;
+  }
+  // Derive buyer_name from primary owner (unit_sale_customers) when present.
+  // Falls back to legacy sale.buyer_name for records not yet migrated to the
+  // join table. Joint owners get "Primary + N others" suffix for the register.
+  for (const u of (units || [])) {
+    const sale = u.unit_sales;
+    if (!sale) continue;
+    const owners = sale.unit_sale_customers || [];
+    if (owners.length) {
+      const primary = owners.find(o => o.is_primary) || owners[0];
+      const primaryName = primary?.customers?.name;
+      if (primaryName) {
+        sale.buyer_name = owners.length > 1
+          ? primaryName + ' +' + (owners.length - 1)
+          : primaryName;
+      }
+    }
   }
   window._uregData = units||[];
   // Reset status segmented filter on entry — segmented chip is rendered fresh
