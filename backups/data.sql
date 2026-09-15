@@ -4,7 +4,7 @@ SET session_replication_role = replica;
 -- PostgreSQL database dump
 --
 
--- \restrict 05TvMuLPKKyNdG8f5fTlSTN6UAzkuyzFmdbekNECsjT0HMcp19GDZcavMqLyanE
+-- \restrict 2loWt9pbrEw03O51Vzgap2XkyHisvcHuA5lbTrzK6bzNIhJihhhDmrHEYx7WPcO
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -1135,6 +1135,18 @@ INSERT INTO "auth"."mfa_amr_claims" ("session_id", "created_at", "updated_at", "
 
 --
 -- Data for Name: mfa_challenges; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+
+
+--
+-- Data for Name: mfa_recovery_code_sets; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+
+
+--
+-- Data for Name: mfa_recovery_codes; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
 
 
@@ -2295,6 +2307,18 @@ INSERT INTO "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "r
 
 --
 -- Data for Name: saml_relay_states; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+
+
+--
+-- Data for Name: scim_tokens; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+
+
+--
+-- Data for Name: scim_users; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
 
 
@@ -5772,6 +5796,6 @@ SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 1365, true);
 -- PostgreSQL database dump complete
 --
 
--- \unrestrict 05TvMuLPKKyNdG8f5fTlSTN6UAzkuyzFmdbekNECsjT0HMcp19GDZcavMqLyanE
+-- \unrestrict 2loWt9pbrEw03O51Vzgap2XkyHisvcHuA5lbTrzK6bzNIhJihhhDmrHEYx7WPcO
 
 RESET ALL;
