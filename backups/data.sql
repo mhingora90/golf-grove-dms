@@ -4,7 +4,7 @@ SET session_replication_role = replica;
 -- PostgreSQL database dump
 --
 
--- \restrict 1Lr050gyIxuRL6mIiK4XBokLlbKMZCTC0bCdXTp3VeeCnscgF84bueVdPpPoOhR
+-- \restrict qgKcTmqQaj5WiIdR4CAH6Wqbho5gVBd4DPPVUyX3cj5NKmqo70RGjOeiDMhGd7R
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -5455,9 +5455,9 @@ INSERT INTO "public"."unit_sale_customers" ("unit_sale_id", "customer_id", "is_p
 -- Data for Name: buckets; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
 --
 
-INSERT INTO "storage"."buckets" ("id", "name", "owner", "created_at", "updated_at", "public", "avif_autodetection", "file_size_limit", "allowed_mime_types", "owner_id", "type", "versioning_status") VALUES
-	('drawings', 'drawings', NULL, '2026-04-08 15:40:10.983941+00', '2026-04-08 15:40:10.983941+00', false, false, NULL, NULL, NULL, 'STANDARD', 'DISABLED'),
-	('attachments', 'attachments', NULL, '2026-04-09 00:27:15.516051+00', '2026-04-09 00:27:15.516051+00', false, false, NULL, NULL, NULL, 'STANDARD', 'DISABLED');
+INSERT INTO "storage"."buckets" ("id", "name", "owner", "created_at", "updated_at", "public", "avif_autodetection", "file_size_limit", "allowed_mime_types", "owner_id", "type", "versioning_status", "lifecycle_configuration", "lifecycle_configuration_generation") VALUES
+	('drawings', 'drawings', NULL, '2026-04-08 15:40:10.983941+00', '2026-04-08 15:40:10.983941+00', false, false, NULL, NULL, NULL, 'STANDARD', 'DISABLED', NULL, NULL),
+	('attachments', 'attachments', NULL, '2026-04-09 00:27:15.516051+00', '2026-04-09 00:27:15.516051+00', false, false, NULL, NULL, NULL, 'STANDARD', 'DISABLED', NULL, NULL);
 
 
 --
@@ -5809,6 +5809,6 @@ SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 1378, true);
 -- PostgreSQL database dump complete
 --
 
--- \unrestrict 1Lr050gyIxuRL6mIiK4XBokLlbKMZCTC0bCdXTp3VeeCnscgF84bueVdPpPoOhR
+-- \unrestrict qgKcTmqQaj5WiIdR4CAH6Wqbho5gVBd4DPPVUyX3cj5NKmqo70RGjOeiDMhGd7R
 
 RESET ALL;
