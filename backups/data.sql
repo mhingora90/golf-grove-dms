@@ -4,7 +4,7 @@ SET session_replication_role = replica;
 -- PostgreSQL database dump
 --
 
--- \restrict DMwOCvPP6hmNHlvyrCPGygd3zx0d8Id7RE29yRB1dpw05OW85cVPBR3NXfMUs7z
+-- \restrict iX7e6Ay7ObbdUJYYQYsaW906PANvufYwj2LWcL8tcg17ViRYcztAeA3gJeGMJw8
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -5600,6 +5600,12 @@ INSERT INTO "storage"."buckets" ("id", "name", "owner", "created_at", "updated_a
 
 
 --
+-- Data for Name: bucket_lifecycle_states; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+
+
+--
 -- Data for Name: buckets_analytics; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
 --
 
@@ -5607,6 +5613,12 @@ INSERT INTO "storage"."buckets" ("id", "name", "owner", "created_at", "updated_a
 
 --
 -- Data for Name: buckets_vectors; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+
+
+--
+-- Data for Name: lifecycle_abandoned_artifacts; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
 --
 
 
@@ -5948,6 +5960,6 @@ SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 1406, true);
 -- PostgreSQL database dump complete
 --
 
--- \unrestrict DMwOCvPP6hmNHlvyrCPGygd3zx0d8Id7RE29yRB1dpw05OW85cVPBR3NXfMUs7z
+-- \unrestrict iX7e6Ay7ObbdUJYYQYsaW906PANvufYwj2LWcL8tcg17ViRYcztAeA3gJeGMJw8
 
 RESET ALL;
